@@ -49,8 +49,8 @@ namespace IV.DX.Application.IntTests
             // Init
             IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
 
-            var entityMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new DXUnitHandlerBaseContext()).ConvertToJObject().ToString();
-            var objectMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new DXUnitHandlerBaseContext()).ConvertToJObject().ToString();
+            var entityMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new DXUnitHandlerBaseContextOld()).ConvertToJObject().ToString();
+            var objectMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new DXUnitHandlerBaseContextOld()).ConvertToJObject().ToString();
             //var entityMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             //var objectMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
 
@@ -131,7 +131,7 @@ namespace IV.DX.Application.IntTests
         {
             this.State = 1;
 
-            this.Result = dataSourceManager.DataService.GetItem(this.Type, this.Id, new DXUnitHandlerBaseContext());
+            this.Result = dataSourceManager.DataService.GetItem(this.Type, this.Id, new DXUnitHandlerBaseContextOld());
 
             this.State = 2;
         }

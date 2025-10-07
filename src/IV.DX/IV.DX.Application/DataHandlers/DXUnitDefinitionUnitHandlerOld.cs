@@ -9,13 +9,13 @@ namespace IV.DX.Application.DataHandlers
 {
     // Need to refactor.
     // Method to process relation to DBBlocks have duplicated code.
-    internal class DXUnitDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXUnitDefinitionUnit>
+    internal class DXUnitDefinitionUnitHandlerOld : DXObjectDefinitionUnitHandlerOld<DXUnitDefinitionUnit>
     {
         private readonly IDXStructureRepository _dataStructureRepo;
         private readonly IDXUnitDataService _dataService;
         private readonly IDXGenericRepository _genericRepo;
 
-        public DXUnitDefinitionUnitHandler(IServiceProvider serviceProvider)
+        public DXUnitDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
@@ -23,18 +23,18 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public override Guid OnInserting(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnInserting(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             base.Validate(entity);
             base.Process(entity);
 
-            if (context is DXUnitHandlerPreInitCoreContext)
+            if (context is DXUnitHandlerPreInitCoreContextOld)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
                 return Guid.Empty;
             }
-            else if (context is DXUnitHandlerPostInitCoreContext)
+            else if (context is DXUnitHandlerPostInitCoreContextOld)
             {
                 return base.OnInserting(entity, context);
             }
@@ -47,7 +47,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnUpdating(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -60,7 +60,7 @@ namespace IV.DX.Application.DataHandlers
             return base.OnUpdating(entity, context);
         }
 
-        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
         {
             var entity = this._genericRepo.GetItem<DXUnitDefinitionUnit>(id);
 

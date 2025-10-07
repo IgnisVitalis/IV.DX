@@ -46,7 +46,7 @@ namespace IV.DX.Hosting
             this._container.AddSingleton<IDXCoreRepository, DXCoreRepository>();
 
             this._container.AddSingleton<IDXGenericRepository, DXGenericRepository>();
-            this._container.AddSingleton<IDXUnitDataService, DataService>();
+            this._container.AddSingleton<IDXUnitDataService, DXUnitDataService>();
             this._container.AddSingleton<IDXCoreHandler, CoreModelHandler>();
             this._container.AddSingleton<IDXMigrationService, MigrationService>();
         }

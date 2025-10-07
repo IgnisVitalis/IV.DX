@@ -1,8 +1,8 @@
 ﻿using IV.DX.Kernel.Models;
 
-namespace IV.DX.Application.Contracts.HandlerContext
+namespace IV.DX.Application.Contracts.Runtime
 {
-    public class DXUnitHandlerMigrationServiceContext : DXUnitHandlerBaseContext
+    public class DXUnitHandlerMigrationServiceContext : IDXHandlerContext
     {
         public DXMigrationScriptsUnit MigrationScript { get; set; }
 

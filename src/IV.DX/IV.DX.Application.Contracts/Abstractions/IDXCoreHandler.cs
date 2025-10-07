@@ -5,20 +5,20 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXCoreHandler
     {
-        bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContext context);
+        bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContextOld context);
 
-        void OnGetting(DXModel model, DXUnitHandlerBaseContext context);
+        void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context);
 
-        bool OnDeleting(string typeName, Guid id, DXUnitHandlerBaseContext context);
+        bool OnDeleting(string typeName, Guid id, DXUnitHandlerBaseContextOld context);
 
-        void OnDeleted(string typeName, Guid id, DXUnitHandlerBaseContext context);
+        void OnDeleted(string typeName, Guid id, DXUnitHandlerBaseContextOld context);
 
-        Guid OnInserting(DXModel model, DXUnitHandlerBaseContext context);
+        Guid OnInserting(DXModel model, DXUnitHandlerBaseContextOld context);
 
-        void OnInserted(DXModel model, DXUnitHandlerBaseContext context);
+        void OnInserted(DXModel model, DXUnitHandlerBaseContextOld context);
 
-        Guid OnUpdating(DXModel model, DXUnitHandlerBaseContext context);
+        Guid OnUpdating(DXModel model, DXUnitHandlerBaseContextOld context);
 
-        void OnUpdated(DXModel model, DXUnitHandlerBaseContext context);
+        void OnUpdated(DXModel model, DXUnitHandlerBaseContextOld context);
     }
 }

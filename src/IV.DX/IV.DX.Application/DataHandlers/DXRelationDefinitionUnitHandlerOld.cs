@@ -5,19 +5,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DXRelationDefinitionUnitHandler : BaseEntityHandler<DXRelationDefinitionUnit>
+    internal class DXRelationDefinitionUnitHandlerOld : BaseEntityHandler<DXRelationDefinitionUnit>
     {
         private readonly IDXGenericRepository _genericRepo;
         private readonly IDXStructureRepository _dataStructureRepo;
 
-        public DXRelationDefinitionUnitHandler(IServiceProvider serviceProvider)
+        public DXRelationDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
         }
 
-        public override Guid OnInserting(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnInserting(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             var existingRelation = this._dataStructureRepo.GetRelation(entity.DXRelationDefinitionMainElement.ObjectNameLeft, entity.DXRelationDefinitionMainElement.RelationNameLeft, entity.DXRelationDefinitionMainElement.ObjectNameRight, entity.DXRelationDefinitionMainElement.RelationNameRight);
 
@@ -26,12 +26,12 @@ namespace IV.DX.Application.DataHandlers
                 return Guid.Empty;
             }
 
-            if (context is DXUnitHandlerPreInitCoreContext)
+            if (context is DXUnitHandlerPreInitCoreContextOld)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
                 return Guid.Empty;
             }
-            else if (context is DXUnitHandlerPostInitCoreContext)
+            else if (context is DXUnitHandlerPostInitCoreContextOld)
             {
                 var invertedRelation = entity.CreateInvertedRelationObject();
 
@@ -49,13 +49,13 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnUpdating(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             base.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
         }
 
-        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
         {
             var entity = this._genericRepo.GetItem<DXRelationDefinitionUnit>(id);
 

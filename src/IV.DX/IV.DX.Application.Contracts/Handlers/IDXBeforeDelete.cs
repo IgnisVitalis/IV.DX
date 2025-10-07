@@ -1,0 +1,10 @@
+﻿using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Models;
+
+namespace IV.DX.Application.Contracts.Handlers
+{
+    public interface IDXBeforeDelete<T> : IDXBeforeOrdered where T : DXUnit
+    {
+        Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
+    }
+}

@@ -5,13 +5,13 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXUnitHandler<T> where T : DXUnit
     {
-        bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context);
-        void OnGetting(DXModel model, DXUnitHandlerBaseContext context);
-        Guid OnInserting(T entity, DXUnitHandlerBaseContext context);
-        void OnInserted(T entity, DXUnitHandlerBaseContext context);
-        Guid OnUpdating(T entity, DXUnitHandlerBaseContext context);
-        void OnUpdated(T entity, DXUnitHandlerBaseContext context);
-        bool OnDeleting(Guid id, DXUnitHandlerBaseContext context);
-        void OnDeleted(Guid id, DXUnitHandlerBaseContext context);
+        bool IsItemExisting(Guid id, DXUnitHandlerBaseContextOld context);
+        void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context);
+        Guid OnInserting(T entity, DXUnitHandlerBaseContextOld context);
+        void OnInserted(T entity, DXUnitHandlerBaseContextOld context);
+        Guid OnUpdating(T entity, DXUnitHandlerBaseContextOld context);
+        void OnUpdated(T entity, DXUnitHandlerBaseContextOld context);
+        bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context);
+        void OnDeleted(Guid id, DXUnitHandlerBaseContextOld context);
     }
 }

@@ -42,12 +42,12 @@ namespace IV.DX.Application
                        typeof(DXUnit),
                       (object)(new BaseEntityHandler<DXUnit>(serviceProvider)));
 
-                Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandler(serviceProvider));
-                Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandler(serviceProvider));
-                Register<DXEnumDefinitionUnit>(new DXEnumDefinitionUnitHandler(serviceProvider));
-                Register<DXRelationDefinitionUnit>(new DXRelationDefinitionUnitHandler(serviceProvider));
-                Register<DXInheritanceInitCore>(new DXInheritanceInitCoreHandler(serviceProvider));
-                Register<DXRelationItemUnit>(new DXRelationItemUnitHandler(serviceProvider));
+                Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandlerOld(serviceProvider));
+                Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandlerOld(serviceProvider));
+                Register<DXEnumDefinitionUnit>(new DXEnumDefinitionUnitHandlerOld(serviceProvider));
+                Register<DXRelationDefinitionUnit>(new DXRelationDefinitionUnitHandlerOld(serviceProvider));
+                Register<DXInheritanceInitCore>(new DXInheritanceInitCoreHandlerOld(serviceProvider));
+                Register<DXRelationItemUnit>(new DXRelationItemUnitHandlerOld(serviceProvider));
 
                 CoreModelHandler = serviceProvider.GetService<IDXCoreHandler>();
 
@@ -133,42 +133,42 @@ namespace IV.DX.Application
                 this._handler = handler;
             }
 
-            public bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context)
+            public bool IsItemExisting(Guid id, DXUnitHandlerBaseContextOld context)
             {
                 return (this._handler.Item2 as dynamic).IsItemExisting(id, context);
             }
 
-            public void OnDeleted(Guid id, DXUnitHandlerBaseContext context)
+            public void OnDeleted(Guid id, DXUnitHandlerBaseContextOld context)
             {
                 (this._handler.Item2 as dynamic).OnDeleted(id, context);
             }
 
-            public bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
+            public bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
             {
                 return (this._handler.Item2 as dynamic).OnDeleting(id, context);
             }
 
-            public void OnGetting(DXModel model, DXUnitHandlerBaseContext context)
+            public void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context)
             {
                 (this._handler.Item2 as dynamic).OnGetting(model, context);
             }
 
-            public void OnInserted(DXUnit entity, DXUnitHandlerBaseContext context)
+            public void OnInserted(DXUnit entity, DXUnitHandlerBaseContextOld context)
             {
                 (this._handler.Item2 as dynamic).OnInserted(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnInserting(DXUnit entity, DXUnitHandlerBaseContext context)
+            public Guid OnInserting(DXUnit entity, DXUnitHandlerBaseContextOld context)
             {
                 return (this._handler.Item2 as dynamic).OnInserting(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public void OnUpdated(DXUnit entity, DXUnitHandlerBaseContext context)
+            public void OnUpdated(DXUnit entity, DXUnitHandlerBaseContextOld context)
             {
                 (this._handler.Item2 as dynamic).OnUpdated(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnUpdating(DXUnit entity, DXUnitHandlerBaseContext context)
+            public Guid OnUpdating(DXUnit entity, DXUnitHandlerBaseContextOld context)
             {
                 return (this._handler.Item2 as dynamic).OnUpdating(VerifyRecord(this._handler.Item1, entity), context);
             }

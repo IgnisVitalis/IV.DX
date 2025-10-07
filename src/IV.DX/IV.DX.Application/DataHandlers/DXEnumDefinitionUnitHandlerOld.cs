@@ -1,35 +1,36 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DXElementDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXElementDefinitionUnit>
+    internal class DXEnumDefinitionUnitHandlerOld : DXObjectDefinitionUnitHandlerOld<DXEnumDefinitionUnit>
     {
         private readonly IDXStructureRepository _dataStructureRepo;
         private readonly IDXGenericRepository _genericRepo;
 
-        public DXElementDefinitionUnitHandler(IServiceProvider serviceProvider)
+        public DXEnumDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();            
         }
 
-        public override Guid OnInserting(DXElementDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnInserting(DXEnumDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             base.Validate(entity);
             base.Process(entity);
 
-            if (context is DXUnitHandlerPreInitCoreContext)
+            if (context is DXUnitHandlerPreInitCoreContextOld)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
                 return Guid.Empty;
             }
-            else if (context is DXUnitHandlerPostInitCoreContext)
+            else if (context is DXUnitHandlerPostInitCoreContextOld)
             {
                 return base.OnInserting(entity, context);
             }
@@ -37,40 +38,38 @@ namespace IV.DX.Application.DataHandlers
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
-                this.ProcessRelations(entity);
                 return base.OnInserting(entity, context);
             }
         }
 
-        public override Guid OnUpdating(DXElementDefinitionUnit entity, DXUnitHandlerBaseContext context)
+        public override Guid OnUpdating(DXEnumDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
         {
             base.Validate(entity);
             base.Process(entity);
 
             this._dataStructureRepo.UpdatedDataStructure(entity);
 
-            this.ProcessRelations(entity);
+            //this._dataStructureRepo.AddOrUpdateEnumInfo(entity);
+
             return base.OnUpdating(entity, context);
         }
 
-        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
         {
-            var entity = this._genericRepo.GetItem<DXElementDefinitionUnit>(id);
-
-            if (entity == null)
-                return false;
+            var entity = this._genericRepo.GetItem<DXEnumDefinitionUnit>(id);
 
             base.Validate(entity);
             base.Process(entity);
 
             this._dataStructureRepo.DropDataStructure(entity);
 
-            return base.OnDeleting(id, context);
-        }
-
-        private void ProcessRelations(DXElementDefinitionUnit entity)
-        {
-            this.ProcessEnumRelations(entity);
+            switch (entity.DXUnitDefinitionMainElement.Kind)
+            {
+                case DXObjectKindEnum.Core:
+                    return false;
+                default:
+                    return base.OnDeleting(id, context);
+            }
         }
     }
 }

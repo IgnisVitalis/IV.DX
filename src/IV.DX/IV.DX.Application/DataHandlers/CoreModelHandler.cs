@@ -17,44 +17,44 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public bool OnDeleting(string typeName, Guid id, DXUnitHandlerBaseContext context)
+        public bool OnDeleting(string typeName, Guid id, DXUnitHandlerBaseContextOld context)
         {
             return this._coreRepo.Delete(typeName, id);
         }
 
-        public void OnDeleted(string typeName, Guid id, DXUnitHandlerBaseContext context)
+        public void OnDeleted(string typeName, Guid id, DXUnitHandlerBaseContextOld context)
         {
         }
 
-        public Guid OnInserting(DXModel model, DXUnitHandlerBaseContext context)
+        public Guid OnInserting(DXModel model, DXUnitHandlerBaseContextOld context)
         {
             return this._coreRepo.Insert(model);
         }
 
-        public void OnInserted(DXModel model, DXUnitHandlerBaseContext context)
+        public void OnInserted(DXModel model, DXUnitHandlerBaseContextOld context)
         {
         }
 
-        public Guid OnUpdating(DXModel model, DXUnitHandlerBaseContext context)
+        public Guid OnUpdating(DXModel model, DXUnitHandlerBaseContextOld context)
         {
             return this._coreRepo.Update(model);
         }
 
-        public void OnUpdated(DXModel model, DXUnitHandlerBaseContext context)
+        public void OnUpdated(DXModel model, DXUnitHandlerBaseContextOld context)
         {
         }
 
-        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context) where T : DXUnit
+        public T GetItem<T>(Guid id, DXUnitHandlerBaseContextOld context) where T : DXUnit
         {
             return this._genericRepo.GetItem<T>(id);
         }
 
-        public bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContext context)
+        public bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContextOld context)
         {
             return this._coreRepo.IsItemExisting(typeName, id);
         }
 
-        public void OnGetting(DXModel model, DXUnitHandlerBaseContext context)
+        public void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context)
         {
         }
     }

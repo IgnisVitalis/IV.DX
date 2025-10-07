@@ -2,94 +2,13 @@
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace IV.DX.Application.DataHandlers
+namespace IV.DX.Application.Handlers
 {
-    internal abstract class DXObjectDefinitionUnitHandler<T> : BaseEntityHandler<T> where T : DXObjectDefinitionUnit
+    internal class DXObjectDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXStructureRepository dataStructureRepo, IDXGenericRepository genericRepo)
     {
-        private readonly IDXStructureRepository _dataStructureRepo;
-        private readonly IDXUnitDataService _dataService;
-        private readonly IDXGenericRepository _genericRepo;
+        readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
 
-        protected static readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
-
-        public DXObjectDefinitionUnitHandler(IServiceProvider serviceProvider)
-            : base(serviceProvider)
-        {
-            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._dataService = serviceProvider.GetService<IDXUnitDataService>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
-        }
-
-        protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)
-        {
-            if (obj.DXColumnDefinitionElement == null)
-                return;
-
-            // TODO: [70fba884-2cef-4d5f-937d-3efc17365a25]     
-            switch (obj.DXColumnDefinitionElement.Mode)
-            {
-                case MultiElementsMode.Full:
-                    break;
-                case MultiElementsMode.Target:
-                    ProcessEnumRelationsUsingTargetMode(obj);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void ProcessEnumRelationsUsingTargetMode(DXObjectDefinitionUnit obj)
-        {
-            var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
-
-            var announcedEnumInfos = this._dataStructureRepo.GetEnums(announcedIds);
-
-            var deletedIds = obj.DXColumnDefinitionElement.Deleted.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
-
-            var deletedEnumInfos = this._dataStructureRepo.GetEnums(deletedIds);
-
-            foreach (var announcedEnumInfo in announcedEnumInfos)
-            {
-                var columnWithEnumValue = obj.DXColumnDefinitionElement.Announced.Single(x => x.EnumType == announcedEnumInfo.ID);
-
-                var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
-
-                this._dataService.Insert(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue));
-            }
-
-            foreach (var deletedEnumInfo in deletedEnumInfos)
-            {
-                var columnWithEnumValue = obj.DXColumnDefinitionElement.Deleted.Single(x => x.EnumType == deletedEnumInfo.ID);
-
-                var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
-
-                var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
-
-                this._dataService.Delete("DXRelationDefinitionUnit", relationObject.ID);
-            }
-        }
-
-        private DXRelationDefinitionUnit GetRelationObjectForEnum(DXObjectDefinitionUnit obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
-        {
-            return new DXRelationDefinitionUnit()
-            {
-                ID = Guid.NewGuid(),
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    ObjectNameLeft = obj.DXUnitDefinitionMainElement.Name,
-                    RelationNameLeft = obj.DXUnitDefinitionMainElement.Name,
-                    ObjectNameRight = enumObj.DXUnitDefinitionMainElement.Name,
-                    RelationNameRight = columnWithEnumValue.Name,
-                    RelationType = DXRelationTypeEnum.ManyToOne,
-                    RelationColumnNameRight = enumColumn.Name,
-                    RelationColumnTypeRight = enumColumn.ColumnType,
-                    Kind = obj.DXUnitDefinitionMainElement.Kind
-                }
-            };
-        }
 
         protected void Validate(DXObjectDefinitionUnit dataBlock)
         {
@@ -127,12 +46,73 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
+        protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)
         {
-            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
-                return null;
+            if (obj.DXColumnDefinitionElement == null)
+                return;
 
-            return this._genericRepo.GetItem<DXObjectDefinitionUnit>(objectInfoIncome.ID);
+            // TODO: [70fba884-2cef-4d5f-937d-3efc17365a25]     
+            switch (obj.DXColumnDefinitionElement.Mode)
+            {
+                case MultiElementsMode.Full:
+                    break;
+                case MultiElementsMode.Target:
+                    ProcessEnumRelationsUsingTargetMode(obj);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void ProcessEnumRelationsUsingTargetMode(DXObjectDefinitionUnit obj)
+        {
+            var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
+
+            var announcedEnumInfos = dataStructureRepo.GetEnums(announcedIds);
+
+            var deletedIds = obj.DXColumnDefinitionElement.Deleted.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
+
+            var deletedEnumInfos = dataStructureRepo.GetEnums(deletedIds);
+
+            foreach (var announcedEnumInfo in announcedEnumInfos)
+            {
+                var columnWithEnumValue = obj.DXColumnDefinitionElement.Announced.Single(x => x.EnumType == announcedEnumInfo.ID);
+
+                var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
+
+                dxUnitService.Insert(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue));
+            }
+
+            foreach (var deletedEnumInfo in deletedEnumInfos)
+            {
+                var columnWithEnumValue = obj.DXColumnDefinitionElement.Deleted.Single(x => x.EnumType == deletedEnumInfo.ID);
+
+                var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
+
+                var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
+
+                dxUnitService.Delete("DXRelationDefinitionUnit", relationObject.ID);
+            }
+        }
+
+        private DXRelationDefinitionUnit GetRelationObjectForEnum(DXObjectDefinitionUnit obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
+        {
+            return new DXRelationDefinitionUnit()
+            {
+                ID = Guid.NewGuid(),
+                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
+                {
+                    ID = Guid.NewGuid(),
+                    ObjectNameLeft = obj.DXUnitDefinitionMainElement.Name,
+                    RelationNameLeft = obj.DXUnitDefinitionMainElement.Name,
+                    ObjectNameRight = enumObj.DXUnitDefinitionMainElement.Name,
+                    RelationNameRight = columnWithEnumValue.Name,
+                    RelationType = DXRelationTypeEnum.ManyToOne,
+                    RelationColumnNameRight = enumColumn.Name,
+                    RelationColumnTypeRight = enumColumn.ColumnType,
+                    Kind = obj.DXUnitDefinitionMainElement.Kind
+                }
+            };
         }
 
         private void SetColumn(DXObjectDefinitionUnit objectInfoIncome, DXObjectDefinitionUnit objectInfoFromDB, ImportantColumn column)
@@ -176,6 +156,15 @@ namespace IV.DX.Application.DataHandlers
 
                 this.SetImportantValues(objectIdColumnDescFromModel, column);
             }
+        }
+
+
+        private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
+        {
+            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
+                return null;
+
+            return genericRepo.GetItem<DXObjectDefinitionUnit>(objectInfoIncome.ID);
         }
 
         private DXColumnDefinitionElement GetColumnDesc(DXObjectDefinitionUnit objectInfo, ImportantColumn column)
