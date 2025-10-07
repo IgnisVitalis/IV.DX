@@ -3,14 +3,14 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence
 {
-    internal static class CoreDataStructureRepository
+    internal static class DXCoreDataStructureRepository
     {
         public static IEnumerable<DXElementDefinitionUnit> CoreBlockInfos { get; set; }
         public static IEnumerable<DXEnumDefinitionUnit> CoreEnumInfos { get; set; }
         public static IEnumerable<DXUnitDefinitionUnit> CoreEntityInfos { get; set; }
         public static IEnumerable<DXRelationDefinitionUnit> CoreRelationInfos { get; set; }
 
-        static CoreDataStructureRepository()
+        static DXCoreDataStructureRepository()
         {
             InitCoreEnumInfos();
             InitCoreBlockInfos();

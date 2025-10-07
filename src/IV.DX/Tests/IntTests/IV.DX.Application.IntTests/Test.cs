@@ -69,7 +69,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
 
             var enumInfo = dataStructureRepository.GetEnum("DXObjectKindEnum");
 
-            var blockDefinition = ModelConverter.GetESQLBlockDefinition(enumInfo);
+            var blockDefinition = DXModelConverter.GetESQLBlockDefinition(enumInfo);
 
             var enums = enumCoreRepository.Get(blockDefinition);
         }

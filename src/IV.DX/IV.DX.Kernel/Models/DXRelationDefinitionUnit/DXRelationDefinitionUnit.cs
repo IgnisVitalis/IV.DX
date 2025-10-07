@@ -4,10 +4,10 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DXRelationDefinitionUnit")]
+    [DXUnit("DXRelationDefinitionUnit")]
     public class DXRelationDefinitionUnit : ESQLObject
     {
-        public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
+        public static ESQLModelDefinition ESQLModelDefinition { get; } = DXModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
 
         public DXRelationDefinitionMainElement DXRelationDefinitionMainElement { get; set; }
 

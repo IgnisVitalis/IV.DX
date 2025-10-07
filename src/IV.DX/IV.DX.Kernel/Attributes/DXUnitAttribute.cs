@@ -1,14 +1,14 @@
 namespace IV.DX.Kernel.Attributes
 {
-    public class ESQLObjectDefinitionAttribute : Attribute
+    public class DXUnitAttribute : Attribute
     {
         public string ObjectName { get; set; }
-        public ESQLObjectDefinitionAttribute(string objectName)
+        public DXUnitAttribute(string objectName)
         {
             ObjectName = objectName;
         }
 
-        public static bool DeepEquals(ESQLObjectDefinitionAttribute item1, ESQLObjectDefinitionAttribute item2)
+        public static bool DeepEquals(DXUnitAttribute item1, DXUnitAttribute item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -18,9 +18,9 @@ namespace IV.DX.Kernel.Attributes
             return result;
         }
 
-        public ESQLObjectDefinitionAttribute DeepClone()
+        public DXUnitAttribute DeepClone()
         {
-            return new ESQLObjectDefinitionAttribute(ObjectName);
+            return new DXUnitAttribute(ObjectName);
         }
     }
 }

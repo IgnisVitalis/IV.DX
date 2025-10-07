@@ -2,16 +2,16 @@
 
 namespace IV.DX.Kernel.Attributes
 {
-    public class ESQLColumnDefinitionAttribute : Attribute
+    public class DXColumnAttribute : Attribute
     {
         public string ColumnName { get; private set; }
         public string ESQLExpression { get; private set; }
-        public TypeOfEntityLoading TypeOfEntityLoading { get; private set; }
+        public DXLoadingType TypeOfEntityLoading { get; private set; }
 
-        public ESQLColumnDefinitionAttribute(
+        public DXColumnAttribute(
             string columnName,
             string esqlExpression = null,
-            TypeOfEntityLoading typeOfEntityLoading = TypeOfEntityLoading.Full)
+            DXLoadingType typeOfEntityLoading = DXLoadingType.Full)
         {
             ColumnName = columnName;
             ESQLExpression = string.IsNullOrEmpty(esqlExpression) ?
@@ -19,7 +19,7 @@ namespace IV.DX.Kernel.Attributes
             TypeOfEntityLoading = typeOfEntityLoading;
         }
 
-        public static bool DeepEquals(ESQLColumnDefinitionAttribute item1, ESQLColumnDefinitionAttribute item2)
+        public static bool DeepEquals(DXColumnAttribute item1, DXColumnAttribute item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -29,7 +29,7 @@ namespace IV.DX.Kernel.Attributes
             return result;
         }
 
-        public static bool DeepEquals(IDictionary<string, ESQLColumnDefinitionAttribute> dict1, IDictionary<string, ESQLColumnDefinitionAttribute> dict2)
+        public static bool DeepEquals(IDictionary<string, DXColumnAttribute> dict1, IDictionary<string, DXColumnAttribute> dict2)
         {
             if (dict1 == null || dict2 == null)
                 return false;
@@ -51,12 +51,12 @@ namespace IV.DX.Kernel.Attributes
             return result;
         }
 
-        public ESQLColumnDefinitionAttribute DeepClone()
+        public DXColumnAttribute DeepClone()
         {
-            return new ESQLColumnDefinitionAttribute(ColumnName, ESQLExpression, TypeOfEntityLoading);
+            return new DXColumnAttribute(ColumnName, ESQLExpression, TypeOfEntityLoading);
         }
 
-        public bool DeepEquals(ESQLColumnDefinitionAttribute columnDefinition)
+        public bool DeepEquals(DXColumnAttribute columnDefinition)
         {
             if (columnDefinition == null)
                 return false;

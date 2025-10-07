@@ -3,9 +3,9 @@ using IV.DX.Kernel.Converters;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DXEnumDefinitionUnit")]
+    [DXUnit("DXEnumDefinitionUnit")]
     public class DXEnumDefinitionUnit : DXObjectDefinitionUnit
     {
-        public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DXEnumDefinitionUnit>();
+        public static ESQLModelDefinition ESQLModelDefinition { get; } = DXModelConverter.GetESQLModelDefinition<DXEnumDefinitionUnit>();
     }
 }

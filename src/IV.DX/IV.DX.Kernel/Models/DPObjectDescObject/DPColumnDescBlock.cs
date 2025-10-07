@@ -3,26 +3,26 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DXColumnDefinitionElement")]
+    [DXElement("DXColumnDefinitionElement")]
     public class DXColumnDefinitionElement : ESQLBlock
     {
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
-        [ESQLColumnDefinition("ColumnType")]
+        [DXColumn("ColumnType")]
         public DXColumnTypeEnum ColumnType { get; set; }
-        [ESQLColumnDefinition("Length")]
+        [DXColumn("Length")]
         public int? Length { get; set; }
-        [ESQLColumnDefinition("Precision")]
+        [DXColumn("Precision")]
         public int? Precision { get; set; }
-        [ESQLColumnDefinition("Scale")]
+        [DXColumn("Scale")]
         public int? Scale { get; set; }
-        [ESQLColumnDefinition("AllowNull")]
+        [DXColumn("AllowNull")]
         public bool AllowNull { get; set; }
-        [ESQLColumnDefinition("DefaultValue")]
+        [DXColumn("DefaultValue")]
         public string DefaultValue { get; set; }
-        [ESQLColumnDefinition("EnumKey")]
+        [DXColumn("EnumKey")]
         public Guid? EnumKey { get; set; }
-        [ESQLColumnDefinition("EnumType")]
+        [DXColumn("EnumType")]
         public Guid? EnumType { get; set; }
     }
 }

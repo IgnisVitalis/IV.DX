@@ -5,11 +5,11 @@ namespace IV.DX.Kernel.Models
 {
     public abstract class ESQLBlock
     {
-        [ESQLColumnDefinition("ID", "ID", TypeOfEntityLoading.Base)]
+        [DXColumn("ID", "ID", DXLoadingType.Base)]
         public Guid ID { get; set; }
-        [ESQLColumnDefinition("ObjectID", "ObjectID", TypeOfEntityLoading.Base)]
+        [DXColumn("ObjectID", "ObjectID", DXLoadingType.Base)]
         public Guid ObjectID { get; set; }
-        [ESQLColumnDefinition("TimeStamp", "TimeStamp", TypeOfEntityLoading.Base)]
+        [DXColumn("TimeStamp", "TimeStamp", DXLoadingType.Base)]
         public DateTime TimeStamp { get; set; }
     }
 }

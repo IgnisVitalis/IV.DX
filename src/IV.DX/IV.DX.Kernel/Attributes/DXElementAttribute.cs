@@ -1,14 +1,14 @@
 namespace IV.DX.Kernel.Attributes
 {
-    public class ESQLBlockDefinitionAttribute : Attribute
+    public class DXElementAttribute : Attribute
     {
         public string BlockName { get; private set; }
-        public ESQLBlockDefinitionAttribute(string blockName)
+        public DXElementAttribute(string blockName)
         {
             BlockName = blockName;
         }
 
-        public static bool DeepEquals(ESQLBlockDefinitionAttribute item1, ESQLBlockDefinitionAttribute item2)
+        public static bool DeepEquals(DXElementAttribute item1, DXElementAttribute item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -18,9 +18,9 @@ namespace IV.DX.Kernel.Attributes
             return result;
         }
 
-        public ESQLBlockDefinitionAttribute DeepClone()
+        public DXElementAttribute DeepClone()
         {
-            return new ESQLBlockDefinitionAttribute(BlockName);
+            return new DXElementAttribute(BlockName);
         }
     }
 }

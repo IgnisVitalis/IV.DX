@@ -29,7 +29,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         {
             // Init
             string json = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
-            DXElementDefinitionUnit blockDesc = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json);
+            DXElementDefinitionUnit blockDesc = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
@@ -209,8 +209,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
             string json1 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0001.json");
 
-            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit blockDesc1 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json1);
+            DXElementDefinitionUnit blockDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc1 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json1);
 
             base._finalizationAction = new Action(() =>
             {
@@ -378,8 +378,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
             string json2 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0002.json");
-            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
+            DXElementDefinitionUnit blockDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
 
             base._finalizationAction = new Action(() =>
             {
@@ -447,9 +447,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             string json2 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0002.json");
             string json3 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0003.json");
 
-            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
-            DXElementDefinitionUnit blockDesc3 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json3);
+            DXElementDefinitionUnit blockDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
+            DXElementDefinitionUnit blockDesc3 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json3);
 
             base._finalizationAction = new Action(() =>
             {
@@ -533,8 +533,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
             string json4 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0004.json");
-            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit blockDesc4 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json4);
+            DXElementDefinitionUnit blockDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc4 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json4);
 
             base._finalizationAction = new Action(() =>
             {

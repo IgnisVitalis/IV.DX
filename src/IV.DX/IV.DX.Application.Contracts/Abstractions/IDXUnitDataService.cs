@@ -7,10 +7,10 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXUnitDataService
     {
-        IEnumerable<T> GetItems<T>(TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(string esqlWhereExpression, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        T GetItem<T>(Guid id, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
         bool IsItemExisting(Guid id, string type);
 
         Guid Insert(ESQLObject esqlObject);
@@ -28,10 +28,10 @@ namespace IV.DX.Application.Contracts.Abstractions
         bool Delete(JObject jObject);
         Guid InsertOrUpdate(JObject jObject);
 
-        IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
+        T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new();
         bool IsItemExisting(Guid id, string type, DXUnitHandlerBaseContext context);
 
         Guid Insert(ESQLObject esqlObject, DXUnitHandlerBaseContext context);

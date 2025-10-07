@@ -2,10 +2,10 @@
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DXUniqueColumnsElement")]
+    [DXElement("DXUniqueColumnsElement")]
     public class DXUniqueColumnsElement : ESQLBlock
     {
-        [ESQLColumnDefinition("Columns")]
+        [DXColumn("Columns")]
         public string Columns { get; set; }
     }
 }

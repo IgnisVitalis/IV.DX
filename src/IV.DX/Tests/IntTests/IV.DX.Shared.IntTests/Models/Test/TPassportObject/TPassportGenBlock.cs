@@ -4,10 +4,10 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLBlockDefinition("TPassportGenBlock")]
+    [DXElement("TPassportGenBlock")]
     public class TPassportGenBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("SerialNumber")]
+        [DXColumn("SerialNumber")]
         public string SerialNumber { get; set; }
     }
 }

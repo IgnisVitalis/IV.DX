@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLObjectDefinition("TBookObject")]
+    [DXUnit("TBookObject")]
     public class TBookObject : ESQLObject
     {
         public TBookGenBlock TBookGenBlock { get; set; }

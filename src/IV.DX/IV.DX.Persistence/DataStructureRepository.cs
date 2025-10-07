@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace IV.DX.Persistence
 {
-    internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
+    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         private IList<DXRelationDefinitionUnit> _relationInfos;
         public IEnumerable<DXRelationDefinitionUnit> RelationInfos { get { return this._relationInfos; } }
@@ -68,8 +68,8 @@ namespace IV.DX.Persistence
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock)
         {
-            var result = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, TypeOfEntityLoading.Full);
-            var existingDataBlock = ESQLObjectHelper.CreateInstance<DXObjectDefinitionUnit>(result);
+            var result = this.GetItem(DXModelConverter.GetESQLModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, DXLoadingType.Full);
+            var existingDataBlock = DXUnitHelper.CreateInstance<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataBlock, existingDataBlock);
 
@@ -177,9 +177,9 @@ namespace IV.DX.Persistence
 
             if (string.IsNullOrEmpty(entity.DXRelationDefinitionMainElement.RelationTable))
             {
-                var existingModel = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), entity.ID, TypeOfEntityLoading.Full);
+                var existingModel = this.GetItem(DXModelConverter.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), entity.ID, DXLoadingType.Full);
 
-                var existingEntity = ESQLObjectHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
+                var existingEntity = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 
                 relationTableName = existingEntity.DXRelationDefinitionMainElement.RelationTable;
             }
@@ -274,44 +274,44 @@ namespace IV.DX.Persistence
 
         private void LoadEnumInfos()
         {
-            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
 
-            var enumInfos = enumsModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXEnumDefinitionUnit>(x));
+            var enumInfos = enumsModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
-            var enumInfosWithoutCore = enumInfos.Except(CoreDataStructureRepository.CoreEnumInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var enumInfosWithoutCore = enumInfos.Except(DXCoreDataStructureRepository.CoreEnumInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXEnumDefinitionUnit);
 
-            this._enumInfos = CoreDataStructureRepository.CoreEnumInfos.Concat(enumInfosWithoutCore).ToList();
+            this._enumInfos = DXCoreDataStructureRepository.CoreEnumInfos.Concat(enumInfosWithoutCore).ToList();
         }
 
         private void LoadEntityInfos()
         {
-            var entityModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var entityModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
 
-            var entityInfos = entityModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(x));
+            var entityInfos = entityModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
-            var entityInfosWithoutCore = entityInfos.Except(CoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var entityInfosWithoutCore = entityInfos.Except(DXCoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
 
-            this._entityInfos = CoreDataStructureRepository.CoreEntityInfos.Concat(entityInfosWithoutCore).ToList();
+            this._entityInfos = DXCoreDataStructureRepository.CoreEntityInfos.Concat(entityInfosWithoutCore).ToList();
         }
 
         private void LoadRelationInfos()
         {
-            var result = this.GetItems(DXRelationDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
-            this._relationInfos = result.Select(x => ESQLObjectHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
+            var result = this.GetItems(DXRelationDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            this._relationInfos = result.Select(x => DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
         }
 
         private void LoadBlockInfos()
         {
-            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
 
-            var blockInfos = blockModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(x));
+            var blockInfos = blockModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
-            var blockInfosWithoutCore = blockInfos.Except(CoreDataStructureRepository.CoreBlockInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var blockInfosWithoutCore = blockInfos.Except(DXCoreDataStructureRepository.CoreBlockInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXElementDefinitionUnit);
 
-            this._blockInfos = CoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
+            this._blockInfos = DXCoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
         }
 
         private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
@@ -429,7 +429,7 @@ namespace IV.DX.Persistence
 
         public void UpdateCache()
         {
-            if (MaintenanceToken.IsCoreInitializing)
+            if (DXMaintenanceToken.IsCoreInitializing)
             {
                 this._blockInfos = DXElementDefinitionUnitItems.Items;
                 this._entityInfos = DXUnitDefinitionUnitItems.Items;

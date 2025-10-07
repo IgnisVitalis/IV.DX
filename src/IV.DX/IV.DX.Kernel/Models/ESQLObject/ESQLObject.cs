@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     {
         public Guid ID { get; set; }
 
-        [ESQLColumnDefinition("TimeStamp", "TimeStamp", TypeOfEntityLoading.Base)]
+        [DXColumn("TimeStamp", "TimeStamp", DXLoadingType.Base)]
         public DateTime TimeStamp { get; set; }
 
         public ESQLObject()

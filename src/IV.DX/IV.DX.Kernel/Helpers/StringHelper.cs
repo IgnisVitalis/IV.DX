@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Helpers
 {
-    public static class StringHelper
+    internal static class StringHelper
     {
         public static IEnumerable<KeyValuePair<string, char?>> SplitAndKeep(this string s, char[] delims)
         {

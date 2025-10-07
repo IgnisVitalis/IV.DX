@@ -3,25 +3,25 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DXRelationDefinitionMainElement")]
+    [DXElement("DXRelationDefinitionMainElement")]
     public class DXRelationDefinitionMainElement : ESQLBlock
     {
-        [ESQLColumnDefinition("RelationType")]
+        [DXColumn("RelationType")]
         public DXRelationTypeEnum RelationType { get; set; }
-        [ESQLColumnDefinition("ObjectNameLeft")]
+        [DXColumn("ObjectNameLeft")]
         public string ObjectNameLeft { get; set; }
-        [ESQLColumnDefinition("RelationNameLeft")]
+        [DXColumn("RelationNameLeft")]
         public string RelationNameLeft { get; set; }
-        [ESQLColumnDefinition("ObjectNameRight")]
+        [DXColumn("ObjectNameRight")]
         public string ObjectNameRight { get; set; }
-        [ESQLColumnDefinition("RelationNameRight")]
+        [DXColumn("RelationNameRight")]
         public string RelationNameRight { get; set; }
-        [ESQLColumnDefinition("RelationTable")]
+        [DXColumn("RelationTable")]
         public string RelationTable { get; set; }
-        [ESQLColumnDefinition("Kind")]
+        [DXColumn("Kind")]
         public DXObjectKindEnum Kind { get; set; }
         private string _relationColumnNameLeft;
-        [ESQLColumnDefinition("RelationColumnNameLeft")]
+        [DXColumn("RelationColumnNameLeft")]
         public string RelationColumnNameLeft
         {
             get
@@ -48,7 +48,7 @@ namespace IV.DX.Kernel.Models
         }
 
         private DXColumnTypeEnum? _relationColumnTypeLeft;
-        [ESQLColumnDefinition("RelationColumnTypeLeft")]
+        [DXColumn("RelationColumnTypeLeft")]
         public DXColumnTypeEnum? RelationColumnTypeLeft
         {
             get
@@ -75,7 +75,7 @@ namespace IV.DX.Kernel.Models
         }
 
         private string _relationColumnNameRight;
-        [ESQLColumnDefinition("RelationColumnNameRight")]
+        [DXColumn("RelationColumnNameRight")]
         public string RelationColumnNameRight
         {
             get
@@ -101,7 +101,7 @@ namespace IV.DX.Kernel.Models
         }
 
         private DXColumnTypeEnum? _relationColumnTypeRight;
-        [ESQLColumnDefinition("RelationColumnTypeRight")]
+        [DXColumn("RelationColumnTypeRight")]
         public DXColumnTypeEnum? RelationColumnTypeRight
         {
             get

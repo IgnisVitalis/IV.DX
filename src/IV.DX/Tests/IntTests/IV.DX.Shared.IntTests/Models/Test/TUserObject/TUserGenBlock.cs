@@ -4,14 +4,14 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLBlockDefinition("TUserGenBlock")]
+    [DXElement("TUserGenBlock")]
     public class TUserGenBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
-        [ESQLColumnDefinition("Surname")]
+        [DXColumn("Surname")]
         public string Surname { get; set; }
-        [ESQLColumnDefinition("Birth")]
+        [DXColumn("Birth")]
         public DateTime Birth { get; set; }
     }
 }

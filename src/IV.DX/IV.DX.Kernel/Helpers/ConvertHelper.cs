@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Helpers
 {
-    public static class ConvertHelper
+    internal static class ConvertHelper
     {
         private static readonly string[] _allowedDateTimeFormats = { "d", "D", "g", "G", "MMM d yyyy h:mmtt" };
 

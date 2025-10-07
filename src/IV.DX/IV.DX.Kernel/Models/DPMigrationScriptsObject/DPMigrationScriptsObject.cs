@@ -2,7 +2,7 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DXMigrationScriptsUnit")]
+    [DXUnit("DXMigrationScriptsUnit")]
     public class DXMigrationScriptsUnit : ESQLObject
     {
         public DXMigrationScriptsMainElement DXMigrationScriptsMainElement { get; set; }

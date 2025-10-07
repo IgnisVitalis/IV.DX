@@ -5,10 +5,10 @@ namespace IV.DX.Kernel.Models
 {
     public class ESQLMainItem
     {
-        public ESQLObjectDefinitionAttribute ObjectInfo { get; private set; }
+        public DXUnitAttribute ObjectInfo { get; private set; }
         public ESQLItem Item { get; set; }
 
-        public ESQLMainItem(ESQLObjectDefinitionAttribute objectInfo)
+        public ESQLMainItem(DXUnitAttribute objectInfo)
         {
             this.ObjectInfo = objectInfo;
         }
@@ -19,7 +19,7 @@ namespace IV.DX.Kernel.Models
                 return false;
 
             var result =
-                ESQLObjectDefinitionAttribute.DeepEquals(item1.ObjectInfo, item2.ObjectInfo)
+                DXUnitAttribute.DeepEquals(item1.ObjectInfo, item2.ObjectInfo)
                 && ESQLItem.DeepEquals(item1.Item, item2.Item);
 
             return result;

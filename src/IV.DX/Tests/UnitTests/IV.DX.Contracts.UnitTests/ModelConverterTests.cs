@@ -69,7 +69,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                 }
             };
 
-            var ownItem = new ESQLMainItem(new ESQLObjectDefinitionAttribute("MyObjectDefinition"))
+            var ownItem = new ESQLMainItem(new DXUnitAttribute("MyObjectDefinition"))
             {
                 Item = new ESQLItem()
                 {
@@ -86,7 +86,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                     new ESQLSingleItem
                     {
                         Name = "MyBlockSingleItem",
-                        BlockInfo = new ESQLBlockDefinitionAttribute("MyBlockDefinition"),
+                        BlockInfo = new DXElementAttribute("MyBlockDefinition"),
                         Item = new ESQLItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
@@ -106,7 +106,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                     new ESQLMultiItem()
                     {
                         Name = "MyBlockMultiItems",
-                        BlockInfo = new ESQLBlockDefinitionAttribute("MyBlockDefinition"),
+                        BlockInfo = new DXElementAttribute("MyBlockDefinition"),
                         Mode = ModeForMultiItems.Target,
                         Announced = new List<ESQLItem>()
                         {
@@ -174,7 +174,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
             // Init                     
 
             // Action            
-            var esqlObjectResult = ESQLObjectHelper.CreateInstance<MyObject>(this.esqlModel);
+            var esqlObjectResult = DXUnitHelper.CreateInstance<MyObject>(this.esqlModel);
             var result = this.esqlObject.ConvertToESQLModel();
 
             // Checking result
@@ -182,7 +182,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
         }
     }
 
-    [ESQLObjectDefinition("MyObjectDefinition")]
+    [DXUnit("MyObjectDefinition")]
     internal class MyObject : ESQLObject
     {
         public MyBlock MyBlockSingleItem { get; set; }
@@ -190,14 +190,14 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
         public ESQLMultiItemsContainer<MyBlock> MyBlockMultiItems { get; set; }
     }
 
-    [ESQLBlockDefinition("MyBlockDefinition")]
+    [DXElement("MyBlockDefinition")]
     internal class MyBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
-        [ESQLColumnDefinition("Value")]
+        [DXColumn("Value")]
         public int Value { get; set; }
-        [ESQLColumnDefinition("Date")]
+        [DXColumn("Date")]
         public DateTime Date { get; set; }
     }
 }

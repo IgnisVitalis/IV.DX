@@ -848,97 +848,97 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(lastItemLeft.ID, relationLeftIDs.Single());
         }
 
-        [ESQLObjectDefinition("RelTableLeft43a1")]
+        [DXUnit("RelTableLeft43a1")]
         private class RelTableLeft1 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableRight43a1")]
+        [DXUnit("RelTableRight43a1")]
         private class RelTableRight1 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableLeftRelation")]
+            [DXColumn("RelTableLeftRelation")]
             public Guid RelTableLeftRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableLeft2")]
+        [DXUnit("RelTableLeft2")]
         private class RelTableLeft2 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableRightRelation")]
+            [DXColumn("RelTableRightRelation")]
             public Guid RelTableRightRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableRight2")]
+        [DXUnit("RelTableRight2")]
         private class RelTableRight2 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableLeft3")]
+        [DXUnit("RelTableLeft3")]
         private class RelTableLeft3 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableRight3")]
+        [DXUnit("RelTableRight3")]
         private class RelTableRight3 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableLeftRelation")]
+            [DXColumn("RelTableLeftRelation")]
             public Guid RelTableLeftRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableLeft4")]
+        [DXUnit("RelTableLeft4")]
         private class RelTableLeft4 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableRightRelation")]
+            [DXColumn("RelTableRightRelation")]
             public Guid RelTableRightRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableRight4")]
+        [DXUnit("RelTableRight4")]
         private class RelTableRight4 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableLeft5")]
+        [DXUnit("RelTableLeft5")]
         private class RelTableLeft5 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableRight5")]
+        [DXUnit("RelTableRight5")]
         private class RelTableRight5 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableLeftRelation")]
+            [DXColumn("RelTableLeftRelation")]
             public Guid? RelTableLeftRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableLeft6")]
+        [DXUnit("RelTableLeft6")]
         private class RelTableLeft6 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableRightRelation")]
+            [DXColumn("RelTableRightRelation")]
             public Guid? RelTableRightRelation { get; set; }
         }
 
-        [ESQLObjectDefinition("RelTableRight6")]
+        [DXUnit("RelTableRight6")]
         private class RelTableRight6 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableLeft7")]
+        [DXUnit("RelTableLeft7")]
         private class RelTableLeft7 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableRight7")]
+        [DXUnit("RelTableRight7")]
         private class RelTableRight7 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableLeft8")]
+        [DXUnit("RelTableLeft8")]
         private class RelTableLeft8 : ESQLObject
         {
         }
 
-        [ESQLObjectDefinition("RelTableRight8")]
+        [DXUnit("RelTableRight8")]
         private class RelTableRight8 : ESQLObject
         {
-            [ESQLColumnDefinition("RelTableLeftRelation")]
+            [DXColumn("RelTableLeftRelation")]
             public Guid? RelTableLeftRelation { get; set; }
         }
 

@@ -5,14 +5,14 @@ namespace IV.DX.Kernel.Models
     public class ESQLPropertyDefinition
     {
         public string Name { get; set; }
-        public ESQLColumnDefinitionAttribute ColumnDefinition { get; set; }
+        public DXColumnAttribute ColumnDefinition { get; set; }
 
         private ESQLPropertyDefinition()
         {
 
         }
 
-        public ESQLPropertyDefinition(string name, ESQLColumnDefinitionAttribute columnDefinition)
+        public ESQLPropertyDefinition(string name, DXColumnAttribute columnDefinition)
         {
             this.Name = name;
             this.ColumnDefinition = columnDefinition;

@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class ESQLMultiItem
     {
         public string Name { get; set; }
-        public ESQLBlockDefinitionAttribute BlockInfo { get; set; }
+        public DXElementAttribute BlockInfo { get; set; }
         public ModeForMultiItems Mode { get; set; }
         public IEnumerable<ESQLItem> Announced { get; set; }
         public IEnumerable<ESQLItem> Deleted { get; set; }
@@ -87,7 +87,7 @@ namespace IV.DX.Kernel.Models
 
             ESQLMultiItem multiFragment = new ESQLMultiItem
             {
-                BlockInfo = new ESQLBlockDefinitionAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
                 Mode = (ModeForMultiItems)jProperty[Constants.Mode].Value<int>()
             };
@@ -122,7 +122,7 @@ namespace IV.DX.Kernel.Models
 
             var result =
                 item1.Name == item2.Name
-                && ESQLBlockDefinitionAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
+                && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
                 && item1.Mode == item2.Mode
                 && ESQLItem.DeepEquals(item1.Announced, item2.Announced)
                 && ESQLItem.DeepEquals(item1.Deleted, item2.Deleted);

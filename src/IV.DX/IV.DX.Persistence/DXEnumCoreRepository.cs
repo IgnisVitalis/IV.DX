@@ -4,7 +4,7 @@ using System.Data;
 
 namespace IV.DX.Persistence
 {
-    internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
+    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         public ESQLMultiItem Get(ESQLBlockDefinition container)
         {

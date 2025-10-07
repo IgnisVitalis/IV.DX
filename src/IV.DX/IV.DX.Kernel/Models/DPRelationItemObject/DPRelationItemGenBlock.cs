@@ -2,18 +2,18 @@
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPRelationItemGenBlock")]
+    [DXElement("DPRelationItemGenBlock")]
     public class DPRelationItemGenBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("ObjectTypeNameLeft")]
+        [DXColumn("ObjectTypeNameLeft")]
         public string ObjectTypeNameLeft { get; set; }
-        [ESQLColumnDefinition("ObjectIDLeft")]
+        [DXColumn("ObjectIDLeft")]
         public Guid ObjectIDLeft { get; set; }
-        [ESQLColumnDefinition("RelationNameRight")]
+        [DXColumn("RelationNameRight")]
         public string RelationNameRight { get; set; }
-        [ESQLColumnDefinition("ObjectTypeNameRight")]
+        [DXColumn("ObjectTypeNameRight")]
         public string ObjectTypeNameRight { get; set; }
-        [ESQLColumnDefinition("ObjectIDRight")]
+        [DXColumn("ObjectIDRight")]
         public Guid ObjectIDRight { get; set; }
     }
 }

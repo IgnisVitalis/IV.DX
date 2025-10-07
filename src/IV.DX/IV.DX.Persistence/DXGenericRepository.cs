@@ -6,11 +6,11 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal class GenericRepository : IDXGenericRepository
+    internal class DXGenericRepository : IDXGenericRepository
     {
         private readonly IDXCoreRepository _coreRepo;
 
-        public GenericRepository(IDXCoreRepository coreRepo)
+        public DXGenericRepository(IDXCoreRepository coreRepo)
         {
             this._coreRepo = coreRepo;
         }
@@ -26,30 +26,30 @@ namespace IV.DX.Persistence
 
         public T GetItem<T>(Guid id) where T : ESQLObject
         {
-            var result = this._coreRepo.GetItem(ModelConverter.GetESQLModelDefinition(typeof(T)), id, TypeOfEntityLoading.Full);
+            var result = this._coreRepo.GetItem(DXModelConverter.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
-            return ESQLObjectHelper.CreateInstance<T>(result);
+            return DXUnitHelper.CreateInstance<T>(result);
         }
 
         public IEnumerable<T> GetItems<T>() where T : ESQLObject
         {
-            var result = this._coreRepo.GetItems(ModelConverter.GetESQLModelDefinition<T>(), TypeOfEntityLoading.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
 
-            return result.Select(x => ESQLObjectHelper.CreateInstance<T>(x)).ToList();
+            return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : ESQLObject
         {
-            var result = this._coreRepo.GetItems(ModelConverter.GetESQLModelDefinition<T>(), ids, TypeOfEntityLoading.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
-            return result.Select(x => ESQLObjectHelper.CreateInstance<T>(x)).ToList();
+            return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : ESQLObject
         {
-            var result = this._coreRepo.GetItems(ModelConverter.GetESQLModelDefinition<T>(), esqlWhereExpression, TypeOfEntityLoading.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), esqlWhereExpression, DXLoadingType.Full).ToList();
 
-            return result.Select(x => ESQLObjectHelper.CreateInstance<T>(x)).ToList();
+            return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public Guid Insert(ESQLObject esqlObject)
@@ -63,9 +63,9 @@ namespace IV.DX.Persistence
 
         public Guid InsertOrUpdate(ESQLObject esqlObject)
         {
-            var definition = ModelConverter.GetESQLModelDefinition(esqlObject.GetType());
+            var definition = DXModelConverter.GetESQLModelDefinition(esqlObject.GetType());
 
-            var existingEntity = this._coreRepo.GetItem(definition, esqlObject.ID, TypeOfEntityLoading.Base);
+            var existingEntity = this._coreRepo.GetItem(definition, esqlObject.ID, DXLoadingType.Base);
 
             if (existingEntity == null)
             {
@@ -143,11 +143,11 @@ namespace IV.DX.Persistence
         {
             var blockName = AttributeReader.GetESQLBlockTypeName(typeof(T));
 
-            var block = ModelConverter.GetESQLBlockDefinition(blockName, typeof(T));
+            var block = DXModelConverter.GetESQLBlockDefinition(blockName, typeof(T));
 
             var result = this._coreRepo.GetSingleBlock(block, id);
 
-            return ESQLObjectHelper.CreateBlockInstance<T>(result);
+            return DXUnitHelper.CreateBlockInstance<T>(result);
         }
     }
 }

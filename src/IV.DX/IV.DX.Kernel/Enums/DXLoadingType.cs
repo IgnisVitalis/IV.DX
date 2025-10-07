@@ -1,6 +1,6 @@
 namespace IV.DX.Kernel.Enums
 {
-    public enum TypeOfEntityLoading
+    public enum DXLoadingType
     {
         Base = 0,
         Full = 1,

@@ -32,20 +32,20 @@ namespace IV.DataProvider.Persistence.Services
         {
             if (this._configuration["Database:Type"].Equals("MySQL", StringComparison.OrdinalIgnoreCase))
             {
-                this._container.AddSingleton<MySQLQueryHelper, MySQLQueryHelper>();
+                this._container.AddSingleton<MySQLQueryDXHelper, MySQLQueryDXHelper>();
             }
             else if (this._configuration["Database:Type"].Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase))
             {
-                this._container.AddSingleton<IDXSQLQueryHelper, PGSQLQueryHelper>();
+                this._container.AddSingleton<ISQLQueryDXHelper, PGSQLQueryDXHelper>();
             }
 
             //container.AddSingleton<CoreRepository>(new InjectionConstructor(new object[] { config.Database.ConnectionString, serviceProvider.GetService<ISQLQueryHelper>() }));
 
-            this._container.AddSingleton<IDXEnumCoreRepository, CoreRepository>();
-            this._container.AddSingleton<IDXStructureRepository, CoreRepository>();
-            this._container.AddSingleton<IDXCoreRepository, CoreRepository>();
+            this._container.AddSingleton<IDXEnumCoreRepository, DXCoreRepository>();
+            this._container.AddSingleton<IDXStructureRepository, DXCoreRepository>();
+            this._container.AddSingleton<IDXCoreRepository, DXCoreRepository>();
 
-            this._container.AddSingleton<IDXGenericRepository, GenericRepository>();
+            this._container.AddSingleton<IDXGenericRepository, DXGenericRepository>();
             this._container.AddSingleton<IDXUnitDataService, DataService>();
             this._container.AddSingleton<IDXCoreHandler, CoreModelHandler>();
             this._container.AddSingleton<IDXMigrationService, MigrationService>();
@@ -81,11 +81,11 @@ namespace IV.DataProvider.Persistence.Services
 
             coreRepo.CreateDataBase();
 
-            MaintenanceToken.StartMaintenanceCore();
+            DXMaintenanceToken.StartMaintenanceCore();
             //dataStructureRepo.Init(coreRepo);
 
             migrationService.LoadCoreStructure();
-            MaintenanceToken.StopMaintenanceCore();
+            DXMaintenanceToken.StopMaintenanceCore();
         }
 
         public void InitCustomData(IServiceProvider serviceProvider, string configPath)

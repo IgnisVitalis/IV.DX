@@ -3,12 +3,12 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLBlockDefinition("TBookChapterBlock")]
+    [DXElement("TBookChapterBlock")]
     public class TBookChapterBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("Text")]
+        [DXColumn("Text")]
         public string Text { get; set; }
-        [ESQLColumnDefinition("Number")]
+        [DXColumn("Number")]
         public int Number { get; set; }
     }
 }

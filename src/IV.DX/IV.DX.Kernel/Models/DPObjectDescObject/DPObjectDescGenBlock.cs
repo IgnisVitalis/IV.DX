@@ -3,14 +3,14 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DXUnitDefinitionMainElement")]
+    [DXElement("DXUnitDefinitionMainElement")]
     public class DXUnitDefinitionMainElement : ESQLBlock
     {
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
-        [ESQLColumnDefinition("DisplayValue")]
+        [DXColumn("DisplayValue")]
         public string DisplayValue { get; set; }
-        [ESQLColumnDefinition("Kind")]
+        [DXColumn("Kind")]
         public DXObjectKindEnum Kind { get; set; }
 
         public DXUnitDefinitionMainElement()

@@ -13,14 +13,14 @@ using System.Data.Common;
 
 namespace IV.DX.Persistence
 {
-    internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
+    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         protected string _connectionStr;
-        protected IDXSQLQueryHelper _queryHelper;
+        protected ISQLQueryDXHelper _queryHelper;
 
-        public CoreRepository(
+        public DXCoreRepository(
             IConfiguration configuration,
-            IDXSQLQueryHelper queryHelper)
+            ISQLQueryDXHelper queryHelper)
         {
             this._connectionStr = configuration["Database:ConnectionString"];
             this._queryHelper = queryHelper;
@@ -69,7 +69,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        public ESQLModel GetItem(ESQLModelDefinition container, Guid id, TypeOfEntityLoading typeOfLoading)
+        public ESQLModel GetItem(ESQLModelDefinition container, Guid id, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -99,7 +99,7 @@ namespace IV.DX.Persistence
 
         private ESQLModel GetESQLModel(ESQLModelDefinition container, Guid id)
         {
-            ESQLModel result = new ESQLModel(new ESQLMainItem(new ESQLObjectDefinitionAttribute(container.OwnSingleItem.Name))
+            ESQLModel result = new ESQLModel(new ESQLMainItem(new DXUnitAttribute(container.OwnSingleItem.Name))
             {
                 Item = new ESQLItem()
                 {
@@ -110,7 +110,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, IEnumerable<Guid> objIds, TypeOfEntityLoading typeOfLoading)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -131,7 +131,7 @@ namespace IV.DX.Persistence
             return resultItems;
         }
 
-        public IEnumerable<ESQLModel> GetItems(DbConnection conn, ESQLModelDefinition container, IEnumerable<Guid> objIds, TypeOfEntityLoading typeOfLoading)
+        public IEnumerable<ESQLModel> GetItems(DbConnection conn, ESQLModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -195,7 +195,7 @@ namespace IV.DX.Persistence
             return new ESQLSingleItem()
             {
                 Name = item.Name,
-                BlockInfo = new ESQLBlockDefinitionAttribute(item.Name)
+                BlockInfo = new DXElementAttribute(item.Name)
             };
         }
 
@@ -204,7 +204,7 @@ namespace IV.DX.Persistence
             return new ESQLMultiItem()
             {
                 Name = item.Name,
-                BlockInfo = new ESQLBlockDefinitionAttribute(item.Name)
+                BlockInfo = new DXElementAttribute(item.Name)
             };
         }
 
@@ -215,7 +215,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItems(modelDefinition, TypeOfEntityLoading.Full);
+            return this.GetItems(modelDefinition, DXLoadingType.Full);
         }
 
         public IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> ids)
@@ -225,7 +225,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItems(modelDefinition, ids, TypeOfEntityLoading.Full);
+            return this.GetItems(modelDefinition, ids, DXLoadingType.Full);
         }
 
         public IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression)
@@ -235,7 +235,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItems(modelDefinition, esqlWhereExpression, TypeOfEntityLoading.Full);
+            return this.GetItems(modelDefinition, esqlWhereExpression, DXLoadingType.Full);
         }
 
         public ESQLModel GetItem(string typeName, Guid id)
@@ -245,7 +245,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItem(modelDefinition, id, TypeOfEntityLoading.Full);
+            return this.GetItem(modelDefinition, id, DXLoadingType.Full);
         }
 
         private ESQLModelDefinition GetModelDefinition(string type)
@@ -303,12 +303,12 @@ namespace IV.DX.Persistence
             return modelDefinition;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, TypeOfEntityLoading typeOfLoading)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, DXLoadingType typeOfLoading)
         {
             return GetItems(container, string.Empty, typeOfLoading);
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, string esqlWhereExpression, TypeOfEntityLoading typeOfLoading)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition container, string esqlWhereExpression, DXLoadingType typeOfLoading)
         {
             string typeName = container.OwnSingleItem.Type;
             string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this.RelationInfos);
@@ -499,7 +499,7 @@ namespace IV.DX.Persistence
         {
             ESQLModelDefinition dd = new ESQLModelDefinition(new ESQLBlockDefinition(type, type));
 
-            var item = this.GetItem(dd, objectId, TypeOfEntityLoading.Base);
+            var item = this.GetItem(dd, objectId, DXLoadingType.Base);
 
             return item != null;
         }

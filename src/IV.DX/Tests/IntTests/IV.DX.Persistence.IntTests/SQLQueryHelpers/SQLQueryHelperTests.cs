@@ -25,13 +25,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
         public IEnumerable<TDocumentObject> documents;
         public IEnumerable<TBookObject> books;
 
-        IDXSQLQueryHelper _sqlQueryHelper;
+        ISQLQueryDXHelper _sqlQueryHelper;
         IDXGenericRepository _genericRepo;
 
         public SQLQueryHelperTests(ITestOutputHelper output)
             : base(output)
         {
-            this._sqlQueryHelper = this.ServiceProvider.GetService<IDXSQLQueryHelper>();
+            this._sqlQueryHelper = this.ServiceProvider.GetService<ISQLQueryDXHelper>();
             this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
 
             InitData();
@@ -97,11 +97,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Passport).TPassportGenBlock.SerialNumber = '6bcc2af44aa3'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"TPassportObject\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPassportGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"SerialNumber\" = '6bcc2af44aa3';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN TPassportObject AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPassportGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.SerialNumber = '6bcc2af44aa3';";
             }
@@ -137,11 +137,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Svitlana' AND R(User).TUserGenBlock.Surname = 'Suvorova'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
@@ -177,11 +177,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Devices).TDeviceGenBlock.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"TDeviceObject\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TDeviceGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN TDeviceObject AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TDeviceGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
             }
@@ -217,11 +217,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Svitlana' AND R(User).TUserGenBlock.Surname = 'Suvorova'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDeviceObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TDeviceObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
@@ -262,11 +262,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Position).TPositionGenBlock.Name = 'Middle'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"TPositionObject\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Middle';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN TPositionObject AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Middle';";
             }
@@ -297,11 +297,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Position).TPositionGenBlock.Name = 'Master'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"TPositionObject\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Master';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN TPositionObject AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Master';";
             }
@@ -337,11 +337,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Victor' AND R(User).TUserGenBlock.Surname = 'Suvorov'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Victor' AND \"t_2_0\".\"Surname\" = 'Suvorov';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Victor' AND t_2_0.Surname = 'Suvorov';";
             }
@@ -372,11 +372,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Svitlana' AND R(User).TUserGenBlock.Surname = 'Suvorova'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
@@ -412,11 +412,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Pavel' AND R(User).TUserGenBlock.Surname = 'Plamenev'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
             }
@@ -447,11 +447,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).TUserGenBlock.Name = 'Svitlana' AND R(User).TUserGenBlock.Surname = 'Suvorova'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
@@ -492,11 +492,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Users).TUserGenBlock.Name = 'Pavel' AND R(Users).TUserGenBlock.Surname = 'Plamenev'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookObject\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserObject_TBookObject_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TBookObject AS t_0_0 LEFT JOIN Relation_TUserObject_TBookObject_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
             }
@@ -527,11 +527,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Users).TUserGenBlock.Name = 'Svitlana' AND R(Users).TUserGenBlock.Surname = 'Suvorova'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookObject\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserObject_TBookObject_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TBookObject AS t_0_0 LEFT JOIN Relation_TUserObject_TBookObject_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
@@ -572,11 +572,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Books).TBookGenBlock.Name = 'book3'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserObject_TBookObject_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book3';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN Relation_TUserObject_TBookObject_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookObject AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'book3';";
             }
@@ -604,11 +604,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(Books).TBookGenBlock.Name = 'book1'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserObject\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserObject_TBookObject_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookGenBlock\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book1';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TUserObject AS t_0_0 LEFT JOIN Relation_TUserObject_TBookObject_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookObject AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookGenBlock AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'book1';";
             }
@@ -649,11 +649,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             var whereExpression = "R(User).R(Position).TPositionGenBlock.Name = 'Master'";
             string expectedSQLQuery = null;
 
-            if (this._sqlQueryHelper is PGSQLQueryHelper)
+            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionObject\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionGenBlock\" AS \"t_3_0\" ON \"t_3_0\".\"ObjectID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" = 'Master';";
             }
-            else if (this._sqlQueryHelper is MySQLQueryHelper)
+            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
                 expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionObject AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionGenBlock AS t_3_0 ON t_3_0.ObjectID = t_2_0.ID WHERE t_3_0.Name = 'Master';";
             }
@@ -691,11 +691,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
                 var whereExpression = $"R(User).R(Position).TPositionGenBlock.Name {operation} 'Master'";
                 string expectedSQLQuery = null;
 
-                if (this._sqlQueryHelper is PGSQLQueryHelper)
+                if (this._sqlQueryHelper is PGSQLQueryDXHelper)
                 {
                     expectedSQLQuery = $"SELECT \"t_0_0\".\"ID\" FROM \"TPassportObject\" AS \"t_0_0\" LEFT JOIN \"TUserObject\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionObject\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionGenBlock\" AS \"t_3_0\" ON \"t_3_0\".\"ObjectID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" {operation} 'Master';";
                 }
-                else if (this._sqlQueryHelper is MySQLQueryHelper)
+                else if (this._sqlQueryHelper is MySQLQueryDXHelper)
                 {
                     expectedSQLQuery = $"SELECT t_0_0.ID FROM TPassportObject AS t_0_0 LEFT JOIN TUserObject AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionObject AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionGenBlock AS t_3_0 ON t_3_0.ObjectID = t_2_0.ID WHERE t_3_0.Name {operation} 'Master';";
                 }

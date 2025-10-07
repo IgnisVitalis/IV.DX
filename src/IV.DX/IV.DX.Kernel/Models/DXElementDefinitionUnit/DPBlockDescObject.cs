@@ -3,10 +3,10 @@ using IV.DX.Kernel.Converters;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DXElementDefinitionUnit")]
+    [DXUnit("DXElementDefinitionUnit")]
     public class DXElementDefinitionUnit : DXObjectDefinitionUnit
     {
         public static ESQLModelDefinition ESQLModelDefinition { get; } 
-            = ModelConverter.GetESQLModelDefinition<DXElementDefinitionUnit>();
+            = DXModelConverter.GetESQLModelDefinition<DXElementDefinitionUnit>();
     }
 }

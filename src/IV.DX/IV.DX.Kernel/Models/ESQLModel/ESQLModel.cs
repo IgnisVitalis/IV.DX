@@ -116,7 +116,7 @@ namespace IV.DX.Kernel.Models
             ESQLSingleItem singleItem = new ESQLSingleItem()
             {
                 Name = property.Name,
-                BlockInfo = new ESQLBlockDefinitionAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Item = GetESQLItem((JObject)property.Value, objId)
             };
 
@@ -128,7 +128,7 @@ namespace IV.DX.Kernel.Models
             ESQLMultiItem esqlMultiItem = new ESQLMultiItem()
             {
                 Name = property.Name,
-                BlockInfo = new ESQLBlockDefinitionAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
                 Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
                 Mode = (ModeForMultiItems)property.Value[Constants.Mode].Value<int>()
@@ -163,7 +163,7 @@ namespace IV.DX.Kernel.Models
                 jObjectCopy.Remove(item.Name);
             }
 
-            var result = new ESQLMainItem(new ESQLObjectDefinitionAttribute(type))
+            var result = new ESQLMainItem(new DXUnitAttribute(type))
             {
                 Item = GetESQLItem(jObjectCopy, id)
             };

@@ -2,22 +2,22 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DXMigrationScriptsMainElement")]
+    [DXElement("DXMigrationScriptsMainElement")]
     public class DXMigrationScriptsMainElement : ESQLBlock
     {
-        [ESQLColumnDefinition("FilePath")]
+        [DXColumn("FilePath")]
         public string FilePath { get; set; }
-        [ESQLColumnDefinition("Version")]
+        [DXColumn("Version")]
         public string Version { get; set; }
-        [ESQLColumnDefinition("Build")]
+        [DXColumn("Build")]
         public string Build { get; set; }
-        [ESQLColumnDefinition("Number")]
+        [DXColumn("Number")]
         public string Number { get; set; }
-        [ESQLColumnDefinition("AppName")]
+        [DXColumn("AppName")]
         public string AppName { get; set; }
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
-        [ESQLColumnDefinition("Extention")]
+        [DXColumn("Extention")]
         public string Extention { get; set; }
 
 

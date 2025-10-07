@@ -4,12 +4,12 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLBlockDefinition("TDeviceGenBlock")]
+    [DXElement("TDeviceGenBlock")]
     public class TDeviceGenBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("Model")]
+        [DXColumn("Model")]
         public string Model { get; set; }
-        [ESQLColumnDefinition("UUID")]
+        [DXColumn("UUID")]
         public Guid UUID { get; set; }
     }
 }

@@ -8,14 +8,14 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
-        ESQLModel GetItem(ESQLModelDefinition definitionContainer, Guid id, TypeOfEntityLoading typeOfLoading);
+        ESQLModel GetItem(ESQLModelDefinition definitionContainer, Guid id, DXLoadingType typeOfLoading);
         IEnumerable<ESQLModel> GetItems(string typeName);
         IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
         IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression);
         ESQLModel GetItem(string typeName, Guid objectId);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, TypeOfEntityLoading typeOfLoading);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, IEnumerable<Guid> objectIds, TypeOfEntityLoading typeOfLoading);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, string esqlWhereExpression, TypeOfEntityLoading typeOfLoading);
+        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, DXLoadingType typeOfLoading);
+        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
+        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, string esqlWhereExpression, DXLoadingType typeOfLoading);
         Guid Insert(ESQLModel model);
         Guid Update(ESQLModel model);
         Guid InsertOrUpdate(ESQLModel model);

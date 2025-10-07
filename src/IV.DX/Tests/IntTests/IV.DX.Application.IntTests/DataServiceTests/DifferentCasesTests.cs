@@ -423,29 +423,29 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
         }
     }
 
-    [ESQLObjectDefinition("TestEntity")]
+    [DXUnit("TestEntity")]
     public class TestEntity : ESQLObject
     {
         public TestBlock TestBlock { get; set; }
     }
 
-    [ESQLBlockDefinition("TestBlock")]
+    [DXElement("TestBlock")]
     public class TestBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("IntCln")]
+        [DXColumn("IntCln")]
         public int IntCln { get; set; }
     }
 
-    [ESQLObjectDefinition("TestEntity")]
+    [DXUnit("TestEntity")]
     public class TestEntityModified : ESQLObject
     {
         public TestBlockModified TestBlock { get; set; }
     }
 
-    [ESQLBlockDefinition("TestBlock")]
+    [DXElement("TestBlock")]
     public class TestBlockModified : ESQLBlock
     {
-        [ESQLColumnDefinition("StrCln")]
+        [DXColumn("StrCln")]
         public string StrCln { get; set; }
     }
 }

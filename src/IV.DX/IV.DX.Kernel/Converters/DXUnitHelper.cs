@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters
 {
-    public static class ESQLObjectHelper
+    public static class DXUnitHelper
     {
         #region Convert to JObject       
         public static JObject ConvertToJObject(this ESQLObject esqlObject)
@@ -27,7 +27,7 @@ namespace IV.DX.Kernel.Converters
         #region Convert to ESQLModel
         public static ESQLModel ConvertToESQLModel(this ESQLObject esqlObject)
         {
-            var objectInfo = AttributeReader.GetSingleAttribute<ESQLObjectDefinitionAttribute>
+            var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
                    (esqlObject.GetType());
 
             var ownItem = new ESQLMainItem(objectInfo)
@@ -59,7 +59,7 @@ namespace IV.DX.Kernel.Converters
 
                 ESQLSingleItem esqlSingleItem = new ESQLSingleItem()
                 {
-                    BlockInfo = AttributeReader.GetSingleAttribute<ESQLBlockDefinitionAttribute>(x.PropertyType),
+                    BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
                     Item = new ESQLItem()
                     {
                         ID = singleItem?.ID,
@@ -77,7 +77,7 @@ namespace IV.DX.Kernel.Converters
 
         public static ESQLSingleItem ConvertToSingleItem(this ESQLBlock block)
         {
-            var blockInfo = AttributeReader.GetSingleAttribute<ESQLBlockDefinitionAttribute>(block.GetType());
+            var blockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(block.GetType());
 
             ESQLSingleItem singleItem = new ESQLSingleItem()
             {
@@ -109,7 +109,7 @@ namespace IV.DX.Kernel.Converters
 
                 ESQLMultiItem multiItem = new ESQLMultiItem()
                 {
-                    BlockInfo = AttributeReader.GetSingleAttribute<ESQLBlockDefinitionAttribute>(x.PropertyType.GenericTypeArguments[0]),
+                    BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
                     Name = x.Name,
                     Mode = mode
                 };
@@ -177,12 +177,12 @@ namespace IV.DX.Kernel.Converters
             JObject jObject = new JObject();
 
             var properties = block.GetType().GetProperties()
-                .Where(x => AttributeReader.GetSinglePropertyAttribute<ESQLColumnDefinitionAttribute>(x) != null)
+                .Where(x => AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(x) != null)
                 .ToList();
 
             foreach (var property in properties)
             {
-                var attribute = AttributeReader.GetSinglePropertyAttribute<ESQLColumnDefinitionAttribute>(property);
+                var attribute = AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(property);
 
                 jObject[property.Name] = new JValue(property.GetValue(block));
             }
@@ -198,12 +198,12 @@ namespace IV.DX.Kernel.Converters
             JObject jObject = new JObject();
 
             var properties = obj.GetType().GetProperties()
-                .Where(x => AttributeReader.GetSinglePropertyAttribute<ESQLColumnDefinitionAttribute>(x) != null)
+                .Where(x => AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(x) != null)
                 .ToList();
 
             foreach (var property in properties)
             {
-                var attribute = AttributeReader.GetSinglePropertyAttribute<ESQLColumnDefinitionAttribute>(property);
+                var attribute = AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(property);
 
                 jObject[property.Name] = new JValue(property.GetValue(obj));
             }

@@ -2,7 +2,7 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DXObjectDefinitionUnit")]
+    [DXUnit("DXObjectDefinitionUnit")]
     public class DXObjectDefinitionUnit : ESQLObject
     {
         public DXUnitDefinitionMainElement DXUnitDefinitionMainElement { get; set; }

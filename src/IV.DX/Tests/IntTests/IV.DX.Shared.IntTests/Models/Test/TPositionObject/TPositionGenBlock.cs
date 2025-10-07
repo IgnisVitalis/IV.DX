@@ -3,10 +3,10 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLBlockDefinition("TPositionGenBlock")]
+    [DXElement("TPositionGenBlock")]
     public class TPositionGenBlock : ESQLBlock
     {
-        [ESQLColumnDefinition("Name")]
+        [DXColumn("Name")]
         public string Name { get; set; }
     }
 }

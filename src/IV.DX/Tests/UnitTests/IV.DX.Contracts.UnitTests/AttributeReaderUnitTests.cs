@@ -20,7 +20,7 @@ namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
 
             // Action
             var attr = AttributeReader
-                .GetSingleAttribute<ESQLObjectDefinitionAttribute>
+                .GetSingleAttribute<DXUnitAttribute>
                 (typeof(DXObjectDefinitionUnit));
 
             // Checking results
@@ -35,7 +35,7 @@ namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
 
             // Action
             var attr = AttributeReader
-                .GetSingleAttribute<ESQLBlockDefinitionAttribute>
+                .GetSingleAttribute<DXElementAttribute>
                 (typeof(DXUnitDefinitionMainElement));
 
             // Checking results
@@ -50,7 +50,7 @@ namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
 
             // Action
             var attributes = AttributeReader
-                    .GetAllSinglePropertyAttributes<ESQLColumnDefinitionAttribute>
+                    .GetAllSinglePropertyAttributes<DXColumnAttribute>
                     (typeof(DXUnitDefinitionMainElement));
 
             // Checking result

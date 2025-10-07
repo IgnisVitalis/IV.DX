@@ -1,10 +1,10 @@
 ﻿namespace IV.DX.Persistence
 {
-    internal static class MaintenanceToken
+    internal static class DXMaintenanceToken
     {
         public static bool IsCoreInitializing { get; private set; }
 
-        static MaintenanceToken()
+        static DXMaintenanceToken()
         {
 
         }

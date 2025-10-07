@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace IV.DX.Kernel.Helpers
 {
-    public static class AttributeReader
+    internal static class AttributeReader
     {
         public static T GetSingleAttribute<T>(PropertyInfo propertyInfo) where T : Attribute
         {
@@ -105,7 +105,7 @@ namespace IV.DX.Kernel.Helpers
         {
             var objectType = FindElementType(type);
 
-            var dataDefinitionNameForFragment = GetAttribute<ESQLObjectDefinitionAttribute>(objectType);
+            var dataDefinitionNameForFragment = GetAttribute<DXUnitAttribute>(objectType);
 
             if (dataDefinitionNameForFragment == null)
                 return string.Empty;
@@ -117,7 +117,7 @@ namespace IV.DX.Kernel.Helpers
         {
             var objectType = FindElementType(type);
 
-            var attribute = GetAttribute<ESQLBlockDefinitionAttribute>(objectType);
+            var attribute = GetAttribute<DXElementAttribute>(objectType);
 
             if (attribute == null)
                 return string.Empty;

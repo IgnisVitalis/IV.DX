@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Helpers
 {
-    public static class CommonHelper
+    internal static class CommonHelper
     {
         public static string ConvertIdsToString(IEnumerable<Guid> ids)
         {

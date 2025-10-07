@@ -5,10 +5,10 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [ESQLObjectDefinition("TDeviceObject")]
+    [DXUnit("TDeviceObject")]
     public class TDeviceObject : ESQLObject
     {
-        [ESQLColumnDefinition("User", "User", TypeOfEntityLoading.Base)]
+        [DXColumn("User", "User", DXLoadingType.Base)]
         public Guid User { get; set; }
         public TDeviceGenBlock TDeviceGenBlock { get; set; }
     }

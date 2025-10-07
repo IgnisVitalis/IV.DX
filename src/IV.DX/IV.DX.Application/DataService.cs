@@ -18,40 +18,40 @@ namespace IV.DX.Application
             this._coreRepo = coreRepo;
         }
 
-        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
-            var modelDefinition = ModelConverter.GetESQLModelDefinition<T>();
+            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
             var esqlModel = this.GetItem(modelDefinition, id, context, typeOfLoading);
 
-            var esqlObject = ESQLObjectHelper.CreateInstance<T>(esqlModel);
+            var esqlObject = DXUnitHelper.CreateInstance<T>(esqlModel);
 
             return esqlObject;
         }
 
-        public IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
-            var modelDefinition = ModelConverter.GetESQLModelDefinition<T>();
+            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
-            var result = this.GetItems(modelDefinition, context, typeOfLoading).Select(x => ESQLObjectHelper.CreateInstance<T>(x));
+            var result = this.GetItems(modelDefinition, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
 
             return result;
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
-            var modelDefinition = ModelConverter.GetESQLModelDefinition<T>();
+            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
-            var result = this.GetItems(modelDefinition, ids, context, typeOfLoading).Select(x => ESQLObjectHelper.CreateInstance<T>(x));
+            var result = this.GetItems(modelDefinition, ids, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
 
             return result;
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
-            var modelDefinition = ModelConverter.GetESQLModelDefinition<T>();
+            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
-            var result = this.GetItems(modelDefinition, esqlWhereExpression, context, typeOfLoading).Select(x => ESQLObjectHelper.CreateInstance<T>(x));
+            var result = this.GetItems(modelDefinition, esqlWhereExpression, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
 
             return result;
         }
@@ -163,22 +163,22 @@ namespace IV.DX.Application
             }
         }
 
-        public IEnumerable<T> GetItems<T>(TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
             return this.GetItems<T>(new DXUnitHandlerBaseContext());
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
             return this.GetItems<T>(ids, new DXUnitHandlerBaseContext());
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
             return this.GetItems<T>(esqlWhereExpression, new DXUnitHandlerBaseContext());
         }
 
-        public T GetItem<T>(Guid id, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new()
+        public T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
         {
             return this.GetItem<T>(id, new DXUnitHandlerBaseContext());
         }
@@ -227,7 +227,7 @@ namespace IV.DX.Application
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
             IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, typeOfLoading);
 
@@ -270,7 +270,7 @@ namespace IV.DX.Application
             }
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
             IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
 
@@ -297,7 +297,7 @@ namespace IV.DX.Application
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, string esqlWhereExpression, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full)
+        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
             IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
 
@@ -315,7 +315,7 @@ namespace IV.DX.Application
             return item;
         }
 
-        public ESQLModel GetItem(ESQLModelDefinition modelDefinition, Guid id, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full)
+        public ESQLModel GetItem(ESQLModelDefinition modelDefinition, Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
             ESQLModel item = this._coreRepo.GetItem(modelDefinition, id, typeOfLoading);
 
@@ -367,7 +367,7 @@ namespace IV.DX.Application
                 var handlerType = EntityHandlerProvider.GetHandlerType(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
                 var handler = EntityHandlerProvider.GetHandler(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
 
-                var obj = ESQLObjectHelper.CreateInstance(esqlModel, handlerType);
+                var obj = DXUnitHelper.CreateInstance(esqlModel, handlerType);
 
                 result = handler.OnInserting(obj, context);
 
@@ -400,7 +400,7 @@ namespace IV.DX.Application
                 var handlerType = EntityHandlerProvider.GetHandlerType(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
                 var handler = EntityHandlerProvider.GetHandler(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
 
-                var obj = ESQLObjectHelper.CreateInstance(esqlModel, handlerType);
+                var obj = DXUnitHelper.CreateInstance(esqlModel, handlerType);
 
                 result = handler.OnUpdating(obj, context);
 

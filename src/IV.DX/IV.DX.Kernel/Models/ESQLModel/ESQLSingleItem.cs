@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class ESQLSingleItem
     {
         public string Name { get; set; }
-        public ESQLBlockDefinitionAttribute BlockInfo { get; set; }
+        public DXElementAttribute BlockInfo { get; set; }
         public ESQLItem Item { get; set; }
 
         public JProperty ConvertToJProperty()
@@ -45,7 +45,7 @@ namespace IV.DX.Kernel.Models
 
             ESQLSingleItem singleFragment = new ESQLSingleItem
             {
-                BlockInfo = new ESQLBlockDefinitionAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name
             };
 
@@ -64,7 +64,7 @@ namespace IV.DX.Kernel.Models
 
             var result =
                 item1.Name == item2.Name
-                && ESQLBlockDefinitionAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
+                && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
                 && ESQLItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
