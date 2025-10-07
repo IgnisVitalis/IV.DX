@@ -6,17 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DPInheritanceInitCoreHandler : BaseEntityHandler<DPInheritanceInitCore>
+    internal class DXInheritanceInitCoreHandler : BaseEntityHandler<DXInheritanceInitCore>
     {
         private readonly IDataStructureRepository _dataStructureRepository;
 
-        public DPInheritanceInitCoreHandler(IServiceProvider serviceProvider)
+        public DXInheritanceInitCoreHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepository = serviceProvider.GetService<IDataStructureRepository>();
         }
 
-        public override Guid OnInserting(DPInheritanceInitCore entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXInheritanceInitCore entity, EntityHandlerBaseContext context)
         {
             this._dataStructureRepository.SetEntityInheritance(entity.ChildEntity, entity.BaseEntity);
 

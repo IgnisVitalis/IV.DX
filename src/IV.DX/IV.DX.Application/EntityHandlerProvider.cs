@@ -46,7 +46,7 @@ namespace IV.DX.Application
                 Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandler(serviceProvider));
                 Register<DXEnumDefinitionUnit>(new DXEnumDefinitionUnitHandler(serviceProvider));
                 Register<DXRelationDefinitionUnit>(new DXRelationDefinitionUnitHandler(serviceProvider));
-                Register<DPInheritanceInitCore>(new DPInheritanceInitCoreHandler(serviceProvider));
+                Register<DXInheritanceInitCore>(new DXInheritanceInitCoreHandler(serviceProvider));
                 Register<DPRelationItemObject>(new DPRelationItemObjectHandler(serviceProvider));
 
                 CoreModelHandler = serviceProvider.GetService<ICoreModelHandler>();
