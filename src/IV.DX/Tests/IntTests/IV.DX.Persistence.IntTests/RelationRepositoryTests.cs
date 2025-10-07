@@ -1,5 +1,5 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests;
-using IV.DataProvider.Persistence.Shared.IntTests.Factories;
+﻿using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Factories;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
-using ObjectFactory = IV.DataProvider.Persistence.Shared.IntTests.Factories.ObjectFactory;
+using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
 
 namespace IV.DataProvider.Persistence.Repositories.IntTests
 {

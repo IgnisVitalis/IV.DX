@@ -1,7 +1,7 @@
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
+namespace IV.DX.Shared.IntTests.Models.Test
 {
     [DXUnit("TBookUnit")]
     public class TBookUnit : DXUnit

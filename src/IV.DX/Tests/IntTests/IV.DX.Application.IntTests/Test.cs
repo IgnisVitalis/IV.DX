@@ -1,4 +1,4 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests;
+﻿using IV.DX.Shared.IntTests;
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Converters;

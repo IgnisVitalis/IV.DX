@@ -3,13 +3,13 @@ using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using System;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
+namespace IV.DX.Shared.IntTests.Models.Test
 {
-    [DXUnit("TDeviceUnit")]
-    public class TDeviceUnit : DXUnit
+    [DXUnit("TPassportUnit")]
+    public class TPassportUnit : DXUnit
     {
         [DXColumn("User", "User", DXLoadingType.Base)]
         public Guid User { get; set; }
-        public TDeviceMainElement TDeviceMainElement { get; set; }
+        public TPassportMainElement TPassportMainElement { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
+﻿using IV.DX.Shared.IntTests.Models.Test;
 using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;

@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 using System;
 using System.Collections.Generic;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
+namespace IV.DX.Shared.IntTests.Factories
 {
     public static class BlockFactory
     {

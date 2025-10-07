@@ -2,7 +2,7 @@
 using IV.DX.Kernel.Models;
 using System;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
+namespace IV.DX.Shared.IntTests.Factories
 {
     public static class ObjectFactory
     {

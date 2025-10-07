@@ -1,7 +1,7 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
+﻿using IV.DX.Shared.IntTests.Models.Test;
 using System;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
+namespace IV.DX.Shared.IntTests.Factories.Test
 {
     public static class TUserUnitFactory
     {

@@ -1,6 +1,6 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests;
-using IV.DataProvider.Persistence.Shared.IntTests.Factories.Test;
-using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
+﻿using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Factories.Test;
+using IV.DX.Shared.IntTests.Models.Test;
 using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;

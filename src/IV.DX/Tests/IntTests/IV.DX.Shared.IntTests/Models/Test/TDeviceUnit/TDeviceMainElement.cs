@@ -2,7 +2,7 @@ using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
 using System;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
+namespace IV.DX.Shared.IntTests.Models.Test
 {
     [DXElement("TDeviceMainElement")]
     public class TDeviceMainElement : DXElement
