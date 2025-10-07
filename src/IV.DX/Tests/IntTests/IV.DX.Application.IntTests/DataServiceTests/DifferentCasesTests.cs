@@ -32,14 +32,14 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
             var id = new Guid("f0ff00d1-303e-42e6-9769-e482b0bf79ff");
 
-            var intCln = new DPColumnDescBlock()
+            var intCln = new DXColumnDefinitionElement()
             {
                 ID = Guid.NewGuid(),
                 Name = "IntCln",
                 ColumnType = DPColumnTypeEnum.Int
             };
 
-            var strCln = new DPColumnDescBlock()
+            var strCln = new DXColumnDefinitionElement()
             {
                 ID = Guid.NewGuid(),
                 Name = "StrCln",
@@ -56,10 +56,10 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestBlock"
                 },
-                DPColumnDescBlock = new ESQLMultiItemsContainer<DPColumnDescBlock>()
+                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = ModeForMultiItems.Target,
-                    Announced = new List<DPColumnDescBlock>()
+                    Announced = new List<DXColumnDefinitionElement>()
                     {
                         intCln
                     }
@@ -126,14 +126,14 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             Assert.Equal(item.TestBlock.IntCln, existingItem.TestBlock.IntCln);
 
             // Action
-            blockDescObject.DPColumnDescBlock = new ESQLMultiItemsContainer<DPColumnDescBlock>()
+            blockDescObject.DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
             {
                 Mode = ModeForMultiItems.Target,
-                Announced = new List<DPColumnDescBlock>()
+                Announced = new List<DXColumnDefinitionElement>()
                 {
                     strCln
                 },
-                Deleted = new List<DPColumnDescBlock>()
+                Deleted = new List<DXColumnDefinitionElement>()
                 {
                     intCln
                 }

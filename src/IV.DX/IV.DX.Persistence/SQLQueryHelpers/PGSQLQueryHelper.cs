@@ -166,7 +166,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"SELECT \"{coreNode.MainTableAlias}\".\"ID\" FROM \"{coreNode.Value}\" AS \"{coreNode.MainTableAlias}\"";
         }
 
-        public string GetSQLColumnDefinitionToAddInTable(DPColumnDescBlock clmDesc)
+        public string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc)
         {
             string sqlClmDef = "";
 
@@ -217,34 +217,34 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return result;
         }
 
-        //public string GetSQLColumnDefinitionToChangeInTable(DPColumnDescBlock dpColumnDescBlockNew, DPColumnDescBlock dpColumnDescBlockExisting)
+        //public string GetSQLColumnDefinitionToChangeInTable(DXColumnDefinitionElement DXColumnDefinitionElementNew, DXColumnDefinitionElement DXColumnDefinitionElementExisting)
         //{
         //    // RENAME COLUMN column_name TO new_column_name;
 
-        //    var mySQLQueryToChangeColumn = $"RENAME COLUMN \"{dpColumnDescBlockExisting.Name}\" {this.GetSQLColumnDefinitionToAddInTable(dpColumnDescBlockNew)}";
+        //    var mySQLQueryToChangeColumn = $"RENAME COLUMN \"{DXColumnDefinitionElementExisting.Name}\" {this.GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElementNew)}";
 
         //    return mySQLQueryToChangeColumn;
         //}
 
-        private string GetSQLColumnDefinitionToAlterColumnSetType(DPColumnDescBlock dpColumnDescBlockNew, DPColumnDescBlock dpColumnDescBlockExisting)
+        private string GetSQLColumnDefinitionToAlterColumnSetType(DXColumnDefinitionElement DXColumnDefinitionElementNew, DXColumnDefinitionElement DXColumnDefinitionElementExisting)
         {
             // RENAME COLUMN column_name TO new_column_name;
 
-            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{dpColumnDescBlockExisting.Name}\" TYPE {this.GetPostgreSQLDataType(dpColumnDescBlockNew.ColumnType)}";
+            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{DXColumnDefinitionElementExisting.Name}\" TYPE {this.GetPostgreSQLDataType(DXColumnDefinitionElementNew.ColumnType)}";
 
-            if (dpColumnDescBlockNew.Length.HasValue)
+            if (DXColumnDefinitionElementNew.Length.HasValue)
             {
-                mySQLQueryToChangeColumn += $"({dpColumnDescBlockNew.Length.Value})";
+                mySQLQueryToChangeColumn += $"({DXColumnDefinitionElementNew.Length.Value})";
             }
 
             return mySQLQueryToChangeColumn;
         }
 
-        private string GetSQLColumnDefinitionToAlterColumnSetAllowNull(DPColumnDescBlock dpColumnDescBlockNew, DPColumnDescBlock dpColumnDescBlockExisting)
+        private string GetSQLColumnDefinitionToAlterColumnSetAllowNull(DXColumnDefinitionElement DXColumnDefinitionElementNew, DXColumnDefinitionElement DXColumnDefinitionElementExisting)
         {
-            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{dpColumnDescBlockExisting.Name}\"";
+            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{DXColumnDefinitionElementExisting.Name}\"";
 
-            if (dpColumnDescBlockNew.AllowNull)
+            if (DXColumnDefinitionElementNew.AllowNull)
             {
                 mySQLQueryToChangeColumn += " SET NULL";
             }
@@ -256,23 +256,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return mySQLQueryToChangeColumn;
         }
 
-        private string GetSQLColumnDefinitionToAlterColumnSetDefaultValue(DPColumnDescBlock dpColumnDescBlockNew, DPColumnDescBlock dpColumnDescBlockExisting)
+        private string GetSQLColumnDefinitionToAlterColumnSetDefaultValue(DXColumnDefinitionElement DXColumnDefinitionElementNew, DXColumnDefinitionElement DXColumnDefinitionElementExisting)
         {
-            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{dpColumnDescBlockExisting.Name}\"";
+            var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{DXColumnDefinitionElementExisting.Name}\"";
 
-            if (dpColumnDescBlockNew.DefaultValue == null)
+            if (DXColumnDefinitionElementNew.DefaultValue == null)
             {
                 mySQLQueryToChangeColumn += $" SET DEFAULT NULL";
             }
             else
             {
-                if (dpColumnDescBlockNew.ColumnType == DPColumnTypeEnum.Bool)
+                if (DXColumnDefinitionElementNew.ColumnType == DPColumnTypeEnum.Bool)
                 {
-                    mySQLQueryToChangeColumn += $" SET DEFAULT '{dpColumnDescBlockNew.DefaultValue}'";
+                    mySQLQueryToChangeColumn += $" SET DEFAULT '{DXColumnDefinitionElementNew.DefaultValue}'";
                 }
                 else
                 {
-                    mySQLQueryToChangeColumn += $" SET DEFAULT {dpColumnDescBlockNew.DefaultValue}";
+                    mySQLQueryToChangeColumn += $" SET DEFAULT {DXColumnDefinitionElementNew.DefaultValue}";
                 }
             }
 
@@ -280,11 +280,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return mySQLQueryToChangeColumn;
         }
 
-        private string GetSQLColumnDefinitionToChangeColumnNames(DPColumnDescBlock dpColumnDescBlockNew, DPColumnDescBlock dpColumnDescBlockExisting)
+        private string GetSQLColumnDefinitionToChangeColumnNames(DXColumnDefinitionElement DXColumnDefinitionElementNew, DXColumnDefinitionElement DXColumnDefinitionElementExisting)
         {
             // RENAME COLUMN column_name TO new_column_name;
 
-            var mySQLQueryToChangeColumn = $"RENAME COLUMN \"{dpColumnDescBlockExisting.Name}\" TO \"{dpColumnDescBlockNew.Name}\"";
+            var mySQLQueryToChangeColumn = $"RENAME COLUMN \"{DXColumnDefinitionElementExisting.Name}\" TO \"{DXColumnDefinitionElementNew.Name}\"";
 
             return mySQLQueryToChangeColumn;
         }
@@ -331,23 +331,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             var columnsToAddMySQLCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
             var columnsToAlterColumnSetTypeCommand = columnIDsToChange.Select(x =>
                 this.GetSQLColumnDefinitionToAlterColumnSetType(
-                    dataBlockNew.DPColumnDescBlock.Announced.Single(y => y.ID == x),
-                    dataBlockExisting.DPColumnDescBlock.Announced.Single(y => y.ID == x)));
+                    dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                    dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToAlterColumnSetAllowNullCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetAllowNull(
-                dataBlockNew.DPColumnDescBlock.Announced.Single(y => y.ID == x),
-                dataBlockExisting.DPColumnDescBlock.Announced.Single(y => y.ID == x)));
+                dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToAlterColumnSetDefaultValueCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetDefaultValue(
-                dataBlockNew.DPColumnDescBlock.Announced.Single(y => y.ID == x),
-                dataBlockExisting.DPColumnDescBlock.Announced.Single(y => y.ID == x)));
+                dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToChangeNamesCommand = columnIDsToChange.Select(x =>
               this.GetSQLColumnDefinitionToChangeColumnNames(
-                  dataBlockNew.DPColumnDescBlock.Announced.Single(y => y.ID == x),
-                  dataBlockExisting.DPColumnDescBlock.Announced.Single(y => y.ID == x)));
+                  dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                  dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
             {
@@ -407,27 +407,27 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             DPObjectDescObject dataBlockNew,
             DPObjectDescObject dataBlockExisting)
         {
-            if (dataBlockNew.DPColumnDescBlock.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DPColumnDescBlock.Announced.Where(x => columnDescBlockExistingIds.Contains(x.ID)).Select(x => x.ID).ToList();
+                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => columnDescBlockExistingIds.Contains(x.ID)).Select(x => x.ID).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
                 var idsToChange = columnDescBlockNewIds.Intersect(columnDescBlockExistingIds).Where(x =>
                 {
-                    var dpColumnDescBlockNew = dataBlockNew.DPColumnDescBlock.Announced.Single(y => y.ID == x);
-                    var dpColumnDescBlockExisting = dataBlockExisting.DPColumnDescBlock.Announced.Single(y => y.ID == x);
+                    var DXColumnDefinitionElementNew = dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
+                    var DXColumnDefinitionElementExisting = dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
 
-                    var result = !(dpColumnDescBlockNew.AllowNull == dpColumnDescBlockExisting.AllowNull
-                    && this.AreEqual(dpColumnDescBlockNew.DefaultValue, dpColumnDescBlockExisting.DefaultValue)
-                    && dpColumnDescBlockNew.ColumnType == dpColumnDescBlockExisting.ColumnType
-                    && dpColumnDescBlockNew.Length == dpColumnDescBlockExisting.Length
-                    && dpColumnDescBlockNew.Name == dpColumnDescBlockExisting.Name);
+                    var result = !(DXColumnDefinitionElementNew.AllowNull == DXColumnDefinitionElementExisting.AllowNull
+                    && this.AreEqual(DXColumnDefinitionElementNew.DefaultValue, DXColumnDefinitionElementExisting.DefaultValue)
+                    && DXColumnDefinitionElementNew.ColumnType == DXColumnDefinitionElementExisting.ColumnType
+                    && DXColumnDefinitionElementNew.Length == DXColumnDefinitionElementExisting.Length
+                    && DXColumnDefinitionElementNew.Name == DXColumnDefinitionElementExisting.Name);
 
                     return result;
                 });
@@ -448,45 +448,45 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
         }
 
-        private IEnumerable<DPColumnDescBlock> GetColumnDescBlocksToDrop(
+        private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToDrop(
             DPObjectDescObject dataBlockNew,
             DPObjectDescObject dataBlockExisting)
         {
-            if (dataBlockNew.DPColumnDescBlock.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DPColumnDescBlock.Deleted.Where(x => columnDescBlockExistingIds.Contains(x.ID)).ToList();
+                return dataBlockNew.DXColumnDefinitionElement.Deleted.Where(x => columnDescBlockExistingIds.Contains(x.ID)).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
                 var idsToRemove = columnDescBlockExistingIds.Where(x => !columnDescBlockNewIds.Contains(x));
 
-                return dataBlockExisting.DPColumnDescBlock.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
+                return dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
             }
         }
 
-        private IEnumerable<DPColumnDescBlock> GetColumnDescBlocksToAdd(
+        private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToAdd(
             DPObjectDescObject dataBlockNew,
             DPObjectDescObject dataBlockExisting)
         {
-            if (dataBlockNew.DPColumnDescBlock.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DPColumnDescBlock.Announced.Where(x => !columnDescBlockExistingIds.Contains(x.ID)).ToList();
+                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => !columnDescBlockExistingIds.Contains(x.ID)).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DPColumnDescBlock.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
                 var idsToAdd = columnDescBlockNewIds.Where(x => !columnDescBlockExistingIds.Contains(x));
 
-                return dataBlockNew.DPColumnDescBlock.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
+                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
             }
         }
 
@@ -648,7 +648,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataBlock.DPObjectDescGenBlock.Name}\"(");
 
-            var clmDefList = dataBlock.DPColumnDescBlock.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
+            var clmDefList = dataBlock.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
             var clmUniqueList = dataBlock.DPColumnsUniqueBlock.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataBlock.DPObjectDescGenBlock.Name, x));
 

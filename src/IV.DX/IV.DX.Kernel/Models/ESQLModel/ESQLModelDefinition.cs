@@ -101,7 +101,7 @@ namespace IV.DX.Kernel.Models
 
             var ownBlockDefinition = new ESQLBlockDefinition(mainEntity.DPObjectDescGenBlock.Name, mainEntity.DPObjectDescGenBlock.Name);
 
-            var props = mainEntity.DPColumnDescBlock.Announced?.Select(x => new ESQLPropertyDefinition(x.Name, new ESQLColumnDefinitionAttribute(x.Name)));
+            var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new ESQLPropertyDefinition(x.Name, new ESQLColumnDefinitionAttribute(x.Name)));
 
             ownBlockDefinition.AddPropertyDefinitions(props);
 
@@ -145,7 +145,7 @@ namespace IV.DX.Kernel.Models
 
         private static ESQLBlockDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)
         {
-            var props = block.DPColumnDescBlock.Announced
+            var props = block.DXColumnDefinitionElement.Announced
                            .Select(y => new ESQLPropertyDefinition(y.Name, new ESQLColumnDefinitionAttribute(y.Name)));
 
             var singleFragmentDefinition = new ESQLBlockDefinition(block.DPObjectDescGenBlock.Name, block.DPObjectDescGenBlock.Name);

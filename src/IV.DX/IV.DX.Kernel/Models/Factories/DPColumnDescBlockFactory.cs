@@ -2,11 +2,11 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public static class DPColumnDescBlockFactory
+    public static class DXColumnDefinitionElementFactory
     {
-        public static DPColumnDescBlock GetIntColumn(Guid id, string columnName, bool allowNull, string defaultValue)
+        public static DXColumnDefinitionElement GetIntColumn(Guid id, string columnName, bool allowNull, string defaultValue)
         {
-            return new DPColumnDescBlock()
+            return new DXColumnDefinitionElement()
             {
                 ID = id,
                 Name = columnName,
@@ -19,14 +19,14 @@ namespace IV.DX.Kernel.Models
             };
         }
 
-        public static DPColumnDescBlock GetIntColumn(string columnName, bool allowNull, string defaultValue)
+        public static DXColumnDefinitionElement GetIntColumn(string columnName, bool allowNull, string defaultValue)
         {
             return GetIntColumn(Guid.NewGuid(), columnName, allowNull, defaultValue);
         }
 
-        public static DPColumnDescBlock GetStringColumn(Guid id, string columnName, int length, bool allowNull, string defaultValue)
+        public static DXColumnDefinitionElement GetStringColumn(Guid id, string columnName, int length, bool allowNull, string defaultValue)
         {
-            return new DPColumnDescBlock()
+            return new DXColumnDefinitionElement()
             {
                 ID = id,
                 Name = columnName,
@@ -39,12 +39,12 @@ namespace IV.DX.Kernel.Models
             };
         }
 
-        public static DPColumnDescBlock GetStringColumn(string columnName, int length, bool allowNull, string defaultValue)
+        public static DXColumnDefinitionElement GetStringColumn(string columnName, int length, bool allowNull, string defaultValue)
         {
             return GetStringColumn(Guid.NewGuid(), columnName, length, allowNull, defaultValue);
         }
 
-        public static DPColumnDescBlock GetIntColumn(string columnName, bool allowNull)
+        public static DXColumnDefinitionElement GetIntColumn(string columnName, bool allowNull)
         {
             return GetIntColumn(Guid.NewGuid(), columnName, allowNull, null);
         }

@@ -37,8 +37,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("e7ec1df8-e169-406c-9323-52e5e6459c95"),
                         ObjectNameLeft = "DPObjectDescObject",
                         RelationNameLeft = "DPObjectDescObjectID",
-                        ObjectNameRight = "DPColumnDescBlock",
-                        RelationNameRight = "DPColumnDescBlock",
+                        ObjectNameRight = "DXColumnDefinitionElement",
+                        RelationNameRight = "DXColumnDefinitionElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
                         Kind = DPObjectKindEnum.Core
@@ -156,8 +156,8 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("7b843027-7c06-40ac-9872-8572cadc66f2"),
-                        ObjectNameLeft = "DPColumnDescBlock",
-                        RelationNameLeft = "DPColumnDescBlock",
+                        ObjectNameLeft = "DXColumnDefinitionElement",
+                        RelationNameLeft = "DXColumnDefinitionElement",
                         ObjectNameRight = "DPColumnTypeEnum",
                         RelationNameRight = "ColumnType",
                         RelationTable = null,
@@ -175,9 +175,9 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("572d875f-66cf-4850-8bc7-45805b93e093"),
-                        ObjectNameLeft = "DPColumnDescBlock",
+                        ObjectNameLeft = "DXColumnDefinitionElement",
                         RelationNameLeft = "Enums",
-                        ObjectNameRight = "DPColumnDescBlock",
+                        ObjectNameRight = "DXColumnDefinitionElement",
                         RelationNameRight = "EnumKey",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToZeroOne,
@@ -192,7 +192,7 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("5ccfd33e-f6b4-4374-bcbe-de3823b6ada4"),
-                        ObjectNameLeft = "DPColumnDescBlock",
+                        ObjectNameLeft = "DXColumnDefinitionElement",
                         RelationNameLeft = "Enums",
                         ObjectNameRight = "DXEnumDefinitionUnit",
                         RelationNameRight = "EnumType",

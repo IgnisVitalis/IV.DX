@@ -47,35 +47,35 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
                 Assert.True(blockDefinition is DXElementDefinitionUnit);
 
-                Assert.NotNull(blockDefinition.DPColumnDescBlock);
-                Assert.Equal(16, blockDefinition.DPColumnDescBlock.Announced.Count());
+                Assert.NotNull(blockDefinition.DXColumnDefinitionElement);
+                Assert.Equal(16, blockDefinition.DXColumnDefinitionElement.Announced.Count());
 
-                var idColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ID");
+                var idColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
                 Assert.NotNull(idColumn);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
                 Assert.Equal("ID", idColumn.Name);
                 Assert.Equal(DPColumnTypeEnum.GUID, idColumn.ColumnType);
 
-                var objectIdColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+                var objectIdColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
                 Assert.NotNull(objectIdColumn);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
                 Assert.Equal("ObjectID", objectIdColumn.Name);
                 Assert.Equal(DPColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
-                var systemTimeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
+                var systemTimeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
                 Assert.NotNull(objectIdColumn);
                 Assert.Equal(DateTime.UtcNow, systemTimeStampColumn.TimeStamp, difference);
                 Assert.Equal("TimeStamp", systemTimeStampColumn.Name);
                 Assert.Equal(DPColumnTypeEnum.TimeStamp, systemTimeStampColumn.ColumnType);
 
-                var guidColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
+                var guidColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
                 Assert.NotNull(guidColumn);
                 Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
                 Assert.Equal("GuidColumn", guidColumn.Name);
                 Assert.Equal(DPColumnTypeEnum.GUID, guidColumn.ColumnType);
 
-                var timeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
+                var timeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
                 Assert.NotNull(timeStampColumn);
                 Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
@@ -83,7 +83,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(DPColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
                 Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
 
-                var stringColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
+                var stringColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
                 Assert.NotNull(stringColumn);
                 Assert.Equal(new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"), stringColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
@@ -93,7 +93,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(100, stringColumn.Length);
                 Assert.Equal("'StringValue'", stringColumn.DefaultValue);
 
-                var textColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
+                var textColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
                 Assert.NotNull(textColumn);
                 Assert.Equal(new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"), textColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.ObjectID);
@@ -101,7 +101,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(DPColumnTypeEnum.Text, textColumn.ColumnType);
                 Assert.True(textColumn.AllowNull);
 
-                var dateTimeColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
+                var dateTimeColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
                 Assert.NotNull(dateTimeColumn);
                 Assert.Equal(new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"), dateTimeColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.ObjectID);
@@ -110,7 +110,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(dateTimeColumn.AllowNull);
                 Assert.Equal("CURRENT_TIMESTAMP", dateTimeColumn.DefaultValue);
 
-                var boolColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
+                var boolColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
                 Assert.NotNull(boolColumn);
                 Assert.Equal(new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"), boolColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.ObjectID);
@@ -119,7 +119,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(boolColumn.AllowNull);
                 Assert.Equal("0", boolColumn.DefaultValue);
 
-                var shortColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
+                var shortColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
                 Assert.NotNull(shortColumn);
                 Assert.Equal(new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"), shortColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.ObjectID);
@@ -128,7 +128,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(shortColumn.AllowNull);
                 Assert.Equal("0", shortColumn.DefaultValue);
 
-                var intColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
+                var intColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
                 Assert.NotNull(intColumn);
                 Assert.Equal(new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"), intColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.ObjectID);
@@ -137,7 +137,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(intColumn.AllowNull);
                 Assert.Equal("0", intColumn.DefaultValue);
 
-                var longColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
+                var longColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
                 Assert.NotNull(longColumn);
                 Assert.Equal(new Guid("5482886C-3062-4F37-B550-41353835C744"), longColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.ObjectID);
@@ -146,7 +146,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(longColumn.AllowNull);
                 Assert.Equal("0", longColumn.DefaultValue);
 
-                var decimalColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
+                var decimalColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
                 Assert.NotNull(decimalColumn);
                 Assert.Equal(new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"), decimalColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.ObjectID);
@@ -157,7 +157,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(13, decimalColumn.Precision);
                 Assert.Equal(4, decimalColumn.Scale);
 
-                var floatColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
+                var floatColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
                 Assert.NotNull(floatColumn);
                 Assert.Equal(new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"), floatColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.ObjectID);
@@ -168,7 +168,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(8, floatColumn.Precision);
                 Assert.Equal(5, floatColumn.Scale);
 
-                var currencyColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
+                var currencyColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
                 Assert.NotNull(currencyColumn);
                 Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
@@ -177,7 +177,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.True(currencyColumn.AllowNull);
                 Assert.Equal("0", currencyColumn.DefaultValue);
 
-                var blobColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
+                var blobColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
                 Assert.NotNull(blobColumn);
                 Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
@@ -233,35 +233,35 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal("UpdatedDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
             Assert.True(blockDefinition is DXElementDefinitionUnit);
 
-            Assert.NotNull(blockDefinition.DPColumnDescBlock);
-            Assert.Equal(16, blockDefinition.DPColumnDescBlock.Announced.Count());
+            Assert.NotNull(blockDefinition.DXColumnDefinitionElement);
+            Assert.Equal(16, blockDefinition.DXColumnDefinitionElement.Announced.Count());
 
-            var idColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ID");
+            var idColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
             Assert.NotNull(objectIdColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
             Assert.Equal("ObjectID", objectIdColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
-            var systemTimeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
+            var systemTimeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
             Assert.NotNull(systemTimeStampColumn);
             Assert.Equal(DateTime.UtcNow, systemTimeStampColumn.TimeStamp, difference);
             Assert.Equal("TimeStamp", systemTimeStampColumn.Name);
             Assert.Equal(DPColumnTypeEnum.TimeStamp, systemTimeStampColumn.ColumnType);
 
-            var guidColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
+            var guidColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, guidColumn.ColumnType);
 
-            var timeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
+            var timeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
@@ -269,7 +269,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(DPColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
 
-            var stringColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
+            var stringColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
             Assert.NotNull(stringColumn);
             Assert.Equal(new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"), stringColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
@@ -279,7 +279,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(200, stringColumn.Length);
             Assert.Equal("'StringValueUpdated'", stringColumn.DefaultValue);
 
-            var textColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
+            var textColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
             Assert.NotNull(textColumn);
             Assert.Equal(new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"), textColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.ObjectID);
@@ -287,7 +287,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(DPColumnTypeEnum.Text, textColumn.ColumnType);
             Assert.False(textColumn.AllowNull);
 
-            var dateTimeColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
+            var dateTimeColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
             Assert.NotNull(dateTimeColumn);
             Assert.Equal(new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"), dateTimeColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.ObjectID);
@@ -296,7 +296,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(dateTimeColumn.AllowNull);
             Assert.Equal("CURRENT_TIMESTAMP", dateTimeColumn.DefaultValue);
 
-            var boolColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
+            var boolColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
             Assert.NotNull(boolColumn);
             Assert.Equal(new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"), boolColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.ObjectID);
@@ -305,7 +305,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(boolColumn.AllowNull);
             Assert.Equal("1", boolColumn.DefaultValue);
 
-            var shortColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
+            var shortColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
             Assert.NotNull(shortColumn);
             Assert.Equal(new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"), shortColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.ObjectID);
@@ -314,7 +314,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(shortColumn.AllowNull);
             Assert.Equal("1", shortColumn.DefaultValue);
 
-            var intColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
+            var intColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
             Assert.NotNull(intColumn);
             Assert.Equal(new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"), intColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.ObjectID);
@@ -323,7 +323,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(intColumn.AllowNull);
             Assert.Equal("1", intColumn.DefaultValue);
 
-            var longColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
+            var longColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
             Assert.NotNull(longColumn);
             Assert.Equal(new Guid("5482886C-3062-4F37-B550-41353835C744"), longColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.ObjectID);
@@ -332,7 +332,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(longColumn.AllowNull);
             Assert.Equal("1", longColumn.DefaultValue);
 
-            var decimalColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
+            var decimalColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
             Assert.NotNull(decimalColumn);
             Assert.Equal(new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"), decimalColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.ObjectID);
@@ -343,7 +343,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(7, decimalColumn.Precision);
             Assert.Equal(2, decimalColumn.Scale);
 
-            var floatColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
+            var floatColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
             Assert.NotNull(floatColumn);
             Assert.Equal(new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"), floatColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.ObjectID);
@@ -354,7 +354,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(3, floatColumn.Precision);
             Assert.Equal(1, floatColumn.Scale);
 
-            var currencyColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
+            var currencyColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
@@ -363,7 +363,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(currencyColumn.AllowNull);
             Assert.Equal("1", currencyColumn.DefaultValue);
 
-            var blobColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
+            var blobColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
@@ -402,35 +402,35 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
             Assert.True(blockDefinition is DXElementDefinitionUnit);
 
-            Assert.NotNull(blockDefinition.DPColumnDescBlock);
-            Assert.Equal(5, blockDefinition.DPColumnDescBlock.Announced.Count());
+            Assert.NotNull(blockDefinition.DXColumnDefinitionElement);
+            Assert.Equal(5, blockDefinition.DXColumnDefinitionElement.Announced.Count());
 
-            var idColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ID");
+            var idColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
             Assert.NotNull(objectIdColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
             Assert.Equal("ObjectID", objectIdColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
-            var systemTimeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
+            var systemTimeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
             Assert.NotNull(systemTimeStampColumn);
             Assert.Equal(DateTime.UtcNow, systemTimeStampColumn.TimeStamp, difference);
             Assert.Equal("TimeStamp", systemTimeStampColumn.Name);
             Assert.Equal(DPColumnTypeEnum.TimeStamp, systemTimeStampColumn.ColumnType);
 
-            var guidColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
+            var guidColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, guidColumn.ColumnType);
 
-            var timeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
+            var timeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
@@ -473,35 +473,35 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
             Assert.True(blockDefinition is DXElementDefinitionUnit);
 
-            Assert.NotNull(blockDefinition.DPColumnDescBlock);
-            Assert.Equal(7, blockDefinition.DPColumnDescBlock.Announced.Count());
+            Assert.NotNull(blockDefinition.DXColumnDefinitionElement);
+            Assert.Equal(7, blockDefinition.DXColumnDefinitionElement.Announced.Count());
 
-            var idColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ID");
+            var idColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
             Assert.NotNull(objectIdColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
             Assert.Equal("ObjectID", objectIdColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
-            var systemTimeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
+            var systemTimeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
             Assert.NotNull(systemTimeStampColumn);
             Assert.Equal(DateTime.UtcNow, systemTimeStampColumn.TimeStamp, difference);
             Assert.Equal("TimeStamp", systemTimeStampColumn.Name);
             Assert.Equal(DPColumnTypeEnum.TimeStamp, systemTimeStampColumn.ColumnType);
 
-            var guidColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
+            var guidColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, guidColumn.ColumnType);
 
-            var timeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
+            var timeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
@@ -509,7 +509,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(DPColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
 
-            var currencyColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
+            var currencyColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
@@ -518,7 +518,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(currencyColumn.AllowNull);
             Assert.Equal("0", currencyColumn.DefaultValue);
 
-            var blobColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
+            var blobColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
@@ -557,35 +557,35 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal("UpdatedDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
             Assert.True(blockDefinition is DXElementDefinitionUnit);
 
-            Assert.NotNull(blockDefinition.DPColumnDescBlock);
-            Assert.Equal(8, blockDefinition.DPColumnDescBlock.Announced.Count());
+            Assert.NotNull(blockDefinition.DXColumnDefinitionElement);
+            Assert.Equal(8, blockDefinition.DXColumnDefinitionElement.Announced.Count());
 
-            var idColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ID");
+            var idColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
             Assert.NotNull(objectIdColumn);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
             Assert.Equal("ObjectID", objectIdColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
-            var systemTimeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
+            var systemTimeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
             Assert.NotNull(systemTimeStampColumn);
             Assert.Equal(DateTime.UtcNow, systemTimeStampColumn.TimeStamp, difference);
             Assert.Equal("TimeStamp", systemTimeStampColumn.Name);
             Assert.Equal(DPColumnTypeEnum.TimeStamp, systemTimeStampColumn.ColumnType);
 
-            var guidColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
+            var guidColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DPColumnTypeEnum.GUID, guidColumn.ColumnType);
 
-            var timeStampColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
+            var timeStampColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
@@ -593,7 +593,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(DPColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
 
-            var stringColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("E042EF31-397E-4614-BABC-79132D4A68DF"));
+            var stringColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("E042EF31-397E-4614-BABC-79132D4A68DF"));
             Assert.NotNull(stringColumn);
             Assert.Equal(new Guid("E042EF31-397E-4614-BABC-79132D4A68DF"), stringColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
@@ -603,7 +603,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(200, stringColumn.Length);
             Assert.Equal("'StringValueNew'", stringColumn.DefaultValue);
 
-            var currencyColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
+            var currencyColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
@@ -612,7 +612,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.False(currencyColumn.AllowNull);
             Assert.Equal("1", currencyColumn.DefaultValue);
 
-            var blobColumn = blockDefinition.DPColumnDescBlock.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
+            var blobColumn = blockDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);

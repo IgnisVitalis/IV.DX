@@ -19,19 +19,19 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                     Kind = DPObjectKindEnum.Custom,
                     ObjectID = id
                 },
-                DPColumnDescBlock = new ESQLMultiItemsContainer<DPColumnDescBlock>()
+                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnDescBlock>()
+                    Announced = new List<DXColumnDefinitionElement>()
                     {
-                        new DPColumnDescBlock()
+                        new DXColumnDefinitionElement()
                         {
                             ID= Guid.NewGuid(),
                             ObjectID = id,
                             ColumnType = DPColumnTypeEnum.GUID,
                             Name = "NameGUID"
                         },
-                        new DPColumnDescBlock()
+                        new DXColumnDefinitionElement()
                         {
                             ID= Guid.NewGuid(),
                             ObjectID = id,

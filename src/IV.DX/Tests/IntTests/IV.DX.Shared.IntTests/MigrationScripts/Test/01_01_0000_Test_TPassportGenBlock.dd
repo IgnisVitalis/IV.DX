@@ -7,7 +7,7 @@
       "Name": "TPassportGenBlock",      
       "Kind": 3
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {

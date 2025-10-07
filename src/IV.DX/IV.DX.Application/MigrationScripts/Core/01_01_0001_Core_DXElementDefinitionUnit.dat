@@ -7,7 +7,7 @@
       "Name": "DPObjectDescGenBlock",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -34,10 +34,10 @@
     "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
     "DPObjectDescGenBlock": {
       "ID": "7725e3cb-e831-4ddc-86d8-c71bea59f9d7",
-      "Name": "DPColumnDescBlock",
+      "Name": "DXColumnDefinitionElement",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -95,7 +95,7 @@
       "Name": "DPColumnsUniqueBlock",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -135,7 +135,7 @@
       "Name": "DPRelationGenBlock",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -232,7 +232,7 @@
       "Name": "DPMigrationScriptsGenBlock",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {

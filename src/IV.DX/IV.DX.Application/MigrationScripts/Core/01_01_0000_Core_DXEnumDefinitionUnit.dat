@@ -7,7 +7,7 @@
       "Name": "DPBlockInObjectTypeEnum",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -45,7 +45,7 @@
       "Name": "DPColumnTypeEnum",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -83,7 +83,7 @@
       "Name": "DPObjectKindEnum",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -121,7 +121,7 @@
       "Name": "DPRelationTypeEnum",
       "Kind": 1
     },
-    "DPColumnDescBlock": {
+    "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {

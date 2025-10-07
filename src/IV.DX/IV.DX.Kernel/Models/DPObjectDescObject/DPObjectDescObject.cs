@@ -7,14 +7,14 @@ namespace IV.DX.Kernel.Models
     {
         public DPObjectDescGenBlock DPObjectDescGenBlock { get; set; }
 
-        public ESQLMultiItemsContainer<DPColumnDescBlock> DPColumnDescBlock { get; set; }
+        public ESQLMultiItemsContainer<DXColumnDefinitionElement> DXColumnDefinitionElement { get; set; }
         public ESQLMultiItemsContainer<DPColumnsUniqueBlock> DPColumnsUniqueBlock { get; set; }
 
         public DPObjectDescObject()
         {
-            this.DPColumnDescBlock = new ESQLMultiItemsContainer<DPColumnDescBlock>
+            this.DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>
             {
-                Announced = new List<DPColumnDescBlock>()
+                Announced = new List<DXColumnDefinitionElement>()
             };
 
             this.DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>

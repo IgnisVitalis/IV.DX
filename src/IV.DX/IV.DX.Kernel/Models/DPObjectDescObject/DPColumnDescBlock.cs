@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPColumnDescBlock")]
-    public class DPColumnDescBlock : ESQLBlock
+    [ESQLBlockDefinition("DXColumnDefinitionElement")]
+    public class DXColumnDefinitionElement : ESQLBlock
     {
         [ESQLColumnDefinition("Name")]
         public string Name { get; set; }

@@ -60,7 +60,7 @@ namespace IV.DX.Kernel.Converters
 
             JObject jObject = new JObject();
 
-            foreach (var column in enumDesc.DPColumnDescBlock.Announced)
+            foreach (var column in enumDesc.DXColumnDefinitionElement.Announced)
             {
                 ESQLPropertyDefinition item = new ESQLPropertyDefinition(column.Name, new ESQLColumnDefinitionAttribute(column.Name));
 

@@ -20,8 +20,8 @@
       "ID": "e7ec1df8-e169-406c-9323-52e5e6459c95",
       "ObjectNameLeft": "DPObjectDescObject",
       "RelationNameLeft": "DPObjectDescObjectID",
-      "ObjectNameRight": "DPColumnDescBlock",
-      "RelationNameRight": "DPColumnDescBlock",
+      "ObjectNameRight": "DXColumnDefinitionElement",
+      "RelationNameRight": "DXColumnDefinitionElement",
       "RelationTable": null,
       "RelationType": 5,
       "Kind": 1
@@ -116,8 +116,8 @@
     "ID": "fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91",
     "DPRelationGenBlock": {
       "ID": "7b843027-7c06-40ac-9872-8572cadc66f2",
-      "ObjectNameLeft": "DPColumnDescBlock",
-      "RelationNameLeft": "DPColumnDescBlock",
+      "ObjectNameLeft": "DXColumnDefinitionElement",
+      "RelationNameLeft": "DXColumnDefinitionElement",
       "ObjectNameRight": "DPColumnTypeEnum",
       "RelationNameRight": "ColumnType",
       "RelationTable": null,
@@ -132,9 +132,9 @@
     "ID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
     "DPRelationGenBlock": {
       "ID": "572d875f-66cf-4850-8bc7-45805b93e093",
-      "ObjectNameLeft": "DPColumnDescBlock",
+      "ObjectNameLeft": "DXColumnDefinitionElement",
       "RelationNameLeft": "Enums",
-      "ObjectNameRight": "DPColumnDescBlock",
+      "ObjectNameRight": "DXColumnDefinitionElement",
       "RelationNameRight": "EnumKey",
       "RelationTable": null,
       "RelationType": 6,
@@ -146,7 +146,7 @@
     "ID": "298099bc-d243-40a0-8807-769a8f307809",
     "DPRelationGenBlock": {
       "ID": "5ccfd33e-f6b4-4374-bcbe-de3823b6ada4",
-      "ObjectNameLeft": "DPColumnDescBlock",
+      "ObjectNameLeft": "DXColumnDefinitionElement",
       "RelationNameLeft": "Enums",
       "ObjectNameRight": "DXEnumDefinitionUnit",
       "RelationNameRight": "EnumType",

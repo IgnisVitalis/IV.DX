@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DPColumnDescBlock", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DXColumnDefinitionElement", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -24,11 +24,11 @@ namespace IV.DX.Application.DataHandlers
 
         protected void ProcessEnumRelations(DPObjectDescObject obj)
         {
-            if (obj.DPColumnDescBlock == null)
+            if (obj.DXColumnDefinitionElement == null)
                 return;
 
             // TODO: [70fba884-2cef-4d5f-937d-3efc17365a25]     
-            switch (obj.DPColumnDescBlock.Mode)
+            switch (obj.DXColumnDefinitionElement.Mode)
             {
                 case ModeForMultiItems.Full:
                     break;
@@ -42,28 +42,28 @@ namespace IV.DX.Application.DataHandlers
 
         private void ProcessEnumRelationsUsingTargetMode(DPObjectDescObject obj)
         {
-            var announcedIds = obj.DPColumnDescBlock.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
+            var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
             var announcedEnumInfos = this._dataStructureRepo.GetEnums(announcedIds);
 
-            var deletedIds = obj.DPColumnDescBlock.Deleted.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
+            var deletedIds = obj.DXColumnDefinitionElement.Deleted.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
             var deletedEnumInfos = this._dataStructureRepo.GetEnums(deletedIds);
 
             foreach (var announcedEnumInfo in announcedEnumInfos)
             {
-                var columnWithEnumValue = obj.DPColumnDescBlock.Announced.Single(x => x.EnumType == announcedEnumInfo.ID);
+                var columnWithEnumValue = obj.DXColumnDefinitionElement.Announced.Single(x => x.EnumType == announcedEnumInfo.ID);
 
-                var enumColumn = announcedEnumInfo.DPColumnDescBlock.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
+                var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
                 this._dataService.Insert(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue));
             }
 
             foreach (var deletedEnumInfo in deletedEnumInfos)
             {
-                var columnWithEnumValue = obj.DPColumnDescBlock.Deleted.Single(x => x.EnumType == deletedEnumInfo.ID);
+                var columnWithEnumValue = obj.DXColumnDefinitionElement.Deleted.Single(x => x.EnumType == deletedEnumInfo.ID);
 
-                var enumColumn = deletedEnumInfo.DPColumnDescBlock.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
+                var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
                 var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
@@ -71,7 +71,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DXRelationDefinitionUnit GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DPColumnDescBlock enumColumn, DPColumnDescBlock columnWithEnumValue)
+        private DXRelationDefinitionUnit GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
         {
             return new DXRelationDefinitionUnit()
             {
@@ -113,7 +113,7 @@ namespace IV.DX.Application.DataHandlers
         {
             var objectInfoFromDB = this.GetObjectInfoFromDB(objectInfoIncome);
 
-            if (objectInfoFromDB == null || objectInfoIncome.DPColumnDescBlock.Mode == ModeForMultiItems.Full)
+            if (objectInfoFromDB == null || objectInfoIncome.DXColumnDefinitionElement.Mode == ModeForMultiItems.Full)
             {
                 if (objectInfoIncome is DXElementDefinitionUnit)
                 {
@@ -142,7 +142,7 @@ namespace IV.DX.Application.DataHandlers
 
             if (objectIdColumnDescFromDataBase == null && objectIdColumnDescFromModel == null)
             {
-                var objectIdColumnDesc = new DPColumnDescBlock()
+                var objectIdColumnDesc = new DXColumnDefinitionElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = objectInfoIncome.ID
@@ -150,9 +150,9 @@ namespace IV.DX.Application.DataHandlers
 
                 this.SetImportantValues(objectIdColumnDesc, column);
 
-                objectInfoIncome.DPColumnDescBlock.Announced =
+                objectInfoIncome.DXColumnDefinitionElement.Announced =
                     objectInfoIncome
-                    .DPColumnDescBlock
+                    .DXColumnDefinitionElement
                     .Announced
                     .Append(objectIdColumnDesc);
             }
@@ -160,9 +160,9 @@ namespace IV.DX.Application.DataHandlers
             {
                 this.SetImportantValues(objectIdColumnDescFromDataBase, column);
 
-                objectInfoIncome.DPColumnDescBlock.Announced =
+                objectInfoIncome.DXColumnDefinitionElement.Announced =
                     objectInfoIncome
-                    .DPColumnDescBlock
+                    .DXColumnDefinitionElement
                     .Announced
                     .Append(objectIdColumnDescFromDataBase);
             }
@@ -178,7 +178,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DPColumnDescBlock GetColumnDesc(DPObjectDescObject objectInfo, ImportantColumn column)
+        private DXColumnDefinitionElement GetColumnDesc(DPObjectDescObject objectInfo, ImportantColumn column)
         {
             string columnName = null;
 
@@ -195,7 +195,7 @@ namespace IV.DX.Application.DataHandlers
                     break;
             }
 
-            return objectInfo?.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == columnName);
+            return objectInfo?.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == columnName);
         }
 
         private enum ImportantColumn
@@ -205,7 +205,7 @@ namespace IV.DX.Application.DataHandlers
             TimeStamp
         }
 
-        private void SetImportantValues(DPColumnDescBlock columnInfo, ImportantColumn columnType)
+        private void SetImportantValues(DXColumnDefinitionElement columnInfo, ImportantColumn columnType)
         {
             switch (columnType)
             {
@@ -221,7 +221,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private void SetImportantValuesForIDColumn(DPColumnDescBlock idColumn)
+        private void SetImportantValuesForIDColumn(DXColumnDefinitionElement idColumn)
         {
             idColumn.AllowNull = false;
             idColumn.DefaultValue = string.Empty;
@@ -229,7 +229,7 @@ namespace IV.DX.Application.DataHandlers
             idColumn.Name = "ID";
         }
 
-        private void SetImportantValuesForObjectIDColumn(DPColumnDescBlock objectIDColumn)
+        private void SetImportantValuesForObjectIDColumn(DXColumnDefinitionElement objectIDColumn)
         {
             objectIDColumn.AllowNull = false;
             objectIDColumn.DefaultValue = string.Empty;
@@ -237,7 +237,7 @@ namespace IV.DX.Application.DataHandlers
             objectIDColumn.Name = "ObjectID";
         }
 
-        private void SetImportantValuesForTimeStampColumn(DPColumnDescBlock timeStamplColumnDesc)
+        private void SetImportantValuesForTimeStampColumn(DXColumnDefinitionElement timeStamplColumnDesc)
         {
             timeStamplColumnDesc.AllowNull = false;
             timeStamplColumnDesc.ColumnType = DPColumnTypeEnum.TimeStamp;
@@ -246,28 +246,28 @@ namespace IV.DX.Application.DataHandlers
 
         private void OrderColumn(DPObjectDescObject dataBlock)
         {
-            var idColumn = dataBlock.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "id");
-            var objectIdColumn = dataBlock.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "objectid");
-            var timeStampColumn = dataBlock.DPColumnDescBlock.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "timestamp");
+            var idColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "id");
+            var objectIdColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "objectid");
+            var timeStampColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "timestamp");
 
-            dataBlock.DPColumnDescBlock.Announced =
-                dataBlock.DPColumnDescBlock.Announced
+            dataBlock.DXColumnDefinitionElement.Announced =
+                dataBlock.DXColumnDefinitionElement.Announced
                 .Where(x =>
                     x.Name.Trim().ToLower() != "id"
                     && x.Name.Trim().ToLower() != "objectid"
                     && x.Name.Trim().ToLower() != "timestamp");
 
             // Third
-            dataBlock.DPColumnDescBlock.Announced = dataBlock.DPColumnDescBlock.Announced.Prepend(timeStampColumn);
+            dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(timeStampColumn);
 
             // Second
             if (objectIdColumn != null)
             {
-                dataBlock.DPColumnDescBlock.Announced = dataBlock.DPColumnDescBlock.Announced.Prepend(objectIdColumn);
+                dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(objectIdColumn);
             }
 
             // First
-            dataBlock.DPColumnDescBlock.Announced = dataBlock.DPColumnDescBlock.Announced.Prepend(idColumn);
+            dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(idColumn);
         }
     }
 }

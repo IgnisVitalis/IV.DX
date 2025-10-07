@@ -11,7 +11,7 @@ namespace IV.DX.Persistence.Abstractions
         void DropDataBase(string connectionString);
         QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetSQLQueryToCreateTable(DPObjectDescObject dataBlock);
-        string GetSQLColumnDefinitionToAddInTable(DPColumnDescBlock clmDesc);
+        string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
         string GetSQLQueryToDropTable(string tableName);
         string GetSQLQueryToDropTable(DPObjectDescObject dataBlock);
         string GetSQLQueryToAlterTable(DPObjectDescObject dataBlockNew, DPObjectDescObject dataBlockExisting);
