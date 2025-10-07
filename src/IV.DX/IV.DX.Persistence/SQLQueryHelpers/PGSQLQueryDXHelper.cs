@@ -32,7 +32,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             foreach (var item in expressionTree.AllNodesWithoutCoreAndLeaves)
             {
-                var nodeAsEntityNode = item as EntityNode;
+                var nodeAsEntityNode = item as DXUnitNode;
                 var nodeAsBlockNode = item as BlockNode;
 
                 if (nodeAsEntityNode != null)

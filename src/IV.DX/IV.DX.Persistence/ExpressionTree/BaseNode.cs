@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace IV.DX.Contracts.Persistence.ExpressionTree
+﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
     internal abstract class BaseNode
     {
@@ -53,9 +50,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return child;
         }
 
-        public EntityNode CreateEntityNodeInstanceChild(int x, int y, string value)
+        public DXUnitNode CreateEntityNodeInstanceChild(int x, int y, string value)
         {
-            var leaf = EntityNode.CreateInstance(x, y, value);
+            var leaf = DXUnitNode.CreateInstance(x, y, value);
 
             leaf.Mother = this;
 

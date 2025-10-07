@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class EntityNode : BaseNode
+    internal class DXUnitNode : BaseNode
     {
         private IEnumerable<JoinedQueryInfo> _queryInfos;
 
@@ -46,15 +46,15 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        private EntityNode(int x, int y, string value)
+        private DXUnitNode(int x, int y, string value)
             : base(x, y, value)
         {
 
         }
 
-        public static EntityNode CreateInstance(int x, int y, string value)
+        public static DXUnitNode CreateInstance(int x, int y, string value)
         {
-            var instance = new EntityNode(x, y, value);
+            var instance = new DXUnitNode(x, y, value);
 
             return instance;
         }
@@ -62,7 +62,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
         private IEnumerable<JoinedQueryInfo> GetQueryInfos()
         {
             var motherAsCoreNode = this.Mother as CoreNode;
-            var motherAsEntityNode = this.Mother as EntityNode;
+            var motherAsEntityNode = this.Mother as DXUnitNode;
 
             switch (this.RelationInfo.DXRelationDefinitionMainElement.RelationType)
             {

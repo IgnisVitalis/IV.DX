@@ -8,7 +8,7 @@ using IV.DX.Persistence.SQLQueryHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IV.DataProvider.Persistence.Services
+namespace IV.DX.Hosting
 {
     public class DependencyRegistrator
     {

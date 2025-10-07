@@ -1,7 +1,5 @@
-﻿using IV.DataProvider.Persistence.Services;
-using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Persistence.Abstractions;
-using IV.DX.Persistence.Contracts.Abstractions;
+﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

@@ -201,7 +201,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
         private bool ProcessNodeAsEntityNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var entityNode = node as EntityNode;
+            var entityNode = node as DXUnitNode;
 
             if (entityNode == null)
             {
@@ -210,7 +210,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             DXRelationDefinitionUnit relationInfo = null;
 
-            var motherNodeAsEntityNode = entityNode.Mother as EntityNode;
+            var motherNodeAsEntityNode = entityNode.Mother as DXUnitNode;
             var motherNodeAsCoreNode = entityNode.Mother as CoreNode;
 
             if (motherNodeAsEntityNode != null)

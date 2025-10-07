@@ -59,8 +59,8 @@ namespace IV.DX.Contracts.UnitTests.ExpressionTree
 
             Assert.Equal(2, childsFirstLevel.Count());
 
-            var childFirstLevel0 = childsFirstLevel.First() as EntityNode;
-            var childFirstLevel1 = childsFirstLevel.Skip(1).First() as EntityNode;
+            var childFirstLevel0 = childsFirstLevel.First() as DXUnitNode;
+            var childFirstLevel1 = childsFirstLevel.Skip(1).First() as DXUnitNode;
 
             this.AssertEntityNode(childFirstLevel0, "R(First)", coreNode);
             this.AssertEntityNode(childFirstLevel1, "R(1)", coreNode);
@@ -76,15 +76,15 @@ namespace IV.DX.Contracts.UnitTests.ExpressionTree
             Assert.Equal(2, childsSecondLevel0.Count());
             Assert.Single(childsSecondLevel1);
 
-            var childSecondLevel0 = childsSecondLevel0.First() as EntityNode;
-            var childSecondLevel1 = childsSecondLevel0.Skip(1).First() as EntityNode;
+            var childSecondLevel0 = childsSecondLevel0.First() as DXUnitNode;
+            var childSecondLevel1 = childsSecondLevel0.Skip(1).First() as DXUnitNode;
 
             this.AssertEntityNode(childSecondLevel0, "R(Second)", childFirstLevel0);
             this.AssertEntityNode(childSecondLevel1, "R(2)", childFirstLevel0);
             this.AssertNodeCoordinates(childSecondLevel0, 2, 0);
             this.AssertNodeCoordinates(childSecondLevel1, 2, 1);
 
-            var childSecondLevel2 = childsSecondLevel1.First() as EntityNode;
+            var childSecondLevel2 = childsSecondLevel1.First() as DXUnitNode;
 
             this.AssertEntityNode(childSecondLevel2, "R(Second)", childFirstLevel1);
             this.AssertNodeCoordinates(childSecondLevel2, 2, 2);
@@ -109,12 +109,12 @@ namespace IV.DX.Contracts.UnitTests.ExpressionTree
             this.AssertNodeCoordinates(childThirdLevel0, 3, 0);
             this.AssertNodeCoordinates(childThirdLevel1, 3, 2);
 
-            var childThirdLevel2 = childsThirdLevel1.First() as EntityNode;
+            var childThirdLevel2 = childsThirdLevel1.First() as DXUnitNode;
 
             this.AssertEntityNode(childThirdLevel2, "R(Third)", childSecondLevel1);
             this.AssertNodeCoordinates(childThirdLevel2, 3, 1);
 
-            var childThirdLevel3 = childsThirdLevel2.First() as EntityNode;
+            var childThirdLevel3 = childsThirdLevel2.First() as DXUnitNode;
 
             this.AssertEntityNode(childThirdLevel3, "R(3)", childSecondLevel2);
             this.AssertNodeCoordinates(childThirdLevel3, 3, 3);
@@ -167,7 +167,7 @@ namespace IV.DX.Contracts.UnitTests.ExpressionTree
             Assert.Null(node.Mother);
         }
 
-        private void AssertEntityNode(EntityNode node, string expectedValue, BaseNode expectedMotherNode)
+        private void AssertEntityNode(DXUnitNode node, string expectedValue, BaseNode expectedMotherNode)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);

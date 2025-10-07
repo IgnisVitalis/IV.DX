@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IV.DX.Contracts.Persistence.ExpressionTree
+﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
     internal class BlockNode : BaseNode
     {
@@ -51,7 +49,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 return result;
             }
 
-            var motherAsEntityNode = this.Mother as EntityNode;
+            var motherAsEntityNode = this.Mother as DXUnitNode;
 
             if (motherAsEntityNode != null)
             {
