@@ -1,8 +1,8 @@
 [
   {
-    "S_Type": "DPRelationItemObject",
+    "S_Type": "DXRelationItemUnit",
     "ID": "48d6cc51-7564-406d-b76b-7b8fd2c97ab6",
-    "DPRelationItemGenBlock": {
+    "DXRelationItemMainElement": {
       "ID": "6acf481e-6d05-4bdc-9441-b99a4852a4fa",
       "ObjectTypeNameLeft": "TUserObject",
       "ObjectIDLeft": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
@@ -12,9 +12,9 @@
     }
   },
   {
-    "S_Type": "DPRelationItemObject",
+    "S_Type": "DXRelationItemUnit",
     "ID": "a29781eb-eb30-4b4a-a4a5-e71a60920e21",
-    "DPRelationItemGenBlock": {
+    "DXRelationItemMainElement": {
       "ID": "c8322d36-daa8-4f2f-97f3-2ca0bebd9ef5",
       "ObjectTypeNameLeft": "TUserObject",
       "ObjectIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
@@ -24,9 +24,9 @@
     }
   },
   {
-    "S_Type": "DPRelationItemObject",
+    "S_Type": "DXRelationItemUnit",
     "ID": "1a6dcde2-4c40-40a9-8742-d9663367f92c",
-    "DPRelationItemGenBlock": {
+    "DXRelationItemMainElement": {
       "ID": "66657295-bb6f-4131-bca6-2cdebf48f8a9",
       "ObjectTypeNameLeft": "TUserObject",
       "ObjectIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",

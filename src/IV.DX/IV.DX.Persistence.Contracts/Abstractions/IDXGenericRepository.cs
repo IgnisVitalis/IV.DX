@@ -12,8 +12,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid Update(DXUnit esqlObject);
         bool Delete(DXUnit esqlObject);
         Guid InsertOrUpdate(DXUnit esqlObject);
-        bool AddRelation(DPRelationItemObject relationItem);
-        bool RemoveRelation(DPRelationItemObject relationItem);
+        bool AddRelation(DXRelationItemUnit relationItem);
+        bool RemoveRelation(DXRelationItemUnit relationItem);
 
         Guid InsertBlock(string esqlModelType, DXElement esqlBlock);
         Guid UpdateBlock(string esqlModelType, DXElement esqlBlock);

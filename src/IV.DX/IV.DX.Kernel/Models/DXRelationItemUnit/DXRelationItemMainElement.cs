@@ -2,8 +2,8 @@
 
 namespace IV.DX.Kernel.Models
 {
-    [DXElement("DPRelationItemGenBlock")]
-    public class DPRelationItemGenBlock : DXElement
+    [DXElement("DXRelationItemMainElement")]
+    public class DXRelationItemMainElement : DXElement
     {
         [DXColumn("ObjectTypeNameLeft")]
         public string ObjectTypeNameLeft { get; set; }

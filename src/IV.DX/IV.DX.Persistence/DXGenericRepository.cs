@@ -86,28 +86,28 @@ namespace IV.DX.Persistence
             return this._coreRepo.Update(esqlModel);
         }
 
-        public bool AddRelation(DPRelationItemObject relationItem)
+        public bool AddRelation(DXRelationItemUnit relationItem)
         {
             ArgumentNullException.ThrowIfNull(relationItem);
 
             return this._coreRepo.AddRelation(
-                relationItem.DPRelationItemGenBlock.ObjectTypeNameLeft,
-                     relationItem.DPRelationItemGenBlock.ObjectIDLeft,
-                     relationItem.DPRelationItemGenBlock.RelationNameRight,
-                     relationItem.DPRelationItemGenBlock.ObjectTypeNameRight,
-                     relationItem.DPRelationItemGenBlock.ObjectIDRight);
+                relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
+                     relationItem.DXRelationItemMainElement.ObjectIDLeft,
+                     relationItem.DXRelationItemMainElement.RelationNameRight,
+                     relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
+                     relationItem.DXRelationItemMainElement.ObjectIDRight);
         }
 
-        public bool RemoveRelation(DPRelationItemObject relationItem)
+        public bool RemoveRelation(DXRelationItemUnit relationItem)
         {
             ArgumentNullException.ThrowIfNull(relationItem);
 
             return this._coreRepo.RemoveRelation(
-                relationItem.DPRelationItemGenBlock.ObjectTypeNameLeft,
-                relationItem.DPRelationItemGenBlock.ObjectIDLeft,
-                relationItem.DPRelationItemGenBlock.RelationNameRight,
-                relationItem.DPRelationItemGenBlock.ObjectTypeNameRight,
-                relationItem.DPRelationItemGenBlock.ObjectIDRight);
+                relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
+                relationItem.DXRelationItemMainElement.ObjectIDLeft,
+                relationItem.DXRelationItemMainElement.RelationNameRight,
+                relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
+                relationItem.DXRelationItemMainElement.ObjectIDRight);
         }
 
         public Guid InsertBlock(string esqlModelType, DXElement esqlBlock)

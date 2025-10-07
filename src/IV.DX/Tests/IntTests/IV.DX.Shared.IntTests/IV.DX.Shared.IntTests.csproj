@@ -89,7 +89,7 @@
         <None Update="MigrationScripts\Test\01_01_0025_Test_TDocumentObject.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0026_Test_DPRelationItemObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0026_Test_DXRelationItemUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

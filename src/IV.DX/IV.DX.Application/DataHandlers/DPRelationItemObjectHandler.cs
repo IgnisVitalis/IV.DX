@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DPRelationItemObjectHandler : BaseEntityHandler<DPRelationItemObject>
+    internal class DXRelationItemUnitHandler : BaseEntityHandler<DXRelationItemUnit>
     {
         private readonly IDXGenericRepository _genericRepo;
 
-        public DPRelationItemObjectHandler(IServiceProvider serviceProvider)
+        public DXRelationItemUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
@@ -21,13 +21,13 @@ namespace IV.DX.Application.DataHandlers
             return false;
         }
 
-        public override Guid OnInserting(DPRelationItemObject entity, DXUnitHandlerBaseContext context)
+        public override Guid OnInserting(DXRelationItemUnit entity, DXUnitHandlerBaseContext context)
         {
             this._genericRepo.AddRelation(entity);
             return Guid.Empty;
         }
 
-        public override Guid OnUpdating(DPRelationItemObject entity, DXUnitHandlerBaseContext context)
+        public override Guid OnUpdating(DXRelationItemUnit entity, DXUnitHandlerBaseContext context)
         {
             this.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
@@ -35,7 +35,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
         {
-            var entity = this._genericRepo.GetItem<DPRelationItemObject>(id);
+            var entity = this._genericRepo.GetItem<DXRelationItemUnit>(id);
 
             return this._genericRepo.Delete(entity);
         }
