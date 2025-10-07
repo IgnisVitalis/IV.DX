@@ -7,7 +7,7 @@
       "Name": "DPObjectDescObject",
       "Kind": 1
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -40,7 +40,7 @@
       "ID": "710b1d0b-9343-4739-8126-ab4baefe5763",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -90,7 +90,7 @@
       "Name": "DXRelationDefinitionUnit",
       "Kind": 1
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -109,7 +109,7 @@
       "Name": "DPMigrationScriptsObject",
       "Kind": 1
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {

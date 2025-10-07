@@ -84,7 +84,7 @@ namespace IV.DX.Application.DataHandlers
             if (existingEntity == null)
                 return;
 
-            var relatedBlockIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+            var relatedBlockIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedBlocks = this._dataStructureRepo.GetBlocks(relatedBlockIds);
 
@@ -102,12 +102,12 @@ namespace IV.DX.Application.DataHandlers
 
         private void ProcessBlocksInEntityRelations(DXUnitDefinitionUnit entity)
         {
-            if (entity.DPBlockInEntityDescGenBlock == null)
+            if (entity.DXElementInUnitDefinitionMainElement == null)
                 return;
 
             var objectInfoFromDB = this.GetObjectInfoFromDB(entity);
 
-            if (objectInfoFromDB == null || entity.DPBlockInEntityDescGenBlock.Mode == ModeForMultiItems.Target)
+            if (objectInfoFromDB == null || entity.DXElementInUnitDefinitionMainElement.Mode == ModeForMultiItems.Target)
             {
                 this.ProcessBlocksInEntityRelationsUsingTragetMode(entity);
             }
@@ -127,8 +127,8 @@ namespace IV.DX.Application.DataHandlers
 
         private void ProcessBlocksInEntityRelationsUsingFullMode(DXUnitDefinitionUnit entity, DXUnitDefinitionUnit existingEntity)
         {
-            var newAnnouncedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
-            var existingAnnouncedIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
+            var newAnnouncedIds = entity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var existingAnnouncedIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
 
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
@@ -142,10 +142,10 @@ namespace IV.DX.Application.DataHandlers
 
         private void ProcessBlocksInEntityRelationsUsingTragetMode(DXUnitDefinitionUnit entity)
         {
-            var announcedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
+            var announcedIds = entity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
             var blocksToAssign = this._dataStructureRepo.GetBlocks(announcedIds);
 
-            var deletedIds = entity.DPBlockInEntityDescGenBlock.Deleted.Select(x => x.DXElementDefinitionUnit);
+            var deletedIds = entity.DXElementInUnitDefinitionMainElement.Deleted.Select(x => x.DXElementDefinitionUnit);
             var blocksToUnassign = this._dataStructureRepo.GetBlocks(deletedIds);
 
             this.AssignBlocks(entity, blocksToAssign);
@@ -156,7 +156,7 @@ namespace IV.DX.Application.DataHandlers
         {
             foreach (var blockToAssign in blocksToAssign)
             {
-                var relationType = entity.DPBlockInEntityDescGenBlock.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
+                var relationType = entity.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
 
                 this._dataService.Insert(this.GetRelationObject(entity, blockToAssign, relationType));
             }

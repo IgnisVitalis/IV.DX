@@ -154,14 +154,14 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
-                #region DPBlockInEntityDescGenBlock
+                #region DXElementInUnitDefinitionMainElement
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7"),
                     DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("abd3be0e-3d54-4cde-a909-fccf7293c661"),
-                        Name = "DPBlockInEntityDescGenBlock",
+                        Name = "DXElementInUnitDefinitionMainElement",
                         Kind = DXObjectKindEnum.Core
                     }
                 },

@@ -7,7 +7,7 @@
       "Name": "TPositionObject",
       "Kind": 3
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {

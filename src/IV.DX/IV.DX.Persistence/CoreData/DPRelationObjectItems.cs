@@ -122,8 +122,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("f60dd08e-cf27-4592-8f84-4a8ba1fca8ff"),
                         ObjectNameLeft = "DXUnitDefinitionUnit",
                         RelationNameLeft = "DXUnitDefinitionUnitID",
-                        ObjectNameRight = "DPBlockInEntityDescGenBlock",
-                        RelationNameRight = "DPBlockInEntityDescGenBlock",
+                        ObjectNameRight = "DXElementInUnitDefinitionMainElement",
+                        RelationNameRight = "DXElementInUnitDefinitionMainElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
@@ -209,8 +209,8 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("4aafad60-92df-41ee-b9be-a57125740b12"),
-                        ObjectNameLeft = "DPBlockInEntityDescGenBlock",
-                        RelationNameLeft = "DPBlockInEntityDescGenBlock",
+                        ObjectNameLeft = "DXElementInUnitDefinitionMainElement",
+                        RelationNameLeft = "DXElementInUnitDefinitionMainElement",
                         ObjectNameRight = "DXElementInUnitTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
@@ -228,7 +228,7 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("fe83cc43-0d3a-412b-bd93-d337717967af"),
-                        ObjectNameLeft = "DPBlockInEntityDescGenBlock",
+                        ObjectNameLeft = "DXElementInUnitDefinitionMainElement",
                         RelationNameLeft = "DXUnitDefinitionUnit",
                         ObjectNameRight = "DXElementDefinitionUnit",
                         RelationNameRight = "DXElementDefinitionUnit",

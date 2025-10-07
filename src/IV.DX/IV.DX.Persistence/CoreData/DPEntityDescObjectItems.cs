@@ -21,23 +21,23 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DPObjectDescObject",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                     {
-                        Announced = new List<DPBlockInEntityDescGenBlock>()
+                        Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("c0074af4-a729-49d2-9fe2-f62a54cd6ac0"),
                                 RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                                 DXElementDefinitionUnit = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2")
                             },
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("4b1500ca-0400-4d2e-ab25-bd77b590ee95"),
                                 RelationType = DXElementInUnitTypeEnum.MultiOptional,
                                 DXElementDefinitionUnit = new Guid("ce754889-4efb-4281-ad1f-14d710b30007")
                             },
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("29e7062c-1669-40e6-af24-adf132742a98"),
                                 RelationType = DXElementInUnitTypeEnum.MultiOptional,
@@ -63,17 +63,17 @@ namespace IV.DX.Persistence.CoreData
                         BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
 
                     },
-                    DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                     {
-                        Announced = new List<DPBlockInEntityDescGenBlock>()
+                        Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("15399025-98be-4cf1-9761-413b5fde515c"),
                                 RelationType = DXElementInUnitTypeEnum.SingleOptional,
                                 DXElementDefinitionUnit = new Guid("eeb499d0-4e20-41aa-8a24-9981c3cbf511")
                             },
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("5c9c45e1-6793-418a-a139-fffa3dd386d9"),
                                 RelationType = DXElementInUnitTypeEnum.MultiOptional,
@@ -127,11 +127,11 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DXRelationDefinitionUnit",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                     {
-                        Announced = new List<DPBlockInEntityDescGenBlock>()
+                        Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("3567c5d3-c419-4507-a404-d71924e2cda6"),
                                 RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -151,11 +151,11 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DPMigrationScriptsObject",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                     {
-                        Announced = new List<DPBlockInEntityDescGenBlock>()
+                        Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
-                            new DPBlockInEntityDescGenBlock()
+                            new DXElementInUnitDefinitionMainElement()
                             {
                                 ID = new Guid("6881bd56-1753-472d-9699-a1d640a1f53a"),
                                 RelationType = DXElementInUnitTypeEnum.SingleMandatory,

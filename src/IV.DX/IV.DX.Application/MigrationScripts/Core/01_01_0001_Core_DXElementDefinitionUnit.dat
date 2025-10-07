@@ -114,7 +114,7 @@
     "ID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
     "DXUnitDefinitionMainElement": {
       "ID": "abd3be0e-3d54-4cde-a909-fccf7293c661",
-      "Name": "DPBlockInEntityDescGenBlock",
+      "Name": "DXElementInUnitDefinitionMainElement",
       "Kind": 1
     }
   },

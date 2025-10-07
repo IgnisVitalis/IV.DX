@@ -7,7 +7,7 @@
       "Name": "TPassportObject",
       "Kind": 3
     },
-    "DPBlockInEntityDescGenBlock": {
+    "DXElementInUnitDefinitionMainElement": {
       "Mode": 1,
       "Announced": [
         {

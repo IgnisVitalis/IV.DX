@@ -670,7 +670,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (obj == null || block == null)
                 return null;
 
-            var blockInEntityInfo = obj.DPBlockInEntityDescGenBlock?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == block.ID);
+            var blockInEntityInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == block.ID);
 
             if (blockInEntityInfo == null)
                 return null;

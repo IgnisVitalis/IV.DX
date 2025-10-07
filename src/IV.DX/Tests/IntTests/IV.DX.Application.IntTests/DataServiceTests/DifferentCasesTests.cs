@@ -74,11 +74,11 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntity"
                 },
-                DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Announced = new List<DPBlockInEntityDescGenBlock>()
+                    Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
-                        new DPBlockInEntityDescGenBlock()
+                        new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -214,21 +214,21 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Insert(blockToDelete);
 
             // Action
-            entity.DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+            entity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = ModeForMultiItems.Target,
-                Announced = new List<DPBlockInEntityDescGenBlock>()
+                Announced = new List<DXElementInUnitDefinitionMainElement>()
                 {
-                    new DPBlockInEntityDescGenBlock()
+                    new DXElementInUnitDefinitionMainElement()
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                         DXElementDefinitionUnit = blockToAdd.ID
                     }
                 },
-                Deleted = new List<DPBlockInEntityDescGenBlock>()
+                Deleted = new List<DXElementInUnitDefinitionMainElement>()
                 {
-                    new DPBlockInEntityDescGenBlock()
+                    new DXElementInUnitDefinitionMainElement()
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -242,17 +242,17 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Assert
             var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
 
-            Assert.Single(existingEntity.DPBlockInEntityDescGenBlock.Announced);
+            Assert.Single(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
 
-            var announcedBlock = existingEntity.DPBlockInEntityDescGenBlock.Announced.Single();
+            var announcedBlock = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Single();
 
             Assert.Equal(blockToAdd.ID, announcedBlock.DXElementDefinitionUnit);
 
             // Action
-            existingEntity.DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+            existingEntity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = ModeForMultiItems.Target,
-                Deleted = new List<DPBlockInEntityDescGenBlock>()
+                Deleted = new List<DXElementInUnitDefinitionMainElement>()
                 {
                     announcedBlock
                 }
@@ -262,7 +262,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
 
             // Assert
             existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingEntity.DPBlockInEntityDescGenBlock.Announced);
+            Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
         }
 
 
@@ -290,11 +290,11 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntity8f9e7d6c5b4a"
                 },
-                DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Announced = new List<DPBlockInEntityDescGenBlock>()
+                    Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
-                        new DPBlockInEntityDescGenBlock()
+                        new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -368,23 +368,23 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntityc44f7a2dd5f6"
                 },
-                DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Announced = new List<DPBlockInEntityDescGenBlock>()
+                    Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
-                        new DPBlockInEntityDescGenBlock()
+                        new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block1.ID
                         },
-                        new DPBlockInEntityDescGenBlock()
+                        new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block2.ID
                         },
-                        new DPBlockInEntityDescGenBlock()
+                        new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -408,18 +408,18 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Insert(entity);
 
             // Action
-            entity.DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
+            entity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = ModeForMultiItems.Target,               
-                Deleted = entity.DPBlockInEntityDescGenBlock.Announced,
-                Announced = new List<DPBlockInEntityDescGenBlock>()
+                Deleted = entity.DXElementInUnitDefinitionMainElement.Announced,
+                Announced = new List<DXElementInUnitDefinitionMainElement>()
             };
 
             this._dataService.Update(entity);
 
             // Assert
             var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingEntity.DPBlockInEntityDescGenBlock.Announced);
+            Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
         }
     }
 

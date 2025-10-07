@@ -243,11 +243,11 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DXElementInUnitTypeEnum relationType)
         {
-            if (entity.DPBlockInEntityDescGenBlock == null)
+            if (entity.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
             var relatedBlockIds =
-              entity.DPBlockInEntityDescGenBlock
+              entity.DXElementInUnitDefinitionMainElement
               .Announced
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
@@ -259,11 +259,11 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity)
         {
-            if (entity.DPBlockInEntityDescGenBlock == null)
+            if (entity.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
             var relatedBlockIds =
-                entity.DPBlockInEntityDescGenBlock
+                entity.DXElementInUnitDefinitionMainElement
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 

@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPBlockInEntityDescGenBlock")]
-    public class DPBlockInEntityDescGenBlock : ESQLBlock
+    [ESQLBlockDefinition("DXElementInUnitDefinitionMainElement")]
+    public class DXElementInUnitDefinitionMainElement : ESQLBlock
     {
         [ESQLColumnDefinition("RelationType")]
         public DXElementInUnitTypeEnum RelationType { get; set; }
