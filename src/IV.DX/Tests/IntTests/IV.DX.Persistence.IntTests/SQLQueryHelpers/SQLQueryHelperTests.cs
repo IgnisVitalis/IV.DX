@@ -14,7 +14,7 @@ using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
+namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 {
     public class SQLQueryHelperTests : IntTestController
     {

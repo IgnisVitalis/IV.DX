@@ -12,7 +12,7 @@ using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
+namespace IV.DX.Application.IntTests.DataServiceTests
 {
     public class DifferentCasesTests : IntTestController
     {

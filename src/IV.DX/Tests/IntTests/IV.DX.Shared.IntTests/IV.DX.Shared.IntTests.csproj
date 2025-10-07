@@ -23,9 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="IV.DataProvider.Persistence.config.mysql">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="MigrationScripts\Test.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

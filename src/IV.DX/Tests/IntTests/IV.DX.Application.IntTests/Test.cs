@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IV.DataProvider.Persistence.Services.IntTests
+namespace IV.DX.Application.IntTests
 {
     public class Test : IntTestController
     {

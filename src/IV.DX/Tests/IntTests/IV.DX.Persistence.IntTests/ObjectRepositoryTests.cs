@@ -8,7 +8,7 @@ using System.IO;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IV.DataProvider.Persistence.Repositories.IntTests
+namespace IV.DX.Persistence.IntTests
 {
     public class ObjectRepositoryTests : IntTestController
     {

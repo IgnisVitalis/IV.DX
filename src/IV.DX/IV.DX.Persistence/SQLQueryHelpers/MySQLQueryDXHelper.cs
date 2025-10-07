@@ -262,11 +262,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // DROP FOREIGN KEY `fk_Table1_Table2_0000`;
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // DROP INDEX `fk_Table1_Table2_0000_idx` ;
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // DROP COLUMN Table2ID;
 
             StringBuilder sb = new StringBuilder();
@@ -283,15 +283,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // ADD COLUMN Table2ID CHAR(36) CHARACTER SET UTF8MB4; ;
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // ADD INDEX `fk_Table1_Table2_0000_idx` (`Table2ID` ASC) VISIBLE;
             // ;
-            // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
+            // ALTER TABLE `IV.DX.TestDB`.`Table1` 
             // ADD CONSTRAINT `fk_Table1_Table2_0000`
             //   FOREIGN KEY (`Table2ID`)
-            //   REFERENCES `IV.DataProvider.TestDB`.`Table2` (`ID`)
+            //   REFERENCES `IV.DX.TestDB`.`Table2` (`ID`)
             //   ON DELETE NO ACTION
             //   ON UPDATE NO ACTION;
 
@@ -454,7 +454,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                     dataSet,
                     "information_schema.tables",
                     new List<string> { "table_name" },
-                    $"table_name LIKE '{intermediateTableBaseName}%' AND TABLE_SCHEMA = 'IV.DataProvider.TestDB'",
+                    $"table_name LIKE '{intermediateTableBaseName}%' AND TABLE_SCHEMA = 'IV.DX.TestDB'",
                     new Dictionary<string, string>() { { "CREATE_TIME", "DESC" } },
                     1);
             }

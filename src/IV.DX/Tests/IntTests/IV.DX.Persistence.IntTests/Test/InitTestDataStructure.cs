@@ -1,4 +1,4 @@
-﻿namespace IV.DataProvider.Persistence.Repositories.IntTests.Test
+﻿namespace IV.DX.Persistence.IntTests.Test
 {
     //public class InitTestDataStructure : IntTestController
     //{

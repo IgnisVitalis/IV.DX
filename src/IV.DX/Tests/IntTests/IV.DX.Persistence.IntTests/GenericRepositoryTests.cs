@@ -11,7 +11,7 @@ using Xunit;
 using Xunit.Abstractions;
 using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
 
-namespace IV.DataProvider.Persistence.Repositories.IntTests
+namespace IV.DX.Persistence.IntTests
 {
     public class GenericRepositoryTests : IntTestController
     {

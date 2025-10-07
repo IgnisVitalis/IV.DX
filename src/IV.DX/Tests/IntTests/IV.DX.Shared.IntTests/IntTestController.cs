@@ -24,9 +24,9 @@ namespace IV.DX.Shared.IntTests
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
                     {"Database:Type", "PostgreSQL"},
-                    {"Database:ConnectionString", "Server=localhost;Database=IV.DataProvider.TestDB;User ID=postgres;password=root;"},
+                    {"Database:ConnectionString", "Server=localhost;Database=IV.DX.TestDB;User ID=postgres;password=root;"},
 					//{"Database:Type", "MySQL"},
-					//{"Database:ConnectionString", "Server=159.89.98.54;Database=IV.DataProvider.TestDB2;Uid=digilit_user;Pwd=Digilit2019!;"},
+					//{"Database:ConnectionString", "Server=159.89.98.54;Database=IV.DX.TestDB2;Uid=digilit_user;Pwd=Digilit2019!;"},
 				})
                 .Build();
 
