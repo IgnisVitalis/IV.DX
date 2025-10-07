@@ -9,19 +9,19 @@ namespace IV.DX.Persistence.Abstractions
     {
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
-        QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DPRelationObject> relationInfos);
+        QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetSQLQueryToCreateTable(DPObjectDescObject dataBlock);
         string GetSQLColumnDefinitionToAddInTable(DPColumnDescBlock clmDesc);
         string GetSQLQueryToDropTable(string tableName);
         string GetSQLQueryToDropTable(DPObjectDescObject dataBlock);
         string GetSQLQueryToAlterTable(DPObjectDescObject dataBlockNew, DPObjectDescObject dataBlockExisting);
-        string GetSQLQueryToDeleteRelationZeroOneToOne(DPRelationObject obj);
-        string GetSQLQueryToDeleteRelationOneToZeroOne(DPRelationObject obj);
-        string GetSQLQueryToDeleteRelationManyToOne(DPRelationObject obj);
-        string GetSQLQueryToDeleteRelationOneToMany(DPRelationObject obj);
-        string GetSQLQueryToCreateRelationToMany(DPRelationObject obj, bool isNullable, bool isUnique);
-        string GetSQLQueryToCreateRelationManyTo(DPRelationObject obj, bool isNullable, bool isUnique);
-        string GetSQLQueryToCreateRelationManyToMany(DPRelationObject obj, string connectionStr);
+        string GetSQLQueryToDeleteRelationZeroOneToOne(DXRelationDefinitionUnit obj);
+        string GetSQLQueryToDeleteRelationOneToZeroOne(DXRelationDefinitionUnit obj);
+        string GetSQLQueryToDeleteRelationManyToOne(DXRelationDefinitionUnit obj);
+        string GetSQLQueryToDeleteRelationOneToMany(DXRelationDefinitionUnit obj);
+        string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique);
+        string GetSQLQueryToCreateRelationManyTo(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique);
+        string GetSQLQueryToCreateRelationManyToMany(DXRelationDefinitionUnit obj, string connectionStr);
         string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter);
@@ -31,7 +31,7 @@ namespace IV.DX.Persistence.Abstractions
         void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
         string GetSelectQuery(CoreNode coreNode);
-        string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DPRelationObject> relationInfos);
+        string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetQueryToSetEntityInheritance(string childEntity, string baseEntity);
         string GetWhereExpressionForID(Guid id);
         string GetWhereExpressionForObjectID(Guid id);

@@ -34,7 +34,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        public DPRelationObject RelationInfo { get; set; }
+        public DXRelationDefinitionUnit RelationInfo { get; set; }
 
         private string _tableNameAliasToJoin;
 

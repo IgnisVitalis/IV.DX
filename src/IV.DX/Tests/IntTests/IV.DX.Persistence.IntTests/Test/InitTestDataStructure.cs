@@ -188,7 +188,7 @@
     //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"));
 
     //        var relationInfo =
-    //                DPRelationObjectFactory.GetItem(objRelId,
+    //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
     //                DPRelationTypeEnum.OneToZeroOne,
     //                "User",
     //                "Passport",
@@ -196,7 +196,7 @@
     //                obj2);
 
     //        // Action
-    //        //this._dataService.Delete(this._genericRepo.GetItem<DPRelationObject>(new Guid("f15f71da-ab49-4937-911a-58170f32da30")));
+    //        //this._dataService.Delete(this._genericRepo.GetItem<DXRelationDefinitionUnit>(new Guid("f15f71da-ab49-4937-911a-58170f32da30")));
     //        this._dataService.Insert(relationInfo);
     //    }
 
@@ -251,7 +251,7 @@
     //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("356aaa53-fc71-41dd-90a0-53975d938cf9"));
 
     //        var relationInfo =
-    //                DPRelationObjectFactory.GetItem(objRelId,
+    //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
     //                DPRelationTypeEnum.OneToMany,
     //                "User",
     //                "Devices",
@@ -259,7 +259,7 @@
     //                obj2);
 
     //        // Action
-    //        //this._dataService.Delete(this._genericRepo.GetItem<DPRelationObject>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
+    //        //this._dataService.Delete(this._genericRepo.GetItem<DXRelationDefinitionUnit>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
     //        this._dataService.Insert(relationInfo);
     //    }
 
@@ -332,7 +332,7 @@
     //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("394566d6-93e4-446a-800d-2209898475ac"));
 
     //        var relationInfo =
-    //                DPRelationObjectFactory.GetItem(objRelId,
+    //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
     //                DPRelationTypeEnum.ZeroOneToZeroOne,
     //                "User",
     //                "Position",
@@ -340,7 +340,7 @@
     //                obj2);
 
     //        // Action
-    //        //this._dataService.Delete(this._genericRepo.GetItem<DPRelationObject>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
+    //        //this._dataService.Delete(this._genericRepo.GetItem<DXRelationDefinitionUnit>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
     //        this._dataService.Insert(relationInfo);
     //    }
 
@@ -413,7 +413,7 @@
     //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"));
 
     //        var relationInfo =
-    //                DPRelationObjectFactory.GetItem(objRelId,
+    //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
     //                DPRelationTypeEnum.ZeroOneToMany,
     //                "User",
     //                "Documents",
@@ -421,7 +421,7 @@
     //                obj2);
 
     //        // Action
-    //        //this._dataService.Delete(this._genericRepo.GetItem<DPRelationObject>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
+    //        //this._dataService.Delete(this._genericRepo.GetItem<DXRelationDefinitionUnit>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
     //        this._dataService.Insert(relationInfo);
     //    }
 
@@ -542,7 +542,7 @@
     //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"));
 
     //        var relationInfo =
-    //                DPRelationObjectFactory.GetItem(objRelId,
+    //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
     //                DPRelationTypeEnum.ManyToMany,
     //                "Users",
     //                "Books",
@@ -550,7 +550,7 @@
     //                obj2);
 
     //        // Action
-    //        //this._dataService.Delete(this._genericRepo.GetItem<DPRelationObject>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
+    //        //this._dataService.Delete(this._genericRepo.GetItem<DXRelationDefinitionUnit>(new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066")));
     //        this._dataService.Insert(relationInfo);
     //    }
     //}

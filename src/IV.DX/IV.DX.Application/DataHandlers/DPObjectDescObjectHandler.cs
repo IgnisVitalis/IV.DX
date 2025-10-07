@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DPColumnDescBlock", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DPRelationObject", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DPColumnDescBlock", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -67,13 +67,13 @@ namespace IV.DX.Application.DataHandlers
 
                 var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
-                this._dataService.Delete("DPRelationObject", relationObject.ID);
+                this._dataService.Delete("DXRelationDefinitionUnit", relationObject.ID);
             }
         }
 
-        private DPRelationObject GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DPColumnDescBlock enumColumn, DPColumnDescBlock columnWithEnumValue)
+        private DXRelationDefinitionUnit GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DPColumnDescBlock enumColumn, DPColumnDescBlock columnWithEnumValue)
         {
-            return new DPRelationObject()
+            return new DXRelationDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
                 DPRelationGenBlock = new DPRelationGenBlock()

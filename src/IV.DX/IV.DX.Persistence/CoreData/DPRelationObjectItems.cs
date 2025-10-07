@@ -3,16 +3,16 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.CoreData
 {
-    internal static class DPRelationObjectItems
+    internal static class DXRelationDefinitionUnitItems
     {
-        public static IList<DPRelationObject> Items { get; private set; }
+        public static IList<DXRelationDefinitionUnit> Items { get; private set; }
 
-        static DPRelationObjectItems()
+        static DXRelationDefinitionUnitItems()
         {
-            Items = new List<DPRelationObject>()
+            Items = new List<DXRelationDefinitionUnit>()
             {
                 #region 9020e4fa-3ce9-4b32-8849-cdabe0b6f707
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("9020e4fa-3ce9-4b32-8849-cdabe0b6f707"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -29,7 +29,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region f802e73c-e512-4655-8067-94e80aea143c
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("f802e73c-e512-4655-8067-94e80aea143c"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -46,7 +46,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region bedc1f2b-2b9b-404f-89e5-5179bd87f60f
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("bedc1f2b-2b9b-404f-89e5-5179bd87f60f"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -63,14 +63,14 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 78462c7e-4658-422d-9ae5-9e9c55b24276
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("78462c7e-4658-422d-9ae5-9e9c55b24276"),
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("ff669d1b-7635-4e23-b5f2-17563fe1e369"),
-                        ObjectNameLeft = "DPRelationObject",
-                        RelationNameLeft = "DPRelationObjectID",
+                        ObjectNameLeft = "DXRelationDefinitionUnit",
+                        RelationNameLeft = "DXRelationDefinitionUnitID",
                         ObjectNameRight = "DPRelationGenBlock",
                         RelationNameRight = "DPRelationGenBlock",
                         RelationTable = null,
@@ -80,7 +80,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 87f7a8f1-caea-4d67-b9d3-6c85aae00174
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("87f7a8f1-caea-4d67-b9d3-6c85aae00174"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -97,7 +97,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 87964e3e-ed1b-42f5-a18e-9f7102ebb352
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("87964e3e-ed1b-42f5-a18e-9f7102ebb352"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -114,7 +114,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -131,7 +131,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region e352d11e-1fb1-4433-8fe6-fe240bae963a
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("e352d11e-1fb1-4433-8fe6-fe240bae963a"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -150,7 +150,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -169,7 +169,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region ecd64009-c91e-4630-aff4-2948f5d0a3df
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("ecd64009-c91e-4630-aff4-2948f5d0a3df"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -186,7 +186,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 298099bc-d243-40a0-8807-769a8f307809
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("298099bc-d243-40a0-8807-769a8f307809"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -203,7 +203,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region f665b056-ee22-482e-8da2-f55aa26a384c
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("f665b056-ee22-482e-8da2-f55aa26a384c"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -222,7 +222,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 4f58bcbb-8398-4481-8a8f-ee936c79431f
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("4f58bcbb-8398-4481-8a8f-ee936c79431f"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -239,7 +239,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 1e1611cd-ff11-495c-82f6-5f0871cdc05c
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("1e1611cd-ff11-495c-82f6-5f0871cdc05c"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -256,7 +256,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 1e1611cd-ff11-495c-82f6-5f0871cdc05c
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("1e1611cd-ff11-495c-82f6-5f0871cdc05c"),
                     DPRelationGenBlock = new DPRelationGenBlock()
@@ -275,7 +275,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region 7328a3c1-0d27-474c-90be-c96c5967d54f
-                new DPRelationObject()
+                new DXRelationDefinitionUnit()
                 {
                     ID = new Guid("7328a3c1-0d27-474c-90be-c96c5967d54f"),
                     DPRelationGenBlock = new DPRelationGenBlock()

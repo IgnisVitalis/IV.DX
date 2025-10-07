@@ -8,7 +8,7 @@ namespace IV.DX.Persistence
         public static IEnumerable<DXElementDefinitionUnit> CoreBlockInfos { get; set; }
         public static IEnumerable<DXEnumDefinitionUnit> CoreEnumInfos { get; set; }
         public static IEnumerable<DXUnitDefinitionUnit> CoreEntityInfos { get; set; }
-        public static IEnumerable<DPRelationObject> CoreRelationInfos { get; set; }
+        public static IEnumerable<DXRelationDefinitionUnit> CoreRelationInfos { get; set; }
 
         static CoreDataStructureRepository()
         {
@@ -825,14 +825,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPRelationObject
-            var dpRelationObject = new DXUnitDefinitionUnit()
+            #region DXRelationDefinitionUnit
+            var DXRelationDefinitionUnit = new DXUnitDefinitionUnit()
             {
                 ID = new Guid("9fec9aab-c0d9-4453-90e7-06b023aa6faf"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
                 {
                     ID = new Guid("f440497f-f9b9-4b25-a558-e7bdd2354683"),
-                    Name = "DPRelationObject",
+                    Name = "DXRelationDefinitionUnit",
                     Kind = DPObjectKindEnum.Core
                 },
                 DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
@@ -883,7 +883,7 @@ namespace IV.DX.Persistence
                 DXUnitDefinitionUnit,
                 DXElementDefinitionUnit,
                 DXEnumDefinitionUnit,
-                dpRelationObject,
+                DXRelationDefinitionUnit,
                 dpMigrationScriptsObject
             };
         }

@@ -83,9 +83,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
             books = new List<TBookObject>() { book1, book2, book3 };
         }
 
-        private IEnumerable<DPRelationObject> GetAllRelations()
+        private IEnumerable<DXRelationDefinitionUnit> GetAllRelations()
         {
-            var result = this._genericRepo.GetItems<DPRelationObject>();
+            var result = this._genericRepo.GetItems<DXRelationDefinitionUnit>();
 
             return result;
         }

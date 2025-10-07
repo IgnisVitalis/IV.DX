@@ -15,7 +15,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
 
-        public QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DPRelationObject> relationInfos)
+        public QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             OrientedTree expressionTree = OrientedTree.CreateInstance(entityType);
 
@@ -137,7 +137,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return new NpgsqlDataAdapter(query, conn);
         }
 
-        public string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DPRelationObject> relationInfos)
+        public string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             if (string.IsNullOrEmpty(esqlWhereExpression))
                 return GetSQLQueryToSelectIDFromTable(typeName);
@@ -495,7 +495,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return columnName != "ID" && columnName != "ObjectID" && columnName != "TimeStamp";
         }
 
-        public string GetSQLQueryToCreateRelationManyTo(DPRelationObject obj, bool isNullable, bool isUnique)
+        public string GetSQLQueryToCreateRelationManyTo(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -518,7 +518,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateRelationManyToMany(DPRelationObject obj, string connectionStr)
+        public string GetSQLQueryToCreateRelationManyToMany(DXRelationDefinitionUnit obj, string connectionStr)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -556,7 +556,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        private int GetNumberOfIntermediateTable(DPRelationObject obj, string connectionStr)
+        private int GetNumberOfIntermediateTable(DXRelationDefinitionUnit obj, string connectionStr)
         {
             //SELECT con.oid, nsp.nspname, con.conname, rel.relname
             //       FROM pg_catalog.pg_constraint con
@@ -619,7 +619,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return adapter;
         }
 
-        public string GetSQLQueryToCreateRelationToMany(DPRelationObject obj, bool isNullable, bool isUnique)
+        public string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -701,7 +701,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDeleteRelationManyToOne(DPRelationObject obj)
+        public string GetSQLQueryToDeleteRelationManyToOne(DXRelationDefinitionUnit obj)
         {
             var sb = new StringBuilder();
 
@@ -714,7 +714,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDeleteRelationOneToMany(DPRelationObject obj)
+        public string GetSQLQueryToDeleteRelationOneToMany(DXRelationDefinitionUnit obj)
         {
             var sb = new StringBuilder();
 
@@ -727,7 +727,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDeleteRelationOneToZeroOne(DPRelationObject obj)
+        public string GetSQLQueryToDeleteRelationOneToZeroOne(DXRelationDefinitionUnit obj)
         {
             var sb = new StringBuilder();
 
@@ -740,7 +740,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDeleteRelationZeroOneToOne(DPRelationObject obj)
+        public string GetSQLQueryToDeleteRelationZeroOneToOne(DXRelationDefinitionUnit obj)
         {
             var sb = new StringBuilder();
 

@@ -5,19 +5,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DPRelationObjectHandler : BaseEntityHandler<DPRelationObject>
+    internal class DXRelationDefinitionUnitHandler : BaseEntityHandler<DXRelationDefinitionUnit>
     {
         private readonly IGenericRepository _genericRepo;
         private readonly IDataStructureRepository _dataStructureRepo;
 
-        public DPRelationObjectHandler(IServiceProvider serviceProvider)
+        public DXRelationDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
         }
 
-        public override Guid OnInserting(DPRelationObject entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             var existingRelation = this._dataStructureRepo.GetRelation(entity.DPRelationGenBlock.ObjectNameLeft, entity.DPRelationGenBlock.RelationNameLeft, entity.DPRelationGenBlock.ObjectNameRight, entity.DPRelationGenBlock.RelationNameRight);
 
@@ -49,7 +49,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DPRelationObject entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
@@ -57,7 +57,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
         {
-            var entity = this._genericRepo.GetItem<DPRelationObject>(id);
+            var entity = this._genericRepo.GetItem<DXRelationDefinitionUnit>(id);
 
             this._dataStructureRepo.DropDataStructure(entity);
 
@@ -75,9 +75,9 @@ namespace IV.DX.Application.DataHandlers
             return this._genericRepo.Delete(invertedRelation);
         }
 
-        private DPRelationObject GetInvertedRelationObject(DPRelationObject entity)
+        private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit entity)
         {
-            var modelDefinition = this._genericRepo.GetItems<DPRelationObject>(entity.GetQueryForInvertedRelationObject());
+            var modelDefinition = this._genericRepo.GetItems<DXRelationDefinitionUnit>(entity.GetQueryForInvertedRelationObject());
 
             return modelDefinition.SingleOrDefault();
         }

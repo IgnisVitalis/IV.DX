@@ -117,14 +117,14 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
-                #region DPRelationObject
+                #region DXRelationDefinitionUnit
                 new DXUnitDefinitionUnit()
                 {
                     ID = new Guid("9fec9aab-c0d9-4453-90e7-06b023aa6faf"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
                     {
                         ID = new Guid("f440497f-f9b9-4b25-a558-e7bdd2354683"),
-                        Name = "DPRelationObject",
+                        Name = "DXRelationDefinitionUnit",
                         Kind = DPObjectKindEnum.Core
                     },
                     DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()

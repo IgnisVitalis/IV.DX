@@ -4,9 +4,9 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
 {
-    public static class DPRelationObjectFactory
+    public static class DXRelationDefinitionUnitFactory
     {
-        public static DPRelationObject GetItem(
+        public static DXRelationDefinitionUnit GetItem(
             Guid id,
             DPRelationTypeEnum relationType,
             string relationNameLeft,
@@ -15,7 +15,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
             DPObjectDescObject objectNameRight,
             string realationTable = null)
         {
-            DPRelationObject obj = new DPRelationObject()
+            DXRelationDefinitionUnit obj = new DXRelationDefinitionUnit()
             {
                 ID = id,
                 DPRelationGenBlock = new DPRelationGenBlock()

@@ -90,7 +90,7 @@ namespace IV.DX.Application.DataHandlers
 
             foreach (var relatedBlock in relatedBlocks)
             {
-                this._dataService.Delete("DPRelationObject", this.GetExistingRelatonObject(entity, relatedBlock).ID);
+                this._dataService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, relatedBlock).ID);
             }
         }
 
@@ -171,11 +171,11 @@ namespace IV.DX.Application.DataHandlers
                 if (existingBlock == null)
                     continue;
 
-                this._dataService.Delete("DPRelationObject", this.GetExistingRelatonObject(entity, blockToUnassign).ID);
+                this._dataService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, blockToUnassign).ID);
             }
         }
 
-        private DPRelationObject GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block, DPBlockInObjectTypeEnum relationType)
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block, DPBlockInObjectTypeEnum relationType)
         {
             var result = this.GetRelationObject(entity, block);
 
@@ -184,9 +184,9 @@ namespace IV.DX.Application.DataHandlers
             return result;
         }
 
-        private DPRelationObject GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
-            return new DPRelationObject()
+            return new DXRelationDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
                 DPRelationGenBlock = new DPRelationGenBlock()
@@ -201,14 +201,14 @@ namespace IV.DX.Application.DataHandlers
             };
         }
 
-        private DPRelationObject GetExistingRelatonObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
+        private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
             var query = $"DPRelationGenBlock.ObjectNameLeft = '{entity.DPObjectDescGenBlock.Name}' " +
                $"AND DPRelationGenBlock.ObjectNameRight = '{block.DPObjectDescGenBlock.Name}' " +
                $"AND DPRelationGenBlock.RelationNameLeft = '{entity.DPObjectDescGenBlock.Name}ID' " +
                $"AND DPRelationGenBlock.RelationNameRight = '{block.DPObjectDescGenBlock.Name}'";
 
-            var items = this._genericRepo.GetItems<DPRelationObject>(query);
+            var items = this._genericRepo.GetItems<DXRelationDefinitionUnit>(query);
 
             return items.SingleOrDefault();
         }

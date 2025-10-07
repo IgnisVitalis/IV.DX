@@ -87,7 +87,7 @@
     "ID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
     "DPObjectDescGenBlock": {
       "ID": "f440497f-f9b9-4b25-a558-e7bdd2354683",
-      "Name": "DPRelationObject",
+      "Name": "DXRelationDefinitionUnit",
       "Kind": 1
     },
     "DPBlockInEntityDescGenBlock": {

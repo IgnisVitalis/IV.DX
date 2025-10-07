@@ -45,7 +45,7 @@ namespace IV.DX.Application
                 Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandler(serviceProvider));
                 Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandler(serviceProvider));
                 Register<DXEnumDefinitionUnit>(new DXEnumDefinitionUnitHandler(serviceProvider));
-                Register<DPRelationObject>(new DPRelationObjectHandler(serviceProvider));
+                Register<DXRelationDefinitionUnit>(new DXRelationDefinitionUnitHandler(serviceProvider));
                 Register<DPInheritanceInitCore>(new DPInheritanceInitCoreHandler(serviceProvider));
                 Register<DPRelationItemObject>(new DPRelationItemObjectHandler(serviceProvider));
 

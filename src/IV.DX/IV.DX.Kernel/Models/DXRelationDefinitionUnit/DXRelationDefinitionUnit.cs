@@ -4,18 +4,18 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DPRelationObject")]
-    public class DPRelationObject : ESQLObject
+    [ESQLObjectDefinition("DXRelationDefinitionUnit")]
+    public class DXRelationDefinitionUnit : ESQLObject
     {
-        public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DPRelationObject>();
+        public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
 
         public DPRelationGenBlock DPRelationGenBlock { get; set; }
 
-        public DPRelationObject CreateInvertedRelationObject()
+        public DXRelationDefinitionUnit CreateInvertedRelationObject()
         {
             var objectId = Guid.NewGuid();
 
-            return new DPRelationObject()
+            return new DXRelationDefinitionUnit()
             {
                 ID = objectId,
                 DPRelationGenBlock = new DPRelationGenBlock()

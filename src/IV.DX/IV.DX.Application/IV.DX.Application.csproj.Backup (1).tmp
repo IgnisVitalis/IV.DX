@@ -24,6 +24,10 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>
+        <Content Include="MigrationScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" Pack="true">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
         <Content Include="MigrationScripts\Core\01_01_0004_Core_DPInheritanceInitCore.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
@@ -43,9 +47,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="MigrationScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="MigrationScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="MigrationScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat">

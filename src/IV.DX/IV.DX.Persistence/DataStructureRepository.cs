@@ -9,8 +9,8 @@ namespace IV.DX.Persistence
 {
     internal partial class CoreRepository : ICoreRepository, IDataStructureRepository, IEnumCoreRepository
     {
-        private IList<DPRelationObject> _relationInfos;
-        public IEnumerable<DPRelationObject> RelationInfos { get { return this._relationInfos; } }
+        private IList<DXRelationDefinitionUnit> _relationInfos;
+        public IEnumerable<DXRelationDefinitionUnit> RelationInfos { get { return this._relationInfos; } }
 
         private IList<DXUnitDefinitionUnit> _entityInfos;
         public IEnumerable<DXUnitDefinitionUnit> EntityInfos { get { return this._entityInfos; } }
@@ -30,7 +30,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void CreateDataStructure(DPRelationObject entity)
+        public void CreateDataStructure(DXRelationDefinitionUnit entity)
         {
             var sqlQuery = this.GetSQLQueryToCreateRelation(entity);
 
@@ -39,7 +39,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DPRelationObject entity)
+        public void DropDataStructure(DXRelationDefinitionUnit entity)
         {
             var sqlQuery = this.GetSQLQueryToDeleteRelation(entity);
 
@@ -96,7 +96,7 @@ namespace IV.DX.Persistence
             return this._queryHelper.GetSQLQueryToCreateTable(obj, block);
         }
 
-        private string GetSQLQueryToCreateRelation(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelation(DXRelationDefinitionUnit obj)
         {
             string result = "";
 
@@ -115,44 +115,44 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        private string GetSQLQueryToCreateRelationManyToOne(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationManyToOne(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, false, false);
         }
 
-        private string GetSQLQueryToCreateRelationManyToZeroOne(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationManyToZeroOne(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, true, false);
         }
 
-        private string GetSQLQueryToCreateRelationZeroOneToOne(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationZeroOneToOne(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, false, true);
         }
 
-        private string GetSQLQueryToCreateRelationOneToMany(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationOneToMany(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, false, false);
         }
 
-        private string GetSQLQueryToCreateRelationZeroOneToMany(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationZeroOneToMany(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, false);
         }
 
-        private string GetSQLQueryToCreateRelationOneToZeroOne(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationOneToZeroOne(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, false, true);
         }
 
-        private string GetSQLQueryToCreateRelationZeroOneToZeroOne(DPRelationObject obj)
+        private string GetSQLQueryToCreateRelationZeroOneToZeroOne(DXRelationDefinitionUnit obj)
         {
             obj.DPRelationGenBlock.RelationTable = obj.DPRelationGenBlock.ObjectNameRight;
 
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, true);
         }
 
-        private string GetSQLQueryToDeleteRelation(DPRelationObject obj)
+        private string GetSQLQueryToDeleteRelation(DXRelationDefinitionUnit obj)
         {
             string result = "";
 
@@ -171,15 +171,15 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        private string GetSQLQueryToDeleteRelationManyToMany(DPRelationObject entity)
+        private string GetSQLQueryToDeleteRelationManyToMany(DXRelationDefinitionUnit entity)
         {
             string relationTableName;
 
             if (string.IsNullOrEmpty(entity.DPRelationGenBlock.RelationTable))
             {
-                var existingModel = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DPRelationObject)), entity.ID, TypeOfEntityLoading.Full);
+                var existingModel = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), entity.ID, TypeOfEntityLoading.Full);
 
-                var existingEntity = ESQLObjectHelper.CreateInstance<DPRelationObject>(existingModel);
+                var existingEntity = ESQLObjectHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 
                 relationTableName = existingEntity.DPRelationGenBlock.RelationTable;
             }
@@ -191,12 +191,12 @@ namespace IV.DX.Persistence
             return this._queryHelper.GetSQLQueryToDropTable(relationTableName);
         }
 
-        private string GetSQLQueryToDeleteRelationManyToZeroOne(DPRelationObject obj)
+        private string GetSQLQueryToDeleteRelationManyToZeroOne(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToDeleteRelationManyToOne(obj);
         }
 
-        private string GetSQLQueryToDeleteRelationZeroOneToMany(DPRelationObject obj)
+        private string GetSQLQueryToDeleteRelationZeroOneToMany(DXRelationDefinitionUnit obj)
         {
             return this._queryHelper.GetSQLQueryToDeleteRelationOneToMany(obj);
         }
@@ -298,8 +298,8 @@ namespace IV.DX.Persistence
 
         private void LoadRelationInfos()
         {
-            var result = this.GetItems(DPRelationObject.ESQLModelDefinition, TypeOfEntityLoading.Full);
-            this._relationInfos = result.Select(x => ESQLObjectHelper.CreateInstance<DPRelationObject>(x)).ToList();
+            var result = this.GetItems(DXRelationDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            this._relationInfos = result.Select(x => ESQLObjectHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
         }
 
         private void LoadBlockInfos()
@@ -343,7 +343,7 @@ namespace IV.DX.Persistence
             }
         }
 
-        public DPRelationObject GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
+        public DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
         {
             var existingRelation = this.RelationInfos.SingleOrDefault(x =>
                 x.DPRelationGenBlock.ObjectNameLeft == objectNameLeft

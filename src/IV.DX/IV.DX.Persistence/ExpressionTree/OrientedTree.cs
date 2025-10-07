@@ -169,7 +169,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return result;
         }
 
-        public void LoadAdditionalInfosToNodes(IEnumerable<DPRelationObject> relationInfos)
+        public void LoadAdditionalInfosToNodes(IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             foreach (var item in this.AllNodes)
             {
@@ -187,7 +187,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        private bool ProcessNodeAsCoreNode(BaseNode node, IEnumerable<DPRelationObject> relationInfos)
+        private bool ProcessNodeAsCoreNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var coreNode = node as CoreNode;
 
@@ -199,7 +199,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsEntityNode(BaseNode node, IEnumerable<DPRelationObject> relationInfos)
+        private bool ProcessNodeAsEntityNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var entityNode = node as EntityNode;
 
@@ -208,7 +208,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 return false;
             }
 
-            DPRelationObject relationInfo = null;
+            DXRelationDefinitionUnit relationInfo = null;
 
             var motherNodeAsEntityNode = entityNode.Mother as EntityNode;
             var motherNodeAsCoreNode = entityNode.Mother as CoreNode;
@@ -236,7 +236,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsBlockNode(BaseNode node, IEnumerable<DPRelationObject> relationInfos)
+        private bool ProcessNodeAsBlockNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var blockNode = node as BlockNode;
 
@@ -248,7 +248,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsPropertyNode(BaseNode node, IEnumerable<DPRelationObject> relationInfos)
+        private bool ProcessNodeAsPropertyNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var propertyNode = node as PropertyNode;
 

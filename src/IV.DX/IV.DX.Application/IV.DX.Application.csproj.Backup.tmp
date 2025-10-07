@@ -32,7 +32,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>
-        <Content Include="MigrationScripts\Core\01_01_0003_Core_DPRelationObject.dat" Pack="true">
+        <Content Include="MigrationScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>

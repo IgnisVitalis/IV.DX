@@ -39,8 +39,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight7");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ManyToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -67,10 +67,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Equal("Relation_RelTableLeft7_RelTableRight7_0", createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -103,8 +103,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight4");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ManyToOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -132,10 +132,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -168,8 +168,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight3");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.OneToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -197,10 +197,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -232,8 +232,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             DPObjectDescObject obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft43a1");
             DPObjectDescObject obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight43a1");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.OneToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -261,10 +261,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -382,8 +382,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight2");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ZeroOneToOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -411,10 +411,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -532,8 +532,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight6");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ManyToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -561,10 +561,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -647,8 +647,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight5");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ZeroOneToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -676,10 +676,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -762,8 +762,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight8");
 
-            DPRelationObject objRelationInfo =
-                DPRelationObjectFactory.GetItem(objRelId,
+            DXRelationDefinitionUnit objRelationInfo =
+                DXRelationDefinitionUnitFactory.GetItem(objRelId,
                 DPRelationTypeEnum.ZeroOneToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
@@ -791,10 +791,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objRelationInfo);
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DPRelationObject>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
-            this.CheckDPRelationObject(objRelationInfo, createdRelationEntry);
+            this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
             Assert.Equal("RelTableRight8", createdRelationEntry.DPRelationGenBlock.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
@@ -942,7 +942,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             public Guid? RelTableLeftRelation { get; set; }
         }
 
-        private void CheckDPRelationObject(DPRelationObject objRelationInfo, DPRelationObject createdEntry)
+        private void CheckDXRelationDefinitionUnit(DXRelationDefinitionUnit objRelationInfo, DXRelationDefinitionUnit createdEntry)
         {
             Assert.Equal(objRelationInfo.ID, createdEntry.ID);
             Assert.Equal(objRelationInfo.DPRelationGenBlock.ID, createdEntry.DPRelationGenBlock.ID);
@@ -954,7 +954,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(objRelationInfo.DPRelationGenBlock.ObjectNameRight, createdEntry.DPRelationGenBlock.ObjectNameRight);
         }
 
-        private void CheckInvertedRelationEntry(DPRelationObject createdRelationEntry, DPRelationObject createdInvertedRelationEntry)
+        private void CheckInvertedRelationEntry(DXRelationDefinitionUnit createdRelationEntry, DXRelationDefinitionUnit createdInvertedRelationEntry)
         {
             Assert.Equal(createdRelationEntry.DPRelationGenBlock.ObjectNameLeft, createdInvertedRelationEntry.DPRelationGenBlock.ObjectNameRight);
             Assert.Equal(createdRelationEntry.DPRelationGenBlock.ObjectNameRight, createdInvertedRelationEntry.DPRelationGenBlock.ObjectNameLeft);
@@ -963,7 +963,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         }
 
         private void CheckingMethodsForRelations(
-            DPRelationObject relationInfo,
+            DXRelationDefinitionUnit relationInfo,
             DPObjectDescObject objLeft,
             DPObjectDescObject objRight,
             ESQLObject relTableFirstLeft,

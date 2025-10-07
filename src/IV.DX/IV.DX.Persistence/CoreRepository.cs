@@ -28,7 +28,7 @@ namespace IV.DX.Persistence
             this._blockInfos = DXElementDefinitionUnitItems.Items;
             this._entityInfos = DXUnitDefinitionUnitItems.Items;
             this._enumInfos = DXEnumDefinitionUnitItems.Items;
-            this._relationInfos = new List<DPRelationObject>();
+            this._relationInfos = new List<DXRelationDefinitionUnit>();
         }
 
         public bool Delete(string typeName, Guid id)
@@ -1302,7 +1302,7 @@ namespace IV.DX.Persistence
         {
             return this.RunRequestInTransaction((conn) =>
             {
-                var dataSet = new DataSet("DPRelationObject");
+                var dataSet = new DataSet("DXRelationDefinitionUnit");
 
                 this.PopulateTableToDataSet(conn, dataSet, "DPRelationGenBlock"
                     , whereClause:
