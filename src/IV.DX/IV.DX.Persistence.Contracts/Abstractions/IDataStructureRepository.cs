@@ -23,7 +23,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         DXEnumDefinitionUnit GetEnum(string enumName);
         IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids);
         DXElementDefinitionUnit GetBlock(Guid id);
-        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DPBlockInObjectTypeEnum relationType);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DXElementInUnitTypeEnum relationType);
         IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity);
         DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight);
         IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids);

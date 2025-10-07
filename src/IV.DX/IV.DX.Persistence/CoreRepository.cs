@@ -264,28 +264,28 @@ namespace IV.DX.Persistence
 
             foreach (var entity in entities)
             {
-                var singleMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DPBlockInObjectTypeEnum.SingleMandatory);
+                var singleMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.SingleMandatory);
 
                 if (singleMandatoryBlocksTemp != null)
                 {
                     singleMandatoryBlocks.AddRange(singleMandatoryBlocksTemp);
                 }
 
-                var singleOptionalBlocksTemp = this.GetRelatedBlocks(entity, DPBlockInObjectTypeEnum.SingleOptional);
+                var singleOptionalBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.SingleOptional);
 
                 if (singleOptionalBlocksTemp != null)
                 {
                     singleOptionalBlocks.AddRange(singleOptionalBlocksTemp);
                 }
 
-                var multiMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DPBlockInObjectTypeEnum.MultiMandatory);
+                var multiMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.MultiMandatory);
 
                 if (multiMandatoryBlocksTemp != null)
                 {
                     multiMandatoryBlocks.AddRange(multiMandatoryBlocksTemp);
                 }
 
-                var multiOptionalBlocksTemp = this.GetRelatedBlocks(entity, DPBlockInObjectTypeEnum.MultiOptional);
+                var multiOptionalBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.MultiOptional);
 
                 if (multiOptionalBlocksTemp != null)
                 {
@@ -549,10 +549,10 @@ namespace IV.DX.Persistence
                 {
                     this.InsertOrUpdateESQLOwnItemToDataSet(model, entityInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
-                    var relatedBlocksSM = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.SingleMandatory);
-                    var relatedBlocksSO = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.SingleOptional);
-                    var relatedBlocksMM = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.MultiMandatory);
-                    var relatedBlocksMO = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.MultiOptional);
+                    var relatedBlocksSM = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedBlocksSO = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    var relatedBlocksMM = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedBlocksMO = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var objectID = model.OwnSingleItem.Item.ID.Value;
                     var entityType = entityInfo.DXUnitDefinitionMainElement.Name;

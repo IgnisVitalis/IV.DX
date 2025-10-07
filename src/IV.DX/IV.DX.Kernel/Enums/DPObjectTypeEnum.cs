@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Enums
 {
-    public enum DPObjectKindEnum
+    public enum DXObjectKindEnum
     {
         Core = 1,
         Custom = 2,

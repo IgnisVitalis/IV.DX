@@ -4,7 +4,7 @@
     "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
     "DXUnitDefinitionMainElement": {
       "ID": "59b115c5-cc8b-4c88-b1e0-d94af8745e99",
-      "Name": "DPBlockInObjectTypeEnum",
+      "Name": "DXElementInUnitTypeEnum",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {
@@ -80,7 +80,7 @@
     "ID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
     "DXUnitDefinitionMainElement": {
       "ID": "179f9be7-dc54-4ac7-a9c5-ea50c7524752",
-      "Name": "DPObjectKindEnum",
+      "Name": "DXObjectKindEnum",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {

@@ -81,7 +81,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = blockDescObject.ID
                         }
                     }
@@ -222,7 +222,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     new DPBlockInEntityDescGenBlock()
                     {
                         ID = Guid.NewGuid(),
-                        RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                        RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                         DXElementDefinitionUnit = blockToAdd.ID
                     }
                 },
@@ -231,7 +231,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     new DPBlockInEntityDescGenBlock()
                     {
                         ID = Guid.NewGuid(),
-                        RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                        RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                         DXElementDefinitionUnit = blockToDelete.ID
                     }
                 }
@@ -297,7 +297,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block.ID
                         }
                     }
@@ -375,19 +375,19 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block1.ID
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block2.ID
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = block3.ID
                         }
                     }

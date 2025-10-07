@@ -67,7 +67,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
             IDataStructureRepository dataStructureRepository = this.ServiceProvider.GetService<IDataStructureRepository>();
             IEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetService<IEnumCoreRepository>();
 
-            var enumInfo = dataStructureRepository.GetEnum("DPObjectKindEnum");
+            var enumInfo = dataStructureRepository.GetEnum("DXObjectKindEnum");
 
             var blockDefinition = ModelConverter.GetESQLBlockDefinition(enumInfo);
 

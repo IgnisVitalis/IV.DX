@@ -19,15 +19,15 @@ namespace IV.DX.Persistence
 
         private static void InitCoreEnumInfos()
         {
-            #region DPBlockInObjectTypeEnum
-            var dpBlockInObjectTypeEnum = new DXEnumDefinitionUnit()
+            #region DXElementInUnitTypeEnum
+            var dxElementInUnitTypeEnum = new DXEnumDefinitionUnit()
             {
                 ID = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("59b115c5-cc8b-4c88-b1e0-d94af8745e99"),
-                    Name = "DPBlockInObjectTypeEnum",
-                    Kind = DPObjectKindEnum.Core,
+                    Name = "DXElementInUnitTypeEnum",
+                    Kind = DXObjectKindEnum.Core,
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -72,7 +72,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("261cfd33-65cb-4f36-8712-be15e6621cc0"),
                     Name = "DXColumnTypeEnum",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -110,15 +110,15 @@ namespace IV.DX.Persistence
 
             #endregion
 
-            #region DPObjectKindEnum
-            var dpObjectKindEnum = new DXEnumDefinitionUnit()
+            #region DXObjectKindEnum
+            var dxObjectKindEnum = new DXEnumDefinitionUnit()
             {
                 ID = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("179f9be7-dc54-4ac7-a9c5-ea50c7524752"),
-                    Name = "DPObjectKindEnum",
-                    Kind = DPObjectKindEnum.Core
+                    Name = "DXObjectKindEnum",
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -163,7 +163,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("dbb5012a-958a-4272-8633-cdf04049fff4"),
                     Name = "DPRelationTypeEnum",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -202,9 +202,9 @@ namespace IV.DX.Persistence
 
             CoreEnumInfos = new List<DXEnumDefinitionUnit>()
             {
-                dpBlockInObjectTypeEnum,
+                dxElementInUnitTypeEnum,
                 dxColumnTypeEnum,
-                dpObjectKindEnum,
+                dxObjectKindEnum,
                 dpRelationTypeEnum
             };
         }
@@ -219,7 +219,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("3a911afb-9c07-4cf8-99b5-0ba02c4eb3f0"),
                     Name = "DXUnitDefinitionMainElement",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -267,7 +267,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("7725e3cb-e831-4ddc-86d8-c71bea59f9d7"),
                     Name = "DXColumnDefinitionElement",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -352,7 +352,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("38402309-6239-4e54-8640-ac70772b76bd"),
                     Name = "DXUniqueColumnsElement",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -392,7 +392,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("5b452ce3-cb10-4e7d-91e9-16c0fb569350"),
                     Name = "DPEntityInheritanceBlock",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -430,7 +430,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("abd3be0e-3d54-4cde-a909-fccf7293c661"),
                     Name = "DPBlockInEntityDescGenBlock",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -471,7 +471,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("5786ba46-1374-475a-baef-446954feea3f"),
                     Name = "DPRelationGenBlock",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -608,7 +608,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("923c3122-0cc6-4c8a-9679-0017f3b7f59d"),
                     Name = "DPMigrationScriptsGenBlock",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                 {
@@ -722,7 +722,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("09b4eda6-96d0-4d47-b8bd-d7879a45ea72"),
                     Name = "DPObjectDescObject",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
                 {
@@ -732,19 +732,19 @@ namespace IV.DX.Persistence
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("c0074af4-a729-49d2-9fe2-f62a54cd6ac0"),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2")
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("4b1500ca-0400-4d2e-ab25-bd77b590ee95"),
-                            RelationType = DPBlockInObjectTypeEnum.MultiOptional,
+                            RelationType = DXElementInUnitTypeEnum.MultiOptional,
                             DXElementDefinitionUnit = new Guid("ce754889-4efb-4281-ad1f-14d710b30007")
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("29e7062c-1669-40e6-af24-adf132742a98"),
-                            RelationType = DPBlockInObjectTypeEnum.MultiOptional,
+                            RelationType = DXElementInUnitTypeEnum.MultiOptional,
                             DXElementDefinitionUnit = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81")
                         }
                     }
@@ -760,7 +760,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("3dd9bba0-102e-4f5a-8161-383fb2ab8a35"),
                     Name = "DXUnitDefinitionUnit",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPEntityInheritanceBlock = new DPEntityInheritanceBlock()
                 {
@@ -775,13 +775,13 @@ namespace IV.DX.Persistence
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("15399025-98be-4cf1-9761-413b5fde515c"),
-                            RelationType = DPBlockInObjectTypeEnum.SingleOptional,
+                            RelationType = DXElementInUnitTypeEnum.SingleOptional,
                             DXElementDefinitionUnit = new Guid("eeb499d0-4e20-41aa-8a24-9981c3cbf511")
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("5c9c45e1-6793-418a-a139-fffa3dd386d9"),
-                            RelationType = DPBlockInObjectTypeEnum.MultiOptional,
+                            RelationType = DXElementInUnitTypeEnum.MultiOptional,
                             DXElementDefinitionUnit = new Guid("8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7")
                         }
                     }
@@ -797,7 +797,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("a40d4fd0-1bf7-4d0b-a68c-d98f873b326d"),
                     Name = "DXElementDefinitionUnit",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPEntityInheritanceBlock = new DPEntityInheritanceBlock()
                 {
@@ -815,7 +815,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("415443b9-16dd-46dd-873b-06266a986c0b"),
                     Name = "DXEnumDefinitionUnit",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPEntityInheritanceBlock = new DPEntityInheritanceBlock()
                 {
@@ -833,7 +833,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("f440497f-f9b9-4b25-a558-e7bdd2354683"),
                     Name = "DXRelationDefinitionUnit",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
                 {
@@ -843,7 +843,7 @@ namespace IV.DX.Persistence
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("3567c5d3-c419-4507-a404-d71924e2cda6"),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = new Guid("35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed")
                         }
                     }
@@ -859,7 +859,7 @@ namespace IV.DX.Persistence
                 {
                     ID = new Guid("f440497f-f9b9-4b25-a558-e7bdd2354683"),
                     Name = "DPMigrationScriptsObject",
-                    Kind = DPObjectKindEnum.Core
+                    Kind = DXObjectKindEnum.Core
                 },
                 DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
                 {
@@ -869,7 +869,7 @@ namespace IV.DX.Persistence
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = new Guid("6881bd56-1753-472d-9699-a1d640a1f53a"),
-                            RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
+                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = new Guid("4502e21d-4d38-475d-88eb-3159d3b7c514")
                         }
                     }

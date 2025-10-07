@@ -16,7 +16,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                 {
                     ID = Guid.NewGuid(),
                     Name = "Name",
-                    Kind = DPObjectKindEnum.Custom,
+                    Kind = DXObjectKindEnum.Custom,
                     ObjectID = id
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()

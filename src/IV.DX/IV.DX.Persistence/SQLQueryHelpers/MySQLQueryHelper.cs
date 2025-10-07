@@ -308,8 +308,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
             sb.Append($"ADD COLUMN {obj.DXUnitDefinitionMainElement.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
 
-            if (blockInEntityInfo.RelationType == DPBlockInObjectTypeEnum.SingleOptional
-            || blockInEntityInfo.RelationType == DPBlockInObjectTypeEnum.SingleMandatory
+            if (blockInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
+            || blockInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
             )
             {
                 sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");

@@ -11,15 +11,15 @@ namespace IV.DX.Persistence.CoreData
         {
             Items = new List<DXEnumDefinitionUnit>()
             {
-                #region DPBlockInObjectTypeEnum
+                #region DXElementInUnitTypeEnum
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e"),
                     DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("59b115c5-cc8b-4c88-b1e0-d94af8745e99"),
-                        Name = "DPBlockInObjectTypeEnum",
-                        Kind = DPObjectKindEnum.Core
+                        Name = "DXElementInUnitTypeEnum",
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -65,7 +65,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("261cfd33-65cb-4f36-8712-be15e6621cc0"),
                         Name = "DXColumnTypeEnum",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -103,15 +103,15 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
 	            #endregion  
-                #region DPObjectKindEnum
+                #region DXObjectKindEnum
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
                     DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("179f9be7-dc54-4ac7-a9c5-ea50c7524752"),
-                        Name = "DPObjectKindEnum",
-                        Kind = DPObjectKindEnum.Core
+                        Name = "DXObjectKindEnum",
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -157,7 +157,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("dbb5012a-958a-4272-8633-cdf04049fff4"),
                         Name = "DPRelationTypeEnum",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {

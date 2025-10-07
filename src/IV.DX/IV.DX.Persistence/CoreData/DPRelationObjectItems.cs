@@ -24,7 +24,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DXUnitDefinitionMainElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -41,7 +41,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DXColumnDefinitionElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -58,7 +58,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DXUniqueColumnsElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -75,7 +75,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DPRelationGenBlock",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -92,7 +92,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DPMigrationScriptsGenBlock",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -109,7 +109,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DPEntityInheritanceBlock",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -126,7 +126,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DPBlockInEntityDescGenBlock",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -139,11 +139,11 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("d38cf673-89c7-47d7-9f48-5a3a49396ed2"),
                         ObjectNameLeft = "DXUnitDefinitionMainElement",
                         RelationNameLeft = "DXUnitDefinitionMainElement",
-                        ObjectNameRight = "DPObjectKindEnum",
+                        ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core,
+                        Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
                     }
@@ -162,7 +162,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "ColumnType",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core,
+                        Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
                     }
@@ -181,7 +181,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "EnumKey",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToZeroOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -198,7 +198,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "EnumType",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToZeroOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -211,11 +211,11 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("4aafad60-92df-41ee-b9be-a57125740b12"),
                         ObjectNameLeft = "DPBlockInEntityDescGenBlock",
                         RelationNameLeft = "DPBlockInEntityDescGenBlock",
-                        ObjectNameRight = "DPBlockInObjectTypeEnum",
+                        ObjectNameRight = "DXElementInUnitTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core,
+                        Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
                     }
@@ -234,7 +234,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "DXElementDefinitionUnit",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -251,7 +251,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "BaseEntity",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -264,11 +264,11 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("ebde3bed-352c-40e7-ac75-c05066f8ca05"),
                         ObjectNameLeft = "DPRelationGenBlock",
                         RelationNameLeft = "DPRelationGenBlock",
-                        ObjectNameRight = "DPObjectKindEnum",
+                        ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core,
+                        Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
                     }
@@ -287,7 +287,7 @@ namespace IV.DX.Persistence.CoreData
                         RelationNameRight = "RelationType",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ManyToOne,
-                        Kind = DPObjectKindEnum.Core,
+                        Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
                     }

@@ -65,7 +65,7 @@ namespace IV.DX.Application.DataHandlers
 
             switch (entity.DXUnitDefinitionMainElement.Kind)
             {
-                case DPObjectKindEnum.Core:
+                case DXObjectKindEnum.Core:
                     return false;
                 default:
                     return base.OnDeleting(id, context);

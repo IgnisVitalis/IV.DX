@@ -19,7 +19,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("3a911afb-9c07-4cf8-99b5-0ba02c4eb3f0"),
                         Name = "DXUnitDefinitionMainElement",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -55,7 +55,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("7725e3cb-e831-4ddc-86d8-c71bea59f9d7"),
                         Name = "DXColumnDefinitionElement",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -123,7 +123,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("38402309-6239-4e54-8640-ac70772b76bd"),
                         Name = "DXUniqueColumnsElement",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -150,7 +150,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("5b452ce3-cb10-4e7d-91e9-16c0fb569350"),
                         Name = "DPEntityInheritanceBlock",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -162,7 +162,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("abd3be0e-3d54-4cde-a909-fccf7293c661"),
                         Name = "DPBlockInEntityDescGenBlock",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     }
                 },
                 #endregion
@@ -174,7 +174,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("5786ba46-1374-475a-baef-446954feea3f"),
                         Name = "DPRelationGenBlock",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {
@@ -287,7 +287,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("923c3122-0cc6-4c8a-9679-0017f3b7f59d"),
                         Name = "DPMigrationScriptsGenBlock",
-                        Kind = DPObjectKindEnum.Core
+                        Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
                     {

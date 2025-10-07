@@ -19,7 +19,7 @@ namespace IV.DX.Kernel.Models
         [ESQLColumnDefinition("RelationTable")]
         public string RelationTable { get; set; }
         [ESQLColumnDefinition("Kind")]
-        public DPObjectKindEnum Kind { get; set; }
+        public DXObjectKindEnum Kind { get; set; }
         private string _relationColumnNameLeft;
         [ESQLColumnDefinition("RelationColumnNameLeft")]
         public string RelationColumnNameLeft
@@ -128,7 +128,7 @@ namespace IV.DX.Kernel.Models
 
         public DPRelationGenBlock()
         {
-            this.Kind = DPObjectKindEnum.Custom;
+            this.Kind = DXObjectKindEnum.Custom;
         }
     }
 }

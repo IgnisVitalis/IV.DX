@@ -1,6 +1,6 @@
 namespace IV.DX.Kernel.Enums
 {
-    public enum DPBlockInObjectTypeEnum
+    public enum DXElementInUnitTypeEnum
     {
         SingleMandatory = 1,
         SingleOptional = 2,

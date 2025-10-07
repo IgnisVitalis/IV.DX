@@ -11,11 +11,11 @@ namespace IV.DX.Kernel.Models
         [ESQLColumnDefinition("DisplayValue")]
         public string DisplayValue { get; set; }
         [ESQLColumnDefinition("Kind")]
-        public DPObjectKindEnum Kind { get; set; }
+        public DXObjectKindEnum Kind { get; set; }
 
         public DXUnitDefinitionMainElement()
         {
-            this.Kind = DPObjectKindEnum.Custom;
+            this.Kind = DXObjectKindEnum.Custom;
         }
     }
 }

@@ -241,7 +241,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DPBlockInObjectTypeEnum relationType)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DXElementInUnitTypeEnum relationType)
         {
             if (entity.DPBlockInEntityDescGenBlock == null)
                 return null;

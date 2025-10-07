@@ -60,7 +60,7 @@
     //            {
     //                ID = new Guid("55a9d478-e4ef-4bb2-8743-290216b22979"),
     //                ObjectID = new Guid("7f052b48-7008-4418-84fe-e51d42e2170d"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.SingleMandatory,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
 
@@ -169,7 +169,7 @@
     //            {
     //                ID = new Guid("fd309653-967e-40e1-862f-92b906689d70"),
     //                ObjectID = new Guid("72f5d23f-2fd5-44ac-886a-3da7dd3f70ea"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.SingleMandatory,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
 
@@ -313,7 +313,7 @@
     //            {
     //                ID = new Guid("d598414d-5c48-40c5-ba7a-b56a871e62b5"),
     //                ObjectID = new Guid("fc4ec5ba-6371-4824-8123-603b62df32f4"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.SingleMandatory,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
 
@@ -394,7 +394,7 @@
     //            {
     //                ID = new Guid("3109ea24-f209-4aac-9414-e7f3493aa41a"),
     //                ObjectID = new Guid("a132f7ef-5bf2-4ebf-bc51-c95f6eddd78c"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.SingleMandatory,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
 
@@ -508,7 +508,7 @@
     //            {
     //                ID = new Guid("07fb6348-a3f8-4b6c-924d-f6533316156e"),
     //                ObjectID = new Guid("db3cdce4-a71f-4129-8d1b-a1b8662ad1dd"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.SingleMandatory,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
 
@@ -521,7 +521,7 @@
     //            {
     //                ID = new Guid("963b1a70-bff1-49c4-8360-f7c34c02b2cb"),
     //                ObjectID = new Guid("f9bf6850-49e3-4515-9299-4a9f07674b22"),
-    //                DPBlockInObjectTypeEnum = DPBlockInObjectTypeEnum.MultiOptional,
+    //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.MultiOptional,
     //            }
     //        };
 

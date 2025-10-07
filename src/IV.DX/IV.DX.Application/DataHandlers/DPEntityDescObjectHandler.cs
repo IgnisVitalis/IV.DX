@@ -175,7 +175,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block, DPBlockInObjectTypeEnum relationType)
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block, DXElementInUnitTypeEnum relationType)
         {
             var result = this.GetRelationObject(entity, block);
 
@@ -213,20 +213,20 @@ namespace IV.DX.Application.DataHandlers
             return items.SingleOrDefault();
         }
 
-        private DPRelationTypeEnum ConvertBlockInEntityRelationTypeToCommonRelationType(DPBlockInObjectTypeEnum relationType)
+        private DPRelationTypeEnum ConvertBlockInEntityRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
         {
             switch (relationType)
             {
-                case DPBlockInObjectTypeEnum.SingleMandatory:
+                case DXElementInUnitTypeEnum.SingleMandatory:
                     return DPRelationTypeEnum.ZeroOneToZeroOne;
-                case DPBlockInObjectTypeEnum.SingleOptional:
+                case DXElementInUnitTypeEnum.SingleOptional:
                     return DPRelationTypeEnum.ZeroOneToZeroOne;
-                case DPBlockInObjectTypeEnum.MultiMandatory:
+                case DXElementInUnitTypeEnum.MultiMandatory:
                     return DPRelationTypeEnum.ZeroOneToMany;
-                case DPBlockInObjectTypeEnum.MultiOptional:
+                case DXElementInUnitTypeEnum.MultiOptional:
                     return DPRelationTypeEnum.ZeroOneToMany;
                 default:
-                    throw new Exception($"DPBlockInObjectTypeEnum doesn't contain '{relationType}' value");
+                    throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
             }
         }
     }

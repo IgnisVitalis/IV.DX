@@ -16,7 +16,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                     ID = Guid.NewGuid(),
                     ObjectID = id,
                     Name = objectName,
-                    Kind = DPObjectKindEnum.Custom,
+                    Kind = DXObjectKindEnum.Custom,
                 }
             };
 
