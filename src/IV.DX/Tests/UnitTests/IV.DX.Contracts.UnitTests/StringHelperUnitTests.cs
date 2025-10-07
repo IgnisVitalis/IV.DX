@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace IV.DataProvider.Persistence.Common.UnitTests.Helpers
+namespace IV.DX.Contracts.UnitTests
 {
     public class StringHelperUnitTests
     {

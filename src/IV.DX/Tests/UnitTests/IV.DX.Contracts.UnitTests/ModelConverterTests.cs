@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
+namespace IV.DX.Contracts.UnitTests
 {
     public class ModelConverterTests
     {

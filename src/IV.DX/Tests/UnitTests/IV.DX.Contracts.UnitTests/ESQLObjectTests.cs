@@ -1,8 +1,8 @@
-﻿using IV.DataProvider.Persistence.Shared.UnitTests.ESQLObjects.Enitites;
-using IV.DX.Kernel.Converters;
+﻿using IV.DX.Kernel.Converters;
+using IV.DX.Shared.UnitTests.DXObjects.DXUnits;
 using Xunit;
 
-namespace IV.DataProvider.Persistence.Contracts.UnitTests.Models
+namespace IV.DX.Contracts.UnitTests
 {
     public class ESQLObjectTests
     {
@@ -10,7 +10,7 @@ namespace IV.DataProvider.Persistence.Contracts.UnitTests.Models
         public void ConvertToESQLModel_UsingDerivedEntity_CorrectESQLModel()
         {
             // Init
-            DerivedEntity1 entity = new DerivedEntity1();
+            DerivedUnit1 entity = new DerivedUnit1();
 
             // Action
             var esqlModel = entity.ConvertToESQLModel();

@@ -4,7 +4,7 @@ using IV.DX.Kernel.Models;
 using System.Linq;
 using Xunit;
 
-namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
+namespace IV.DX.Contracts.UnitTests
 {
     public class AttributeReaderUnitTests
     {
