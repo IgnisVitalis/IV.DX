@@ -1,6 +1,6 @@
 namespace IV.DX.Kernel.Enums
 {
-    public enum DPColumnTypeEnum
+    public enum DXColumnTypeEnum
     {
         GUID = 1,
         TimeStamp = 2,

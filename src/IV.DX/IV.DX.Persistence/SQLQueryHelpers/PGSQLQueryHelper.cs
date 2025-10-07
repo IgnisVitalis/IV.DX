@@ -186,7 +186,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             && clmDesc.Name != "ID"
             && clmDesc.Name != "ObjectID")
             {
-                if (clmDesc.ColumnType == DPColumnTypeEnum.Bool)
+                if (clmDesc.ColumnType == DXColumnTypeEnum.Bool)
                 {
                     sqlClmDef += $" DEFAULT '{clmDesc.DefaultValue}'";
                 }
@@ -266,7 +266,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
             else
             {
-                if (DXColumnDefinitionElementNew.ColumnType == DPColumnTypeEnum.Bool)
+                if (DXColumnDefinitionElementNew.ColumnType == DXColumnTypeEnum.Bool)
                 {
                     mySQLQueryToChangeColumn += $" SET DEFAULT '{DXColumnDefinitionElementNew.DefaultValue}'";
                 }
@@ -877,51 +877,51 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
         }
 
-        private string GetPostgreSQLDataType(DPColumnTypeEnum clmType)
+        private string GetPostgreSQLDataType(DXColumnTypeEnum clmType)
         {
             string mysqlDataType = null;
 
             switch (clmType)
             {
-                case DPColumnTypeEnum.Bool:
+                case DXColumnTypeEnum.Bool:
                     mysqlDataType = "boolean";
                     break;
-                case DPColumnTypeEnum.DateTime:
+                case DXColumnTypeEnum.DateTime:
                     //mysqlDataType = "time";
                     mysqlDataType = "timestamp with time zone";
                     break;
-                case DPColumnTypeEnum.Decimal:
+                case DXColumnTypeEnum.Decimal:
                     mysqlDataType = "decimal";
                     break;
-                case DPColumnTypeEnum.GUID:
+                case DXColumnTypeEnum.GUID:
                     mysqlDataType = "uuid";
                     break;
-                case DPColumnTypeEnum.Int:
+                case DXColumnTypeEnum.Int:
                     mysqlDataType = "integer";
                     break;
-                case DPColumnTypeEnum.String:
+                case DXColumnTypeEnum.String:
                     mysqlDataType = "varchar";
                     break;
-                case DPColumnTypeEnum.TimeStamp:
+                case DXColumnTypeEnum.TimeStamp:
                     mysqlDataType = "timestamp";
                     //mysqlDataType = "timestamp with time zone";
                     break;
-                case DPColumnTypeEnum.Text:
+                case DXColumnTypeEnum.Text:
                     mysqlDataType = "text";
                     break;
-                case DPColumnTypeEnum.Short:
+                case DXColumnTypeEnum.Short:
                     mysqlDataType = "smallint";
                     break;
-                case DPColumnTypeEnum.Long:
+                case DXColumnTypeEnum.Long:
                     mysqlDataType = "bigint";
                     break;
-                case DPColumnTypeEnum.Float:
+                case DXColumnTypeEnum.Float:
                     mysqlDataType = "real";
                     break;
-                case DPColumnTypeEnum.Currency:
+                case DXColumnTypeEnum.Currency:
                     mysqlDataType = "NUMERIC(13,4)";
                     break;
-                case DPColumnTypeEnum.Blob:
+                case DXColumnTypeEnum.Blob:
                     mysqlDataType = "bytea";
                     break;
             }

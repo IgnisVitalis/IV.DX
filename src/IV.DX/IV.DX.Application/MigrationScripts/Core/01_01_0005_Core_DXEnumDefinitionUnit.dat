@@ -24,79 +24,79 @@
     "Value": "MultiOptional"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "95ad4566-791b-478c-8c55-5f478d365eed",
     "Key": 1,
     "Value": "GUID"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "b839122b-5939-46c1-96c5-e7a94d9b741f",
     "Key": 2,
     "Value": "TimeStamp"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "b1477a09-7d88-4e77-9b57-98a8e31eab27",
     "Key": 3,
     "Value": "String"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "8a7d71ab-ea9f-4747-b7af-ab5135ec355b",
     "Key": 4,
     "Value": "Text"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "5250c541-ba6b-4bb7-bbb4-ae5cd4cf85e4",
     "Key": 5,
     "Value": "DateTime"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "12015acd-7038-4a74-8072-0e226050f10e",
     "Key": 6,
     "Value": "Bool"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "24f82956-e8bb-471f-8cf1-0b4938842a01",
     "Key": 7,
     "Value": "Short"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "dd49de56-59f3-46b3-8bc8-aef4271ada9c",
     "Key": 8,
     "Value": "Int"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "0d705738-cc82-490d-96a6-9a4f5f802b7d",
     "Key": 9,
     "Value": "Long"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "5a738980-e60c-490c-a771-f1d08d9189a5",
     "Key": 10,
     "Value": "Decimal"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "09227e91-76e4-49f8-838b-f77cc1c2e0c7",
     "Key": 11,
     "Value": "Float"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "23cbe2cc-cd51-45e6-adc3-0c65b7187f3c",
     "Key": 12,
     "Value": "Currency"
   },
   {
-    "S_Type": "DPColumnTypeEnum",
+    "S_Type": "DXColumnTypeEnum",
     "ID": "186354e6-dac8-45d4-a0d9-b58244acbe72",
     "Key": 13,
     "Value": "Blob"

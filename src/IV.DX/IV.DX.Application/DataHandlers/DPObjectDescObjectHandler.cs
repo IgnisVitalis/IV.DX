@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DPObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -225,7 +225,7 @@ namespace IV.DX.Application.DataHandlers
         {
             idColumn.AllowNull = false;
             idColumn.DefaultValue = string.Empty;
-            idColumn.ColumnType = DPColumnTypeEnum.GUID;
+            idColumn.ColumnType = DXColumnTypeEnum.GUID;
             idColumn.Name = "ID";
         }
 
@@ -233,14 +233,14 @@ namespace IV.DX.Application.DataHandlers
         {
             objectIDColumn.AllowNull = false;
             objectIDColumn.DefaultValue = string.Empty;
-            objectIDColumn.ColumnType = DPColumnTypeEnum.GUID;
+            objectIDColumn.ColumnType = DXColumnTypeEnum.GUID;
             objectIDColumn.Name = "ObjectID";
         }
 
         private void SetImportantValuesForTimeStampColumn(DXColumnDefinitionElement timeStamplColumnDesc)
         {
             timeStamplColumnDesc.AllowNull = false;
-            timeStamplColumnDesc.ColumnType = DPColumnTypeEnum.TimeStamp;
+            timeStamplColumnDesc.ColumnType = DXColumnTypeEnum.TimeStamp;
             timeStamplColumnDesc.Name = "TimeStamp";
         }
 

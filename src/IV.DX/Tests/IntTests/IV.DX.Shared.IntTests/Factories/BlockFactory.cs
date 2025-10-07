@@ -28,14 +28,14 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                         {
                             ID= Guid.NewGuid(),
                             ObjectID = id,
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             Name = "NameGUID"
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID= Guid.NewGuid(),
                             ObjectID = id,
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "NameString"
                         }
                     }

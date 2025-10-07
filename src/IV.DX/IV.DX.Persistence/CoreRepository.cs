@@ -1333,8 +1333,8 @@ namespace IV.DX.Persistence
                     RelationNameRight = ConvertHelper.ParseString(row["RelationNameRight"]),
                     RelationColumnNameLeft = ConvertHelper.ParseString(row["RelationColumnNameLeft"]),
                     RelationColumnNameRight = ConvertHelper.ParseString(row["RelationColumnNameRight"]),
-                    RelationColumnTypeLeft = row["RelationColumnTypeLeft"] == DBNull.Value ? null : (DPColumnTypeEnum)ConvertHelper.ParseInt(row["RelationColumnTypeLeft"]),
-                    RelationColumnTypeRight = row["RelationColumnTypeRight"] == DBNull.Value ? null : (DPColumnTypeEnum)ConvertHelper.ParseInt(row["RelationColumnTypeRight"])
+                    RelationColumnTypeLeft = row["RelationColumnTypeLeft"] == DBNull.Value ? null : (DXColumnTypeEnum)ConvertHelper.ParseInt(row["RelationColumnTypeLeft"]),
+                    RelationColumnTypeRight = row["RelationColumnTypeRight"] == DBNull.Value ? null : (DXColumnTypeEnum)ConvertHelper.ParseInt(row["RelationColumnTypeRight"])
                 };
             });
         }

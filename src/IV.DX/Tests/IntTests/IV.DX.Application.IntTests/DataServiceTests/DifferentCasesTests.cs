@@ -36,7 +36,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             {
                 ID = Guid.NewGuid(),
                 Name = "IntCln",
-                ColumnType = DPColumnTypeEnum.Int
+                ColumnType = DXColumnTypeEnum.Int
             };
 
             var strCln = new DXColumnDefinitionElement()
@@ -45,7 +45,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 Name = "StrCln",
                 Length = 100,
                 DefaultValue = "''",
-                ColumnType = DPColumnTypeEnum.String
+                ColumnType = DXColumnTypeEnum.String
             };
 
             DXElementDefinitionUnit blockDescObject = new DXElementDefinitionUnit()

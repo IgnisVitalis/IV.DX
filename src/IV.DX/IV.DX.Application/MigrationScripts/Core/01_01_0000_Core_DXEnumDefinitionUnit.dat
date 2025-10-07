@@ -42,7 +42,7 @@
     "ID": "971d538a-1489-483a-bc84-86596ed0c51a",
     "DXUnitDefinitionMainElement": {
       "ID": "261cfd33-65cb-4f36-8712-be15e6621cc0",
-      "Name": "DPColumnTypeEnum",
+      "Name": "DXColumnTypeEnum",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {

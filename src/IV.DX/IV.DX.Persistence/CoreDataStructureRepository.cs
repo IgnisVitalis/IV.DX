@@ -37,14 +37,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("72d914ae-c902-45dd-b405-fb12d5021597"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Value",
                             Length = 50
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("d214fd3a-99a2-4446-ba90-dd1e863e56e1"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Key"
                         }
                     }
@@ -64,14 +64,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPColumnTypeEnum
-            var dpColumnTypeEnum = new DXEnumDefinitionUnit()
+            #region DXColumnTypeEnum
+            var dxColumnTypeEnum = new DXEnumDefinitionUnit()
             {
                 ID = new Guid("971d538a-1489-483a-bc84-86596ed0c51a"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("261cfd33-65cb-4f36-8712-be15e6621cc0"),
-                    Name = "DPColumnTypeEnum",
+                    Name = "DXColumnTypeEnum",
                     Kind = DPObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
@@ -82,14 +82,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("940d5067-9271-4dc2-9ae0-b1b83c519e11"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Value",
                             Length = 50
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Key"
                         }
                     }
@@ -128,14 +128,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("6212d559-2cf3-4341-a517-89f3a57abe78"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Value",
                             Length = 50
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Key"
                         }
                     }
@@ -173,14 +173,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("c16e1093-6e36-4963-9a20-707429832b4d"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Value",
                             Length = 50
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Key"
                         }
                     }
@@ -203,7 +203,7 @@ namespace IV.DX.Persistence
             CoreEnumInfos = new List<DXEnumDefinitionUnit>()
             {
                 dpBlockInObjectTypeEnum,
-                dpColumnTypeEnum,
+                dxColumnTypeEnum,
                 dpObjectKindEnum,
                 dpRelationTypeEnum
             };
@@ -229,19 +229,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("2a8e6b99-37ec-45dd-8dd1-c6163e56fb36"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Name",
                             AllowNull = false,
                             Length = 100
@@ -249,7 +249,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("d6f1c72a-42c3-42a1-ac44-b5d5ada561a4"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "DisplayValue",
                             AllowNull = true,
                             Length = 500
@@ -277,19 +277,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("203f9137-b7e0-46a5-b12b-551dd4493c67"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Name",
                             AllowNull = false,
                             Length = 100
@@ -297,35 +297,35 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("3a594944-e944-4da3-9203-fef22db78e58"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Length",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("b5b6091d-7b2a-47f2-b5b6-b44499f2caf7"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Precision",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("119437a8-7f00-4411-83ce-9990f769bbcf"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Scale",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("858fa49d-7638-4a83-84a2-eed8dde5b4fa"),
-                            ColumnType = DPColumnTypeEnum.Bool,
+                            ColumnType = DXColumnTypeEnum.Bool,
                             Name = "AllowNull",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("006134f1-7929-49e6-b51f-9647ab0b12f2"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "DefaultValue",
                             AllowNull = true,
                             Length = 100
@@ -333,7 +333,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("86b96626-6d67-4afb-9616-583bd9ae0934"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "ColumnType",
                             AllowNull = false,
                             EnumKey = new Guid("884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"),
@@ -362,19 +362,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("836b5fdc-c995-46d6-9151-fd562bfada19"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Columns",
                             AllowNull = false,
                             Length = 300
@@ -402,19 +402,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "BaseEntity",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = true
                         }
                     }
@@ -440,19 +440,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("2881e628-2258-4de9-a9a6-1f5e62f476b5"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "RelationType",
                             AllowNull = false,
                             EnumKey = new Guid("d214fd3a-99a2-4446-ba90-dd1e863e56e1"),
@@ -481,19 +481,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("002d22b0-2154-424a-b813-611178ed5864"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "ObjectNameLeft",
                             AllowNull = false,
                             Length = 100
@@ -501,7 +501,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("94556eda-f8f5-4d5a-a1fc-ae4e0ac15cb5"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "RelationNameLeft",
                             AllowNull = false,
                             Length = 100
@@ -509,7 +509,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("eb9ac69d-9198-49fe-9b29-6899cabe6340"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "RelationColumnNameLeft",
                             AllowNull = true,
                             Length = 100
@@ -517,14 +517,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("08744099-30bb-46a6-9e44-e46f475b204b"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "RelationColumnTypeLeft",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("428c0829-d296-4d94-9b9a-94a65745543d"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "ObjectNameRight",
                             AllowNull = false,
                             Length = 100
@@ -532,7 +532,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("e00f6022-7d20-4a90-b698-be8dfbe18332"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "RelationNameRight",
                             AllowNull = false,
                             Length = 100
@@ -540,7 +540,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("9dc7d697-5f56-457e-8040-ff96766f5d75"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "RelationColumnNameRight",
                             AllowNull = true,
                             Length = 100
@@ -548,14 +548,14 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("acbacb32-5e1f-4bb7-a06b-c50f346da38c"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "RelationColumnTypeRight",
                             AllowNull = true
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("002d22b0-2154-424a-b813-611178ed5864"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "RelationTable",
                             AllowNull = true,
                             Length = 100
@@ -563,7 +563,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("4692e78b-002a-4f29-9d78-96739292b1d0"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "RelationType",
                             AllowNull = false,
                             EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd"),
@@ -572,7 +572,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("df750be8-2df0-4497-82fe-97eff7bba2eb"),
-                            ColumnType = DPColumnTypeEnum.Int,
+                            ColumnType = DXColumnTypeEnum.Int,
                             Name = "Kind",
                             AllowNull = false,
                             EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798"),
@@ -618,19 +618,19 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             Name = "ID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             Name = "ObjectID",
-                            ColumnType = DPColumnTypeEnum.GUID,
+                            ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("86a27647-265b-4335-bd1d-13ca6eef1085"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Version",
                             AllowNull = false,
                             Length = 2
@@ -638,7 +638,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("bc843f74-2d6a-4bea-a76a-1d49c143f5cd"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Build",
                             AllowNull = false,
                             Length = 2
@@ -646,7 +646,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("9ee89343-8361-40b4-a2f8-f3fa30a8a8e7"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Number",
                             AllowNull = false,
                             Length = 4
@@ -654,7 +654,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("330fb7c4-f77d-4ef9-ba1b-993a1a798c04"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "AppName",
                             AllowNull = false,
                             Length = 10
@@ -662,7 +662,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("f0b946a5-b663-4593-a91d-a3054998c8ba"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Name",
                             AllowNull = false,
                             Length = 30
@@ -670,7 +670,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("432abec1-71ff-4502-8316-1025aa368903"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "Extention",
                             AllowNull = false,
                             Length = 5
@@ -678,7 +678,7 @@ namespace IV.DX.Persistence
                         new DXColumnDefinitionElement()
                         {
                             ID = new Guid("881b6f1d-f465-4a00-99ee-3ba91347bd61"),
-                            ColumnType = DPColumnTypeEnum.String,
+                            ColumnType = DXColumnTypeEnum.String,
                             Name = "FilePath",
                             AllowNull = false,
                             Length = 255

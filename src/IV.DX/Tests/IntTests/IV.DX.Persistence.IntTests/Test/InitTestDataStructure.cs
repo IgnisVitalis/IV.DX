@@ -35,7 +35,7 @@
     //                        ID = new Guid("c9cd8a6a-1987-4320-933d-128420e55fd5"),
     //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Name",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    },
@@ -44,7 +44,7 @@
     //                        ID = new Guid("499867bb-8ce6-4245-862d-b7486e58238a"),
     //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Birth",
-    //                        ColumnType = DPColumnTypeEnum.DateTime,
+    //                        ColumnType = DXColumnTypeEnum.DateTime,
     //                        AllowNull = false
     //                    }
     //                }
@@ -91,7 +91,7 @@
     //                        ID = new Guid("c9cd8a6a-1987-4320-933d-128420e55fd5"),
     //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Name",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    },
@@ -100,7 +100,7 @@
     //                        ID = new Guid("499867bb-8ce6-4245-862d-b7486e58238a"),
     //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Birth",
-    //                        ColumnType = DPColumnTypeEnum.DateTime,
+    //                        ColumnType = DXColumnTypeEnum.DateTime,
     //                        AllowNull = false
     //                    },
     //                    new DXColumnDefinitionElement()
@@ -108,7 +108,7 @@
     //                        ID = new Guid("66d24eb6-b30d-4a9a-a31c-c2b7c8e8c69e"),
     //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Surname",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    },
@@ -152,7 +152,7 @@
     //                        ID = new Guid("d6c1126f-1a54-439e-8834-c1b4ba1dd727"),
     //                        ObjectID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //                        Name = "SerialNumber",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    }
@@ -222,7 +222,7 @@
     //                        ID = new Guid("58cc9980-87d0-469b-8b66-33e90962f3ab"),
     //                        ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                        Name = "Model",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    },
@@ -231,7 +231,7 @@
     //                        ID = new Guid("9de64e8a-efaa-4759-8e5d-8ec4ff198dd3"),
     //                        ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                        Name = "UUID",
-    //                        ColumnType = DPColumnTypeEnum.GUID,
+    //                        ColumnType = DXColumnTypeEnum.GUID,
     //                        AllowNull = false
     //                    }
     //                }
@@ -296,7 +296,7 @@
     //                        ID = new Guid("6e021c8b-8b81-493a-bc38-bd84a7cd40de"),
     //                        ObjectID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //                        Name = "Name",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    }
@@ -377,7 +377,7 @@
     //                        ID = new Guid("dc864e8b-c84f-48a1-8e22-1ecedd742c5f"),
     //                        ObjectID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //                        Name = "Name",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    }
@@ -458,7 +458,7 @@
     //                        ID = new Guid("665b5c55-eb32-488d-8305-1c575344863e"),
     //                        ObjectID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //                        Name = "Name",
-    //                        ColumnType = DPColumnTypeEnum.String,
+    //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
     //                        AllowNull = false
     //                    }
@@ -484,7 +484,7 @@
     //                        ID = new Guid("9c48b070-0332-49ac-982e-ced1bab74368"),
     //                        ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                        Name = "Text",
-    //                        ColumnType = DPColumnTypeEnum.Text,
+    //                        ColumnType = DXColumnTypeEnum.Text,
     //                        AllowNull = false
     //                    },
     //                    new DXColumnDefinitionElement()
@@ -492,7 +492,7 @@
     //                        ID = new Guid("b0148a60-48c8-4c26-9ab8-fae46037577b"),
     //                        ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                        Name = "Number",
-    //                        ColumnType = DPColumnTypeEnum.Int,
+    //                        ColumnType = DXColumnTypeEnum.Int,
     //                        AllowNull = false
     //                    }
     //                }

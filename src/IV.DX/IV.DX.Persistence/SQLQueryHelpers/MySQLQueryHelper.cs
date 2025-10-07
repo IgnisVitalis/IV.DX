@@ -592,49 +592,49 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return idsToChange;
         }
 
-        private string GetMySQLDataType(DPColumnTypeEnum clmType)
+        private string GetMySQLDataType(DXColumnTypeEnum clmType)
         {
             string mysqlDataType = null;
 
             switch (clmType)
             {
-                case DPColumnTypeEnum.Bool:
+                case DXColumnTypeEnum.Bool:
                     mysqlDataType = "TINYINT";
                     break;
-                case DPColumnTypeEnum.DateTime:
+                case DXColumnTypeEnum.DateTime:
                     mysqlDataType = "DATETIME";
                     break;
-                case DPColumnTypeEnum.Decimal:
+                case DXColumnTypeEnum.Decimal:
                     mysqlDataType = "DECIMAL";
                     break;
-                case DPColumnTypeEnum.GUID:
+                case DXColumnTypeEnum.GUID:
                     mysqlDataType = "CHAR(36) CHARACTER SET UTF8MB4";
                     break;
-                case DPColumnTypeEnum.Int:
+                case DXColumnTypeEnum.Int:
                     mysqlDataType = "INT";
                     break;
-                case DPColumnTypeEnum.String:
+                case DXColumnTypeEnum.String:
                     mysqlDataType = "NVARCHAR";
                     break;
-                case DPColumnTypeEnum.TimeStamp:
+                case DXColumnTypeEnum.TimeStamp:
                     mysqlDataType = "TIMESTAMP";
                     break;
-                case DPColumnTypeEnum.Text:
+                case DXColumnTypeEnum.Text:
                     mysqlDataType = "LONGTEXT";
                     break;
-                case DPColumnTypeEnum.Short:
+                case DXColumnTypeEnum.Short:
                     mysqlDataType = "SMALLINT";
                     break;
-                case DPColumnTypeEnum.Long:
+                case DXColumnTypeEnum.Long:
                     mysqlDataType = "BIGINT";
                     break;
-                case DPColumnTypeEnum.Float:
+                case DXColumnTypeEnum.Float:
                     mysqlDataType = "FLOAT";
                     break;
-                case DPColumnTypeEnum.Currency:
+                case DXColumnTypeEnum.Currency:
                     mysqlDataType = "DECIMAL(13,4)";
                     break;
-                case DPColumnTypeEnum.Blob:
+                case DXColumnTypeEnum.Blob:
                     mysqlDataType = "BLOB";
                     break;
             }

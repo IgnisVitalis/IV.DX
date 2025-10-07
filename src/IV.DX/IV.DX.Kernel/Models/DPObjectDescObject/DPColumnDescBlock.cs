@@ -9,7 +9,7 @@ namespace IV.DX.Kernel.Models
         [ESQLColumnDefinition("Name")]
         public string Name { get; set; }
         [ESQLColumnDefinition("ColumnType")]
-        public DPColumnTypeEnum ColumnType { get; set; }
+        public DXColumnTypeEnum ColumnType { get; set; }
         [ESQLColumnDefinition("Length")]
         public int? Length { get; set; }
         [ESQLColumnDefinition("Precision")]

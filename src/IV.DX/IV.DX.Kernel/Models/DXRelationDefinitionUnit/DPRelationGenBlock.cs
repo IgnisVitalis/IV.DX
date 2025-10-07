@@ -47,9 +47,9 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        private DPColumnTypeEnum? _relationColumnTypeLeft;
+        private DXColumnTypeEnum? _relationColumnTypeLeft;
         [ESQLColumnDefinition("RelationColumnTypeLeft")]
-        public DPColumnTypeEnum? RelationColumnTypeLeft
+        public DXColumnTypeEnum? RelationColumnTypeLeft
         {
             get
             {
@@ -61,7 +61,7 @@ namespace IV.DX.Kernel.Models
                         || this.RelationType == DPRelationTypeEnum.OneToZeroOne
                         || this.RelationType == DPRelationTypeEnum.ZeroOneToZeroOne)
                     {
-                        this._relationColumnTypeLeft = DPColumnTypeEnum.GUID;
+                        this._relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                     }
                 }
 
@@ -100,9 +100,9 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        private DPColumnTypeEnum? _relationColumnTypeRight;
+        private DXColumnTypeEnum? _relationColumnTypeRight;
         [ESQLColumnDefinition("RelationColumnTypeRight")]
-        public DPColumnTypeEnum? RelationColumnTypeRight
+        public DXColumnTypeEnum? RelationColumnTypeRight
         {
             get
             {
@@ -113,7 +113,7 @@ namespace IV.DX.Kernel.Models
                         || this.RelationType == DPRelationTypeEnum.ManyToZeroOne
                         || this.RelationType == DPRelationTypeEnum.ZeroOneToOne)
                     {
-                        this._relationColumnTypeRight = DPColumnTypeEnum.GUID;
+                        this._relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }
                 }
 
