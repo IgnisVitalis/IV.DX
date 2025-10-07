@@ -21,7 +21,7 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\IV.DX.Contracts\IV.DX.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\IV.DX.Persistence\IV.DX.Persistence.csproj" />
     <ProjectReference Include="..\IV.DX.Shared.UnitTests\IV.DX.Shared.UnitTests.csproj" />
   </ItemGroup>
 

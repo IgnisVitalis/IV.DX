@@ -1,9 +1,8 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DataProvider.Persistence.Shared.IntTests;
+﻿using IV.DataProvider.Persistence.Shared.IntTests;
 using IV.DataProvider.Persistence.Shared.IntTests.Factories;
-using IV.DX.Contracts.Common.Attributes;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

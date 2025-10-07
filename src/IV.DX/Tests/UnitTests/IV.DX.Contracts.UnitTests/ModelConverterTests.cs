@@ -1,7 +1,6 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DX.Contracts.Common.Attributes;
-using IV.DX.Contracts.Common.Converters;
-using IV.DX.Contracts.Common.Models;
+﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

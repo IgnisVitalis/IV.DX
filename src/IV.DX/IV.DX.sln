@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Domain", "IV.DX.Domain\IV.DX.Domain.csproj", "{BAF9586D-74E6-4841-96CD-13C9F81CF455}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Contracts", "IV.DX.Contracts\IV.DX.Contracts.csproj", "{82671828-3B06-436E-9E81-CD0BE24433CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Application", "IV.DX.Application\IV.DX.Application.csproj", "{805AA468-1E9E-4F68-9C51-7715D8A3025E}"
 EndProject
@@ -29,6 +27,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Application.IntTests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Persistence.IntTests", "Tests\IntTests\IV.DX.Persistence.IntTests\IV.DX.Persistence.IntTests.csproj", "{06C00418-8043-49FD-914C-762115EC9215}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Kernel", "IV.DX.Kernel\IV.DX.Kernel.csproj", "{10E4A4A2-0274-4C67-BDBA-86FF49534D4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Persistence.Contracts", "IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj", "{7A1EEA76-4004-4805-AE60-A2355F289852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Application.Contracts", "IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj", "{7BB2BE1D-C404-47C6-BEC3-072EFED5DE97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +43,6 @@ Global
 		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82671828-3B06-436E-9E81-CD0BE24433CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82671828-3B06-436E-9E81-CD0BE24433CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82671828-3B06-436E-9E81-CD0BE24433CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82671828-3B06-436E-9E81-CD0BE24433CA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +75,18 @@ Global
 		{06C00418-8043-49FD-914C-762115EC9215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C00418-8043-49FD-914C-762115EC9215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C00418-8043-49FD-914C-762115EC9215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E4A4A2-0274-4C67-BDBA-86FF49534D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E4A4A2-0274-4C67-BDBA-86FF49534D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E4A4A2-0274-4C67-BDBA-86FF49534D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E4A4A2-0274-4C67-BDBA-86FF49534D4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1EEA76-4004-4805-AE60-A2355F289852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1EEA76-4004-4805-AE60-A2355F289852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1EEA76-4004-4805-AE60-A2355F289852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1EEA76-4004-4805-AE60-A2355F289852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BB2BE1D-C404-47C6-BEC3-072EFED5DE97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BB2BE1D-C404-47C6-BEC3-072EFED5DE97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BB2BE1D-C404-47C6-BEC3-072EFED5DE97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BB2BE1D-C404-47C6-BEC3-072EFED5DE97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

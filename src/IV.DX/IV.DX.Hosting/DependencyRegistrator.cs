@@ -1,17 +1,16 @@
 ﻿using IV.DX.Application;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.DataHandlers;
-using IV.DX.Contracts;
-using IV.DX.Contracts.Application;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Persistence;
 using IV.DX.Persistence;
+using IV.DX.Persistence.Abstractions;
+using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.SQLQueryHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DataProvider.Persistence.Services
 {
-    public class DependencyRegistrator : IDependencyRegistrator
+    public class DependencyRegistrator
     {
         IConfiguration _configuration;
         IServiceCollection _container;

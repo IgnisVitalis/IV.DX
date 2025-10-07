@@ -1,5 +1,5 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
+﻿using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
+using IV.DX.Kernel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

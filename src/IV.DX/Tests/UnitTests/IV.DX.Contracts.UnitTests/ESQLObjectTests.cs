@@ -1,5 +1,5 @@
 ﻿using IV.DataProvider.Persistence.Shared.UnitTests.ESQLObjects.Enitites;
-using IV.DX.Contracts.Common.Converters;
+using IV.DX.Kernel.Converters;
 using Xunit;
 
 namespace IV.DataProvider.Persistence.Contracts.UnitTests.Models

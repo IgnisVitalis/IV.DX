@@ -1,5 +1,5 @@
 ﻿using IV.DataProvider.Persistence.Shared.UnitTests.ESQLObjects.Blocks;
-using IV.DX.Contracts.Common.Attributes;
+using IV.DX.Kernel.Attributes;
 
 namespace IV.DataProvider.Persistence.Shared.UnitTests.ESQLObjects.Enitites
 {

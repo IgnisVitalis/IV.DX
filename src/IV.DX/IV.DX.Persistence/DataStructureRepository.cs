@@ -1,8 +1,7 @@
-﻿using IV.DX.Contracts.Common.Converters;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
-using IV.DX.Contracts.Persistence;
+﻿using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.CoreData;
 using System.Diagnostics.CodeAnalysis;
 

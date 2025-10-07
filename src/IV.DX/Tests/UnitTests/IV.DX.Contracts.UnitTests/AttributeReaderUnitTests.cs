@@ -1,6 +1,6 @@
-using IV.DX.Contracts.Common.Attributes;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
 using System.Linq;
 using Xunit;
 

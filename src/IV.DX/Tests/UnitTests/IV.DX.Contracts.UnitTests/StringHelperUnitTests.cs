@@ -1,4 +1,4 @@
-﻿using IV.DX.Contracts.Common.Helpers;
+﻿using IV.DX.Kernel.Helpers;
 using System.Linq;
 using Xunit;
 

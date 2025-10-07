@@ -26,8 +26,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IV.DX.Contracts\IV.DX.Contracts.csproj" />
         <ProjectReference Include="..\IV.DX.Domain\IV.DX.Domain.csproj" />
+        <ProjectReference Include="..\IV.DX.Kernel\IV.DX.Kernel.csproj" />
+        <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Converters\" />
     </ItemGroup>
 
 </Project>

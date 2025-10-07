@@ -2,7 +2,7 @@
 using IV.DataProvider.Persistence.Shared.IntTests.Factories;
 using IV.DataProvider.Persistence.Shared.IntTests.Factories.Test;
 using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Kernel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,8 +1,8 @@
 ﻿using IV.DataProvider.Persistence.Shared.IntTests;
 using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
-using IV.DX.Contracts.Application;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xunit.Abstractions;

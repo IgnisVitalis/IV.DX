@@ -11,7 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IV.DX.Contracts\IV.DX.Contracts.csproj" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     </ItemGroup>
@@ -49,6 +48,11 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />
+      <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

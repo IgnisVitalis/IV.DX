@@ -1,6 +1,5 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Models;
+﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.CoreData
 {

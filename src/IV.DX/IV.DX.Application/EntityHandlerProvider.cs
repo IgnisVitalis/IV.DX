@@ -1,8 +1,8 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
+﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.DataHandlers;
-using IV.DX.Contracts.Application;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application

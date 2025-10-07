@@ -1,10 +1,10 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DX.Contracts.Application;
-using IV.DX.Contracts.Common.Converters;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
-using IV.DX.Contracts.Persistence;
+﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application

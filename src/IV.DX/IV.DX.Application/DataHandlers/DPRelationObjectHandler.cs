@@ -1,7 +1,6 @@
-﻿using IV.DX.Contracts.Application;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
-using IV.DX.Contracts.Persistence;
+﻿using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
@@ -10,14 +9,12 @@ namespace IV.DX.Application.DataHandlers
     {
         private readonly IGenericRepository _genericRepo;
         private readonly IDataStructureRepository _dataStructureRepo;
-        private readonly ISQLQueryHelper _sqlQueryHelper;
 
         public DPRelationObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
-            this._sqlQueryHelper = serviceProvider.GetService<ISQLQueryHelper>();
         }
 
         public override Guid OnInserting(DPRelationObject entity, EntityHandlerBaseContext context)

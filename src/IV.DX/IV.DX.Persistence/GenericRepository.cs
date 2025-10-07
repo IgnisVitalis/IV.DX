@@ -1,9 +1,8 @@
-﻿using IV.DataProvider.Persistence.Contracts.Models;
-using IV.DX.Contracts.Common.Converters;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Helpers;
-using IV.DX.Contracts.Common.Models;
-using IV.DX.Contracts.Persistence;
+﻿using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {

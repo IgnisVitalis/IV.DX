@@ -1,8 +1,8 @@
-﻿using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Models;
-using IV.DX.Contracts.Persistence;
-using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Contracts.Persistence.Models;
+﻿using IV.DX.Contracts.Persistence.ExpressionTree;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Abstractions;
+using IV.DX.Persistence.Models;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Data.Common;

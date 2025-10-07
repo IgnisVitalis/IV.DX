@@ -12,8 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />
     <ProjectReference Include="..\IV.DX.Application\IV.DX.Application.csproj" />
-    <ProjectReference Include="..\IV.DX.Contracts\IV.DX.Contracts.csproj" />
+    <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
     <ProjectReference Include="..\IV.DX.Persistence\IV.DX.Persistence.csproj" />
   </ItemGroup>
 

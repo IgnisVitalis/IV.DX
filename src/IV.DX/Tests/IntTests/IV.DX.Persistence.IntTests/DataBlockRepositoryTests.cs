@@ -1,7 +1,7 @@
 using IV.DataProvider.Persistence.Shared.IntTests;
-using IV.DX.Contracts.Common.Converters;
-using IV.DX.Contracts.Common.Enums;
-using IV.DX.Contracts.Common.Models;
+using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using System;
 using System.IO;
 using System.Linq;
