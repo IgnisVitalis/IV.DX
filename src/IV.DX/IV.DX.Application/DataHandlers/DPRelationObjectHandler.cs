@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class DPRelationObjectHandler : BaseEntityHandler<DPRelationObject>
+    internal class DPRelationObjectHandler : BaseEntityHandler<DPRelationObject>
     {
         private readonly IGenericRepository _genericRepo;
         private readonly IDataStructureRepository _dataStructureRepo;

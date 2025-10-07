@@ -3,20 +3,28 @@ using IV.DataProvider.Persistence.Shared.IntTests.Factories;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
+using ObjectFactory = IV.DataProvider.Persistence.Shared.IntTests.Factories.ObjectFactory;
 
 namespace IV.DataProvider.Persistence.Repositories.IntTests
 {
     public class RelationRepositoryTests : IntTestController
     {
+        IGenericRepository _genericRepo;
+        ICoreRepository _coreRepo;
+
         public RelationRepositoryTests(ITestOutputHelper output)
             : base(output)
         {
-
+            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
+            this._coreRepo = this.ServiceProvider.GetService<ICoreRepository>();
         }
 
         [Fact]

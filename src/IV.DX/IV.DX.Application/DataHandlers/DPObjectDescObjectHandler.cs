@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public abstract class DPObjectDescObjectHandler<T> : BaseEntityHandler<T> where T : DPObjectDescObject
+    internal abstract class DPObjectDescObjectHandler<T> : BaseEntityHandler<T> where T : DPObjectDescObject
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;

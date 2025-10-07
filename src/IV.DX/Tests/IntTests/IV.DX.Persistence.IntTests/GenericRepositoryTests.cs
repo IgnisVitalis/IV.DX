@@ -1,22 +1,26 @@
-﻿using IV.DataProvider.Persistence.Shared.IntTests;
-using IV.DataProvider.Persistence.Shared.IntTests.Factories;
-using IV.DataProvider.Persistence.Shared.IntTests.Factories.Test;
+﻿using IV.DataProvider.Persistence.Shared.IntTests.Factories.Test;
 using IV.DataProvider.Persistence.Shared.IntTests.Models.Test;
 using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
+using ObjectFactory = IV.DataProvider.Persistence.Shared.IntTests.Factories.ObjectFactory;
 
 namespace IV.DataProvider.Persistence.Repositories.IntTests
 {
     public class GenericRepositoryTests : IntTestController
     {
+        IGenericRepository _genericRepo;
+
         public GenericRepositoryTests(ITestOutputHelper output)
             : base(output)
-        {
-
+        {           
+            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
         }
 
         [Fact]
@@ -33,10 +37,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             });
 
             // Action Insert
-            base._genericRepo.Insert(item);
+            this._genericRepo.Insert(item);
 
             // Checking result
-            var result = base._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            var result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -48,10 +52,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             // Action Update
             item.DPObjectDescGenBlock.Name = "UpdatedSomeTestName";
-            base._genericRepo.Update(item);
+            this._genericRepo.Update(item);
 
             // Checking result
-            result = base._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -62,10 +66,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(result is DPEntityDescObject);
 
             // Action Delete
-            base._genericRepo.Delete(item);
+            this._genericRepo.Delete(item);
 
             // Checking result
-            result = base._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
 
             Assert.Null(result);
         }
@@ -98,11 +102,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             });
 
             // Action Insert
-            base._genericRepo.Insert(item1);
-            base._genericRepo.Insert(item2);
+            this._genericRepo.Insert(item1);
+            this._genericRepo.Insert(item2);
 
             // Checking result
-            var result = base._genericRepo.GetItems<DPEntityDescObject>();
+            var result = this._genericRepo.GetItems<DPEntityDescObject>();
 
             var resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -126,13 +130,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             // Action Update
             item1.DPObjectDescGenBlock.Name = "UpdatedSomeTestName1";
-            base._genericRepo.Update(item1);
+            this._genericRepo.Update(item1);
 
             item2.DPObjectDescGenBlock.Name = "UpdatedSomeTestName2";
-            base._genericRepo.Update(item2);
+            this._genericRepo.Update(item2);
 
             // Checking result
-            result = base._genericRepo.GetItems<DPEntityDescObject>();
+            result = this._genericRepo.GetItems<DPEntityDescObject>();
 
             resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -155,18 +159,18 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(resultItem2 is DPEntityDescObject);
 
             // Action Delete
-            base._genericRepo.Delete(item1);
+            this._genericRepo.Delete(item1);
 
             // Checking result
-            resultItem1 = base._genericRepo.GetItem<DPEntityDescObject>(objectId1);
+            resultItem1 = this._genericRepo.GetItem<DPEntityDescObject>(objectId1);
 
             Assert.Null(resultItem1);
 
             // Action Delete
-            base._genericRepo.Delete(item2);
+            this._genericRepo.Delete(item2);
 
             // Checking result
-            resultItem2 = base._genericRepo.GetItem<DPEntityDescObject>(objectId2);
+            resultItem2 = this._genericRepo.GetItem<DPEntityDescObject>(objectId2);
 
             Assert.Null(resultItem2);
         }
@@ -183,7 +187,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 this._genericRepo.Delete(book);
             });
 
-            base._genericRepo.Insert(book);
+            this._genericRepo.Insert(book);
 
             var page5 = new TBookChapterBlock()
             {

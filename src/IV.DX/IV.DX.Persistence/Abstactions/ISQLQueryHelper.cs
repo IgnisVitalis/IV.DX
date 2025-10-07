@@ -5,7 +5,7 @@ using System.Data.Common;
 
 namespace IV.DX.Persistence.Abstractions
 {
-    public interface ISQLQueryHelper
+    internal interface ISQLQueryHelper
     {
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);

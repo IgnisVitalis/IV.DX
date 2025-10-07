@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public class EntityNode : BaseNode
+    internal class EntityNode : BaseNode
     {
         private IEnumerable<JoinedQueryInfo> _queryInfos;
 

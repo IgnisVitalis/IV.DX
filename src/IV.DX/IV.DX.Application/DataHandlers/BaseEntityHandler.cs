@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class BaseEntityHandler<T> : IEntityHandler<T> where T : ESQLObject
+    internal class BaseEntityHandler<T> : IEntityHandler<T> where T : ESQLObject
     {
         private readonly ICoreModelHandler _coreModelHandler;
 

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application
 {
-    public class EntityHandlerProvider
+    internal class EntityHandlerProvider
     {
         public static Dictionary<string, Tuple<Type, Object>> Handlers
         {

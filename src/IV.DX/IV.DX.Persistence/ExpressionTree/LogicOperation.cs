@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public enum LogicOperation
+    internal enum LogicOperation
     {
         AND,
         OR

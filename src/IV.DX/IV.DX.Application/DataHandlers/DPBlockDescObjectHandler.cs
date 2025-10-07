@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class DPBlockDescObjectHandler : DPObjectDescObjectHandler<DPBlockDescObject>
+    internal class DPBlockDescObjectHandler : DPObjectDescObjectHandler<DPBlockDescObject>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IGenericRepository _genericRepo;

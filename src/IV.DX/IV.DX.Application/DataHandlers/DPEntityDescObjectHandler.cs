@@ -9,7 +9,7 @@ namespace IV.DX.Application.DataHandlers
 {
     // Need to refactor.
     // Method to process relation to DBBlocks have duplicated code.
-    public class DPEntityDescObjectHandler : DPObjectDescObjectHandler<DPEntityDescObject>
+    internal class DPEntityDescObjectHandler : DPObjectDescObjectHandler<DPEntityDescObject>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;

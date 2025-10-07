@@ -2,7 +2,7 @@
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public class PropertyNode : BaseNode
+    internal class PropertyNode : BaseNode
     {
         public LogicOperation LogicOperation { get; private set; }
         public int ExpressionOrder { get; private set; }

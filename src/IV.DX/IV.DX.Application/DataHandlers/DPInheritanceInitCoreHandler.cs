@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class DPInheritanceInitCoreHandler : BaseEntityHandler<DPInheritanceInitCore>
+    internal class DPInheritanceInitCoreHandler : BaseEntityHandler<DPInheritanceInitCore>
     {
         private readonly IDataStructureRepository _dataStructureRepository;
 

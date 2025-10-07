@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Application
 {
-    public class MigrationService : IMigrationService
+    internal class MigrationService : IMigrationService
     {
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;

@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public class OrientedTree
+    internal class OrientedTree
     {
         public CoreNode CoreNode { get; private set; }
 

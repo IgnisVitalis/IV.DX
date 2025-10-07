@@ -1,6 +1,8 @@
-using IV.DataProvider.Persistence.Shared.IntTests;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using Xunit;
@@ -10,10 +12,12 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 {
     public class ObjectRepositoryTests : IntTestController
     {
+        IGenericRepository _genericRepo;
+
         public ObjectRepositoryTests(ITestOutputHelper output)
             : base(output)
         {
-
+            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
         }
 
         [Fact]

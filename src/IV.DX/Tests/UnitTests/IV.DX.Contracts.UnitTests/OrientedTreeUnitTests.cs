@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace IV.DataProvider.Persistence.Contracts.UnitTests.ExpressionTree
+namespace IV.DX.Contracts.UnitTests.ExpressionTree
 {
     public class OrientedTreeUnitTests
     {

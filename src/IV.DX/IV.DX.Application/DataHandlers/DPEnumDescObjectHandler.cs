@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class DPEnumDescObjectHandler : DPObjectDescObjectHandler<DPEnumDescObject>
+    internal class DPEnumDescObjectHandler : DPObjectDescObjectHandler<DPEnumDescObject>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IGenericRepository _genericRepo;

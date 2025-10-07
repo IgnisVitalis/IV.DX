@@ -2,7 +2,7 @@
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public class BlockNode : BaseNode
+    internal class BlockNode : BaseNode
     {
         private JoinedQueryInfo _queryInfo;
 

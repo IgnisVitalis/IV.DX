@@ -4,6 +4,7 @@ using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;

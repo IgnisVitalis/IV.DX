@@ -10,17 +10,13 @@ using System.Diagnostics;
 using System.IO;
 using Xunit.Abstractions;
 
-namespace IV.DataProvider.Persistence.Shared.IntTests
+namespace IV.DX.Shared.IntTests
 {
     public abstract class IntTestController : IDisposable
     {
         protected Action _finalizationAction;
-
-        protected ICoreRepository _coreRepo;
-        protected IGenericRepository _genericRepo;
-        protected ISQLQueryHelper _sqlQueryHelper;
-        protected IDataService _dataService;
-        protected IDataStructureRepository _dataStructureRepo;
+     
+        protected IDataService _dataService;        
         protected IServiceProvider ServiceProvider;
         protected IMigrationService _migrationService;
 
@@ -69,10 +65,6 @@ namespace IV.DataProvider.Persistence.Shared.IntTests
             coreDI.InitEntityHandlerProvider(this.ServiceProvider);
 
             // Resolve types
-            this._dataStructureRepo = this.ServiceProvider.GetService<IDataStructureRepository>();
-            this._sqlQueryHelper = this.ServiceProvider.GetService<ISQLQueryHelper>();
-            this._coreRepo = this.ServiceProvider.GetService<ICoreRepository>();
-            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
             this._dataService = this.ServiceProvider.GetService<IDataService>();
             this._migrationService = this.ServiceProvider.GetService<IMigrationService>();
         }

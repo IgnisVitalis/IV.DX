@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
-    public interface ICoreRepository
+    internal interface ICoreRepository
     {
         void DropDataBase();
         void CreateDataBase();

@@ -1,7 +1,9 @@
-using IV.DataProvider.Persistence.Shared.IntTests;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,9 +16,12 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
     {
         private readonly TimeSpan difference = new TimeSpan(0, 0, 10);
 
+        IGenericRepository _genericRepo;
+        
         public DataBlockRepositoryTests(ITestOutputHelper output)
             : base(output)
         {
+            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
-    public interface IEnumCoreRepository
+    internal interface IEnumCoreRepository
     {
         ESQLMultiItem Get(ESQLBlockDefinition container);
     }

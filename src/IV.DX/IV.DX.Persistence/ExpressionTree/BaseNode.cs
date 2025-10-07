@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public abstract class BaseNode
+    internal abstract class BaseNode
     {
         public string Value { get; private set; }
         public int X { get; private set; }

@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    public class CoreNode : BaseNode
+    internal class CoreNode : BaseNode
     {
         public string MainTableAlias
         {

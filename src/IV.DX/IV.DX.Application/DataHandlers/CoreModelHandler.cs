@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public sealed class CoreModelHandler : ICoreModelHandler
+    internal sealed class CoreModelHandler : ICoreModelHandler
     {
         private readonly ICoreRepository _coreRepo;
         private readonly IGenericRepository _genericRepo;

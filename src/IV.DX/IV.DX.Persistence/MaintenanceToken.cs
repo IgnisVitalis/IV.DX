@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Persistence
 {
-    public static class MaintenanceToken
+    internal static class MaintenanceToken
     {
         public static bool IsCoreInitializing { get; private set; }
 

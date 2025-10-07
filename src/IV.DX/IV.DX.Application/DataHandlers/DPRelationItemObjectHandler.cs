@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    public class DPRelationItemObjectHandler : BaseEntityHandler<DPRelationItemObject>
+    internal class DPRelationItemObjectHandler : BaseEntityHandler<DPRelationItemObject>
     {
         private readonly IGenericRepository _genericRepo;
 
