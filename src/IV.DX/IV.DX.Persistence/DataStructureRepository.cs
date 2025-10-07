@@ -21,7 +21,7 @@ namespace IV.DX.Persistence
         private IList<DXEnumDefinitionUnit> _enumInfos;
         public IEnumerable<DXEnumDefinitionUnit> EnumInfos { get { return this._enumInfos; } }
 
-        public void CreateDataStructure(DPObjectDescObject dataBlock)
+        public void CreateDataStructure(DXObjectDefinitionUnit dataBlock)
         {
             var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dataBlock);
 
@@ -66,10 +66,10 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void UpdatedDataStructure(DPObjectDescObject dataBlock)
+        public void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock)
         {
-            var result = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DPObjectDescObject)), dataBlock.ID, TypeOfEntityLoading.Full);
-            var existingDataBlock = ESQLObjectHelper.CreateInstance<DPObjectDescObject>(result);
+            var result = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, TypeOfEntityLoading.Full);
+            var existingDataBlock = ESQLObjectHelper.CreateInstance<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataBlock, existingDataBlock);
 
@@ -78,7 +78,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DPObjectDescObject dataBlock)
+        public void DropDataStructure(DXObjectDefinitionUnit dataBlock)
         {
             var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataBlock);
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
@@ -278,7 +278,7 @@ namespace IV.DX.Persistence
 
             var enumInfos = enumsModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
-            var enumInfosWithoutCore = enumInfos.Except(CoreDataStructureRepository.CoreEnumInfos, DPObjectDescObjectIDComparer.Instance)
+            var enumInfosWithoutCore = enumInfos.Except(CoreDataStructureRepository.CoreEnumInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXEnumDefinitionUnit);
 
             this._enumInfos = CoreDataStructureRepository.CoreEnumInfos.Concat(enumInfosWithoutCore).ToList();
@@ -290,7 +290,7 @@ namespace IV.DX.Persistence
 
             var entityInfos = entityModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
-            var entityInfosWithoutCore = entityInfos.Except(CoreDataStructureRepository.CoreEntityInfos, DPObjectDescObjectIDComparer.Instance)
+            var entityInfosWithoutCore = entityInfos.Except(CoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
 
             this._entityInfos = CoreDataStructureRepository.CoreEntityInfos.Concat(entityInfosWithoutCore).ToList();
@@ -308,22 +308,22 @@ namespace IV.DX.Persistence
 
             var blockInfos = blockModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
-            var blockInfosWithoutCore = blockInfos.Except(CoreDataStructureRepository.CoreBlockInfos, DPObjectDescObjectIDComparer.Instance)
+            var blockInfosWithoutCore = blockInfos.Except(CoreDataStructureRepository.CoreBlockInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXElementDefinitionUnit);
 
             this._blockInfos = CoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
         }
 
-        private class DPObjectDescObjectIDComparer : IEqualityComparer<DPObjectDescObject>
+        private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
         {
-            public static DPObjectDescObjectIDComparer Instance { get; set; } = new DPObjectDescObjectIDComparer();
+            public static DXObjectDefinitionUnitIDComparer Instance { get; set; } = new DXObjectDefinitionUnitIDComparer();
 
-            private DPObjectDescObjectIDComparer()
+            private DXObjectDefinitionUnitIDComparer()
             {
 
             }
 
-            public bool Equals(DPObjectDescObject x, DPObjectDescObject y)
+            public bool Equals(DXObjectDefinitionUnit x, DXObjectDefinitionUnit y)
             {
                 if (x == null)
                     return false;
@@ -337,7 +337,7 @@ namespace IV.DX.Persistence
                 return x.ID == y.ID;
             }
 
-            public int GetHashCode([DisallowNull] DPObjectDescObject obj)
+            public int GetHashCode([DisallowNull] DXObjectDefinitionUnit obj)
             {
                 return obj.ID.GetHashCode();
             }

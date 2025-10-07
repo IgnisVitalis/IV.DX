@@ -11,14 +11,14 @@ namespace IV.DX.Persistence.CoreData
         {
             Items = new List<DXUnitDefinitionUnit>()
             {
-                #region DPObjectDescObject
+                #region DXObjectDefinitionUnit
                 new DXUnitDefinitionUnit()
                 {
                     ID = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
                     DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("09b4eda6-96d0-4d47-b8bd-d7879a45ea72"),
-                        Name = "DPObjectDescObject",
+                        Name = "DXObjectDefinitionUnit",
                         Kind = DXObjectKindEnum.Core
                     },
                     DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()

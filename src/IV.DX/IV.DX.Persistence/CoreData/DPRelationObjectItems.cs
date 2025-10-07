@@ -18,8 +18,8 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("a0e9308c-7e20-4eff-add8-9ce21e1de13b"),
-                        ObjectNameLeft = "DPObjectDescObject",
-                        RelationNameLeft = "DPObjectDescObjectID",
+                        ObjectNameLeft = "DXObjectDefinitionUnit",
+                        RelationNameLeft = "DXObjectDefinitionUnitID",
                         ObjectNameRight = "DXUnitDefinitionMainElement",
                         RelationNameRight = "DXUnitDefinitionMainElement",
                         RelationTable = null,
@@ -35,8 +35,8 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("e7ec1df8-e169-406c-9323-52e5e6459c95"),
-                        ObjectNameLeft = "DPObjectDescObject",
-                        RelationNameLeft = "DPObjectDescObjectID",
+                        ObjectNameLeft = "DXObjectDefinitionUnit",
+                        RelationNameLeft = "DXObjectDefinitionUnitID",
                         ObjectNameRight = "DXColumnDefinitionElement",
                         RelationNameRight = "DXColumnDefinitionElement",
                         RelationTable = null,
@@ -52,8 +52,8 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("afd2a155-e21e-44b3-b719-139b7a7deefc"),
-                        ObjectNameLeft = "DPObjectDescObject",
-                        RelationNameLeft = "DPObjectDescObjectID",
+                        ObjectNameLeft = "DXObjectDefinitionUnit",
+                        RelationNameLeft = "DXObjectDefinitionUnitID",
                         ObjectNameRight = "DXUniqueColumnsElement",
                         RelationNameRight = "DXUniqueColumnsElement",
                         RelationTable = null,

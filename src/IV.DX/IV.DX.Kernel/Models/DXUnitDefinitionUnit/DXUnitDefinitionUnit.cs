@@ -4,7 +4,7 @@ using IV.DX.Kernel.Converters;
 namespace IV.DX.Kernel.Models
 {
     [ESQLObjectDefinition("DXUnitDefinitionUnit")]
-    public class DXUnitDefinitionUnit : DPObjectDescObject
+    public class DXUnitDefinitionUnit : DXObjectDefinitionUnit
     {
         public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DXUnitDefinitionUnit>();
 

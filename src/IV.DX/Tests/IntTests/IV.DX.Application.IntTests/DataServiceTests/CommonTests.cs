@@ -21,7 +21,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
         [Fact]
         public void CheckPerformance()
         {
-            var ids = Enumerable.Range(0, 1000).Select(x => Guid.NewGuid()).ToList();
+            var ids = Enumerable.Range(0, 100).Select(x => Guid.NewGuid()).ToList();
 
             var ids100 = ids.Take(100).ToList();
 

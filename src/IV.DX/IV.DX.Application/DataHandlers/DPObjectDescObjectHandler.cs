@@ -6,15 +6,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal abstract class DPObjectDescObjectHandler<T> : BaseEntityHandler<T> where T : DPObjectDescObject
+    internal abstract class DXObjectDefinitionUnitHandler<T> : BaseEntityHandler<T> where T : DXObjectDefinitionUnit
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DXRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DXRelationTypeEnum" };
 
-        public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
+        public DXObjectDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
@@ -22,7 +22,7 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();
         }
 
-        protected void ProcessEnumRelations(DPObjectDescObject obj)
+        protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)
         {
             if (obj.DXColumnDefinitionElement == null)
                 return;
@@ -40,7 +40,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private void ProcessEnumRelationsUsingTargetMode(DPObjectDescObject obj)
+        private void ProcessEnumRelationsUsingTargetMode(DXObjectDefinitionUnit obj)
         {
             var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
@@ -71,7 +71,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DXRelationDefinitionUnit GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
+        private DXRelationDefinitionUnit GetRelationObjectForEnum(DXObjectDefinitionUnit obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
         {
             return new DXRelationDefinitionUnit()
             {
@@ -91,25 +91,25 @@ namespace IV.DX.Application.DataHandlers
             };
         }
 
-        protected void Validate(DPObjectDescObject dataBlock)
+        protected void Validate(DXObjectDefinitionUnit dataBlock)
         {
             if (dataBlock == null)
-                throw new Exception("DPObjectDescObject is NULL;");
+                throw new Exception("DXObjectDefinitionUnit is NULL;");
 
             if (dataBlock.ID == default(Guid))
-                throw new Exception("DPObjectDescObject.ID has Default value;");
+                throw new Exception("DXObjectDefinitionUnit.ID has Default value;");
 
             if (dataBlock.DXUnitDefinitionMainElement == null)
-                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement is NULL;");
+                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement is NULL;");
 
             if (dataBlock.DXUnitDefinitionMainElement.ID == default(Guid))
-                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement.ID has Default value;");
+                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.ID has Default value;");
 
             if (string.IsNullOrEmpty(dataBlock.DXUnitDefinitionMainElement.Name))
-                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement.Name is NULL or Empty;");
+                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.Name is NULL or Empty;");
         }
 
-        protected void Process(DPObjectDescObject objectInfoIncome)
+        protected void Process(DXObjectDefinitionUnit objectInfoIncome)
         {
             var objectInfoFromDB = this.GetObjectInfoFromDB(objectInfoIncome);
 
@@ -127,15 +127,15 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DPObjectDescObject GetObjectInfoFromDB(DPObjectDescObject objectInfoIncome)
+        private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
         {
             if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            return this._genericRepo.GetItem<DPObjectDescObject>(objectInfoIncome.ID);
+            return this._genericRepo.GetItem<DXObjectDefinitionUnit>(objectInfoIncome.ID);
         }
 
-        private void SetColumn(DPObjectDescObject objectInfoIncome, DPObjectDescObject objectInfoFromDB, ImportantColumn column)
+        private void SetColumn(DXObjectDefinitionUnit objectInfoIncome, DXObjectDefinitionUnit objectInfoFromDB, ImportantColumn column)
         {
             var objectIdColumnDescFromModel = this.GetColumnDesc(objectInfoIncome, column);
             var objectIdColumnDescFromDataBase = this.GetColumnDesc(objectInfoFromDB, column);
@@ -178,7 +178,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DXColumnDefinitionElement GetColumnDesc(DPObjectDescObject objectInfo, ImportantColumn column)
+        private DXColumnDefinitionElement GetColumnDesc(DXObjectDefinitionUnit objectInfo, ImportantColumn column)
         {
             string columnName = null;
 
@@ -244,7 +244,7 @@ namespace IV.DX.Application.DataHandlers
             timeStamplColumnDesc.Name = "TimeStamp";
         }
 
-        private void OrderColumn(DPObjectDescObject dataBlock)
+        private void OrderColumn(DXObjectDefinitionUnit dataBlock)
         {
             var idColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "id");
             var objectIdColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "objectid");

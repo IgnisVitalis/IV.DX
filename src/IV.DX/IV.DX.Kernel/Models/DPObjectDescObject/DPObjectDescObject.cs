@@ -2,15 +2,15 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DPObjectDescObject")]
-    public class DPObjectDescObject : ESQLObject
+    [ESQLObjectDefinition("DXObjectDefinitionUnit")]
+    public class DXObjectDefinitionUnit : ESQLObject
     {
         public DXUnitDefinitionMainElement DXUnitDefinitionMainElement { get; set; }
 
         public ESQLMultiItemsContainer<DXColumnDefinitionElement> DXColumnDefinitionElement { get; set; }
         public ESQLMultiItemsContainer<DXUniqueColumnsElement> DXUniqueColumnsElement { get; set; }
 
-        public DPObjectDescObject()
+        public DXObjectDefinitionUnit()
         {
             this.DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>
             {

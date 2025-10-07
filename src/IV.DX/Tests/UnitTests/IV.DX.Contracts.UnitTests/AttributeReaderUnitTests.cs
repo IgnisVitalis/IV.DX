@@ -14,18 +14,18 @@ namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
         }
 
         [Fact]
-        public void GetESQLObjectDefinitionAttribute_FromDPObjectDescObject_AttributeWithCorrectValues()
+        public void GetESQLObjectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues()
         {
             // Init
 
             // Action
             var attr = AttributeReader
                 .GetSingleAttribute<ESQLObjectDefinitionAttribute>
-                (typeof(DPObjectDescObject));
+                (typeof(DXObjectDefinitionUnit));
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.ObjectName == "DPObjectDescObject");
+            Assert.True(attr.ObjectName == "DXObjectDefinitionUnit");
         }
 
         [Fact]

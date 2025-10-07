@@ -11,8 +11,8 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
             DXRelationTypeEnum relationType,
             string relationNameLeft,
             string relationNameRight,
-            DPObjectDescObject objectNameLeft,
-            DPObjectDescObject objectNameRight,
+            DXObjectDefinitionUnit objectNameLeft,
+            DXObjectDefinitionUnit objectNameRight,
             string realationTable = null)
         {
             DXRelationDefinitionUnit obj = new DXRelationDefinitionUnit()

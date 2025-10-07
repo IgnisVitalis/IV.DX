@@ -28,7 +28,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void CreateNewDataBlock_IncludedColumnsWithAllDataTypes_Success()
         {
             // Init
-            string json = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
+            string json = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
             DXElementDefinitionUnit blockDesc = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
@@ -206,8 +206,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void UpdateDataBlock_UpdateAllColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
-            string json1 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0001.json");
+            string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
+            string json1 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0001.json");
 
             DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit blockDesc1 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json1);
@@ -376,8 +376,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void UpdateDataBlock_RemoveSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
-            string json2 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0002.json");
+            string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
+            string json2 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0002.json");
             DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
 
@@ -443,9 +443,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void UpdateDataBlock_RemoveAndAddSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
-            string json2 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0002.json");
-            string json3 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0003.json");
+            string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
+            string json2 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0002.json");
+            string json3 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0003.json");
 
             DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
@@ -531,8 +531,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void UpdateDataBlock_RemoveAndAddAndUpdateSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
-            string json4 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0004.json");
+            string json0 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0000.json");
+            string json4 = File.ReadAllText("Assets/JSON/Blocks/DXObjectDefinitionUnit0004.json");
             DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit blockDesc4 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json4);
 

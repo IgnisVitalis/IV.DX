@@ -6,7 +6,7 @@
     //    public void CreateUserStructure()
     //    {
     //        // Init
-    //        var userObject = new DPObjectDescObject()
+    //        var userObject = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -17,7 +17,7 @@
     //            }
     //        };
 
-    //        var userGenBlock = new DPObjectDescObject()
+    //        var userGenBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -73,7 +73,7 @@
     //    //[Fact]
     //    public void UpdateUserStructure()
     //    {
-    //        var userGenBlock = new DPObjectDescObject()
+    //        var userGenBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -123,7 +123,7 @@
     //    public void CreatePassportStructure()
     //    {
     //        // Init
-    //        var obj = new DPObjectDescObject()
+    //        var obj = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -134,7 +134,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DPObjectDescObject()
+    //        var genBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -184,8 +184,8 @@
     //    {
     //        // Init
     //        var objRelId = new Guid("f15f71da-ab49-4937-911a-58170f32da30");
-    //        var obj1 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
-    //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"));
+    //        var obj1 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
+    //        var obj2 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"));
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -204,7 +204,7 @@
     //    public void UpdateDeviceStructure()
     //    {
     //        // Init   
-    //        var genBlock = new DPObjectDescObject()
+    //        var genBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -247,8 +247,8 @@
     //    {
     //        // Init
     //        var objRelId = new Guid("3e9be76e-a2d2-4ff4-9c93-8a4df4846066");
-    //        var obj1 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
-    //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("356aaa53-fc71-41dd-90a0-53975d938cf9"));
+    //        var obj1 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
+    //        var obj2 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("356aaa53-fc71-41dd-90a0-53975d938cf9"));
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -267,7 +267,7 @@
     //    public void CreatePositionStructure()
     //    {
     //        // Init
-    //        var obj = new DPObjectDescObject()
+    //        var obj = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("394566d6-93e4-446a-800d-2209898475ac"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -278,7 +278,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DPObjectDescObject()
+    //        var genBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -328,8 +328,8 @@
     //    {
     //        // Init
     //        var objRelId = new Guid("8ab5ba94-ca7c-47ef-99a8-dfb9c020af92");
-    //        var obj1 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
-    //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("394566d6-93e4-446a-800d-2209898475ac"));
+    //        var obj1 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
+    //        var obj2 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("394566d6-93e4-446a-800d-2209898475ac"));
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -348,7 +348,7 @@
     //    public void CreateDocumentStructure()
     //    {
     //        // Init
-    //        var obj = new DPObjectDescObject()
+    //        var obj = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -359,7 +359,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DPObjectDescObject()
+    //        var genBlock = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -409,8 +409,8 @@
     //    {
     //        // Init
     //        var objRelId = new Guid("e799893d-0943-4902-86aa-9a21747cf764");
-    //        var obj1 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
-    //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"));
+    //        var obj1 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
+    //        var obj2 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"));
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -429,7 +429,7 @@
     //    public void CreateBookStructure()
     //    {
     //        // Init
-    //        var obj = new DPObjectDescObject()
+    //        var obj = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -440,7 +440,7 @@
     //            }
     //        };
 
-    //        var genBlock1 = new DPObjectDescObject()
+    //        var genBlock1 = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -466,7 +466,7 @@
     //            }
     //        };
 
-    //        var genBlock2 = new DPObjectDescObject()
+    //        var genBlock2 = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -538,8 +538,8 @@
     //    {
     //        // Init
     //        var objRelId = new Guid("ef5e9942-c1bb-4637-97a1-b95b2f843a50");
-    //        var obj1 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
-    //        var obj2 = this._genericRepo.GetItem<DPObjectDescObject>(new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"));
+    //        var obj1 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"));
+    //        var obj2 = this._genericRepo.GetItem<DXObjectDefinitionUnit>(new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"));
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,

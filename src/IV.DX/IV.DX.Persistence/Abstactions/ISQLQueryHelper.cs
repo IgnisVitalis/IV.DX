@@ -10,11 +10,11 @@ namespace IV.DX.Persistence.Abstractions
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
         QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
-        string GetSQLQueryToCreateTable(DPObjectDescObject dataBlock);
+        string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock);
         string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
         string GetSQLQueryToDropTable(string tableName);
-        string GetSQLQueryToDropTable(DPObjectDescObject dataBlock);
-        string GetSQLQueryToAlterTable(DPObjectDescObject dataBlockNew, DPObjectDescObject dataBlockExisting);
+        string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataBlock);
+        string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataBlockNew, DXObjectDefinitionUnit dataBlockExisting);
         string GetSQLQueryToDeleteRelationZeroOneToOne(DXRelationDefinitionUnit obj);
         string GetSQLQueryToDeleteRelationOneToZeroOne(DXRelationDefinitionUnit obj);
         string GetSQLQueryToDeleteRelationManyToOne(DXRelationDefinitionUnit obj);

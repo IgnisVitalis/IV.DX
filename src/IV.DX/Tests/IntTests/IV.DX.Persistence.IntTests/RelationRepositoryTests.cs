@@ -229,8 +229,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var obj2Id = new Guid("a3e72030-6892-4875-84c6-af18151312d3");
             var objRelId = new Guid("73b722a2-119e-4c4a-8b62-060ea45625ce");
 
-            DPObjectDescObject obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft43a1");
-            DPObjectDescObject obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight43a1");
+            DXObjectDefinitionUnit obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft43a1");
+            DXObjectDefinitionUnit obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight43a1");
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -964,8 +964,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
         private void CheckingMethodsForRelations(
             DXRelationDefinitionUnit relationInfo,
-            DPObjectDescObject objLeft,
-            DPObjectDescObject objRight,
+            DXObjectDefinitionUnit objLeft,
+            DXObjectDefinitionUnit objRight,
             ESQLObject relTableFirstLeft,
             ESQLObject relTableFirstRight)
         {

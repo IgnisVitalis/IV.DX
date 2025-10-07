@@ -75,20 +75,20 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         }
 
 
-        // TODO: this test should be update to check multifragments also. Also need to use another entity because DPObjectDescObject can be used in another tests.
+        // TODO: this test should be update to check multifragments also. Also need to use another entity because DXObjectDefinitionUnit can be used in another tests.
         [Fact]
         public void CRUD_UsingEnities_EntitysAreProcessedCorrectly()
         {
             // Init
             var objectId1 = new Guid("3DBA464B-542F-484B-A121-2D2FFEE9FEAC");
 
-            DPObjectDescObject item1 = ObjectFactory.GetItem(objectId1, "SomeTestName1");
+            DXObjectDefinitionUnit item1 = ObjectFactory.GetItem(objectId1, "SomeTestName1");
 
             var objectId2 = new Guid("789E3EFA-EB65-498D-A1FC-C2CCA046DC62");
 
-            DPObjectDescObject item2 = ObjectFactory.GetItem(objectId2, "SomeTestName2");
+            DXObjectDefinitionUnit item2 = ObjectFactory.GetItem(objectId2, "SomeTestName2");
 
-            IEnumerable<DPObjectDescObject> items = new List<DPObjectDescObject>()
+            IEnumerable<DXObjectDefinitionUnit> items = new List<DXObjectDefinitionUnit>()
             {
                 item1, item2
             };

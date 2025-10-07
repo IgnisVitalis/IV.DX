@@ -10,9 +10,9 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         IEnumerable<DXElementDefinitionUnit> BlockInfos { get; }
         IEnumerable<DXEnumDefinitionUnit> EnumInfos { get; }
         void UpdateCache();
-        void CreateDataStructure(DPObjectDescObject dataBlock);
-        void UpdatedDataStructure(DPObjectDescObject dataBlock);
-        void DropDataStructure(DPObjectDescObject dataBlock);
+        void CreateDataStructure(DXObjectDefinitionUnit dataBlock);
+        void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock);
+        void DropDataStructure(DXObjectDefinitionUnit dataBlock);
         void CreateDataStructure(DXRelationDefinitionUnit entity);
         void DropDataStructure(DXRelationDefinitionUnit entity);
         void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);

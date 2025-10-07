@@ -4,8 +4,8 @@
     "ID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
     "DXRelationDefinitionMainElement": {
       "ID": "a0e9308c-7e20-4eff-add8-9ce21e1de13b",
-      "ObjectNameLeft": "DPObjectDescObject",
-      "RelationNameLeft": "DPObjectDescObjectID",
+      "ObjectNameLeft": "DXObjectDefinitionUnit",
+      "RelationNameLeft": "DXObjectDefinitionUnitID",
       "ObjectNameRight": "DXUnitDefinitionMainElement",
       "RelationNameRight": "DXUnitDefinitionMainElement",
       "RelationTable": null,
@@ -18,8 +18,8 @@
     "ID": "f802e73c-e512-4655-8067-94e80aea143c",
     "DXRelationDefinitionMainElement": {
       "ID": "e7ec1df8-e169-406c-9323-52e5e6459c95",
-      "ObjectNameLeft": "DPObjectDescObject",
-      "RelationNameLeft": "DPObjectDescObjectID",
+      "ObjectNameLeft": "DXObjectDefinitionUnit",
+      "RelationNameLeft": "DXObjectDefinitionUnitID",
       "ObjectNameRight": "DXColumnDefinitionElement",
       "RelationNameRight": "DXColumnDefinitionElement",
       "RelationTable": null,
@@ -32,8 +32,8 @@
     "ID": "bedc1f2b-2b9b-404f-89e5-5179bd87f60f",
     "DXRelationDefinitionMainElement": {
       "ID": "afd2a155-e21e-44b3-b719-139b7a7deefc",
-      "ObjectNameLeft": "DPObjectDescObject",
-      "RelationNameLeft": "DPObjectDescObjectID",
+      "ObjectNameLeft": "DXObjectDefinitionUnit",
+      "RelationNameLeft": "DXObjectDefinitionUnitID",
       "ObjectNameRight": "DXUniqueColumnsElement",
       "RelationNameRight": "DXUniqueColumnsElement",
       "RelationTable": null,

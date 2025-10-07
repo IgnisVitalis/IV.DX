@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DXElementDefinitionUnitHandler : DPObjectDescObjectHandler<DXElementDefinitionUnit>
+    internal class DXElementDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXElementDefinitionUnit>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IGenericRepository _genericRepo;

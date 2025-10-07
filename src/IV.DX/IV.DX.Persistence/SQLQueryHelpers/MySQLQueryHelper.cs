@@ -93,7 +93,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"SELECT {coreNode.MainTableAlias}.ID FROM {coreNode.Value} AS {coreNode.MainTableAlias}";
         }
 
-        public string GetSQLQueryToCreateTable(DPObjectDescObject dataBlock)
+        public string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock)
         {
             // CREATE TABLE IF NOT EXISTS tasks (
             //     task_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -138,7 +138,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return mySQLQueryToChangeColumn;
         }
 
-        public string GetSQLQueryToDropTable(DPObjectDescObject dataBlock)
+        public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataBlock)
         {
             // TODO: need to find solution how to drop table by ObjectID
             return GetSQLQueryToDropTable(dataBlock.DXUnitDefinitionMainElement.Name);
@@ -195,8 +195,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         public string GetSQLQueryToAlterTable(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             // ALTER TABLE `new_table` 
             // DROP COLUMN `pwd`,
@@ -538,8 +538,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToDrop(
-           DPObjectDescObject dataBlockNew,
-           DPObjectDescObject dataBlockExisting
+           DXObjectDefinitionUnit dataBlockNew,
+           DXObjectDefinitionUnit dataBlockExisting
            )
         {
             var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
@@ -551,8 +551,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToAdd(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
             var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
@@ -568,8 +568,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<Guid> GetColumnDescBlocksToChange(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => x.Name != "ID" && x.Name != "ObjectID").Select(x => x.ID);
             var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => x.Name != "ID" && x.Name != "ObjectID").Select(x => x.ID);

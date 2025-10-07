@@ -24,9 +24,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void CreateObject_WithDefaultValues_Success()
         {
             // Init
-            string json = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0000.json");
+            string json = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0000.json");
 
-            DPObjectDescObject objDesc = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json);
+            DXObjectDefinitionUnit objDesc = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
@@ -51,8 +51,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         public void UpdateObject_UsingNewValues_Success()
         {
             // Ini
-            string json0 = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0000.json");
-            string json1 = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0001.json");
+            string json0 = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0000.json");
+            string json1 = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0001.json");
             var objDesc0 = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json0);
             var objDesc1 = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json1);
 

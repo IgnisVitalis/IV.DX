@@ -319,7 +319,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToAlterTable(DPObjectDescObject dataBlockNew, DPObjectDescObject dataBlockExisting)
+        public string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataBlockNew, DXObjectDefinitionUnit dataBlockExisting)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -404,8 +404,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<Guid> GetColumnDescBlockIDsToChange(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
@@ -449,8 +449,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToDrop(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
@@ -470,8 +470,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToAdd(
-            DPObjectDescObject dataBlockNew,
-            DPObjectDescObject dataBlockExisting)
+            DXObjectDefinitionUnit dataBlockNew,
+            DXObjectDefinitionUnit dataBlockExisting)
         {
             if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
             {
@@ -642,7 +642,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateTable(DPObjectDescObject dataBlock)
+        public string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -753,7 +753,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDropTable(DPObjectDescObject dataBlock)
+        public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataBlock)
         {
             // TODO: need to find solution how to drop table by ObjectID
             return GetSQLQueryToDropTable(dataBlock.DXUnitDefinitionMainElement.Name);
