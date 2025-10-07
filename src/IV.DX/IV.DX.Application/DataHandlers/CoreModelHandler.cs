@@ -17,44 +17,44 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public bool OnDeleting(string typeName, Guid id, EntityHandlerBaseContext context)
+        public bool OnDeleting(string typeName, Guid id, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.Delete(typeName, id);
         }
 
-        public void OnDeleted(string typeName, Guid id, EntityHandlerBaseContext context)
+        public void OnDeleted(string typeName, Guid id, DXUnitHandlerBaseContext context)
         {
         }
 
-        public Guid OnInserting(ESQLModel model, EntityHandlerBaseContext context)
+        public Guid OnInserting(ESQLModel model, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.Insert(model);
         }
 
-        public void OnInserted(ESQLModel model, EntityHandlerBaseContext context)
+        public void OnInserted(ESQLModel model, DXUnitHandlerBaseContext context)
         {
         }
 
-        public Guid OnUpdating(ESQLModel model, EntityHandlerBaseContext context)
+        public Guid OnUpdating(ESQLModel model, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.Update(model);
         }
 
-        public void OnUpdated(ESQLModel model, EntityHandlerBaseContext context)
+        public void OnUpdated(ESQLModel model, DXUnitHandlerBaseContext context)
         {
         }
 
-        public T GetItem<T>(Guid id, EntityHandlerBaseContext context) where T : ESQLObject
+        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context) where T : ESQLObject
         {
             return this._genericRepo.GetItem<T>(id);
         }
 
-        public bool IsItemExisting(string typeName, Guid id, EntityHandlerBaseContext context)
+        public bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.IsItemExisting(typeName, id);
         }
 
-        public void OnGetting(ESQLModel model, EntityHandlerBaseContext context)
+        public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
         {
         }
     }

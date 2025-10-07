@@ -23,46 +23,46 @@ namespace IV.DX.Application.DataHandlers
             this._coreModelHandler = serviceProvider.GetService<ICoreModelHandler>();
         }
 
-        public virtual bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+        public virtual bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
         {
             return this._coreModelHandler.OnDeleting(TypeName, id, context);
         }
 
-        public virtual void OnDeleted(Guid id, EntityHandlerBaseContext context)
+        public virtual void OnDeleted(Guid id, DXUnitHandlerBaseContext context)
         {
             this._coreModelHandler.OnDeleted(TypeName, id, context);
         }
 
-        public virtual Guid OnInserting(T entity, EntityHandlerBaseContext context)
+        public virtual Guid OnInserting(T entity, DXUnitHandlerBaseContext context)
         {
             var esqlModel = entity.ConvertToESQLModel();
             return this._coreModelHandler.OnInserting(esqlModel, context);
         }
 
-        public virtual void OnInserted(T entity, EntityHandlerBaseContext context)
+        public virtual void OnInserted(T entity, DXUnitHandlerBaseContext context)
         {
             var esqlModel = entity.ConvertToESQLModel();
             this._coreModelHandler.OnInserted(esqlModel, context);
         }
 
-        public virtual Guid OnUpdating(T entity, EntityHandlerBaseContext context)
+        public virtual Guid OnUpdating(T entity, DXUnitHandlerBaseContext context)
         {
             var esqlModel = entity.ConvertToESQLModel();
             return this._coreModelHandler.OnUpdating(esqlModel, context);
         }
 
-        public virtual void OnUpdated(T entity, EntityHandlerBaseContext context)
+        public virtual void OnUpdated(T entity, DXUnitHandlerBaseContext context)
         {
             var esqlModel = entity.ConvertToESQLModel();
             this._coreModelHandler.OnUpdated(esqlModel, context);
         }
 
-        public virtual bool IsItemExisting(Guid id, EntityHandlerBaseContext context)
+        public virtual bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context)
         {
             return this._coreModelHandler.IsItemExisting(TypeName, id, context);
         }
 
-        public void OnGetting(ESQLModel model, EntityHandlerBaseContext context)
+        public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
         {
             this._coreModelHandler.OnGetting(model, context);
         }

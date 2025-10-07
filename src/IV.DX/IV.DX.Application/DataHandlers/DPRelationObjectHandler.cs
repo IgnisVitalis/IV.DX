@@ -17,7 +17,7 @@ namespace IV.DX.Application.DataHandlers
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
         }
 
-        public override Guid OnInserting(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContext context)
         {
             var existingRelation = this._dataStructureRepo.GetRelation(entity.DXRelationDefinitionMainElement.ObjectNameLeft, entity.DXRelationDefinitionMainElement.RelationNameLeft, entity.DXRelationDefinitionMainElement.ObjectNameRight, entity.DXRelationDefinitionMainElement.RelationNameRight);
 
@@ -26,12 +26,12 @@ namespace IV.DX.Application.DataHandlers
                 return Guid.Empty;
             }
 
-            if (context is EntityHandlerPreInitCoreContext)
+            if (context is DXUnitHandlerPreInitCoreContext)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
                 return Guid.Empty;
             }
-            else if (context is EntityHandlerPostInitCoreContext)
+            else if (context is DXUnitHandlerPostInitCoreContext)
             {
                 var invertedRelation = entity.CreateInvertedRelationObject();
 
@@ -49,13 +49,13 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContext context)
         {
             base.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
         }
 
-        public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
         {
             var entity = this._genericRepo.GetItem<DXRelationDefinitionUnit>(id);
 

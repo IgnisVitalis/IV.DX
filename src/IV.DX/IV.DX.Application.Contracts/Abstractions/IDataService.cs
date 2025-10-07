@@ -28,30 +28,30 @@ namespace IV.DX.Application.Contracts.Abstractions
         bool Delete(JObject jObject);
         Guid InsertOrUpdate(JObject jObject);
 
-        IEnumerable<T> GetItems<T>(EntityHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, EntityHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        IEnumerable<T> GetItems<T>(string esqlWhereExpression, EntityHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        T GetItem<T>(Guid id, EntityHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
-        bool IsItemExisting(Guid id, string type, EntityHandlerBaseContext context);
+        IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
+        bool IsItemExisting(Guid id, string type, DXUnitHandlerBaseContext context);
 
-        Guid Insert(ESQLObject esqlObject, EntityHandlerBaseContext context);
-        Guid Update(ESQLObject esqlObject, EntityHandlerBaseContext context);
-        Guid InsertOrUpdate(ESQLObject esqlObject, EntityHandlerBaseContext context);
-        bool Delete(ESQLObject esqlObject, EntityHandlerBaseContext context);
+        Guid Insert(ESQLObject esqlObject, DXUnitHandlerBaseContext context);
+        Guid Update(ESQLObject esqlObject, DXUnitHandlerBaseContext context);
+        Guid InsertOrUpdate(ESQLObject esqlObject, DXUnitHandlerBaseContext context);
+        bool Delete(ESQLObject esqlObject, DXUnitHandlerBaseContext context);
 
-        IEnumerable<ESQLModel> GetItems(string typeName, EntityHandlerBaseContext context);
-        IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> ids, EntityHandlerBaseContext context);
-        IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression, EntityHandlerBaseContext context);
-        ESQLModel GetItem(string typeName, Guid id, EntityHandlerBaseContext context);
+        IEnumerable<ESQLModel> GetItems(string typeName, DXUnitHandlerBaseContext context);
+        IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context);
+        IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContext context);
+        ESQLModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContext context);
 
-        Guid Insert(string jObject, EntityHandlerBaseContext context);
-        Guid Update(string jObject, EntityHandlerBaseContext context);
-        bool Delete(string typeName, Guid id, EntityHandlerBaseContext context);
-        Guid InsertOrUpdate(string jObject, EntityHandlerBaseContext context);
+        Guid Insert(string jObject, DXUnitHandlerBaseContext context);
+        Guid Update(string jObject, DXUnitHandlerBaseContext context);
+        bool Delete(string typeName, Guid id, DXUnitHandlerBaseContext context);
+        Guid InsertOrUpdate(string jObject, DXUnitHandlerBaseContext context);
 
-        Guid Insert(JObject jObject, EntityHandlerBaseContext context);
-        Guid Update(JObject jObject, EntityHandlerBaseContext context);
-        bool Delete(JObject jObject, EntityHandlerBaseContext context);
-        Guid InsertOrUpdate(JObject jObject, EntityHandlerBaseContext context);
+        Guid Insert(JObject jObject, DXUnitHandlerBaseContext context);
+        Guid Update(JObject jObject, DXUnitHandlerBaseContext context);
+        bool Delete(JObject jObject, DXUnitHandlerBaseContext context);
+        Guid InsertOrUpdate(JObject jObject, DXUnitHandlerBaseContext context);
     }
 }

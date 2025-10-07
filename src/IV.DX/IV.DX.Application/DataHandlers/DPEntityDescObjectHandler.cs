@@ -23,18 +23,18 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public override Guid OnInserting(DXUnitDefinitionUnit entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
 
-            if (context is EntityHandlerPreInitCoreContext)
+            if (context is DXUnitHandlerPreInitCoreContext)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
                 return Guid.Empty;
             }
-            else if (context is EntityHandlerPostInitCoreContext)
+            else if (context is DXUnitHandlerPostInitCoreContext)
             {
                 return base.OnInserting(entity, context);
             }
@@ -47,7 +47,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXUnitDefinitionUnit entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXUnitDefinitionUnit entity, DXUnitHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -60,7 +60,7 @@ namespace IV.DX.Application.DataHandlers
             return base.OnUpdating(entity, context);
         }
 
-        public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
         {
             var entity = this._genericRepo.GetItem<DXUnitDefinitionUnit>(id);
 

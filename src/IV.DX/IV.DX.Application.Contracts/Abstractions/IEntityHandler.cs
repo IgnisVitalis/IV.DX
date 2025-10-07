@@ -5,13 +5,13 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IEntityHandler<T> where T : ESQLObject
     {
-        bool IsItemExisting(Guid id, EntityHandlerBaseContext context);
-        void OnGetting(ESQLModel model, EntityHandlerBaseContext context);
-        Guid OnInserting(T entity, EntityHandlerBaseContext context);
-        void OnInserted(T entity, EntityHandlerBaseContext context);
-        Guid OnUpdating(T entity, EntityHandlerBaseContext context);
-        void OnUpdated(T entity, EntityHandlerBaseContext context);
-        bool OnDeleting(Guid id, EntityHandlerBaseContext context);
-        void OnDeleted(Guid id, EntityHandlerBaseContext context);
+        bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context);
+        void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context);
+        Guid OnInserting(T entity, DXUnitHandlerBaseContext context);
+        void OnInserted(T entity, DXUnitHandlerBaseContext context);
+        Guid OnUpdating(T entity, DXUnitHandlerBaseContext context);
+        void OnUpdated(T entity, DXUnitHandlerBaseContext context);
+        bool OnDeleting(Guid id, DXUnitHandlerBaseContext context);
+        void OnDeleted(Guid id, DXUnitHandlerBaseContext context);
     }
 }

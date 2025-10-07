@@ -64,7 +64,7 @@ namespace IV.DX.Application
                         throw new Exception($"Migration script {migrationScript} could be processed.");
                     }
 
-                    this._dataService.Insert(migrationScript, new EntityHandlerMigrationServiceContext(migrationScript));
+                    this._dataService.Insert(migrationScript, new DXUnitHandlerMigrationServiceContext(migrationScript));
                 }
                 catch (Exception exc)
                 {
@@ -105,7 +105,7 @@ namespace IV.DX.Application
 
                 foreach (var script in scriptsPreInit)
                 {
-                    this._dataService.Insert(script, new EntityHandlerMigrationServiceContext(script));
+                    this._dataService.Insert(script, new DXUnitHandlerMigrationServiceContext(script));
                 }
             }
 
@@ -161,7 +161,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new EntityHandlerPreInitCoreContext(file));
+                this._dataService.Insert(item.ToString(), new DXUnitHandlerPreInitCoreContext(file));
             }
         }
 
@@ -173,7 +173,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new EntityHandlerPostInitCoreContext(file));
+                this._dataService.Insert(item.ToString(), new DXUnitHandlerPostInitCoreContext(file));
             }
         }
 
@@ -185,7 +185,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new EntityHandlerMigrationServiceContext(relFile));
+                this._dataService.Insert(item.ToString(), new DXUnitHandlerMigrationServiceContext(relFile));
             }
         }
 
@@ -197,7 +197,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.InsertOrUpdate(item.ToString(), new EntityHandlerMigrationServiceContext(datFile));
+                this._dataService.InsertOrUpdate(item.ToString(), new DXUnitHandlerMigrationServiceContext(datFile));
             }
         }
 

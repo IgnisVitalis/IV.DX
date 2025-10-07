@@ -16,24 +16,24 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public override bool IsItemExisting(Guid id, EntityHandlerBaseContext context)
+        public override bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context)
         {
             return false;
         }
 
-        public override Guid OnInserting(DPRelationItemObject entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DPRelationItemObject entity, DXUnitHandlerBaseContext context)
         {
             this._genericRepo.AddRelation(entity);
             return Guid.Empty;
         }
 
-        public override Guid OnUpdating(DPRelationItemObject entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DPRelationItemObject entity, DXUnitHandlerBaseContext context)
         {
             this.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
         }
 
-        public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
         {
             var entity = this._genericRepo.GetItem<DPRelationItemObject>(id);
 

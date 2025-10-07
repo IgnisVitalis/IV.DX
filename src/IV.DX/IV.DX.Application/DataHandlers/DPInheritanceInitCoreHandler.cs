@@ -16,7 +16,7 @@ namespace IV.DX.Application.DataHandlers
             this._dataStructureRepository = serviceProvider.GetService<IDXStructureRepository>();
         }
 
-        public override Guid OnInserting(DXInheritanceInitCore entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXInheritanceInitCore entity, DXUnitHandlerBaseContext context)
         {
             this._dataStructureRepository.SetEntityInheritance(entity.ChildEntity, entity.BaseEntity);
 

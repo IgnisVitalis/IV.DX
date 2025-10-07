@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Application.Contracts.HandlerContext
 {
-    public class EntityHandlerBaseContext
+    public class DXUnitHandlerBaseContext
     {
     }
 }

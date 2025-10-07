@@ -158,7 +158,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
 
             // Action
-            var model = this._dataService.GetItem("TDeviceObject", id, new EntityHandlerBaseContext());
+            var model = this._dataService.GetItem("TDeviceObject", id, new DXUnitHandlerBaseContext());
 
             // Assert
             var jObject = model.ConvertToJObject();

@@ -116,7 +116,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
 
             // Action           
-            var block = _dataService.GetItem("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"), new EntityHandlerBaseContext());
+            var block = _dataService.GetItem("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"), new DXUnitHandlerBaseContext());
 
             // Checking result
             Assert.NotNull(block);
@@ -133,7 +133,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var objectID = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
 
             // Action
-            var objs = _dataService.GetItems<DXUnitDefinitionUnit>($"ID = '{objectID}'", new EntityHandlerBaseContext());
+            var objs = _dataService.GetItems<DXUnitDefinitionUnit>($"ID = '{objectID}'", new DXUnitHandlerBaseContext());
 
             // Checking result
             Assert.Single(objs);
@@ -149,7 +149,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
 
             // Action
-            var objs = _dataService.GetItems("DXUnitDefinitionUnit", new EntityHandlerBaseContext());
+            var objs = _dataService.GetItems("DXUnitDefinitionUnit", new DXUnitHandlerBaseContext());
 
             // Checking result
             Assert.NotEmpty(objs);

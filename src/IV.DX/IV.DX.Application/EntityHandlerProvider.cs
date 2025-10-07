@@ -133,42 +133,42 @@ namespace IV.DX.Application
                 this._handler = handler;
             }
 
-            public bool IsItemExisting(Guid id, EntityHandlerBaseContext context)
+            public bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).IsItemExisting(id, context);
             }
 
-            public void OnDeleted(Guid id, EntityHandlerBaseContext context)
+            public void OnDeleted(Guid id, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnDeleted(id, context);
             }
 
-            public bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+            public bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).OnDeleting(id, context);
             }
 
-            public void OnGetting(ESQLModel model, EntityHandlerBaseContext context)
+            public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnGetting(model, context);
             }
 
-            public void OnInserted(ESQLObject entity, EntityHandlerBaseContext context)
+            public void OnInserted(ESQLObject entity, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnInserted(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnInserting(ESQLObject entity, EntityHandlerBaseContext context)
+            public Guid OnInserting(ESQLObject entity, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).OnInserting(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public void OnUpdated(ESQLObject entity, EntityHandlerBaseContext context)
+            public void OnUpdated(ESQLObject entity, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnUpdated(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnUpdating(ESQLObject entity, EntityHandlerBaseContext context)
+            public Guid OnUpdating(ESQLObject entity, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).OnUpdating(VerifyRecord(this._handler.Item1, entity), context);
             }
