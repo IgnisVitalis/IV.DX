@@ -204,7 +204,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sqlClmDef;
         }
 
-        private string GetSQLColumnsUniqueToAddInTable(string tableName, DPColumnsUniqueBlock clmDesc)
+        private string GetSQLColumnsUniqueToAddInTable(string tableName, DXUniqueColumnsElement clmDesc)
         {
             var columns = clmDesc.Columns.Split(',').Select(x => x.Trim());
 
@@ -650,7 +650,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             var clmDefList = dataBlock.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
-            var clmUniqueList = dataBlock.DPColumnsUniqueBlock.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataBlock.DPObjectDescGenBlock.Name, x));
+            var clmUniqueList = dataBlock.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataBlock.DPObjectDescGenBlock.Name, x));
 
             sb.Append(string.Join(",", clmDefList));
 

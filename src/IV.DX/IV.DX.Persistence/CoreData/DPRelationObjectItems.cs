@@ -54,8 +54,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("afd2a155-e21e-44b3-b719-139b7a7deefc"),
                         ObjectNameLeft = "DPObjectDescObject",
                         RelationNameLeft = "DPObjectDescObjectID",
-                        ObjectNameRight = "DPColumnsUniqueBlock",
-                        RelationNameRight = "DPColumnsUniqueBlock",
+                        ObjectNameRight = "DXUniqueColumnsElement",
+                        RelationNameRight = "DXUniqueColumnsElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToMany,
                         Kind = DPObjectKindEnum.Core

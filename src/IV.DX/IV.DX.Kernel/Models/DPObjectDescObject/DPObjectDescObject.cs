@@ -8,7 +8,7 @@ namespace IV.DX.Kernel.Models
         public DPObjectDescGenBlock DPObjectDescGenBlock { get; set; }
 
         public ESQLMultiItemsContainer<DXColumnDefinitionElement> DXColumnDefinitionElement { get; set; }
-        public ESQLMultiItemsContainer<DPColumnsUniqueBlock> DPColumnsUniqueBlock { get; set; }
+        public ESQLMultiItemsContainer<DXUniqueColumnsElement> DXUniqueColumnsElement { get; set; }
 
         public DPObjectDescObject()
         {
@@ -17,9 +17,9 @@ namespace IV.DX.Kernel.Models
                 Announced = new List<DXColumnDefinitionElement>()
             };
 
-            this.DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>
+            this.DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>
             {
-                Announced = new List<DPColumnsUniqueBlock>()
+                Announced = new List<DXUniqueColumnsElement>()
             };
         }
     }

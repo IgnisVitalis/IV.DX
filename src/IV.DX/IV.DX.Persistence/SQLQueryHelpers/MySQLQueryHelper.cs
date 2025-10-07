@@ -112,7 +112,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             var clmDefList = dataBlock.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
-            var clmUniqueList = dataBlock.DPColumnsUniqueBlock.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(x));
+            var clmUniqueList = dataBlock.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(x));
 
             sb.Append(string.Join(",", clmDefList));
 
@@ -150,7 +150,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"DROP TABLE IF EXISTS {tableName}";
         }
 
-        private string GetSQLColumnsUniqueToAddInTable(DPColumnsUniqueBlock clmDesc)
+        private string GetSQLColumnsUniqueToAddInTable(DXUniqueColumnsElement clmDesc)
         {
             var columns = clmDesc.Columns.Split(',').Select(x => x.Trim());
 

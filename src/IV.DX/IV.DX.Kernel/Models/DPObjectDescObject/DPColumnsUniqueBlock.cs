@@ -2,8 +2,8 @@
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPColumnsUniqueBlock")]
-    public class DPColumnsUniqueBlock : ESQLBlock
+    [ESQLBlockDefinition("DXUniqueColumnsElement")]
+    public class DXUniqueColumnsElement : ESQLBlock
     {
         [ESQLColumnDefinition("Columns")]
         public string Columns { get; set; }

@@ -49,12 +49,12 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("44892f0b-5f87-4373-b3c2-a7eac4a41ffd"),
                             Columns = "Key"
@@ -94,12 +94,12 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("ff9aab92-03c6-4c38-8147-08c77e694fe9"),
                             Columns = "Key"
@@ -140,12 +140,12 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("2038343f-0d46-4534-8408-963ab18e763f"),
                             Columns = "Key"
@@ -185,12 +185,12 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("f3e6e16c-6dc0-4056-aab2-6176e17c7ab4"),
                             Columns = "Key"
@@ -344,14 +344,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPColumnsUniqueBlock
-            var dpColumnsUniqueBlock = new DXElementDefinitionUnit()
+            #region DXUniqueColumnsElement
+            var DXUniqueColumnsElement = new DXElementDefinitionUnit()
             {
                 ID = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
                 {
                     ID = new Guid("38402309-6239-4e54-8640-ac70772b76bd"),
-                    Name = "DPColumnsUniqueBlock",
+                    Name = "DXUniqueColumnsElement",
                     Kind = DPObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
@@ -580,17 +580,17 @@ namespace IV.DX.Persistence
                         }
                     },
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("a210fada-2da8-46f0-a7b1-35963e21cda0"),
                             Columns = "ObjectNameLeft, RelationNameRight"
                         },
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("0338d236-4cce-4019-b9b7-e14657dd81a8"),
                             Columns = "ObjectNameRight, RelationNameLeft"
@@ -685,12 +685,12 @@ namespace IV.DX.Persistence
                         }
                     },
                 },
-                DPColumnsUniqueBlock = new ESQLMultiItemsContainer<DPColumnsUniqueBlock>()
+                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = ModeForMultiItems.Full,
-                    Announced = new List<DPColumnsUniqueBlock>()
+                    Announced = new List<DXUniqueColumnsElement>()
                     {
-                        new DPColumnsUniqueBlock()
+                        new DXUniqueColumnsElement()
                         {
                             ID = new Guid("3b9dbbcb-2739-451e-b08f-19e68fc566f1"),
                             Columns = "Version, Build, Number, AppName, Name, Extention"
@@ -704,7 +704,7 @@ namespace IV.DX.Persistence
             {
                 dpObjectDescGenBlock,
                 DXColumnDefinitionElement,
-                dpColumnsUniqueBlock,
+                DXUniqueColumnsElement,
                 dpEntityInheritanceBlock,
                 dpBlockInEntityDescGenBlock,
                 dpRelationGenBlock,

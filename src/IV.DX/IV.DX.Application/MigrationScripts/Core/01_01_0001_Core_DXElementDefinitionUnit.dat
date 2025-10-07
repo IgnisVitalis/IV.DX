@@ -92,7 +92,7 @@
     "ID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
     "DPObjectDescGenBlock": {
       "ID": "38402309-6239-4e54-8640-ac70772b76bd",
-      "Name": "DPColumnsUniqueBlock",
+      "Name": "DXUniqueColumnsElement",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {
@@ -210,7 +210,7 @@
         }
       ]
     },
-    "DPColumnsUniqueBlock": {
+    "DXUniqueColumnsElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -293,7 +293,7 @@
         }
       ]
     },
-    "DPColumnsUniqueBlock": {
+    "DXUniqueColumnsElement": {
       "Mode": 1,
       "Announced": [
         {
