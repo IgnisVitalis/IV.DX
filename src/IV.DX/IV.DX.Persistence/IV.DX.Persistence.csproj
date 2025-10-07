@@ -7,18 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="MigrationScripts\Custom\**" />
-        <Compile Remove="MigrationScripts\MySQL\**" />
-        <Compile Remove="MigrationScripts\Test\**" />
-        <EmbeddedResource Remove="MigrationScripts\Custom\**" />
-        <EmbeddedResource Remove="MigrationScripts\MySQL\**" />
-        <EmbeddedResource Remove="MigrationScripts\Test\**" />
-        <None Remove="MigrationScripts\Custom\**" />
-        <None Remove="MigrationScripts\MySQL\**" />
-        <None Remove="MigrationScripts\Test\**" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="MySql.Data" Version="8.0.18" />
@@ -29,10 +17,6 @@
         <ProjectReference Include="..\IV.DX.Domain\IV.DX.Domain.csproj" />
         <ProjectReference Include="..\IV.DX.Kernel\IV.DX.Kernel.csproj" />
         <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Converters\" />
     </ItemGroup>
 
 </Project>
