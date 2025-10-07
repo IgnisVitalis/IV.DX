@@ -20,7 +20,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             bool isBaseOperator = false;
 
-            foreach (var baseOperator in ESQLOperators.BaseOperators)
+            foreach (var baseOperator in DXSQLOperators.BaseOperators)
             {
                 if (base.Value.Contains(baseOperator))
                 {

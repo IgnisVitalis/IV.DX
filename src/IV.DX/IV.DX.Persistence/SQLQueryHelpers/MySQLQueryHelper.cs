@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Persistence.SQLQueryHelpers
 {
-    internal class MySQLQueryHelper : ISQLQueryHelper
+    internal class MySQLQueryHelper : IDXSQLQueryHelper
     {
         public MySQLQueryHelper()
         {

@@ -9,7 +9,7 @@ namespace IV.DX.Application.DataHandlers
     internal abstract class DXObjectDefinitionUnitHandler<T> : BaseEntityHandler<T> where T : DXObjectDefinitionUnit
     {
         private readonly IDXStructureRepository _dataStructureRepo;
-        private readonly IDataService _dataService;
+        private readonly IDXUnitDataService _dataService;
         private readonly IDXGenericRepository _genericRepo;
 
         protected static readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
@@ -18,7 +18,7 @@ namespace IV.DX.Application.DataHandlers
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._dataService = serviceProvider.GetService<IDataService>();
+            this._dataService = serviceProvider.GetService<IDXUnitDataService>();
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 

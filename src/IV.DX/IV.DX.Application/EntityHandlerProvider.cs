@@ -23,7 +23,7 @@ namespace IV.DX.Application
         private static bool IsInitCore;
         private static readonly bool IsInit;
 
-        public static ICoreModelHandler CoreModelHandler { get; private set; }
+        public static IDXCoreHandler CoreModelHandler { get; private set; }
 
         private static readonly object obj = new object();
 
@@ -49,7 +49,7 @@ namespace IV.DX.Application
                 Register<DXInheritanceInitCore>(new DXInheritanceInitCoreHandler(serviceProvider));
                 Register<DPRelationItemObject>(new DPRelationItemObjectHandler(serviceProvider));
 
-                CoreModelHandler = serviceProvider.GetService<ICoreModelHandler>();
+                CoreModelHandler = serviceProvider.GetService<IDXCoreHandler>();
 
                 IsInitCore = true;
             }
@@ -66,7 +66,7 @@ namespace IV.DX.Application
             }
         }
 
-        public static void Register<T>(IEntityHandler<T> handler) where T : ESQLObject, new()
+        public static void Register<T>(IDXUnitHandler<T> handler) where T : ESQLObject, new()
         {
             lock (obj)
             {
@@ -84,7 +84,7 @@ namespace IV.DX.Application
             }
         }
 
-        public static IEntityHandler<ESQLObject> GetHandler(string entityName)
+        public static IDXUnitHandler<ESQLObject> GetHandler(string entityName)
         {
             Tuple<Type, object> existinghandler = null;
 
@@ -117,14 +117,14 @@ namespace IV.DX.Application
             return _handlers.ContainsKey(entityName);
         }
 
-        public static IEntityHandler<ESQLObject> GetHandler(ESQLObject esqlObject)
+        public static IDXUnitHandler<ESQLObject> GetHandler(ESQLObject esqlObject)
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
             return GetHandler(typeName);
         }
 
-        private class CompositeEntityBehavior : IEntityHandler<ESQLObject>
+        private class CompositeEntityBehavior : IDXUnitHandler<ESQLObject>
         {
             private readonly Tuple<Type, object> _handler;
 

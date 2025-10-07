@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Persistence.SQLQueryHelpers
 {
-    internal class PGSQLQueryHelper : ISQLQueryHelper
+    internal class PGSQLQueryHelper : IDXSQLQueryHelper
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
 

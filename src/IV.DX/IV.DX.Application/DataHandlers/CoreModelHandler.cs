@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal sealed class CoreModelHandler : ICoreModelHandler
+    internal sealed class CoreModelHandler : IDXCoreHandler
     {
         private readonly IDXCoreRepository _coreRepo;
         private readonly IDXGenericRepository _genericRepo;

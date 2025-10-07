@@ -36,7 +36,7 @@ namespace IV.DataProvider.Persistence.Services
             }
             else if (this._configuration["Database:Type"].Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase))
             {
-                this._container.AddSingleton<ISQLQueryHelper, PGSQLQueryHelper>();
+                this._container.AddSingleton<IDXSQLQueryHelper, PGSQLQueryHelper>();
             }
 
             //container.AddSingleton<CoreRepository>(new InjectionConstructor(new object[] { config.Database.ConnectionString, serviceProvider.GetService<ISQLQueryHelper>() }));
@@ -46,9 +46,9 @@ namespace IV.DataProvider.Persistence.Services
             this._container.AddSingleton<IDXCoreRepository, CoreRepository>();
 
             this._container.AddSingleton<IDXGenericRepository, GenericRepository>();
-            this._container.AddSingleton<IDataService, DataService>();
-            this._container.AddSingleton<ICoreModelHandler, CoreModelHandler>();
-            this._container.AddSingleton<IMigrationService, MigrationService>();
+            this._container.AddSingleton<IDXUnitDataService, DataService>();
+            this._container.AddSingleton<IDXCoreHandler, CoreModelHandler>();
+            this._container.AddSingleton<IDXMigrationService, MigrationService>();
         }
 
         public void InitCache(IServiceProvider serviceProvider)
@@ -77,7 +77,7 @@ namespace IV.DataProvider.Persistence.Services
         {
             var dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
             var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
-            var migrationService = serviceProvider.GetService<IMigrationService>();
+            var migrationService = serviceProvider.GetService<IDXMigrationService>();
 
             coreRepo.CreateDataBase();
 
@@ -90,7 +90,7 @@ namespace IV.DataProvider.Persistence.Services
 
         public void InitCustomData(IServiceProvider serviceProvider, string configPath)
         {
-            var migrationService = serviceProvider.GetService<IMigrationService>();
+            var migrationService = serviceProvider.GetService<IDXMigrationService>();
 
             migrationService.LoadStructure(configPath);
         }

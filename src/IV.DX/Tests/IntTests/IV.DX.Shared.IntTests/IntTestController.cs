@@ -16,9 +16,9 @@ namespace IV.DX.Shared.IntTests
     {
         protected Action _finalizationAction;
      
-        protected IDataService _dataService;        
+        protected IDXUnitDataService _dataService;        
         protected IServiceProvider ServiceProvider;
-        protected IMigrationService _migrationService;
+        protected IDXMigrationService _migrationService;
 
         protected ITestOutputHelper Output;
 
@@ -65,8 +65,8 @@ namespace IV.DX.Shared.IntTests
             coreDI.InitEntityHandlerProvider(this.ServiceProvider);
 
             // Resolve types
-            this._dataService = this.ServiceProvider.GetService<IDataService>();
-            this._migrationService = this.ServiceProvider.GetService<IMigrationService>();
+            this._dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
+            this._migrationService = this.ServiceProvider.GetService<IDXMigrationService>();
         }
 
         public void Dispose()

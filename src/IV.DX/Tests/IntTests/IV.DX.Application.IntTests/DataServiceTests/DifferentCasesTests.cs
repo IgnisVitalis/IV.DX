@@ -16,13 +16,13 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
 {
     public class DifferentCasesTests : IntTestController
     {
-        IDataService _dataService;
+        IDXUnitDataService _dataService;
         IDXGenericRepository _genericRepo;
 
         public DifferentCasesTests(ITestOutputHelper output)
             : base(output)
         {
-            this._dataService = this.ServiceProvider.GetService<IDataService>();
+            this._dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
             this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
         }
 

@@ -12,14 +12,14 @@ namespace IV.DX.Application.DataHandlers
     internal class DXUnitDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXUnitDefinitionUnit>
     {
         private readonly IDXStructureRepository _dataStructureRepo;
-        private readonly IDataService _dataService;
+        private readonly IDXUnitDataService _dataService;
         private readonly IDXGenericRepository _genericRepo;
 
         public DXUnitDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._dataService = serviceProvider.GetService<IDataService>();
+            this._dataService = serviceProvider.GetService<IDXUnitDataService>();
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 

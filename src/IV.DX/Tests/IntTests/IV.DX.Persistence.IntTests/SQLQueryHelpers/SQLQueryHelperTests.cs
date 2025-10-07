@@ -25,13 +25,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
         public IEnumerable<TDocumentObject> documents;
         public IEnumerable<TBookObject> books;
 
-        ISQLQueryHelper _sqlQueryHelper;
+        IDXSQLQueryHelper _sqlQueryHelper;
         IDXGenericRepository _genericRepo;
 
         public SQLQueryHelperTests(ITestOutputHelper output)
             : base(output)
         {
-            this._sqlQueryHelper = this.ServiceProvider.GetService<ISQLQueryHelper>();
+            this._sqlQueryHelper = this.ServiceProvider.GetService<IDXSQLQueryHelper>();
             this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
 
             InitData();
@@ -685,7 +685,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
         [Fact]
         public void CheckOperators_UsingBaseOperators_CorrectQuery()
         {
-            foreach (var operation in ESQLOperators.BaseOperators)
+            foreach (var operation in DXSQLOperators.BaseOperators)
             {
                 // Init
                 var whereExpression = $"R(User).R(Position).TPositionGenBlock.Name {operation} 'Master'";

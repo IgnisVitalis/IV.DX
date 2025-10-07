@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal static class ESQLOperators
+    internal static class DXSQLOperators
     {
         public static readonly string[] BaseOperators = ["!=", "=", "<>"];
     }

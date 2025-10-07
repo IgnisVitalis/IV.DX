@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Abstractions
 {
-    public interface ICoreModelHandler
+    public interface IDXCoreHandler
     {
         bool IsItemExisting(string typeName, Guid id, DXUnitHandlerBaseContext context);
 

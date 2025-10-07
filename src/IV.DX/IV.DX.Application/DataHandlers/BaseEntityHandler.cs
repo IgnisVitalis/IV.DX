@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class BaseEntityHandler<T> : IEntityHandler<T> where T : ESQLObject
+    internal class BaseEntityHandler<T> : IDXUnitHandler<T> where T : ESQLObject
     {
-        private readonly ICoreModelHandler _coreModelHandler;
+        private readonly IDXCoreHandler _coreModelHandler;
 
         protected readonly string TypeName = AttributeReader.GetESQLObjectTypeName(typeof(T));
 
@@ -20,7 +20,7 @@ namespace IV.DX.Application.DataHandlers
 
         public BaseEntityHandler(IServiceProvider serviceProvider)
         {
-            this._coreModelHandler = serviceProvider.GetService<ICoreModelHandler>();
+            this._coreModelHandler = serviceProvider.GetService<IDXCoreHandler>();
         }
 
         public virtual bool OnDeleting(Guid id, DXUnitHandlerBaseContext context)

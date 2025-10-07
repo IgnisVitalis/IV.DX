@@ -7,15 +7,15 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Application
 {
-    internal class MigrationService : IMigrationService
+    internal class MigrationService : IDXMigrationService
     {
-        private readonly IDataService _dataService;
+        private readonly IDXUnitDataService _dataService;
         private readonly IDXGenericRepository _genericRepo;
         private readonly Mutex mutex = new Mutex(false, "1e12dbb9-37ff-4e13-a9b1-5efa33cea05f");
 
         public MigrationService(
             IDXGenericRepository genericRepo,
-            IDataService dataService)
+            IDXUnitDataService dataService)
         {
             this._genericRepo = genericRepo;
             this._dataService = dataService;

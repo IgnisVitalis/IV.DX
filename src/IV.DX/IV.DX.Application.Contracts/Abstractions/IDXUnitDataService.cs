@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Contracts.Abstractions
 {
-    public interface IDataService
+    public interface IDXUnitDataService
     {
         IEnumerable<T> GetItems<T>(TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();
         IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, TypeOfEntityLoading typeOfLoading = TypeOfEntityLoading.Full) where T : ESQLObject, new();

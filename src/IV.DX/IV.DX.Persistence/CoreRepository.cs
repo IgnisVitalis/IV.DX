@@ -16,11 +16,11 @@ namespace IV.DX.Persistence
     internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         protected string _connectionStr;
-        protected ISQLQueryHelper _queryHelper;
+        protected IDXSQLQueryHelper _queryHelper;
 
         public CoreRepository(
             IConfiguration configuration,
-            ISQLQueryHelper queryHelper)
+            IDXSQLQueryHelper queryHelper)
         {
             this._connectionStr = configuration["Database:ConnectionString"];
             this._queryHelper = queryHelper;

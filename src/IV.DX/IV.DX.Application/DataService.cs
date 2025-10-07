@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application
 {
-    internal class DataService : IDataService
+    internal class DataService : IDXUnitDataService
     {
         private readonly IDXCoreRepository _coreRepo;
 

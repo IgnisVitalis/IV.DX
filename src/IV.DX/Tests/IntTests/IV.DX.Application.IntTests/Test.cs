@@ -25,7 +25,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
         public void Test2()
         {
             // Init
-            IDataService dataService = this.ServiceProvider.GetService<IDataService>();
+            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
 
             var dataSource1 = new DataSource("TBookObject", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
             var dataSource2 = new DataSource("TUserObject", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
@@ -47,7 +47,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
         public void Test3()
         {
             // Init
-            IDataService dataService = this.ServiceProvider.GetService<IDataService>();
+            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
 
             var entityMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new DXUnitHandlerBaseContext()).ConvertToJObject().ToString();
             var objectMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new DXUnitHandlerBaseContext()).ConvertToJObject().ToString();
@@ -63,7 +63,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
         public void Test4()
         {
                        // Init
-            IDataService dataService = this.ServiceProvider.GetService<IDataService>();
+            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
             IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetService<IDXStructureRepository>();
             IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetService<IDXEnumCoreRepository>();
 
@@ -79,9 +79,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests
     {
         public IList<DataSource> Subscribers { get; private set; }
 
-        public IDataService DataService { get; private set; }
+        public IDXUnitDataService DataService { get; private set; }
 
-        public DataSourceManager(IDataService dataService)
+        public DataSourceManager(IDXUnitDataService dataService)
         {
             this.Subscribers = new List<DataSource>();
             this.DataService = dataService;

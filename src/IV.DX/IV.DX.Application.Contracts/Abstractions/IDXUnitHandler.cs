@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Abstractions
 {
-    public interface IEntityHandler<T> where T : ESQLObject
+    public interface IDXUnitHandler<T> where T : ESQLObject
     {
         bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context);
         void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context);
