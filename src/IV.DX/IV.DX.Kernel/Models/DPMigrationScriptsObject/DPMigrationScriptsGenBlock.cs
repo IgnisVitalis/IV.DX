@@ -3,7 +3,7 @@ using IV.DX.Kernel.Attributes;
 namespace IV.DX.Kernel.Models
 {
     [DXElement("DXMigrationScriptsMainElement")]
-    public class DXMigrationScriptsMainElement : ESQLBlock
+    public class DXMigrationScriptsMainElement : DXElement
     {
         [DXColumn("FilePath")]
         public string FilePath { get; set; }

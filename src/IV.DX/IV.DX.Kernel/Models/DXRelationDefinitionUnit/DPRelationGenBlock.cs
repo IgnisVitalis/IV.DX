@@ -4,7 +4,7 @@ using IV.DX.Kernel.Enums;
 namespace IV.DX.Kernel.Models
 {
     [DXElement("DXRelationDefinitionMainElement")]
-    public class DXRelationDefinitionMainElement : ESQLBlock
+    public class DXRelationDefinitionMainElement : DXElement
     {
         [DXColumn("RelationType")]
         public DXRelationTypeEnum RelationType { get; set; }

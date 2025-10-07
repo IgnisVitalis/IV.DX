@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Models
 {
-    public class DXInheritanceInitCore : ESQLObject
+    public class DXInheritanceInitCore : DXUnit
     {
         public string BaseEntity { get; set; }
         public string ChildEntity { get; set; }

@@ -4,20 +4,20 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXGenericRepository
     {
-        IEnumerable<T> GetItems<T>() where T : ESQLObject;
-        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : ESQLObject;
-        IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : ESQLObject;
-        T GetItem<T>(Guid id) where T : ESQLObject;
-        Guid Insert(ESQLObject esqlObject);
-        Guid Update(ESQLObject esqlObject);
-        bool Delete(ESQLObject esqlObject);
-        Guid InsertOrUpdate(ESQLObject esqlObject);
+        IEnumerable<T> GetItems<T>() where T : DXUnit;
+        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : DXUnit;
+        IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : DXUnit;
+        T GetItem<T>(Guid id) where T : DXUnit;
+        Guid Insert(DXUnit esqlObject);
+        Guid Update(DXUnit esqlObject);
+        bool Delete(DXUnit esqlObject);
+        Guid InsertOrUpdate(DXUnit esqlObject);
         bool AddRelation(DPRelationItemObject relationItem);
         bool RemoveRelation(DPRelationItemObject relationItem);
 
-        Guid InsertBlock(string esqlModelType, ESQLBlock esqlBlock);
-        Guid UpdateBlock(string esqlModelType, ESQLBlock esqlBlock);
-        bool DeleteBlock(ESQLBlock esqlBlock);
-        T GetBlock<T>(Guid id) where T : ESQLBlock;
+        Guid InsertBlock(string esqlModelType, DXElement esqlBlock);
+        Guid UpdateBlock(string esqlModelType, DXElement esqlBlock);
+        bool DeleteBlock(DXElement esqlBlock);
+        T GetBlock<T>(Guid id) where T : DXElement;
     }
 }

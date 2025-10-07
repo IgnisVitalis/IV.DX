@@ -1,16 +1,13 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLMultiItemsContainer<T> where T : ESQLBlock
+    public class DXMultiElementsContainer<T> where T : DXElement
     {
-        public ESQLMultiItemsContainer()
+        public DXMultiElementsContainer()
         {
-            this.Mode = ModeForMultiItems.Full;
+            this.Mode = MultiElementsMode.Full;
         }
 
-        public ModeForMultiItems Mode { get; set; }
+        public MultiElementsMode Mode { get; set; }
         private IEnumerable<T> _announced;
         public IEnumerable<T> Announced
         {

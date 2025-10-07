@@ -18,7 +18,7 @@ namespace IV.DX.Application
             this._coreRepo = coreRepo;
         }
 
-        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
@@ -29,7 +29,7 @@ namespace IV.DX.Application
             return esqlObject;
         }
 
-        public IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
@@ -38,7 +38,7 @@ namespace IV.DX.Application
             return result;
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
@@ -47,7 +47,7 @@ namespace IV.DX.Application
             return result;
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
 
@@ -56,7 +56,7 @@ namespace IV.DX.Application
             return result;
         }
 
-        public Guid Insert(ESQLObject esqlObject, DXUnitHandlerBaseContext context)
+        public Guid Insert(DXUnit esqlObject, DXUnitHandlerBaseContext context)
         {
             var handler = EntityHandlerProvider.GetHandler(esqlObject);
 
@@ -67,7 +67,7 @@ namespace IV.DX.Application
             return result;
         }
 
-        public Guid InsertOrUpdate(ESQLObject esqlObject, DXUnitHandlerBaseContext context)
+        public Guid InsertOrUpdate(DXUnit esqlObject, DXUnitHandlerBaseContext context)
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
@@ -83,7 +83,7 @@ namespace IV.DX.Application
             }
         }
 
-        public Guid Update(ESQLObject esqlObject, DXUnitHandlerBaseContext context)
+        public Guid Update(DXUnit esqlObject, DXUnitHandlerBaseContext context)
         {
             var handler = EntityHandlerProvider.GetHandler(esqlObject);
 
@@ -99,7 +99,7 @@ namespace IV.DX.Application
             return this.Delete(typeName, id, new DXUnitHandlerBaseContext());
         }
 
-        public bool Delete(ESQLObject esqlObject)
+        public bool Delete(DXUnit esqlObject)
         {
             return this.Delete(esqlObject, new DXUnitHandlerBaseContext());
         }
@@ -163,22 +163,22 @@ namespace IV.DX.Application
             }
         }
 
-        public IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             return this.GetItems<T>(new DXUnitHandlerBaseContext());
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             return this.GetItems<T>(ids, new DXUnitHandlerBaseContext());
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             return this.GetItems<T>(esqlWhereExpression, new DXUnitHandlerBaseContext());
         }
 
-        public T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : ESQLObject, new()
+        public T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             return this.GetItem<T>(id, new DXUnitHandlerBaseContext());
         }
@@ -188,17 +188,17 @@ namespace IV.DX.Application
             return this.IsItemExisting(id, type, new DXUnitHandlerBaseContext());
         }
 
-        public Guid Insert(ESQLObject esqlObject)
+        public Guid Insert(DXUnit esqlObject)
         {
             return this.Insert(esqlObject, new DXUnitHandlerBaseContext());
         }
 
-        public Guid Update(ESQLObject esqlObject)
+        public Guid Update(DXUnit esqlObject)
         {
             return this.Update(esqlObject, new DXUnitHandlerBaseContext());
         }
 
-        public Guid InsertOrUpdate(ESQLObject esqlObject)
+        public Guid InsertOrUpdate(DXUnit esqlObject)
         {
             return this.InsertOrUpdate(esqlObject, new DXUnitHandlerBaseContext());
         }
@@ -344,7 +344,7 @@ namespace IV.DX.Application
             return this.InsertOrUpdate(jObject, new DXUnitHandlerBaseContext());
         }
 
-        public bool Delete(ESQLObject esqlObject, DXUnitHandlerBaseContext context)
+        public bool Delete(DXUnit esqlObject, DXUnitHandlerBaseContext context)
         {
             return this.Delete(esqlObject.GetTypeName(), esqlObject.ID, context);
         }

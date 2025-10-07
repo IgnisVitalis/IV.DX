@@ -21,7 +21,7 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DXObjectDefinitionUnit",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                    DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                     {
                         Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
@@ -63,7 +63,7 @@ namespace IV.DX.Persistence.CoreData
                         BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
 
                     },
-                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                    DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                     {
                         Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
@@ -127,7 +127,7 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DXRelationDefinitionUnit",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                    DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                     {
                         Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {
@@ -151,7 +151,7 @@ namespace IV.DX.Persistence.CoreData
                         Name = "DXMigrationScriptsUnit",
                         Kind = DXObjectKindEnum.Core
                     },
-                    DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                    DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                     {
                         Announced = new List<DXElementInUnitDefinitionMainElement>()
                         {

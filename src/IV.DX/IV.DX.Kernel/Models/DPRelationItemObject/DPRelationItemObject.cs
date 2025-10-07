@@ -3,7 +3,7 @@
 namespace IV.DX.Kernel.Models
 {
     [DXUnit("DPRelationItemObject")]
-    public class DPRelationItemObject : ESQLObject
+    public class DPRelationItemObject : DXUnit
     {
         public DPRelationItemGenBlock DPRelationItemGenBlock { get; set; }
     }

@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Converters
 {
     internal static class DXModelConverter
     {
-        public static ESQLModelDefinition GetESQLModelDefinition<T>() where T : ESQLObject
+        public static ESQLModelDefinition GetESQLModelDefinition<T>() where T : DXUnit
         {
             Type type = typeof(T);
 

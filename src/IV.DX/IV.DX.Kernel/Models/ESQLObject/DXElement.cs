@@ -3,7 +3,7 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    public abstract class ESQLBlock
+    public abstract class DXElement
     {
         [DXColumn("ID", "ID", DXLoadingType.Base)]
         public Guid ID { get; set; }

@@ -56,7 +56,7 @@ namespace IV.DX.Kernel.Helpers
             return attributes;
         }
 
-        public static IEnumerable<PropertyInfo> GetSingleItemInfos(ESQLObject esqlObject)
+        public static IEnumerable<PropertyInfo> GetSingleItemInfos(DXUnit esqlObject)
         {
             if (esqlObject == null)
                 return null;
@@ -68,12 +68,12 @@ namespace IV.DX.Kernel.Helpers
         {
             var singleFragmentProperties =
               GetProperties(type)
-              .Where(x => x.PropertyType.BaseType == typeof(ESQLBlock)).ToList();
+              .Where(x => x.PropertyType.BaseType == typeof(DXElement)).ToList();
 
             return singleFragmentProperties;
         }
 
-        public static IEnumerable<PropertyInfo> GetMultiItemInfos(ESQLObject esqlObject)
+        public static IEnumerable<PropertyInfo> GetMultiItemInfos(DXUnit esqlObject)
         {
             if (esqlObject == null)
                 return null;
@@ -86,7 +86,7 @@ namespace IV.DX.Kernel.Helpers
             var multiFragmentProperties =
                 GetProperties(type)
                 .Where(x => x.PropertyType.IsGenericType).ToList()
-                .Where(x => x.PropertyType.GetGenericTypeDefinition() == typeof(ESQLMultiItemsContainer<>)).ToList();
+                .Where(x => x.PropertyType.GetGenericTypeDefinition() == typeof(DXMultiElementsContainer<>)).ToList();
 
             return multiFragmentProperties;
         }
@@ -125,7 +125,7 @@ namespace IV.DX.Kernel.Helpers
             return attribute.BlockName;
         }
 
-        public static string GetTypeName(this ESQLObject esqlObject)
+        public static string GetTypeName(this DXUnit esqlObject)
         {
             return GetESQLObjectTypeName(esqlObject.GetType());
         }

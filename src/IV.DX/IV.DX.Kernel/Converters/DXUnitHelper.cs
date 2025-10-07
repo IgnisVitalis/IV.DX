@@ -8,14 +8,14 @@ namespace IV.DX.Kernel.Converters
     public static class DXUnitHelper
     {
         #region Convert to JObject       
-        public static JObject ConvertToJObject(this ESQLObject esqlObject)
+        public static JObject ConvertToJObject(this DXUnit esqlObject)
         {
             var result = esqlObject.ConvertToESQLModel().ConvertToJObject();
 
             return result;
         }
 
-        public static string ConvertToString(this ESQLObject esqlObject)
+        public static string ConvertToString(this DXUnit esqlObject)
         {
             var jObject = esqlObject.ConvertToJObject();
             var str = jObject.ToString();
@@ -25,7 +25,7 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Convert to ESQLModel
-        public static ESQLModel ConvertToESQLModel(this ESQLObject esqlObject)
+        public static ESQLModel ConvertToESQLModel(this DXUnit esqlObject)
         {
             var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
                    (esqlObject.GetType());
@@ -49,13 +49,13 @@ namespace IV.DX.Kernel.Converters
             return model;
         }
 
-        private static IEnumerable<ESQLSingleItem> GetESQLSingleItems(ESQLObject esqlObject)
+        private static IEnumerable<ESQLSingleItem> GetESQLSingleItems(DXUnit esqlObject)
         {
             var singleItemInfos = AttributeReader.GetSingleItemInfos(esqlObject);
 
             var result = singleItemInfos.Select(x =>
             {
-                var singleItem = x.GetValue(esqlObject) as ESQLBlock;
+                var singleItem = x.GetValue(esqlObject) as DXElement;
 
                 ESQLSingleItem esqlSingleItem = new ESQLSingleItem()
                 {
@@ -75,7 +75,7 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static ESQLSingleItem ConvertToSingleItem(this ESQLBlock block)
+        public static ESQLSingleItem ConvertToSingleItem(this DXElement block)
         {
             var blockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(block.GetType());
 
@@ -93,7 +93,7 @@ namespace IV.DX.Kernel.Converters
             return singleItem;
         }
 
-        private static IEnumerable<ESQLMultiItem> GetESQLMutliItems(ESQLObject esqlObject)
+        private static IEnumerable<ESQLMultiItem> GetESQLMutliItems(DXUnit esqlObject)
         {
             var multiItemsInfos = AttributeReader.GetMultiItemInfos(esqlObject);
 
@@ -102,10 +102,10 @@ namespace IV.DX.Kernel.Converters
                 var multiItemType = x.PropertyType;
                 var multiItemValue = x.GetValue(esqlObject);
 
-                ModeForMultiItems mode = ModeForMultiItems.Full;
+                MultiElementsMode mode = MultiElementsMode.Full;
 
                 if (multiItemValue != null)
-                    mode = (ModeForMultiItems)multiItemType.GetProperty("Mode").GetValue(multiItemValue);
+                    mode = (MultiElementsMode)multiItemType.GetProperty("Mode").GetValue(multiItemValue);
 
                 ESQLMultiItem multiItem = new ESQLMultiItem()
                 {
@@ -116,7 +116,7 @@ namespace IV.DX.Kernel.Converters
 
                 if (multiItemValue != null)
                 {
-                    var announcedArray = multiItemType.GetProperty(Constants.Announced).GetValue(multiItemValue) as IEnumerable<ESQLBlock>;
+                    var announcedArray = multiItemType.GetProperty(Constants.Announced).GetValue(multiItemValue) as IEnumerable<DXElement>;
 
                     if (announcedArray != null)
                     {
@@ -139,7 +139,7 @@ namespace IV.DX.Kernel.Converters
                         multiItem.Announced = new List<ESQLItem>();
                     }
 
-                    var destroyedArray = multiItemType.GetProperty(Constants.Deleted).GetValue(multiItemValue) as IEnumerable<ESQLBlock>;
+                    var destroyedArray = multiItemType.GetProperty(Constants.Deleted).GetValue(multiItemValue) as IEnumerable<DXElement>;
 
                     if (destroyedArray != null)
                     {
@@ -169,7 +169,7 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        private static JObject GetContent(ESQLBlock block)
+        private static JObject GetContent(DXElement block)
         {
             if (block == null)
                 return null;
@@ -190,7 +190,7 @@ namespace IV.DX.Kernel.Converters
             return jObject;
         }
 
-        private static JObject GetContent(ESQLObject obj)
+        private static JObject GetContent(DXUnit obj)
         {
             if (obj == null)
                 return null;
@@ -213,7 +213,7 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Create instance
-        public static T CreateInstance<T>(string json) where T : ESQLObject
+        public static T CreateInstance<T>(string json) where T : DXUnit
         {
             var esqlModel = ESQLModel.CreateInstance(json);
 
@@ -222,14 +222,14 @@ namespace IV.DX.Kernel.Converters
             return esqlObj;
         }
 
-        public static IEnumerable<T> CreateInstances<T>(string json) where T : ESQLObject
+        public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit
         {
             var jArray = JArray.Parse(json);
 
             return CreateInstances<T>(jArray);
         }
 
-        public static IEnumerable<T> CreateInstances<T>(JArray jArray) where T : ESQLObject
+        public static IEnumerable<T> CreateInstances<T>(JArray jArray) where T : DXUnit
         {
             foreach (JObject jObject in jArray)
             {
@@ -237,7 +237,7 @@ namespace IV.DX.Kernel.Converters
             }
         }
 
-        public static T CreateInstance<T>(JObject jObject) where T : ESQLObject
+        public static T CreateInstance<T>(JObject jObject) where T : DXUnit
         {
             var esqlModel = ESQLModel.CreateInstance(jObject);
 
@@ -246,35 +246,35 @@ namespace IV.DX.Kernel.Converters
             return esqlObj;
         }
 
-        public static ESQLObject CreateInstance(string json, Type type)
+        public static DXUnit CreateInstance(string json, Type type)
         {
             var esqlModel = ESQLModel.CreateInstance(json);
 
-            ESQLObject esqlObj = CreateInstance(esqlModel, type);
+            DXUnit esqlObj = CreateInstance(esqlModel, type);
 
             return esqlObj;
         }
 
-        public static ESQLObject CreateInstance(JObject jObject, Type type)
+        public static DXUnit CreateInstance(JObject jObject, Type type)
         {
             var esqlModel = ESQLModel.CreateInstance(jObject);
 
-            ESQLObject esqlObj = CreateInstance(esqlModel, type);
+            DXUnit esqlObj = CreateInstance(esqlModel, type);
 
             return esqlObj;
         }
 
-        public static T CreateInstance<T>(ESQLModel model) where T : ESQLObject
+        public static T CreateInstance<T>(ESQLModel model) where T : DXUnit
         {
             return ConvertToESQLObject(model, typeof(T)) as T;
         }
 
-        public static ESQLObject CreateInstance(ESQLModel model, Type type)
+        public static DXUnit CreateInstance(ESQLModel model, Type type)
         {
             return ConvertToESQLObject(model, type);
         }
 
-        public static T CreateBlockInstance<T>(ESQLSingleItem item) where T : ESQLBlock
+        public static T CreateBlockInstance<T>(ESQLSingleItem item) where T : DXElement
         {
             if (item == null)
                 return null;
@@ -289,7 +289,7 @@ namespace IV.DX.Kernel.Converters
             return singleFragmetInstance as T;
         }
 
-        private static ESQLObject ConvertToESQLObject(ESQLModel model, Type type)
+        private static DXUnit ConvertToESQLObject(ESQLModel model, Type type)
         {
             if (model == null)
                 return null;
@@ -356,11 +356,11 @@ namespace IV.DX.Kernel.Converters
                 }
             }
 
-            return (ESQLObject)obj;
+            return (DXUnit)obj;
         }
         #endregion
 
-        public static string ConvertToJArrayString(this IEnumerable<ESQLObject> objects)
+        public static string ConvertToJArrayString(this IEnumerable<DXUnit> objects)
         {
             if (objects == null)
                 return null;

@@ -56,9 +56,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestBlock"
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Target,
+                    Mode = MultiElementsMode.Target,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         intCln
@@ -74,7 +74,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntity"
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
@@ -126,9 +126,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             Assert.Equal(item.TestBlock.IntCln, existingItem.TestBlock.IntCln);
 
             // Action
-            blockDescObject.DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+            blockDescObject.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
             {
-                Mode = ModeForMultiItems.Target,
+                Mode = MultiElementsMode.Target,
                 Announced = new List<DXColumnDefinitionElement>()
                 {
                     strCln
@@ -214,9 +214,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Insert(blockToDelete);
 
             // Action
-            entity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+            entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
-                Mode = ModeForMultiItems.Target,
+                Mode = MultiElementsMode.Target,
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
                 {
                     new DXElementInUnitDefinitionMainElement()
@@ -249,9 +249,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             Assert.Equal(blockToAdd.ID, announcedBlock.DXElementDefinitionUnit);
 
             // Action
-            existingEntity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+            existingEntity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
-                Mode = ModeForMultiItems.Target,
+                Mode = MultiElementsMode.Target,
                 Deleted = new List<DXElementInUnitDefinitionMainElement>()
                 {
                     announcedBlock
@@ -290,7 +290,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntity8f9e7d6c5b4a"
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
@@ -368,7 +368,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     ID = Guid.NewGuid(),
                     Name = "TestEntityc44f7a2dd5f6"
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
@@ -408,9 +408,9 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Insert(entity);
 
             // Action
-            entity.DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+            entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
-                Mode = ModeForMultiItems.Target,               
+                Mode = MultiElementsMode.Target,               
                 Deleted = entity.DXElementInUnitDefinitionMainElement.Announced,
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
             };
@@ -424,26 +424,26 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
     }
 
     [DXUnit("TestEntity")]
-    public class TestEntity : ESQLObject
+    public class TestEntity : DXUnit
     {
         public TestBlock TestBlock { get; set; }
     }
 
     [DXElement("TestBlock")]
-    public class TestBlock : ESQLBlock
+    public class TestBlock : DXElement
     {
         [DXColumn("IntCln")]
         public int IntCln { get; set; }
     }
 
     [DXUnit("TestEntity")]
-    public class TestEntityModified : ESQLObject
+    public class TestEntityModified : DXUnit
     {
         public TestBlockModified TestBlock { get; set; }
     }
 
     [DXElement("TestBlock")]
-    public class TestBlockModified : ESQLBlock
+    public class TestBlockModified : DXElement
     {
         [DXColumn("StrCln")]
         public string StrCln { get; set; }

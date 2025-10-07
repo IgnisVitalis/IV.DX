@@ -29,9 +29,9 @@ namespace IV.DX.Persistence
                     Name = "DXElementInUnitTypeEnum",
                     Kind = DXObjectKindEnum.Core,
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -49,9 +49,9 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -74,9 +74,9 @@ namespace IV.DX.Persistence
                     Name = "DXColumnTypeEnum",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -94,9 +94,9 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -120,9 +120,9 @@ namespace IV.DX.Persistence
                     Name = "DXObjectKindEnum",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -140,9 +140,9 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -165,9 +165,9 @@ namespace IV.DX.Persistence
                     Name = "DXRelationTypeEnum",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -185,9 +185,9 @@ namespace IV.DX.Persistence
                         }
                     }
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -221,9 +221,9 @@ namespace IV.DX.Persistence
                     Name = "DXUnitDefinitionMainElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -269,9 +269,9 @@ namespace IV.DX.Persistence
                     Name = "DXColumnDefinitionElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -354,9 +354,9 @@ namespace IV.DX.Persistence
                     Name = "DXUniqueColumnsElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -394,9 +394,9 @@ namespace IV.DX.Persistence
                     Name = "DXUnitInheritanceElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -432,9 +432,9 @@ namespace IV.DX.Persistence
                     Name = "DXElementInUnitDefinitionMainElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -473,9 +473,9 @@ namespace IV.DX.Persistence
                     Name = "DXRelationDefinitionMainElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -580,9 +580,9 @@ namespace IV.DX.Persistence
                         }
                     },
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -610,9 +610,9 @@ namespace IV.DX.Persistence
                     Name = "DXMigrationScriptsMainElement",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
@@ -685,9 +685,9 @@ namespace IV.DX.Persistence
                         }
                     },
                 },
-                DXUniqueColumnsElement = new ESQLMultiItemsContainer<DXUniqueColumnsElement>()
+                DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
@@ -724,9 +724,9 @@ namespace IV.DX.Persistence
                     Name = "DXObjectDefinitionUnit",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
                         new DXElementInUnitDefinitionMainElement()
@@ -767,9 +767,9 @@ namespace IV.DX.Persistence
                     ID = new Guid("710b1d0b-9343-4739-8126-ab4baefe5763"),
                     BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
                         new DXElementInUnitDefinitionMainElement()
@@ -835,9 +835,9 @@ namespace IV.DX.Persistence
                     Name = "DXRelationDefinitionUnit",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
                         new DXElementInUnitDefinitionMainElement()
@@ -861,9 +861,9 @@ namespace IV.DX.Persistence
                     Name = "DXMigrationScriptsUnit",
                     Kind = DXObjectKindEnum.Core
                 },
-                DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXElementInUnitDefinitionMainElement>()
                     {
                         new DXElementInUnitDefinitionMainElement()

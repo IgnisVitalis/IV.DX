@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Models
 {
-    public enum ModeForMultiItems
+    public enum MultiElementsMode
     {
         Full = 1,
         Target = 2

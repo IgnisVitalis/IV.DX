@@ -4,7 +4,7 @@ using IV.DX.Kernel.Models;
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
     [DXElement("TBookChapterBlock")]
-    public class TBookChapterBlock : ESQLBlock
+    public class TBookChapterBlock : DXElement
     {
         [DXColumn("Text")]
         public string Text { get; set; }

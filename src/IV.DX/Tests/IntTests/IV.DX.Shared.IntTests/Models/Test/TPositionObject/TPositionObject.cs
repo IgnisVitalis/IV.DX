@@ -6,7 +6,7 @@ using System;
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
     [DXUnit("TPositionObject")]
-    public class TPositionObject : ESQLObject
+    public class TPositionObject : DXUnit
     {
         [DXColumn("User", "User", DXLoadingType.Base)]
         public Guid? User { get; set; }

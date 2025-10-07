@@ -28,7 +28,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 
             int number = 1;
 
-            result.TBookChapterBlock = new ESQLMultiItemsContainer<TBookChapterBlock>()
+            result.TBookChapterBlock = new DXMultiElementsContainer<TBookChapterBlock>()
             {
                 Announced = text.Select(x =>
                     new TBookChapterBlock()

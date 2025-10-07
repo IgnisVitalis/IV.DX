@@ -19,9 +19,9 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                     Kind = DXObjectKindEnum.Custom,
                     ObjectID = id
                 },
-                DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = ModeForMultiItems.Full,
+                    Mode = MultiElementsMode.Full,
                     Announced = new List<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()

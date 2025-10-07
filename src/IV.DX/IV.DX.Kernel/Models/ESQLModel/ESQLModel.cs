@@ -131,7 +131,7 @@ namespace IV.DX.Kernel.Models
                 BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
                 Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
-                Mode = (ModeForMultiItems)property.Value[Constants.Mode].Value<int>()
+                Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()
             };
 
             return esqlMultiItem;

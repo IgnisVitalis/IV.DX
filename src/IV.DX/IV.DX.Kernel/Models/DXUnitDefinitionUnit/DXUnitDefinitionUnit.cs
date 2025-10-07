@@ -9,6 +9,6 @@ namespace IV.DX.Kernel.Models
         public static ESQLModelDefinition ESQLModelDefinition { get; } = DXModelConverter.GetESQLModelDefinition<DXUnitDefinitionUnit>();
 
         public DXUnitInheritanceElement DXUnitInheritanceElement { get; set; }
-        public ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement> DXElementInUnitDefinitionMainElement { get; set; }
+        public DXMultiElementsContainer<DXElementInUnitDefinitionMainElement> DXElementInUnitDefinitionMainElement { get; set; }
     }
 }

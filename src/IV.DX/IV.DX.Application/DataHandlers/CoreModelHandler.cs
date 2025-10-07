@@ -44,7 +44,7 @@ namespace IV.DX.Application.DataHandlers
         {
         }
 
-        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context) where T : ESQLObject
+        public T GetItem<T>(Guid id, DXUnitHandlerBaseContext context) where T : DXUnit
         {
             return this._genericRepo.GetItem<T>(id);
         }

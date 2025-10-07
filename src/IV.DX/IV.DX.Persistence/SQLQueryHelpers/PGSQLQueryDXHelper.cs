@@ -407,7 +407,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             DXObjectDefinitionUnit dataBlockNew,
             DXObjectDefinitionUnit dataBlockExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
                 var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
@@ -452,7 +452,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             DXObjectDefinitionUnit dataBlockNew,
             DXObjectDefinitionUnit dataBlockExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
                 var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
@@ -473,7 +473,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             DXObjectDefinitionUnit dataBlockNew,
             DXObjectDefinitionUnit dataBlockExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == ModeForMultiItems.Target)
+            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
                 var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 

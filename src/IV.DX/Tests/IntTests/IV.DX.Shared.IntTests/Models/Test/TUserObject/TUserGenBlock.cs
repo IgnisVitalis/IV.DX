@@ -5,7 +5,7 @@ using System;
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
     [DXElement("TUserGenBlock")]
-    public class TUserGenBlock : ESQLBlock
+    public class TUserGenBlock : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }

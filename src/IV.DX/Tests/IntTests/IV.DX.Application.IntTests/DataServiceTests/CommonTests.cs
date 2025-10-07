@@ -37,7 +37,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         ID = id,
                         Name = $"Name{id}"
                     },
-                    TBookChapterBlock = new ESQLMultiItemsContainer<TBookChapterBlock>()
+                    TBookChapterBlock = new DXMultiElementsContainer<TBookChapterBlock>()
                     {
                         Announced = new List<TBookChapterBlock>()
                         {

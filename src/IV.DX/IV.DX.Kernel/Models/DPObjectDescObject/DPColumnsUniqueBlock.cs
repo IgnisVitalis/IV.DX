@@ -3,7 +3,7 @@
 namespace IV.DX.Kernel.Models
 {
     [DXElement("DXUniqueColumnsElement")]
-    public class DXUniqueColumnsElement : ESQLBlock
+    public class DXUniqueColumnsElement : DXElement
     {
         [DXColumn("Columns")]
         public string Columns { get; set; }

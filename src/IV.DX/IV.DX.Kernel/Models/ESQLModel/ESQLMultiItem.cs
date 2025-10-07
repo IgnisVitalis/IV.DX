@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     {
         public string Name { get; set; }
         public DXElementAttribute BlockInfo { get; set; }
-        public ModeForMultiItems Mode { get; set; }
+        public MultiElementsMode Mode { get; set; }
         public IEnumerable<ESQLItem> Announced { get; set; }
         public IEnumerable<ESQLItem> Deleted { get; set; }
 
@@ -89,7 +89,7 @@ namespace IV.DX.Kernel.Models
             {
                 BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
-                Mode = (ModeForMultiItems)jProperty[Constants.Mode].Value<int>()
+                Mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>()
             };
 
             if (jProperty[Constants.Announced] == null)

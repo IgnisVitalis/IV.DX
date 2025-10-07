@@ -4,7 +4,7 @@ using IV.DX.Kernel.Enums;
 namespace IV.DX.Kernel.Models
 {
     [DXElement("DXColumnDefinitionElement")]
-    public class DXColumnDefinitionElement : ESQLBlock
+    public class DXColumnDefinitionElement : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }

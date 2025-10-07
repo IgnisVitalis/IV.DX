@@ -107,7 +107,7 @@ namespace IV.DX.Application.DataHandlers
 
             var objectInfoFromDB = this.GetObjectInfoFromDB(entity);
 
-            if (objectInfoFromDB == null || entity.DXElementInUnitDefinitionMainElement.Mode == ModeForMultiItems.Target)
+            if (objectInfoFromDB == null || entity.DXElementInUnitDefinitionMainElement.Mode == MultiElementsMode.Target)
             {
                 this.ProcessBlocksInEntityRelationsUsingTragetMode(entity);
             }

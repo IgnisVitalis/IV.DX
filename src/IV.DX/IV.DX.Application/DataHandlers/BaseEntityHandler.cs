@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class BaseEntityHandler<T> : IDXUnitHandler<T> where T : ESQLObject
+    internal class BaseEntityHandler<T> : IDXUnitHandler<T> where T : DXUnit
     {
         private readonly IDXCoreHandler _coreModelHandler;
 

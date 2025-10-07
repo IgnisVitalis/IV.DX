@@ -39,8 +39,8 @@ namespace IV.DX.Application
             {
                 _baseHandler =
                   Tuple.Create(
-                       typeof(ESQLObject),
-                      (object)(new BaseEntityHandler<ESQLObject>(serviceProvider)));
+                       typeof(DXUnit),
+                      (object)(new BaseEntityHandler<DXUnit>(serviceProvider)));
 
                 Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandler(serviceProvider));
                 Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandler(serviceProvider));
@@ -66,7 +66,7 @@ namespace IV.DX.Application
             }
         }
 
-        public static void Register<T>(IDXUnitHandler<T> handler) where T : ESQLObject, new()
+        public static void Register<T>(IDXUnitHandler<T> handler) where T : DXUnit, new()
         {
             lock (obj)
             {
@@ -84,7 +84,7 @@ namespace IV.DX.Application
             }
         }
 
-        public static IDXUnitHandler<ESQLObject> GetHandler(string entityName)
+        public static IDXUnitHandler<DXUnit> GetHandler(string entityName)
         {
             Tuple<Type, object> existinghandler = null;
 
@@ -117,14 +117,14 @@ namespace IV.DX.Application
             return _handlers.ContainsKey(entityName);
         }
 
-        public static IDXUnitHandler<ESQLObject> GetHandler(ESQLObject esqlObject)
+        public static IDXUnitHandler<DXUnit> GetHandler(DXUnit esqlObject)
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
             return GetHandler(typeName);
         }
 
-        private class CompositeEntityBehavior : IDXUnitHandler<ESQLObject>
+        private class CompositeEntityBehavior : IDXUnitHandler<DXUnit>
         {
             private readonly Tuple<Type, object> _handler;
 
@@ -153,27 +153,27 @@ namespace IV.DX.Application
                 (this._handler.Item2 as dynamic).OnGetting(model, context);
             }
 
-            public void OnInserted(ESQLObject entity, DXUnitHandlerBaseContext context)
+            public void OnInserted(DXUnit entity, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnInserted(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnInserting(ESQLObject entity, DXUnitHandlerBaseContext context)
+            public Guid OnInserting(DXUnit entity, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).OnInserting(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public void OnUpdated(ESQLObject entity, DXUnitHandlerBaseContext context)
+            public void OnUpdated(DXUnit entity, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnUpdated(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnUpdating(ESQLObject entity, DXUnitHandlerBaseContext context)
+            public Guid OnUpdating(DXUnit entity, DXUnitHandlerBaseContext context)
             {
                 return (this._handler.Item2 as dynamic).OnUpdating(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            private dynamic VerifyRecord(Type recordType, ESQLObject dbRecord)
+            private dynamic VerifyRecord(Type recordType, DXUnit dbRecord)
             {
                 if (!recordType.IsInstanceOfType(dbRecord))
                 {

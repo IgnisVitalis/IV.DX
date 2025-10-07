@@ -5,7 +5,7 @@ using IV.DX.Kernel.Models;
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
     [DXUnit("TUserObject")]
-    public class TUserObject : ESQLObject
+    public class TUserObject : DXUnit
     {
         public TUserGenBlock TUserGenBlock { get; set; }
     }

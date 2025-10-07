@@ -30,9 +30,9 @@ namespace IV.DX.Application.DataHandlers
             // TODO: [70fba884-2cef-4d5f-937d-3efc17365a25]     
             switch (obj.DXColumnDefinitionElement.Mode)
             {
-                case ModeForMultiItems.Full:
+                case MultiElementsMode.Full:
                     break;
-                case ModeForMultiItems.Target:
+                case MultiElementsMode.Target:
                     ProcessEnumRelationsUsingTargetMode(obj);
                     break;
                 default:
@@ -113,7 +113,7 @@ namespace IV.DX.Application.DataHandlers
         {
             var objectInfoFromDB = this.GetObjectInfoFromDB(objectInfoIncome);
 
-            if (objectInfoFromDB == null || objectInfoIncome.DXColumnDefinitionElement.Mode == ModeForMultiItems.Full)
+            if (objectInfoFromDB == null || objectInfoIncome.DXColumnDefinitionElement.Mode == MultiElementsMode.Full)
             {
                 if (objectInfoIncome is DXElementDefinitionUnit)
                 {

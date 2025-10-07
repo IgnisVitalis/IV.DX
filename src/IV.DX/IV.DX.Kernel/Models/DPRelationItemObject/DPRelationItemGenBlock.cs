@@ -3,7 +3,7 @@
 namespace IV.DX.Kernel.Models
 {
     [DXElement("DPRelationItemGenBlock")]
-    public class DPRelationItemGenBlock : ESQLBlock
+    public class DPRelationItemGenBlock : DXElement
     {
         [DXColumn("ObjectTypeNameLeft")]
         public string ObjectTypeNameLeft { get; set; }

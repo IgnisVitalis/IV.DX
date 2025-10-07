@@ -407,7 +407,7 @@ namespace IV.DX.Persistence
             IEnumerable<DataRow> rows)
         {
             multiItem.Announced = rows.OfType<DataRow>().Select(x => this.GetESQLItem(x, fragmentDefinition)).ToList();
-            multiItem.Mode = ModeForMultiItems.Full;
+            multiItem.Mode = MultiElementsMode.Full;
         }
 
         private ESQLItem GetESQLItem(DataRow row, ESQLBlockDefinition structure)
@@ -812,7 +812,7 @@ namespace IV.DX.Persistence
 
             DataTable dataTable = dataSet.Tables[blockName];
 
-            if (block.Mode == ModeForMultiItems.Full)
+            if (block.Mode == MultiElementsMode.Full)
             {
                 this.ProcessAnnouncedItems(block, dataTable, dataSet.DataSetName);
 
@@ -830,7 +830,7 @@ namespace IV.DX.Persistence
                 }
 
             }
-            else if (block.Mode == ModeForMultiItems.Target)
+            else if (block.Mode == MultiElementsMode.Target)
             {
                 this.ProcessAnnouncedItems(block, dataTable, dataSet.DataSetName);
                 this.ProcessDeletedItems(block, dataTable);

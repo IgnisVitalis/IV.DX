@@ -30,9 +30,9 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                     Value = 1,
                     TimeStamp = new DateTime(2020, 12, 1)
                 },
-                MyBlockMultiItems = new ESQLMultiItemsContainer<MyBlock>()
+                MyBlockMultiItems = new DXMultiElementsContainer<MyBlock>()
                 {
-                    Mode = ModeForMultiItems.Target,
+                    Mode = MultiElementsMode.Target,
                     Announced = new List<MyBlock>()
                     {
                         new MyBlock()
@@ -107,7 +107,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                     {
                         Name = "MyBlockMultiItems",
                         BlockInfo = new DXElementAttribute("MyBlockDefinition"),
-                        Mode = ModeForMultiItems.Target,
+                        Mode = MultiElementsMode.Target,
                         Announced = new List<ESQLItem>()
                         {
                             new ESQLItem()
@@ -183,15 +183,15 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
     }
 
     [DXUnit("MyObjectDefinition")]
-    internal class MyObject : ESQLObject
+    internal class MyObject : DXUnit
     {
         public MyBlock MyBlockSingleItem { get; set; }
 
-        public ESQLMultiItemsContainer<MyBlock> MyBlockMultiItems { get; set; }
+        public DXMultiElementsContainer<MyBlock> MyBlockMultiItems { get; set; }
     }
 
     [DXElement("MyBlockDefinition")]
-    internal class MyBlock : ESQLBlock
+    internal class MyBlock : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }

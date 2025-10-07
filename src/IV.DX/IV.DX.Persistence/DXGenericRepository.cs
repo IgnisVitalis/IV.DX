@@ -15,7 +15,7 @@ namespace IV.DX.Persistence
             this._coreRepo = coreRepo;
         }
 
-        public bool Delete(ESQLObject esqlObject)
+        public bool Delete(DXUnit esqlObject)
         {
             ArgumentNullException.ThrowIfNull(esqlObject);
 
@@ -24,35 +24,35 @@ namespace IV.DX.Persistence
             return this._coreRepo.Delete(asqlTypeName, esqlObject.ID);
         }
 
-        public T GetItem<T>(Guid id) where T : ESQLObject
+        public T GetItem<T>(Guid id) where T : DXUnit
         {
             var result = this._coreRepo.GetItem(DXModelConverter.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
             return DXUnitHelper.CreateInstance<T>(result);
         }
 
-        public IEnumerable<T> GetItems<T>() where T : ESQLObject
+        public IEnumerable<T> GetItems<T>() where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : ESQLObject
+        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : ESQLObject
+        public IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), esqlWhereExpression, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public Guid Insert(ESQLObject esqlObject)
+        public Guid Insert(DXUnit esqlObject)
         {
             ArgumentNullException.ThrowIfNull(esqlObject);
 
@@ -61,7 +61,7 @@ namespace IV.DX.Persistence
             return this._coreRepo.Insert(esqlModel);
         }
 
-        public Guid InsertOrUpdate(ESQLObject esqlObject)
+        public Guid InsertOrUpdate(DXUnit esqlObject)
         {
             var definition = DXModelConverter.GetESQLModelDefinition(esqlObject.GetType());
 
@@ -77,7 +77,7 @@ namespace IV.DX.Persistence
             }
         }
 
-        public Guid Update(ESQLObject esqlObject)
+        public Guid Update(DXUnit esqlObject)
         {
             ArgumentNullException.ThrowIfNull(esqlObject);
 
@@ -110,7 +110,7 @@ namespace IV.DX.Persistence
                 relationItem.DPRelationItemGenBlock.ObjectIDRight);
         }
 
-        public Guid InsertBlock(string esqlModelType, ESQLBlock esqlBlock)
+        public Guid InsertBlock(string esqlModelType, DXElement esqlBlock)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
             ArgumentNullException.ThrowIfNull(esqlBlock);
@@ -120,7 +120,7 @@ namespace IV.DX.Persistence
             return this._coreRepo.InsertSingleBlock(esqlModelType, singleBlock);
         }
 
-        public Guid UpdateBlock(string esqlModelType, ESQLBlock esqlBlock)
+        public Guid UpdateBlock(string esqlModelType, DXElement esqlBlock)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
             ArgumentNullException.ThrowIfNull(esqlBlock);
@@ -130,7 +130,7 @@ namespace IV.DX.Persistence
             return this._coreRepo.UpdateSingleBlock(esqlModelType, singleBlock);
         }
 
-        public bool DeleteBlock(ESQLBlock esqlBlock)
+        public bool DeleteBlock(DXElement esqlBlock)
         {
             ArgumentNullException.ThrowIfNull(esqlBlock);
 
@@ -139,7 +139,7 @@ namespace IV.DX.Persistence
             return this._coreRepo.DeleteSingleBlock(singleBlock.Name, esqlBlock.ID);
         }
 
-        public T GetBlock<T>(Guid id) where T : ESQLBlock
+        public T GetBlock<T>(Guid id) where T : DXElement
         {
             var blockName = AttributeReader.GetESQLBlockTypeName(typeof(T));
 

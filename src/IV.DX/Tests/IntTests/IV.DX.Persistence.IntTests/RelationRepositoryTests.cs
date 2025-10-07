@@ -849,94 +849,94 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         }
 
         [DXUnit("RelTableLeft43a1")]
-        private class RelTableLeft1 : ESQLObject
+        private class RelTableLeft1 : DXUnit
         {
         }
 
         [DXUnit("RelTableRight43a1")]
-        private class RelTableRight1 : ESQLObject
+        private class RelTableRight1 : DXUnit
         {
             [DXColumn("RelTableLeftRelation")]
             public Guid RelTableLeftRelation { get; set; }
         }
 
         [DXUnit("RelTableLeft2")]
-        private class RelTableLeft2 : ESQLObject
+        private class RelTableLeft2 : DXUnit
         {
             [DXColumn("RelTableRightRelation")]
             public Guid RelTableRightRelation { get; set; }
         }
 
         [DXUnit("RelTableRight2")]
-        private class RelTableRight2 : ESQLObject
+        private class RelTableRight2 : DXUnit
         {
         }
 
         [DXUnit("RelTableLeft3")]
-        private class RelTableLeft3 : ESQLObject
+        private class RelTableLeft3 : DXUnit
         {
         }
 
         [DXUnit("RelTableRight3")]
-        private class RelTableRight3 : ESQLObject
+        private class RelTableRight3 : DXUnit
         {
             [DXColumn("RelTableLeftRelation")]
             public Guid RelTableLeftRelation { get; set; }
         }
 
         [DXUnit("RelTableLeft4")]
-        private class RelTableLeft4 : ESQLObject
+        private class RelTableLeft4 : DXUnit
         {
             [DXColumn("RelTableRightRelation")]
             public Guid RelTableRightRelation { get; set; }
         }
 
         [DXUnit("RelTableRight4")]
-        private class RelTableRight4 : ESQLObject
+        private class RelTableRight4 : DXUnit
         {
         }
 
         [DXUnit("RelTableLeft5")]
-        private class RelTableLeft5 : ESQLObject
+        private class RelTableLeft5 : DXUnit
         {
         }
 
         [DXUnit("RelTableRight5")]
-        private class RelTableRight5 : ESQLObject
+        private class RelTableRight5 : DXUnit
         {
             [DXColumn("RelTableLeftRelation")]
             public Guid? RelTableLeftRelation { get; set; }
         }
 
         [DXUnit("RelTableLeft6")]
-        private class RelTableLeft6 : ESQLObject
+        private class RelTableLeft6 : DXUnit
         {
             [DXColumn("RelTableRightRelation")]
             public Guid? RelTableRightRelation { get; set; }
         }
 
         [DXUnit("RelTableRight6")]
-        private class RelTableRight6 : ESQLObject
+        private class RelTableRight6 : DXUnit
         {
         }
 
         [DXUnit("RelTableLeft7")]
-        private class RelTableLeft7 : ESQLObject
+        private class RelTableLeft7 : DXUnit
         {
         }
 
         [DXUnit("RelTableRight7")]
-        private class RelTableRight7 : ESQLObject
+        private class RelTableRight7 : DXUnit
         {
         }
 
         [DXUnit("RelTableLeft8")]
-        private class RelTableLeft8 : ESQLObject
+        private class RelTableLeft8 : DXUnit
         {
         }
 
         [DXUnit("RelTableRight8")]
-        private class RelTableRight8 : ESQLObject
+        private class RelTableRight8 : DXUnit
         {
             [DXColumn("RelTableLeftRelation")]
             public Guid? RelTableLeftRelation { get; set; }
@@ -966,8 +966,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             DXRelationDefinitionUnit relationInfo,
             DXObjectDefinitionUnit objLeft,
             DXObjectDefinitionUnit objRight,
-            ESQLObject relTableFirstLeft,
-            ESQLObject relTableFirstRight)
+            DXUnit relTableFirstLeft,
+            DXUnit relTableFirstRight)
         {
             #region Checking core repo to process N to M relation using one entry from left list and one entry from right list
             var actionsForAdding = new List<Action>() {

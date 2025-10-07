@@ -5,7 +5,7 @@ using IV.DX.Kernel.Enums;
 namespace IV.DX.Kernel.Models
 {
     [DXUnit("DXRelationDefinitionUnit")]
-    public class DXRelationDefinitionUnit : ESQLObject
+    public class DXRelationDefinitionUnit : DXUnit
     {
         public static ESQLModelDefinition ESQLModelDefinition { get; } = DXModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
 

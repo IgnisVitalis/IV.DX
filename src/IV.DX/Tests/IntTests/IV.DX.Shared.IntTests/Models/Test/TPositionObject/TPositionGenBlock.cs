@@ -4,7 +4,7 @@ using IV.DX.Kernel.Models;
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
     [DXElement("TPositionGenBlock")]
-    public class TPositionGenBlock : ESQLBlock
+    public class TPositionGenBlock : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }
