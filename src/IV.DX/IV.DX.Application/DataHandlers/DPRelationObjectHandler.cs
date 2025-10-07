@@ -19,7 +19,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override Guid OnInserting(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
         {
-            var existingRelation = this._dataStructureRepo.GetRelation(entity.DPRelationGenBlock.ObjectNameLeft, entity.DPRelationGenBlock.RelationNameLeft, entity.DPRelationGenBlock.ObjectNameRight, entity.DPRelationGenBlock.RelationNameRight);
+            var existingRelation = this._dataStructureRepo.GetRelation(entity.DXRelationDefinitionMainElement.ObjectNameLeft, entity.DXRelationDefinitionMainElement.RelationNameLeft, entity.DXRelationDefinitionMainElement.ObjectNameRight, entity.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation != null)
             {
@@ -61,7 +61,7 @@ namespace IV.DX.Application.DataHandlers
 
             this._dataStructureRepo.DropDataStructure(entity);
 
-            var existingRelation = this._dataStructureRepo.GetRelation(entity.DPRelationGenBlock.ObjectNameLeft, entity.DPRelationGenBlock.RelationNameLeft, entity.DPRelationGenBlock.ObjectNameRight, entity.DPRelationGenBlock.RelationNameRight);
+            var existingRelation = this._dataStructureRepo.GetRelation(entity.DXRelationDefinitionMainElement.ObjectNameLeft, entity.DXRelationDefinitionMainElement.RelationNameLeft, entity.DXRelationDefinitionMainElement.ObjectNameRight, entity.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation == null)
                 return false;

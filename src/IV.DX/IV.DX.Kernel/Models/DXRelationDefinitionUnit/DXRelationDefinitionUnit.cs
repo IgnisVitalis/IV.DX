@@ -9,7 +9,7 @@ namespace IV.DX.Kernel.Models
     {
         public static ESQLModelDefinition ESQLModelDefinition { get; } = ModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
 
-        public DPRelationGenBlock DPRelationGenBlock { get; set; }
+        public DXRelationDefinitionMainElement DXRelationDefinitionMainElement { get; set; }
 
         public DXRelationDefinitionUnit CreateInvertedRelationObject()
         {
@@ -18,30 +18,30 @@ namespace IV.DX.Kernel.Models
             return new DXRelationDefinitionUnit()
             {
                 ID = objectId,
-                DPRelationGenBlock = new DPRelationGenBlock()
+                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = objectId,
-                    ObjectNameLeft = this.DPRelationGenBlock.ObjectNameRight,
-                    ObjectNameRight = this.DPRelationGenBlock.ObjectNameLeft,
-                    RelationNameLeft = this.DPRelationGenBlock.RelationNameRight,
-                    RelationNameRight = this.DPRelationGenBlock.RelationNameLeft,
-                    RelationTable = this.DPRelationGenBlock.RelationTable,
-                    RelationType = this.GetInvertedRelationType(this.DPRelationGenBlock.RelationType),
-                    RelationColumnNameLeft = this.DPRelationGenBlock.RelationColumnNameRight,
-                    RelationColumnNameRight = this.DPRelationGenBlock.RelationColumnNameLeft,
-                    RelationColumnTypeLeft = this.DPRelationGenBlock.RelationColumnTypeRight,
-                    RelationColumnTypeRight = this.DPRelationGenBlock.RelationColumnTypeLeft
+                    ObjectNameLeft = this.DXRelationDefinitionMainElement.ObjectNameRight,
+                    ObjectNameRight = this.DXRelationDefinitionMainElement.ObjectNameLeft,
+                    RelationNameLeft = this.DXRelationDefinitionMainElement.RelationNameRight,
+                    RelationNameRight = this.DXRelationDefinitionMainElement.RelationNameLeft,
+                    RelationTable = this.DXRelationDefinitionMainElement.RelationTable,
+                    RelationType = this.GetInvertedRelationType(this.DXRelationDefinitionMainElement.RelationType),
+                    RelationColumnNameLeft = this.DXRelationDefinitionMainElement.RelationColumnNameRight,
+                    RelationColumnNameRight = this.DXRelationDefinitionMainElement.RelationColumnNameLeft,
+                    RelationColumnTypeLeft = this.DXRelationDefinitionMainElement.RelationColumnTypeRight,
+                    RelationColumnTypeRight = this.DXRelationDefinitionMainElement.RelationColumnTypeLeft
                 }
             };
         }
 
         public string GetQueryForInvertedRelationObject()
         {
-            return $@"DPRelationGenBlock.ObjectNameRight = '{this.DPRelationGenBlock.ObjectNameLeft}' 
-                    AND DPRelationGenBlock.ObjectNameLeft = '{this.DPRelationGenBlock.ObjectNameRight}'
-                    AND DPRelationGenBlock.RelationNameRight = '{this.DPRelationGenBlock.RelationNameLeft}'
-                    AND DPRelationGenBlock.RelationNameLeft = '{this.DPRelationGenBlock.RelationNameRight}'";
+            return $@"DXRelationDefinitionMainElement.ObjectNameRight = '{this.DXRelationDefinitionMainElement.ObjectNameLeft}' 
+                    AND DXRelationDefinitionMainElement.ObjectNameLeft = '{this.DXRelationDefinitionMainElement.ObjectNameRight}'
+                    AND DXRelationDefinitionMainElement.RelationNameRight = '{this.DXRelationDefinitionMainElement.RelationNameLeft}'
+                    AND DXRelationDefinitionMainElement.RelationNameLeft = '{this.DXRelationDefinitionMainElement.RelationNameRight}'";
         }
 
         private DPRelationTypeEnum GetInvertedRelationType(DPRelationTypeEnum value)

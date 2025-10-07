@@ -149,7 +149,7 @@ namespace IV.DX.Persistence.CoreData
                     DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("5b452ce3-cb10-4e7d-91e9-16c0fb569350"),
-                        Name = "DPEntityInheritanceBlock",
+                        Name = "DXUnitInheritanceElement",
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -166,14 +166,14 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
-                #region DPRelationGenBlock
+                #region DXRelationDefinitionMainElement
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed"),
                     DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("5786ba46-1374-475a-baef-446954feea3f"),
-                        Name = "DPRelationGenBlock",
+                        Name = "DXRelationDefinitionMainElement",
                         Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()

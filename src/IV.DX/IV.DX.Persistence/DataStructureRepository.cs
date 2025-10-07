@@ -100,7 +100,7 @@ namespace IV.DX.Persistence
         {
             string result = "";
 
-            switch (obj.DPRelationGenBlock.RelationType)
+            switch (obj.DXRelationDefinitionMainElement.RelationType)
             {
                 case DPRelationTypeEnum.ManyToMany: result = this._queryHelper.GetSQLQueryToCreateRelationManyToMany(obj, this._connectionStr); break;
                 case DPRelationTypeEnum.ManyToOne: result = this.GetSQLQueryToCreateRelationManyToOne(obj); break;
@@ -147,7 +147,7 @@ namespace IV.DX.Persistence
 
         private string GetSQLQueryToCreateRelationZeroOneToZeroOne(DXRelationDefinitionUnit obj)
         {
-            obj.DPRelationGenBlock.RelationTable = obj.DPRelationGenBlock.ObjectNameRight;
+            obj.DXRelationDefinitionMainElement.RelationTable = obj.DXRelationDefinitionMainElement.ObjectNameRight;
 
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, true);
         }
@@ -156,7 +156,7 @@ namespace IV.DX.Persistence
         {
             string result = "";
 
-            switch (obj.DPRelationGenBlock.RelationType)
+            switch (obj.DXRelationDefinitionMainElement.RelationType)
             {
                 case DPRelationTypeEnum.ManyToMany: result = this.GetSQLQueryToDeleteRelationManyToMany(obj); break;
                 case DPRelationTypeEnum.ManyToOne: result = this._queryHelper.GetSQLQueryToDeleteRelationManyToOne(obj); break;
@@ -175,17 +175,17 @@ namespace IV.DX.Persistence
         {
             string relationTableName;
 
-            if (string.IsNullOrEmpty(entity.DPRelationGenBlock.RelationTable))
+            if (string.IsNullOrEmpty(entity.DXRelationDefinitionMainElement.RelationTable))
             {
                 var existingModel = this.GetItem(ModelConverter.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), entity.ID, TypeOfEntityLoading.Full);
 
                 var existingEntity = ESQLObjectHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 
-                relationTableName = existingEntity.DPRelationGenBlock.RelationTable;
+                relationTableName = existingEntity.DXRelationDefinitionMainElement.RelationTable;
             }
             else
             {
-                relationTableName = entity.DPRelationGenBlock.RelationTable;
+                relationTableName = entity.DXRelationDefinitionMainElement.RelationTable;
             }
 
             return this._queryHelper.GetSQLQueryToDropTable(relationTableName);
@@ -212,16 +212,16 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetBaseEntity(DXUnitDefinitionUnit derivedEntity)
         {
-            if (derivedEntity == null || derivedEntity.DPEntityInheritanceBlock?.BaseEntity == null)
+            if (derivedEntity == null || derivedEntity.DXUnitInheritanceElement?.BaseEntity == null)
                 return null;
 
-            var result = EntityInfos.SingleOrDefault(x => x.ID == derivedEntity.DPEntityInheritanceBlock.BaseEntity);
+            var result = EntityInfos.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = EntityInfos.SingleOrDefault(x => x.ID == derivedEntity.DPEntityInheritanceBlock.BaseEntity);
+                result = EntityInfos.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
             }
 
             return result;
@@ -346,20 +346,20 @@ namespace IV.DX.Persistence
         public DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
         {
             var existingRelation = this.RelationInfos.SingleOrDefault(x =>
-                x.DPRelationGenBlock.ObjectNameLeft == objectNameLeft
-                && x.DPRelationGenBlock.RelationNameLeft == relationNameLeft
-                && x.DPRelationGenBlock.ObjectNameRight == objectNameRight
-                && x.DPRelationGenBlock.RelationNameRight == relationNameRight);
+                x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
+                && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
+                && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
+                && x.DXRelationDefinitionMainElement.RelationNameRight == relationNameRight);
 
             if (existingRelation == null)
             {
                 this.UpdateCache();
 
                 existingRelation = this.RelationInfos.SingleOrDefault(x =>
-                x.DPRelationGenBlock.ObjectNameLeft == objectNameLeft
-                && x.DPRelationGenBlock.RelationNameLeft == relationNameLeft
-                && x.DPRelationGenBlock.ObjectNameRight == objectNameRight
-                && x.DPRelationGenBlock.RelationNameRight == relationNameRight);
+                x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
+                && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
+                && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
+                && x.DXRelationDefinitionMainElement.RelationNameRight == relationNameRight);
             }
 
             return existingRelation;

@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPRelationGenBlock")]
-    public class DPRelationGenBlock : ESQLBlock
+    [ESQLBlockDefinition("DXRelationDefinitionMainElement")]
+    public class DXRelationDefinitionMainElement : ESQLBlock
     {
         [ESQLColumnDefinition("RelationType")]
         public DPRelationTypeEnum RelationType { get; set; }
@@ -126,7 +126,7 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public DPRelationGenBlock()
+        public DXRelationDefinitionMainElement()
         {
             this.Kind = DXObjectKindEnum.Custom;
         }

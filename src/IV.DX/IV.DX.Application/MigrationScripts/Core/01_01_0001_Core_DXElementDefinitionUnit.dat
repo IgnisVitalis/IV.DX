@@ -123,7 +123,7 @@
     "ID": "eeb499d0-4e20-41aa-8a24-9981c3cbf511",
     "DXUnitDefinitionMainElement": {
       "ID": "5b452ce3-cb10-4e7d-91e9-16c0fb569350",
-      "Name": "DPEntityInheritanceBlock",
+      "Name": "DXUnitInheritanceElement",
       "Kind": 1
     }
   },
@@ -132,7 +132,7 @@
     "ID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
     "DXUnitDefinitionMainElement": {
       "ID": "5786ba46-1374-475a-baef-446954feea3f",
-      "Name": "DPRelationGenBlock",
+      "Name": "DXRelationDefinitionMainElement",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {

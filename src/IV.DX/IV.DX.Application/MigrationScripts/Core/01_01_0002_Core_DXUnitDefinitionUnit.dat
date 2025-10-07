@@ -36,7 +36,7 @@
       "Name": "DXUnitDefinitionUnit",
       "Kind": 1
     },
-    "DPEntityInheritanceBlock": {
+    "DXUnitInheritanceElement": {
       "ID": "710b1d0b-9343-4739-8126-ab4baefe5763",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
@@ -59,7 +59,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
-    "DPEntityInheritanceBlock": {
+    "DXUnitInheritanceElement": {
       "ID": "61b4c43f-cc9b-460e-80f9-9f2a7f4f7ca9",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
@@ -72,7 +72,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "baa62331-fa09-47c6-8d33-f2b25ec29bf1",
-    "DPEntityInheritanceBlock": {
+    "DXUnitInheritanceElement": {
       "ID": "408785e8-7e42-4e7f-b60a-d5c686911612",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },

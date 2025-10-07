@@ -216,14 +216,14 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             if (motherNodeAsEntityNode != null)
             {
                 relationInfo = relationInfos.SingleOrDefault(x =>
-                    x.DPRelationGenBlock.ObjectNameLeft == motherNodeAsEntityNode.RelationInfo.DPRelationGenBlock.ObjectNameRight
-                    && x.DPRelationGenBlock.RelationNameRight == entityNode.RelationName);
+                    x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsEntityNode.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight
+                    && x.DXRelationDefinitionMainElement.RelationNameRight == entityNode.RelationName);
             }
             else if (motherNodeAsCoreNode != null)
             {
                 relationInfo = relationInfos.SingleOrDefault(x =>
-                    x.DPRelationGenBlock.ObjectNameLeft == motherNodeAsCoreNode.Value
-                    && x.DPRelationGenBlock.RelationNameRight == entityNode.RelationName);
+                    x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsCoreNode.Value
+                    && x.DXRelationDefinitionMainElement.RelationNameRight == entityNode.RelationName);
             }
 
             entityNode.RelationInfo = relationInfo;

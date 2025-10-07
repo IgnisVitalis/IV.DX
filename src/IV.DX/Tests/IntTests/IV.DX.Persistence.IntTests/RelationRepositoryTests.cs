@@ -71,7 +71,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Equal("Relation_RelTableLeft7_RelTableRight7_0", createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Equal("Relation_RelTableLeft7_RelTableRight7_0", createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -136,7 +136,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -201,7 +201,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -265,7 +265,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -415,7 +415,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -565,7 +565,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -680,7 +680,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Null(createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Null(createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -795,7 +795,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
-            Assert.Equal("RelTableRight8", createdRelationEntry.DPRelationGenBlock.RelationTable);
+            Assert.Equal("RelTableRight8", createdRelationEntry.DXRelationDefinitionMainElement.RelationTable);
 
             this.CheckInvertedRelationEntry(createdRelationEntry, createdInvertedRelationEntry);
 
@@ -945,21 +945,21 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         private void CheckDXRelationDefinitionUnit(DXRelationDefinitionUnit objRelationInfo, DXRelationDefinitionUnit createdEntry)
         {
             Assert.Equal(objRelationInfo.ID, createdEntry.ID);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.ID, createdEntry.DPRelationGenBlock.ID);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.ObjectID, createdEntry.DPRelationGenBlock.ObjectID);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.RelationType, createdEntry.DPRelationGenBlock.RelationType);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.RelationNameLeft, createdEntry.DPRelationGenBlock.RelationNameLeft);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.RelationNameRight, createdEntry.DPRelationGenBlock.RelationNameRight);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.ObjectNameLeft, createdEntry.DPRelationGenBlock.ObjectNameLeft);
-            Assert.Equal(objRelationInfo.DPRelationGenBlock.ObjectNameRight, createdEntry.DPRelationGenBlock.ObjectNameRight);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ID, createdEntry.DXRelationDefinitionMainElement.ID);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ObjectID, createdEntry.DXRelationDefinitionMainElement.ObjectID);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationType, createdEntry.DXRelationDefinitionMainElement.RelationType);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationNameLeft, createdEntry.DXRelationDefinitionMainElement.RelationNameLeft);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationNameRight, createdEntry.DXRelationDefinitionMainElement.RelationNameRight);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ObjectNameLeft, createdEntry.DXRelationDefinitionMainElement.ObjectNameLeft);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ObjectNameRight, createdEntry.DXRelationDefinitionMainElement.ObjectNameRight);
         }
 
         private void CheckInvertedRelationEntry(DXRelationDefinitionUnit createdRelationEntry, DXRelationDefinitionUnit createdInvertedRelationEntry)
         {
-            Assert.Equal(createdRelationEntry.DPRelationGenBlock.ObjectNameLeft, createdInvertedRelationEntry.DPRelationGenBlock.ObjectNameRight);
-            Assert.Equal(createdRelationEntry.DPRelationGenBlock.ObjectNameRight, createdInvertedRelationEntry.DPRelationGenBlock.ObjectNameLeft);
-            Assert.Equal(createdRelationEntry.DPRelationGenBlock.RelationNameLeft, createdInvertedRelationEntry.DPRelationGenBlock.RelationNameRight);
-            Assert.Equal(createdRelationEntry.DPRelationGenBlock.RelationNameRight, createdInvertedRelationEntry.DPRelationGenBlock.RelationNameLeft);
+            Assert.Equal(createdRelationEntry.DXRelationDefinitionMainElement.ObjectNameLeft, createdInvertedRelationEntry.DXRelationDefinitionMainElement.ObjectNameRight);
+            Assert.Equal(createdRelationEntry.DXRelationDefinitionMainElement.ObjectNameRight, createdInvertedRelationEntry.DXRelationDefinitionMainElement.ObjectNameLeft);
+            Assert.Equal(createdRelationEntry.DXRelationDefinitionMainElement.RelationNameLeft, createdInvertedRelationEntry.DXRelationDefinitionMainElement.RelationNameRight);
+            Assert.Equal(createdRelationEntry.DXRelationDefinitionMainElement.RelationNameRight, createdInvertedRelationEntry.DXRelationDefinitionMainElement.RelationNameLeft);
         }
 
         private void CheckingMethodsForRelations(
@@ -1013,10 +1013,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                     Assert.Single(relationIdsLeft);
                     Assert.Equal(relTableFirstLeft.ID, relationIdsLeft.Single());
 
-                    if (relationInfo.DPRelationGenBlock.RelationType != DPRelationTypeEnum.ManyToOne
-                        && relationInfo.DPRelationGenBlock.RelationType != DPRelationTypeEnum.OneToMany
-                        && relationInfo.DPRelationGenBlock.RelationType != DPRelationTypeEnum.OneToZeroOne
-                        && relationInfo.DPRelationGenBlock.RelationType != DPRelationTypeEnum.ZeroOneToOne)
+                    if (relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.ManyToOne
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.OneToMany
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.OneToZeroOne
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.ZeroOneToOne)
                     {
                         // Action
                         actionForRemoving.Invoke();

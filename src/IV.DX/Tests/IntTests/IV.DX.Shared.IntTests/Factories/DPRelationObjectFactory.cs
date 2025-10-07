@@ -18,7 +18,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
             DXRelationDefinitionUnit obj = new DXRelationDefinitionUnit()
             {
                 ID = id,
-                DPRelationGenBlock = new DPRelationGenBlock()
+                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

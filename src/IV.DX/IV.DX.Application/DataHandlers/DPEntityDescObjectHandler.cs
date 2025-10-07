@@ -179,7 +179,7 @@ namespace IV.DX.Application.DataHandlers
         {
             var result = this.GetRelationObject(entity, block);
 
-            result.DPRelationGenBlock.RelationType = this.ConvertBlockInEntityRelationTypeToCommonRelationType(relationType);
+            result.DXRelationDefinitionMainElement.RelationType = this.ConvertBlockInEntityRelationTypeToCommonRelationType(relationType);
 
             return result;
         }
@@ -189,7 +189,7 @@ namespace IV.DX.Application.DataHandlers
             return new DXRelationDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
-                DPRelationGenBlock = new DPRelationGenBlock()
+                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectNameLeft = entity.DXUnitDefinitionMainElement.Name,
@@ -203,10 +203,10 @@ namespace IV.DX.Application.DataHandlers
 
         private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
-            var query = $"DPRelationGenBlock.ObjectNameLeft = '{entity.DXUnitDefinitionMainElement.Name}' " +
-               $"AND DPRelationGenBlock.ObjectNameRight = '{block.DXUnitDefinitionMainElement.Name}' " +
-               $"AND DPRelationGenBlock.RelationNameLeft = '{entity.DXUnitDefinitionMainElement.Name}ID' " +
-               $"AND DPRelationGenBlock.RelationNameRight = '{block.DXUnitDefinitionMainElement.Name}'";
+            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{entity.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{block.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{entity.DXUnitDefinitionMainElement.Name}ID' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{block.DXUnitDefinitionMainElement.Name}'";
 
             var items = this._genericRepo.GetItems<DXRelationDefinitionUnit>(query);
 

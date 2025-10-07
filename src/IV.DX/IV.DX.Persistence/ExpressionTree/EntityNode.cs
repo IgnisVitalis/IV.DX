@@ -64,7 +64,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             var motherAsCoreNode = this.Mother as CoreNode;
             var motherAsEntityNode = this.Mother as EntityNode;
 
-            switch (this.RelationInfo.DPRelationGenBlock.RelationType)
+            switch (this.RelationInfo.DXRelationDefinitionMainElement.RelationType)
             {
                 case DPRelationTypeEnum.OneToZeroOne:
                 case DPRelationTypeEnum.OneToMany:
@@ -72,8 +72,8 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                     {
                         JoinedQueryInfo queryInfo = new JoinedQueryInfo()
                         {
-                            JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameRight,
-                            JoinedTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameLeft,
+                            JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight,
+                            JoinedTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameLeft,
                             MainTableKey = "ID",
                             JoinedTableAlias = this.TableNameAliasBase
                         };
@@ -97,9 +97,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                     {
                         JoinedQueryInfo queryInfo = new JoinedQueryInfo()
                         {
-                            JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameRight,
+                            JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight,
                             JoinedTableKey = "ID",
-                            MainTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameRight,
+                            MainTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameRight,
                             JoinedTableAlias = this.TableNameAliasBase
                         };
 
@@ -123,16 +123,16 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                             JoinedTableAlias = this.TableNameAliasBase
                         };
 
-                        if (this.RelationInfo.DPRelationGenBlock.RelationTable == this.RelationInfo.DPRelationGenBlock.ObjectNameLeft)
+                        if (this.RelationInfo.DXRelationDefinitionMainElement.RelationTable == this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameLeft)
                         {
-                            queryInfo.JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameRight;
+                            queryInfo.JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight;
                             queryInfo.JoinedTableKey = "ID";
-                            queryInfo.MainTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameRight;
+                            queryInfo.MainTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameRight;
                         }
                         else
                         {
-                            queryInfo.JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameRight;
-                            queryInfo.JoinedTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameLeft;
+                            queryInfo.JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight;
+                            queryInfo.JoinedTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameLeft;
                             queryInfo.MainTableKey = "ID";
                         }
 
@@ -156,7 +156,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                         JoinedQueryInfo intermediate = new JoinedQueryInfo()
                         {
                             JoinedTableAlias = this.TableNameAliasBase + "_int",
-                            JoinedTableName = this.RelationInfo.DPRelationGenBlock.RelationTable,
+                            JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.RelationTable,
                             MainTableKey = "ID"
                         };
 
@@ -180,19 +180,19 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                             motherTableName = motherLastQueryInfo.JoinedTableName;
                         };
 
-                        if (this.RelationInfo.DPRelationGenBlock.ObjectNameLeft == motherTableName)
+                        if (this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameLeft == motherTableName)
                         {
-                            intermediate.JoinedTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameLeft;
+                            intermediate.JoinedTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameLeft;
 
-                            main.MainTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameRight;
-                            main.JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameRight;
+                            main.MainTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameRight;
+                            main.JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight;
                         }
                         else
                         {
-                            intermediate.JoinedTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameRight;
+                            intermediate.JoinedTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameRight;
 
-                            main.MainTableKey = this.RelationInfo.DPRelationGenBlock.RelationNameLeft;
-                            main.JoinedTableName = this.RelationInfo.DPRelationGenBlock.ObjectNameLeft;
+                            main.MainTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameLeft;
+                            main.JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameLeft;
                         }
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
