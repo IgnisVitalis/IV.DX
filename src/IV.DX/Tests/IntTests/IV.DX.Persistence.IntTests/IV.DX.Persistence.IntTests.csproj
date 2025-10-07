@@ -48,10 +48,10 @@
         <None Update="Assets\JSON\Blocks\DPObjectDescObject0004.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DPBlockDescObject0000.json">
+        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXElementDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DPBlockDescObject0001.json">
+        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXElementDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\DPBlockInObjectDescObject\DPObjectDescObject0001.json">

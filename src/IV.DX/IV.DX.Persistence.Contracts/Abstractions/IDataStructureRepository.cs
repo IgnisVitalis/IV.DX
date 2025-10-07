@@ -6,27 +6,27 @@ namespace IV.DX.Persistence.Contracts.Abstractions
     internal interface IDataStructureRepository
     {
         IEnumerable<DPRelationObject> RelationInfos { get; }
-        IEnumerable<DPEntityDescObject> EntityInfos { get; }
-        IEnumerable<DPBlockDescObject> BlockInfos { get; }
-        IEnumerable<DPEnumDescObject> EnumInfos { get; }
+        IEnumerable<DXUnitDefinitionUnit> EntityInfos { get; }
+        IEnumerable<DXElementDefinitionUnit> BlockInfos { get; }
+        IEnumerable<DXEnumDefinitionUnit> EnumInfos { get; }
         void UpdateCache();
         void CreateDataStructure(DPObjectDescObject dataBlock);
         void UpdatedDataStructure(DPObjectDescObject dataBlock);
         void DropDataStructure(DPObjectDescObject dataBlock);
         void CreateDataStructure(DPRelationObject entity);
         void DropDataStructure(DPRelationObject entity);
-        void CreateDataStructure(DPEntityDescObject obj, DPBlockDescObject block);
-        void DropDataStructure(DPEntityDescObject obj, DPBlockDescObject block);
+        void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
+        void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         void SetEntityInheritance(string childEntity, string baseEntity);
-        DPEntityDescObject GetBaseEntity(DPEntityDescObject derivedEntity);
-        DPEntityDescObject GetEntity(string name);
-        DPEnumDescObject GetEnum(string enumName);
-        IEnumerable<DPBlockDescObject> GetBlocks(IEnumerable<Guid> ids);
-        DPBlockDescObject GetBlock(Guid id);
-        IEnumerable<DPBlockDescObject> GetRelatedBlocks(DPEntityDescObject entity, DPBlockInObjectTypeEnum relationType);
-        IEnumerable<DPBlockDescObject> GetRelatedBlocks(DPEntityDescObject entity);
+        DXUnitDefinitionUnit GetBaseEntity(DXUnitDefinitionUnit derivedEntity);
+        DXUnitDefinitionUnit GetEntity(string name);
+        DXEnumDefinitionUnit GetEnum(string enumName);
+        IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids);
+        DXElementDefinitionUnit GetBlock(Guid id);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DPBlockInObjectTypeEnum relationType);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity);
         DPRelationObject GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight);
-        IEnumerable<DPEnumDescObject> GetEnums(IEnumerable<Guid> ids);
-        DPEnumDescObject GetEnum(Guid id);
+        IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids);
+        DXEnumDefinitionUnit GetEnum(Guid id);
     }
 }

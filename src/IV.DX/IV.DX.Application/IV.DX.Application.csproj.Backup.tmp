@@ -24,6 +24,14 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>
+        <Content Include="MigrationScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" Pack="true">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
+        <Content Include="MigrationScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" Pack="true">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
         <Content Include="MigrationScripts\Core\01_01_0003_Core_DPRelationObject.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
@@ -41,12 +49,6 @@
 
     <ItemGroup>
       <None Update="MigrationScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="MigrationScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="MigrationScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="MigrationScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat">

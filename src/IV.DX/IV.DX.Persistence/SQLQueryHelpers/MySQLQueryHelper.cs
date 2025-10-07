@@ -260,7 +260,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDropTable(DPEntityDescObject obj, DPBlockDescObject block)
+        public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
             // DROP FOREIGN KEY `fk_Table1_Table2_0000`;
@@ -281,7 +281,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateTable(DPEntityDescObject obj, DPBlockDescObject block)
+        public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             // ALTER TABLE `IV.DataProvider.TestDB`.`Table1` 
             // ADD COLUMN Table2ID CHAR(36) CHARACTER SET UTF8MB4; ;
@@ -298,7 +298,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (obj == null || block == null)
                 return null;
 
-            var blockInEntityInfo = obj.DPBlockInEntityDescGenBlock?.Announced.SingleOrDefault(x => x.DPBlockDescObject == block.ID);
+            var blockInEntityInfo = obj.DPBlockInEntityDescGenBlock?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == block.ID);
 
             if (blockInEntityInfo == null)
                 return null;

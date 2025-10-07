@@ -3,16 +3,16 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.CoreData
 {
-    internal static class DPEnumDescObjectItems
+    internal static class DXEnumDefinitionUnitItems
     {
-        public static IList<DPEnumDescObject> Items { get; private set; }
+        public static IList<DXEnumDefinitionUnit> Items { get; private set; }
 
-        static DPEnumDescObjectItems()
+        static DXEnumDefinitionUnitItems()
         {
-            Items = new List<DPEnumDescObject>()
+            Items = new List<DXEnumDefinitionUnit>()
             {
                 #region DPBlockInObjectTypeEnum
-                new DPEnumDescObject()
+                new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e"),
                     DPObjectDescGenBlock= new DPObjectDescGenBlock()
@@ -58,7 +58,7 @@ namespace IV.DX.Persistence.CoreData
                 },
 	            #endregion  
                 #region DPColumnTypeEnum
-                new DPEnumDescObject()
+                new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("971d538a-1489-483a-bc84-86596ed0c51a"),
                     DPObjectDescGenBlock= new DPObjectDescGenBlock()
@@ -104,7 +104,7 @@ namespace IV.DX.Persistence.CoreData
                 },
 	            #endregion  
                 #region DPObjectKindEnum
-                new DPEnumDescObject()
+                new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
                     DPObjectDescGenBlock= new DPObjectDescGenBlock()
@@ -150,7 +150,7 @@ namespace IV.DX.Persistence.CoreData
                 },
 	            #endregion  
                 #region DPRelationTypeEnum
-                new DPEnumDescObject()
+                new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
                     DPObjectDescGenBlock= new DPObjectDescGenBlock()

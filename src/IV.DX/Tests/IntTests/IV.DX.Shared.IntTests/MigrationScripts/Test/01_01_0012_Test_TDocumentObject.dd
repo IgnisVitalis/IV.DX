@@ -1,6 +1,6 @@
 [
   {
-    "S_Type": "DPEntityDescObject",
+    "S_Type": "DXUnitDefinitionUnit",
     "ID": "1d99fab1-cfb6-4fc8-ab47-f71279fe16eb",
     "DPObjectDescGenBlock": {
       "ID": "c3845b6a-67f1-4ffd-b981-c3736c315e20",
@@ -13,7 +13,7 @@
         {
           "ID": "aaad2e72-2d1f-42c3-a385-f1a093f9a11d",
           "RelationType": 1,
-          "DPBlockDescObject": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb"
+          "DXElementDefinitionUnit": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb"
         }
       ]
     }

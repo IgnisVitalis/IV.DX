@@ -54,7 +54,7 @@ namespace IV.DX.Kernel.Converters
             return esqlBlockDefinition;
         }
 
-        public static ESQLBlockDefinition GetESQLBlockDefinition(DPEnumDescObject enumDesc)
+        public static ESQLBlockDefinition GetESQLBlockDefinition(DXEnumDefinitionUnit enumDesc)
         {
             ESQLBlockDefinition esqlBlockDefinition = new ESQLBlockDefinition(enumDesc.DPObjectDescGenBlock.Name, enumDesc.DPObjectDescGenBlock.Name);
 

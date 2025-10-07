@@ -42,9 +42,9 @@ namespace IV.DX.Application
                        typeof(ESQLObject),
                       (object)(new BaseEntityHandler<ESQLObject>(serviceProvider)));
 
-                Register<DPBlockDescObject>(new DPBlockDescObjectHandler(serviceProvider));
-                Register<DPEntityDescObject>(new DPEntityDescObjectHandler(serviceProvider));
-                Register<DPEnumDescObject>(new DPEnumDescObjectHandler(serviceProvider));
+                Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandler(serviceProvider));
+                Register<DXUnitDefinitionUnit>(new DXUnitDefinitionUnitHandler(serviceProvider));
+                Register<DXEnumDefinitionUnit>(new DXEnumDefinitionUnitHandler(serviceProvider));
                 Register<DPRelationObject>(new DPRelationObjectHandler(serviceProvider));
                 Register<DPInheritanceInitCore>(new DPInheritanceInitCoreHandler(serviceProvider));
                 Register<DPRelationItemObject>(new DPRelationItemObjectHandler(serviceProvider));

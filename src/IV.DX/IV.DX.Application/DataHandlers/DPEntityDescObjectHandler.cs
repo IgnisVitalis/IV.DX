@@ -9,13 +9,13 @@ namespace IV.DX.Application.DataHandlers
 {
     // Need to refactor.
     // Method to process relation to DBBlocks have duplicated code.
-    internal class DPEntityDescObjectHandler : DPObjectDescObjectHandler<DPEntityDescObject>
+    internal class DXUnitDefinitionUnitHandler : DPObjectDescObjectHandler<DXUnitDefinitionUnit>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        public DPEntityDescObjectHandler(IServiceProvider serviceProvider)
+        public DXUnitDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
@@ -23,7 +23,7 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();
         }
 
-        public override Guid OnInserting(DPEntityDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXUnitDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -47,7 +47,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DPEntityDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXUnitDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -62,7 +62,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
         {
-            var entity = this._genericRepo.GetItem<DPEntityDescObject>(id);
+            var entity = this._genericRepo.GetItem<DXUnitDefinitionUnit>(id);
 
             if (entity == null)
                 return false;
@@ -77,14 +77,14 @@ namespace IV.DX.Application.DataHandlers
             return base.OnDeleting(id, context);
         }
 
-        private void DeleteRelations(DPEntityDescObject entity)
+        private void DeleteRelations(DXUnitDefinitionUnit entity)
         {
-            var existingEntity = this._genericRepo.GetItem<DPEntityDescObject>(entity.ID);
+            var existingEntity = this._genericRepo.GetItem<DXUnitDefinitionUnit>(entity.ID);
 
             if (existingEntity == null)
                 return;
 
-            var relatedBlockIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DPBlockDescObject).ToList();
+            var relatedBlockIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedBlocks = this._dataStructureRepo.GetBlocks(relatedBlockIds);
 
@@ -94,13 +94,13 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private void ProcessRelations(DPEntityDescObject entity)
+        private void ProcessRelations(DXUnitDefinitionUnit entity)
         {
             this.ProcessBlocksInEntityRelations(entity);
             this.ProcessEnumRelations(entity);
         }
 
-        private void ProcessBlocksInEntityRelations(DPEntityDescObject entity)
+        private void ProcessBlocksInEntityRelations(DXUnitDefinitionUnit entity)
         {
             if (entity.DPBlockInEntityDescGenBlock == null)
                 return;
@@ -117,18 +117,18 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DPEntityDescObject GetObjectInfoFromDB(DPEntityDescObject objectInfoIncome)
+        private DXUnitDefinitionUnit GetObjectInfoFromDB(DXUnitDefinitionUnit objectInfoIncome)
         {
             if (systemObjectNames.Contains(objectInfoIncome.DPObjectDescGenBlock.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            return this._genericRepo.GetItem<DPEntityDescObject>(objectInfoIncome.ID);
+            return this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectInfoIncome.ID);
         }
 
-        private void ProcessBlocksInEntityRelationsUsingFullMode(DPEntityDescObject entity, DPEntityDescObject existingEntity)
+        private void ProcessBlocksInEntityRelationsUsingFullMode(DXUnitDefinitionUnit entity, DXUnitDefinitionUnit existingEntity)
         {
-            var newAnnouncedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DPBlockDescObject);
-            var existingAnnouncedIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DPBlockDescObject);
+            var newAnnouncedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
+            var existingAnnouncedIds = existingEntity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
 
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
@@ -140,29 +140,29 @@ namespace IV.DX.Application.DataHandlers
             this.UnassingBlocks(entity, blocksToUnassign);
         }
 
-        private void ProcessBlocksInEntityRelationsUsingTragetMode(DPEntityDescObject entity)
+        private void ProcessBlocksInEntityRelationsUsingTragetMode(DXUnitDefinitionUnit entity)
         {
-            var announcedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DPBlockDescObject);
+            var announcedIds = entity.DPBlockInEntityDescGenBlock.Announced.Select(x => x.DXElementDefinitionUnit);
             var blocksToAssign = this._dataStructureRepo.GetBlocks(announcedIds);
 
-            var deletedIds = entity.DPBlockInEntityDescGenBlock.Deleted.Select(x => x.DPBlockDescObject);
+            var deletedIds = entity.DPBlockInEntityDescGenBlock.Deleted.Select(x => x.DXElementDefinitionUnit);
             var blocksToUnassign = this._dataStructureRepo.GetBlocks(deletedIds);
 
             this.AssignBlocks(entity, blocksToAssign);
             this.UnassingBlocks(entity, blocksToUnassign);
         }
 
-        private void AssignBlocks(DPEntityDescObject entity, IEnumerable<DPBlockDescObject> blocksToAssign)
+        private void AssignBlocks(DXUnitDefinitionUnit entity, IEnumerable<DXElementDefinitionUnit> blocksToAssign)
         {
             foreach (var blockToAssign in blocksToAssign)
             {
-                var relationType = entity.DPBlockInEntityDescGenBlock.Announced.Single(x => x.DPBlockDescObject == blockToAssign.ID).RelationType;
+                var relationType = entity.DPBlockInEntityDescGenBlock.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
 
                 this._dataService.Insert(this.GetRelationObject(entity, blockToAssign, relationType));
             }
         }
 
-        private void UnassingBlocks(DPEntityDescObject entity, IEnumerable<DPBlockDescObject> blocksToUnassign)
+        private void UnassingBlocks(DXUnitDefinitionUnit entity, IEnumerable<DXElementDefinitionUnit> blocksToUnassign)
         {
             foreach (var blockToUnassign in blocksToUnassign)
             {
@@ -175,7 +175,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DPRelationObject GetRelationObject(DPEntityDescObject entity, DPBlockDescObject block, DPBlockInObjectTypeEnum relationType)
+        private DPRelationObject GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block, DPBlockInObjectTypeEnum relationType)
         {
             var result = this.GetRelationObject(entity, block);
 
@@ -184,7 +184,7 @@ namespace IV.DX.Application.DataHandlers
             return result;
         }
 
-        private DPRelationObject GetRelationObject(DPEntityDescObject entity, DPBlockDescObject block)
+        private DPRelationObject GetRelationObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
             return new DPRelationObject()
             {
@@ -201,7 +201,7 @@ namespace IV.DX.Application.DataHandlers
             };
         }
 
-        private DPRelationObject GetExistingRelatonObject(DPEntityDescObject entity, DPBlockDescObject block)
+        private DPRelationObject GetExistingRelatonObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
             var query = $"DPRelationGenBlock.ObjectNameLeft = '{entity.DPObjectDescGenBlock.Name}' " +
                $"AND DPRelationGenBlock.ObjectNameRight = '{block.DPObjectDescGenBlock.Name}' " +

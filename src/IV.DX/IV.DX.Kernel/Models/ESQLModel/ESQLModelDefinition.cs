@@ -90,11 +90,11 @@ namespace IV.DX.Kernel.Models
         }
 
         public static ESQLModelDefinition BuildModelDefinition(
-            DPEntityDescObject mainEntity,
-            IEnumerable<DPBlockDescObject> relatedSingleMandatoryBlocks,
-            IEnumerable<DPBlockDescObject> relatedSingleOptionalBlocks,
-            IEnumerable<DPBlockDescObject> relatedMultiMandatoryBlocks,
-            IEnumerable<DPBlockDescObject> relatedMultiOptionalBlocks)
+            DXUnitDefinitionUnit mainEntity,
+            IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryBlocks,
+            IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalBlocks,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryBlocks,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalBlocks)
         {
             if (mainEntity == null)
                 return null;
@@ -105,8 +105,8 @@ namespace IV.DX.Kernel.Models
 
             ownBlockDefinition.AddPropertyDefinitions(props);
 
-            var singleBlocks = new List<DPBlockDescObject>();
-            var multiBlocks = new List<DPBlockDescObject>();
+            var singleBlocks = new List<DXElementDefinitionUnit>();
+            var multiBlocks = new List<DXElementDefinitionUnit>();
 
             var esqlModel = new ESQLModelDefinition(ownBlockDefinition);
 
@@ -143,7 +143,7 @@ namespace IV.DX.Kernel.Models
             return esqlModel;
         }
 
-        private static ESQLBlockDefinition ConvertToBlockDefinition(DPBlockDescObject block)
+        private static ESQLBlockDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)
         {
             var props = block.DPColumnDescBlock.Announced
                            .Select(y => new ESQLPropertyDefinition(y.Name, new ESQLColumnDefinitionAttribute(y.Name)));

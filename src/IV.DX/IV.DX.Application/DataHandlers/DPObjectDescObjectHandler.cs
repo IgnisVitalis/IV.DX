@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DPEntityDescObject", "DPBlockDescObject", "DPEnumDescObject", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DPColumnDescBlock", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DPRelationObject", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DPColumnDescBlock", "DPColumnsUniqueBlock", "DPObjectKindEnum", "DPColumnTypeEnum", "DPRelationObject", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -71,7 +71,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        private DPRelationObject GetRelationObjectForEnum(DPObjectDescObject obj, DPEnumDescObject enumObj, DPColumnDescBlock enumColumn, DPColumnDescBlock columnWithEnumValue)
+        private DPRelationObject GetRelationObjectForEnum(DPObjectDescObject obj, DXEnumDefinitionUnit enumObj, DPColumnDescBlock enumColumn, DPColumnDescBlock columnWithEnumValue)
         {
             return new DPRelationObject()
             {
@@ -115,7 +115,7 @@ namespace IV.DX.Application.DataHandlers
 
             if (objectInfoFromDB == null || objectInfoIncome.DPColumnDescBlock.Mode == ModeForMultiItems.Full)
             {
-                if (objectInfoIncome is DPBlockDescObject)
+                if (objectInfoIncome is DXElementDefinitionUnit)
                 {
                     this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.ObjectID);
                 }

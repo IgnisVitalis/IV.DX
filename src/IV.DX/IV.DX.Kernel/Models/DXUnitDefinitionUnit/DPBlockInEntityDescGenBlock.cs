@@ -9,7 +9,7 @@ namespace IV.DX.Kernel.Models
         [ESQLColumnDefinition("RelationType")]
         public DPBlockInObjectTypeEnum RelationType { get; set; }
 
-        [ESQLColumnDefinition("DPBlockDescObject")]
-        public Guid DPBlockDescObject { get; set; }
+        [ESQLColumnDefinition("DXElementDefinitionUnit")]
+        public Guid DXElementDefinitionUnit { get; set; }
     }
 }

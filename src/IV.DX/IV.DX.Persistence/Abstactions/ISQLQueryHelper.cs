@@ -22,8 +22,8 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQueryToCreateRelationToMany(DPRelationObject obj, bool isNullable, bool isUnique);
         string GetSQLQueryToCreateRelationManyTo(DPRelationObject obj, bool isNullable, bool isUnique);
         string GetSQLQueryToCreateRelationManyToMany(DPRelationObject obj, string connectionStr);
-        string GetSQLQueryToDropTable(DPEntityDescObject obj, DPBlockDescObject block);
-        string GetSQLQueryToCreateTable(DPEntityDescObject obj, DPBlockDescObject block);
+        string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
+        string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter);
         DbDataAdapter GetDbDataAdapter(DbConnection dbconnection, string query);
         DbConnection GetDBConnection(string connectionStr);

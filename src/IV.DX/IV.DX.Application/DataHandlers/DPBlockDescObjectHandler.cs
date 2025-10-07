@@ -6,19 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DPBlockDescObjectHandler : DPObjectDescObjectHandler<DPBlockDescObject>
+    internal class DXElementDefinitionUnitHandler : DPObjectDescObjectHandler<DXElementDefinitionUnit>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IGenericRepository _genericRepo;
 
-        public DPBlockDescObjectHandler(IServiceProvider serviceProvider)
+        public DXElementDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();
         }
 
-        public override Guid OnInserting(DPBlockDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXElementDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -42,7 +42,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DPBlockDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXElementDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -55,7 +55,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
         {
-            var entity = this._genericRepo.GetItem<DPBlockDescObject>(id);
+            var entity = this._genericRepo.GetItem<DXElementDefinitionUnit>(id);
 
             if (entity == null)
                 return false;
@@ -68,7 +68,7 @@ namespace IV.DX.Application.DataHandlers
             return base.OnDeleting(id, context);
         }
 
-        private void ProcessRelations(DPBlockDescObject entity)
+        private void ProcessRelations(DXElementDefinitionUnit entity)
         {
             this.ProcessEnumRelations(entity);
         }

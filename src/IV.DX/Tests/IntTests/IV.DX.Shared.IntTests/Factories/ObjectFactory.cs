@@ -6,9 +6,9 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
 {
     public static class ObjectFactory
     {
-        public static DPEntityDescObject GetItem(Guid id, string objectName)
+        public static DXUnitDefinitionUnit GetItem(Guid id, string objectName)
         {
-            DPEntityDescObject item = new DPEntityDescObject()
+            DXUnitDefinitionUnit item = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()

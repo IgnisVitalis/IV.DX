@@ -3,16 +3,16 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.CoreData
 {
-    internal static class DPBlockDescObjectItems
+    internal static class DXElementDefinitionUnitItems
     {
-        public static IList<DPBlockDescObject> Items { get; private set; }
+        public static IList<DXElementDefinitionUnit> Items { get; private set; }
 
-        static DPBlockDescObjectItems()
+        static DXElementDefinitionUnitItems()
         {
-            Items = new List<DPBlockDescObject>()
+            Items = new List<DXElementDefinitionUnit>()
             {
                 #region DPObjectDescGenBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -48,7 +48,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPColumnDescBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("ce754889-4efb-4281-ad1f-14d710b30007"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -116,7 +116,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPColumnsUniqueBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -143,7 +143,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPColumnsUniqueBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("eeb499d0-4e20-41aa-8a24-9981c3cbf511"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -155,7 +155,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPBlockInEntityDescGenBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -167,7 +167,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPRelationGenBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -280,7 +280,7 @@ namespace IV.DX.Persistence.CoreData
                 },
                 #endregion
                 #region DPMigrationScriptsGenBlock
-                new DPBlockDescObject()
+                new DXElementDefinitionUnit()
                 {
                     ID = new Guid("4502e21d-4d38-475d-88eb-3159d3b7c514"),
                     DPObjectDescGenBlock = new DPObjectDescGenBlock()

@@ -665,12 +665,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateTable(DPEntityDescObject obj, DPBlockDescObject block)
+        public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             if (obj == null || block == null)
                 return null;
 
-            var blockInEntityInfo = obj.DPBlockInEntityDescGenBlock?.Announced.SingleOrDefault(x => x.DPBlockDescObject == block.ID);
+            var blockInEntityInfo = obj.DPBlockInEntityDescGenBlock?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == block.ID);
 
             if (blockInEntityInfo == null)
                 return null;
@@ -765,7 +765,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"DROP TABLE IF EXISTS \"{tableName}\"";
         }
 
-        public string GetSQLQueryToDropTable(DPEntityDescObject obj, DPBlockDescObject block)
+        public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             StringBuilder sb = new StringBuilder();
 

@@ -48,7 +48,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 ColumnType = DPColumnTypeEnum.String
             };
 
-            DPBlockDescObject blockDescObject = new DPBlockDescObject()
+            DXElementDefinitionUnit blockDescObject = new DXElementDefinitionUnit()
             {
                 ID = id,
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -66,7 +66,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            DPEntityDescObject entityDescObject = new DPEntityDescObject()
+            DXUnitDefinitionUnit entityDescObject = new DXUnitDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -82,7 +82,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                            DPBlockDescObject = blockDescObject.ID
+                            DXElementDefinitionUnit = blockDescObject.ID
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
             var id = new Guid("622c2056-9797-47ab-82c2-5c3eeb6a68ce");
 
-            var blockToAdd = new DPBlockDescObject()
+            var blockToAdd = new DXElementDefinitionUnit()
             {
                 ID = new Guid("4b95f498-f0cb-407d-be16-e7a1518fc070"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -182,7 +182,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var blockToDelete = new DPBlockDescObject()
+            var blockToDelete = new DXElementDefinitionUnit()
             {
                 ID = new Guid("d3b5e1e2-3f3a-4f7c-8f0c-5e2b8e6f4a1c"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -192,7 +192,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DPEntityDescObject()
+            var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -223,7 +223,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                        DPBlockDescObject = blockToAdd.ID
+                        DXElementDefinitionUnit = blockToAdd.ID
                     }
                 },
                 Deleted = new List<DPBlockInEntityDescGenBlock>()
@@ -232,7 +232,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                        DPBlockDescObject = blockToDelete.ID
+                        DXElementDefinitionUnit = blockToDelete.ID
                     }
                 }
             };
@@ -240,13 +240,13 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Update(entity);
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DPEntityDescObject>(id);
+            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
 
             Assert.Single(existingEntity.DPBlockInEntityDescGenBlock.Announced);
 
             var announcedBlock = existingEntity.DPBlockInEntityDescGenBlock.Announced.Single();
 
-            Assert.Equal(blockToAdd.ID, announcedBlock.DPBlockDescObject);
+            Assert.Equal(blockToAdd.ID, announcedBlock.DXElementDefinitionUnit);
 
             // Action
             existingEntity.DPBlockInEntityDescGenBlock = new ESQLMultiItemsContainer<DPBlockInEntityDescGenBlock>()
@@ -261,7 +261,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Update(existingEntity);
 
             // Assert
-            existingEntity = this._dataService.GetItem<DPEntityDescObject>(id);
+            existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
             Assert.Empty(existingEntity.DPBlockInEntityDescGenBlock.Announced);
         }
 
@@ -272,7 +272,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
             var id = new Guid("1c4e8f3e-3f4b-4c6a-9f7e-8f9e7d6c5b4a");
 
-            var block = new DPBlockDescObject()
+            var block = new DXElementDefinitionUnit()
             {
                 ID = new Guid("02449441-f8c4-483a-950f-6b47f2f216b4"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -282,7 +282,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DPEntityDescObject()
+            var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -298,7 +298,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                            DPBlockDescObject = block.ID
+                            DXElementDefinitionUnit = block.ID
                         }
                     }
                 }
@@ -317,10 +317,10 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Delete(entity);
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DPEntityDescObject>(id);
+            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
             Assert.Null(existingEntity);
 
-            var existingBlock = this._dataService.GetItem<DPBlockDescObject>(block.ID);
+            var existingBlock = this._dataService.GetItem<DXElementDefinitionUnit>(block.ID);
             Assert.NotNull(existingBlock);
         }
 
@@ -330,7 +330,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
             var id = new Guid("1873aa67-8f3e-4044-8659-c44f7a2dd5f6");
 
-            var block1 = new DPBlockDescObject()
+            var block1 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("f8f68404-6143-433e-aa2c-f45215f6be1c"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -340,7 +340,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var block2 = new DPBlockDescObject()
+            var block2 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("63c28d39-1561-4c97-b212-fa7db5443a11"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -350,7 +350,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var block3 = new DPBlockDescObject()
+            var block3 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("8ae093df-d6b8-4d13-acc7-801b464bfb0f"),
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -360,7 +360,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DPEntityDescObject()
+            var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DPObjectDescGenBlock = new DPObjectDescGenBlock()
@@ -376,19 +376,19 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                            DPBlockDescObject = block1.ID
+                            DXElementDefinitionUnit = block1.ID
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                            DPBlockDescObject = block2.ID
+                            DXElementDefinitionUnit = block2.ID
                         },
                         new DPBlockInEntityDescGenBlock()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DPBlockInObjectTypeEnum.SingleMandatory,
-                            DPBlockDescObject = block3.ID
+                            DXElementDefinitionUnit = block3.ID
                         }
                     }
                 }
@@ -418,7 +418,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             this._dataService.Update(entity);
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DPEntityDescObject>(id);
+            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
             Assert.Empty(existingEntity.DPBlockInEntityDescGenBlock.Announced);
         }
     }

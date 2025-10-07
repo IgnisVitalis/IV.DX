@@ -29,14 +29,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         {
             // Init
             string json = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
-            DPBlockDescObject blockDesc = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json);
+            DXElementDefinitionUnit blockDesc = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
                 this._dataService.Delete(blockDesc);
             });
 
-            void Check(DPBlockDescObject blockDefinition)
+            void Check(DXElementDefinitionUnit blockDefinition)
             {
                 Assert.NotNull(blockDefinition);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -45,7 +45,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                 Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), blockDefinition.DPObjectDescGenBlock.ID);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.DPObjectDescGenBlock.ObjectID);
                 Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
-                Assert.True(blockDefinition is DPBlockDescObject);
+                Assert.True(blockDefinition is DXElementDefinitionUnit);
 
                 Assert.NotNull(blockDefinition.DPColumnDescBlock);
                 Assert.Equal(16, blockDefinition.DPColumnDescBlock.Announced.Count());
@@ -190,11 +190,11 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(blockDesc);
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DPBlockDescObject>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Check(blockDefinition);
 
-            var blockDefinitions = this._genericRepo.GetItems<DPBlockDescObject>();
+            var blockDefinitions = this._genericRepo.GetItems<DXElementDefinitionUnit>();
 
             Assert.True(blockDefinitions.Count() > 0);
             blockDefinition = blockDefinitions.SingleOrDefault(x => x.ID == new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -209,8 +209,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
             string json1 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0001.json");
 
-            DPBlockDescObject blockDesc0 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json0);
-            DPBlockDescObject blockDesc1 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json1);
+            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc1 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json1);
 
             base._finalizationAction = new Action(() =>
             {
@@ -222,7 +222,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Update(blockDesc1);
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DPBlockDescObject>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -231,7 +231,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), blockDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("UpdatedDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(blockDefinition is DPBlockDescObject);
+            Assert.True(blockDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(blockDefinition.DPColumnDescBlock);
             Assert.Equal(16, blockDefinition.DPColumnDescBlock.Announced.Count());
@@ -378,8 +378,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
             string json2 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0002.json");
-            DPBlockDescObject blockDesc0 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json0);
-            DPBlockDescObject blockDesc2 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json2);
+            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
 
             base._finalizationAction = new Action(() =>
             {
@@ -391,7 +391,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Update(blockDesc2);
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DPBlockDescObject>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -400,7 +400,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), blockDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(blockDefinition is DPBlockDescObject);
+            Assert.True(blockDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(blockDefinition.DPColumnDescBlock);
             Assert.Equal(5, blockDefinition.DPColumnDescBlock.Announced.Count());
@@ -447,9 +447,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             string json2 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0002.json");
             string json3 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0003.json");
 
-            DPBlockDescObject blockDesc0 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json0);
-            DPBlockDescObject blockDesc2 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json2);
-            DPBlockDescObject blockDesc3 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json3);
+            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc2 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json2);
+            DXElementDefinitionUnit blockDesc3 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json3);
 
             base._finalizationAction = new Action(() =>
             {
@@ -462,7 +462,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Update(blockDesc3);
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DPBlockDescObject>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -471,7 +471,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), blockDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("NewDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(blockDefinition is DPBlockDescObject);
+            Assert.True(blockDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(blockDefinition.DPColumnDescBlock);
             Assert.Equal(7, blockDefinition.DPColumnDescBlock.Announced.Count());
@@ -533,8 +533,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0000.json");
             string json4 = File.ReadAllText("Assets/JSON/Blocks/DPObjectDescObject0004.json");
-            DPBlockDescObject blockDesc0 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json0);
-            DPBlockDescObject blockDesc4 = ESQLObjectHelper.CreateInstance<DPBlockDescObject>(json4);
+            DXElementDefinitionUnit blockDesc0 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit blockDesc4 = ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(json4);
 
             base._finalizationAction = new Action(() =>
             {
@@ -546,7 +546,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Update(blockDesc4);
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DPBlockDescObject>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -555,7 +555,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), blockDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("UpdatedDataBlock", blockDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(blockDefinition is DPBlockDescObject);
+            Assert.True(blockDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(blockDefinition.DPColumnDescBlock);
             Assert.Equal(8, blockDefinition.DPColumnDescBlock.Announced.Count());

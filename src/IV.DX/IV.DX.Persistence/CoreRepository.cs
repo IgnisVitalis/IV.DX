@@ -25,9 +25,9 @@ namespace IV.DX.Persistence
             this._connectionStr = configuration["Database:ConnectionString"];
             this._queryHelper = queryHelper;
 
-            this._blockInfos = DPBlockDescObjectItems.Items;
-            this._entityInfos = DPEntityDescObjectItems.Items;
-            this._enumInfos = DPEnumDescObjectItems.Items;
+            this._blockInfos = DXElementDefinitionUnitItems.Items;
+            this._entityInfos = DXUnitDefinitionUnitItems.Items;
+            this._enumInfos = DXEnumDefinitionUnitItems.Items;
             this._relationInfos = new List<DPRelationObject>();
         }
 
@@ -257,10 +257,10 @@ namespace IV.DX.Persistence
 
             var entities = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntity);
 
-            List<DPBlockDescObject> singleMandatoryBlocks = new List<DPBlockDescObject>();
-            List<DPBlockDescObject> singleOptionalBlocks = new List<DPBlockDescObject>();
-            List<DPBlockDescObject> multiMandatoryBlocks = new List<DPBlockDescObject>();
-            List<DPBlockDescObject> multiOptionalBlocks = new List<DPBlockDescObject>();
+            List<DXElementDefinitionUnit> singleMandatoryBlocks = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> singleOptionalBlocks = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> multiMandatoryBlocks = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> multiOptionalBlocks = new List<DXElementDefinitionUnit>();
 
             foreach (var entity in entities)
             {
@@ -539,7 +539,7 @@ namespace IV.DX.Persistence
             return model.OwnSingleItem.Item.ID.Value;
         }
 
-        private void ProcessESQLModelAsESQLEntity(string typeName, ESQLModel model, IEnumerable<DPEntityDescObject> entityHierarchy, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEntity(string typeName, ESQLModel model, IEnumerable<DXUnitDefinitionUnit> entityHierarchy, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
@@ -609,7 +609,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private void ProcessESQLModelAsESQLEnum(string typeName, DPEnumDescObject entity, ESQLModel model, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEnum(string typeName, DXEnumDefinitionUnit entity, ESQLModel model, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
@@ -623,9 +623,9 @@ namespace IV.DX.Persistence
             });
         }
 
-        private IEnumerable<DPEntityDescObject> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DPEntityDescObject derivedEntity)
+        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DXUnitDefinitionUnit derivedEntity)
         {
-            var result = new List<DPEntityDescObject>() { derivedEntity };
+            var result = new List<DXUnitDefinitionUnit>() { derivedEntity };
 
             if (derivedEntity.DPEntityInheritanceBlock?.BaseEntity == null)
                 return result;
@@ -651,7 +651,7 @@ namespace IV.DX.Persistence
             return result.ToList();
         }
 
-        private IEnumerable<DPEntityDescObject> GetHierarchyChainOfBaseEntitiesFromBaseToDerived(DPEntityDescObject derivedEntity)
+        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromBaseToDerived(DXUnitDefinitionUnit derivedEntity)
         {
             return this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(derivedEntity).Reverse();
         }
@@ -785,7 +785,7 @@ namespace IV.DX.Persistence
             return block.Item.ID.Value;
         }
 
-        private void InsertOrUpdateESQLMultiItemToDataSet(ESQLModel model, DPEntityDescObject entityInfo, DPBlockDescObject blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateESQLMultiItemToDataSet(ESQLModel model, DXUnitDefinitionUnit entityInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
             var blockName = blockInfo.DPObjectDescGenBlock.Name.Trim();
             var objectID = model.OwnSingleItem.Item.ID;

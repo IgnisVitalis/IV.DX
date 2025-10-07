@@ -7,19 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Application.DataHandlers
 {
-    internal class DPEnumDescObjectHandler : DPObjectDescObjectHandler<DPEnumDescObject>
+    internal class DXEnumDefinitionUnitHandler : DPObjectDescObjectHandler<DXEnumDefinitionUnit>
     {
         private readonly IDataStructureRepository _dataStructureRepo;
         private readonly IGenericRepository _genericRepo;
 
-        public DPEnumDescObjectHandler(IServiceProvider serviceProvider)
+        public DXEnumDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
             this._genericRepo = serviceProvider.GetService<IGenericRepository>();            
         }
 
-        public override Guid OnInserting(DPEnumDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnInserting(DXEnumDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -42,7 +42,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DPEnumDescObject entity, EntityHandlerBaseContext context)
+        public override Guid OnUpdating(DXEnumDefinitionUnit entity, EntityHandlerBaseContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -56,7 +56,7 @@ namespace IV.DX.Application.DataHandlers
 
         public override bool OnDeleting(Guid id, EntityHandlerBaseContext context)
         {
-            var entity = this._genericRepo.GetItem<DPEnumDescObject>(id);
+            var entity = this._genericRepo.GetItem<DXEnumDefinitionUnit>(id);
 
             base.Validate(entity);
             base.Process(entity);

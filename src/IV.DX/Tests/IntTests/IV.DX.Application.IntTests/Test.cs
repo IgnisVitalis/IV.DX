@@ -49,12 +49,12 @@ namespace IV.DataProvider.Persistence.Services.IntTests
             // Init
             IDataService dataService = this.ServiceProvider.GetService<IDataService>();
 
-            var entityMetadata = _dataService.GetItem("DPEntityDescObject", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new EntityHandlerBaseContext()).ConvertToJObject().ToString();
-            var objectMetadata = _dataService.GetItem("DPEntityDescObject", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new EntityHandlerBaseContext()).ConvertToJObject().ToString();
-            //var entityMetadata = await ESQLObjectApiClient.GetEntityAsync("DPEntityDescObject", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
-            //var objectMetadata = await ESQLObjectApiClient.GetEntityAsync("DPEntityDescObject", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
+            var entityMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new EntityHandlerBaseContext()).ConvertToJObject().ToString();
+            var objectMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new EntityHandlerBaseContext()).ConvertToJObject().ToString();
+            //var entityMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            //var objectMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
 
-            var item = _dataService.GetItem<DPEntityDescObject>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            var item = _dataService.GetItem<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             // Action
 
         }

@@ -97,12 +97,12 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItems_UsingDPBlockDescObject_ExistingBlocksWithAllInformation()
+        public void GetItems_UsingDXElementDefinitionUnit_ExistingBlocksWithAllInformation()
         {
             // Init
 
             // Action
-            var blocks = _dataService.GetItems<DPBlockDescObject>();
+            var blocks = _dataService.GetItems<DXElementDefinitionUnit>();
 
             // Checking result
             Assert.NotEmpty(blocks);
@@ -111,12 +111,12 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItemNonParameterized_UsingDPBlockDescObject_ExistingBlockWithAllInformation()
+        public void GetItemNonParameterized_UsingDXElementDefinitionUnit_ExistingBlockWithAllInformation()
         {
             // Init
 
             // Action           
-            var block = _dataService.GetItem("DPBlockDescObject", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"), new EntityHandlerBaseContext());
+            var block = _dataService.GetItem("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"), new EntityHandlerBaseContext());
 
             // Checking result
             Assert.NotNull(block);
@@ -133,14 +133,14 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var objectID = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
 
             // Action
-            var objs = _dataService.GetItems<DPEntityDescObject>($"ID = '{objectID}'", new EntityHandlerBaseContext());
+            var objs = _dataService.GetItems<DXUnitDefinitionUnit>($"ID = '{objectID}'", new EntityHandlerBaseContext());
 
             // Checking result
             Assert.Single(objs);
 
             var obj = objs.Single();
 
-            Assert.Equal("DPEntityDescObject", obj.DPObjectDescGenBlock.Name);
+            Assert.Equal("DXUnitDefinitionUnit", obj.DPObjectDescGenBlock.Name);
         }
 
         [Fact]
@@ -149,7 +149,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Init
 
             // Action
-            var objs = _dataService.GetItems("DPEntityDescObject", new EntityHandlerBaseContext());
+            var objs = _dataService.GetItems("DXUnitDefinitionUnit", new EntityHandlerBaseContext());
 
             // Checking result
             Assert.NotEmpty(objs);

@@ -40,7 +40,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._genericRepo.Insert(item);
 
             // Checking result
-            var result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            var result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -48,14 +48,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(result.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId, result.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("SomeTestName", result.DPObjectDescGenBlock.Name);
-            Assert.True(result is DPEntityDescObject);
+            Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Update
             item.DPObjectDescGenBlock.Name = "UpdatedSomeTestName";
             this._genericRepo.Update(item);
 
             // Checking result
-            result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -63,13 +63,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(result.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId, result.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("UpdatedSomeTestName", result.DPObjectDescGenBlock.Name);
-            Assert.True(result is DPEntityDescObject);
+            Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Delete
             this._genericRepo.Delete(item);
 
             // Checking result
-            result = this._genericRepo.GetItem<DPEntityDescObject>(objectId);
+            result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
 
             Assert.Null(result);
         }
@@ -106,7 +106,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._genericRepo.Insert(item2);
 
             // Checking result
-            var result = this._genericRepo.GetItems<DPEntityDescObject>();
+            var result = this._genericRepo.GetItems<DXUnitDefinitionUnit>();
 
             var resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -116,7 +116,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(resultItem1.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId1, resultItem1.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("SomeTestName1", resultItem1.DPObjectDescGenBlock.Name);
-            Assert.True(resultItem1 is DPEntityDescObject);
+            Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             var resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
@@ -126,7 +126,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(resultItem2.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId2, resultItem2.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("SomeTestName2", resultItem2.DPObjectDescGenBlock.Name);
-            Assert.True(resultItem2 is DPEntityDescObject);
+            Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Update
             item1.DPObjectDescGenBlock.Name = "UpdatedSomeTestName1";
@@ -136,7 +136,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._genericRepo.Update(item2);
 
             // Checking result
-            result = this._genericRepo.GetItems<DPEntityDescObject>();
+            result = this._genericRepo.GetItems<DXUnitDefinitionUnit>();
 
             resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -146,7 +146,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(resultItem1.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId1, resultItem1.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("UpdatedSomeTestName1", resultItem1.DPObjectDescGenBlock.Name);
-            Assert.True(resultItem1 is DPEntityDescObject);
+            Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
@@ -156,13 +156,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             Assert.True(resultItem2.DPObjectDescGenBlock.ID != default(Guid));
             Assert.Equal(objectId2, resultItem2.DPObjectDescGenBlock.ObjectID);
             Assert.Equal("UpdatedSomeTestName2", resultItem2.DPObjectDescGenBlock.Name);
-            Assert.True(resultItem2 is DPEntityDescObject);
+            Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Delete
             this._genericRepo.Delete(item1);
 
             // Checking result
-            resultItem1 = this._genericRepo.GetItem<DPEntityDescObject>(objectId1);
+            resultItem1 = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId1);
 
             Assert.Null(resultItem1);
 
@@ -170,7 +170,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._genericRepo.Delete(item2);
 
             // Checking result
-            resultItem2 = this._genericRepo.GetItem<DPEntityDescObject>(objectId2);
+            resultItem2 = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId2);
 
             Assert.Null(resultItem2);
         }

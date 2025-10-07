@@ -26,7 +26,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Init
             string json = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0000.json");
 
-            DPObjectDescObject objDesc = ESQLObjectHelper.CreateInstance<DPEntityDescObject>(json);
+            DPObjectDescObject objDesc = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
@@ -37,14 +37,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Insert(objDesc);
 
             // Checking
-            var objDefinition = this._genericRepo.GetItem<DPEntityDescObject>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal("NewObject", objDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(objDefinition is DPEntityDescObject);
+            Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
 
         [Fact]
@@ -53,8 +53,8 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Ini
             string json0 = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0000.json");
             string json1 = File.ReadAllText("Assets/JSON/Objects/DPObjectDescObject0001.json");
-            var objDesc0 = ESQLObjectHelper.CreateInstance<DPEntityDescObject>(json0);
-            var objDesc1 = ESQLObjectHelper.CreateInstance<DPEntityDescObject>(json1);
+            var objDesc0 = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json0);
+            var objDesc1 = ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(json1);
 
             base._finalizationAction = new Action(() =>
             {
@@ -66,14 +66,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._dataService.Update(objDesc1);
 
             // Checking
-            var objDefinition = this._genericRepo.GetItem<DPEntityDescObject>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DPObjectDescGenBlock.ObjectID);
             Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DPObjectDescGenBlock.ID);
             Assert.Equal("UpdatedObject", objDefinition.DPObjectDescGenBlock.Name);
-            Assert.True(objDefinition is DPEntityDescObject);
+            Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
     }
 }

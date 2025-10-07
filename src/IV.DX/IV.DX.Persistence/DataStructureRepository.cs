@@ -12,14 +12,14 @@ namespace IV.DX.Persistence
         private IList<DPRelationObject> _relationInfos;
         public IEnumerable<DPRelationObject> RelationInfos { get { return this._relationInfos; } }
 
-        private IList<DPEntityDescObject> _entityInfos;
-        public IEnumerable<DPEntityDescObject> EntityInfos { get { return this._entityInfos; } }
+        private IList<DXUnitDefinitionUnit> _entityInfos;
+        public IEnumerable<DXUnitDefinitionUnit> EntityInfos { get { return this._entityInfos; } }
 
-        private IList<DPBlockDescObject> _blockInfos;
-        public IEnumerable<DPBlockDescObject> BlockInfos { get { return this._blockInfos; } }
+        private IList<DXElementDefinitionUnit> _blockInfos;
+        public IEnumerable<DXElementDefinitionUnit> BlockInfos { get { return this._blockInfos; } }
 
-        private IList<DPEnumDescObject> _enumInfos;
-        public IEnumerable<DPEnumDescObject> EnumInfos { get { return this._enumInfos; } }
+        private IList<DXEnumDefinitionUnit> _enumInfos;
+        public IEnumerable<DXEnumDefinitionUnit> EnumInfos { get { return this._enumInfos; } }
 
         public void CreateDataStructure(DPObjectDescObject dataBlock)
         {
@@ -48,7 +48,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void CreateDataStructure(DPEntityDescObject obj, DPBlockDescObject block)
+        public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             var sqlQuery = this.GetSQLQueryToCreateTable(obj, block);
 
@@ -57,7 +57,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DPEntityDescObject obj, DPBlockDescObject block)
+        public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             var sqlQuery = this.GetSQLQueryToDropTable(obj, block);
 
@@ -86,12 +86,12 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        private string GetSQLQueryToDropTable(DPEntityDescObject obj, DPBlockDescObject block)
+        private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             return this._queryHelper.GetSQLQueryToDropTable(obj, block);
         }
 
-        private string GetSQLQueryToCreateTable(DPEntityDescObject obj, DPBlockDescObject block)
+        private string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
         {
             return this._queryHelper.GetSQLQueryToCreateTable(obj, block);
         }
@@ -210,7 +210,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public DPEntityDescObject GetBaseEntity(DPEntityDescObject derivedEntity)
+        public DXUnitDefinitionUnit GetBaseEntity(DXUnitDefinitionUnit derivedEntity)
         {
             if (derivedEntity == null || derivedEntity.DPEntityInheritanceBlock?.BaseEntity == null)
                 return null;
@@ -227,7 +227,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DPEntityDescObject GetEntity(string entityType)
+        public DXUnitDefinitionUnit GetEntity(string entityType)
         {
             var result = EntityInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(entityType));
 
@@ -241,7 +241,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public IEnumerable<DPBlockDescObject> GetRelatedBlocks(DPEntityDescObject entity, DPBlockInObjectTypeEnum relationType)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DPBlockInObjectTypeEnum relationType)
         {
             if (entity.DPBlockInEntityDescGenBlock == null)
                 return null;
@@ -250,14 +250,14 @@ namespace IV.DX.Persistence
               entity.DPBlockInEntityDescGenBlock
               .Announced
               .Where(x => x.RelationType == relationType)
-              .Select(x => x.DPBlockDescObject).ToList();
+              .Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedBlocks = BlockInfos.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
 
             return relatedBlocks;
         }
 
-        public IEnumerable<DPBlockDescObject> GetRelatedBlocks(DPEntityDescObject entity)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity)
         {
             if (entity.DPBlockInEntityDescGenBlock == null)
                 return null;
@@ -265,7 +265,7 @@ namespace IV.DX.Persistence
             var relatedBlockIds =
                 entity.DPBlockInEntityDescGenBlock
                 .Announced
-                .Select(x => x.DPBlockDescObject).ToList();
+                .Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedBlocks = BlockInfos.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
 
@@ -274,24 +274,24 @@ namespace IV.DX.Persistence
 
         private void LoadEnumInfos()
         {
-            var enumsModelsFromDB = this.GetItems(DPEnumDescObject.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
 
-            var enumInfos = enumsModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DPEnumDescObject>(x));
+            var enumInfos = enumsModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
             var enumInfosWithoutCore = enumInfos.Except(CoreDataStructureRepository.CoreEnumInfos, DPObjectDescObjectIDComparer.Instance)
-                .Select(x => x as DPEnumDescObject);
+                .Select(x => x as DXEnumDefinitionUnit);
 
             this._enumInfos = CoreDataStructureRepository.CoreEnumInfos.Concat(enumInfosWithoutCore).ToList();
         }
 
         private void LoadEntityInfos()
         {
-            var entityModelsFromDB = this.GetItems(DPEntityDescObject.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var entityModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
 
-            var entityInfos = entityModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DPEntityDescObject>(x));
+            var entityInfos = entityModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
             var entityInfosWithoutCore = entityInfos.Except(CoreDataStructureRepository.CoreEntityInfos, DPObjectDescObjectIDComparer.Instance)
-                .Select(x => x as DPEntityDescObject);
+                .Select(x => x as DXUnitDefinitionUnit);
 
             this._entityInfos = CoreDataStructureRepository.CoreEntityInfos.Concat(entityInfosWithoutCore).ToList();
         }
@@ -304,12 +304,12 @@ namespace IV.DX.Persistence
 
         private void LoadBlockInfos()
         {
-            var blockModelsFromDB = this.GetItems(DPBlockDescObject.ESQLModelDefinition, TypeOfEntityLoading.Full);
+            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.ESQLModelDefinition, TypeOfEntityLoading.Full);
 
-            var blockInfos = blockModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DPBlockDescObject>(x));
+            var blockInfos = blockModelsFromDB.Select(x => ESQLObjectHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
             var blockInfosWithoutCore = blockInfos.Except(CoreDataStructureRepository.CoreBlockInfos, DPObjectDescObjectIDComparer.Instance)
-                .Select(x => x as DPBlockDescObject);
+                .Select(x => x as DXElementDefinitionUnit);
 
             this._blockInfos = CoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
         }
@@ -365,7 +365,7 @@ namespace IV.DX.Persistence
             return existingRelation;
         }
 
-        public IEnumerable<DPBlockDescObject> GetBlocks(IEnumerable<Guid> ids)
+        public IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids)
         {
             if (ids == null)
                 return null;
@@ -375,7 +375,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DPBlockDescObject GetBlock(Guid id)
+        public DXElementDefinitionUnit GetBlock(Guid id)
         {
             var existingBlock = this.BlockInfos.SingleOrDefault(x => x.ID == id);
 
@@ -389,7 +389,7 @@ namespace IV.DX.Persistence
             return existingBlock;
         }
 
-        public IEnumerable<DPEnumDescObject> GetEnums(IEnumerable<Guid> ids)
+        public IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids)
         {
             if (ids == null)
                 return null;
@@ -399,7 +399,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DPEnumDescObject GetEnum(Guid id)
+        public DXEnumDefinitionUnit GetEnum(Guid id)
         {
             var existingEnum = this.EnumInfos.SingleOrDefault(x => x.ID == id);
 
@@ -413,7 +413,7 @@ namespace IV.DX.Persistence
             return existingEnum;
         }
 
-        public DPEnumDescObject GetEnum(string enumName)
+        public DXEnumDefinitionUnit GetEnum(string enumName)
         {
             var existingEnum = this.EnumInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(enumName));
 
@@ -431,9 +431,9 @@ namespace IV.DX.Persistence
         {
             if (MaintenanceToken.IsCoreInitializing)
             {
-                this._blockInfos = DPBlockDescObjectItems.Items;
-                this._entityInfos = DPEntityDescObjectItems.Items;
-                this._enumInfos = DPEnumDescObjectItems.Items;
+                this._blockInfos = DXElementDefinitionUnitItems.Items;
+                this._entityInfos = DXUnitDefinitionUnitItems.Items;
+                this._enumInfos = DXEnumDefinitionUnitItems.Items;
             }
             else
             {
