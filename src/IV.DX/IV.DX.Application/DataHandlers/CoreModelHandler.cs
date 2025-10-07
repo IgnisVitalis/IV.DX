@@ -26,21 +26,21 @@ namespace IV.DX.Application.DataHandlers
         {
         }
 
-        public Guid OnInserting(ESQLModel model, DXUnitHandlerBaseContext context)
+        public Guid OnInserting(DXModel model, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.Insert(model);
         }
 
-        public void OnInserted(ESQLModel model, DXUnitHandlerBaseContext context)
+        public void OnInserted(DXModel model, DXUnitHandlerBaseContext context)
         {
         }
 
-        public Guid OnUpdating(ESQLModel model, DXUnitHandlerBaseContext context)
+        public Guid OnUpdating(DXModel model, DXUnitHandlerBaseContext context)
         {
             return this._coreRepo.Update(model);
         }
 
-        public void OnUpdated(ESQLModel model, DXUnitHandlerBaseContext context)
+        public void OnUpdated(DXModel model, DXUnitHandlerBaseContext context)
         {
         }
 
@@ -54,7 +54,7 @@ namespace IV.DX.Application.DataHandlers
             return this._coreRepo.IsItemExisting(typeName, id);
         }
 
-        public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
+        public void OnGetting(DXModel model, DXUnitHandlerBaseContext context)
         {
         }
     }

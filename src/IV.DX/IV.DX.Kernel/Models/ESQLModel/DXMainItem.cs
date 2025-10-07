@@ -3,30 +3,30 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLMainItem
+    public class DXMainItem
     {
         public DXUnitAttribute ObjectInfo { get; private set; }
-        public ESQLItem Item { get; set; }
+        public DXItem Item { get; set; }
 
-        public ESQLMainItem(DXUnitAttribute objectInfo)
+        public DXMainItem(DXUnitAttribute objectInfo)
         {
             this.ObjectInfo = objectInfo;
         }
 
-        public static bool DeepEquals(ESQLMainItem item1, ESQLMainItem item2)
+        public static bool DeepEquals(DXMainItem item1, DXMainItem item2)
         {
             if (item1 == null || item2 == null)
                 return false;
 
             var result =
                 DXUnitAttribute.DeepEquals(item1.ObjectInfo, item2.ObjectInfo)
-                && ESQLItem.DeepEquals(item1.Item, item2.Item);
+                && DXItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
         }
-        public ESQLMainItem DeepClone()
+        public DXMainItem DeepClone()
         {
-            return new ESQLMainItem(this.ObjectInfo.DeepClone())
+            return new DXMainItem(this.ObjectInfo.DeepClone())
             {
                 Item = this.Item.DeepClone(),
             };

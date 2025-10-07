@@ -2,21 +2,21 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLModelDefinition
+    public class DXModelDefinition
     {
-        public ESQLBlockDefinition OwnSingleItem { get; private set; }
-        public IEnumerable<ESQLBlockDefinition> SingleFragmentDefinitions { get; private set; }
-        public IEnumerable<ESQLBlockDefinition> MultiFragmentDefinitions { get; private set; }
+        public DXElementDefinition OwnSingleItem { get; private set; }
+        public IEnumerable<DXElementDefinition> SingleFragmentDefinitions { get; private set; }
+        public IEnumerable<DXElementDefinition> MultiFragmentDefinitions { get; private set; }
 
-        public ESQLModelDefinition(ESQLBlockDefinition ownSingleItem)
+        public DXModelDefinition(DXElementDefinition ownSingleItem)
         {
             this.OwnSingleItem = ownSingleItem;
-            this.SingleFragmentDefinitions = new List<ESQLBlockDefinition>();
-            this.MultiFragmentDefinitions = new List<ESQLBlockDefinition>();
+            this.SingleFragmentDefinitions = new List<DXElementDefinition>();
+            this.MultiFragmentDefinitions = new List<DXElementDefinition>();
         }
 
 
-        public void AppendToSingleItemDefinitions(ESQLBlockDefinition item)
+        public void AppendToSingleItemDefinitions(DXElementDefinition item)
         {
             var existingFragmentDefinition = this.SingleFragmentDefinitions.SingleOrDefault(x => x.Type == item.Type);
 
@@ -28,7 +28,7 @@ namespace IV.DX.Kernel.Models
             this.SingleFragmentDefinitions = this.SingleFragmentDefinitions.Append(item);
         }
 
-        public void AppendToSingleItemDefinitions(IEnumerable<ESQLBlockDefinition> items)
+        public void AppendToSingleItemDefinitions(IEnumerable<DXElementDefinition> items)
         {
             foreach (var item in items)
             {
@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public void AppendToMultiItemDefinitions(ESQLBlockDefinition item)
+        public void AppendToMultiItemDefinitions(DXElementDefinition item)
         {
             var existingFragmentDefinition = this.MultiFragmentDefinitions.SingleOrDefault(x => x.Type == item.Type);
 
@@ -58,7 +58,7 @@ namespace IV.DX.Kernel.Models
             this.MultiFragmentDefinitions = this.MultiFragmentDefinitions.Append(item);
         }
 
-        public void AppendToMultiItemDefinitions(IEnumerable<ESQLBlockDefinition> items)
+        public void AppendToMultiItemDefinitions(IEnumerable<DXElementDefinition> items)
         {
             foreach (var item in items)
             {
@@ -76,9 +76,9 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public ESQLModelDefinition DeepClone()
+        public DXModelDefinition DeepClone()
         {
-            var clone = new ESQLModelDefinition(this.OwnSingleItem);
+            var clone = new DXModelDefinition(this.OwnSingleItem);
 
             var singleFragmentDefinitionClones = this.SingleFragmentDefinitions.Select(x => x.DeepClone());
             var multiFragmentDefinitionClones = this.MultiFragmentDefinitions.Select(x => x.DeepClone());
@@ -89,7 +89,7 @@ namespace IV.DX.Kernel.Models
             return clone;
         }
 
-        public static ESQLModelDefinition BuildModelDefinition(
+        public static DXModelDefinition BuildModelDefinition(
             DXUnitDefinitionUnit mainEntity,
             IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryBlocks,
             IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalBlocks,
@@ -99,16 +99,16 @@ namespace IV.DX.Kernel.Models
             if (mainEntity == null)
                 return null;
 
-            var ownBlockDefinition = new ESQLBlockDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
+            var ownBlockDefinition = new DXElementDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
 
-            var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new ESQLPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+            var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
             ownBlockDefinition.AddPropertyDefinitions(props);
 
             var singleBlocks = new List<DXElementDefinitionUnit>();
             var multiBlocks = new List<DXElementDefinitionUnit>();
 
-            var esqlModel = new ESQLModelDefinition(ownBlockDefinition);
+            var esqlModel = new DXModelDefinition(ownBlockDefinition);
 
             if (relatedSingleMandatoryBlocks != null)
             {
@@ -143,12 +143,12 @@ namespace IV.DX.Kernel.Models
             return esqlModel;
         }
 
-        private static ESQLBlockDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)
+        private static DXElementDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)
         {
             var props = block.DXColumnDefinitionElement.Announced
-                           .Select(y => new ESQLPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
+                           .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
 
-            var singleFragmentDefinition = new ESQLBlockDefinition(block.DXUnitDefinitionMainElement.Name, block.DXUnitDefinitionMainElement.Name);
+            var singleFragmentDefinition = new DXElementDefinition(block.DXUnitDefinitionMainElement.Name, block.DXUnitDefinitionMainElement.Name);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 

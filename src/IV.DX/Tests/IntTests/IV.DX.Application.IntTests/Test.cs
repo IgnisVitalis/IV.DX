@@ -110,7 +110,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests
     {
         public Guid Id { get; set; }
         public string Type { get; set; }
-        public ESQLModel Result { get; set; }
+        public DXModel Result { get; set; }
 
         // -1 - Error occured
         // 0 - Init

@@ -2,25 +2,25 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLPropertyDefinition
+    public class DXPropertyDefinition
     {
         public string Name { get; set; }
         public DXColumnAttribute ColumnDefinition { get; set; }
 
-        private ESQLPropertyDefinition()
+        private DXPropertyDefinition()
         {
 
         }
 
-        public ESQLPropertyDefinition(string name, DXColumnAttribute columnDefinition)
+        public DXPropertyDefinition(string name, DXColumnAttribute columnDefinition)
         {
             this.Name = name;
             this.ColumnDefinition = columnDefinition;
         }
 
-        public ESQLPropertyDefinition DeepClone()
+        public DXPropertyDefinition DeepClone()
         {
-            var clone = new ESQLPropertyDefinition()
+            var clone = new DXPropertyDefinition()
             {
                 Name = this.Name,
                 ColumnDefinition = this.ColumnDefinition.DeepClone()
@@ -29,7 +29,7 @@ namespace IV.DX.Kernel.Models
             return clone;
         }
 
-        public bool DeepEquals(ESQLPropertyDefinition columnDefinition)
+        public bool DeepEquals(DXPropertyDefinition columnDefinition)
         {
             if (columnDefinition == null)
                 return false;

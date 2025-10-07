@@ -8,17 +8,17 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
-        ESQLModel GetItem(ESQLModelDefinition definitionContainer, Guid id, DXLoadingType typeOfLoading);
-        IEnumerable<ESQLModel> GetItems(string typeName);
-        IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
-        IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression);
-        ESQLModel GetItem(string typeName, Guid objectId);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, DXLoadingType typeOfLoading);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
-        IEnumerable<ESQLModel> GetItems(ESQLModelDefinition definitionContainer, string esqlWhereExpression, DXLoadingType typeOfLoading);
-        Guid Insert(ESQLModel model);
-        Guid Update(ESQLModel model);
-        Guid InsertOrUpdate(ESQLModel model);
+        DXModel GetItem(DXModelDefinition definitionContainer, Guid id, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(string typeName);
+        IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
+        IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression);
+        DXModel GetItem(string typeName, Guid objectId);
+        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, string esqlWhereExpression, DXLoadingType typeOfLoading);
+        Guid Insert(DXModel model);
+        Guid Update(DXModel model);
+        Guid InsertOrUpdate(DXModel model);
         bool Delete(string typeName, Guid objectId);
         IEnumerable<Guid> GetRelations(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
@@ -26,10 +26,10 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         bool RemoveRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
 
 
-        Guid InsertSingleBlock(string esqlModelType, ESQLSingleItem esqlSingleBlock);
-        Guid UpdateSingleBlock(string esqlModelType, ESQLSingleItem esqlSingleBlock);
-        Guid InsertOrUpdateSingleBlock(string esqlModelType, ESQLSingleItem esqlSingleBlock);
+        Guid InsertSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
+        Guid UpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
+        Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
         bool DeleteSingleBlock(string typeName, Guid objectId);
-        ESQLSingleItem GetSingleBlock(ESQLBlockDefinition container, Guid id);
+        DXSingleItem GetSingleBlock(DXElementDefinition container, Guid id);
     }
 }

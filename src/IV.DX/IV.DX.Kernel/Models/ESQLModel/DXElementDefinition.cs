@@ -2,9 +2,9 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLBlockDefinition : IEnumerable<ESQLPropertyDefinition>
+    public class DXElementDefinition : IEnumerable<DXPropertyDefinition>
     {
-        private readonly List<ESQLPropertyDefinition> _items;
+        private readonly List<DXPropertyDefinition> _items;
 
         private string _name;
         public string Name
@@ -33,14 +33,14 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public ESQLBlockDefinition(string type, string name)
+        public DXElementDefinition(string type, string name)
         {
             this.Name = name;
             this.Type = type;
-            this._items = new List<ESQLPropertyDefinition>();
+            this._items = new List<DXPropertyDefinition>();
         }
 
-        public void AddPropertyDefinition(ESQLPropertyDefinition item)
+        public void AddPropertyDefinition(DXPropertyDefinition item)
         {
             if (this.GetPropertyDefinitionByName(item.Name) != null)
                 throw new Exception($"ASQLPropertyDefinition with Name {item.Name} is already existing.");
@@ -48,7 +48,7 @@ namespace IV.DX.Kernel.Models
             this._items.Add(item);
         }
 
-        public void AddPropertyDefinitions(IEnumerable<ESQLPropertyDefinition> items)
+        public void AddPropertyDefinitions(IEnumerable<DXPropertyDefinition> items)
         {
             if (items == null || items.Count() == 0)
                 return;
@@ -65,22 +65,22 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public ESQLPropertyDefinition GetPropertyDefinitionByName(string name)
+        public DXPropertyDefinition GetPropertyDefinitionByName(string name)
         {
             var item = this._items.SingleOrDefault(x => x.Name == name);
 
             return item;
         }
 
-        public ESQLBlockDefinition DeepClone()
+        public DXElementDefinition DeepClone()
         {
-            var clone = new ESQLBlockDefinition(this.Type, this.Name);
+            var clone = new DXElementDefinition(this.Type, this.Name);
             clone.AddPropertyDefinitions(this._items);
 
             return clone;
         }
 
-        public IEnumerator<ESQLPropertyDefinition> GetEnumerator()
+        public IEnumerator<DXPropertyDefinition> GetEnumerator()
         {
             return this._items.GetEnumerator();
         }

@@ -39,10 +39,10 @@ namespace IV.DX.Application.Contracts.Abstractions
         Guid InsertOrUpdate(DXUnit esqlObject, DXUnitHandlerBaseContext context);
         bool Delete(DXUnit esqlObject, DXUnitHandlerBaseContext context);
 
-        IEnumerable<ESQLModel> GetItems(string typeName, DXUnitHandlerBaseContext context);
-        IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context);
-        IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContext context);
-        ESQLModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContext context);
+        IEnumerable<DXModel> GetItems(string typeName, DXUnitHandlerBaseContext context);
+        IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context);
+        IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContext context);
+        DXModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContext context);
 
         Guid Insert(string jObject, DXUnitHandlerBaseContext context);
         Guid Update(string jObject, DXUnitHandlerBaseContext context);

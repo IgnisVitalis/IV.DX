@@ -25,14 +25,14 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Convert to ESQLModel
-        public static ESQLModel ConvertToESQLModel(this DXUnit esqlObject)
+        public static DXModel ConvertToESQLModel(this DXUnit esqlObject)
         {
             var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
                    (esqlObject.GetType());
 
-            var ownItem = new ESQLMainItem(objectInfo)
+            var ownItem = new DXMainItem(objectInfo)
             {
-                Item = new ESQLItem()
+                Item = new DXItem()
                 {
                     ID = esqlObject.ID,
                     ObjectID = esqlObject.ID,
@@ -40,7 +40,7 @@ namespace IV.DX.Kernel.Converters
                 }
             };
 
-            ESQLModel model = new ESQLModel(ownItem)
+            DXModel model = new DXModel(ownItem)
             {
                 SingleItems = GetESQLSingleItems(esqlObject),
                 MultiItems = GetESQLMutliItems(esqlObject)
@@ -49,7 +49,7 @@ namespace IV.DX.Kernel.Converters
             return model;
         }
 
-        private static IEnumerable<ESQLSingleItem> GetESQLSingleItems(DXUnit esqlObject)
+        private static IEnumerable<DXSingleItem> GetESQLSingleItems(DXUnit esqlObject)
         {
             var singleItemInfos = AttributeReader.GetSingleItemInfos(esqlObject);
 
@@ -57,10 +57,10 @@ namespace IV.DX.Kernel.Converters
             {
                 var singleItem = x.GetValue(esqlObject) as DXElement;
 
-                ESQLSingleItem esqlSingleItem = new ESQLSingleItem()
+                DXSingleItem esqlSingleItem = new DXSingleItem()
                 {
                     BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
-                    Item = new ESQLItem()
+                    Item = new DXItem()
                     {
                         ID = singleItem?.ID,
                         ObjectID = esqlObject.ID,
@@ -75,14 +75,14 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static ESQLSingleItem ConvertToSingleItem(this DXElement block)
+        public static DXSingleItem ConvertToSingleItem(this DXElement block)
         {
             var blockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(block.GetType());
 
-            ESQLSingleItem singleItem = new ESQLSingleItem()
+            DXSingleItem singleItem = new DXSingleItem()
             {
                 BlockInfo = blockInfo,
-                Item = new ESQLItem()
+                Item = new DXItem()
                 {
                     ID = block.ID,
                     ObjectID = block.ObjectID,
@@ -93,7 +93,7 @@ namespace IV.DX.Kernel.Converters
             return singleItem;
         }
 
-        private static IEnumerable<ESQLMultiItem> GetESQLMutliItems(DXUnit esqlObject)
+        private static IEnumerable<DXMultiItem> GetESQLMutliItems(DXUnit esqlObject)
         {
             var multiItemsInfos = AttributeReader.GetMultiItemInfos(esqlObject);
 
@@ -107,7 +107,7 @@ namespace IV.DX.Kernel.Converters
                 if (multiItemValue != null)
                     mode = (MultiElementsMode)multiItemType.GetProperty("Mode").GetValue(multiItemValue);
 
-                ESQLMultiItem multiItem = new ESQLMultiItem()
+                DXMultiItem multiItem = new DXMultiItem()
                 {
                     BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
                     Name = x.Name,
@@ -124,7 +124,7 @@ namespace IV.DX.Kernel.Converters
                         {
                             var content = GetContent(y);
 
-                            var esqlItem = new ESQLItem()
+                            var esqlItem = new DXItem()
                             {
                                 ID = y.ID,
                                 ObjectID = esqlObject.ID,
@@ -136,7 +136,7 @@ namespace IV.DX.Kernel.Converters
                     }
                     else
                     {
-                        multiItem.Announced = new List<ESQLItem>();
+                        multiItem.Announced = new List<DXItem>();
                     }
 
                     var destroyedArray = multiItemType.GetProperty(Constants.Deleted).GetValue(multiItemValue) as IEnumerable<DXElement>;
@@ -147,7 +147,7 @@ namespace IV.DX.Kernel.Converters
                         {
                             var content = GetContent(y);
 
-                            var esqlItem = new ESQLItem()
+                            var esqlItem = new DXItem()
                             {
                                 ID = y.ID,
                                 ObjectID = esqlObject.ID,
@@ -159,7 +159,7 @@ namespace IV.DX.Kernel.Converters
                     }
                     else
                     {
-                        multiItem.Deleted = new List<ESQLItem>();
+                        multiItem.Deleted = new List<DXItem>();
                     }
                 }
 
@@ -215,7 +215,7 @@ namespace IV.DX.Kernel.Converters
         #region Create instance
         public static T CreateInstance<T>(string json) where T : DXUnit
         {
-            var esqlModel = ESQLModel.CreateInstance(json);
+            var esqlModel = DXModel.CreateInstance(json);
 
             T esqlObj = CreateInstance<T>(esqlModel);
 
@@ -239,7 +239,7 @@ namespace IV.DX.Kernel.Converters
 
         public static T CreateInstance<T>(JObject jObject) where T : DXUnit
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
 
             T esqlObj = CreateInstance<T>(esqlModel);
 
@@ -248,7 +248,7 @@ namespace IV.DX.Kernel.Converters
 
         public static DXUnit CreateInstance(string json, Type type)
         {
-            var esqlModel = ESQLModel.CreateInstance(json);
+            var esqlModel = DXModel.CreateInstance(json);
 
             DXUnit esqlObj = CreateInstance(esqlModel, type);
 
@@ -257,24 +257,24 @@ namespace IV.DX.Kernel.Converters
 
         public static DXUnit CreateInstance(JObject jObject, Type type)
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
 
             DXUnit esqlObj = CreateInstance(esqlModel, type);
 
             return esqlObj;
         }
 
-        public static T CreateInstance<T>(ESQLModel model) where T : DXUnit
+        public static T CreateInstance<T>(DXModel model) where T : DXUnit
         {
             return ConvertToESQLObject(model, typeof(T)) as T;
         }
 
-        public static DXUnit CreateInstance(ESQLModel model, Type type)
+        public static DXUnit CreateInstance(DXModel model, Type type)
         {
             return ConvertToESQLObject(model, type);
         }
 
-        public static T CreateBlockInstance<T>(ESQLSingleItem item) where T : DXElement
+        public static T CreateBlockInstance<T>(DXSingleItem item) where T : DXElement
         {
             if (item == null)
                 return null;
@@ -289,7 +289,7 @@ namespace IV.DX.Kernel.Converters
             return singleFragmetInstance as T;
         }
 
-        private static DXUnit ConvertToESQLObject(ESQLModel model, Type type)
+        private static DXUnit ConvertToESQLObject(DXModel model, Type type)
         {
             if (model == null)
                 return null;

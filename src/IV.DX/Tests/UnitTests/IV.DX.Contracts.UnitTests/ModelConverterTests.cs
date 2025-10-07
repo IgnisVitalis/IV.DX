@@ -11,7 +11,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
     public class ModelConverterTests
     {
         private readonly MyObject esqlObject;
-        private readonly ESQLModel esqlModel;
+        private readonly DXModel esqlModel;
 
         public ModelConverterTests()
         {
@@ -69,9 +69,9 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                 }
             };
 
-            var ownItem = new ESQLMainItem(new DXUnitAttribute("MyObjectDefinition"))
+            var ownItem = new DXMainItem(new DXUnitAttribute("MyObjectDefinition"))
             {
-                Item = new ESQLItem()
+                Item = new DXItem()
                 {
                     ID = objectId,
                     ObjectID = objectId,
@@ -79,15 +79,15 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                 }
             };
 
-            esqlModel = new ESQLModel(ownItem)
+            esqlModel = new DXModel(ownItem)
             {
-                SingleItems = new List<ESQLSingleItem>()
+                SingleItems = new List<DXSingleItem>()
                 {
-                    new ESQLSingleItem
+                    new DXSingleItem
                     {
                         Name = "MyBlockSingleItem",
                         BlockInfo = new DXElementAttribute("MyBlockDefinition"),
-                        Item = new ESQLItem()
+                        Item = new DXItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
                             ObjectID = objectId,
@@ -101,16 +101,16 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                         }
                     }
                 },
-                MultiItems = new List<ESQLMultiItem>()
+                MultiItems = new List<DXMultiItem>()
                 {
-                    new ESQLMultiItem()
+                    new DXMultiItem()
                     {
                         Name = "MyBlockMultiItems",
                         BlockInfo = new DXElementAttribute("MyBlockDefinition"),
                         Mode = MultiElementsMode.Target,
-                        Announced = new List<ESQLItem>()
+                        Announced = new List<DXItem>()
                         {
-                            new ESQLItem()
+                            new DXItem()
                             {
                                 ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
                                 ObjectID = objectId,
@@ -122,7 +122,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                                     new JProperty("ObjectID",  new Guid("032169a1-fdfa-45b8-b0ec-381a6888ff35")),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 2))),
                             },
-                            new ESQLItem()
+                            new DXItem()
                             {
                                 ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
                                 ObjectID = objectId,
@@ -135,9 +135,9 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 3)))
                             }
                         },
-                        Deleted = new List<ESQLItem>()
+                        Deleted = new List<DXItem>()
                         {
-                            new ESQLItem()
+                            new DXItem()
                             {
                                 ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
                                 ObjectID = objectId,
@@ -165,7 +165,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
             var result = this.esqlObject.ConvertToESQLModel();
 
             // Checking result
-            Assert.True(ESQLModel.DeepEquals(this.esqlModel, result));
+            Assert.True(DXModel.DeepEquals(this.esqlModel, result));
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace IV.DataProvider.Persistence.Common.UnitTests.Converters
             var result = this.esqlObject.ConvertToESQLModel();
 
             // Checking result
-            Assert.True(ESQLModel.DeepEquals(this.esqlModel, result));
+            Assert.True(DXModel.DeepEquals(this.esqlModel, result));
         }
     }
 

@@ -6,12 +6,12 @@ namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
-        public ESQLMultiItem Get(ESQLBlockDefinition container)
+        public DXMultiItem Get(DXElementDefinition container)
         {
             if (container == null)
                 return null;
 
-            ESQLMultiItem result = null;
+            DXMultiItem result = null;
 
             this.RunRequest((conn) =>
             {

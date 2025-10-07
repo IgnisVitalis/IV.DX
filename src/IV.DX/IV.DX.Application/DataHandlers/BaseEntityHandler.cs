@@ -62,7 +62,7 @@ namespace IV.DX.Application.DataHandlers
             return this._coreModelHandler.IsItemExisting(TypeName, id, context);
         }
 
-        public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
+        public void OnGetting(DXModel model, DXUnitHandlerBaseContext context)
         {
             this._coreModelHandler.OnGetting(model, context);
         }

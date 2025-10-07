@@ -3,18 +3,18 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLModel
+    public class DXModel
     {
-        public ESQLMainItem OwnSingleItem { get; set; }
-        public IEnumerable<ESQLSingleItem> SingleItems { get; set; }
-        public IEnumerable<ESQLMultiItem> MultiItems { get; set; }
+        public DXMainItem OwnSingleItem { get; set; }
+        public IEnumerable<DXSingleItem> SingleItems { get; set; }
+        public IEnumerable<DXMultiItem> MultiItems { get; set; }
 
-        public ESQLModel(ESQLMainItem ownSingleItem)
+        public DXModel(DXMainItem ownSingleItem)
         {
             this.OwnSingleItem = ownSingleItem;
         }
 
-        public static bool DeepEquals(ESQLModel item1, ESQLModel item2)
+        public static bool DeepEquals(DXModel item1, DXModel item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -22,18 +22,18 @@ namespace IV.DX.Kernel.Models
             var result = true;
 
             result = result
-                && ESQLMainItem.DeepEquals(item1.OwnSingleItem, item2.OwnSingleItem)
-                && ESQLSingleItem.DeepEquals(item1.SingleItems, item2.SingleItems)
-                && ESQLMultiItem.DeepEquals(item1.MultiItems, item2.MultiItems);
+                && DXMainItem.DeepEquals(item1.OwnSingleItem, item2.OwnSingleItem)
+                && DXSingleItem.DeepEquals(item1.SingleItems, item2.SingleItems)
+                && DXMultiItem.DeepEquals(item1.MultiItems, item2.MultiItems);
 
             return result;
         }
 
-        public ESQLModel DeepClone()
+        public DXModel DeepClone()
         {
             var ownItemClone = this.OwnSingleItem.DeepClone();
 
-            return new ESQLModel(ownItemClone)
+            return new DXModel(ownItemClone)
             {
                 SingleItems = this.SingleItems?.Select(x => x.DeepClone()).ToList(),
                 MultiItems = this.MultiItems?.Select(x => x.DeepClone()).ToList()
@@ -70,7 +70,7 @@ namespace IV.DX.Kernel.Models
         #endregion
 
         #region Create instance
-        public static ESQLModel CreateInstance(JObject jObject)
+        public static DXModel CreateInstance(JObject jObject)
         {
             if (jObject == null)
                 return null;
@@ -95,7 +95,7 @@ namespace IV.DX.Kernel.Models
                     .Select(x => GetESQLMutliItem(x, ownItem.Item.ID))
                     .ToList();
 
-            ESQLModel model = new ESQLModel(ownItem)
+            DXModel model = new DXModel(ownItem)
             {
                 SingleItems = singleItems,
                 MultiItems = multiItems
@@ -104,16 +104,16 @@ namespace IV.DX.Kernel.Models
             return model;
         }
 
-        public static ESQLModel CreateInstance(string json)
+        public static DXModel CreateInstance(string json)
         {
             var jObject = JObject.Parse(json);
 
             return CreateInstance(jObject);
         }
 
-        private static ESQLSingleItem GetESQLSingleItem(JProperty property, Guid? objId)
+        private static DXSingleItem GetESQLSingleItem(JProperty property, Guid? objId)
         {
-            ESQLSingleItem singleItem = new ESQLSingleItem()
+            DXSingleItem singleItem = new DXSingleItem()
             {
                 Name = property.Name,
                 BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
@@ -123,9 +123,9 @@ namespace IV.DX.Kernel.Models
             return singleItem;
         }
 
-        private static ESQLMultiItem GetESQLMutliItem(JProperty property, Guid? objId)
+        private static DXMultiItem GetESQLMutliItem(JProperty property, Guid? objId)
         {
-            ESQLMultiItem esqlMultiItem = new ESQLMultiItem()
+            DXMultiItem esqlMultiItem = new DXMultiItem()
             {
                 Name = property.Name,
                 BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
@@ -137,7 +137,7 @@ namespace IV.DX.Kernel.Models
             return esqlMultiItem;
         }
 
-        private static ESQLMainItem GetQwnESQLSingleItem(JObject jObject)
+        private static DXMainItem GetQwnESQLSingleItem(JObject jObject)
         {
             var jObjectCopy = jObject.DeepClone() as JObject;
             string type = null;
@@ -163,7 +163,7 @@ namespace IV.DX.Kernel.Models
                 jObjectCopy.Remove(item.Name);
             }
 
-            var result = new ESQLMainItem(new DXUnitAttribute(type))
+            var result = new DXMainItem(new DXUnitAttribute(type))
             {
                 Item = GetESQLItem(jObjectCopy, id)
             };
@@ -174,9 +174,9 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        private static ESQLItem GetESQLItem(JObject jObject, Guid? objId)
+        private static DXItem GetESQLItem(JObject jObject, Guid? objId)
         {
-            ESQLItem esqlItem = new ESQLItem
+            DXItem esqlItem = new DXItem
             {
                 ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
                 ObjectID = objId

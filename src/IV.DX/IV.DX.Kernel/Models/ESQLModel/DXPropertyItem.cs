@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Models
 {
-    public class ESQLPropertyItem
+    public class DXPropertyItem
     {
     }
 }

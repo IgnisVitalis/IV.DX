@@ -6,7 +6,7 @@ namespace IV.DX.Application.Contracts.Abstractions
     public interface IDXUnitHandler<T> where T : DXUnit
     {
         bool IsItemExisting(Guid id, DXUnitHandlerBaseContext context);
-        void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context);
+        void OnGetting(DXModel model, DXUnitHandlerBaseContext context);
         Guid OnInserting(T entity, DXUnitHandlerBaseContext context);
         void OnInserted(T entity, DXUnitHandlerBaseContext context);
         Guid OnUpdating(T entity, DXUnitHandlerBaseContext context);

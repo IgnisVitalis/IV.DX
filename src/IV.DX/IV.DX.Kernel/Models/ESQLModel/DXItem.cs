@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLItem
+    public class DXItem
     {
         public Guid? ID { get; set; }
         public Guid? ObjectID { get; set; }
@@ -50,9 +50,9 @@ namespace IV.DX.Kernel.Models
             return obj;
         }
 
-        public static ESQLItem ConvertFromJObject(JObject jObject)
+        public static DXItem ConvertFromJObject(JObject jObject)
         {
-            ESQLItem fragment = new ESQLItem
+            DXItem fragment = new DXItem
             {
                 ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
                 ObjectID = jObject[Constants.ObjectID] != null ? (Guid?)jObject[Constants.ObjectID] : null
@@ -68,9 +68,9 @@ namespace IV.DX.Kernel.Models
             return fragment;
         }
 
-        public static ESQLItem Combine(params ESQLItem[] items)
+        public static DXItem Combine(params DXItem[] items)
         {
-            ESQLItem result = new ESQLItem()
+            DXItem result = new DXItem()
             {
                 Content = new JObject()
             };
@@ -139,7 +139,7 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        public static bool DeepEquals(ESQLItem item1, ESQLItem item2)
+        public static bool DeepEquals(DXItem item1, DXItem item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -169,7 +169,7 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        public static bool DeepEquals(IEnumerable<ESQLItem> list1, IEnumerable<ESQLItem> list2)
+        public static bool DeepEquals(IEnumerable<DXItem> list1, IEnumerable<DXItem> list2)
         {
             if (list1 == null || list2 == null)
                 return true;
@@ -187,16 +187,16 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!ESQLItem.DeepEquals(item1, item2))
+                if (!DXItem.DeepEquals(item1, item2))
                     return false;
             }
 
             return true;
         }
 
-        public ESQLItem DeepClone()
+        public DXItem DeepClone()
         {
-            return new ESQLItem()
+            return new DXItem()
             {
                 ID = this.ID,
                 ObjectID = this.ObjectID,

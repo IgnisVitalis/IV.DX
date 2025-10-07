@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLSingleItem
+    public class DXSingleItem
     {
         public string Name { get; set; }
         public DXElementAttribute BlockInfo { get; set; }
-        public ESQLItem Item { get; set; }
+        public DXItem Item { get; set; }
 
         public JProperty ConvertToJProperty()
         {
@@ -38,12 +38,12 @@ namespace IV.DX.Kernel.Models
             return jProperty;
         }
 
-        public static ESQLSingleItem ConvertFromJProperty(JProperty jProperty)
+        public static DXSingleItem ConvertFromJProperty(JProperty jProperty)
         {
             if (jProperty == null)
                 return null;
 
-            ESQLSingleItem singleFragment = new ESQLSingleItem
+            DXSingleItem singleFragment = new DXSingleItem
             {
                 BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name
@@ -52,12 +52,12 @@ namespace IV.DX.Kernel.Models
             var jObjectForContent = jProperty.Value as JObject;
             jObjectForContent.Remove(Constants.SystemPropertyTypeName);
 
-            singleFragment.Item = ESQLItem.ConvertFromJObject(jObjectForContent);
+            singleFragment.Item = DXItem.ConvertFromJObject(jObjectForContent);
 
             return singleFragment;
         }
 
-        public static bool DeepEquals(ESQLSingleItem item1, ESQLSingleItem item2)
+        public static bool DeepEquals(DXSingleItem item1, DXSingleItem item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -65,12 +65,12 @@ namespace IV.DX.Kernel.Models
             var result =
                 item1.Name == item2.Name
                 && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
-                && ESQLItem.DeepEquals(item1.Item, item2.Item);
+                && DXItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
         }
 
-        public static bool DeepEquals(IEnumerable<ESQLSingleItem> list1, IEnumerable<ESQLSingleItem> list2)
+        public static bool DeepEquals(IEnumerable<DXSingleItem> list1, IEnumerable<DXSingleItem> list2)
         {
             if (list1 == null && list2 == null)
                 return false;
@@ -85,16 +85,16 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!ESQLSingleItem.DeepEquals(item1, item2))
+                if (!DXSingleItem.DeepEquals(item1, item2))
                     return false;
             }
 
             return true;
         }
 
-        public ESQLSingleItem DeepClone()
+        public DXSingleItem DeepClone()
         {
-            return new ESQLSingleItem()
+            return new DXSingleItem()
             {
                 BlockInfo = this.BlockInfo?.DeepClone(),
                 Name = this.Name,

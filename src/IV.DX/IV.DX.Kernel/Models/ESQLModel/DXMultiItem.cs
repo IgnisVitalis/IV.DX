@@ -3,13 +3,13 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class ESQLMultiItem
+    public class DXMultiItem
     {
         public string Name { get; set; }
         public DXElementAttribute BlockInfo { get; set; }
         public MultiElementsMode Mode { get; set; }
-        public IEnumerable<ESQLItem> Announced { get; set; }
-        public IEnumerable<ESQLItem> Deleted { get; set; }
+        public IEnumerable<DXItem> Announced { get; set; }
+        public IEnumerable<DXItem> Deleted { get; set; }
 
         public JProperty ConvertToJProperty()
         {
@@ -80,12 +80,12 @@ namespace IV.DX.Kernel.Models
             return jProperty;
         }
 
-        public static ESQLMultiItem ConvertFromJProperty(JProperty jProperty)
+        public static DXMultiItem ConvertFromJProperty(JProperty jProperty)
         {
             if (jProperty == null)
                 return null;
 
-            ESQLMultiItem multiFragment = new ESQLMultiItem
+            DXMultiItem multiFragment = new DXMultiItem
             {
                 BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
@@ -94,28 +94,28 @@ namespace IV.DX.Kernel.Models
 
             if (jProperty[Constants.Announced] == null)
             {
-                multiFragment.Announced = new List<ESQLItem>();
+                multiFragment.Announced = new List<DXItem>();
             }
             else
             {
                 multiFragment.Announced = (jProperty[Constants.Announced] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => ESQLItem.ConvertFromJObject(x));
+                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x));
             }
 
             if (jProperty[Constants.Deleted] == null)
             {
-                multiFragment.Deleted = new List<ESQLItem>();
+                multiFragment.Deleted = new List<DXItem>();
             }
             else
             {
                 multiFragment.Deleted = (jProperty[Constants.Deleted] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => ESQLItem.ConvertFromJObject(x));
+                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x));
             }
 
             return multiFragment;
         }
 
-        public static bool DeepEquals(ESQLMultiItem item1, ESQLMultiItem item2)
+        public static bool DeepEquals(DXMultiItem item1, DXMultiItem item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -124,13 +124,13 @@ namespace IV.DX.Kernel.Models
                 item1.Name == item2.Name
                 && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
                 && item1.Mode == item2.Mode
-                && ESQLItem.DeepEquals(item1.Announced, item2.Announced)
-                && ESQLItem.DeepEquals(item1.Deleted, item2.Deleted);
+                && DXItem.DeepEquals(item1.Announced, item2.Announced)
+                && DXItem.DeepEquals(item1.Deleted, item2.Deleted);
 
             return result;
         }
 
-        public static bool DeepEquals(IEnumerable<ESQLMultiItem> list1, IEnumerable<ESQLMultiItem> list2)
+        public static bool DeepEquals(IEnumerable<DXMultiItem> list1, IEnumerable<DXMultiItem> list2)
         {
             if (list1 == null && list2 == null)
                 return false;
@@ -145,16 +145,16 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!ESQLMultiItem.DeepEquals(item1, item2))
+                if (!DXMultiItem.DeepEquals(item1, item2))
                     return false;
             }
 
             return true;
         }
 
-        public ESQLMultiItem DeepClone()
+        public DXMultiItem DeepClone()
         {
-            return new ESQLMultiItem()
+            return new DXMultiItem()
             {
                 Mode = this.Mode,
                 Name = this.Name,

@@ -218,25 +218,25 @@ namespace IV.DX.Application
             return this.InsertOrUpdate(jObject, new DXUnitHandlerBaseContext());
         }
 
-        public IEnumerable<ESQLModel> GetItems(string typeName, DXUnitHandlerBaseContext context)
+        public IEnumerable<DXModel> GetItems(string typeName, DXUnitHandlerBaseContext context)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(typeName);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName);
 
             this.HandleItems(items, typeName, context);
 
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
+        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, typeOfLoading);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
             return items;
         }
 
-        private void HandleItems(IEnumerable<ESQLModel> items, string typeName, DXUnitHandlerBaseContext context)
+        private void HandleItems(IEnumerable<DXModel> items, string typeName, DXUnitHandlerBaseContext context)
         {
             if (EntityHandlerProvider.IsCustomHandlerExisting(typeName))
             {
@@ -256,7 +256,7 @@ namespace IV.DX.Application
             }
         }
 
-        private void HandleItem(ESQLModel item, string typeName, DXUnitHandlerBaseContext context)
+        private void HandleItem(DXModel item, string typeName, DXUnitHandlerBaseContext context)
         {
             if (EntityHandlerProvider.IsCustomHandlerExisting(typeName))
             {
@@ -270,54 +270,54 @@ namespace IV.DX.Application
             }
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
+        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context)
+        public IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContext context)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(typeName, ids);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName, ids);
 
             this.HandleItems(items, typeName, context);
 
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContext context)
+        public IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContext context)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(typeName, esqlWhereExpression);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName, esqlWhereExpression);
 
             this.HandleItems(items, typeName, context);
 
             return items;
         }
 
-        public IEnumerable<ESQLModel> GetItems(ESQLModelDefinition modelDefinition, string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
+        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, string esqlWhereExpression, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<ESQLModel> items = this._coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
+            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
             return items;
         }
 
-        public ESQLModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContext context)
+        public DXModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContext context)
         {
-            ESQLModel item = this._coreRepo.GetItem(typeName, id);
+            DXModel item = this._coreRepo.GetItem(typeName, id);
 
             this.HandleItem(item, typeName, context);
 
             return item;
         }
 
-        public ESQLModel GetItem(ESQLModelDefinition modelDefinition, Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
+        public DXModel GetItem(DXModelDefinition modelDefinition, Guid id, DXUnitHandlerBaseContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            ESQLModel item = this._coreRepo.GetItem(modelDefinition, id, typeOfLoading);
+            DXModel item = this._coreRepo.GetItem(modelDefinition, id, typeOfLoading);
 
             this.HandleItem(item, modelDefinition.OwnSingleItem.Type, context);
 
@@ -351,12 +351,12 @@ namespace IV.DX.Application
 
         public Guid Insert(JObject jObject, DXUnitHandlerBaseContext context)
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
 
             return this.Insert(esqlModel, context);
         }
 
-        private Guid Insert(ESQLModel esqlModel, DXUnitHandlerBaseContext context)
+        private Guid Insert(DXModel esqlModel, DXUnitHandlerBaseContext context)
         {            
             var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
 
@@ -385,11 +385,11 @@ namespace IV.DX.Application
 
         public Guid Update(JObject jObject, DXUnitHandlerBaseContext context)
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
             return this.Update(esqlModel, context);
         }
 
-        private Guid Update(ESQLModel esqlModel, DXUnitHandlerBaseContext context)
+        private Guid Update(DXModel esqlModel, DXUnitHandlerBaseContext context)
         {           
             var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
 
@@ -418,14 +418,14 @@ namespace IV.DX.Application
 
         public bool Delete(JObject jObject, DXUnitHandlerBaseContext context)
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
             
             return this.Delete(esqlModel.OwnSingleItem.ObjectInfo.ObjectName, esqlModel.OwnSingleItem.Item.ID.Value, context);
         }
 
         public Guid InsertOrUpdate(JObject jObject, DXUnitHandlerBaseContext context)
         {
-            var esqlModel = ESQLModel.CreateInstance(jObject);
+            var esqlModel = DXModel.CreateInstance(jObject);
 
             var objId = esqlModel.OwnSingleItem.Item.ID;
 

@@ -4,6 +4,6 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXEnumCoreRepository
     {
-        ESQLMultiItem Get(ESQLBlockDefinition container);
+        DXMultiItem Get(DXElementDefinition container);
     }
 }

@@ -148,7 +148,7 @@ namespace IV.DX.Application
                 return (this._handler.Item2 as dynamic).OnDeleting(id, context);
             }
 
-            public void OnGetting(ESQLModel model, DXUnitHandlerBaseContext context)
+            public void OnGetting(DXModel model, DXUnitHandlerBaseContext context)
             {
                 (this._handler.Item2 as dynamic).OnGetting(model, context);
             }
