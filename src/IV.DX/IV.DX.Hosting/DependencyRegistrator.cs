@@ -41,11 +41,11 @@ namespace IV.DataProvider.Persistence.Services
 
             //container.AddSingleton<CoreRepository>(new InjectionConstructor(new object[] { config.Database.ConnectionString, serviceProvider.GetService<ISQLQueryHelper>() }));
 
-            this._container.AddSingleton<IEnumCoreRepository, CoreRepository>();
-            this._container.AddSingleton<IDataStructureRepository, CoreRepository>();
-            this._container.AddSingleton<ICoreRepository, CoreRepository>();
+            this._container.AddSingleton<IDXEnumCoreRepository, CoreRepository>();
+            this._container.AddSingleton<IDXStructureRepository, CoreRepository>();
+            this._container.AddSingleton<IDXCoreRepository, CoreRepository>();
 
-            this._container.AddSingleton<IGenericRepository, GenericRepository>();
+            this._container.AddSingleton<IDXGenericRepository, GenericRepository>();
             this._container.AddSingleton<IDataService, DataService>();
             this._container.AddSingleton<ICoreModelHandler, CoreModelHandler>();
             this._container.AddSingleton<IMigrationService, MigrationService>();
@@ -53,11 +53,11 @@ namespace IV.DataProvider.Persistence.Services
 
         public void InitCache(IServiceProvider serviceProvider)
         {
-            var dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
-            var coreRepo = serviceProvider.GetService<ICoreRepository>();
+            var dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
+            var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
 
             dataStructureRepo.UpdateCache();
-            (coreRepo as IDataStructureRepository).UpdateCache();
+            (coreRepo as IDXStructureRepository).UpdateCache();
         }
 
         public void InitEntityHandlerProvider(IServiceProvider serviceProvider)
@@ -68,15 +68,15 @@ namespace IV.DataProvider.Persistence.Services
 
         public void DropDatabase(IServiceProvider serviceProvider)
         {
-            var coreRepo = serviceProvider.GetService<ICoreRepository>();
+            var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
 
             coreRepo.DropDataBase();
         }
 
         public void InitCoreData(IServiceProvider serviceProvider)
         {
-            var dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
-            var coreRepo = serviceProvider.GetService<ICoreRepository>();
+            var dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
+            var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
             var migrationService = serviceProvider.GetService<IMigrationService>();
 
             coreRepo.CreateDataBase();

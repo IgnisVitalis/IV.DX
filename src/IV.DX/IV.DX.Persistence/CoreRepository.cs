@@ -13,7 +13,7 @@ using System.Data.Common;
 
 namespace IV.DX.Persistence
 {
-    internal partial class CoreRepository : ICoreRepository, IDataStructureRepository, IEnumCoreRepository
+    internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         protected string _connectionStr;
         protected ISQLQueryHelper _queryHelper;

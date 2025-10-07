@@ -64,8 +64,8 @@ namespace IV.DataProvider.Persistence.Services.IntTests
         {
                        // Init
             IDataService dataService = this.ServiceProvider.GetService<IDataService>();
-            IDataStructureRepository dataStructureRepository = this.ServiceProvider.GetService<IDataStructureRepository>();
-            IEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetService<IEnumCoreRepository>();
+            IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetService<IDXStructureRepository>();
+            IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetService<IDXEnumCoreRepository>();
 
             var enumInfo = dataStructureRepository.GetEnum("DXObjectKindEnum");
 

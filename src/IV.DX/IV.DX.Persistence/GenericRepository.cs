@@ -6,11 +6,11 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal class GenericRepository : IGenericRepository
+    internal class GenericRepository : IDXGenericRepository
     {
-        private readonly ICoreRepository _coreRepo;
+        private readonly IDXCoreRepository _coreRepo;
 
-        public GenericRepository(ICoreRepository coreRepo)
+        public GenericRepository(IDXCoreRepository coreRepo)
         {
             this._coreRepo = coreRepo;
         }

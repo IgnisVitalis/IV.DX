@@ -16,12 +16,12 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
     {
         private readonly TimeSpan difference = new TimeSpan(0, 0, 10);
 
-        IGenericRepository _genericRepo;
+        IDXGenericRepository _genericRepo;
         
         public DataBlockRepositoryTests(ITestOutputHelper output)
             : base(output)
         {
-            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
         }
 
         [Fact]

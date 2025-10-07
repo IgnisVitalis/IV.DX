@@ -8,18 +8,18 @@ namespace IV.DX.Application.DataHandlers
 {
     internal abstract class DXObjectDefinitionUnitHandler<T> : BaseEntityHandler<T> where T : DXObjectDefinitionUnit
     {
-        private readonly IDataStructureRepository _dataStructureRepo;
+        private readonly IDXStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXGenericRepository _genericRepo;
 
         protected static readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
 
         public DXObjectDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
+            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
             this._dataService = serviceProvider.GetService<IDataService>();
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
         protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)

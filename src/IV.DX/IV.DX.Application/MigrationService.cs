@@ -10,11 +10,11 @@ namespace IV.DX.Application
     internal class MigrationService : IMigrationService
     {
         private readonly IDataService _dataService;
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXGenericRepository _genericRepo;
         private readonly Mutex mutex = new Mutex(false, "1e12dbb9-37ff-4e13-a9b1-5efa33cea05f");
 
         public MigrationService(
-            IGenericRepository genericRepo,
+            IDXGenericRepository genericRepo,
             IDataService dataService)
         {
             this._genericRepo = genericRepo;

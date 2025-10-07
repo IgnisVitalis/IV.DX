@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
-    internal interface IDataStructureRepository
+    internal interface IDXStructureRepository
     {
         IEnumerable<DXRelationDefinitionUnit> RelationInfos { get; }
         IEnumerable<DXUnitDefinitionUnit> EntityInfos { get; }

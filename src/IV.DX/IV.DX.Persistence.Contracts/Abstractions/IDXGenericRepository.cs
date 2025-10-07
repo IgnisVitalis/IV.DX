@@ -2,7 +2,7 @@
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
-    internal interface IGenericRepository
+    internal interface IDXGenericRepository
     {
         IEnumerable<T> GetItems<T>() where T : ESQLObject;
         IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : ESQLObject;

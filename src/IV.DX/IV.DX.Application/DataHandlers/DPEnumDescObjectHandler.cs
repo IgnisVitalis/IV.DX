@@ -9,14 +9,14 @@ namespace IV.DX.Application.DataHandlers
 {
     internal class DXEnumDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXEnumDefinitionUnit>
     {
-        private readonly IDataStructureRepository _dataStructureRepo;
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXStructureRepository _dataStructureRepo;
+        private readonly IDXGenericRepository _genericRepo;
 
         public DXEnumDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();            
+            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();            
         }
 
         public override Guid OnInserting(DXEnumDefinitionUnit entity, EntityHandlerBaseContext context)

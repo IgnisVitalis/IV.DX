@@ -8,12 +8,12 @@ namespace IV.DX.Application.DataHandlers
 {
     internal class DPRelationItemObjectHandler : BaseEntityHandler<DPRelationItemObject>
     {
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXGenericRepository _genericRepo;
 
         public DPRelationItemObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
         public override bool IsItemExisting(Guid id, EntityHandlerBaseContext context)

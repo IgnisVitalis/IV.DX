@@ -8,13 +8,13 @@ namespace IV.DX.Application.DataHandlers
 {
     internal sealed class CoreModelHandler : ICoreModelHandler
     {
-        private readonly ICoreRepository _coreRepo;
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXCoreRepository _coreRepo;
+        private readonly IDXGenericRepository _genericRepo;
 
         public CoreModelHandler(IServiceProvider serviceProvider)
         {
-            this._coreRepo = serviceProvider.GetService<ICoreRepository>();
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();
+            this._coreRepo = serviceProvider.GetService<IDXCoreRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
         public bool OnDeleting(string typeName, Guid id, EntityHandlerBaseContext context)

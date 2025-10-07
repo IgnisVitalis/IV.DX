@@ -26,13 +26,13 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests.SQLQueryHelpers
         public IEnumerable<TBookObject> books;
 
         ISQLQueryHelper _sqlQueryHelper;
-        IGenericRepository _genericRepo;
+        IDXGenericRepository _genericRepo;
 
         public SQLQueryHelperTests(ITestOutputHelper output)
             : base(output)
         {
             this._sqlQueryHelper = this.ServiceProvider.GetService<ISQLQueryHelper>();
-            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
 
             InitData();
         }

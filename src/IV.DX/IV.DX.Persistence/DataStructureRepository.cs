@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace IV.DX.Persistence
 {
-    internal partial class CoreRepository : ICoreRepository, IDataStructureRepository, IEnumCoreRepository
+    internal partial class CoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
     {
         private IList<DXRelationDefinitionUnit> _relationInfos;
         public IEnumerable<DXRelationDefinitionUnit> RelationInfos { get { return this._relationInfos; } }

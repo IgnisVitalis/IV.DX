@@ -11,9 +11,9 @@ namespace IV.DX.Application
 {
     internal class DataService : IDataService
     {
-        private readonly ICoreRepository _coreRepo;
+        private readonly IDXCoreRepository _coreRepo;
 
-        public DataService(ICoreRepository coreRepo)
+        public DataService(IDXCoreRepository coreRepo)
         {
             this._coreRepo = coreRepo;
         }

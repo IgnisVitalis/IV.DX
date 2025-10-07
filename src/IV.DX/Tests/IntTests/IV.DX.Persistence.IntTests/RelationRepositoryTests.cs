@@ -17,14 +17,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 {
     public class RelationRepositoryTests : IntTestController
     {
-        IGenericRepository _genericRepo;
-        ICoreRepository _coreRepo;
+        IDXGenericRepository _genericRepo;
+        IDXCoreRepository _coreRepo;
 
         public RelationRepositoryTests(ITestOutputHelper output)
             : base(output)
         {
-            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
-            this._coreRepo = this.ServiceProvider.GetService<ICoreRepository>();
+            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+            this._coreRepo = this.ServiceProvider.GetService<IDXCoreRepository>();
         }
 
         [Fact]

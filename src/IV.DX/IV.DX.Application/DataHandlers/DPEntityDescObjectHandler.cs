@@ -11,16 +11,16 @@ namespace IV.DX.Application.DataHandlers
     // Method to process relation to DBBlocks have duplicated code.
     internal class DXUnitDefinitionUnitHandler : DXObjectDefinitionUnitHandler<DXUnitDefinitionUnit>
     {
-        private readonly IDataStructureRepository _dataStructureRepo;
+        private readonly IDXStructureRepository _dataStructureRepo;
         private readonly IDataService _dataService;
-        private readonly IGenericRepository _genericRepo;
+        private readonly IDXGenericRepository _genericRepo;
 
         public DXUnitDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
+            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
             this._dataService = serviceProvider.GetService<IDataService>();
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
         public override Guid OnInserting(DXUnitDefinitionUnit entity, EntityHandlerBaseContext context)

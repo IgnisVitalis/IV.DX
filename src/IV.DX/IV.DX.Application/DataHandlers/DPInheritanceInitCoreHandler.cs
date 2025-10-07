@@ -8,12 +8,12 @@ namespace IV.DX.Application.DataHandlers
 {
     internal class DXInheritanceInitCoreHandler : BaseEntityHandler<DXInheritanceInitCore>
     {
-        private readonly IDataStructureRepository _dataStructureRepository;
+        private readonly IDXStructureRepository _dataStructureRepository;
 
         public DXInheritanceInitCoreHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepository = serviceProvider.GetService<IDataStructureRepository>();
+            this._dataStructureRepository = serviceProvider.GetService<IDXStructureRepository>();
         }
 
         public override Guid OnInserting(DXInheritanceInitCore entity, EntityHandlerBaseContext context)

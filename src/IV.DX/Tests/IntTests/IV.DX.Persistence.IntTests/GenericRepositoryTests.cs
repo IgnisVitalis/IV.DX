@@ -15,12 +15,12 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 {
     public class GenericRepositoryTests : IntTestController
     {
-        IGenericRepository _genericRepo;
+        IDXGenericRepository _genericRepo;
 
         public GenericRepositoryTests(ITestOutputHelper output)
             : base(output)
         {           
-            this._genericRepo = this.ServiceProvider.GetService<IGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
         }
 
         [Fact]

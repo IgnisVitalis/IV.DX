@@ -7,14 +7,14 @@ namespace IV.DX.Application.DataHandlers
 {
     internal class DXRelationDefinitionUnitHandler : BaseEntityHandler<DXRelationDefinitionUnit>
     {
-        private readonly IGenericRepository _genericRepo;
-        private readonly IDataStructureRepository _dataStructureRepo;
+        private readonly IDXGenericRepository _genericRepo;
+        private readonly IDXStructureRepository _dataStructureRepo;
 
         public DXRelationDefinitionUnitHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._genericRepo = serviceProvider.GetService<IGenericRepository>();
-            this._dataStructureRepo = serviceProvider.GetService<IDataStructureRepository>();
+            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
         }
 
         public override Guid OnInserting(DXRelationDefinitionUnit entity, EntityHandlerBaseContext context)
