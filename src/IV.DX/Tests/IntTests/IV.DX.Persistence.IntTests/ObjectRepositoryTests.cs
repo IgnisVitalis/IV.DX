@@ -41,9 +41,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DPObjectDescGenBlock.ID);
-            Assert.Equal("NewObject", objDefinition.DPObjectDescGenBlock.Name);
+            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DXUnitDefinitionMainElement.ID);
+            Assert.Equal("NewObject", objDefinition.DXUnitDefinitionMainElement.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
 
@@ -70,9 +70,9 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DPObjectDescGenBlock.ID);
-            Assert.Equal("UpdatedObject", objDefinition.DPObjectDescGenBlock.Name);
+            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("19EAEF84-8E84-4B1B-BC5E-90A277BB67E5"), objDefinition.DXUnitDefinitionMainElement.ID);
+            Assert.Equal("UpdatedObject", objDefinition.DXUnitDefinitionMainElement.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
     }

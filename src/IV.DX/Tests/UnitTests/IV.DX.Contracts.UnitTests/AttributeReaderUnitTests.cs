@@ -29,29 +29,29 @@ namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
         }
 
         [Fact]
-        public void GetESQLBlockDefinitionAttribute_FromDPObjectDescGenBlock_AttributeWithCorrectValues()
+        public void GetESQLBlockDefinitionAttribute_FromDXUnitDefinitionMainElement_AttributeWithCorrectValues()
         {
             // Init
 
             // Action
             var attr = AttributeReader
                 .GetSingleAttribute<ESQLBlockDefinitionAttribute>
-                (typeof(DPObjectDescGenBlock));
+                (typeof(DXUnitDefinitionMainElement));
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.BlockName == "DPObjectDescGenBlock");
+            Assert.True(attr.BlockName == "DXUnitDefinitionMainElement");
         }
 
         [Fact]
-        public void GetESQLColumnDefinitionAttributes_FromDPObjectDescGenBlock_AttributesWithCorrectValues()
+        public void GetESQLColumnDefinitionAttributes_FromDXUnitDefinitionMainElement_AttributesWithCorrectValues()
         {
             // Init
 
             // Action
             var attributes = AttributeReader
                     .GetAllSinglePropertyAttributes<ESQLColumnDefinitionAttribute>
-                    (typeof(DPObjectDescGenBlock));
+                    (typeof(DXUnitDefinitionMainElement));
 
             // Checking result
             Assert.True(attributes.Count() == 6);

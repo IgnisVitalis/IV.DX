@@ -107,7 +107,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Checking result
             Assert.NotEmpty(blocks);
 
-            Assert.Equal(blocks.Count(), blocks.Where(x => x.DPObjectDescGenBlock != null).Count());
+            Assert.Equal(blocks.Count(), blocks.Where(x => x.DXUnitDefinitionMainElement != null).Count());
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             // Checking result
             Assert.NotNull(block);
 
-            var genBlock = block.SingleItems.SingleOrDefault(x => x.Name == "DPObjectDescGenBlock");
+            var genBlock = block.SingleItems.SingleOrDefault(x => x.Name == "DXUnitDefinitionMainElement");
 
             Assert.NotNull(genBlock);
         }
@@ -140,7 +140,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
 
             var obj = objs.Single();
 
-            Assert.Equal("DXUnitDefinitionUnit", obj.DPObjectDescGenBlock.Name);
+            Assert.Equal("DXUnitDefinitionUnit", obj.DXUnitDefinitionMainElement.Name);
         }
 
         [Fact]

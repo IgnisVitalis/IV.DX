@@ -44,14 +44,14 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
-            Assert.NotNull(result.DPObjectDescGenBlock);
-            Assert.True(result.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId, result.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("SomeTestName", result.DPObjectDescGenBlock.Name);
+            Assert.NotNull(result.DXUnitDefinitionMainElement);
+            Assert.True(result.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId, result.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName", result.DXUnitDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Update
-            item.DPObjectDescGenBlock.Name = "UpdatedSomeTestName";
+            item.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName";
             this._genericRepo.Update(item);
 
             // Checking result
@@ -59,10 +59,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
-            Assert.NotNull(result.DPObjectDescGenBlock);
-            Assert.True(result.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId, result.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("UpdatedSomeTestName", result.DPObjectDescGenBlock.Name);
+            Assert.NotNull(result.DXUnitDefinitionMainElement);
+            Assert.True(result.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId, result.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName", result.DXUnitDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Delete
@@ -112,27 +112,27 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(resultItem1);
             Assert.Equal(objectId1, resultItem1.ID);
-            Assert.NotNull(resultItem1.DPObjectDescGenBlock);
-            Assert.True(resultItem1.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("SomeTestName1", resultItem1.DPObjectDescGenBlock.Name);
+            Assert.NotNull(resultItem1.DXUnitDefinitionMainElement);
+            Assert.True(resultItem1.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId1, resultItem1.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName1", resultItem1.DXUnitDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             var resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
             Assert.NotNull(resultItem2);
             Assert.Equal(objectId2, resultItem2.ID);
-            Assert.NotNull(resultItem2.DPObjectDescGenBlock);
-            Assert.True(resultItem2.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("SomeTestName2", resultItem2.DPObjectDescGenBlock.Name);
+            Assert.NotNull(resultItem2.DXUnitDefinitionMainElement);
+            Assert.True(resultItem2.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId2, resultItem2.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName2", resultItem2.DXUnitDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Update
-            item1.DPObjectDescGenBlock.Name = "UpdatedSomeTestName1";
+            item1.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName1";
             this._genericRepo.Update(item1);
 
-            item2.DPObjectDescGenBlock.Name = "UpdatedSomeTestName2";
+            item2.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName2";
             this._genericRepo.Update(item2);
 
             // Checking result
@@ -142,20 +142,20 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             Assert.NotNull(resultItem1);
             Assert.Equal(objectId1, resultItem1.ID);
-            Assert.NotNull(resultItem1.DPObjectDescGenBlock);
-            Assert.True(resultItem1.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("UpdatedSomeTestName1", resultItem1.DPObjectDescGenBlock.Name);
+            Assert.NotNull(resultItem1.DXUnitDefinitionMainElement);
+            Assert.True(resultItem1.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId1, resultItem1.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName1", resultItem1.DXUnitDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
             Assert.NotNull(resultItem2);
             Assert.Equal(objectId2, resultItem2.ID);
-            Assert.NotNull(resultItem2.DPObjectDescGenBlock);
-            Assert.True(resultItem2.DPObjectDescGenBlock.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DPObjectDescGenBlock.ObjectID);
-            Assert.Equal("UpdatedSomeTestName2", resultItem2.DPObjectDescGenBlock.Name);
+            Assert.NotNull(resultItem2.DXUnitDefinitionMainElement);
+            Assert.True(resultItem2.DXUnitDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId2, resultItem2.DXUnitDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName2", resultItem2.DXUnitDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Delete

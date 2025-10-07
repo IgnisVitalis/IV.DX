@@ -6,8 +6,8 @@
       "ID": "a0e9308c-7e20-4eff-add8-9ce21e1de13b",
       "ObjectNameLeft": "DPObjectDescObject",
       "RelationNameLeft": "DPObjectDescObjectID",
-      "ObjectNameRight": "DPObjectDescGenBlock",
-      "RelationNameRight": "DPObjectDescGenBlock",
+      "ObjectNameRight": "DXUnitDefinitionMainElement",
+      "RelationNameRight": "DXUnitDefinitionMainElement",
       "RelationTable": null,
       "RelationType": 8,
       "Kind": 1
@@ -100,8 +100,8 @@
     "ID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
     "DPRelationGenBlock": {
       "ID": "d38cf673-89c7-47d7-9f48-5a3a49396ed2",
-      "ObjectNameLeft": "DPObjectDescGenBlock",
-      "RelationNameLeft": "DPObjectDescGenBlock",
+      "ObjectNameLeft": "DXUnitDefinitionMainElement",
+      "RelationNameLeft": "DXUnitDefinitionMainElement",
       "ObjectNameRight": "DPObjectKindEnum",
       "RelationNameRight": "Kind",
       "RelationTable": null,

@@ -51,7 +51,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             DXElementDefinitionUnit blockDescObject = new DXElementDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlock"
@@ -69,7 +69,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             DXUnitDefinitionUnit entityDescObject = new DXUnitDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestEntity"
@@ -175,7 +175,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var blockToAdd = new DXElementDefinitionUnit()
             {
                 ID = new Guid("4b95f498-f0cb-407d-be16-e7a1518fc070"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlockToAdde7a1518fc070"
@@ -185,7 +185,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var blockToDelete = new DXElementDefinitionUnit()
             {
                 ID = new Guid("d3b5e1e2-3f3a-4f7c-8f0c-5e2b8e6f4a1c"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlockToDelete5e2b8e6f4a1c"
@@ -195,7 +195,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestEntity5c3eeb6a68ce"
@@ -275,7 +275,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var block = new DXElementDefinitionUnit()
             {
                 ID = new Guid("02449441-f8c4-483a-950f-6b47f2f216b4"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlock6b47f2f216b4"
@@ -285,7 +285,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestEntity8f9e7d6c5b4a"
@@ -333,7 +333,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var block1 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("f8f68404-6143-433e-aa2c-f45215f6be1c"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlockf45215f6be1c"
@@ -343,7 +343,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var block2 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("63c28d39-1561-4c97-b212-fa7db5443a11"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlockfa7db5443a11"
@@ -353,7 +353,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var block3 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("8ae093df-d6b8-4d13-acc7-801b464bfb0f"),
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestBlock801b464bfb0f"
@@ -363,7 +363,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             var entity = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestEntityc44f7a2dd5f6"

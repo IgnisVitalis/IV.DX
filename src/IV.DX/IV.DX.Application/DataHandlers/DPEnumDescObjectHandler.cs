@@ -63,7 +63,7 @@ namespace IV.DX.Application.DataHandlers
 
             this._dataStructureRepo.DropDataStructure(entity);
 
-            switch (entity.DPObjectDescGenBlock.Kind)
+            switch (entity.DXUnitDefinitionMainElement.Kind)
             {
                 case DPObjectKindEnum.Core:
                     return false;

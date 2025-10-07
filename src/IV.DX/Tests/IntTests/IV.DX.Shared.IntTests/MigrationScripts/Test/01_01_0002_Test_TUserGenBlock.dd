@@ -2,7 +2,7 @@
   {
     "S_Type": "DXElementDefinitionUnit",
     "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "e8a16147-6885-4588-a467-7f30f9c8603b",
       "Name": "TUserGenBlock",
       "Kind": 3

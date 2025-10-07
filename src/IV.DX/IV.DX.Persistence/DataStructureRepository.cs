@@ -229,13 +229,13 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetEntity(string entityType)
         {
-            var result = EntityInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(entityType));
+            var result = EntityInfos.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(entityType));
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = EntityInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(entityType));
+                result = EntityInfos.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(entityType));
             }
 
             return result;
@@ -415,13 +415,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetEnum(string enumName)
         {
-            var existingEnum = this.EnumInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(enumName));
+            var existingEnum = this.EnumInfos.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
 
             if (existingEnum == null)
             {
                 this.UpdateCache();
 
-                existingEnum = this.EnumInfos.SingleOrDefault(x => x.DPObjectDescGenBlock.Name.Equals(enumName));
+                existingEnum = this.EnumInfos.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
             }
 
             return existingEnum;

@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DPObjectDescGenBlock", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DPBlockInObjectTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DPEntityInheritanceBlock", "DPBlockInEntityDescGenBlock", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DPObjectKindEnum", "DPColumnTypeEnum", "DXRelationDefinitionUnit", "DPRelationGenBlock", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -79,14 +79,14 @@ namespace IV.DX.Application.DataHandlers
                 DPRelationGenBlock = new DPRelationGenBlock()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectNameLeft = obj.DPObjectDescGenBlock.Name,
-                    RelationNameLeft = obj.DPObjectDescGenBlock.Name,
-                    ObjectNameRight = enumObj.DPObjectDescGenBlock.Name,
+                    ObjectNameLeft = obj.DXUnitDefinitionMainElement.Name,
+                    RelationNameLeft = obj.DXUnitDefinitionMainElement.Name,
+                    ObjectNameRight = enumObj.DXUnitDefinitionMainElement.Name,
                     RelationNameRight = columnWithEnumValue.Name,
                     RelationType = DPRelationTypeEnum.ManyToOne,
                     RelationColumnNameRight = enumColumn.Name,
                     RelationColumnTypeRight = enumColumn.ColumnType,
-                    Kind = obj.DPObjectDescGenBlock.Kind
+                    Kind = obj.DXUnitDefinitionMainElement.Kind
                 }
             };
         }
@@ -99,14 +99,14 @@ namespace IV.DX.Application.DataHandlers
             if (dataBlock.ID == default(Guid))
                 throw new Exception("DPObjectDescObject.ID has Default value;");
 
-            if (dataBlock.DPObjectDescGenBlock == null)
-                throw new Exception("DPObjectDescObject.DPObjectDescGenBlock is NULL;");
+            if (dataBlock.DXUnitDefinitionMainElement == null)
+                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement is NULL;");
 
-            if (dataBlock.DPObjectDescGenBlock.ID == default(Guid))
-                throw new Exception("DPObjectDescObject.DPObjectDescGenBlock.ID has Default value;");
+            if (dataBlock.DXUnitDefinitionMainElement.ID == default(Guid))
+                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement.ID has Default value;");
 
-            if (string.IsNullOrEmpty(dataBlock.DPObjectDescGenBlock.Name))
-                throw new Exception("DPObjectDescObject.DPObjectDescGenBlock.Name is NULL or Empty;");
+            if (string.IsNullOrEmpty(dataBlock.DXUnitDefinitionMainElement.Name))
+                throw new Exception("DPObjectDescObject.DXUnitDefinitionMainElement.Name is NULL or Empty;");
         }
 
         protected void Process(DPObjectDescObject objectInfoIncome)
@@ -129,7 +129,7 @@ namespace IV.DX.Application.DataHandlers
 
         private DPObjectDescObject GetObjectInfoFromDB(DPObjectDescObject objectInfoIncome)
         {
-            if (systemObjectNames.Contains(objectInfoIncome.DPObjectDescGenBlock.Name, StringComparer.OrdinalIgnoreCase))
+            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
             return this._genericRepo.GetItem<DPObjectDescObject>(objectInfoIncome.ID);

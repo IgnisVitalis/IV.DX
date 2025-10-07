@@ -108,7 +108,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"CREATE TABLE IF NOT EXISTS {dataBlock.DPObjectDescGenBlock.Name}(");
+            sb.Append($"CREATE TABLE IF NOT EXISTS {dataBlock.DXUnitDefinitionMainElement.Name}(");
 
             var clmDefList = dataBlock.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
@@ -141,7 +141,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToDropTable(DPObjectDescObject dataBlock)
         {
             // TODO: need to find solution how to drop table by ObjectID
-            return GetSQLQueryToDropTable(dataBlock.DPObjectDescGenBlock.Name);
+            return GetSQLQueryToDropTable(dataBlock.DXUnitDefinitionMainElement.Name);
         }
 
         public string GetSQLQueryToDropTable(string tableName)
@@ -216,7 +216,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                     dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
                     dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
-            sb.Append($"ALTER TABLE {dataBlockExisting.DPObjectDescGenBlock.Name} ");
+            sb.Append($"ALTER TABLE {dataBlockExisting.DXUnitDefinitionMainElement.Name} ");
             if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
             {
                 sb.Append($"{string.Join(",", columnsToDropMySQLCommand)},");
@@ -229,7 +229,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
                 sb.Append($"{string.Join(",", columnsToChangeMySQLCommand)},");
             }
-            sb.Append($"RENAME TO {dataBlockNew.DPObjectDescGenBlock.Name}");
+            sb.Append($"RENAME TO {dataBlockNew.DXUnitDefinitionMainElement.Name}");
 
             return sb.ToString();
         }
@@ -271,12 +271,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"DROP FOREIGN KEY `FK_{block.DPObjectDescGenBlock.Name}_{obj.DPObjectDescGenBlock.Name}_0000`; ");
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"DROP INDEX `FK_{block.DPObjectDescGenBlock.Name}_{obj.DPObjectDescGenBlock.Name}_0000_idx`;");
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"DROP COLUMN {obj.DPObjectDescGenBlock.Name}ID; ");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"DROP FOREIGN KEY `FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000`; ");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"DROP INDEX `FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx`;");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"DROP COLUMN {obj.DXUnitDefinitionMainElement.Name}ID; ");
 
             return sb.ToString();
         }
@@ -305,23 +305,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"ADD COLUMN {obj.DPObjectDescGenBlock.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"ADD COLUMN {obj.DXUnitDefinitionMainElement.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
 
             if (blockInEntityInfo.RelationType == DPBlockInObjectTypeEnum.SingleOptional
             || blockInEntityInfo.RelationType == DPBlockInObjectTypeEnum.SingleMandatory
             )
             {
-                sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-                sb.Append($"ADD CONSTRAINT {obj.DPObjectDescGenBlock.Name}ID_unique UNIQUE({obj.DPObjectDescGenBlock.Name}ID); ");
+                sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+                sb.Append($"ADD CONSTRAINT {obj.DXUnitDefinitionMainElement.Name}ID_unique UNIQUE({obj.DXUnitDefinitionMainElement.Name}ID); ");
             }
 
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"ADD INDEX `FK_{block.DPObjectDescGenBlock.Name}_{obj.DPObjectDescGenBlock.Name}_0000_idx` (`{obj.DPObjectDescGenBlock.Name}ID` ASC) VISIBLE; ");
-            sb.Append($"ALTER TABLE {block.DPObjectDescGenBlock.Name} ");
-            sb.Append($"ADD CONSTRAINT `FK_{block.DPObjectDescGenBlock.Name}_{obj.DPObjectDescGenBlock.Name}_0000` ");
-            sb.Append($"FOREIGN KEY (`{obj.DPObjectDescGenBlock.Name}ID`) ");
-            sb.Append($"REFERENCES `{obj.DPObjectDescGenBlock.Name}` (`ID`) ");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"ADD INDEX `FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx` (`{obj.DXUnitDefinitionMainElement.Name}ID` ASC) VISIBLE; ");
+            sb.Append($"ALTER TABLE {block.DXUnitDefinitionMainElement.Name} ");
+            sb.Append($"ADD CONSTRAINT `FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000` ");
+            sb.Append($"FOREIGN KEY (`{obj.DXUnitDefinitionMainElement.Name}ID`) ");
+            sb.Append($"REFERENCES `{obj.DXUnitDefinitionMainElement.Name}` (`ID`) ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 

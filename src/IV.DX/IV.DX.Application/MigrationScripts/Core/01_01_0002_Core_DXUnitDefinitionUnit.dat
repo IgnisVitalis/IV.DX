@@ -2,7 +2,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "09b4eda6-96d0-4d47-b8bd-d7879a45ea72",
       "Name": "DPObjectDescObject",
       "Kind": 1
@@ -31,7 +31,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "3dd9bba0-102e-4f5a-8161-383fb2ab8a35",
       "Name": "DXUnitDefinitionUnit",
       "Kind": 1
@@ -63,7 +63,7 @@
       "ID": "61b4c43f-cc9b-460e-80f9-9f2a7f4f7ca9",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "a40d4fd0-1bf7-4d0b-a68c-d98f873b326d",
       "Name": "DXElementDefinitionUnit",
       "Kind": 1
@@ -76,7 +76,7 @@
       "ID": "408785e8-7e42-4e7f-b60a-d5c686911612",
       "BaseEntity": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "415443b9-16dd-46dd-873b-06266a986c0b",
       "Name": "DXEnumDefinitionUnit",
       "Kind": 1
@@ -85,7 +85,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "f440497f-f9b9-4b25-a558-e7bdd2354683",
       "Name": "DXRelationDefinitionUnit",
       "Kind": 1
@@ -104,7 +104,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "e4b329e3-9282-40ce-91ac-58f2e8c5433c",
       "Name": "DPMigrationScriptsObject",
       "Kind": 1

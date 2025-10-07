@@ -11,7 +11,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
             DXUnitDefinitionUnit item = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

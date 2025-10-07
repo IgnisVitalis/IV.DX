@@ -55,12 +55,12 @@ namespace IV.DX.Persistence
                         // Delete related blocks
                         foreach (var relatedBlock in relatedBlocks)
                         {
-                            this.DeleteESQLBlocksFromDataSet(relatedBlock.DPObjectDescGenBlock.Name, id, dataSet, conn);
+                            this.DeleteESQLBlocksFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                         }
                     }
 
                     // Delete entity
-                    this.DeleteESQLSEntityFromDataSet(entityInfo.DPObjectDescGenBlock.Name, id, dataSet, conn);
+                    this.DeleteESQLSEntityFromDataSet(entityInfo.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                 }
 
                 dataSet.AcceptChanges();
@@ -547,7 +547,7 @@ namespace IV.DX.Persistence
 
                 foreach (var entityInfo in entityHierarchy)
                 {
-                    this.InsertOrUpdateESQLOwnItemToDataSet(model, entityInfo.DPObjectDescGenBlock.Name, dataSet, conn, processingType);
+                    this.InsertOrUpdateESQLOwnItemToDataSet(model, entityInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
                     var relatedBlocksSM = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.SingleMandatory);
                     var relatedBlocksSO = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.SingleOptional);
@@ -555,13 +555,13 @@ namespace IV.DX.Persistence
                     var relatedBlocksMO = this.GetRelatedBlocks(entityInfo, DPBlockInObjectTypeEnum.MultiOptional);
 
                     var objectID = model.OwnSingleItem.Item.ID.Value;
-                    var entityType = entityInfo.DPObjectDescGenBlock.Name;
+                    var entityType = entityInfo.DXUnitDefinitionMainElement.Name;
                     // Process ESQL single items
                     if (relatedBlocksSM != null)
                     {
                         foreach (var singleItem in relatedBlocksSM)
                         {
-                            var blockName = singleItem.DPObjectDescGenBlock.Name.Trim();
+                            var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
                             var block = model.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 
                             if (block == null)
@@ -575,7 +575,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var singleItem in relatedBlocksSO)
                         {
-                            var blockName = singleItem.DPObjectDescGenBlock.Name.Trim();
+                            var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
                             var block = model.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 
                             if (block == null)
@@ -615,7 +615,7 @@ namespace IV.DX.Persistence
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                this.InsertOrUpdateESQLOwnItemToDataSet(model, entity.DPObjectDescGenBlock.Name, dataSet, conn, processingType);
+                this.InsertOrUpdateESQLOwnItemToDataSet(model, entity.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
                 dataSet.AcceptChanges();
 
@@ -787,9 +787,9 @@ namespace IV.DX.Persistence
 
         private void InsertOrUpdateESQLMultiItemToDataSet(ESQLModel model, DXUnitDefinitionUnit entityInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
-            var blockName = blockInfo.DPObjectDescGenBlock.Name.Trim();
+            var blockName = blockInfo.DXUnitDefinitionMainElement.Name.Trim();
             var objectID = model.OwnSingleItem.Item.ID;
-            var entityType = entityInfo.DPObjectDescGenBlock.Name;
+            var entityType = entityInfo.DXUnitDefinitionMainElement.Name;
 
             var block = model.MultiItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 

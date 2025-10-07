@@ -9,7 +9,7 @@
     //        var userObject = new DPObjectDescObject()
     //        {
     //            ID = new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("b0f45798-4fc0-48e4-b791-a31e36d16e3b"),
     //                ObjectID = new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"),
@@ -20,7 +20,7 @@
     //        var userGenBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("bea190b6-4138-4775-9157-f3b15ac9d51e"),
     //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
@@ -76,7 +76,7 @@
     //        var userGenBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("bea190b6-4138-4775-9157-f3b15ac9d51e"),
     //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
@@ -126,7 +126,7 @@
     //        var obj = new DPObjectDescObject()
     //        {
     //            ID = new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("29f74c7a-4d82-4140-a88e-1a25a68e67ef"),
     //                ObjectID = new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"),
@@ -137,7 +137,7 @@
     //        var genBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("2218f1da-5c87-424f-843d-964fa095f480"),
     //                ObjectID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
@@ -207,7 +207,7 @@
     //        var genBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("57a80968-3195-427b-a49d-8ba69d472f2c"),
     //                ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
@@ -270,7 +270,7 @@
     //        var obj = new DPObjectDescObject()
     //        {
     //            ID = new Guid("394566d6-93e4-446a-800d-2209898475ac"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("33b7bf0d-5761-49eb-9d0c-1c6b82fb9304"),
     //                ObjectID = new Guid("394566d6-93e4-446a-800d-2209898475ac"),
@@ -281,7 +281,7 @@
     //        var genBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("0a0245c5-65ba-4be1-8747-da4a72974053"),
     //                ObjectID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
@@ -351,7 +351,7 @@
     //        var obj = new DPObjectDescObject()
     //        {
     //            ID = new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("a3a03877-5021-4bb9-9020-ef017b69ce48"),
     //                ObjectID = new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"),
@@ -362,7 +362,7 @@
     //        var genBlock = new DPObjectDescObject()
     //        {
     //            ID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("6244f906-587d-4a2c-b3a1-54b90a110e9a"),
     //                ObjectID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
@@ -432,7 +432,7 @@
     //        var obj = new DPObjectDescObject()
     //        {
     //            ID = new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("b2561ad0-c5ef-40dd-b460-c7c1330b3e54"),
     //                ObjectID = new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"),
@@ -443,7 +443,7 @@
     //        var genBlock1 = new DPObjectDescObject()
     //        {
     //            ID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("6e6839b6-8dc6-4e15-86b4-0767f3042f11"),
     //                ObjectID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
@@ -469,7 +469,7 @@
     //        var genBlock2 = new DPObjectDescObject()
     //        {
     //            ID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
-    //            DPObjectDescGenBlock = new DPObjectDescGenBlock()
+    //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
     //            {
     //                ID = new Guid("06560692-98ca-41e6-9763-331a2aed5a1f"),
     //                ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),

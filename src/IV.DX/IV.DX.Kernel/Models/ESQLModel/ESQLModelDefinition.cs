@@ -99,7 +99,7 @@ namespace IV.DX.Kernel.Models
             if (mainEntity == null)
                 return null;
 
-            var ownBlockDefinition = new ESQLBlockDefinition(mainEntity.DPObjectDescGenBlock.Name, mainEntity.DPObjectDescGenBlock.Name);
+            var ownBlockDefinition = new ESQLBlockDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
 
             var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new ESQLPropertyDefinition(x.Name, new ESQLColumnDefinitionAttribute(x.Name)));
 
@@ -148,7 +148,7 @@ namespace IV.DX.Kernel.Models
             var props = block.DXColumnDefinitionElement.Announced
                            .Select(y => new ESQLPropertyDefinition(y.Name, new ESQLColumnDefinitionAttribute(y.Name)));
 
-            var singleFragmentDefinition = new ESQLBlockDefinition(block.DPObjectDescGenBlock.Name, block.DPObjectDescGenBlock.Name);
+            var singleFragmentDefinition = new ESQLBlockDefinition(block.DXUnitDefinitionMainElement.Name, block.DXUnitDefinitionMainElement.Name);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 

@@ -5,7 +5,7 @@ namespace IV.DX.Kernel.Models
     [ESQLObjectDefinition("DPObjectDescObject")]
     public class DPObjectDescObject : ESQLObject
     {
-        public DPObjectDescGenBlock DPObjectDescGenBlock { get; set; }
+        public DXUnitDefinitionMainElement DXUnitDefinitionMainElement { get; set; }
 
         public ESQLMultiItemsContainer<DXColumnDefinitionElement> DXColumnDefinitionElement { get; set; }
         public ESQLMultiItemsContainer<DXUniqueColumnsElement> DXUniqueColumnsElement { get; set; }

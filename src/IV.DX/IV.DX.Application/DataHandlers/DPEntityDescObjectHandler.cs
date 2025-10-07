@@ -119,7 +119,7 @@ namespace IV.DX.Application.DataHandlers
 
         private DXUnitDefinitionUnit GetObjectInfoFromDB(DXUnitDefinitionUnit objectInfoIncome)
         {
-            if (systemObjectNames.Contains(objectInfoIncome.DPObjectDescGenBlock.Name, StringComparer.OrdinalIgnoreCase))
+            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
             return this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectInfoIncome.ID);
@@ -192,21 +192,21 @@ namespace IV.DX.Application.DataHandlers
                 DPRelationGenBlock = new DPRelationGenBlock()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectNameLeft = entity.DPObjectDescGenBlock.Name,
-                    RelationNameLeft = $"{entity.DPObjectDescGenBlock.Name}ID",
-                    ObjectNameRight = block.DPObjectDescGenBlock.Name,
-                    RelationNameRight = block.DPObjectDescGenBlock.Name,
-                    Kind = entity.DPObjectDescGenBlock.Kind
+                    ObjectNameLeft = entity.DXUnitDefinitionMainElement.Name,
+                    RelationNameLeft = $"{entity.DXUnitDefinitionMainElement.Name}ID",
+                    ObjectNameRight = block.DXUnitDefinitionMainElement.Name,
+                    RelationNameRight = block.DXUnitDefinitionMainElement.Name,
+                    Kind = entity.DXUnitDefinitionMainElement.Kind
                 }
             };
         }
 
         private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit entity, DXElementDefinitionUnit block)
         {
-            var query = $"DPRelationGenBlock.ObjectNameLeft = '{entity.DPObjectDescGenBlock.Name}' " +
-               $"AND DPRelationGenBlock.ObjectNameRight = '{block.DPObjectDescGenBlock.Name}' " +
-               $"AND DPRelationGenBlock.RelationNameLeft = '{entity.DPObjectDescGenBlock.Name}ID' " +
-               $"AND DPRelationGenBlock.RelationNameRight = '{block.DPObjectDescGenBlock.Name}'";
+            var query = $"DPRelationGenBlock.ObjectNameLeft = '{entity.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DPRelationGenBlock.ObjectNameRight = '{block.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DPRelationGenBlock.RelationNameLeft = '{entity.DXUnitDefinitionMainElement.Name}ID' " +
+               $"AND DPRelationGenBlock.RelationNameRight = '{block.DXUnitDefinitionMainElement.Name}'";
 
             var items = this._genericRepo.GetItems<DXRelationDefinitionUnit>(query);
 

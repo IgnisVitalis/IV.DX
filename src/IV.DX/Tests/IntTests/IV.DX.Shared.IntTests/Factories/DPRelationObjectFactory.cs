@@ -25,8 +25,8 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
                     RelationType = relationType,
                     RelationNameLeft = relationNameLeft,
                     RelationNameRight = relationNameRight,
-                    ObjectNameLeft = objectNameLeft.DPObjectDescGenBlock.Name,
-                    ObjectNameRight = objectNameRight.DPObjectDescGenBlock.Name,
+                    ObjectNameLeft = objectNameLeft.DXUnitDefinitionMainElement.Name,
+                    ObjectNameRight = objectNameRight.DXUnitDefinitionMainElement.Name,
                     RelationTable = realationTable
                 }
             };

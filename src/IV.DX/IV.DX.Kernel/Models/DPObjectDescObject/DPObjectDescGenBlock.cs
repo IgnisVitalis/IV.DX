@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPObjectDescGenBlock")]
-    public class DPObjectDescGenBlock : ESQLBlock
+    [ESQLBlockDefinition("DXUnitDefinitionMainElement")]
+    public class DXUnitDefinitionMainElement : ESQLBlock
     {
         [ESQLColumnDefinition("Name")]
         public string Name { get; set; }
@@ -13,7 +13,7 @@ namespace IV.DX.Kernel.Models
         [ESQLColumnDefinition("Kind")]
         public DPObjectKindEnum Kind { get; set; }
 
-        public DPObjectDescGenBlock()
+        public DXUnitDefinitionMainElement()
         {
             this.Kind = DPObjectKindEnum.Custom;
         }

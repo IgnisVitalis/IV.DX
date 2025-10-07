@@ -12,7 +12,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
             return new DXElementDefinitionUnit()
             {
                 ID = id,
-                DPObjectDescGenBlock = new DPObjectDescGenBlock()
+                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "Name",

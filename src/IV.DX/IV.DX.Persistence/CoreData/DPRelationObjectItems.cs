@@ -20,8 +20,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("a0e9308c-7e20-4eff-add8-9ce21e1de13b"),
                         ObjectNameLeft = "DPObjectDescObject",
                         RelationNameLeft = "DPObjectDescObjectID",
-                        ObjectNameRight = "DPObjectDescGenBlock",
-                        RelationNameRight = "DPObjectDescGenBlock",
+                        ObjectNameRight = "DXUnitDefinitionMainElement",
+                        RelationNameRight = "DXUnitDefinitionMainElement",
                         RelationTable = null,
                         RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DPObjectKindEnum.Core
@@ -137,8 +137,8 @@ namespace IV.DX.Persistence.CoreData
                     DPRelationGenBlock = new DPRelationGenBlock()
                     {
                         ID = new Guid("d38cf673-89c7-47d7-9f48-5a3a49396ed2"),
-                        ObjectNameLeft = "DPObjectDescGenBlock",
-                        RelationNameLeft = "DPObjectDescGenBlock",
+                        ObjectNameLeft = "DXUnitDefinitionMainElement",
+                        RelationNameLeft = "DXUnitDefinitionMainElement",
                         ObjectNameRight = "DPObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,

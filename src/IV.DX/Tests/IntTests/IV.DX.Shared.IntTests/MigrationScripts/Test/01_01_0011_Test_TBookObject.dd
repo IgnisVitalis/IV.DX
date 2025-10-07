@@ -2,7 +2,7 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "05fdf970-e682-436d-8a09-94fc60d6b650",
-    "DPObjectDescGenBlock": {
+    "DXUnitDefinitionMainElement": {
       "ID": "6ce56652-3ecb-4a52-9ec7-a309e5dc297d",
       "Name": "TBookObject",
       "Kind": 3
