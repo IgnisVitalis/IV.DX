@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     public class DXRelationDefinitionMainElement : ESQLBlock
     {
         [ESQLColumnDefinition("RelationType")]
-        public DPRelationTypeEnum RelationType { get; set; }
+        public DXRelationTypeEnum RelationType { get; set; }
         [ESQLColumnDefinition("ObjectNameLeft")]
         public string ObjectNameLeft { get; set; }
         [ESQLColumnDefinition("RelationNameLeft")]
@@ -28,11 +28,11 @@ namespace IV.DX.Kernel.Models
             {
                 if (string.IsNullOrEmpty(this._relationColumnNameLeft))
                 {
-                    if (this.RelationType == DPRelationTypeEnum.ManyToMany
-                        || this.RelationType == DPRelationTypeEnum.OneToMany
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToMany
-                        || this.RelationType == DPRelationTypeEnum.OneToZeroOne
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToZeroOne)
+                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
+                        || this.RelationType == DXRelationTypeEnum.OneToMany
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToMany
+                        || this.RelationType == DXRelationTypeEnum.OneToZeroOne
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
                     {
                         this._relationColumnNameLeft = "ID";
                     }
@@ -55,11 +55,11 @@ namespace IV.DX.Kernel.Models
             {
                 if (!this._relationColumnTypeLeft.HasValue)
                 {
-                    if (this.RelationType == DPRelationTypeEnum.ManyToMany
-                        || this.RelationType == DPRelationTypeEnum.OneToMany
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToMany
-                        || this.RelationType == DPRelationTypeEnum.OneToZeroOne
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToZeroOne)
+                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
+                        || this.RelationType == DXRelationTypeEnum.OneToMany
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToMany
+                        || this.RelationType == DXRelationTypeEnum.OneToZeroOne
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
                     {
                         this._relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                     }
@@ -82,10 +82,10 @@ namespace IV.DX.Kernel.Models
             {
                 if (string.IsNullOrEmpty(this._relationColumnNameRight))
                 {
-                    if (this.RelationType == DPRelationTypeEnum.ManyToMany
-                        || this.RelationType == DPRelationTypeEnum.ManyToOne
-                        || this.RelationType == DPRelationTypeEnum.ManyToZeroOne
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToOne)
+                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
+                        || this.RelationType == DXRelationTypeEnum.ManyToOne
+                        || this.RelationType == DXRelationTypeEnum.ManyToZeroOne
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToOne)
                     {
                         this._relationColumnNameRight = "ID";
                     }
@@ -108,10 +108,10 @@ namespace IV.DX.Kernel.Models
             {
                 if (!this._relationColumnTypeRight.HasValue)
                 {
-                    if (this.RelationType == DPRelationTypeEnum.ManyToMany
-                        || this.RelationType == DPRelationTypeEnum.ManyToOne
-                        || this.RelationType == DPRelationTypeEnum.ManyToZeroOne
-                        || this.RelationType == DPRelationTypeEnum.ZeroOneToOne)
+                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
+                        || this.RelationType == DXRelationTypeEnum.ManyToOne
+                        || this.RelationType == DXRelationTypeEnum.ManyToZeroOne
+                        || this.RelationType == DXRelationTypeEnum.ZeroOneToOne)
                     {
                         this._relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }

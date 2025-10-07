@@ -155,14 +155,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPRelationTypeEnum
-            var dpRelationTypeEnum = new DXEnumDefinitionUnit()
+            #region DXRelationTypeEnum
+            var DXRelationTypeEnum = new DXEnumDefinitionUnit()
             {
                 ID = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("dbb5012a-958a-4272-8633-cdf04049fff4"),
-                    Name = "DPRelationTypeEnum",
+                    Name = "DXRelationTypeEnum",
                     Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
@@ -205,7 +205,7 @@ namespace IV.DX.Persistence
                 dxElementInUnitTypeEnum,
                 dxColumnTypeEnum,
                 dxObjectKindEnum,
-                dpRelationTypeEnum
+                DXRelationTypeEnum
             };
         }
 

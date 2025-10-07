@@ -23,7 +23,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXUnitDefinitionMainElement",
                         RelationNameRight = "DXUnitDefinitionMainElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
+                        RelationType = DXRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -40,7 +40,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXColumnDefinitionElement",
                         RelationNameRight = "DXColumnDefinitionElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToMany,
+                        RelationType = DXRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -57,7 +57,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXUniqueColumnsElement",
                         RelationNameRight = "DXUniqueColumnsElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToMany,
+                        RelationType = DXRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -74,7 +74,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXRelationDefinitionMainElement",
                         RelationNameRight = "DXRelationDefinitionMainElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
+                        RelationType = DXRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -91,7 +91,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DPMigrationScriptsGenBlock",
                         RelationNameRight = "DPMigrationScriptsGenBlock",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToZeroOne,
+                        RelationType = DXRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -108,7 +108,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXUnitInheritanceElement",
                         RelationNameRight = "DXUnitInheritanceElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToMany,
+                        RelationType = DXRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -125,7 +125,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXElementInUnitDefinitionMainElement",
                         RelationNameRight = "DXElementInUnitDefinitionMainElement",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ZeroOneToMany,
+                        RelationType = DXRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -142,7 +142,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
@@ -161,7 +161,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXColumnTypeEnum",
                         RelationNameRight = "ColumnType",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
@@ -180,7 +180,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXColumnDefinitionElement",
                         RelationNameRight = "EnumKey",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToZeroOne,
+                        RelationType = DXRelationTypeEnum.ManyToZeroOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -197,7 +197,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXEnumDefinitionUnit",
                         RelationNameRight = "EnumType",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToZeroOne,
+                        RelationType = DXRelationTypeEnum.ManyToZeroOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -214,7 +214,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXElementInUnitTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
@@ -233,7 +233,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXElementDefinitionUnit",
                         RelationNameRight = "DXElementDefinitionUnit",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -250,7 +250,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXUnitDefinitionUnit",
                         RelationNameRight = "BaseEntity",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -267,7 +267,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int
@@ -283,10 +283,10 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("c5bc5c06-1d3c-4767-b13c-887623ecb2ae"),
                         ObjectNameLeft = "DXRelationDefinitionMainElement",
                         RelationNameLeft = "DXRelationDefinitionMainElement",
-                        ObjectNameRight = "DPRelationTypeEnum",
+                        ObjectNameRight = "DXRelationTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
-                        RelationType = DPRelationTypeEnum.ManyToOne,
+                        RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core,
                         RelationColumnNameRight = "Key",
                         RelationColumnTypeRight = DXColumnTypeEnum.Int

@@ -120,49 +120,49 @@
     "Value": "Default"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "7eb44ee1-f81b-4f15-ac41-37ee9ab46104",
     "Key": 1,
     "Value": "1 to 0/1"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "268e6783-5be0-4370-91f6-1c4082203dae",
     "Key": 2,
     "Value": "0/1 to 1"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "5b31ce30-e01a-4e53-8534-a9d93481d6cc",
     "Key": 3,
     "Value": "1 to M"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "9f03014b-234e-4df8-b3a4-431c61d0ae8f",
     "Key": 4,
     "Value": "N to 1"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "c0a6b9f3-65fc-4afa-b1c7-2a4185f748aa",
     "Key": 5,
     "Value": "0/1 to M"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "3d5d4e8b-8c1a-4ea9-867d-e43de840e750",
     "Key": 6,
     "Value": "N to 0/1"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "6065c4b4-a949-40f0-b94b-466979c9354e",
     "Key": 7,
     "Value": "N to M"
   },
   {
-    "S_Type": "DPRelationTypeEnum",
+    "S_Type": "DXRelationTypeEnum",
     "ID": "83258595-a278-4cca-8a93-9be824180866",
     "Key": 8,
     "Value": "0/1 to 0/1"

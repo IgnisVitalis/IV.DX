@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Enums
 {
-    public enum DPRelationTypeEnum
+    public enum DXRelationTypeEnum
     {
         OneToZeroOne = 1,
         ZeroOneToOne = 2,

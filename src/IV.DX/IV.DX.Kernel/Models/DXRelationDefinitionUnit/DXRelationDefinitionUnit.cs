@@ -44,26 +44,26 @@ namespace IV.DX.Kernel.Models
                     AND DXRelationDefinitionMainElement.RelationNameLeft = '{this.DXRelationDefinitionMainElement.RelationNameRight}'";
         }
 
-        private DPRelationTypeEnum GetInvertedRelationType(DPRelationTypeEnum value)
+        private DXRelationTypeEnum GetInvertedRelationType(DXRelationTypeEnum value)
         {
             switch (value)
             {
-                case DPRelationTypeEnum.OneToZeroOne:
-                    return DPRelationTypeEnum.ZeroOneToOne;
-                case DPRelationTypeEnum.ZeroOneToOne:
-                    return DPRelationTypeEnum.OneToZeroOne;
-                case DPRelationTypeEnum.OneToMany:
-                    return DPRelationTypeEnum.ManyToOne;
-                case DPRelationTypeEnum.ManyToOne:
-                    return DPRelationTypeEnum.OneToMany;
-                case DPRelationTypeEnum.ZeroOneToMany:
-                    return DPRelationTypeEnum.ManyToZeroOne;
-                case DPRelationTypeEnum.ManyToZeroOne:
-                    return DPRelationTypeEnum.ZeroOneToMany;
-                case DPRelationTypeEnum.ManyToMany:
-                    return DPRelationTypeEnum.ManyToMany;
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
-                    return DPRelationTypeEnum.ZeroOneToZeroOne;
+                case DXRelationTypeEnum.OneToZeroOne:
+                    return DXRelationTypeEnum.ZeroOneToOne;
+                case DXRelationTypeEnum.ZeroOneToOne:
+                    return DXRelationTypeEnum.OneToZeroOne;
+                case DXRelationTypeEnum.OneToMany:
+                    return DXRelationTypeEnum.ManyToOne;
+                case DXRelationTypeEnum.ManyToOne:
+                    return DXRelationTypeEnum.OneToMany;
+                case DXRelationTypeEnum.ZeroOneToMany:
+                    return DXRelationTypeEnum.ManyToZeroOne;
+                case DXRelationTypeEnum.ManyToZeroOne:
+                    return DXRelationTypeEnum.ZeroOneToMany;
+                case DXRelationTypeEnum.ManyToMany:
+                    return DXRelationTypeEnum.ManyToMany;
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
+                    return DXRelationTypeEnum.ZeroOneToZeroOne;
             }
 
             return value;

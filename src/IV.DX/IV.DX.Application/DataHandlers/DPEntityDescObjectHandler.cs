@@ -213,18 +213,18 @@ namespace IV.DX.Application.DataHandlers
             return items.SingleOrDefault();
         }
 
-        private DPRelationTypeEnum ConvertBlockInEntityRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
+        private DXRelationTypeEnum ConvertBlockInEntityRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
         {
             switch (relationType)
             {
                 case DXElementInUnitTypeEnum.SingleMandatory:
-                    return DPRelationTypeEnum.ZeroOneToZeroOne;
+                    return DXRelationTypeEnum.ZeroOneToZeroOne;
                 case DXElementInUnitTypeEnum.SingleOptional:
-                    return DPRelationTypeEnum.ZeroOneToZeroOne;
+                    return DXRelationTypeEnum.ZeroOneToZeroOne;
                 case DXElementInUnitTypeEnum.MultiMandatory:
-                    return DPRelationTypeEnum.ZeroOneToMany;
+                    return DXRelationTypeEnum.ZeroOneToMany;
                 case DXElementInUnitTypeEnum.MultiOptional:
-                    return DPRelationTypeEnum.ZeroOneToMany;
+                    return DXRelationTypeEnum.ZeroOneToMany;
                 default:
                     throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
             }

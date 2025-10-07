@@ -118,7 +118,7 @@
     "ID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
     "DXUnitDefinitionMainElement": {
       "ID": "dbb5012a-958a-4272-8633-cdf04049fff4",
-      "Name": "DPRelationTypeEnum",
+      "Name": "DXRelationTypeEnum",
       "Kind": 1
     },
     "DXColumnDefinitionElement": {

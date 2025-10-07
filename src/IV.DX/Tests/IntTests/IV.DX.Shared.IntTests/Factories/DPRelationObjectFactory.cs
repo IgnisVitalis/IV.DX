@@ -8,7 +8,7 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories
     {
         public static DXRelationDefinitionUnit GetItem(
             Guid id,
-            DPRelationTypeEnum relationType,
+            DXRelationTypeEnum relationType,
             string relationNameLeft,
             string relationNameRight,
             DPObjectDescObject objectNameLeft,

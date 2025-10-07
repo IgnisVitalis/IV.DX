@@ -222,7 +222,7 @@
       "ID": "c5bc5c06-1d3c-4767-b13c-887623ecb2ae",
       "ObjectNameLeft": "DXRelationDefinitionMainElement",
       "RelationNameLeft": "DXRelationDefinitionMainElement",
-      "ObjectNameRight": "DPRelationTypeEnum",
+      "ObjectNameRight": "DXRelationTypeEnum",
       "RelationNameRight": "RelationType",
       "RelationTable": null,
       "RelationType": 4,

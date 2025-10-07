@@ -12,7 +12,7 @@ namespace IV.DX.Application.DataHandlers
         private readonly IDataService _dataService;
         private readonly IGenericRepository _genericRepo;
 
-        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DPRelationTypeEnum" };
+        protected static readonly string[] systemObjectNames = new[] { "DPObjectDescObject", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DPObjectDescObject", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DPMigrationScriptsObject", "DPMigrationScriptsGenBlock", "DXRelationTypeEnum" };
 
         public DPObjectDescObjectHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
@@ -83,7 +83,7 @@ namespace IV.DX.Application.DataHandlers
                     RelationNameLeft = obj.DXUnitDefinitionMainElement.Name,
                     ObjectNameRight = enumObj.DXUnitDefinitionMainElement.Name,
                     RelationNameRight = columnWithEnumValue.Name,
-                    RelationType = DPRelationTypeEnum.ManyToOne,
+                    RelationType = DXRelationTypeEnum.ManyToOne,
                     RelationColumnNameRight = enumColumn.Name,
                     RelationColumnTypeRight = enumColumn.ColumnType,
                     Kind = obj.DXUnitDefinitionMainElement.Kind

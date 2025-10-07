@@ -189,7 +189,7 @@
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
-    //                DPRelationTypeEnum.OneToZeroOne,
+    //                DXRelationTypeEnum.OneToZeroOne,
     //                "User",
     //                "Passport",
     //                obj1,
@@ -252,7 +252,7 @@
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
-    //                DPRelationTypeEnum.OneToMany,
+    //                DXRelationTypeEnum.OneToMany,
     //                "User",
     //                "Devices",
     //                obj1,
@@ -333,7 +333,7 @@
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
-    //                DPRelationTypeEnum.ZeroOneToZeroOne,
+    //                DXRelationTypeEnum.ZeroOneToZeroOne,
     //                "User",
     //                "Position",
     //                obj1,
@@ -414,7 +414,7 @@
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
-    //                DPRelationTypeEnum.ZeroOneToMany,
+    //                DXRelationTypeEnum.ZeroOneToMany,
     //                "User",
     //                "Documents",
     //                obj1,
@@ -543,7 +543,7 @@
 
     //        var relationInfo =
     //                DXRelationDefinitionUnitFactory.GetItem(objRelId,
-    //                DPRelationTypeEnum.ManyToMany,
+    //                DXRelationTypeEnum.ManyToMany,
     //                "Users",
     //                "Books",
     //                obj1,

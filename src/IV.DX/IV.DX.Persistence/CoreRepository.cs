@@ -1055,28 +1055,28 @@ namespace IV.DX.Persistence
 
             switch (relationInfo.RelationType)
             {
-                case DPRelationTypeEnum.ManyToMany:
+                case DXRelationTypeEnum.ManyToMany:
                     result = this.GetRelationsManyToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.OneToZeroOne:
+                case DXRelationTypeEnum.OneToZeroOne:
                     result = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToOne:
+                case DXRelationTypeEnum.ZeroOneToOne:
                     result = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.OneToMany:
                     result = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToOne:
                     result = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
                     result = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
                     result = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
                     result = this.GetRelationsZeroOneToZeroOne(relationInfo, obj1Id);
                     break;
             }
@@ -1094,28 +1094,28 @@ namespace IV.DX.Persistence
 
             switch (relationInfo.RelationType)
             {
-                case DPRelationTypeEnum.ManyToMany:
+                case DXRelationTypeEnum.ManyToMany:
                     ids = this.GetRelationsManyToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.OneToZeroOne:
+                case DXRelationTypeEnum.OneToZeroOne:
                     ids = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToOne:
+                case DXRelationTypeEnum.ZeroOneToOne:
                     ids = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.OneToMany:
                     ids = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToOne:
                     ids = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
                     ids = this.GetRelationsOneToMany(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
                     ids = this.GetRelationsManyToOne(relationInfo, obj1Id);
                     break;
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
                     ids = this.GetRelationsZeroOneToZeroOne(relationInfo, obj1Id);
                     break;
             }
@@ -1139,21 +1139,21 @@ namespace IV.DX.Persistence
 
             switch (relationInfo.RelationType)
             {
-                case DPRelationTypeEnum.ManyToMany:
+                case DXRelationTypeEnum.ManyToMany:
                     return this.AddRelationManyToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.OneToZeroOne:
+                case DXRelationTypeEnum.OneToZeroOne:
                     return this.AddRelationOneToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ZeroOneToOne:
+                case DXRelationTypeEnum.ZeroOneToOne:
                     return this.AddRelationManyToOne(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.OneToMany:
                     return this.AddRelationOneToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToOne:
                     return this.AddRelationManyToOne(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
                     return this.AddRelationOneToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
                     return this.AddRelationManyToOne(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
                     return this.AddRelationZeroOneToZeroOne(relationInfo, obj1Id, obj2Id);
                 default:
                     throw new NotImplementedException($"Relation type '{relationInfo.RelationType}' is not supported.");
@@ -1166,21 +1166,21 @@ namespace IV.DX.Persistence
 
             switch (relationInfo.RelationType)
             {
-                case DPRelationTypeEnum.ManyToMany:
+                case DXRelationTypeEnum.ManyToMany:
                     return this.RemoveRelationManyToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.OneToZeroOne:
+                case DXRelationTypeEnum.OneToZeroOne:
                     throw new NotImplementedException("'1 to 0/1' relation couldn't be removed.");
-                case DPRelationTypeEnum.ZeroOneToOne:
+                case DXRelationTypeEnum.ZeroOneToOne:
                     throw new NotImplementedException("'0/1 to 1' relation couldn't be removed.");
-                case DPRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.OneToMany:
                     throw new NotImplementedException("'1 to M' relation couldn't be removed.");
-                case DPRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToOne:
                     throw new NotImplementedException("'N to 1' relation couldn't be removed.");
-                case DPRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
                     return this.RemoveRelationZeroOneToMany(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
                     return this.RemoveRelationManyToZeroOne(relationInfo, obj1Id, obj2Id);
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
                     return this.RemoveRelationZeroOneToZeroOne(relationInfo, obj1Id, obj2Id);
                 default:
                     throw new NotImplementedException($"Relation type '{relationInfo.RelationType}' is not supported.");
@@ -1323,7 +1323,7 @@ namespace IV.DX.Persistence
 
                 return new DXRelationDefinitionMainElement()
                 {
-                    RelationType = (DPRelationTypeEnum)ConvertHelper.ParseInt(row["RelationType"]),
+                    RelationType = (DXRelationTypeEnum)ConvertHelper.ParseInt(row["RelationType"]),
                     RelationTable = ConvertHelper.ParseString(row["RelationTable"]),
                     ID = ConvertHelper.ParseGuid(row[Constants.ID]),
                     ObjectID = ConvertHelper.ParseGuid(row[Constants.ObjectID]),

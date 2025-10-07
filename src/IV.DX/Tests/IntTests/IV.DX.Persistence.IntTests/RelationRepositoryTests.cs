@@ -41,7 +41,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ManyToMany,
+                DXRelationTypeEnum.ManyToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -105,7 +105,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ManyToOne,
+                DXRelationTypeEnum.ManyToOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -170,7 +170,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.OneToMany,
+                DXRelationTypeEnum.OneToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -234,7 +234,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.OneToZeroOne,
+                DXRelationTypeEnum.OneToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -384,7 +384,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ZeroOneToOne,
+                DXRelationTypeEnum.ZeroOneToOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -534,7 +534,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ManyToZeroOne,
+                DXRelationTypeEnum.ManyToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -649,7 +649,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ZeroOneToMany,
+                DXRelationTypeEnum.ZeroOneToMany,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -764,7 +764,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
-                DPRelationTypeEnum.ZeroOneToZeroOne,
+                DXRelationTypeEnum.ZeroOneToZeroOne,
                 "RelTableLeftRelation",
                 "RelTableRightRelation",
                 obj1,
@@ -1013,10 +1013,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
                     Assert.Single(relationIdsLeft);
                     Assert.Equal(relTableFirstLeft.ID, relationIdsLeft.Single());
 
-                    if (relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.ManyToOne
-                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.OneToMany
-                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.OneToZeroOne
-                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DPRelationTypeEnum.ZeroOneToOne)
+                    if (relationInfo.DXRelationDefinitionMainElement.RelationType != DXRelationTypeEnum.ManyToOne
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DXRelationTypeEnum.OneToMany
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DXRelationTypeEnum.OneToZeroOne
+                        && relationInfo.DXRelationDefinitionMainElement.RelationType != DXRelationTypeEnum.ZeroOneToOne)
                     {
                         // Action
                         actionForRemoving.Invoke();

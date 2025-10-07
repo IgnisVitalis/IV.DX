@@ -66,9 +66,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             switch (this.RelationInfo.DXRelationDefinitionMainElement.RelationType)
             {
-                case DPRelationTypeEnum.OneToZeroOne:
-                case DPRelationTypeEnum.OneToMany:
-                case DPRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.OneToZeroOne:
+                case DXRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
                     {
                         JoinedQueryInfo queryInfo = new JoinedQueryInfo()
                         {
@@ -91,9 +91,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
                     };
-                case DPRelationTypeEnum.ZeroOneToOne:
-                case DPRelationTypeEnum.ManyToOne:
-                case DPRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToOne:
+                case DXRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
                     {
                         JoinedQueryInfo queryInfo = new JoinedQueryInfo()
                         {
@@ -116,7 +116,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
                     };
-                case DPRelationTypeEnum.ZeroOneToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
                     {
                         JoinedQueryInfo queryInfo = new JoinedQueryInfo()
                         {
@@ -149,7 +149,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
                     };
-                case DPRelationTypeEnum.ManyToMany:
+                case DXRelationTypeEnum.ManyToMany:
                     {
                         string motherTableName = null;
 
