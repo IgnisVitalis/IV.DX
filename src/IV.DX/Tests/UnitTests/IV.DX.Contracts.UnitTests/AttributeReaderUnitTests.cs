@@ -1,0 +1,78 @@
+using IV.DX.Contracts.Common.Attributes;
+using IV.DX.Contracts.Common.Helpers;
+using IV.DX.Contracts.Common.Models;
+using System.Linq;
+using Xunit;
+
+namespace IV.DataProvider.Persistence.Common.IntTests.Helpers
+{
+    public class AttributeReaderUnitTests
+    {
+        public AttributeReaderUnitTests()
+        {
+
+        }
+
+        [Fact]
+        public void GetESQLObjectDefinitionAttribute_FromDPObjectDescObject_AttributeWithCorrectValues()
+        {
+            // Init
+
+            // Action
+            var attr = AttributeReader
+                .GetSingleAttribute<ESQLObjectDefinitionAttribute>
+                (typeof(DPObjectDescObject));
+
+            // Checking results
+            Assert.NotNull(attr);
+            Assert.True(attr.ObjectName == "DPObjectDescObject");
+        }
+
+        [Fact]
+        public void GetESQLBlockDefinitionAttribute_FromDPObjectDescGenBlock_AttributeWithCorrectValues()
+        {
+            // Init
+
+            // Action
+            var attr = AttributeReader
+                .GetSingleAttribute<ESQLBlockDefinitionAttribute>
+                (typeof(DPObjectDescGenBlock));
+
+            // Checking results
+            Assert.NotNull(attr);
+            Assert.True(attr.BlockName == "DPObjectDescGenBlock");
+        }
+
+        [Fact]
+        public void GetESQLColumnDefinitionAttributes_FromDPObjectDescGenBlock_AttributesWithCorrectValues()
+        {
+            // Init
+
+            // Action
+            var attributes = AttributeReader
+                    .GetAllSinglePropertyAttributes<ESQLColumnDefinitionAttribute>
+                    (typeof(DPObjectDescGenBlock));
+
+            // Checking result
+            Assert.True(attributes.Count() == 6);
+
+            var displayValueAttr = attributes.SingleOrDefault(x => x.ColumnName == "DisplayValue");
+            Assert.NotNull(displayValueAttr);
+
+            var namePropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "Name");
+            Assert.NotNull(namePropertyAttr);
+
+            var idPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "ID");
+            Assert.NotNull(idPropertyAttr);
+
+            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "ObjectID");
+            Assert.NotNull(objectIdPropertyAttr);
+
+            var kindPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "Kind");
+            Assert.NotNull(kindPropertyAttr);
+
+            var timeStampePropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "TimeStamp");
+            Assert.NotNull(timeStampePropertyAttr);
+        }
+    }
+}

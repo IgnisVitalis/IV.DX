@@ -1,0 +1,170 @@
+[
+  {
+    "S_Type": "DPBlockInObjectTypeEnum",
+    "ID": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
+    "Key": 1,
+    "Value": "SingleMandatory"
+  },
+  {
+    "S_Type": "DPBlockInObjectTypeEnum",
+    "ID": "08e793f0-07c9-4fc5-818f-515d74731b65",
+    "Key": 2,
+    "Value": "SingleOptional"
+  },
+  {
+    "S_Type": "DPBlockInObjectTypeEnum",
+    "ID": "57df2e3d-352d-4824-a8d4-25464e52d2be",
+    "Key": 3,
+    "Value": "MultiMandatory"
+  },
+  {
+    "S_Type": "DPBlockInObjectTypeEnum",
+    "ID": "43bc0666-21b6-4b90-8a05-a5af00bee362",
+    "Key": 4,
+    "Value": "MultiOptional"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "95ad4566-791b-478c-8c55-5f478d365eed",
+    "Key": 1,
+    "Value": "GUID"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "b839122b-5939-46c1-96c5-e7a94d9b741f",
+    "Key": 2,
+    "Value": "TimeStamp"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "b1477a09-7d88-4e77-9b57-98a8e31eab27",
+    "Key": 3,
+    "Value": "String"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "8a7d71ab-ea9f-4747-b7af-ab5135ec355b",
+    "Key": 4,
+    "Value": "Text"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "5250c541-ba6b-4bb7-bbb4-ae5cd4cf85e4",
+    "Key": 5,
+    "Value": "DateTime"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "12015acd-7038-4a74-8072-0e226050f10e",
+    "Key": 6,
+    "Value": "Bool"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "24f82956-e8bb-471f-8cf1-0b4938842a01",
+    "Key": 7,
+    "Value": "Short"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "dd49de56-59f3-46b3-8bc8-aef4271ada9c",
+    "Key": 8,
+    "Value": "Int"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "0d705738-cc82-490d-96a6-9a4f5f802b7d",
+    "Key": 9,
+    "Value": "Long"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "5a738980-e60c-490c-a771-f1d08d9189a5",
+    "Key": 10,
+    "Value": "Decimal"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "09227e91-76e4-49f8-838b-f77cc1c2e0c7",
+    "Key": 11,
+    "Value": "Float"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "23cbe2cc-cd51-45e6-adc3-0c65b7187f3c",
+    "Key": 12,
+    "Value": "Currency"
+  },
+  {
+    "S_Type": "DPColumnTypeEnum",
+    "ID": "186354e6-dac8-45d4-a0d9-b58244acbe72",
+    "Key": 13,
+    "Value": "Blob"
+  },
+  {
+    "S_Type": "DPObjectKindEnum",
+    "ID": "9eff6fef-16bd-4d98-b835-fb4303917442",
+    "Key": 1,
+    "Value": "Core"
+  },
+  {
+    "S_Type": "DPObjectKindEnum",
+    "ID": "aace43e2-691f-4fc0-a2dd-81120add8db8",
+    "Key": 2,
+    "Value": "Custom"
+  },
+  {
+    "S_Type": "DPObjectKindEnum",
+    "ID": "c2014b2e-f4aa-4a85-8062-baed7e938298",
+    "Key": 3,
+    "Value": "Default"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "7eb44ee1-f81b-4f15-ac41-37ee9ab46104",
+    "Key": 1,
+    "Value": "1 to 0/1"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "268e6783-5be0-4370-91f6-1c4082203dae",
+    "Key": 2,
+    "Value": "0/1 to 1"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "5b31ce30-e01a-4e53-8534-a9d93481d6cc",
+    "Key": 3,
+    "Value": "1 to M"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "9f03014b-234e-4df8-b3a4-431c61d0ae8f",
+    "Key": 4,
+    "Value": "N to 1"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "c0a6b9f3-65fc-4afa-b1c7-2a4185f748aa",
+    "Key": 5,
+    "Value": "0/1 to M"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "3d5d4e8b-8c1a-4ea9-867d-e43de840e750",
+    "Key": 6,
+    "Value": "N to 0/1"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "6065c4b4-a949-40f0-b94b-466979c9354e",
+    "Key": 7,
+    "Value": "N to M"
+  },
+  {
+    "S_Type": "DPRelationTypeEnum",
+    "ID": "83258595-a278-4cca-8a93-9be824180866",
+    "Key": 8,
+    "Value": "0/1 to 0/1"
+  }
+]

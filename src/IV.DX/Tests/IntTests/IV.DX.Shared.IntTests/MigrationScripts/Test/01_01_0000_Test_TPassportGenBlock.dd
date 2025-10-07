@@ -1,0 +1,24 @@
+[
+  {
+    "S_Type": "DPBlockDescObject",
+    "ID": "f7f2185a-a933-41af-9b84-e37c98b33ef7",
+    "DPObjectDescGenBlock": {
+      "ID": "152f70fb-515e-4575-8924-c0e9e5538e49",
+      "Name": "TPassportGenBlock",      
+      "Kind": 3
+    },
+    "DPColumnDescBlock": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "66b58401-16e1-4f1d-8dfc-beab4557ffbc",
+          "ColumnType": 3,
+          "Name": "SerialNumber",
+          "Length": 50,
+          "AllowNull": true,
+          "DefaultValue": null
+        }
+      ]
+    }
+  }
+]

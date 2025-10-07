@@ -1,0 +1,55 @@
+CREATE DATABASE  IF NOT EXISTS `IV.DataProvider.TestDB` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `IV.DataProvider.TestDB`;
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+--
+-- Host: 159.89.98.54    Database: IV.DataProvider.TestDB
+-- ------------------------------------------------------
+-- Server version	8.0.21
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `DPRelationTypeEnum`
+--
+
+DROP TABLE IF EXISTS `DPRelationTypeEnum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `DPRelationTypeEnum` (
+  `ID` char(36) NOT NULL,
+  `Key` int NOT NULL,
+  `Value` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `Key_UNIQUE` (`Key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `DPRelationTypeEnum`
+--
+
+LOCK TABLES `DPRelationTypeEnum` WRITE;
+/*!40000 ALTER TABLE `DPRelationTypeEnum` DISABLE KEYS */;
+INSERT INTO `DPRelationTypeEnum` VALUES ('268e6783-5be0-4370-91f6-1c4082203dae',2,'0/1 to 1'),('3d5d4e8b-8c1a-4ea9-867d-e43de840e750',6,'N to 0/1'),('5b31ce30-e01a-4e53-8534-a9d93481d6cc',3,'1 to M'),('6065c4b4-a949-40f0-b94b-466979c9354e',7,'N to M'),('7eb44ee1-f81b-4f15-ac41-37ee9ab46104',1,'1 to 0/1'),('83258595-a278-4cca-8a93-9be824180866',8,'0/1 to 0/1'),('9f03014b-234e-4df8-b3a4-431c61d0ae8f',4,'N to 1'),('c0a6b9f3-65fc-4afa-b1c7-2a4185f748aa',5,'0/1 to M');
+/*!40000 ALTER TABLE `DPRelationTypeEnum` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-10-02 19:00:48

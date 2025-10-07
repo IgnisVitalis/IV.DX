@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="MigrationScripts\Custom\**" />
+        <Compile Remove="MigrationScripts\MySQL\**" />
+        <Compile Remove="MigrationScripts\Test\**" />
+        <EmbeddedResource Remove="MigrationScripts\Custom\**" />
+        <EmbeddedResource Remove="MigrationScripts\MySQL\**" />
+        <EmbeddedResource Remove="MigrationScripts\Test\**" />
+        <None Remove="MigrationScripts\Custom\**" />
+        <None Remove="MigrationScripts\MySQL\**" />
+        <None Remove="MigrationScripts\Test\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="MySql.Data" Version="8.0.18" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\IV.DX.Contracts\IV.DX.Contracts.csproj" />
+        <ProjectReference Include="..\IV.DX.Domain\IV.DX.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+[
+  {
+    "S_Type": "DPBlockDescObject",
+    "ID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
+    "DPObjectDescGenBlock": {
+      "ID": "8b4aefa8-d0ee-4519-8213-87523862bf3b",
+      "Name": "TDocumentGenBlock",
+      "Kind": 3
+    },
+    "DPColumnDescBlock": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "3e273e56-2e26-4b66-b3df-e7f55525a10f",
+          "ColumnType": 3,
+          "Name": "Name",
+          "Length": 50,
+          "AllowNull": true,
+          "DefaultValue": null
+        }
+      ]
+    }
+  }
+]

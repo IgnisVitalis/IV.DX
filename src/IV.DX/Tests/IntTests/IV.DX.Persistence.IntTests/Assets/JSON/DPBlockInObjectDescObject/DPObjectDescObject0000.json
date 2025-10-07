@@ -1,0 +1,11 @@
+{
+  "S_Type": "DPObjectDescObject",
+  "ID": "A320C5B4-8C14-460C-91EA-3DB885CCFD3D",
+  "DPObjectDescGenBlock": {
+    "ObjectID": "A320C5B4-8C14-460C-91EA-3DB885CCFD3D",
+    "ID": "3D9CCF03-94B0-4324-9B1E-AC793ABB38B4",
+    "Name": "ForBIOTestsObject0000",
+    "Type": 2,
+    "Kind": 2
+  }
+}

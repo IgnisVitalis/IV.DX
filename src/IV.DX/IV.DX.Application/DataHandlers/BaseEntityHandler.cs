@@ -1,0 +1,70 @@
+﻿using IV.DataProvider.Persistence.Contracts.Models;
+using IV.DX.Contracts.Application;
+using IV.DX.Contracts.Common.Converters;
+using IV.DX.Contracts.Common.Helpers;
+using IV.DX.Contracts.Common.Models;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace IV.DX.Application.DataHandlers
+{
+    public class BaseEntityHandler<T> : IEntityHandler<T> where T : ESQLObject
+    {
+        private readonly ICoreModelHandler _coreModelHandler;
+
+        protected readonly string TypeName = AttributeReader.GetESQLObjectTypeName(typeof(T));
+
+        protected void ThrowNotSupportedExceptionForOnUpdatingMethod()
+        {
+            throw new Exception($"OnUpdating method isn't supported for '{AttributeReader.GetESQLObjectTypeName(typeof(T))}'");
+        }
+
+        public BaseEntityHandler(IServiceProvider serviceProvider)
+        {
+            this._coreModelHandler = serviceProvider.GetService<ICoreModelHandler>();
+        }
+
+        public virtual bool OnDeleting(Guid id, EntityHandlerBaseContext context)
+        {
+            return this._coreModelHandler.OnDeleting(TypeName, id, context);
+        }
+
+        public virtual void OnDeleted(Guid id, EntityHandlerBaseContext context)
+        {
+            this._coreModelHandler.OnDeleted(TypeName, id, context);
+        }
+
+        public virtual Guid OnInserting(T entity, EntityHandlerBaseContext context)
+        {
+            var esqlModel = entity.ConvertToESQLModel();
+            return this._coreModelHandler.OnInserting(esqlModel, context);
+        }
+
+        public virtual void OnInserted(T entity, EntityHandlerBaseContext context)
+        {
+            var esqlModel = entity.ConvertToESQLModel();
+            this._coreModelHandler.OnInserted(esqlModel, context);
+        }
+
+        public virtual Guid OnUpdating(T entity, EntityHandlerBaseContext context)
+        {
+            var esqlModel = entity.ConvertToESQLModel();
+            return this._coreModelHandler.OnUpdating(esqlModel, context);
+        }
+
+        public virtual void OnUpdated(T entity, EntityHandlerBaseContext context)
+        {
+            var esqlModel = entity.ConvertToESQLModel();
+            this._coreModelHandler.OnUpdated(esqlModel, context);
+        }
+
+        public virtual bool IsItemExisting(Guid id, EntityHandlerBaseContext context)
+        {
+            return this._coreModelHandler.IsItemExisting(TypeName, id, context);
+        }
+
+        public void OnGetting(ESQLModel model, EntityHandlerBaseContext context)
+        {
+            this._coreModelHandler.OnGetting(model, context);
+        }
+    }
+}

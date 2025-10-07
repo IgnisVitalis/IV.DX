@@ -1,0 +1,29 @@
+{
+  "S_Type": "DPObjectDescObject",
+  "ID": "63D75594-E4C5-47B9-B871-912130A8C91D",
+  "DPObjectDescGenBlock": {
+    "ObjectID": "63D75594-E4C5-47B9-B871-912130A8C91D",
+    "ID": "F95C5372-5479-4FE5-95B2-EF4F82DCF51A",
+    "Name": "ForBIOTestsBlock0001",
+    "Type": 1,
+    "Kind": 2
+  },
+  "DPColumnDescBlock": {
+    "Mode": 1,
+    "Announced": [
+      {
+        "ObjectID": "63D75594-E4C5-47B9-B871-912130A8C91D",
+        "ID": "A8370551-C8BC-4149-B5E6-450B7654C56B",
+        "ColumnType": 1,
+        "Name": "GuidColumn"
+      },
+      {
+        "ObjectID": "63D75594-E4C5-47B9-B871-912130A8C91D",
+        "ID": "69F7CA29-B5B0-44DD-9F2A-D7BBE8A92877",
+        "ColumnType": 2,
+        "Name": "TimeStampColumn",
+        "DefaultValue": "CURRENT_TIMESTAMP"
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "S_Type": "DPEntityDescObject",
+    "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
+    "DPObjectDescGenBlock": {
+      "ID": "e907dedf-2c41-4b8a-bb80-7732bbdc23fe",
+      "Name": "TUserObject",
+      "Kind": 3
+    },
+    "DPBlockInEntityDescGenBlock": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "38746c7d-6c26-4285-aa38-c179d1868dc6",
+          "RelationType": 1,
+          "DPBlockDescObject": "f57b61b7-3e76-4ccf-826e-c1b46c44b397"
+        }
+      ]
+    }
+  }
+]

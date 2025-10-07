@@ -1,0 +1,20 @@
+[
+  {
+    "S_Type": "DPInheritanceInitCore",
+    "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
+    "BaseEntity": "DPObjectDescObject",
+    "ChildEntity": "DPEntityDescObject"
+  },
+  {
+    "S_Type": "DPInheritanceInitCore",
+    "ID": "6354ab0c-4ac3-4f44-a001-384fb87c5835",
+    "BaseEntity": "DPObjectDescObject",
+    "ChildEntity": "DPBlockDescObject"
+  },
+  {
+    "S_Type": "DPInheritanceInitCore",
+    "ID": "d141b1d1-5f40-411f-ad06-fabe84b34b81",
+    "BaseEntity": "DPObjectDescObject",
+    "ChildEntity": "DPEnumDescObject"
+  }
+]

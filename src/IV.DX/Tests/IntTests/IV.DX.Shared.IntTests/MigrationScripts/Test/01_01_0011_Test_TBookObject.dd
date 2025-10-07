@@ -1,0 +1,26 @@
+[
+  {
+    "S_Type": "DPEntityDescObject",
+    "ID": "05fdf970-e682-436d-8a09-94fc60d6b650",
+    "DPObjectDescGenBlock": {
+      "ID": "6ce56652-3ecb-4a52-9ec7-a309e5dc297d",
+      "Name": "TBookObject",
+      "Kind": 3
+    },
+    "DPBlockInEntityDescGenBlock": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "90b0963c-294c-4e05-97aa-f77045502dc2",
+          "RelationType": 1,
+          "DPBlockDescObject": "0953cb79-4001-4add-87d6-2ebce5ecc848"
+        },
+        {
+          "ID": "37c30535-4108-4d20-9063-3bb229c6cff6",
+          "RelationType": 4,
+          "DPBlockDescObject": "547a5481-9931-4d48-982c-6f8cf959712e"
+        }
+      ]
+    }
+  }
+]
