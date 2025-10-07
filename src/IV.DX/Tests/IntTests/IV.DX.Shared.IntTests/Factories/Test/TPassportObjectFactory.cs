@@ -3,15 +3,15 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 {
-    public static class TPassportObjectFactory
+    public static class TPassportUnitFactory
     {
-        public static TPassportObject GetItem(Guid id, string serialNumber, TUserObject user)
+        public static TPassportUnit GetItem(Guid id, string serialNumber, TUserUnit user)
         {
-            return new TPassportObject()
+            return new TPassportUnit()
             {
                 ID = id,
                 User = user.ID,
-                TPassportGenBlock = new TPassportGenBlock()
+                TPassportMainElement = new TPassportMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

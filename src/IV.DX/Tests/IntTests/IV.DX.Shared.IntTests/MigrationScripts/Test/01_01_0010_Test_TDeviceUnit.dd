@@ -4,7 +4,7 @@
     "ID": "7f8501fd-7f16-42f8-8a7d-297619126e13",
     "DXUnitDefinitionMainElement": {
       "ID": "7beb2ac8-23aa-45b0-990a-57ca6928e66f",
-      "Name": "TDeviceObject",
+      "Name": "TDeviceUnit",
       "Kind": 3
     },
     "DXElementInUnitDefinitionMainElement": {

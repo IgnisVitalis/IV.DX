@@ -29,64 +29,64 @@
         <None Update="MigrationScripts\Test.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0000_Test_TPassportGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0000_Test_TPassportMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0001_Test_TPositionGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0001_Test_TPositionMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0002_Test_TUserGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0002_Test_TUserMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0003_Test_TDeviceGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0003_Test_TDeviceMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0004_Test_TBookGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0004_Test_TBookMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0005_Test_TBookChapterBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0005_Test_TBookChapterElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0006_Test_TDocumentGenBlock.dd">
+        <None Update="MigrationScripts\Test\01_01_0006_Test_TDocumentMainElement.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0007_Test_TPassportObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0007_Test_TPassportUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0008_Test_TPositionObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0008_Test_TPositionUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0009_Test_TUserObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0009_Test_TUserUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0010_Test_TDeviceObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0010_Test_TDeviceUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0011_Test_TBookObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0011_Test_TBookUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0012_Test_TDocumentObject.dd">
+        <None Update="MigrationScripts\Test\01_01_0012_Test_TDocumentUnit.dd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0019_Test_TUserObject.rd">
+        <None Update="MigrationScripts\Test\01_01_0019_Test_TUserUnit.rd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0020_Test_TUserObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0020_Test_TUserUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0021_Test_TPassportObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0021_Test_TPassportUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0022_Test_TPositionObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0022_Test_TPositionUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0023_Test_TDeviceObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0023_Test_TDeviceUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0024_Test_TBookObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0024_Test_TBookUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0025_Test_TDocumentObject.dat">
+        <None Update="MigrationScripts\Test\01_01_0025_Test_TDocumentUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="MigrationScripts\Test\01_01_0026_Test_DXRelationItemUnit.dat">

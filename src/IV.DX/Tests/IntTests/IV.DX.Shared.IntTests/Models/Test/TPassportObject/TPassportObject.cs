@@ -5,11 +5,11 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXUnit("TPassportObject")]
-    public class TPassportObject : DXUnit
+    [DXUnit("TPassportUnit")]
+    public class TPassportUnit : DXUnit
     {
         [DXColumn("User", "User", DXLoadingType.Base)]
         public Guid User { get; set; }
-        public TPassportGenBlock TPassportGenBlock { get; set; }
+        public TPassportMainElement TPassportMainElement { get; set; }
     }
 }

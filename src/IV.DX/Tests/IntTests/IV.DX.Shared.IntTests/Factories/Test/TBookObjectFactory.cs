@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 {
-    public static class TBookObjectFactory
+    public static class TBookUnitFactory
     {
-        public static TBookObject GetItem(Guid id, string name)
+        public static TBookUnit GetItem(Guid id, string name)
         {
-            return new TBookObject()
+            return new TBookUnit()
             {
                 ID = id,
-                TBookGenBlock = new TBookGenBlock()
+                TBookMainElement = new TBookMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,
@@ -22,16 +22,16 @@ namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
             };
         }
 
-        public static TBookObject GetItemWithText(Guid id, string name, IEnumerable<string> text)
+        public static TBookUnit GetItemWithText(Guid id, string name, IEnumerable<string> text)
         {
             var result = GetItem(id, name);
 
             int number = 1;
 
-            result.TBookChapterBlock = new DXMultiElementsContainer<TBookChapterBlock>()
+            result.TBookChapterElement = new DXMultiElementsContainer<TBookChapterElement>()
             {
                 Announced = text.Select(x =>
-                    new TBookChapterBlock()
+                    new TBookChapterElement()
                     {
                         ID = Guid.NewGuid(),
                         ObjectID = result.ID,

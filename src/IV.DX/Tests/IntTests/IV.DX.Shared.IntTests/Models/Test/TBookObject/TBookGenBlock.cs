@@ -3,8 +3,8 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXElement("TBookChapterBlock")]
-    public class TBookChapterBlock : DXElement
+    [DXElement("TBookChapterElement")]
+    public class TBookChapterElement : DXElement
     {
         [DXColumn("Text")]
         public string Text { get; set; }

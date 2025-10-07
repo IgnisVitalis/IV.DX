@@ -1,12 +1,12 @@
 [
   {
-    "S_Type": "TBookObject",
+    "S_Type": "TBookUnit",
     "ID": "1b51edff-1d99-4043-9a69-209996729b69",
-    "TBookGenBlock": {
+    "TBookMainElement": {
       "ID": "272aad21-f8c9-4bf2-91d2-472f65bc9058",
       "Name": "book1"
     },
-    "TBookChapterBlock": {
+    "TBookChapterElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -23,13 +23,13 @@
     }
   },
   {
-    "S_Type": "TBookObject",
+    "S_Type": "TBookUnit",
     "ID": "4782b530-6343-4d11-846a-65127cf71f3b",
-    "TBookGenBlock": {
+    "TBookMainElement": {
       "ID": "022ab2e9-d79c-453e-abbb-92586e37c51e",
       "Name": "book2"
     },
-    "TBookChapterBlock": {
+    "TBookChapterElement": {
       "Mode": 1,
       "Announced": [
         {
@@ -51,13 +51,13 @@
     }
   },
   {
-    "S_Type": "TBookObject",
+    "S_Type": "TBookUnit",
     "ID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
-    "TBookGenBlock": {
+    "TBookMainElement": {
       "ID": "e241e31e-8e9a-4174-8d95-4aac63ec211d",
       "Name": "book3"
     },
-    "TBookChapterBlock": {
+    "TBookChapterElement": {
       "Mode": 1,
       "Announced": [
         {

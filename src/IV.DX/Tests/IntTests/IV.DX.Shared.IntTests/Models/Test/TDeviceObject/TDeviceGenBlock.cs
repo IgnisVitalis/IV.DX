@@ -4,8 +4,8 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXElement("TDeviceGenBlock")]
-    public class TDeviceGenBlock : DXElement
+    [DXElement("TDeviceMainElement")]
+    public class TDeviceMainElement : DXElement
     {
         [DXColumn("Model")]
         public string Model { get; set; }

@@ -27,8 +27,8 @@ namespace IV.DataProvider.Persistence.Services.IntTests
             // Init
             IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
 
-            var dataSource1 = new DataSource("TBookObject", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
-            var dataSource2 = new DataSource("TUserObject", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
+            var dataSource1 = new DataSource("TBookUnit", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
+            var dataSource2 = new DataSource("TUserUnit", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
 
             var subject = new DataSourceManager(dataService);
 

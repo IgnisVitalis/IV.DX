@@ -4,8 +4,8 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXElement("TUserGenBlock")]
-    public class TUserGenBlock : DXElement
+    [DXElement("TUserMainElement")]
+    public class TUserMainElement : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }

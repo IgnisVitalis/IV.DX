@@ -4,7 +4,7 @@
     "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
     "DXUnitDefinitionMainElement": {
       "ID": "e907dedf-2c41-4b8a-bb80-7732bbdc23fe",
-      "Name": "TUserObject",
+      "Name": "TUserUnit",
       "Kind": 3
     },
     "DXElementInUnitDefinitionMainElement": {

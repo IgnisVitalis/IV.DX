@@ -3,15 +3,15 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 {
-    public static class TDocumentObjectFactory
+    public static class TDocumentUnitFactory
     {
-        public static TDocumentObject GetItem(Guid id, string name)
+        public static TDocumentUnit GetItem(Guid id, string name)
         {
-            return new TDocumentObject()
+            return new TDocumentUnit()
             {
                 ID = id,
                 //User = user.ID,
-                TDocumentGenBlock = new TDocumentGenBlock()
+                TDocumentMainElement = new TDocumentMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

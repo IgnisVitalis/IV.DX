@@ -4,7 +4,7 @@
     "ID": "e9622428-0578-402e-9d96-f57e670499c4",
     "DXUnitDefinitionMainElement": {
       "ID": "34365153-0139-4746-840b-09bfe9463985",
-      "Name": "TPositionObject",
+      "Name": "TPositionUnit",
       "Kind": 3
     },
     "DXElementInUnitDefinitionMainElement": {

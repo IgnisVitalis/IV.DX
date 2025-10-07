@@ -1,19 +1,19 @@
 [
   {
     "S_Type": "DXElementDefinitionUnit",
-    "ID": "f7f2185a-a933-41af-9b84-e37c98b33ef7",
+    "ID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
     "DXUnitDefinitionMainElement": {
-      "ID": "152f70fb-515e-4575-8924-c0e9e5538e49",
-      "Name": "TPassportGenBlock",      
+      "ID": "4fd5a626-879b-4fe0-aa30-3276e0f8dd8c",
+      "Name": "TBookMainElement",
       "Kind": 3
     },
     "DXColumnDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {
-          "ID": "66b58401-16e1-4f1d-8dfc-beab4557ffbc",
+          "ID": "20e239fb-5775-45cb-97a5-b400c231e707",
           "ColumnType": 3,
-          "Name": "SerialNumber",
+          "Name": "Name",
           "Length": 50,
           "AllowNull": true,
           "DefaultValue": null

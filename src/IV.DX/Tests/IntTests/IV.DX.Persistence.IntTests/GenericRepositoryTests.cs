@@ -180,7 +180,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
         {
             // Init
             var objectId = new Guid("57499CB1-1C08-4480-A274-2C71CE943B43");
-            var book = TBookObjectFactory.GetItemWithText(objectId, "MyBook", new[] { "Page1", "Page2", "Page3", "Page4" });
+            var book = TBookUnitFactory.GetItemWithText(objectId, "MyBook", new[] { "Page1", "Page2", "Page3", "Page4" });
 
             base._finalizationAction = new Action(() =>
             {
@@ -189,7 +189,7 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
 
             this._genericRepo.Insert(book);
 
-            var page5 = new TBookChapterBlock()
+            var page5 = new TBookChapterElement()
             {
                 ID = Guid.NewGuid(),
                 ObjectID = objectId,
@@ -198,10 +198,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             };
 
             // Action Insert
-            this._genericRepo.InsertBlock("TBookObject", page5);
+            this._genericRepo.InsertBlock("TBookUnit", page5);
 
             // Checking result
-            var createdBlock = this._genericRepo.GetBlock<TBookChapterBlock>(page5.ID);
+            var createdBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
 
             Assert.NotNull(createdBlock);
             Assert.Equal(page5.ID, createdBlock.ID);
@@ -212,10 +212,10 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             // Action Update 
             page5.Number = 6;
             page5.Text = "Page6";
-            this._genericRepo.UpdateBlock("TBookObject", page5);
+            this._genericRepo.UpdateBlock("TBookUnit", page5);
 
             // Checking result
-            var updatedBlock = this._genericRepo.GetBlock<TBookChapterBlock>(page5.ID);
+            var updatedBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
 
             Assert.NotNull(updatedBlock);
             Assert.Equal(page5.ID, updatedBlock.ID);
@@ -227,15 +227,15 @@ namespace IV.DataProvider.Persistence.Repositories.IntTests
             this._genericRepo.DeleteBlock(page5);
 
             // Checking result
-            var deletedBlock = this._genericRepo.GetBlock<TBookChapterBlock>(page5.ID);
+            var deletedBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
 
             Assert.Null(deletedBlock);
 
-            var existingBook = this._genericRepo.GetItem<TBookObject>(objectId);
+            var existingBook = this._genericRepo.GetItem<TBookUnit>(objectId);
 
-            Assert.Equal(existingBook.TBookChapterBlock.Announced.Count(), book.TBookChapterBlock.Announced.Count());
+            Assert.Equal(existingBook.TBookChapterElement.Announced.Count(), book.TBookChapterElement.Announced.Count());
 
-            Assert.True(existingBook.TBookChapterBlock.Announced.All(x => x.ID != page5.ID));
+            Assert.True(existingBook.TBookChapterElement.Announced.All(x => x.ID != page5.ID));
         }
     }
 }

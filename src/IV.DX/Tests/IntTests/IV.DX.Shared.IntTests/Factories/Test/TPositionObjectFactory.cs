@@ -3,15 +3,15 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 {
-    public static class TPositionObjectFactory
+    public static class TPositionUnitFactory
     {
-        public static TPositionObject GetItem(Guid id, string name)
+        public static TPositionUnit GetItem(Guid id, string name)
         {
-            return new TPositionObject()
+            return new TPositionUnit()
             {
                 ID = id,
                 //User = user.ID,
-                TPositionGenBlock = new TPositionGenBlock()
+                TPositionMainElement = new TPositionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

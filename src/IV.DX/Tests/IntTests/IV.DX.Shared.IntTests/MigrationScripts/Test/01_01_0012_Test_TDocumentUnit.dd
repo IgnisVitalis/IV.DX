@@ -4,7 +4,7 @@
     "ID": "1d99fab1-cfb6-4fc8-ab47-f71279fe16eb",
     "DXUnitDefinitionMainElement": {
       "ID": "c3845b6a-67f1-4ffd-b981-c3736c315e20",
-      "Name": "TDocumentObject",
+      "Name": "TDocumentUnit",
       "Kind": 3
     },
     "DXElementInUnitDefinitionMainElement": {

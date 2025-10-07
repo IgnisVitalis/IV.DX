@@ -3,15 +3,15 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Factories.Test
 {
-    public static class TDeviceObjectFactory
+    public static class TDeviceUnitFactory
     {
-        public static TDeviceObject GetItem(Guid id, string model, Guid uuid, TUserObject user)
+        public static TDeviceUnit GetItem(Guid id, string model, Guid uuid, TUserUnit user)
         {
-            return new TDeviceObject()
+            return new TDeviceUnit()
             {
                 ID = id,
                 User = user.ID,
-                TDeviceGenBlock = new TDeviceGenBlock()
+                TDeviceMainElement = new TDeviceMainElement()
                 {
                     ID = Guid.NewGuid(),
                     ObjectID = id,

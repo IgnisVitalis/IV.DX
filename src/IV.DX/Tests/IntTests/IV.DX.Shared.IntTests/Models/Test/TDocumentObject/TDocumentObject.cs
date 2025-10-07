@@ -5,11 +5,11 @@ using System;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXUnit("TDocumentObject")]
-    public class TDocumentObject : DXUnit
+    [DXUnit("TDocumentUnit")]
+    public class TDocumentUnit : DXUnit
     {
         [DXColumn("User", "User", DXLoadingType.Base)]
         public Guid? User { get; set; }
-        public TDocumentGenBlock TDocumentGenBlock { get; set; }
+        public TDocumentMainElement TDocumentMainElement { get; set; }
     }
 }

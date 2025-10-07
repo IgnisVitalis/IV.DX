@@ -4,9 +4,9 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DataProvider.Persistence.Shared.IntTests.Models.Test
 {
-    [DXUnit("TUserObject")]
-    public class TUserObject : DXUnit
+    [DXUnit("TUserUnit")]
+    public class TUserUnit : DXUnit
     {
-        public TUserGenBlock TUserGenBlock { get; set; }
+        public TUserMainElement TUserMainElement { get; set; }
     }
 }

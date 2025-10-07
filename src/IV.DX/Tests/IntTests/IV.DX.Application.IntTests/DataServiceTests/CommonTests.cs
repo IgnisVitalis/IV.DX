@@ -29,31 +29,31 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
             {
                 var id = Guid.NewGuid();
 
-                return new TBookObject()
+                return new TBookUnit()
                 {
                     ID = x,
-                    TBookGenBlock = new TBookGenBlock()
+                    TBookMainElement = new TBookMainElement()
                     {
                         ID = id,
                         Name = $"Name{id}"
                     },
-                    TBookChapterBlock = new DXMultiElementsContainer<TBookChapterBlock>()
+                    TBookChapterElement = new DXMultiElementsContainer<TBookChapterElement>()
                     {
-                        Announced = new List<TBookChapterBlock>()
+                        Announced = new List<TBookChapterElement>()
                         {
-                            new TBookChapterBlock()
+                            new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
                                 Number = 12345,
                                 Text = "Seleucus VI Epiphanes (c. 115 – 94 BC) was a Seleucid monarch who reigned as King of Syria between 96 and 94 BC during the Hellenistic period. He was the son of Antiochus VIII and his Egyptian wife Tryphaena."
                             },
-                            new TBookChapterBlock()
+                            new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
                                 Number = 9132423,
                                 Text = "According to the ancient historian Appian, Seleucus VI was a violent ruler. He taxed his dominions extensively to support his wars, and resisted allowing the cities a measure of autonomy, as former kings allowed. His reign did not last long; in 94 BC, he was expelled from Antioch by Antiochus X, who followed him to the Cilician city of Mopsuestia, where his attempts to raise money led to riots that eventually claimed his life."
                             },
-                            new TBookChapterBlock()
+                            new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
                                 Number = 42543,
@@ -74,14 +74,14 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
 
             EstimatePerformance(() =>
             {
-                var books = _dataService.GetItems<TBookObject>(ids100);
+                var books = _dataService.GetItems<TBookUnit>(ids100);
             }, $"GetItems({ids100.Count()})");
 
             EstimatePerformance(() =>
             {
                 foreach (var id in ids100)
                 {
-                    var book = _dataService.GetItem<TBookObject>(id);
+                    var book = _dataService.GetItem<TBookUnit>(id);
                 }
             }, $"GetItem x {ids100.Count()}");
 
@@ -93,7 +93,7 @@ namespace IV.DataProvider.Persistence.Services.IntTests.DataServiceTests
                 }
             }, $"Deleting x {ids.Count()}");
 
-            Assert.Empty(_dataService.GetItems<TBookObject>(ids));
+            Assert.Empty(_dataService.GetItems<TBookUnit>(ids));
         }
 
         [Fact]
