@@ -4,9 +4,9 @@ namespace IV.DX.Application.Contracts.HandlerContext
 {
     public class EntityHandlerMigrationServiceContext : EntityHandlerBaseContext
     {
-        public DPMigrationScriptsObject MigrationScript { get; set; }
+        public DXMigrationScriptsUnit MigrationScript { get; set; }
 
-        public EntityHandlerMigrationServiceContext(DPMigrationScriptsObject migrationScriptInfo)
+        public EntityHandlerMigrationServiceContext(DXMigrationScriptsUnit migrationScriptInfo)
         {
             MigrationScript = migrationScriptInfo;
         }

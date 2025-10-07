@@ -2,18 +2,18 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLObjectDefinition("DPMigrationScriptsObject")]
-    public class DPMigrationScriptsObject : ESQLObject
+    [ESQLObjectDefinition("DXMigrationScriptsUnit")]
+    public class DXMigrationScriptsUnit : ESQLObject
     {
-        public DPMigrationScriptsGenBlock DPMigrationScriptsGenBlock { get; set; }
+        public DXMigrationScriptsMainElement DXMigrationScriptsMainElement { get; set; }
 
         public override string ToString()
         {
             string result = null;
 
-            if (this.DPMigrationScriptsGenBlock != null)
+            if (this.DXMigrationScriptsMainElement != null)
             {
-                result = this.DPMigrationScriptsGenBlock.ToString();
+                result = this.DXMigrationScriptsMainElement.ToString();
             }
 
             return result;

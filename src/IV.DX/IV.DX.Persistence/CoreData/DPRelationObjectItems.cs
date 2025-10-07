@@ -86,10 +86,10 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("e0e600cc-00aa-4b96-982c-e2ccdd750403"),
-                        ObjectNameLeft = "DPMigrationScriptsObject",
-                        RelationNameLeft = "DPMigrationScriptsObjectID",
-                        ObjectNameRight = "DPMigrationScriptsGenBlock",
-                        RelationNameRight = "DPMigrationScriptsGenBlock",
+                        ObjectNameLeft = "DXMigrationScriptsUnit",
+                        RelationNameLeft = "DXMigrationScriptsUnitID",
+                        ObjectNameRight = "DXMigrationScriptsMainElement",
+                        RelationNameRight = "DXMigrationScriptsMainElement",
                         RelationTable = null,
                         RelationType = DXRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DXObjectKindEnum.Core

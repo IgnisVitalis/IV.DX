@@ -106,7 +106,7 @@
     "ID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
     "DXUnitDefinitionMainElement": {
       "ID": "e4b329e3-9282-40ce-91ac-58f2e8c5433c",
-      "Name": "DPMigrationScriptsObject",
+      "Name": "DXMigrationScriptsUnit",
       "Kind": 1
     },
     "DXElementInUnitDefinitionMainElement": {

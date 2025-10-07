@@ -40,22 +40,22 @@ namespace IV.DX.Application
             {
                 try
                 {
-                    if (scriptsHistory.SingleOrDefault(x => x.Equals(migrationScript.DPMigrationScriptsGenBlock)) != null)
+                    if (scriptsHistory.SingleOrDefault(x => x.Equals(migrationScript.DXMigrationScriptsMainElement)) != null)
                         continue;
 
-                    if (migrationScript.DPMigrationScriptsGenBlock.Extention == "dat")
+                    if (migrationScript.DXMigrationScriptsMainElement.Extention == "dat")
                     {
                         this.ProcessFileToInsertOrUpdate(migrationScript);
                     }
-                    else if (migrationScript.DPMigrationScriptsGenBlock.Extention == "dd")
+                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "dd")
                     {
                         this.ProcessFileToInsert(migrationScript);
                     }
-                    else if (migrationScript.DPMigrationScriptsGenBlock.Extention == "rd")
+                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "rd")
                     {
                         this.ProcessFileToInsert(migrationScript);
                     }
-                    else if (migrationScript.DPMigrationScriptsGenBlock.Extention == "od")
+                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "od")
                     {
                         this.ProcessFileToInsert(migrationScript);
                     }
@@ -77,7 +77,7 @@ namespace IV.DX.Application
         {
             mutex.WaitOne();
 
-            IEnumerable<DPMigrationScriptsGenBlock> scriptsHistory;
+            IEnumerable<DXMigrationScriptsMainElement> scriptsHistory;
 
             try
             {
@@ -112,14 +112,14 @@ namespace IV.DX.Application
             mutex.ReleaseMutex();
         }
 
-        private IEnumerable<DPMigrationScriptsGenBlock> GetScriptsHistoryIfExisting()
+        private IEnumerable<DXMigrationScriptsMainElement> GetScriptsHistoryIfExisting()
         {
-            var result = this._genericRepo.GetItems<DPMigrationScriptsObject>().Select(x => x.DPMigrationScriptsGenBlock);
+            var result = this._genericRepo.GetItems<DXMigrationScriptsUnit>().Select(x => x.DXMigrationScriptsMainElement);
 
             return result;
         }
 
-        private IEnumerable<DPMigrationScriptsObject> GetMirgationScripts(string path)
+        private IEnumerable<DXMigrationScriptsUnit> GetMirgationScripts(string path)
         {
             var jArray = JArray.Parse(path);
 
@@ -133,10 +133,10 @@ namespace IV.DX.Application
 
                 var match = regex.Match(x.Name);
 
-                return new DPMigrationScriptsObject()
+                return new DXMigrationScriptsUnit()
                 {
                     ID = Guid.NewGuid(),
-                    DPMigrationScriptsGenBlock = new DPMigrationScriptsGenBlock()
+                    DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement()
                     {
                         ID = Guid.NewGuid(),
                         FilePath = x.FullName,
@@ -153,9 +153,9 @@ namespace IV.DX.Application
             return migrationScripts;
         }
 
-        private void ProcessFileForPreInitCore(DPMigrationScriptsObject file)
+        private void ProcessFileForPreInitCore(DXMigrationScriptsUnit file)
         {
-            var content = File.ReadAllText(file.DPMigrationScriptsGenBlock.FilePath);
+            var content = File.ReadAllText(file.DXMigrationScriptsMainElement.FilePath);
 
             var jarray = JArray.Parse(content);
 
@@ -165,9 +165,9 @@ namespace IV.DX.Application
             }
         }
 
-        private void ProcessFileForPostInitCore(DPMigrationScriptsObject file)
+        private void ProcessFileForPostInitCore(DXMigrationScriptsUnit file)
         {
-            var content = File.ReadAllText(file.DPMigrationScriptsGenBlock.FilePath);
+            var content = File.ReadAllText(file.DXMigrationScriptsMainElement.FilePath);
 
             var jarray = JArray.Parse(content);
 
@@ -177,9 +177,9 @@ namespace IV.DX.Application
             }
         }
 
-        private void ProcessFileToInsert(DPMigrationScriptsObject relFile)
+        private void ProcessFileToInsert(DXMigrationScriptsUnit relFile)
         {
-            var content = File.ReadAllText(relFile.DPMigrationScriptsGenBlock.FilePath);
+            var content = File.ReadAllText(relFile.DXMigrationScriptsMainElement.FilePath);
 
             var jarray = JArray.Parse(content);
 
@@ -189,9 +189,9 @@ namespace IV.DX.Application
             }
         }
 
-        private void ProcessFileToInsertOrUpdate(DPMigrationScriptsObject datFile)
+        private void ProcessFileToInsertOrUpdate(DXMigrationScriptsUnit datFile)
         {
-            var content = File.ReadAllText(datFile.DPMigrationScriptsGenBlock.FilePath);
+            var content = File.ReadAllText(datFile.DXMigrationScriptsMainElement.FilePath);
 
             var jarray = JArray.Parse(content);
 

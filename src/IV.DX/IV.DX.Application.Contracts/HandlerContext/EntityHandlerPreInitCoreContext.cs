@@ -4,7 +4,7 @@ namespace IV.DX.Application.Contracts.HandlerContext
 {
     public class EntityHandlerPreInitCoreContext : EntityHandlerMigrationServiceContext
     {
-        public EntityHandlerPreInitCoreContext(DPMigrationScriptsObject migrationScriptInfo)
+        public EntityHandlerPreInitCoreContext(DXMigrationScriptsUnit migrationScriptInfo)
             : base(migrationScriptInfo)
         {
         }

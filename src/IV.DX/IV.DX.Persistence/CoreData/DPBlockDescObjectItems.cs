@@ -279,14 +279,14 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
-                #region DPMigrationScriptsGenBlock
+                #region DXMigrationScriptsMainElement
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("4502e21d-4d38-475d-88eb-3159d3b7c514"),
                     DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                     {
                         ID = new Guid("923c3122-0cc6-4c8a-9679-0017f3b7f59d"),
-                        Name = "DPMigrationScriptsGenBlock",
+                        Name = "DXMigrationScriptsMainElement",
                         Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()

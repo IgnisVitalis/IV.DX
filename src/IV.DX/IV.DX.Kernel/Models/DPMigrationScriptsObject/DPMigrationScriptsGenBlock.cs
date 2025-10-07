@@ -2,8 +2,8 @@ using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {
-    [ESQLBlockDefinition("DPMigrationScriptsGenBlock")]
-    public class DPMigrationScriptsGenBlock : ESQLBlock
+    [ESQLBlockDefinition("DXMigrationScriptsMainElement")]
+    public class DXMigrationScriptsMainElement : ESQLBlock
     {
         [ESQLColumnDefinition("FilePath")]
         public string FilePath { get; set; }
@@ -28,7 +28,7 @@ namespace IV.DX.Kernel.Models
 
         public override bool Equals(object obj)
         {
-            var obj2 = obj as DPMigrationScriptsGenBlock;
+            var obj2 = obj as DXMigrationScriptsMainElement;
 
             if (obj2 == null)
                 return false;

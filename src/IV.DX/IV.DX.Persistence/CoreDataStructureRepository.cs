@@ -600,14 +600,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPMigrationScriptsGenBlock
-            var dpMigrationScriptsGenBlock = new DXElementDefinitionUnit()
+            #region DXMigrationScriptsMainElement
+            var DXMigrationScriptsMainElement = new DXElementDefinitionUnit()
             {
                 ID = new Guid("4502e21d-4d38-475d-88eb-3159d3b7c514"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("923c3122-0cc6-4c8a-9679-0017f3b7f59d"),
-                    Name = "DPMigrationScriptsGenBlock",
+                    Name = "DXMigrationScriptsMainElement",
                     Kind = DXObjectKindEnum.Core
                 },
                 DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
@@ -708,7 +708,7 @@ namespace IV.DX.Persistence
                 DXUnitInheritanceElement,
                 DXElementInUnitDefinitionMainElement,
                 DXRelationDefinitionMainElement,
-                dpMigrationScriptsGenBlock
+                DXMigrationScriptsMainElement
             };
         }
 
@@ -851,14 +851,14 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            #region DPMigrationScriptsObject
-            var dpMigrationScriptsObject = new DXUnitDefinitionUnit()
+            #region DXMigrationScriptsUnit
+            var DXMigrationScriptsUnit = new DXUnitDefinitionUnit()
             {
                 ID = new Guid("0f4a01ba-427d-41ca-9f98-5dddadbd25d6"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = new Guid("f440497f-f9b9-4b25-a558-e7bdd2354683"),
-                    Name = "DPMigrationScriptsObject",
+                    Name = "DXMigrationScriptsUnit",
                     Kind = DXObjectKindEnum.Core
                 },
                 DXElementInUnitDefinitionMainElement = new ESQLMultiItemsContainer<DXElementInUnitDefinitionMainElement>()
@@ -884,7 +884,7 @@ namespace IV.DX.Persistence
                 DXElementDefinitionUnit,
                 DXEnumDefinitionUnit,
                 DXRelationDefinitionUnit,
-                dpMigrationScriptsObject
+                DXMigrationScriptsUnit
             };
         }
     }
