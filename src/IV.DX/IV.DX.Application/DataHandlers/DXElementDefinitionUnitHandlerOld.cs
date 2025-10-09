@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,7 @@ namespace IV.DX.Application.DataHandlers
             this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
         }
 
-        public override Guid OnInserting(DXElementDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
+        public override Guid OnInserting(DXElementDefinitionUnit entity, IDXHandlerContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -41,7 +42,7 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXElementDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
+        public override Guid OnUpdating(DXElementDefinitionUnit entity, IDXHandlerContext context)
         {
             base.Validate(entity);
             base.Process(entity);
@@ -52,7 +53,7 @@ namespace IV.DX.Application.DataHandlers
             return base.OnUpdating(entity, context);
         }
 
-        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
+        public override bool OnDeleting(Guid id, IDXHandlerContext context)
         {
             var entity = this._genericRepo.GetItem<DXElementDefinitionUnit>(id);
 

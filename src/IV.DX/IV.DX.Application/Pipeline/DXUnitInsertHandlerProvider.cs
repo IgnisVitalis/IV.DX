@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace IV.DX.Application.Pipeline
 {
-    internal sealed class DXUnitHandlerProvider : IDXUnitInsertHandlerProvider
+    internal sealed class DXUnitInsertHandlerProvider : IDXUnitInsertHandlerProvider
     {
         private static readonly Dictionary<string, Type> _typesByName = new(StringComparer.OrdinalIgnoreCase);
 

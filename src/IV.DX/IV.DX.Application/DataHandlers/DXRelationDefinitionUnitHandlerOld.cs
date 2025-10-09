@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,7 @@ namespace IV.DX.Application.DataHandlers
             this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
         }
 
-        public override Guid OnInserting(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
+        public override Guid OnInserting(DXRelationDefinitionUnit entity, IDXHandlerContext context)
         {
             var existingRelation = this._dataStructureRepo.GetRelation(entity.DXRelationDefinitionMainElement.ObjectNameLeft, entity.DXRelationDefinitionMainElement.RelationNameLeft, entity.DXRelationDefinitionMainElement.ObjectNameRight, entity.DXRelationDefinitionMainElement.RelationNameRight);
 
@@ -49,13 +50,13 @@ namespace IV.DX.Application.DataHandlers
             }
         }
 
-        public override Guid OnUpdating(DXRelationDefinitionUnit entity, DXUnitHandlerBaseContextOld context)
+        public override Guid OnUpdating(DXRelationDefinitionUnit entity, IDXHandlerContext context)
         {
             base.ThrowNotSupportedExceptionForOnUpdatingMethod();
             return Guid.Empty;
         }
 
-        public override bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
+        public override bool OnDeleting(Guid id, IDXHandlerContext context)
         {
             var entity = this._genericRepo.GetItem<DXRelationDefinitionUnit>(id);
 

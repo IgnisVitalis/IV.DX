@@ -1,17 +1,18 @@
 ﻿using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXUnitHandler<T> where T : DXUnit
     {
-        bool IsItemExisting(Guid id, DXUnitHandlerBaseContextOld context);
-        void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context);
-        Guid OnInserting(T entity, DXUnitHandlerBaseContextOld context);
-        void OnInserted(T entity, DXUnitHandlerBaseContextOld context);
-        Guid OnUpdating(T entity, DXUnitHandlerBaseContextOld context);
-        void OnUpdated(T entity, DXUnitHandlerBaseContextOld context);
-        bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context);
-        void OnDeleted(Guid id, DXUnitHandlerBaseContextOld context);
+        bool IsItemExisting(Guid id, IDXHandlerContext context);
+        void OnGetting(DXModel model, IDXHandlerContext context);
+        Guid OnInserting(T entity, IDXHandlerContext context);
+        void OnInserted(T entity, IDXHandlerContext context);
+        Guid OnUpdating(T entity, IDXHandlerContext context);
+        void OnUpdated(T entity, IDXHandlerContext context);
+        bool OnDeleting(Guid id, IDXHandlerContext context);
+        void OnDeleted(Guid id, IDXHandlerContext context);
     }
 }

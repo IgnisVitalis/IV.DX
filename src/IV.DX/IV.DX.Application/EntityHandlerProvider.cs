@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Application.DataHandlers;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -133,42 +134,42 @@ namespace IV.DX.Application
                 this._handler = handler;
             }
 
-            public bool IsItemExisting(Guid id, DXUnitHandlerBaseContextOld context)
+            public bool IsItemExisting(Guid id, IDXHandlerContext context)
             {
                 return (this._handler.Item2 as dynamic).IsItemExisting(id, context);
             }
 
-            public void OnDeleted(Guid id, DXUnitHandlerBaseContextOld context)
+            public void OnDeleted(Guid id, IDXHandlerContext context)
             {
                 (this._handler.Item2 as dynamic).OnDeleted(id, context);
             }
 
-            public bool OnDeleting(Guid id, DXUnitHandlerBaseContextOld context)
+            public bool OnDeleting(Guid id, IDXHandlerContext context)
             {
                 return (this._handler.Item2 as dynamic).OnDeleting(id, context);
             }
 
-            public void OnGetting(DXModel model, DXUnitHandlerBaseContextOld context)
+            public void OnGetting(DXModel model, IDXHandlerContext context)
             {
                 (this._handler.Item2 as dynamic).OnGetting(model, context);
             }
 
-            public void OnInserted(DXUnit entity, DXUnitHandlerBaseContextOld context)
+            public void OnInserted(DXUnit entity, IDXHandlerContext context)
             {
                 (this._handler.Item2 as dynamic).OnInserted(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnInserting(DXUnit entity, DXUnitHandlerBaseContextOld context)
+            public Guid OnInserting(DXUnit entity, IDXHandlerContext context)
             {
                 return (this._handler.Item2 as dynamic).OnInserting(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public void OnUpdated(DXUnit entity, DXUnitHandlerBaseContextOld context)
+            public void OnUpdated(DXUnit entity, IDXHandlerContext context)
             {
                 (this._handler.Item2 as dynamic).OnUpdated(VerifyRecord(this._handler.Item1, entity), context);
             }
 
-            public Guid OnUpdating(DXUnit entity, DXUnitHandlerBaseContextOld context)
+            public Guid OnUpdating(DXUnit entity, IDXHandlerContext context)
             {
                 return (this._handler.Item2 as dynamic).OnUpdating(VerifyRecord(this._handler.Item1, entity), context);
             }

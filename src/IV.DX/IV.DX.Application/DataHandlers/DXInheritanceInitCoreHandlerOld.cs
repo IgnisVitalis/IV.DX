@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ namespace IV.DX.Application.DataHandlers
             this._dataStructureRepository = serviceProvider.GetService<IDXStructureRepository>();
         }
 
-        public override Guid OnInserting(DXInheritanceInitCore entity, DXUnitHandlerBaseContextOld context)
+        public override Guid OnInserting(DXInheritanceInitCore entity, IDXHandlerContext context)
         {
             this._dataStructureRepository.SetEntityInheritance(entity.ChildEntity, entity.BaseEntity);
 
