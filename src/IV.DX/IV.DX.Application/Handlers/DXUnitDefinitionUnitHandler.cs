@@ -37,18 +37,49 @@ namespace IV.DX.Application.Handlers
 
                 this.ProcessRelations(dxUnit);
                 return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
-            }            
+            }
         }
 
         public Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            dataStructureRepo.UpdatedDataStructure(dxUnit);
+
+            this.ProcessRelations(dxUnit);
+            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        public Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct)
+        public Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            this.DeleteRelations(dxUnit);
+
+            dataStructureRepo.DropDataStructure(dxUnit);
+
+            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
         }
+
+        private void DeleteRelations(DXUnitDefinitionUnit entity)
+        {
+            var existingEntity = genericRepo.GetItem<DXUnitDefinitionUnit>(entity.ID);
+
+            if (existingEntity == null)
+                return;
+
+            var relatedBlockIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+
+            var relatedBlocks = dataStructureRepo.GetBlocks(relatedBlockIds);
+
+            foreach (var relatedBlock in relatedBlocks)
+            {
+                dxUnitService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, relatedBlock).ID);
+            }
+        }
+
 
         private void ProcessRelations(DXUnitDefinitionUnit dxUnit)
         {

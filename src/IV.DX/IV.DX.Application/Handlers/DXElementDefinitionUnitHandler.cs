@@ -51,19 +51,14 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        public Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct)
+        public Task<DXResult<DXElementDefinitionUnit>> BeforeDeleteAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            var entity = genericRepo.GetItem<DXElementDefinitionUnit>(id);
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
 
-            if (entity == null)
-                return Task.Run(() => DXResult.Ok(DXFlow.SkipProcess));
+            dataStructureRepo.DropDataStructure(dxUnit);
 
-            base.Validate(entity);
-            base.Process(entity);
-
-            dataStructureRepo.DropDataStructure(entity);
-
-            return Task.Run(() => DXResult.OkContinue());
+            return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
         }
 
         private void ProcessRelations(DXElementDefinitionUnit entity)

@@ -8,30 +8,43 @@ namespace IV.DX.Application.Contracts.Pipeline
     {
         Task<DXResult<T?>> GetAsync<T>(
             Guid id,
-            IEnumerable<IDXBeforeGet<T>> befores,
-            IEnumerable<IDXAfterGet<T>> afters,
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit;
+
+        Task<DXResult<DXModel?>> GetAsync(
+            string typeName,
+            Guid id,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
 
         Task<DXResult<T>> InsertAsync<T>(
-            T model,
-            IEnumerable<IDXBeforeInsert<T>> befores,
-            IEnumerable<IDXAfterInsert<T>> afters,
+            T dxUnit,
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit;
+
+        Task<DXResult<DXModel>> InsertAsync(
+            DXModel dxModel,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
 
         Task<DXResult<T>> UpdateAsync<T>(
-            T model,
-            IEnumerable<IDXBeforeUpdate<T>> befores,
-            IEnumerable<IDXAfterUpdate<T>> afters,
+            T dxUnit,
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit;
 
-        Task<DXResult> DeleteAsync<T>(
-            Guid id,
-            IEnumerable<IDXBeforeDelete<T>> befores,
-            IEnumerable<IDXAfterDelete<T>> afters,
+        Task<DXResult<DXModel>> UpdateAsync(
+           DXModel dxModel,
+           IDXHandlerContext ctx,
+           CancellationToken ct);
+
+        Task<DXResult<T>> DeleteAsync<T>(
+            T dxUnit,
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit;
+
+        Task<DXResult<DXModel>> DeleteAsync(
+            DXModel dxModel,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
     }
 }

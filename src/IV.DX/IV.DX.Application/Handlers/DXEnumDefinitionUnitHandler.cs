@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
@@ -21,13 +20,13 @@ namespace IV.DX.Application.Handlers
             base.Validate(dxUnit);
             base.Process(dxUnit);
 
-            if (ctx is DXUnitHandlerPreInitCoreContextOld)
+            if (ctx is DXUnitHandlerPreInitCoreContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
                 return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit));
             }
-            else if (ctx is DXUnitHandlerPostInitCoreContextOld)
+            else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
                 return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
             }
@@ -49,21 +48,19 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        public Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct)
+        public Task<DXResult<DXEnumDefinitionUnit>> BeforeDeleteAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            var entity = genericRepo.GetItem<DXEnumDefinitionUnit>(id);
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
 
-            base.Validate(entity);
-            base.Process(entity);
+            dataStructureRepo.DropDataStructure(dxUnit);
 
-            dataStructureRepo.DropDataStructure(entity);
-
-            switch (entity.DXUnitDefinitionMainElement.Kind)
+            switch (dxUnit.DXUnitDefinitionMainElement.Kind)
             {
                 case DXObjectKindEnum.Core:
-                    return Task.Run(() => DXResult.OkSkipProcess());
+                    return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit));
                 default:
-                    return Task.Run(() => DXResult.OkContinue());
+                    return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
             }
         }
     }

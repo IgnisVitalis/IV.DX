@@ -19,9 +19,9 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(esqlObject);
 
-            var asqlTypeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
+            var esqlTypeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
-            return this._coreRepo.Delete(asqlTypeName, esqlObject.ID);
+            return this._coreRepo.Delete(esqlTypeName, esqlObject.ID);
         }
 
         public T GetItem<T>(Guid id) where T : DXUnit

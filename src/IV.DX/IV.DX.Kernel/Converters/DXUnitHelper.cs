@@ -7,6 +7,13 @@ namespace IV.DX.Kernel.Converters
 {
     public static class DXUnitHelper
     {
+        public static string GetTypeName(string json)
+        {
+            var jObject = JObject.Parse(json);
+
+            return (string)jObject[Constants.SystemPropertyTypeName];
+        }
+
         #region Convert to JObject       
         public static JObject ConvertToJObject(this DXUnit esqlObject)
         {
@@ -25,8 +32,11 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Convert to ESQLModel
-        public static DXModel ConvertToESQLModel(this DXUnit esqlObject)
+        public static DXModel? ConvertToESQLModel(this DXUnit esqlObject)
         {
+            if (esqlObject == null)
+                return null;
+
             var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
                    (esqlObject.GetType());
 

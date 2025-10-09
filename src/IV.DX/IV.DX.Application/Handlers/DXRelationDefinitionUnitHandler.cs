@@ -49,28 +49,26 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
         }
 
-        public Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct)
+        public Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             if (ctx is DXRelationDefinitionUnitInvertedItemContext)
             {
-                return Task.Run(() => DXResult.OkContinue());
+                return Task.Run(() => DXResult< DXRelationDefinitionUnit>.OkContinue(dxUnit));
             }
-
-            var dxUnit = genericRepo.GetItem<DXRelationDefinitionUnit>(id);
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
             var existingRelation = dataStructureRepo.GetRelation(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation == null)
-                return Task.Run(() => DXResult.OkSkipProcess());
+                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
 
             dxUnit = existingRelation;
             var invertedRelation = this.GetInvertedRelationObject(dxUnit);
 
             dxUnitService.Delete("DXRelationDefinitionUnit", invertedRelation.ID, new DXRelationDefinitionUnitInvertedItemContext());
 
-            return Task.Run(() => DXResult.OkContinue());
+            return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
         }
 
         private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit entity)

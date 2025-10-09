@@ -5,6 +5,6 @@ namespace IV.DX.Application.Contracts.Handlers
 {
     public interface IDXBeforeDelete<T> : IDXBeforeOrdered where T : DXUnit
     {
-        Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
+        Task<DXResult<T>> BeforeDeleteAsync(T dxUnit, IDXHandlerContext ctx, CancellationToken ct);
     }
 }
