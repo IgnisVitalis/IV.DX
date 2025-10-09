@@ -2,6 +2,7 @@
 using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 
@@ -13,8 +14,8 @@ namespace IV.DX.Application.Handlers
         IDXBeforeUpdate<DXEnumDefinitionUnit>,
         IDXBeforeDelete<DXEnumDefinitionUnit>
     {
-        public int BeforeOrder => throw new NotImplementedException();
-              
+        public int BeforeOrder => 1;
+
         public Task<DXResult<DXEnumDefinitionUnit>> BeforeInsertAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
@@ -40,12 +41,30 @@ namespace IV.DX.Application.Handlers
 
         public Task<DXResult<DXEnumDefinitionUnit>> BeforeUpdateAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            dataStructureRepo.UpdatedDataStructure(dxUnit);
+
+            return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
         }
 
         public Task<DXResult> BeforeDeleteAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var entity = genericRepo.GetItem<DXEnumDefinitionUnit>(id);
+
+            base.Validate(entity);
+            base.Process(entity);
+
+            dataStructureRepo.DropDataStructure(entity);
+
+            switch (entity.DXUnitDefinitionMainElement.Kind)
+            {
+                case DXObjectKindEnum.Core:
+                    return Task.Run(() => DXResult.OkSkipProcess());
+                default:
+                    return Task.Run(() => DXResult.OkContinue());
+            }
         }
     }
 }

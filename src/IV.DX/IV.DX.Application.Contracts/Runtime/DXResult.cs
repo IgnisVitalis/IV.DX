@@ -14,7 +14,9 @@ namespace IV.DX.Application.Contracts.Runtime
         }
 
         public static DXResult Ok(DXFlow flow = DXFlow.Continue) => new(true, null, flow);
+        public static DXResult OkContinue() => new(true, null, DXFlow.Continue);
         public static DXResult Fail(string error) => new(false, error, DXFlow.Stop);
+        public static DXResult OkSkipProcess() => new(true, null, DXFlow.SkipProcess);
     }
 
     public sealed class DXResult<T> : DXResult where T : DXUnit

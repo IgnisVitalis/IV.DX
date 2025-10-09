@@ -63,7 +63,7 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.DropDataStructure(entity);
 
-            return Task.Run(() => DXResult.Ok(DXFlow.Continue));
+            return Task.Run(() => DXResult.OkContinue());
         }
 
         private void ProcessRelations(DXElementDefinitionUnit entity)

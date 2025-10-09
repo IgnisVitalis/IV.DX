@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.HandlerContext;
+﻿using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -28,30 +28,30 @@ namespace IV.DX.Application.Contracts.Abstractions
         bool Delete(JObject jObject);
         Guid InsertOrUpdate(JObject jObject);
 
-        IEnumerable<T> GetItems<T>(DXUnitHandlerBaseContextOld context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
-        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXUnitHandlerBaseContextOld context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
-        IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXUnitHandlerBaseContextOld context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
-        T GetItem<T>(Guid id, DXUnitHandlerBaseContextOld context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
-        bool IsItemExisting(Guid id, string type, DXUnitHandlerBaseContextOld context);
+        IEnumerable<T> GetItems<T>(IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+        IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+        IEnumerable<T> GetItems<T>(string esqlWhereExpression, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+        T GetItem<T>(Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+        bool IsItemExisting(Guid id, string type, IDXHandlerContext context);
 
-        Guid Insert(DXUnit esqlObject, DXUnitHandlerBaseContextOld context);
-        Guid Update(DXUnit esqlObject, DXUnitHandlerBaseContextOld context);
-        Guid InsertOrUpdate(DXUnit esqlObject, DXUnitHandlerBaseContextOld context);
-        bool Delete(DXUnit esqlObject, DXUnitHandlerBaseContextOld context);
+        Guid Insert(DXUnit esqlObject, IDXHandlerContext context);
+        Guid Update(DXUnit esqlObject, IDXHandlerContext context);
+        Guid InsertOrUpdate(DXUnit esqlObject, IDXHandlerContext context);
+        bool Delete(DXUnit esqlObject, IDXHandlerContext context);
 
-        IEnumerable<DXModel> GetItems(string typeName, DXUnitHandlerBaseContextOld context);
-        IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, DXUnitHandlerBaseContextOld context);
-        IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, DXUnitHandlerBaseContextOld context);
-        DXModel GetItem(string typeName, Guid id, DXUnitHandlerBaseContextOld context);
+        IEnumerable<DXModel> GetItems(string typeName, IDXHandlerContext context);
+        IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, IDXHandlerContext context);
+        IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, IDXHandlerContext context);
+        DXModel GetItem(string typeName, Guid id, IDXHandlerContext context);
 
-        Guid Insert(string jObject, DXUnitHandlerBaseContextOld context);
-        Guid Update(string jObject, DXUnitHandlerBaseContextOld context);
-        bool Delete(string typeName, Guid id, DXUnitHandlerBaseContextOld context);
-        Guid InsertOrUpdate(string jObject, DXUnitHandlerBaseContextOld context);
+        Guid Insert(string jObject, IDXHandlerContext context);
+        Guid Update(string jObject, IDXHandlerContext context);
+        bool Delete(string typeName, Guid id, IDXHandlerContext context);
+        Guid InsertOrUpdate(string jObject, IDXHandlerContext context);
 
-        Guid Insert(JObject jObject, DXUnitHandlerBaseContextOld context);
-        Guid Update(JObject jObject, DXUnitHandlerBaseContextOld context);
-        bool Delete(JObject jObject, DXUnitHandlerBaseContextOld context);
-        Guid InsertOrUpdate(JObject jObject, DXUnitHandlerBaseContextOld context);
+        Guid Insert(JObject jObject, IDXHandlerContext context);
+        Guid Update(JObject jObject, IDXHandlerContext context);
+        bool Delete(JObject jObject, IDXHandlerContext context);
+        Guid InsertOrUpdate(JObject jObject, IDXHandlerContext context);
     }
 }
