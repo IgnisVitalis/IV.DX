@@ -10,15 +10,8 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application
 {
-    internal class DXUnitDataService : IDXUnitDataService
+    internal class DXUnitDataService(IDXCoreRepository coreRepo) : IDXUnitDataService
     {
-        private readonly IDXCoreRepository _coreRepo;
-
-        public DXUnitDataService(IDXCoreRepository coreRepo)
-        {
-            this._coreRepo = coreRepo;
-        }
-
         public T GetItem<T>(Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {
             var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
@@ -72,7 +65,7 @@ namespace IV.DX.Application
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
-            var itemIsExisting = this._coreRepo.IsItemExisting(typeName, esqlObject.ID);
+            var itemIsExisting = coreRepo.IsItemExisting(typeName, esqlObject.ID);
 
             if (itemIsExisting)
             {
@@ -221,7 +214,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(string typeName, IDXHandlerContext context)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName);
+            IEnumerable<DXModel> items = coreRepo.GetItems(typeName);
 
             this.HandleItems(items, typeName, context);
 
@@ -230,7 +223,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, typeOfLoading);
+            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
@@ -273,7 +266,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, IEnumerable<Guid> ids, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
+            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
@@ -282,7 +275,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, IDXHandlerContext context)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName, ids);
+            IEnumerable<DXModel> items = coreRepo.GetItems(typeName, ids);
 
             this.HandleItems(items, typeName, context);
 
@@ -291,7 +284,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, IDXHandlerContext context)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(typeName, esqlWhereExpression);
+            IEnumerable<DXModel> items = coreRepo.GetItems(typeName, esqlWhereExpression);
 
             this.HandleItems(items, typeName, context);
 
@@ -300,7 +293,7 @@ namespace IV.DX.Application
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, string esqlWhereExpression, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            IEnumerable<DXModel> items = this._coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
+            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
 
             this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
 
@@ -309,7 +302,7 @@ namespace IV.DX.Application
 
         public DXModel GetItem(string typeName, Guid id, IDXHandlerContext context)
         {
-            DXModel item = this._coreRepo.GetItem(typeName, id);
+            DXModel item = coreRepo.GetItem(typeName, id);
 
             this.HandleItem(item, typeName, context);
 
@@ -318,7 +311,7 @@ namespace IV.DX.Application
 
         public DXModel GetItem(DXModelDefinition modelDefinition, Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
         {
-            DXModel item = this._coreRepo.GetItem(modelDefinition, id, typeOfLoading);
+            DXModel item = coreRepo.GetItem(modelDefinition, id, typeOfLoading);
 
             this.HandleItem(item, modelDefinition.OwnSingleItem.Type, context);
 
