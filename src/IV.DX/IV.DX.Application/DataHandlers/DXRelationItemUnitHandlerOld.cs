@@ -13,7 +13,7 @@ namespace IV.DX.Application.DataHandlers
         public DXRelationItemUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         public override bool IsItemExisting(Guid id, IDXHandlerContext context)

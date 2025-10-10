@@ -38,8 +38,6 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXStructureRepository, DXCoreRepository>();
             services.AddScoped<IDXEnumCoreRepository, DXCoreRepository>();
 
-            services.AddSingleton<IDXCoreHandler, CoreModelHandler>();
-
             services.AddScoped<IDXGenericRepository, DXGenericRepository>();
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXCoreHandler, CoreModelHandler>();

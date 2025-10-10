@@ -1,5 +1,4 @@
-﻿using IV.DX.Application.Contracts.Handlers;
-using IV.DX.Application.Contracts.Runtime;
+﻿using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Pipeline
@@ -9,7 +8,7 @@ namespace IV.DX.Application.Contracts.Pipeline
         Task<DXResult<T?>> GetAsync<T>(
             Guid id,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit;
+            CancellationToken ct) where T : DXUnit, new();
 
         Task<DXResult<DXModel?>> GetAsync(
             string typeName,
@@ -20,7 +19,7 @@ namespace IV.DX.Application.Contracts.Pipeline
         Task<DXResult<T>> InsertAsync<T>(
             T dxUnit,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit;
+            CancellationToken ct) where T : DXUnit, new();
 
         Task<DXResult<DXModel>> InsertAsync(
             DXModel dxModel,
@@ -30,7 +29,7 @@ namespace IV.DX.Application.Contracts.Pipeline
         Task<DXResult<T>> UpdateAsync<T>(
             T dxUnit,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit;
+            CancellationToken ct) where T : DXUnit, new();
 
         Task<DXResult<DXModel>> UpdateAsync(
            DXModel dxModel,
@@ -40,7 +39,7 @@ namespace IV.DX.Application.Contracts.Pipeline
         Task<DXResult<T>> DeleteAsync<T>(
             T dxUnit,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit;
+            CancellationToken ct) where T : DXUnit, new();
 
         Task<DXResult<DXModel>> DeleteAsync(
             DXModel dxModel,

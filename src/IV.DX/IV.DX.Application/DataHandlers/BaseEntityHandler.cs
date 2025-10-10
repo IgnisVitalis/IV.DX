@@ -21,7 +21,7 @@ namespace IV.DX.Application.DataHandlers
 
         public BaseEntityHandler(IServiceProvider serviceProvider)
         {
-            this._coreModelHandler = serviceProvider.GetService<IDXCoreHandler>();
+            this._coreModelHandler = serviceProvider.GetRequiredService<IDXCoreHandler>();
         }
 
         public virtual bool OnDeleting(Guid id, IDXHandlerContext context)

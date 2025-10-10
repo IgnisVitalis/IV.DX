@@ -1,12 +1,11 @@
-﻿using IV.DX.Shared.IntTests;
-using IV.DX.Shared.IntTests.Factories.Test;
-using IV.DX.Shared.IntTests.Models.Test;
-using IV.DX.Contracts.Persistence.ExpressionTree;
+﻿using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.SQLQueryHelpers;
 using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Factories.Test;
+using IV.DX.Shared.IntTests.Models.Test;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 {
+    [Collection("DX:one-time")]
     public class SQLQueryHelperTests : IntTestController
     {
         public IEnumerable<TUserUnit> users;
@@ -28,11 +28,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         ISQLQueryDXHelper _sqlQueryHelper;
         IDXGenericRepository _genericRepo;
 
-        public SQLQueryHelperTests(ITestOutputHelper output)
-            : base(output)
+        public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
-            this._sqlQueryHelper = this.ServiceProvider.GetService<ISQLQueryDXHelper>();
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+            this._sqlQueryHelper = this.ServiceProvider.GetRequiredService<ISQLQueryDXHelper>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
 
             InitData();
         }

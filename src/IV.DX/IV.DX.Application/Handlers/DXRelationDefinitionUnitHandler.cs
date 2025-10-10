@@ -8,10 +8,13 @@ namespace IV.DX.Application.Handlers
 {
     internal class DXRelationDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
         IDXBeforeInsert<DXRelationDefinitionUnit>,
+        IDXAfterInsert<DXRelationDefinitionUnit>,
         IDXBeforeUpdate<DXRelationDefinitionUnit>,
         IDXBeforeDelete<DXRelationDefinitionUnit>
     {
         public int BeforeOrder => 1;
+
+        public int AfterOrder => throw new NotImplementedException();
 
         public Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -30,17 +33,29 @@ namespace IV.DX.Application.Handlers
             }
             else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
-                var invertedRelation = dxUnit.CreateInvertedRelationObject();
-
                 return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
             }
             else
             {
-                dataStructureRepo.CreateDataStructure(dxUnit);
-
-                var invertedRelation = dxUnit.CreateInvertedRelationObject();
+                dataStructureRepo.CreateDataStructure(dxUnit);              
 
                 return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
+            }
+        }
+
+        public Task<DXResult> AfterInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            if (ctx is DXUnitHandlerPreInitCoreContext)
+            {
+                return Task.Run(() => DXResult.OkSkipProcess());
+            }
+            else
+            {
+                var invertedRelation = dxUnit.CreateInvertedRelationObject();
+
+                genericRepo.Insert(invertedRelation);
+
+                return Task.Run(() => DXResult.OkContinue());
             }
         }
 
@@ -51,10 +66,10 @@ namespace IV.DX.Application.Handlers
 
         public Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            if (ctx is DXRelationDefinitionUnitInvertedItemContext)
-            {
-                return Task.Run(() => DXResult< DXRelationDefinitionUnit>.OkContinue(dxUnit));
-            }
+            //if (ctx is DXRelationDefinitionUnitInvertedItemContext)
+            //{
+            //    return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
+            //}
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
@@ -66,7 +81,7 @@ namespace IV.DX.Application.Handlers
             dxUnit = existingRelation;
             var invertedRelation = this.GetInvertedRelationObject(dxUnit);
 
-            dxUnitService.Delete("DXRelationDefinitionUnit", invertedRelation.ID, new DXRelationDefinitionUnitInvertedItemContext());
+            genericRepo.Delete(invertedRelation);
 
             return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
         }
@@ -76,11 +91,11 @@ namespace IV.DX.Application.Handlers
             var modelDefinition = genericRepo.GetItems<DXRelationDefinitionUnit>(entity.GetQueryForInvertedRelationObject());
 
             return modelDefinition.SingleOrDefault();
-        }
+        }   
 
-        private class DXRelationDefinitionUnitInvertedItemContext : IDXHandlerContext
-        {
+        //private class DXRelationDefinitionUnitInvertedItemContext : IDXHandlerContext
+        //{
 
-        }
+        //}
     }
 }

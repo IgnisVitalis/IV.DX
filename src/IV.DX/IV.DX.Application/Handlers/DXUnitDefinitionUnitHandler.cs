@@ -80,7 +80,6 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-
         private void ProcessRelations(DXUnitDefinitionUnit dxUnit)
         {
             this.ProcessBlocksIndxUnitRelations(dxUnit);
@@ -145,7 +144,7 @@ namespace IV.DX.Application.Handlers
             {
                 var relationType = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
 
-                dxUnitService.Insert(this.GetRelationObject(dxUnit, blockToAssign, relationType));
+                dxUnitService.InsertAsync(this.GetRelationObject(dxUnit, blockToAssign, relationType)).Wait();
             }
         }
 

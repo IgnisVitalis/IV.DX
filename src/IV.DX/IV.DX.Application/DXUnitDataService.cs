@@ -51,18 +51,21 @@ namespace IV.DX.Application
             return result;
         }
 
-        public Guid Insert(DXUnit esqlObject, IDXHandlerContext context)
+        public async Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var handler = EntityHandlerProvider.GetHandler(esqlObject);
+            var result = await dxPipelineExecutor.InsertAsync<T>(esqlObject, context, ct);
 
-            var result = handler.OnInserting(esqlObject, context);
-
-            handler.OnInserted(esqlObject, context);
-
-            return result;
+            if (result.IsSuccess && result.Value != null)
+            {
+                return result.Value;
+            }
+            else
+            {
+                throw new Exception($"There are an error to insert dxUnit: {result.Error}");
+            }
         }
 
-        public Guid InsertOrUpdate(DXUnit esqlObject, IDXHandlerContext context)
+        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
@@ -70,23 +73,34 @@ namespace IV.DX.Application
 
             if (itemIsExisting)
             {
-                return this.Update(esqlObject, context);
+                return await this.UpdateAsync(esqlObject, context, ct);
             }
             else
             {
-                return this.Insert(esqlObject, context);
+                return await this.InsertAsync(esqlObject, context, ct);
             }
         }
 
-        public Guid Update(DXUnit esqlObject, IDXHandlerContext context)
+        public async Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var handler = EntityHandlerProvider.GetHandler(esqlObject);
+            var result = await dxPipelineExecutor.UpdateAsync<T>(esqlObject, context, ct);
 
-            var result = handler.OnUpdating(esqlObject, context);
+            if (result.IsSuccess && result.Value != null)
+            {
+                return result.Value;
+            }
+            else
+            {
+                throw new Exception($"There are an error to update dxUnit: {result.Error}");
+            }
 
-            handler.OnUpdated(esqlObject, context);
+            //var handler = EntityHandlerProvider.GetHandler(esqlObject);
 
-            return result;
+            //var result = handler.OnUpdating(esqlObject, context);
+
+            //handler.OnUpdated(esqlObject, context);
+
+            //return result;
         }
 
         public bool Delete(string typeName, Guid id)
@@ -94,15 +108,15 @@ namespace IV.DX.Application
             return this.Delete(typeName, id, new DXUnitHandlerBaseContextOld());
         }
 
-        public bool Delete(DXUnit esqlObject)
+        public async Task<bool> DeleteAsync<T>(T esqlObject, CancellationToken ct) where T : DXUnit, new()
         {
-            return this.Delete(esqlObject, new DXUnitHandlerBaseContextOld());
+            return await this.DeleteAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
         }
 
         public Guid Insert(string json, IDXHandlerContext context)
         {
             var jObject = JObject.Parse(json);
-           
+
             return this.Insert(jObject, context);
         }
 
@@ -183,19 +197,19 @@ namespace IV.DX.Application
             return this.IsItemExisting(id, type, new DXUnitHandlerBaseContextOld());
         }
 
-        public Guid Insert(DXUnit esqlObject)
+        public async Task<T> InsertAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
         {
-            return this.Insert(esqlObject, new DXUnitHandlerBaseContextOld());
+            return await this.InsertAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
         }
 
-        public Guid Update(DXUnit esqlObject)
+        public async Task<T> UpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
         {
-            return this.Update(esqlObject, new DXUnitHandlerBaseContextOld());
+            return await this.UpdateAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
         }
 
-        public Guid InsertOrUpdate(DXUnit esqlObject)
+        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
         {
-            return this.InsertOrUpdate(esqlObject, new DXUnitHandlerBaseContextOld());
+            return await this.InsertOrUpdateAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
         }
 
         public Guid Insert(string jObject)
@@ -339,9 +353,18 @@ namespace IV.DX.Application
             return this.InsertOrUpdate(jObject, new DXUnitHandlerBaseContextOld());
         }
 
-        public bool Delete(DXUnit esqlObject, IDXHandlerContext context)
+        public async Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct) where T : DXUnit, new()
         {
-            return this.Delete(esqlObject.GetTypeName(), esqlObject.ID, context);
+            var result = await dxPipelineExecutor.DeleteAsync(esqlObject, context, ct);
+
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public Guid Insert(JObject jObject, IDXHandlerContext context)
@@ -352,7 +375,7 @@ namespace IV.DX.Application
         }
 
         private Guid Insert(DXModel esqlModel, IDXHandlerContext context)
-        {            
+        {
             var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
 
             Guid result;
@@ -385,7 +408,7 @@ namespace IV.DX.Application
         }
 
         private Guid Update(DXModel esqlModel, IDXHandlerContext context)
-        {           
+        {
             var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
 
             Guid result;
@@ -414,7 +437,7 @@ namespace IV.DX.Application
         public bool Delete(JObject jObject, IDXHandlerContext context)
         {
             var esqlModel = DXModel.CreateInstance(jObject);
-            
+
             return this.Delete(esqlModel.OwnSingleItem.ObjectInfo.ObjectName, esqlModel.OwnSingleItem.Item.ID.Value, context);
         }
 

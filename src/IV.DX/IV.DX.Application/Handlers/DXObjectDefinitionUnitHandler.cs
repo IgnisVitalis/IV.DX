@@ -79,7 +79,7 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
-                dxUnitService.Insert(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue));
+                dxUnitService.InsertAsync(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue)).Wait();
             }
 
             foreach (var deletedEnumInfo in deletedEnumInfos)

@@ -7,16 +7,33 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXUnitDataService
     {
+
+        Task<T> InsertAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new();
+        Task<T> UpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new();
+        Task<T> InsertOrUpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new();
+        Task<bool> DeleteAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new();
+
+
+        Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new();
+        Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new();
+        Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new();
+        Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new();
+
+        T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+
+
+
         IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
         IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
         IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
-        T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
+       
         bool IsItemExisting(Guid id, string type);
 
-        Guid Insert(DXUnit esqlObject);
-        Guid Update(DXUnit esqlObject);
-        bool Delete(DXUnit esqlObject);
-        Guid InsertOrUpdate(DXUnit esqlObject);
+
+
+
+
+    
 
         Guid Insert(string jObject);
         Guid Update(string jObject);
@@ -34,10 +51,11 @@ namespace IV.DX.Application.Contracts.Abstractions
         T GetItem<T>(Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new();
         bool IsItemExisting(Guid id, string type, IDXHandlerContext context);
 
-        Guid Insert(DXUnit esqlObject, IDXHandlerContext context);
-        Guid Update(DXUnit esqlObject, IDXHandlerContext context);
-        Guid InsertOrUpdate(DXUnit esqlObject, IDXHandlerContext context);
-        bool Delete(DXUnit esqlObject, IDXHandlerContext context);
+      
+     
+    
+      
+     
 
         IEnumerable<DXModel> GetItems(string typeName, IDXHandlerContext context);
         IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, IDXHandlerContext context);

@@ -13,14 +13,15 @@ using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
 
 namespace IV.DX.Persistence.IntTests
 {
+    [Collection("DX:one-time")]
     public class GenericRepositoryTests : IntTestController
     {
         IDXGenericRepository _genericRepo;
 
-        public GenericRepositoryTests(ITestOutputHelper output)
-            : base(output)
-        {           
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+        public GenericRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
+        {
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         [Fact]

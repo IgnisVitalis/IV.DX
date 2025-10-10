@@ -1,3 +1,4 @@
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -10,14 +11,17 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Persistence.IntTests
 {
+    [Collection("DX:one-time")]
     public class ObjectRepositoryTests : IntTestController
     {
         IDXGenericRepository _genericRepo;
+        IDXUnitDataService _dataService;
 
-        public ObjectRepositoryTests(ITestOutputHelper output)
-            : base(output)
+        public ObjectRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
         [Fact]
@@ -30,11 +34,11 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objDesc);
+                this._dataService.DeleteAsync(objDesc).Wait();
             });
 
             // Action
-            this._dataService.Insert(objDesc);
+            this._dataService.InsertAsync(objDesc).Wait();
 
             // Checking
             var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
@@ -58,12 +62,12 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objDesc1);
+                this._dataService.DeleteAsync(objDesc1).Wait();
             });
 
             // Action
-            this._dataService.Insert(objDesc0);
-            this._dataService.Update(objDesc1);
+            this._dataService.InsertAsync(objDesc0).Wait();
+            this._dataService.UpdateAsync(objDesc1).Wait();
 
             // Checking
             var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));

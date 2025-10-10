@@ -18,7 +18,7 @@ namespace IV.DX.Application.Pipeline
         : IDXPipelineExecutor
     {
         public async Task<DXResult<T?>> GetAsync<T>(
-            Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+            Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             var flow = DXFlow.Continue;
             T? dxUnit = default;
@@ -80,7 +80,7 @@ namespace IV.DX.Application.Pipeline
         public async Task<DXResult<T>> InsertAsync<T>(
             T dxUnit,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit
+            CancellationToken ct) where T : DXUnit, new()
         {
             var flow = DXFlow.Continue;
 
@@ -161,7 +161,7 @@ namespace IV.DX.Application.Pipeline
         public async Task<DXResult<T>> UpdateAsync<T>(
             T dxUnit,
             IDXHandlerContext ctx,
-            CancellationToken ct) where T : DXUnit
+            CancellationToken ct) where T : DXUnit, new()
         {
             var flow = DXFlow.Continue;
 
@@ -240,7 +240,7 @@ namespace IV.DX.Application.Pipeline
             return DXResult<DXModel>.OkContinue(saved);
         }
 
-        public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+        public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             var flow = DXFlow.Continue;
 
@@ -329,14 +329,14 @@ namespace IV.DX.Application.Pipeline
 
         // ---------- статические generic-хелперы, которые закрываются по Type ОДИН РАЗ ----------
         private static async Task<DXResult<DXUnit?>> InvokeTypedGet<T>(
-            DXPipelineExecutor exec, Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+            DXPipelineExecutor exec, Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             var r = await exec.GetAsync<T>(id, ctx, ct);
             return DXResult<DXUnit?>.MapFrom(r, r.Value);
         }
 
         private static async Task<DXResult<DXUnit>> InvokeTypedInsert<T>(
-            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             if (model is not T m) return DXResult<DXUnit>.Fail($"Wrong model type. Expected {typeof(T).Name}");
             var r = await exec.InsertAsync<T>(m, ctx, ct);
@@ -344,7 +344,7 @@ namespace IV.DX.Application.Pipeline
         }
 
         private static async Task<DXResult<DXUnit>> InvokeTypedUpdate<T>(
-            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             if (model is not T m) return DXResult<DXUnit>.Fail($"Wrong model type. Expected {typeof(T).Name}");
             var r = await exec.UpdateAsync<T>(m, ctx, ct);
@@ -352,7 +352,7 @@ namespace IV.DX.Application.Pipeline
         }
 
         private static async Task<DXResult<DXUnit>> InvokeTypedDelete<T>(
-            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit
+            DXPipelineExecutor exec, DXUnit model, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
             if (model is not T m) return DXResult<DXUnit>.Fail($"Wrong model type. Expected {typeof(T).Name}");
             var r = await exec.DeleteAsync<T>(m, ctx, ct);

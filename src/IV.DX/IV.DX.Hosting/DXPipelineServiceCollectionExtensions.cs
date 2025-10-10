@@ -8,10 +8,10 @@ namespace IV.DX.Hosting
     {
         public static IServiceCollection AddDXPipeline(this IServiceCollection services)
         {         
-            services.AddScoped<IDXUnitGetHandlerProvider, DXUnitGetHandlerProvider>();
-            services.AddScoped<IDXUnitInsertHandlerProvider, DXUnitInsertHandlerProvider>();
-            services.AddScoped<IDXUnitUpdateHandlerProvider, DXUnitUpdateHandlerProvider>();
-            services.AddScoped<IDXUnitDeleteHandlerProvider, DXUnitDeleteHandlerProvider>();
+            services.AddSingleton<IDXUnitGetHandlerProvider, DXUnitGetHandlerProvider>();
+            services.AddSingleton<IDXUnitInsertHandlerProvider, DXUnitInsertHandlerProvider>();
+            services.AddSingleton<IDXUnitUpdateHandlerProvider, DXUnitUpdateHandlerProvider>();
+            services.AddSingleton<IDXUnitDeleteHandlerProvider, DXUnitDeleteHandlerProvider>();
 
             services.AddScoped<IDXPipelineExecutor, DXPipelineExecutor>();
 

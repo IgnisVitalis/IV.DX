@@ -1,3 +1,4 @@
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -12,16 +13,20 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Persistence.IntTests
 {
+    [Collection("DX:one-time")]
     public class DataBlockRepositoryTests : IntTestController
     {
         private readonly TimeSpan difference = new TimeSpan(0, 0, 10);
 
         IDXGenericRepository _genericRepo;
-        
-        public DataBlockRepositoryTests(ITestOutputHelper output)
-            : base(output)
+
+        IDXUnitDataService _dataService;
+
+        public DataBlockRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
         [Fact]
@@ -33,7 +38,7 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(blockDesc);
+                this._dataService.DeleteAsync(blockDesc).Wait();
             });
 
             void Check(DXElementDefinitionUnit blockDefinition)
@@ -187,7 +192,7 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Action
-            this._dataService.Insert(blockDesc);
+            this._dataService.InsertAsync(blockDesc).Wait();
 
             // Checking
             var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -214,12 +219,12 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(blockDesc1);
+                this._dataService.DeleteAsync(blockDesc1).Wait();
             });
 
             // Action
-            this._dataService.Insert(blockDesc0);
-            this._dataService.Update(blockDesc1);
+            this._dataService.InsertAsync(blockDesc0).Wait();
+            this._dataService.UpdateAsync(blockDesc1).Wait();
 
             // Checking
             var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -383,12 +388,12 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(blockDesc2);
+                this._dataService.DeleteAsync(blockDesc2).Wait();
             });
 
             // Action
-            this._dataService.Insert(blockDesc0);
-            this._dataService.Update(blockDesc2);
+            this._dataService.InsertAsync(blockDesc0).Wait();
+            this._dataService.UpdateAsync(blockDesc2).Wait();
 
             // Checking
             var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -453,13 +458,13 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(blockDesc3);
+                this._dataService.DeleteAsync(blockDesc3).Wait();
             });
 
             // Action
-            this._dataService.Insert(blockDesc0);
-            this._dataService.Update(blockDesc2);
-            this._dataService.Update(blockDesc3);
+            this._dataService.InsertAsync(blockDesc0).Wait();
+            this._dataService.UpdateAsync(blockDesc2).Wait();
+            this._dataService.UpdateAsync(blockDesc3).Wait();
 
             // Checking
             var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -538,12 +543,12 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(blockDesc4);
+                this._dataService.DeleteAsync(blockDesc4).Wait();
             });
 
             // Action
-            this._dataService.Insert(blockDesc0);
-            this._dataService.Update(blockDesc4);
+            this._dataService.InsertAsync(blockDesc0).Wait();
+            this._dataService.UpdateAsync(blockDesc4).Wait();
 
             // Checking
             var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));

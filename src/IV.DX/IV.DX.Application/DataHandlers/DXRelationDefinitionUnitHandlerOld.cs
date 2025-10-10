@@ -14,8 +14,8 @@ namespace IV.DX.Application.DataHandlers
         public DXRelationDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
-            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();
+            this._dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
         }
 
         public override Guid OnInserting(DXRelationDefinitionUnit entity, IDXHandlerContext context)

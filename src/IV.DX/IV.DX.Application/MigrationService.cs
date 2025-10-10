@@ -64,7 +64,7 @@ namespace IV.DX.Application
                         throw new Exception($"Migration script {migrationScript} could be processed.");
                     }
 
-                    this._dataService.Insert(migrationScript, new DXUnitHandlerMigrationServiceContextOld(migrationScript));
+                    this._dataService.InsertAsync(migrationScript, new DXUnitHandlerMigrationServiceContextOld(migrationScript)).Wait();
                 }
                 catch (Exception exc)
                 {
@@ -105,7 +105,7 @@ namespace IV.DX.Application
 
                 foreach (var script in scriptsPreInit)
                 {
-                    this._dataService.Insert(script, new DXUnitHandlerMigrationServiceContextOld(script));
+                    this._dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContextOld(script)).Wait();
                 }
             }
 

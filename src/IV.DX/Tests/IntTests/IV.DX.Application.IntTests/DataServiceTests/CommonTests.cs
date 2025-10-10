@@ -1,7 +1,9 @@
-﻿using IV.DX.Shared.IntTests.Models.Test;
+﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Models.Test;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +12,21 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Application.IntTests.DataServiceTests
 {
+    [Collection("DX:one-time")]
     public class CommonTests : IntTestController
     {
-        public CommonTests(ITestOutputHelper output)
-            : base(output)
-        {
+        IDXUnitDataService _dataService;
 
+        public CommonTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
+        {
+            this._dataService = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
         [Fact]
         public void CheckPerformance()
         {
-            var ids = Enumerable.Range(0, 100).Select(x => Guid.NewGuid()).ToList();
+            var ids = Enumerable.Range(0, 300).Select(x => Guid.NewGuid()).ToList();
 
             var ids100 = ids.Take(100).ToList();
 
@@ -68,7 +73,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             {
                 foreach (var book in books)
                 {
-                    _dataService.Insert(book);
+                    _dataService.InsertAsync(book).Wait();
                 }
             }, $"Inserting x {ids.Count()}");
 
@@ -89,7 +94,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             {
                 foreach (var book in books)
                 {
-                    _dataService.Delete(book);
+                    _dataService.DeleteAsync(book).Wait();
                 }
             }, $"Deleting x {ids.Count()}");
 

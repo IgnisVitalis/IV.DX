@@ -1,5 +1,4 @@
-﻿using IV.DX.Shared.IntTests;
-using IV.DX.Application.Contracts.Abstractions;
+﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Models;
@@ -14,18 +13,22 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Application.IntTests
 {
+    [Collection("DX:one-time")]
     public class Test : IntTestController
     {
-        public Test(ITestOutputHelper output)
-            : base(output)
+        IDXUnitDataService _dataService;
+
+        public Test(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
+            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
         [Fact]
         public void Test2()
         {
             // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
+            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
 
             var dataSource1 = new DataSource("TBookUnit", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
             var dataSource2 = new DataSource("TUserUnit", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
@@ -47,7 +50,7 @@ namespace IV.DX.Application.IntTests
         public void Test3()
         {
             // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
+            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
 
             var entityMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"), new DXUnitHandlerBaseContextOld()).ConvertToJObject().ToString();
             var objectMetadata = _dataService.GetItem("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"), new DXUnitHandlerBaseContextOld()).ConvertToJObject().ToString();
@@ -62,10 +65,10 @@ namespace IV.DX.Application.IntTests
         [Fact]
         public void Test4()
         {
-                       // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
-            IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetService<IDXStructureRepository>();
-            IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetService<IDXEnumCoreRepository>();
+            // Init
+            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetRequiredService<IDXStructureRepository>();
+            IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetRequiredService<IDXEnumCoreRepository>();
 
             var enumInfo = dataStructureRepository.GetEnum("DXObjectKindEnum");
 

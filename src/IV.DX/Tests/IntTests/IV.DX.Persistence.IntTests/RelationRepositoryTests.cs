@@ -1,10 +1,10 @@
-﻿using IV.DX.Shared.IntTests;
-using IV.DX.Shared.IntTests.Factories;
+﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,16 +15,19 @@ using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
 
 namespace IV.DX.Persistence.IntTests
 {
+    [Collection("DX:one-time")]
     public class RelationRepositoryTests : IntTestController
     {
         IDXGenericRepository _genericRepo;
         IDXCoreRepository _coreRepo;
+        IDXUnitDataService _dataService;
 
-        public RelationRepositoryTests(ITestOutputHelper output)
-            : base(output)
+        public RelationRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
-            this._coreRepo = this.ServiceProvider.GetService<IDXCoreRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._coreRepo = this.ServiceProvider.GetRequiredService<IDXCoreRepository>();
+            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
         [Fact]
@@ -55,16 +58,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action           
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -120,16 +123,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -165,7 +168,6 @@ namespace IV.DX.Persistence.IntTests
             var objRelId = new Guid("68ae16b3-27b2-43f7-996f-a5ac51340944");
 
             var obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft3");
-
             var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight3");
 
             DXRelationDefinitionUnit objRelationInfo =
@@ -185,16 +187,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -229,8 +231,8 @@ namespace IV.DX.Persistence.IntTests
             var obj2Id = new Guid("a3e72030-6892-4875-84c6-af18151312d3");
             var objRelId = new Guid("73b722a2-119e-4c4a-8b62-060ea45625ce");
 
-            DXObjectDefinitionUnit obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft43a1");
-            DXObjectDefinitionUnit obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight43a1");
+            var obj1 = ObjectFactory.GetItem(obj1Id, "RelTableLeft43a1");
+            var obj2 = ObjectFactory.GetItem(obj2Id, "RelTableRight43a1");
 
             DXRelationDefinitionUnit objRelationInfo =
                 DXRelationDefinitionUnitFactory.GetItem(objRelId,
@@ -249,16 +251,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -399,16 +401,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -549,16 +551,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -664,16 +666,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
@@ -779,16 +781,16 @@ namespace IV.DX.Persistence.IntTests
 
             base._finalizationAction = new Action(() =>
             {
-                this._dataService.Delete(objRelationInfo);
-                this._dataService.Delete(obj1);
-                this._dataService.Delete(obj2);
+                this._dataService.DeleteAsync(objRelationInfo).Wait();
+                this._dataService.DeleteAsync(obj1).Wait();
+                this._dataService.DeleteAsync(obj2).Wait();
             });
 
-            this._dataService.Insert(obj1);
-            this._dataService.Insert(obj2);
+            this._dataService.InsertAsync(obj1).Wait();
+            this._dataService.InsertAsync(obj2).Wait();
 
             // Action        
-            this._dataService.Insert(objRelationInfo);
+            this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
             var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);

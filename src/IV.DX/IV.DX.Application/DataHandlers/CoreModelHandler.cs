@@ -14,8 +14,8 @@ namespace IV.DX.Application.DataHandlers
 
         public CoreModelHandler(IServiceProvider serviceProvider)
         {
-            this._coreRepo = serviceProvider.GetService<IDXCoreRepository>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._coreRepo = serviceProvider.GetRequiredService<IDXCoreRepository>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         public bool OnDeleting(string typeName, Guid id, IDXHandlerContext context)

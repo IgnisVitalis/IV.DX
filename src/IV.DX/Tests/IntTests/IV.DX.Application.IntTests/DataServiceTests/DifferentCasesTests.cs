@@ -14,16 +14,17 @@ using Xunit.Abstractions;
 
 namespace IV.DX.Application.IntTests.DataServiceTests
 {
+    [Collection("DX:one-time")]
     public class DifferentCasesTests : IntTestController
     {
         IDXUnitDataService _dataService;
         IDXGenericRepository _genericRepo;
 
-        public DifferentCasesTests(ITestOutputHelper output)
-            : base(output)
+        public DifferentCasesTests(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
         {
-            this._dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
-            this._genericRepo = this.ServiceProvider.GetService<IDXGenericRepository>();
+            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         [Fact]
@@ -102,19 +103,19 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             {
                 base.RunActionSafety(() =>
                 {
-                    this._dataService.Delete(item);
+                    this._dataService.DeleteAsync(item).Wait();
                 });
 
-                this._dataService.Update(entityDescObject);
-                this._dataService.Delete(entityDescObject);
-                this._dataService.Delete(blockDescObject);
+                this._dataService.UpdateAsync(entityDescObject).Wait();
+                this._dataService.DeleteAsync(entityDescObject).Wait();
+                this._dataService.DeleteAsync(blockDescObject).Wait();
             };
 
             // Action
-            this._dataService.InsertOrUpdate(blockDescObject);
-            this._dataService.InsertOrUpdate(entityDescObject);
+            this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
+            this._dataService.InsertOrUpdateAsync(entityDescObject).Wait();
 
-            this._dataService.InsertOrUpdate(item);
+            this._dataService.InsertOrUpdateAsync(item).Wait();
 
             // Assert
             var existingItems = this._genericRepo.GetItems<TestEntity>();
@@ -139,7 +140,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.InsertOrUpdate(blockDescObject);
+            this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
 
             // Assert
             var existingModifiedItems = this._genericRepo.GetItems<TestEntityModified>();
@@ -204,14 +205,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.Delete(entity);
-                this._dataService.Delete(blockToAdd);
-                this._dataService.Delete(blockToDelete);
+                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(blockToAdd).Wait();
+                this._dataService.DeleteAsync(blockToDelete).Wait();
             };
 
-            this._dataService.Insert(entity);
-            this._dataService.Insert(blockToAdd);
-            this._dataService.Insert(blockToDelete);
+            this._dataService.InsertAsync(entity).Wait();
+            this._dataService.InsertAsync(blockToAdd).Wait();
+            this._dataService.InsertAsync(blockToDelete).Wait();
 
             // Action
             entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
@@ -237,7 +238,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.Update(entity);
+            this._dataService.UpdateAsync(entity).Wait();
 
             // Assert
             var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
@@ -258,7 +259,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.Update(existingEntity);
+            this._dataService.UpdateAsync(existingEntity).Wait();
 
             // Assert
             existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
@@ -306,15 +307,15 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.Delete(entity);
-                this._dataService.Delete(block);
+                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(block).Wait();
             };
 
-            this._dataService.Insert(block);
-            this._dataService.Insert(entity);
+            this._dataService.InsertAsync(block).Wait();
+            this._dataService.InsertAsync(entity).Wait();
 
             // Action
-            this._dataService.Delete(entity);
+            this._dataService.DeleteAsync(entity).Wait();
 
             // Assert
             var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
@@ -396,16 +397,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.Delete(entity);
-                this._dataService.Delete(block1);
-                this._dataService.Delete(block2);
-                this._dataService.Delete(block3);
+                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(block1).Wait();
+                this._dataService.DeleteAsync(block2).Wait();
+                this._dataService.DeleteAsync(block3).Wait();
             };
 
-            this._dataService.Insert(block1);
-            this._dataService.Insert(block2);
-            this._dataService.Insert(block3);
-            this._dataService.Insert(entity);
+            this._dataService.InsertAsync(block1).Wait();
+            this._dataService.InsertAsync(block2).Wait();
+            this._dataService.InsertAsync(block3).Wait();
+            this._dataService.InsertAsync(entity).Wait();
 
             // Action
             entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
@@ -415,7 +416,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
             };
 
-            this._dataService.Update(entity);
+            this._dataService.UpdateAsync(entity).Wait();
 
             // Assert
             var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);

@@ -50,7 +50,7 @@ namespace IV.DX.Application
                 Register<DXInheritanceInitCore>(new DXInheritanceInitCoreHandlerOld(serviceProvider));
                 Register<DXRelationItemUnit>(new DXRelationItemUnitHandlerOld(serviceProvider));
 
-                CoreModelHandler = serviceProvider.GetService<IDXCoreHandler>();
+                CoreModelHandler = serviceProvider.GetRequiredService<IDXCoreHandler>();
 
                 IsInitCore = true;
             }

@@ -16,8 +16,8 @@ namespace IV.DX.Application.DataHandlers
         public DXEnumDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();            
+            this._dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();            
         }
 
         public override Guid OnInserting(DXEnumDefinitionUnit entity, IDXHandlerContext context)

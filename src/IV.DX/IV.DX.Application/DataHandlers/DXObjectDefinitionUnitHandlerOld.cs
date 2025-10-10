@@ -17,9 +17,9 @@ namespace IV.DX.Application.DataHandlers
         public DXObjectDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._dataService = serviceProvider.GetService<IDXUnitDataService>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
+            this._dataService = serviceProvider.GetRequiredService<IDXUnitDataService>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)
@@ -56,7 +56,7 @@ namespace IV.DX.Application.DataHandlers
 
                 var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
-                this._dataService.Insert(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue));
+                this._dataService.InsertAsync(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue)).Wait();
             }
 
             foreach (var deletedEnumInfo in deletedEnumInfos)

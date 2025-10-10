@@ -19,9 +19,9 @@ namespace IV.DX.Application.DataHandlers
         public DXUnitDefinitionUnitHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-            this._dataService = serviceProvider.GetService<IDXUnitDataService>();
-            this._genericRepo = serviceProvider.GetService<IDXGenericRepository>();
+            this._dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
+            this._dataService = serviceProvider.GetRequiredService<IDXUnitDataService>();
+            this._genericRepo = serviceProvider.GetRequiredService<IDXGenericRepository>();
         }
 
         public override Guid OnInserting(DXUnitDefinitionUnit entity, IDXHandlerContext context)
@@ -159,7 +159,7 @@ namespace IV.DX.Application.DataHandlers
             {
                 var relationType = entity.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
 
-                this._dataService.Insert(this.GetRelationObject(entity, blockToAssign, relationType));
+                this._dataService.InsertAsync(this.GetRelationObject(entity, blockToAssign, relationType)).Wait();
             }
         }
 

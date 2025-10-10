@@ -13,7 +13,7 @@ namespace IV.DX.Application.DataHandlers
         public DXInheritanceInitCoreHandlerOld(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            this._dataStructureRepository = serviceProvider.GetService<IDXStructureRepository>();
+            this._dataStructureRepository = serviceProvider.GetRequiredService<IDXStructureRepository>();
         }
 
         public override Guid OnInserting(DXInheritanceInitCore entity, IDXHandlerContext context)

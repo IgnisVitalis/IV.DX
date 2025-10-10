@@ -62,15 +62,15 @@ namespace IV.DX.Hosting
 
     //    private void InitCoreHandlers(IServiceProvider serviceProvider)
     //    {
-    //        var insertHandlerProvider = serviceProvider.GetService<IDXUnitInsertHandlerProvider>();
+    //        var insertHandlerProvider = serviceProvider.GetRequiredService<IDXUnitInsertHandlerProvider>();
 
     //        insertHandlerProvider.Register<DXElementDefinitionUnit>(new DXElementDefinitionUnitHandler());
     //    }
 
     //    public void InitCache(IServiceProvider serviceProvider)
     //    {
-    //        var dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-    //        var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
+    //        var dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
+    //        var coreRepo = serviceProvider.GetRequiredService<IDXCoreRepository>();
 
     //        dataStructureRepo.UpdateCache();
     //        (coreRepo as IDXStructureRepository).UpdateCache();
@@ -84,16 +84,16 @@ namespace IV.DX.Hosting
 
     //    public void DropDatabase(IServiceProvider serviceProvider)
     //    {
-    //        var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
+    //        var coreRepo = serviceProvider.GetRequiredService<IDXCoreRepository>();
 
     //        coreRepo.DropDataBase();
     //    }
 
     //    public void InitCoreData(IServiceProvider serviceProvider)
     //    {
-    //        var dataStructureRepo = serviceProvider.GetService<IDXStructureRepository>();
-    //        var coreRepo = serviceProvider.GetService<IDXCoreRepository>();
-    //        var migrationService = serviceProvider.GetService<IDXMigrationService>();
+    //        var dataStructureRepo = serviceProvider.GetRequiredService<IDXStructureRepository>();
+    //        var coreRepo = serviceProvider.GetRequiredService<IDXCoreRepository>();
+    //        var migrationService = serviceProvider.GetRequiredService<IDXMigrationService>();
 
     //        coreRepo.CreateDataBase();
 
@@ -106,7 +106,7 @@ namespace IV.DX.Hosting
 
     //    public void InitCustomData(IServiceProvider serviceProvider, string configPath)
     //    {
-    //        var migrationService = serviceProvider.GetService<IDXMigrationService>();
+    //        var migrationService = serviceProvider.GetRequiredService<IDXMigrationService>();
 
     //        migrationService.LoadStructure(configPath);
     //    }
