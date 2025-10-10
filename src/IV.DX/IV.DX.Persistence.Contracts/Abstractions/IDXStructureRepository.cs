@@ -5,11 +5,6 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXStructureRepository
     {
-        IEnumerable<DXRelationDefinitionUnit> RelationInfos { get; }
-        IEnumerable<DXUnitDefinitionUnit> EntityInfos { get; }
-        IEnumerable<DXElementDefinitionUnit> BlockInfos { get; }
-        IEnumerable<DXEnumDefinitionUnit> EnumInfos { get; }
-        void UpdateCache();
         void CreateDataStructure(DXObjectDefinitionUnit dataBlock);
         void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock);
         void DropDataStructure(DXObjectDefinitionUnit dataBlock);

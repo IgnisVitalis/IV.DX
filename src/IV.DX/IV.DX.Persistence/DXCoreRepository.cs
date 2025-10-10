@@ -6,29 +6,27 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.CoreData;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.Common;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository
+    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
     {
         protected string _connectionStr;
         protected ISQLQueryDXHelper _queryHelper;
+        IDXStructureCache _dxStructureCache;
 
         public DXCoreRepository(
-            IConfiguration configuration,
+            IOptions<DXDatabaseOptions> options,
+            IDXStructureCache dxStructureCache,
             ISQLQueryDXHelper queryHelper)
         {
-            this._connectionStr = configuration["Database:ConnectionString"];
-            this._queryHelper = queryHelper;
-
-            this._blockInfos = DXElementDefinitionUnitItems.Items;
-            this._entityInfos = DXUnitDefinitionUnitItems.Items;
-            this._enumInfos = DXEnumDefinitionUnitItems.Items;
-            this._relationInfos = new List<DXRelationDefinitionUnit>();
+            _connectionStr = options.Value.ConnectionString ?? throw new ArgumentNullException("Database:ConnectionString");
+            _queryHelper = queryHelper;
+            _dxStructureCache = dxStructureCache;
         }
 
         public bool Delete(string typeName, Guid id)
@@ -311,7 +309,7 @@ namespace IV.DX.Persistence
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, string esqlWhereExpression, DXLoadingType typeOfLoading)
         {
             string typeName = container.OwnSingleItem.Type;
-            string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this.RelationInfos);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this._dxStructureCache.Relations);
 
             return this.RunRequestInTransaction((conn) =>
             {

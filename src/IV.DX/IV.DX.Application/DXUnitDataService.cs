@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
@@ -10,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application
 {
-    internal class DXUnitDataService(IDXCoreRepository coreRepo) : IDXUnitDataService
+    internal class DXUnitDataService(IDXCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
     {
         public T GetItem<T>(Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
         {

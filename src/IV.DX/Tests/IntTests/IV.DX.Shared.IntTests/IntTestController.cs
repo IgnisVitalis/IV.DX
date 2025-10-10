@@ -1,4 +1,6 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+﻿using IV.DX.Application;
+using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Handlers;
 using IV.DX.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,35 +34,58 @@ namespace IV.DX.Shared.IntTests
 
         static IntTestController()
         {
-            IServiceCollection services = new ServiceCollection();
+            var services = new ServiceCollection();
 
-            var coreDI = new DependencyRegistrator(configuration, services);
-            services.AddSingleton(configuration);
+            services.AddLogging();
+            services.AddDXCore(configuration);
+            services.AddDXPipeline();
+            services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
+            services.AddDXInitializer();
 
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            var sp = services.BuildServiceProvider();
+            sp.InitializeDXHandlers();
 
-            //coreDI.InitCache(serviceProvider);
-            coreDI.InitEntityHandlerProvider(serviceProvider);
+            EntityHandlerProvider.InitCore(sp);
+            EntityHandlerProvider.Init();
 
-            coreDI.DropDatabase(serviceProvider);
-            coreDI.InitCoreData(serviceProvider);
-            coreDI.InitCustomData(serviceProvider, "MigrationScripts/Test.json");
+            using (var scope = sp.CreateScope())
+            {
+                var init = scope.ServiceProvider.GetRequiredService<IDXInitializer>();
+
+                init.DropDatabase();
+                init.InitCoreData();
+                init.InitCustomData("MigrationScripts/Test.json");
+                init.InitCacheAsync(scope).Wait();
+            }            
         }
 
         public IntTestController(ITestOutputHelper output)
         {
             this.Output = output;
 
-            // Init
-            IServiceCollection services = new ServiceCollection();
+            var services = new ServiceCollection();
 
-            var coreDI = new DependencyRegistrator(configuration, services);
-            services.AddSingleton(configuration);
+            services.AddLogging();
+            services.AddDXCore(configuration);
+            services.AddDXPipeline();
+            services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
+            services.AddDXInitializer();
 
-            this.ServiceProvider = services.BuildServiceProvider();
+            ServiceProvider = services.BuildServiceProvider();
+            ServiceProvider.InitializeDXHandlers();
 
-            coreDI.InitCache(this.ServiceProvider);
-            coreDI.InitEntityHandlerProvider(this.ServiceProvider);
+            EntityHandlerProvider.InitCore(ServiceProvider);
+            EntityHandlerProvider.Init();
+
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var init = scope.ServiceProvider.GetRequiredService<IDXInitializer>();
+
+                //init.DropDatabase();
+                //init.InitCoreData();
+                //init.InitCustomData("MigrationScripts/Test.json");
+                init.InitCacheAsync(scope).Wait();
+            }         
 
             // Resolve types
             this._dataService = this.ServiceProvider.GetService<IDXUnitDataService>();
