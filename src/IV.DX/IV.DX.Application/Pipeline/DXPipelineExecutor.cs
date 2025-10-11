@@ -6,7 +6,6 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace IV.DX.Application.Pipeline
@@ -443,11 +442,67 @@ namespace IV.DX.Application.Pipeline
             return await GetItemsAsync(typeName, string.Empty, ctx, ct);
         }
 
+        public async Task<DXResult<bool>> IsUnitExistingAsync<T>(Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
+        {
+            var flow = DXFlow.Continue;
+            bool result = false;
+
+            foreach (var h in getHandlerProvider.GetIsItemExistingHandlers<T>())
+            {
+                var r = await h.IsItemExistingAsync(id, ctx, ct);
+
+                if (!r.IsSuccess) return DXResult<bool>.Fail(r.Error!);
+
+                if (r.Flow == DXFlow.SkipProcess) flow = DXFlow.SkipProcess;
+                if (r.Flow == DXFlow.Stop) return DXResult<bool>.OkStop();
+
+                result = r.Value;
+            }
+
+            if (flow != DXFlow.SkipProcess)
+            {
+                var typeName = DXUnitHelper.GetTypeName(typeof(T));
+
+                result = coreRepo.IsItemExisting(typeName, id);
+            }
+
+            return flow switch
+            {
+                DXFlow.SkipProcess => DXResult<bool>.OkSkipProcess(result),
+                DXFlow.Stop => DXResult<bool>.OkStop(result),
+                _ => DXResult<bool>.OkContinue(result),
+            };
+        }
+
+        public async Task<DXResult<bool>> IsUnitExistingAsync(string typeName, Guid id, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            if (getHandlerProvider.TryResolveType(typeName, out var modelType))
+            {
+                var inv = GetIsUnitExistingInvoker(modelType);
+
+                var baseRes = await inv(this, id, ctx, ct);
+
+                if (!baseRes.IsSuccess)
+                    return DXResult<bool>.Fail(baseRes.Error!);
+
+                return DXResult<bool>.Ok(baseRes.Value, baseRes.Flow);
+            }
+            else
+            {
+                var result = coreRepo.IsItemExisting(typeName, id);
+
+                return DXResult<bool>.OkContinue(result);
+            }
+        }
+
         private static readonly ConcurrentDictionary<Type,
             Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit?>>>> _getInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
           Func<DXPipelineExecutor, IEnumerable<Guid>, IDXHandlerContext, CancellationToken, Task<DXResult<IEnumerable<DXUnit>?>>>> _getItemsInvokers = new();
+
+        private static readonly ConcurrentDictionary<Type,
+            Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>>> _isUnitExistingInvokers = new();        
 
         private static readonly ConcurrentDictionary<Type,
             Func<DXPipelineExecutor, DXUnit, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit>>>> _insertInvokers = new();
@@ -471,6 +526,13 @@ namespace IV.DX.Application.Pipeline
         {
             var r = await exec.GetItemsAsync<T>(ids, ctx, ct);
             return DXResult<IEnumerable<DXUnit>?>.MapFrom(r, r.Value);
+        }
+
+        private static async Task<DXResult<bool>> InvokeTypedIsUnitExisting<T>(
+            DXPipelineExecutor exec, Guid id, IDXHandlerContext ctx, CancellationToken ct) where T : DXUnit, new()
+        {
+            var r = await exec.IsUnitExistingAsync<T>(id, ctx, ct);
+            return DXResult<bool>.MapFrom(r, r.Value);
         }
 
         private static async Task<DXResult<DXUnit>> InvokeTypedInsert<T>(
@@ -523,6 +585,20 @@ namespace IV.DX.Application.Pipeline
                        mi);
            });
 
+        private Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>> GetIsUnitExistingInvoker(Type modelType)
+           => _isUnitExistingInvokers.GetOrAdd(modelType, static t =>
+           {
+               var mi = typeof(DXPipelineExecutor)
+                   .GetMethod(nameof(InvokeTypedIsUnitExisting), BindingFlags.NonPublic | BindingFlags.Static)!
+                   .MakeGenericMethod(t);
+
+               return (Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>>)
+                   Delegate.CreateDelegate(
+                       typeof(Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>>),
+                       mi);
+           });
+
+
         private Func<DXPipelineExecutor, DXUnit, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit>>> GetInsertInvoker(Type modelType)
             => _insertInvokers.GetOrAdd(modelType, static t =>
             {
@@ -569,6 +645,7 @@ namespace IV.DX.Application.Pipeline
             {
                 _getInvokers.GetOrAdd(t, _ => MakeGet(t));
                 _getItemsInvokers.GetOrAdd(t, _ => MakeGetItems(t));
+                _isUnitExistingInvokers.GetOrAdd(t, _ => MakeIsUnitExisting(t));
                 _insertInvokers.GetOrAdd(t, _ => MakeInsert(t));
                 _updateInvokers.GetOrAdd(t, _ => MakeUpdate(t));
                 _deleteInvokers.GetOrAdd(t, _ => MakeDelete(t));
@@ -580,12 +657,17 @@ namespace IV.DX.Application.Pipeline
                      typeof(Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit?>>>),
                      typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedGet), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
 
-
             static Func<DXPipelineExecutor, IEnumerable<Guid>, IDXHandlerContext, CancellationToken, Task<DXResult<IEnumerable<DXUnit>?>>> MakeGetItems(Type t)
                => (Func<DXPipelineExecutor, IEnumerable<Guid>, IDXHandlerContext, CancellationToken, Task<DXResult<IEnumerable<DXUnit>?>>>)
                   Delegate.CreateDelegate(
                     typeof(Func<DXPipelineExecutor, IEnumerable<Guid>, IDXHandlerContext, CancellationToken, Task<DXResult<IEnumerable<DXUnit>?>>>),
-                    typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedGet), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
+                    typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedGetItems), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
+
+            static Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>> MakeIsUnitExisting(Type t)
+                => (Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>>)
+                Delegate.CreateDelegate(
+                   typeof(Func<DXPipelineExecutor, Guid, IDXHandlerContext, CancellationToken, Task<DXResult<bool>>>),
+                   typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedIsUnitExisting), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
 
             static Func<DXPipelineExecutor, DXUnit, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit>>> MakeInsert(Type t)
                 => (Func<DXPipelineExecutor, DXUnit, IDXHandlerContext, CancellationToken, Task<DXResult<DXUnit>>>)

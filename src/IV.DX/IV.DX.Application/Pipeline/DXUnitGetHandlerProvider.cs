@@ -12,6 +12,7 @@ namespace IV.DX.Application.Pipeline
 
         private readonly Dictionary<Type, List<object>> _beforeInsert = new();
         private readonly Dictionary<Type, List<object>> _afterGet = new();
+        private readonly Dictionary<Type, List<object>> _isItemExisting = new();
 
         private readonly object _lock = new();
 
@@ -102,5 +103,34 @@ namespace IV.DX.Application.Pipeline
 
         public bool TryResolveType(string typeName, out Type type)
             => _typesByName.TryGetValue(typeName, out type!);
+
+        public IEnumerable<IDXIsItemExisting<T>> GetIsItemExistingHandlers<T>() where T : DXUnit
+        {
+            var key = typeof(T);
+
+            lock (_lock)
+            {
+                if (!_isItemExisting.TryGetValue(key, out var list))
+                    return Enumerable.Empty<IDXIsItemExisting<T>>();
+
+                return list.OfType<IDXIsItemExisting<T>>()
+                           .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
+                           .ThenBy(h => h.GetType().FullName)
+                           .ToArray();
+            }
+        }
+
+        public void Register<T>(IDXIsItemExisting<T> handler) where T : DXUnit
+        {
+            var key = typeof(T);
+            lock (_lock)
+            {
+                if (!_isItemExisting.TryGetValue(key, out var list))
+                    _isItemExisting[key] = list = new List<object>();
+                list.Add(handler);
+            }
+
+            EnsureAliases(key);
+        }
     }
 }

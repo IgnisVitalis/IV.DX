@@ -10,7 +10,7 @@ namespace IV.DX.Application.Contracts.Abstractions
         Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
-        Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new(); 
+        Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<IEnumerable<T>> GetItemsAsync<T>(IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new();
         Task<IEnumerable<T>> GetItemsAsync<T>(IEnumerable<Guid> ids, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new();
@@ -29,6 +29,6 @@ namespace IV.DX.Application.Contracts.Abstractions
 
 
 
-        Task<bool> IsItemExistingAsync(Guid id, string type, IDXHandlerContext? context = default, CancellationToken ct = default);
+        Task<bool> IsItemExistingAsync(string type, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default);
     }
 }

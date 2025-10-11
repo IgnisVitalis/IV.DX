@@ -3,8 +3,8 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Handlers
 {
-    public interface IDXBeforeGet<T> : IDXBeforeOrdered where T : DXUnit
+    public interface IDXIsItemExisting<T> : IDXBeforeOrdered where T : DXUnit
     {
-        Task<DXResult<Guid>> BeforeGetAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
+        Task<DXResult<bool>> IsItemExistingAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
     }
 }

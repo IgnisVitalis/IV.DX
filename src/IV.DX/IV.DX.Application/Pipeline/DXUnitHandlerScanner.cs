@@ -10,7 +10,8 @@ namespace IV.DX.Application.Pipeline
             typeof(IDXBeforeInsert<>), typeof(IDXAfterInsert<>),
             typeof(IDXBeforeUpdate<>), typeof(IDXAfterUpdate<>),
             typeof(IDXBeforeDelete<>), typeof(IDXAfterDelete<>),
-            typeof(IDXBeforeGet<>),    typeof(IDXAfterGet<>)
+            typeof(IDXBeforeGet<>),    typeof(IDXAfterGet<>),
+            typeof(IDXIsItemExisting<>)
         };
 
         public static IReadOnlyList<Type> FindHandlerTypes(params Assembly[] assemblies)

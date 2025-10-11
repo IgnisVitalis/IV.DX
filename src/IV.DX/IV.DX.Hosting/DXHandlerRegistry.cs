@@ -1,5 +1,4 @@
-﻿using IV.DX.Application;
-using IV.DX.Application.Contracts.Pipeline;
+﻿using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -22,9 +21,6 @@ namespace IV.DX.Hosting
 
         public static void InitializeDXHandlers(this IServiceProvider root, params Assembly[] scanAssemblies)
         {
-            EntityHandlerProvider.InitCore(root); 
-            EntityHandlerProvider.Init();
-
             var assemblies = (scanAssemblies is { Length: > 0 })
                 ? scanAssemblies
                 : root.GetRequiredService<IReadOnlyList<Assembly>>()?.ToArray() ?? Array.Empty<Assembly>();

@@ -19,6 +19,11 @@ namespace IV.DX.Kernel.Converters
             return (string)jObject[Constants.SystemPropertyTypeName];
         }
 
+        public static string GetTypeName(Type type)
+        {
+            return AttributeReader.GetESQLObjectTypeName(type);
+        }
+
         public static Guid GetID(JObject jObject)
         {
             return (Guid)jObject[Constants.ID];

@@ -6,6 +6,7 @@ using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
+using System.Reflection.Metadata;
 
 namespace IV.DX.Application
 {
@@ -131,20 +132,19 @@ namespace IV.DX.Application
             }
         }
 
-        public async Task<bool> IsItemExistingAsync(Guid id, string type, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<bool> IsItemExistingAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            var entityType = type;
+            var result = await dxPipelineExecutor.IsUnitExistingAsync(typeName, id, context, ct);
 
-            if (EntityHandlerProvider.IsCustomHandlerExisting(entityType))
+            if (result.IsSuccess)
             {
-                var handler = EntityHandlerProvider.GetHandler(entityType);
+                if (result.Outcome == DXOutcome.Ok)
+                {
+                    return result.Value;
+                }
+            }
 
-                return handler.IsItemExisting(id, context);
-            }
-            else
-            {
-                return EntityHandlerProvider.CoreModelHandler.IsItemExisting(entityType, id, context);
-            }
+            throw new Exception($"There are an error to check dxModel existing by type ({typeName}) and id ({id}): {result.Error}");
         }
 
         public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IDXHandlerContext? context = default, CancellationToken ct = default)
@@ -286,7 +286,7 @@ namespace IV.DX.Application
             var objId = esqlModel.OwnSingleItem.Item.ID;
 
             if (objId.HasValue
-                && await this.IsItemExistingAsync(objId.Value, esqlModel.OwnSingleItem.ObjectInfo.ObjectName, context, ct))
+                && await this.IsItemExistingAsync(esqlModel.OwnSingleItem.ObjectInfo.ObjectName, objId.Value, context, ct))
             {
                 return await this.UpdateAsync(jObject, context, ct);
             }

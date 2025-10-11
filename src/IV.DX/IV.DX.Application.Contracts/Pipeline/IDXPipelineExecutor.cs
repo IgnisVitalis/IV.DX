@@ -6,6 +6,17 @@ namespace IV.DX.Application.Contracts.Pipeline
 {
     public interface IDXPipelineExecutor
     {
+        Task<DXResult<bool>> IsUnitExistingAsync<T>(
+            Guid id,
+            IDXHandlerContext ctx,
+            CancellationToken ct) where T : DXUnit, new();
+
+        Task<DXResult<bool>> IsUnitExistingAsync(
+            string typeName,
+            Guid id,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
+
         Task<DXResult<T?>> GetAsync<T>(
             Guid id,
             IDXHandlerContext ctx,
