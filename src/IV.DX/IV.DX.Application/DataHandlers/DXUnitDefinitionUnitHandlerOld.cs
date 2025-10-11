@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -29,13 +28,13 @@ namespace IV.DX.Application.DataHandlers
             base.Validate(entity);
             base.Process(entity);
 
-            if (context is DXUnitHandlerPreInitCoreContextOld)
+            if (context is DXUnitHandlerPreInitCoreContext)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
                 return Guid.Empty;
             }
-            else if (context is DXUnitHandlerPostInitCoreContextOld)
+            else if (context is DXUnitHandlerPostInitCoreContext)
             {
                 return base.OnInserting(entity, context);
             }
@@ -91,7 +90,7 @@ namespace IV.DX.Application.DataHandlers
 
             foreach (var relatedBlock in relatedBlocks)
             {
-                this._dataService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, relatedBlock).ID);
+                //this._dataService.DeleteAsync("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, relatedBlock).ID).Wait();
             }
         }
 
@@ -172,7 +171,7 @@ namespace IV.DX.Application.DataHandlers
                 if (existingBlock == null)
                     continue;
 
-                this._dataService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, blockToUnassign).ID);
+                //this._dataService.DeleteAsync("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, blockToUnassign).ID).Wait();
             }
         }
 

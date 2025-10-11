@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Contracts.Pipeline
 {
@@ -10,9 +11,40 @@ namespace IV.DX.Application.Contracts.Pipeline
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<DXModel?>> GetAsync(
+        Task<DXResult<IEnumerable<T>?>> GetItemsAsync<T>(
+           IEnumerable<Guid> ids,
+           IDXHandlerContext ctx,
+           CancellationToken ct) where T : DXUnit, new();
+
+        Task<DXResult<IEnumerable<T>?>> GetItemsAsync<T>(
+            string query,
+            IDXHandlerContext ctx,
+            CancellationToken ct) where T : DXUnit, new();
+
+        Task<DXResult<IEnumerable<T>?>> GetItemsAsync<T>(
+           IDXHandlerContext ctx,
+           CancellationToken ct) where T : DXUnit, new();
+
+        Task<DXResult<JObject?>> GetAsync(
             string typeName,
             Guid id,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
+
+        Task<DXResult<IEnumerable<JObject>?>> GetItemsAsync(
+            string typeName,
+            IEnumerable<Guid> ids,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
+
+        Task<DXResult<IEnumerable<JObject>?>> GetItemsAsync(
+            string typeName,
+            string query,
+            IDXHandlerContext ctx,
+            CancellationToken ct);
+
+        Task<DXResult<IEnumerable<JObject>?>> GetItemsAsync(
+            string typeName,
             IDXHandlerContext ctx,
             CancellationToken ct);
 
@@ -21,8 +53,8 @@ namespace IV.DX.Application.Contracts.Pipeline
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<DXModel>> InsertAsync(
-            DXModel dxModel,
+        Task<DXResult<JObject>> InsertAsync(
+            JObject dxModel,
             IDXHandlerContext ctx,
             CancellationToken ct);
 
@@ -31,8 +63,8 @@ namespace IV.DX.Application.Contracts.Pipeline
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<DXModel>> UpdateAsync(
-           DXModel dxModel,
+        Task<DXResult<JObject>> UpdateAsync(
+           JObject dxModel,
            IDXHandlerContext ctx,
            CancellationToken ct);
 
@@ -41,8 +73,8 @@ namespace IV.DX.Application.Contracts.Pipeline
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<DXModel>> DeleteAsync(
-            DXModel dxModel,
+        Task<DXResult<JObject>> DeleteAsync(
+            JObject dxModel,
             IDXHandlerContext ctx,
             CancellationToken ct);
     }

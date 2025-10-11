@@ -1,8 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -13,45 +11,83 @@ namespace IV.DX.Application
 {
     internal class DXUnitDataService(IDXCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
     {
-        public T GetItem<T>(Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
+        public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
+            var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
 
-            var esqlModel = this.GetItem(modelDefinition, id, context, typeOfLoading);
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
+                }
+            }
 
-            var esqlObject = DXUnitHelper.CreateInstance<T>(esqlModel);
-
-            return esqlObject;
+            throw new Exception($"There are an error to get dxUnit by ID ({id}): {result.Error}");
         }
 
-        public IEnumerable<T> GetItems<T>(IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(context, ct);
 
-            var result = this.GetItems(modelDefinition, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
 
-            return result;
+            throw new Exception($"There are an error to get all dxUnit: {result.Error}");
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(IEnumerable<Guid> ids, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(ids, context, ct);
 
-            var result = this.GetItems(modelDefinition, ids, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
 
-            return result;
+            throw new Exception($"There are an error to get dxUnit by ids: {result.Error}");
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string esqlWhereExpression, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var modelDefinition = DXModelConverter.GetESQLModelDefinition<T>();
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(esqlWhereExpression, context, ct);
 
-            var result = this.GetItems(modelDefinition, esqlWhereExpression, context, typeOfLoading).Select(x => DXUnitHelper.CreateInstance<T>(x));
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
 
-            return result;
+            throw new Exception($"There are an error to get dxUnit by query ({esqlWhereExpression}): {result.Error}");
         }
 
-        public async Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             var result = await dxPipelineExecutor.InsertAsync<T>(esqlObject, context, ct);
 
@@ -65,7 +101,7 @@ namespace IV.DX.Application
             }
         }
 
-        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
 
@@ -81,7 +117,7 @@ namespace IV.DX.Application
             }
         }
 
-        public async Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             var result = await dxPipelineExecutor.UpdateAsync<T>(esqlObject, context, ct);
 
@@ -93,70 +129,9 @@ namespace IV.DX.Application
             {
                 throw new Exception($"There are an error to update dxUnit: {result.Error}");
             }
-
-            //var handler = EntityHandlerProvider.GetHandler(esqlObject);
-
-            //var result = handler.OnUpdating(esqlObject, context);
-
-            //handler.OnUpdated(esqlObject, context);
-
-            //return result;
         }
 
-        public bool Delete(string typeName, Guid id)
-        {
-            return this.Delete(typeName, id, new DXUnitHandlerBaseContextOld());
-        }
-
-        public async Task<bool> DeleteAsync<T>(T esqlObject, CancellationToken ct) where T : DXUnit, new()
-        {
-            return await this.DeleteAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
-        }
-
-        public Guid Insert(string json, IDXHandlerContext context)
-        {
-            var jObject = JObject.Parse(json);
-
-            return this.Insert(jObject, context);
-        }
-
-        public Guid Update(string json, IDXHandlerContext context)
-        {
-            var jObject = JObject.Parse(json);
-
-            return this.Update(jObject, context);
-        }
-
-        public bool Delete(string typeName, Guid id, IDXHandlerContext context)
-        {
-            bool result;
-
-            if (EntityHandlerProvider.IsCustomHandlerExisting(typeName))
-            {
-                var handler = EntityHandlerProvider.GetHandler(typeName);
-
-                result = handler.OnDeleting(id, context);
-
-                handler.OnDeleted(id, context);
-            }
-            else
-            {
-                result = EntityHandlerProvider.CoreModelHandler.OnDeleting(typeName, id, context);
-
-                EntityHandlerProvider.CoreModelHandler.OnDeleted(typeName, id, context);
-            }
-
-            return result;
-        }
-
-        public Guid InsertOrUpdate(string json, IDXHandlerContext context)
-        {
-            var jObject = JObject.Parse(json);
-
-            return this.InsertOrUpdate(jObject, context);
-        }
-
-        public bool IsItemExisting(Guid id, string type, IDXHandlerContext context)
+        public async Task<bool> IsItemExistingAsync(Guid id, string type, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
             var entityType = type;
 
@@ -172,190 +147,85 @@ namespace IV.DX.Application
             }
         }
 
-        public IEnumerable<T> GetItems<T>(DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            return this.GetItems<T>(new DXUnitHandlerBaseContextOld());
-        }
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, context, ct);
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
-        {
-            return this.GetItems<T>(ids, new DXUnitHandlerBaseContextOld());
-        }
-
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
-        {
-            return this.GetItems<T>(esqlWhereExpression, new DXUnitHandlerBaseContextOld());
-        }
-
-        public T GetItem<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full) where T : DXUnit, new()
-        {
-            return this.GetItem<T>(id, new DXUnitHandlerBaseContextOld());
-        }
-
-        public bool IsItemExisting(Guid id, string type)
-        {
-            return this.IsItemExisting(id, type, new DXUnitHandlerBaseContextOld());
-        }
-
-        public async Task<T> InsertAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
-        {
-            return await this.InsertAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
-        }
-
-        public async Task<T> UpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
-        {
-            return await this.UpdateAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
-        }
-
-        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, CancellationToken ct = default) where T : DXUnit, new()
-        {
-            return await this.InsertOrUpdateAsync(esqlObject, new DXUnitHandlerBaseContextOld(), ct);
-        }
-
-        public Guid Insert(string jObject)
-        {
-            return this.Insert(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public Guid Update(string jObject)
-        {
-            return this.Update(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public Guid InsertOrUpdate(string jObject)
-        {
-            return this.InsertOrUpdate(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName, IDXHandlerContext context)
-        {
-            IEnumerable<DXModel> items = coreRepo.GetItems(typeName);
-
-            this.HandleItems(items, typeName, context);
-
-            return items;
-        }
-
-        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
-        {
-            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, typeOfLoading);
-
-            this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
-
-            return items;
-        }
-
-        private void HandleItems(IEnumerable<DXModel> items, string typeName, IDXHandlerContext context)
-        {
-            if (EntityHandlerProvider.IsCustomHandlerExisting(typeName))
+            if (result.IsSuccess)
             {
-                var handler = EntityHandlerProvider.GetHandler(typeName);
-
-                foreach (var item in items)
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
                 {
-                    handler.OnGetting(item, context);
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
                 }
             }
-            else
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}): {result.Error}");
+        }
+
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IEnumerable<Guid> ids, IDXHandlerContext? context = default, CancellationToken ct = default)
+        {
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, ids, context, ct);
+
+            if (result.IsSuccess)
             {
-                foreach (var item in items)
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
                 {
-                    EntityHandlerProvider.CoreModelHandler.OnGetting(item, context);
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
                 }
             }
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {result.Error}");
         }
 
-        private void HandleItem(DXModel item, string typeName, IDXHandlerContext context)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string esqlWhereExpression, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            if (EntityHandlerProvider.IsCustomHandlerExisting(typeName))
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, esqlWhereExpression, context, ct);
+
+            if (result.IsSuccess)
             {
-                var handler = EntityHandlerProvider.GetHandler(typeName);
-
-                handler.OnGetting(item, context);
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
+                }
             }
-            else
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({esqlWhereExpression}): {result.Error}");
+        }
+
+        public async Task<JObject> GetItemAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)
+        {
+            var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
+
+            if (result.IsSuccess)
             {
-                EntityHandlerProvider.CoreModelHandler.OnGetting(item, context);
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
+                }
             }
+
+            throw new Exception($"There are an error to get dxModel by ID ({id}): {result.Error}");
         }
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, IEnumerable<Guid> ids, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
+        public async Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, ids, typeOfLoading);
-
-            this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
-
-            return items;
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids, IDXHandlerContext context)
-        {
-            IEnumerable<DXModel> items = coreRepo.GetItems(typeName, ids);
-
-            this.HandleItems(items, typeName, context);
-
-            return items;
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression, IDXHandlerContext context)
-        {
-            IEnumerable<DXModel> items = coreRepo.GetItems(typeName, esqlWhereExpression);
-
-            this.HandleItems(items, typeName, context);
-
-            return items;
-        }
-
-        public IEnumerable<DXModel> GetItems(DXModelDefinition modelDefinition, string esqlWhereExpression, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
-        {
-            IEnumerable<DXModel> items = coreRepo.GetItems(modelDefinition, esqlWhereExpression, typeOfLoading);
-
-            this.HandleItems(items, modelDefinition.OwnSingleItem.Type, context);
-
-            return items;
-        }
-
-        public DXModel GetItem(string typeName, Guid id, IDXHandlerContext context)
-        {
-            DXModel item = coreRepo.GetItem(typeName, id);
-
-            this.HandleItem(item, typeName, context);
-
-            return item;
-        }
-
-        public DXModel GetItem(DXModelDefinition modelDefinition, Guid id, IDXHandlerContext context, DXLoadingType typeOfLoading = DXLoadingType.Full)
-        {
-            DXModel item = coreRepo.GetItem(modelDefinition, id, typeOfLoading);
-
-            this.HandleItem(item, modelDefinition.OwnSingleItem.Type, context);
-
-            return item;
-        }
-
-        public Guid Insert(JObject jObject)
-        {
-            return this.Insert(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public Guid Update(JObject jObject)
-        {
-            return this.Update(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public bool Delete(JObject jObject)
-        {
-            return this.Delete(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public Guid InsertOrUpdate(JObject jObject)
-        {
-            return this.InsertOrUpdate(jObject, new DXUnitHandlerBaseContextOld());
-        }
-
-        public async Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext context, CancellationToken ct) where T : DXUnit, new()
-        {
-            var result = await dxPipelineExecutor.DeleteAsync(esqlObject, context, ct);
+            var result = await dxPipelineExecutor.DeleteAsync<T>(esqlObject, context, ct);
 
             if (result.IsSuccess)
             {
@@ -367,94 +237,62 @@ namespace IV.DX.Application
             }
         }
 
-        public Guid Insert(JObject jObject, IDXHandlerContext context)
+        public async Task<JObject> InsertAsync(JObject jObject, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
+            var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
 
-            return this.Insert(esqlModel, context);
-        }
-
-        private Guid Insert(DXModel esqlModel, IDXHandlerContext context)
-        {
-            var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
-
-            Guid result;
-
-            if (EntityHandlerProvider.IsCustomHandlerExisting(entityType))
+            if (result.IsSuccess && result.Value != null)
             {
-                var handlerType = EntityHandlerProvider.GetHandlerType(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
-                var handler = EntityHandlerProvider.GetHandler(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
-
-                var obj = DXUnitHelper.CreateInstance(esqlModel, handlerType);
-
-                result = handler.OnInserting(obj, context);
-
-                handler.OnInserted(obj, context);
+                return result.Value;
             }
             else
             {
-                result = EntityHandlerProvider.CoreModelHandler.OnInserting(esqlModel, context);
-
-                EntityHandlerProvider.CoreModelHandler.OnInserted(esqlModel, context);
+                throw new Exception($"There are an error to insert dxUnit: {result.Error}");
             }
-
-            return result;
         }
 
-        public Guid Update(JObject jObject, IDXHandlerContext context)
+        public async Task<JObject> UpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
-            return this.Update(esqlModel, context);
-        }
+            var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
-        private Guid Update(DXModel esqlModel, IDXHandlerContext context)
-        {
-            var entityType = esqlModel.OwnSingleItem.ObjectInfo.ObjectName;
-
-            Guid result;
-
-            if (EntityHandlerProvider.IsCustomHandlerExisting(entityType))
+            if (result.IsSuccess && result.Value != null)
             {
-                var handlerType = EntityHandlerProvider.GetHandlerType(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
-                var handler = EntityHandlerProvider.GetHandler(esqlModel.OwnSingleItem.ObjectInfo.ObjectName);
-
-                var obj = DXUnitHelper.CreateInstance(esqlModel, handlerType);
-
-                result = handler.OnUpdating(obj, context);
-
-                handler.OnUpdated(obj, context);
+                return result.Value;
             }
             else
             {
-                result = EntityHandlerProvider.CoreModelHandler.OnUpdating(esqlModel, context);
-
-                EntityHandlerProvider.CoreModelHandler.OnUpdated(esqlModel, context);
+                throw new Exception($"There are an error to update dxUnit: {result.Error}");
             }
-
-            return result;
         }
 
-        public bool Delete(JObject jObject, IDXHandlerContext context)
+        public async Task<bool> DeleteAsync(JObject jObject, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
+            var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
-            return this.Delete(esqlModel.OwnSingleItem.ObjectInfo.ObjectName, esqlModel.OwnSingleItem.Item.ID.Value, context);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public Guid InsertOrUpdate(JObject jObject, IDXHandlerContext context)
+        public async Task<JObject> InsertOrUpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
         {
             var esqlModel = DXModel.CreateInstance(jObject);
 
             var objId = esqlModel.OwnSingleItem.Item.ID;
 
             if (objId.HasValue
-                && this.IsItemExisting(objId.Value, esqlModel.OwnSingleItem.ObjectInfo.ObjectName, context))
+                && await this.IsItemExistingAsync(objId.Value, esqlModel.OwnSingleItem.ObjectInfo.ObjectName, context, ct))
             {
-                return this.Update(esqlModel, context);
+                return await this.UpdateAsync(jObject, context, ct);
             }
             else
             {
-                return this.Insert(esqlModel, context);
+                return await this.InsertAsync(jObject, context, ct);
             }
         }
     }

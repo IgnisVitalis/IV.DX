@@ -26,7 +26,7 @@ namespace IV.DX.Application.Pipeline
 
             foreach (var t in units)
             {
-                var alias = DxTypeName.Get(t);
+                var alias = DXTypeName.Get(t);
                 _typesByName[alias] = t;
                 _typesByName[t.Name] = t;
                 if (t.FullName is not null) _typesByName[t.FullName] = t;
@@ -35,7 +35,7 @@ namespace IV.DX.Application.Pipeline
 
         private static void EnsureAliases(Type key)
         {
-            var alias = DxTypeName.Get(key);
+            var alias = DXTypeName.Get(key);
             _typesByName.TryAdd(alias, key);
             _typesByName.TryAdd(key.Name, key);
             if (key.FullName is not null) _typesByName.TryAdd(key.FullName, key);

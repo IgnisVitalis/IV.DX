@@ -877,6 +877,8 @@ namespace IV.DX.Persistence
             };
             #endregion
 
+
+
             CoreEntityInfos = new List<DXUnitDefinitionUnit>()
             {
                 DXObjectDefinitionUnit,

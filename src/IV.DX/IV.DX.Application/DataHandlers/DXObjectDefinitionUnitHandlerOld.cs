@@ -67,7 +67,7 @@ namespace IV.DX.Application.DataHandlers
 
                 var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
-                this._dataService.Delete("DXRelationDefinitionUnit", relationObject.ID);
+                this._dataService.DeleteAsync(relationObject).Wait();
             }
         }
 

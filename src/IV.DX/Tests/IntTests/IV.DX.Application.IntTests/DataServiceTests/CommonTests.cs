@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Models.Test;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,7 +24,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void CheckPerformance()
+        public async Task CheckPerformance()
         {
             var ids = Enumerable.Range(0, 300).Select(x => Guid.NewGuid()).ToList();
 
@@ -69,7 +69,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 };
             });
 
-            EstimatePerformance(() =>
+            await EstimatePerformanceAsync(async () =>
             {
                 foreach (var book in books)
                 {
@@ -77,37 +77,37 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             }, $"Inserting x {ids.Count()}");
 
-            EstimatePerformance(() =>
+            await EstimatePerformanceAsync(async () =>
             {
-                var books = _dataService.GetItems<TBookUnit>(ids100);
+                var books = await _dataService.GetItemsAsync<TBookUnit>(ids100);
             }, $"GetItems({ids100.Count()})");
 
-            EstimatePerformance(() =>
+            await EstimatePerformanceAsync(async () =>
             {
                 foreach (var id in ids100)
                 {
-                    var book = _dataService.GetItem<TBookUnit>(id);
+                    var book = await _dataService.GetItemAsync<TBookUnit>(id);
                 }
             }, $"GetItem x {ids100.Count()}");
 
-            EstimatePerformance(() =>
+            await EstimatePerformanceAsync(async () =>
             {
                 foreach (var book in books)
                 {
-                    _dataService.DeleteAsync(book).Wait();
+                    await _dataService.DeleteAsync(book);
                 }
             }, $"Deleting x {ids.Count()}");
 
-            Assert.Empty(_dataService.GetItems<TBookUnit>(ids));
+            Assert.Empty(await _dataService.GetItemsAsync<TBookUnit>(ids));
         }
 
         [Fact]
-        public void GetItems_UsingDXElementDefinitionUnit_ExistingBlocksWithAllInformation()
+        public async Task GetItems_UsingDXElementDefinitionUnit_ExistingBlocksWithAllInformation()
         {
             // Init
 
             // Action
-            var blocks = _dataService.GetItems<DXElementDefinitionUnit>();
+            var blocks = await _dataService.GetItemsAsync<DXElementDefinitionUnit>();
 
             // Checking result
             Assert.NotEmpty(blocks);
@@ -116,12 +116,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItemNonParameterized_UsingDXElementDefinitionUnit_ExistingBlockWithAllInformation()
+        public async Task GetItemNonParameterized_UsingDXElementDefinitionUnit_ExistingBlockWithAllInformation()
         {
             // Init
 
             // Action           
-            var block = _dataService.GetItem("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"), new DXUnitHandlerBaseContextOld());
+            var blockJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"));
+
+            var block = DXModel.CreateInstance(blockJObject);
 
             // Checking result
             Assert.NotNull(block);
@@ -132,13 +134,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItems_UsingWhereExpression_CorrectValue()
+        public async Task GetItems_UsingWhereExpression_CorrectValue()
         {
             // Init
             var objectID = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
 
             // Action
-            var objs = _dataService.GetItems<DXUnitDefinitionUnit>($"ID = '{objectID}'", new DXUnitHandlerBaseContextOld());
+            var objs = await _dataService.GetItemsAsync<DXUnitDefinitionUnit>($"ID = '{objectID}'");
 
             // Checking result
             Assert.Single(objs);
@@ -149,12 +151,12 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItems_UsingTypeName_CorrectValues()
+        public async Task GetItems_UsingTypeName_CorrectValues()
         {
             // Init
 
             // Action
-            var objs = _dataService.GetItems("DXUnitDefinitionUnit", new DXUnitHandlerBaseContextOld());
+            var objs = await _dataService.GetItemsAsync("DXUnitDefinitionUnit");
 
             // Checking result
             Assert.NotEmpty(objs);

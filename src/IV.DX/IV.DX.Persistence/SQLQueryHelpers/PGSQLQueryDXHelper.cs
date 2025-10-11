@@ -139,7 +139,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            if (string.IsNullOrEmpty(esqlWhereExpression))
+            if (esqlWhereExpression == default)
                 return GetSQLQueryToSelectIDFromTable(typeName);
 
             var result = this.ConvertToQueryContainer(typeName, esqlWhereExpression, relationInfos);

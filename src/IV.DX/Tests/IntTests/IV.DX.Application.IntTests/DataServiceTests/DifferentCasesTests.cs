@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -153,22 +153,20 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void GetItem_UsingMultiblockWithRelation_Ok()
+        public async Task GetItem_UsingMultiblockWithRelation_Ok()
         {
             // Init
             var id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
 
             // Action
-            var model = this._dataService.GetItem("TDeviceUnit", id, new DXUnitHandlerBaseContextOld());
+            var jObject = await this._dataService.GetItemAsync("TDeviceUnit", id);
 
             // Assert
-            var jObject = model.ConvertToJObject();
-
             Assert.Null(jObject["User"]);
         }
 
         [Fact]
-        public void UpdateEntity_UsingAddedDeletedBlocksWithTargetMode_Ok()
+        public async Task UpdateEntity_UsingAddedDeletedBlocksWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("622c2056-9797-47ab-82c2-5c3eeb6a68ce");
@@ -241,7 +239,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(entity).Wait();
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
+            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
 
             Assert.Single(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
 
@@ -262,13 +260,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(existingEntity).Wait();
 
             // Assert
-            existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
+            existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
             Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
         }
 
 
         [Fact]
-        public void DeleteEntity_WithBlocks_Ok()
+        public async Task DeleteEntity_WithBlocks_Ok()
         {
             // Init
             var id = new Guid("1c4e8f3e-3f4b-4c6a-9f7e-8f9e7d6c5b4a");
@@ -318,15 +316,15 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.DeleteAsync(entity).Wait();
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
+            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
             Assert.Null(existingEntity);
 
-            var existingBlock = this._dataService.GetItem<DXElementDefinitionUnit>(block.ID);
+            var existingBlock = await this._dataService.GetItemAsync<DXElementDefinitionUnit>(block.ID);
             Assert.NotNull(existingBlock);
         }
 
         [Fact]
-        public void UpdateEntity_UsingMoreThanOnelDeletedBlocksWithTargetMode_Ok()
+        public async Task UpdateEntity_UsingMoreThanOnelDeletedBlocksWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("1873aa67-8f3e-4044-8659-c44f7a2dd5f6");
@@ -411,7 +409,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Action
             entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
-                Mode = MultiElementsMode.Target,               
+                Mode = MultiElementsMode.Target,
                 Deleted = entity.DXElementInUnitDefinitionMainElement.Announced,
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
             };
@@ -419,7 +417,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(entity).Wait();
 
             // Assert
-            var existingEntity = this._dataService.GetItem<DXUnitDefinitionUnit>(id);
+            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
             Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
         }
     }

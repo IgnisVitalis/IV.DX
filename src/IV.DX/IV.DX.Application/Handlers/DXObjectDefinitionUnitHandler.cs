@@ -90,7 +90,7 @@ namespace IV.DX.Application.Handlers
 
                 var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
-                dxUnitService.Delete("DXRelationDefinitionUnit", relationObject.ID);
+                dxUnitService.DeleteAsync(relationObject).Wait();
             }
         }
 

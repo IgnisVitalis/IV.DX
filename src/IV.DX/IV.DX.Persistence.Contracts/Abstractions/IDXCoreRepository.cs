@@ -5,6 +5,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXCoreRepository
     {
+        IEnumerable<Guid> GetItemIDs(string typeName, string? esqlWhereExpression = default);
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
@@ -24,8 +25,6 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         bool AddRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
         bool RemoveRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
-
-
         Guid InsertSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
         Guid UpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
         Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);

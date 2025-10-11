@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace IV.DX.Shared.IntTests
@@ -89,7 +90,7 @@ namespace IV.DX.Shared.IntTests
             }
         }
 
-        protected void EstimatePerformance(Action action, string message)
+        protected async Task EstimatePerformanceAsync(Action action, string message)
         {
             if (action == null)
                 return;

@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
 using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
@@ -21,13 +20,13 @@ namespace IV.DX.Application.Handlers
             base.Validate(dxUnit);
             base.Process(dxUnit);
 
-            if (ctx is DXUnitHandlerPreInitCoreContextOld)
+            if (ctx is DXUnitHandlerPreInitCoreContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
                 return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkSkipProcess(dxUnit));
             }
-            else if (ctx is DXUnitHandlerPostInitCoreContextOld)
+            else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
                 return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
             }
@@ -76,7 +75,7 @@ namespace IV.DX.Application.Handlers
 
             foreach (var relatedBlock in relatedBlocks)
             {
-                dxUnitService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(entity, relatedBlock).ID);
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(entity, relatedBlock)).Wait();
             }
         }
 
@@ -157,7 +156,7 @@ namespace IV.DX.Application.Handlers
                 if (existingBlock == null)
                     continue;
 
-                dxUnitService.Delete("DXRelationDefinitionUnit", this.GetExistingRelatonObject(dxUnit, blockToUnassign).ID);
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, blockToUnassign)).Wait();
             }
         }
 

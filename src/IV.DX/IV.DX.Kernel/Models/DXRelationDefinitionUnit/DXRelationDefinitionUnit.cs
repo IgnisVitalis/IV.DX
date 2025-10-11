@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXRelationDefinitionUnit")]
     public class DXRelationDefinitionUnit : DXUnit
     {
-        public static DXModelDefinition ESQLModelDefinition { get; } = DXModelConverter.GetESQLModelDefinition<DXRelationDefinitionUnit>();
+        public static DXModelDefinition ESQLModelDefinition { get; } = DXModelDefinitionHelper.GetESQLModelDefinition<DXRelationDefinitionUnit>();
 
         public DXRelationDefinitionMainElement DXRelationDefinitionMainElement { get; set; }
 

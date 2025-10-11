@@ -2,12 +2,8 @@
 {
     public enum DXOutcome
     {
-        None,
-        FromCache,         
-        NoOp,
-        AlreadyExists,
-        AlreadyUpToDate,
-        SoftDeleted,
-        CreatedViaUpsert
+        Ok,
+        NotFound,
+        Error
     }
 }

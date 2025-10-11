@@ -1,5 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.HandlerContext;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
@@ -64,7 +64,7 @@ namespace IV.DX.Application
                         throw new Exception($"Migration script {migrationScript} could be processed.");
                     }
 
-                    this._dataService.InsertAsync(migrationScript, new DXUnitHandlerMigrationServiceContextOld(migrationScript)).Wait();
+                    this._dataService.InsertAsync(migrationScript, new DXUnitHandlerMigrationServiceContext(migrationScript)).Wait();
                 }
                 catch (Exception exc)
                 {
@@ -85,7 +85,6 @@ namespace IV.DX.Application
             }
             catch (Exception)
             {
-
                 var corePreInitFiles = File.ReadAllText(this.GetFullPath("MigrationScripts/CorePreInit.json"));
                 var scriptsPreInit = GetMirgationScripts(corePreInitFiles);
 
@@ -105,7 +104,7 @@ namespace IV.DX.Application
 
                 foreach (var script in scriptsPreInit)
                 {
-                    this._dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContextOld(script)).Wait();
+                    this._dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContext(script)).Wait();
                 }
             }
 
@@ -161,7 +160,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new DXUnitHandlerPreInitCoreContextOld(file));
+                this._dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file)).Wait();
             }
         }
 
@@ -173,7 +172,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new DXUnitHandlerPostInitCoreContextOld(file));
+                this._dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file)).Wait();
             }
         }
 
@@ -185,7 +184,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.Insert(item.ToString(), new DXUnitHandlerMigrationServiceContextOld(relFile));
+                this._dataService.InsertAsync(item, new DXUnitHandlerMigrationServiceContext(relFile)).Wait();
             }
         }
 
@@ -197,7 +196,7 @@ namespace IV.DX.Application
 
             foreach (JObject item in jarray)
             {
-                this._dataService.InsertOrUpdate(item.ToString(), new DXUnitHandlerMigrationServiceContextOld(datFile));
+                this._dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(datFile)).Wait();
             }
         }
 

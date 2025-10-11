@@ -8,6 +8,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.CoreData;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 
@@ -234,6 +235,25 @@ namespace IV.DX.Persistence
                 return null;
 
             return this.GetItems(modelDefinition, esqlWhereExpression, DXLoadingType.Full);
+        }
+
+        // TODO: need to check what kind of data is loaded. Because this method should load only IDs
+        public IEnumerable<Guid> GetItemIDs(string typeName, string? esqlWhereExpression = default)
+        {
+            string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this._dxStructureCache.Relations);
+
+            return this.RunRequestInTransaction((conn) =>
+            {
+                var dataSet = new DataSet(typeName);
+
+                var adapter = this._queryHelper.GetDbDataAdapter(conn, sqlQuery);
+
+                adapter.Fill(dataSet, typeName);
+
+                var ids = dataSet.Tables[typeName].Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID])).ToList();
+
+                return ids;
+            });
         }
 
         public DXModel GetItem(string typeName, Guid id)

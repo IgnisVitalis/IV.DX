@@ -11,7 +11,17 @@ namespace IV.DX.Kernel.Converters
         {
             var jObject = JObject.Parse(json);
 
+            return GetTypeName(jObject);
+        }
+
+        public static string GetTypeName(JObject jObject)
+        {
             return (string)jObject[Constants.SystemPropertyTypeName];
+        }
+
+        public static Guid GetID(JObject jObject)
+        {
+            return (Guid)jObject[Constants.ID];
         }
 
         #region Convert to JObject       

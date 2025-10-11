@@ -1,10 +1,10 @@
 ﻿namespace IV.DX.Application.Pipeline
 {
-    internal static class DxTypeName
+    internal static class DXTypeName
     {
         public static string Get(Type t)
-            => t.GetCustomAttributes(typeof(DxNameAttribute), false) is { Length: > 0 } a
-               ? ((DxNameAttribute)a[0]).Name
+            => t.GetCustomAttributes(typeof(DXNameAttribute), false) is { Length: > 0 } a
+               ? ((DXNameAttribute)a[0]).Name
                : t.Name; // fallback
     }
 

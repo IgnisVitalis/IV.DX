@@ -1,5 +1,4 @@
-﻿using IV.DX.Application.Contracts.HandlerContext;
-using IV.DX.Application.Contracts.Runtime;
+﻿using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,13 +22,13 @@ namespace IV.DX.Application.DataHandlers
             base.Validate(entity);
             base.Process(entity);
 
-            if (context is DXUnitHandlerPreInitCoreContextOld)
+            if (context is DXUnitHandlerPreInitCoreContext)
             {
                 this._dataStructureRepo.CreateDataStructure(entity);
 
                 return Guid.Empty;
             }
-            else if (context is DXUnitHandlerPostInitCoreContextOld)
+            else if (context is DXUnitHandlerPostInitCoreContext)
             {
                 return base.OnInserting(entity, context);
             }

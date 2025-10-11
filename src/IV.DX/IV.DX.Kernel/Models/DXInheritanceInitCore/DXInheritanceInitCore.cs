@@ -1,5 +1,8 @@
-﻿namespace IV.DX.Kernel.Models
+﻿using IV.DX.Kernel.Attributes;
+
+namespace IV.DX.Kernel.Models
 {
+    [DXUnit("DXInheritanceInitCore")]
     public class DXInheritanceInitCore : DXUnit
     {
         public string BaseEntity { get; set; }

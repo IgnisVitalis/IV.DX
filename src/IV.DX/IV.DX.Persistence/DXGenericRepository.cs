@@ -26,28 +26,28 @@ namespace IV.DX.Persistence
 
         public T GetItem<T>(Guid id) where T : DXUnit
         {
-            var result = this._coreRepo.GetItem(DXModelConverter.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
+            var result = this._coreRepo.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
             return DXUnitHelper.CreateInstance<T>(result);
         }
 
         public IEnumerable<T> GetItems<T>() where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelConverter.GetESQLModelDefinition<T>(), esqlWhereExpression, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), esqlWhereExpression, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
@@ -63,7 +63,7 @@ namespace IV.DX.Persistence
 
         public Guid InsertOrUpdate(DXUnit esqlObject)
         {
-            var definition = DXModelConverter.GetESQLModelDefinition(esqlObject.GetType());
+            var definition = DXModelDefinitionHelper.GetESQLModelDefinition(esqlObject.GetType());
 
             var existingEntity = this._coreRepo.GetItem(definition, esqlObject.ID, DXLoadingType.Base);
 
@@ -143,7 +143,7 @@ namespace IV.DX.Persistence
         {
             var blockName = AttributeReader.GetESQLBlockTypeName(typeof(T));
 
-            var block = DXModelConverter.GetESQLBlockDefinition(blockName, typeof(T));
+            var block = DXModelDefinitionHelper.GetESQLBlockDefinition(blockName, typeof(T));
 
             var result = this._coreRepo.GetSingleBlock(block, id);
 

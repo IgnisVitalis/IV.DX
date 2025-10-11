@@ -1,9 +1,9 @@
 ﻿namespace IV.DX.Application.Pipeline
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    internal sealed class DxNameAttribute : Attribute
+    internal sealed class DXNameAttribute : Attribute
     {
         public string Name { get; }
-        public DxNameAttribute(string name) => Name = name;
+        public DXNameAttribute(string name) => Name = name;
     }
 }
