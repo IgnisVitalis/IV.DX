@@ -8,9 +8,10 @@ namespace IV.DX.Application.Pipeline
 {
     internal class DXUnitGetHandlerProvider : IDXUnitGetHandlerProvider
     {
-        private static readonly Dictionary<string, Type> _typesByName = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Type> _typesByName =
+            new(StringComparer.OrdinalIgnoreCase);
 
-        private readonly Dictionary<Type, List<object>> _beforeInsert = new();
+        private readonly Dictionary<Type, List<object>> _beforeGet = new();
         private readonly Dictionary<Type, List<object>> _afterGet = new();
         private readonly Dictionary<Type, List<object>> _isItemExisting = new();
 
@@ -42,20 +43,35 @@ namespace IV.DX.Application.Pipeline
             if (key.FullName is not null) _typesByName.TryAdd(key.FullName, key);
         }
 
-        public void Register<T>(IDXBeforeGet<T> handler) where T : DXUnit
+        // ---------------- Register: BEFORE GET ----------------
+
+        public void Register<T>(IDXBeforeGetHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
-                if (!_beforeInsert.TryGetValue(key, out var list))
-                    _beforeInsert[key] = list = new List<object>();
+                if (!_beforeGet.TryGetValue(key, out var list))
+                    _beforeGet[key] = list = new List<object>();
+             
+                var isUniqueIncoming = handler is IDXUniqueBeforeGetHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueBeforeGetHandler);
+
+                if (isUniqueIncoming && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"BeforeGet handler for {key.Name} must be unique, but handlers already registered: " +
+                        $"{string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!isUniqueIncoming && existsUnique)
+                    throw new InvalidOperationException(
+                        $"BeforeGet handler for {key.Name} is already occupied by a unique handler; cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
 
             EnsureAliases(key);
         }
 
-        public void Register<T>(IDXAfterGet<T> handler) where T : DXUnit
+        public void Register<T>(IDXAfterGetHadnler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
 
@@ -63,39 +79,95 @@ namespace IV.DX.Application.Pipeline
             {
                 if (!_afterGet.TryGetValue(key, out var list))
                     _afterGet[key] = list = new List<object>();
+
+                var isUniqueIncoming = handler is IDXUniqueAfterGetHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueAfterGetHandler);
+
+                if (isUniqueIncoming && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"AfterGet handler for {key.Name} must be unique, but handlers already registered: " +
+                        $"{string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!isUniqueIncoming && existsUnique)
+                    throw new InvalidOperationException(
+                        $"AfterGet handler for {key.Name} is already occupied by a unique handler; cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
 
             EnsureAliases(key);
         }
 
-        public IEnumerable<IDXBeforeGet<T>> GetBeforeGetHandlers<T>() where T : DXUnit
+        public void Register<T>(IDXIsItemExistingHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
-                if (!_beforeInsert.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXBeforeGet<T>>();
+                if (!_isItemExisting.TryGetValue(key, out var list))
+                    _isItemExisting[key] = list = new List<object>();
 
-                return list.OfType<IDXBeforeGet<T>>()
+                var isUniqueIncoming = handler is IDXUniqueIsItemExistingHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueIsItemExistingHandler);
+
+                if (isUniqueIncoming && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"IsItemExisting handler for {key.Name} must be unique, but handlers already registered: " +
+                        $"{string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!isUniqueIncoming && existsUnique)
+                    throw new InvalidOperationException(
+                        $"IsItemExisting handler for {key.Name} is already occupied by a unique handler; cannot add '{handler.GetType().Name}'.");
+
+                list.Add(handler);
+            }
+
+            EnsureAliases(key);
+        }
+
+        public IEnumerable<IDXBeforeGetHandler<T>> GetBeforeGetHandlers<T>() where T : DXUnit
+        {
+            var key = typeof(T);
+
+            lock (_lock)
+            {
+                if (!_beforeGet.TryGetValue(key, out var list))
+                    return Enumerable.Empty<IDXBeforeGetHandler<T>>();
+
+                return list.OfType<IDXBeforeGetHandler<T>>()
                            .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
                            .ThenBy(h => h.GetType().FullName)
                            .ToArray();
             }
         }
 
-        public IEnumerable<IDXAfterGet<T>> GetAfterGetHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXAfterGetHadnler<T>> GetAfterGetHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
                 if (!_afterGet.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXAfterGet<T>>();
+                    return Enumerable.Empty<IDXAfterGetHadnler<T>>();
 
-                return list.OfType<IDXAfterGet<T>>()
+                return list.OfType<IDXAfterGetHadnler<T>>()
                            .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
+                           .ThenBy(h => h.GetType().FullName)
+                           .ToArray();
+            }
+        }
+
+        public IEnumerable<IDXIsItemExistingHandler<T>> GetIsItemExistingHandlers<T>() where T : DXUnit
+        {
+            var key = typeof(T);
+
+            lock (_lock)
+            {
+                if (!_isItemExisting.TryGetValue(key, out var list))
+                    return Enumerable.Empty<IDXIsItemExistingHandler<T>>();
+
+                return list.OfType<IDXIsItemExistingHandler<T>>()
+                           .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
                            .ThenBy(h => h.GetType().FullName)
                            .ToArray();
             }
@@ -103,34 +175,5 @@ namespace IV.DX.Application.Pipeline
 
         public bool TryResolveType(string typeName, out Type type)
             => _typesByName.TryGetValue(typeName, out type!);
-
-        public IEnumerable<IDXIsItemExisting<T>> GetIsItemExistingHandlers<T>() where T : DXUnit
-        {
-            var key = typeof(T);
-
-            lock (_lock)
-            {
-                if (!_isItemExisting.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXIsItemExisting<T>>();
-
-                return list.OfType<IDXIsItemExisting<T>>()
-                           .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
-                           .ThenBy(h => h.GetType().FullName)
-                           .ToArray();
-            }
-        }
-
-        public void Register<T>(IDXIsItemExisting<T> handler) where T : DXUnit
-        {
-            var key = typeof(T);
-            lock (_lock)
-            {
-                if (!_isItemExisting.TryGetValue(key, out var list))
-                    _isItemExisting[key] = list = new List<object>();
-                list.Add(handler);
-            }
-
-            EnsureAliases(key);
-        }
     }
 }

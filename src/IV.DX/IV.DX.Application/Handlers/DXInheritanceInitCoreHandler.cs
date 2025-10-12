@@ -6,7 +6,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 namespace IV.DX.Application.Handlers
 {
     internal class DXInheritanceInitCoreHandler(IDXStructureRepository dataStructureRepo) :
-        IDXBeforeInsert<DXInheritanceInitCore>
+        IDXBeforeInsertHandler<DXInheritanceInitCore>, IDXUniqueBeforeInsertHandler
     {
         public int BeforeOrder => 1;
 

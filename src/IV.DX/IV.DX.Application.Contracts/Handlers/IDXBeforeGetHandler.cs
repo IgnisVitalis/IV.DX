@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Handlers
 {
-    public interface IDXBeforeGet<T> : IDXBeforeOrdered where T : DXUnit
+    public interface IDXBeforeGetHandler<T> : IDXBeforeOrdered where T : DXUnit
     {
         Task<DXResult<Guid>> BeforeGetAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
     }

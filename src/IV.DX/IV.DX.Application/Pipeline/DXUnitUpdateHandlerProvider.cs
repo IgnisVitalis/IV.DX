@@ -15,7 +15,7 @@ namespace IV.DX.Application.Pipeline
         private readonly Dictionary<Type, List<object>> _afterUpdate = new();
 
         private readonly object _lock = new();
-      
+
         public static void InitCore(params Assembly[] scanAssemblies)
         {
             _typesByName.Clear();
@@ -44,63 +44,92 @@ namespace IV.DX.Application.Pipeline
 
         public bool TryResolveType(string typeName, out Type type)
             => _typesByName.TryGetValue(typeName, out type!);
-            
-        public void Register<T>(IDXBeforeUpdate<T> handler) where T : DXUnit
+
+        public void Register<T>(IDXBeforeUpdateHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
                 if (!_beforeUpdate.TryGetValue(key, out var list))
                     _beforeUpdate[key] = list = new List<object>();
+
+                var incomingIsUnique = handler is IDXUniqueBeforeUpdateHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueBeforeUpdateHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"BeforeUpdate handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"BeforeUpdate for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
             EnsureAliases(key);
         }
 
-        public void Register<T>(IDXAfterUpdate<T> handler) where T : DXUnit
+        public void Register<T>(IDXAfterUpdateHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
                 if (!_afterUpdate.TryGetValue(key, out var list))
                     _afterUpdate[key] = list = new List<object>();
+
+                var incomingIsUnique = handler is IDXUniqueAfterUpdateHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueAfterUpdateHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"AfterUpdate handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"AfterUpdate for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
             EnsureAliases(key);
         }
 
-        public IEnumerable<IDXBeforeUpdate<T>> GetBeforeUpdateHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXBeforeUpdateHandler<T>> GetBeforeUpdateHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
                 if (!_beforeUpdate.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXBeforeUpdate<T>>();
+                    return Enumerable.Empty<IDXBeforeUpdateHandler<T>>();
 
                 return list
-                    .OfType<IDXBeforeUpdate<T>>()
+                    .OfType<IDXBeforeUpdateHandler<T>>()
                     .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
                     .ThenBy(h => h.GetType().FullName)
                     .ToArray();
             }
         }
 
-        public IEnumerable<IDXAfterUpdate<T>> GetAfterUpdateHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXAfterUpdateHandler<T>> GetAfterUpdateHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
                 if (!_afterUpdate.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXAfterUpdate<T>>();
+                    return Enumerable.Empty<IDXAfterUpdateHandler<T>>();
 
                 return list
-                    .OfType<IDXAfterUpdate<T>>()
+                    .OfType<IDXAfterUpdateHandler<T>>()
                     .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
                     .ThenBy(h => h.GetType().FullName)
                     .ToArray();
             }
         }
     }
+
 }

@@ -5,10 +5,10 @@ namespace IV.DX.Application.Contracts.Pipeline
 {
     public interface IDXUnitUpdateHandlerProvider
     {   
-        IEnumerable<IDXBeforeUpdate<T>> GetBeforeUpdateHandlers<T>() where T : DXUnit;
-        IEnumerable<IDXAfterUpdate<T>> GetAfterUpdateHandlers<T>() where T : DXUnit;
-        void Register<T>(IDXBeforeUpdate<T> handler) where T : DXUnit;
-        void Register<T>(IDXAfterUpdate<T> handler) where T : DXUnit;
+        IEnumerable<IDXBeforeUpdateHandler<T>> GetBeforeUpdateHandlers<T>() where T : DXUnit;
+        IEnumerable<IDXAfterUpdateHandler<T>> GetAfterUpdateHandlers<T>() where T : DXUnit;
+        void Register<T>(IDXBeforeUpdateHandler<T> handler) where T : DXUnit;
+        void Register<T>(IDXAfterUpdateHandler<T> handler) where T : DXUnit;
         bool TryResolveType(string typeName, out Type type);
     }
 }

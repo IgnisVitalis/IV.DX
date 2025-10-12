@@ -45,62 +45,89 @@ namespace IV.DX.Application.Pipeline
         public bool TryResolveType(string typeName, out Type type)
             => _typesByName.TryGetValue(typeName, out type!);
 
-        public void Register<T>(IDXBeforeDelete<T> handler) where T : DXUnit
+        public void Register<T>(IDXBeforeDeleteHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
                 if (!_beforeDelete.TryGetValue(key, out var list))
                     _beforeDelete[key] = list = new List<object>();
+
+                var incomingIsUnique = handler is IDXUniqueBeforeDeleteHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueBeforeDeleteHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"BeforeDelete handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"BeforeDelete for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
             EnsureAliases(key);
         }
 
-        public void Register<T>(IDXAfterDelete<T> handler) where T : DXUnit
+        public void Register<T>(IDXAfterDeleteHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
                 if (!_afterDelete.TryGetValue(key, out var list))
                     _afterDelete[key] = list = new List<object>();
+
+                var incomingIsUnique = handler is IDXUniqueAfterDeleteHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueAfterDeleteHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"AfterDelete handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"AfterDelete for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
             EnsureAliases(key);
         }
 
-        public IEnumerable<IDXBeforeDelete<T>> GetBeforeDeleteHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXBeforeDeleteHandler<T>> GetBeforeDeleteHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
-
             lock (_lock)
             {
                 if (!_beforeDelete.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXBeforeDelete<T>>();
+                    return Enumerable.Empty<IDXBeforeDeleteHandler<T>>();
 
                 return list
-                    .OfType<IDXBeforeDelete<T>>()
+                    .OfType<IDXBeforeDeleteHandler<T>>()
                     .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
                     .ThenBy(h => h.GetType().FullName)
                     .ToArray();
             }
         }
 
-        public IEnumerable<IDXAfterDelete<T>> GetAfterDeleteHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXAfterDeleteHandler<T>> GetAfterDeleteHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
-
             lock (_lock)
             {
                 if (!_afterDelete.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXAfterDelete<T>>();
+                    return Enumerable.Empty<IDXAfterDeleteHandler<T>>();
 
                 return list
-                    .OfType<IDXAfterDelete<T>>()
+                    .OfType<IDXAfterDeleteHandler<T>>()
                     .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
                     .ThenBy(h => h.GetType().FullName)
                     .ToArray();
             }
         }
     }
+
 }

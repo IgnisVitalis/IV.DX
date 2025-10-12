@@ -37,21 +37,21 @@ namespace IV.DX.Hosting
                 {
                     var closedIface = openInterface.MakeGenericType(unitType);
 
-                    if (openInterface == typeof(IDXBeforeInsert<>))
+                    if (openInterface == typeof(IDXBeforeInsertHandler<>))
                         CallRegister(insertProv, nameof(insertProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXAfterInsert<>))
+                    else if (openInterface == typeof(IDXAfterInsertHandler<>))
                         CallRegister(insertProv, nameof(insertProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXBeforeUpdate<>))
+                    else if (openInterface == typeof(IDXBeforeUpdateHandler<>))
                         CallRegister(updateProv, nameof(updateProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXAfterUpdate<>))
+                    else if (openInterface == typeof(IDXAfterUpdateHandler<>))
                         CallRegister(updateProv, nameof(updateProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXBeforeDelete<>))
+                    else if (openInterface == typeof(IDXBeforeDeleteHandler<>))
                         CallRegister(deleteProv, nameof(deleteProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXAfterDelete<>))
+                    else if (openInterface == typeof(IDXAfterDeleteHandler<>))
                         CallRegister(deleteProv, nameof(deleteProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXBeforeGet<>))
+                    else if (openInterface == typeof(IDXBeforeGetHandler<>))
                         CallRegister(getProv, nameof(getProv.Register), closedIface, handler);
-                    else if (openInterface == typeof(IDXAfterGet<>))
+                    else if (openInterface == typeof(IDXAfterGetHadnler<>))
                         CallRegister(getProv, nameof(getProv.Register), closedIface, handler);
                 }
             }

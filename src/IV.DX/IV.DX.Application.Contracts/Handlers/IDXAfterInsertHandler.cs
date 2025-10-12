@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Contracts.Handlers
 {
-    public interface IDXAfterInsert<T> : IDXAfterOrdered where T : DXUnit
+    public interface IDXAfterInsertHandler<T> : IDXAfterOrdered where T : DXUnit
     {
         Task<DXResult> AfterInsertAsync(T dxUnit, IDXHandlerContext ctx, CancellationToken ct);
     }

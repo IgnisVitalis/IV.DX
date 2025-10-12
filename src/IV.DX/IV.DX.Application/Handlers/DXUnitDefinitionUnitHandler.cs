@@ -9,9 +9,9 @@ namespace IV.DX.Application.Handlers
 {
     internal class DXUnitDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
         DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
-        IDXBeforeInsert<DXUnitDefinitionUnit>,
-        IDXBeforeUpdate<DXUnitDefinitionUnit>,
-        IDXBeforeDelete<DXUnitDefinitionUnit>
+        IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
+        IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
+        IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler
     {
         public int BeforeOrder => 1;
 

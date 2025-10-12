@@ -5,10 +5,10 @@ namespace IV.DX.Application.Contracts.Pipeline
 {
     public interface IDXUnitDeleteHandlerProvider
     {   
-        IEnumerable<IDXBeforeDelete<T>> GetBeforeDeleteHandlers<T>() where T : DXUnit;
-        IEnumerable<IDXAfterDelete<T>> GetAfterDeleteHandlers<T>() where T : DXUnit;
-        void Register<T>(IDXBeforeDelete<T> handler) where T : DXUnit;
-        void Register<T>(IDXAfterDelete<T> handler) where T : DXUnit;
+        IEnumerable<IDXBeforeDeleteHandler<T>> GetBeforeDeleteHandlers<T>() where T : DXUnit;
+        IEnumerable<IDXAfterDeleteHandler<T>> GetAfterDeleteHandlers<T>() where T : DXUnit;
+        void Register<T>(IDXBeforeDeleteHandler<T> handler) where T : DXUnit;
+        void Register<T>(IDXAfterDeleteHandler<T> handler) where T : DXUnit;
         bool TryResolveType(string typeName, out Type type);
     }
 }

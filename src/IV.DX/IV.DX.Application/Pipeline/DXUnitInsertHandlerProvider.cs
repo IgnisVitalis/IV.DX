@@ -8,10 +8,11 @@ namespace IV.DX.Application.Pipeline
 {
     internal sealed class DXUnitInsertHandlerProvider : IDXUnitInsertHandlerProvider
     {
-        private static readonly Dictionary<string, Type> _typesByName = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Type> _typesByName =
+            new(StringComparer.OrdinalIgnoreCase);
 
         private readonly Dictionary<Type, List<object>> _beforeInsert = new();
-        private readonly Dictionary<Type, List<object>> _afterInsert = new();     
+        private readonly Dictionary<Type, List<object>> _afterInsert = new();
 
         private readonly object _lock = new();
 
@@ -39,68 +40,93 @@ namespace IV.DX.Application.Pipeline
             _typesByName.TryAdd(alias, key);
             _typesByName.TryAdd(key.Name, key);
             if (key.FullName is not null) _typesByName.TryAdd(key.FullName, key);
-        }       
+        }
 
-        public void Register<T>(IDXBeforeInsert<T> handler) where T : DXUnit
+        public bool TryResolveType(string typeName, out Type type)
+            => _typesByName.TryGetValue(typeName, out type!);
+        public void Register<T>(IDXBeforeInsertHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
             lock (_lock)
             {
                 if (!_beforeInsert.TryGetValue(key, out var list))
                     _beforeInsert[key] = list = new List<object>();
-                list.Add(handler);            
-            }
 
+                var incomingIsUnique = handler is IDXUniqueBeforeInsertHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueBeforeInsertHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"BeforeInsert handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"BeforeInsert for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
+                list.Add(handler);
+            }
             EnsureAliases(key);
         }
 
-        public void Register<T>(IDXAfterInsert<T> handler) where T : DXUnit
+        public void Register<T>(IDXAfterInsertHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
-
             lock (_lock)
             {
                 if (!_afterInsert.TryGetValue(key, out var list))
                     _afterInsert[key] = list = new List<object>();
+
+                var incomingIsUnique = handler is IDXUniqueAfterInsertHandler;
+                var existsUnique = list.Any(h => h is IDXUniqueAfterInsertHandler);
+
+                if (incomingIsUnique && list.Count > 0)
+                    throw new InvalidOperationException(
+                        $"AfterInsert handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
+
+                if (!incomingIsUnique && existsUnique)
+                    throw new InvalidOperationException(
+                        $"AfterInsert for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handler.GetType().Name}'.");
+
                 list.Add(handler);
             }
-
             EnsureAliases(key);
         }
 
-        public IEnumerable<IDXBeforeInsert<T>> GetBeforeInsertHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXBeforeInsertHandler<T>> GetBeforeInsertHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
                 if (!_beforeInsert.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXBeforeInsert<T>>();
+                    return Enumerable.Empty<IDXBeforeInsertHandler<T>>();
 
-                return list.OfType<IDXBeforeInsert<T>>()
+                return list.OfType<IDXBeforeInsertHandler<T>>()
                            .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
                            .ThenBy(h => h.GetType().FullName)
                            .ToArray();
             }
         }
 
-        public IEnumerable<IDXAfterInsert<T>> GetAfterInsertHandlers<T>() where T : DXUnit
+        public IEnumerable<IDXAfterInsertHandler<T>> GetAfterInsertHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
 
             lock (_lock)
             {
                 if (!_afterInsert.TryGetValue(key, out var list))
-                    return Enumerable.Empty<IDXAfterInsert<T>>();
+                    return Enumerable.Empty<IDXAfterInsertHandler<T>>();
 
-                return list.OfType<IDXAfterInsert<T>>()
+                return list.OfType<IDXAfterInsertHandler<T>>()
                            .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
                            .ThenBy(h => h.GetType().FullName)
                            .ToArray();
             }
         }
-
-        public bool TryResolveType(string typeName, out Type type)
-            => _typesByName.TryGetValue(typeName, out type!);
     }
+
 }

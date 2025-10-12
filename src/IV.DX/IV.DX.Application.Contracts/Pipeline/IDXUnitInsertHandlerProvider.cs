@@ -5,10 +5,10 @@ namespace IV.DX.Application.Contracts.Pipeline
 {
     public interface IDXUnitInsertHandlerProvider
     {
-        IEnumerable<IDXBeforeInsert<T>> GetBeforeInsertHandlers<T>() where T : DXUnit;
-        IEnumerable<IDXAfterInsert<T>> GetAfterInsertHandlers<T>() where T : DXUnit;
-        void Register<T>(IDXBeforeInsert<T> handler) where T : DXUnit;
-        void Register<T>(IDXAfterInsert<T> handler) where T : DXUnit;
+        IEnumerable<IDXBeforeInsertHandler<T>> GetBeforeInsertHandlers<T>() where T : DXUnit;
+        IEnumerable<IDXAfterInsertHandler<T>> GetAfterInsertHandlers<T>() where T : DXUnit;
+        void Register<T>(IDXBeforeInsertHandler<T> handler) where T : DXUnit;
+        void Register<T>(IDXAfterInsertHandler<T> handler) where T : DXUnit;
         bool TryResolveType(string typeName, out Type type);
     }
 }

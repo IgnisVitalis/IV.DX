@@ -7,11 +7,11 @@ namespace IV.DX.Application.Pipeline
     {
         private static readonly Type[] _handlerGenericInterfaces =
         {
-            typeof(IDXBeforeInsert<>), typeof(IDXAfterInsert<>),
-            typeof(IDXBeforeUpdate<>), typeof(IDXAfterUpdate<>),
-            typeof(IDXBeforeDelete<>), typeof(IDXAfterDelete<>),
-            typeof(IDXBeforeGet<>),    typeof(IDXAfterGet<>),
-            typeof(IDXIsItemExisting<>)
+            typeof(IDXBeforeInsertHandler<>), typeof(IDXAfterInsertHandler<>),
+            typeof(IDXBeforeUpdateHandler<>), typeof(IDXAfterUpdateHandler<>),
+            typeof(IDXBeforeDeleteHandler<>), typeof(IDXAfterDeleteHandler<>),
+            typeof(IDXBeforeGetHandler<>),    typeof(IDXAfterGetHadnler<>),
+            typeof(IDXIsItemExistingHandler<>)
         };
 
         public static IReadOnlyList<Type> FindHandlerTypes(params Assembly[] assemblies)

@@ -5,12 +5,12 @@ namespace IV.DX.Application.Contracts.Pipeline
 {
     public interface IDXUnitGetHandlerProvider
     {
-        IEnumerable<IDXIsItemExisting<T>> GetIsItemExistingHandlers<T>() where T : DXUnit;
-        IEnumerable<IDXBeforeGet<T>> GetBeforeGetHandlers<T>() where T : DXUnit;
-        IEnumerable<IDXAfterGet<T>> GetAfterGetHandlers<T>() where T : DXUnit;
-        void Register<T>(IDXBeforeGet<T> handler) where T : DXUnit;
-        void Register<T>(IDXAfterGet<T> handler) where T : DXUnit;
-        void Register<T>(IDXIsItemExisting<T> handler) where T : DXUnit;
+        IEnumerable<IDXIsItemExistingHandler<T>> GetIsItemExistingHandlers<T>() where T : DXUnit;
+        IEnumerable<IDXBeforeGetHandler<T>> GetBeforeGetHandlers<T>() where T : DXUnit;
+        IEnumerable<IDXAfterGetHadnler<T>> GetAfterGetHandlers<T>() where T : DXUnit;
+        void Register<T>(IDXBeforeGetHandler<T> handler) where T : DXUnit;
+        void Register<T>(IDXAfterGetHadnler<T> handler) where T : DXUnit;
+        void Register<T>(IDXIsItemExistingHandler<T> handler) where T : DXUnit;
         bool TryResolveType(string typeName, out Type type);
     }
 }
