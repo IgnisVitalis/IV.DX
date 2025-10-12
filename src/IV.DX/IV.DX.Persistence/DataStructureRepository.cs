@@ -2,7 +2,6 @@
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
-using IV.DX.Persistence.CoreData;
 using System.Diagnostics.CodeAnalysis;
 
 namespace IV.DX.Persistence
@@ -229,7 +228,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
         {
             if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
@@ -245,7 +244,7 @@ namespace IV.DX.Persistence
             return relatedBlocks;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
         {
             if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
@@ -289,7 +288,7 @@ namespace IV.DX.Persistence
             }
         }
 
-        public DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
+        public DXRelationDefinitionUnit GetDXRelationDefinition(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
         {
             var existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
                 x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
@@ -316,12 +315,12 @@ namespace IV.DX.Persistence
             if (ids == null)
                 return null;
 
-            var result = ids.Select(x => this.GetBlock(x)).Where(x => x != null).ToList();
+            var result = ids.Select(x => this.GetDXElementDefinition(x)).Where(x => x != null).ToList();
 
             return result;
         }
 
-        public DXElementDefinitionUnit GetBlock(Guid id)
+        public DXElementDefinitionUnit GetDXElementDefinition(Guid id)
         {
             var existingBlock = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
 
@@ -335,17 +334,17 @@ namespace IV.DX.Persistence
             return existingBlock;
         }
 
-        public IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids)
+        public IEnumerable<DXEnumDefinitionUnit> GetDXEnumDefinitions(IEnumerable<Guid> ids)
         {
             if (ids == null)
                 return null;
 
-            var result = ids.Select(x => this.GetEnum(x)).Where(x => x != null).ToList();
+            var result = ids.Select(x => this.GetDXEnumDefinition(x)).Where(x => x != null).ToList();
 
             return result;
         }
 
-        public DXEnumDefinitionUnit GetEnum(Guid id)
+        public DXEnumDefinitionUnit GetDXEnumDefinition(Guid id)
         {
             var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
 

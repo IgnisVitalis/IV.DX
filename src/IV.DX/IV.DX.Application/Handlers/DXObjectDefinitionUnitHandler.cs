@@ -67,11 +67,11 @@ namespace IV.DX.Application.Handlers
         {
             var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
-            var announcedEnumInfos = dataStructureRepo.GetEnums(announcedIds);
+            var announcedEnumInfos = dataStructureRepo.GetDXEnumDefinitions(announcedIds);
 
             var deletedIds = obj.DXColumnDefinitionElement.Deleted.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
-            var deletedEnumInfos = dataStructureRepo.GetEnums(deletedIds);
+            var deletedEnumInfos = dataStructureRepo.GetDXEnumDefinitions(deletedIds);
 
             foreach (var announcedEnumInfo in announcedEnumInfos)
             {

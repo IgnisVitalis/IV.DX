@@ -47,7 +47,7 @@ namespace IV.DX.Persistence
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    var relatedBlocks = this.GetRelatedBlocks(dxUnitInfo);
+                    var relatedBlocks = this.GetRelatedDXElementDefinitions(dxUnitInfo);
 
                     if (relatedBlocks != null)
                     {
@@ -282,28 +282,28 @@ namespace IV.DX.Persistence
 
             foreach (var dxUnit in entities)
             {
-                var singleMandatoryBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
+                var singleMandatoryBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
 
                 if (singleMandatoryBlocksTemp != null)
                 {
                     singleMandatoryBlocks.AddRange(singleMandatoryBlocksTemp);
                 }
 
-                var singleOptionalBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
+                var singleOptionalBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
 
                 if (singleOptionalBlocksTemp != null)
                 {
                     singleOptionalBlocks.AddRange(singleOptionalBlocksTemp);
                 }
 
-                var multiMandatoryBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
+                var multiMandatoryBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
 
                 if (multiMandatoryBlocksTemp != null)
                 {
                     multiMandatoryBlocks.AddRange(multiMandatoryBlocksTemp);
                 }
 
-                var multiOptionalBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
+                var multiOptionalBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
 
                 if (multiOptionalBlocksTemp != null)
                 {
@@ -567,10 +567,10 @@ namespace IV.DX.Persistence
                 {
                     this.InsertOrUpdateESQLOwnItemToDataSet(dxModel, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
-                    var relatedBlocksSM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedBlocksSO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
-                    var relatedBlocksMM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedBlocksMO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    var relatedBlocksSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedBlocksSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    var relatedBlocksMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedBlocksMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var objectID = dxModel.OwnSingleItem.Item.ID.Value;
                     var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;

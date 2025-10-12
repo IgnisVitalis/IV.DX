@@ -17,11 +17,11 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         DXUnitDefinitionUnit GetDXUnitDefinition(string name);
         DXEnumDefinitionUnit GetDXEnumDefinition(string enumName);
         IEnumerable<DXElementDefinitionUnit> GetDXElementDefinitions(IEnumerable<Guid> ids);
-        DXElementDefinitionUnit GetBlock(Guid id);
-        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType);
-        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit);
-        DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight);
-        IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids);
-        DXEnumDefinitionUnit GetEnum(Guid id);
+        DXElementDefinitionUnit GetDXElementDefinition(Guid id);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit);
+        DXRelationDefinitionUnit GetDXRelationDefinition(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight);
+        IEnumerable<DXEnumDefinitionUnit> GetDXEnumDefinitions(IEnumerable<Guid> ids);
+        DXEnumDefinitionUnit GetDXEnumDefinition(Guid id);
     }
 }

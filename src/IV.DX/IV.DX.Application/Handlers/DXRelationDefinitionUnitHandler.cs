@@ -18,7 +18,7 @@ namespace IV.DX.Application.Handlers
 
         public Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            var existingRelation = dataStructureRepo.GetRelation(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
+            var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation != null)
             {
@@ -73,7 +73,7 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
-            var existingRelation = dataStructureRepo.GetRelation(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
+            var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation == null)
                 return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
