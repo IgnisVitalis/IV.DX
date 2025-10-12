@@ -15,11 +15,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
 
-        public QueryContainer ConvertToQueryContainer(string entityType, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public QueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            OrientedTree expressionTree = OrientedTree.CreateInstance(entityType);
+            OrientedTree expressionTree = OrientedTree.CreateInstance(dxUnitType);
 
-            expressionTree.Load(esqlWhereExpression);
+            expressionTree.Load(dxsqlWhereExpression);
 
             expressionTree.LoadAdditionalInfosToNodes(relationInfos);
 
@@ -137,12 +137,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return new NpgsqlDataAdapter(query, conn);
         }
 
-        public string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            if (esqlWhereExpression == default)
+            if (dxsqlWhereExpression == default)
                 return GetSQLQueryToSelectIDFromTable(typeName);
 
-            var result = this.ConvertToQueryContainer(typeName, esqlWhereExpression, relationInfos);
+            var result = this.ConvertToQueryContainer(typeName, dxsqlWhereExpression, relationInfos);
 
             return result.Query;
         }

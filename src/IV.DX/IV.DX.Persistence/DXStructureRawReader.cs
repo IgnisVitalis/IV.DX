@@ -28,14 +28,14 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var entityModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            var dxUnitModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
 
-            var entityInfos = entityModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
+            var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
-            var entityInfosWithoutCore = entityInfos.Except(DXCoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var dxUnitInfosWithoutCore = dxUnitInfos.Except(DXCoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
 
-            return DXCoreDataStructureRepository.CoreEntityInfos.Concat(entityInfosWithoutCore).ToList();
+            return DXCoreDataStructureRepository.CoreEntityInfos.Concat(dxUnitInfosWithoutCore).ToList();
         }
 
         public IEnumerable<DXEnumDefinitionUnit> LoadEnumInfosRaw()

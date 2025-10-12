@@ -17,24 +17,24 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
         }
 
-        public string GetQuery(string typeName, string esqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            if (string.IsNullOrEmpty(esqlWhereExpression))
+            if (string.IsNullOrEmpty(dxsqlWhereExpression))
                 return GetSQLQueryToSelectIDFromTable(typeName);
 
-            var result = this.ConvertToQueryContainer(typeName, esqlWhereExpression, relationInfos);
+            var result = this.ConvertToQueryContainer(typeName, dxsqlWhereExpression, relationInfos);
 
             return result.Query;
         }
 
         public QueryContainer ConvertToQueryContainer(
-           string entityType,
-           string esqlWhereExpression,
+           string dxUnitType,
+           string dxsqlWhereExpression,
            IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            OrientedTree expressionTree = OrientedTree.CreateInstance(entityType);
+            OrientedTree expressionTree = OrientedTree.CreateInstance(dxUnitType);
 
-            expressionTree.Load(esqlWhereExpression);
+            expressionTree.Load(dxsqlWhereExpression);
 
             expressionTree.LoadAdditionalInfosToNodes(relationInfos);
 

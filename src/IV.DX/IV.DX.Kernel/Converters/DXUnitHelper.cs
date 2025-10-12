@@ -30,16 +30,16 @@ namespace IV.DX.Kernel.Converters
         }
 
         #region Convert to JObject       
-        public static JObject ConvertToJObject(this DXUnit esqlObject)
+        public static JObject ConvertToJObject(this DXUnit dxUnit)
         {
-            var result = esqlObject.ConvertToESQLModel().ConvertToJObject();
+            var result = dxUnit.ConvertToESQLModel().ConvertToJObject();
 
             return result;
         }
 
-        public static string ConvertToString(this DXUnit esqlObject)
+        public static string ConvertToString(this DXUnit dxUnit)
         {
-            var jObject = esqlObject.ConvertToJObject();
+            var jObject = dxUnit.ConvertToJObject();
             var str = jObject.ToString();
 
             return str;
@@ -47,40 +47,40 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Convert to ESQLModel
-        public static DXModel? ConvertToESQLModel(this DXUnit esqlObject)
+        public static DXModel? ConvertToESQLModel(this DXUnit dxUnit)
         {
-            if (esqlObject == null)
+            if (dxUnit == null)
                 return null;
 
             var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
-                   (esqlObject.GetType());
+                   (dxUnit.GetType());
 
             var ownItem = new DXMainItem(objectInfo)
             {
                 Item = new DXItem()
                 {
-                    ID = esqlObject.ID,
-                    ObjectID = esqlObject.ID,
-                    Content = GetContent(esqlObject)
+                    ID = dxUnit.ID,
+                    ObjectID = dxUnit.ID,
+                    Content = GetContent(dxUnit)
                 }
             };
 
             DXModel model = new DXModel(ownItem)
             {
-                SingleItems = GetESQLSingleItems(esqlObject),
-                MultiItems = GetESQLMutliItems(esqlObject)
+                SingleItems = GetESQLSingleItems(dxUnit),
+                MultiItems = GetESQLMutliItems(dxUnit)
             };
 
             return model;
         }
 
-        private static IEnumerable<DXSingleItem> GetESQLSingleItems(DXUnit esqlObject)
+        private static IEnumerable<DXSingleItem> GetESQLSingleItems(DXUnit dxUnit)
         {
-            var singleItemInfos = AttributeReader.GetSingleItemInfos(esqlObject);
+            var singleItemInfos = AttributeReader.GetSingleItemInfos(dxUnit);
 
             var result = singleItemInfos.Select(x =>
             {
-                var singleItem = x.GetValue(esqlObject) as DXElement;
+                var singleItem = x.GetValue(dxUnit) as DXElement;
 
                 DXSingleItem esqlSingleItem = new DXSingleItem()
                 {
@@ -88,7 +88,7 @@ namespace IV.DX.Kernel.Converters
                     Item = new DXItem()
                     {
                         ID = singleItem?.ID,
-                        ObjectID = esqlObject.ID,
+                        ObjectID = dxUnit.ID,
                         Content = GetContent(singleItem),
                     },
                     Name = x.Name
@@ -118,14 +118,14 @@ namespace IV.DX.Kernel.Converters
             return singleItem;
         }
 
-        private static IEnumerable<DXMultiItem> GetESQLMutliItems(DXUnit esqlObject)
+        private static IEnumerable<DXMultiItem> GetESQLMutliItems(DXUnit dxUnit)
         {
-            var multiItemsInfos = AttributeReader.GetMultiItemInfos(esqlObject);
+            var multiItemsInfos = AttributeReader.GetMultiItemInfos(dxUnit);
 
             var result = multiItemsInfos.Select(x =>
             {
                 var multiItemType = x.PropertyType;
-                var multiItemValue = x.GetValue(esqlObject);
+                var multiItemValue = x.GetValue(dxUnit);
 
                 MultiElementsMode mode = MultiElementsMode.Full;
 
@@ -152,7 +152,7 @@ namespace IV.DX.Kernel.Converters
                             var esqlItem = new DXItem()
                             {
                                 ID = y.ID,
-                                ObjectID = esqlObject.ID,
+                                ObjectID = dxUnit.ID,
                                 Content = content
                             };
 
@@ -175,7 +175,7 @@ namespace IV.DX.Kernel.Converters
                             var esqlItem = new DXItem()
                             {
                                 ID = y.ID,
-                                ObjectID = esqlObject.ID,
+                                ObjectID = dxUnit.ID,
                                 Content = content
                             };
 

@@ -29,7 +29,7 @@ namespace IV.DX.Contracts.UnitTests
         }
 
         [Fact]
-        public void GetESQLBlockDefinitionAttribute_FromDXUnitDefinitionMainElement_AttributeWithCorrectValues()
+        public void GetDXElementDefinitionAttribute_FromDXUnitDefinitionMainElement_AttributeWithCorrectValues()
         {
             // Init
 

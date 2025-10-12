@@ -201,32 +201,32 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
         private bool ProcessNodeAsEntityNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var entityNode = node as DXUnitNode;
+            var dxUnitNode = node as DXUnitNode;
 
-            if (entityNode == null)
+            if (dxUnitNode == null)
             {
                 return false;
             }
 
             DXRelationDefinitionUnit relationInfo = null;
 
-            var motherNodeAsEntityNode = entityNode.Mother as DXUnitNode;
-            var motherNodeAsCoreNode = entityNode.Mother as CoreNode;
+            var motherNodeAsEntityNode = dxUnitNode.Mother as DXUnitNode;
+            var motherNodeAsCoreNode = dxUnitNode.Mother as CoreNode;
 
             if (motherNodeAsEntityNode != null)
             {
                 relationInfo = relationInfos.SingleOrDefault(x =>
                     x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsEntityNode.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight
-                    && x.DXRelationDefinitionMainElement.RelationNameRight == entityNode.RelationName);
+                    && x.DXRelationDefinitionMainElement.RelationNameRight == dxUnitNode.RelationName);
             }
             else if (motherNodeAsCoreNode != null)
             {
                 relationInfo = relationInfos.SingleOrDefault(x =>
                     x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsCoreNode.Value
-                    && x.DXRelationDefinitionMainElement.RelationNameRight == entityNode.RelationName);
+                    && x.DXRelationDefinitionMainElement.RelationNameRight == dxUnitNode.RelationName);
             }
 
-            entityNode.RelationInfo = relationInfo;
+            dxUnitNode.RelationInfo = relationInfo;
 
             if (relationInfo == null)
             {

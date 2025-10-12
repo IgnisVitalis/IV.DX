@@ -56,12 +56,12 @@ namespace IV.DX.Kernel.Helpers
             return attributes;
         }
 
-        public static IEnumerable<PropertyInfo> GetSingleItemInfos(DXUnit esqlObject)
+        public static IEnumerable<PropertyInfo> GetSingleItemInfos(DXUnit dxUnit)
         {
-            if (esqlObject == null)
+            if (dxUnit == null)
                 return null;
 
-            return GetSingleItemInfos(esqlObject.GetType()).Where(x => x.GetValue(esqlObject) != null);
+            return GetSingleItemInfos(dxUnit.GetType()).Where(x => x.GetValue(dxUnit) != null);
         }
 
         public static IEnumerable<PropertyInfo> GetSingleItemInfos(Type type)
@@ -73,12 +73,12 @@ namespace IV.DX.Kernel.Helpers
             return singleFragmentProperties;
         }
 
-        public static IEnumerable<PropertyInfo> GetMultiItemInfos(DXUnit esqlObject)
+        public static IEnumerable<PropertyInfo> GetMultiItemInfos(DXUnit dxUnit)
         {
-            if (esqlObject == null)
+            if (dxUnit == null)
                 return null;
 
-            return GetMultiItemInfos(esqlObject.GetType()).Where(x => x.GetValue(esqlObject) != null);
+            return GetMultiItemInfos(dxUnit.GetType()).Where(x => x.GetValue(dxUnit) != null);
         }
 
         public static IEnumerable<PropertyInfo> GetMultiItemInfos(Type type)
@@ -113,7 +113,7 @@ namespace IV.DX.Kernel.Helpers
             return dataDefinitionNameForFragment.ObjectName;
         }
 
-        public static string GetESQLBlockTypeName(Type type)
+        public static string GetDXBlockTypeName(Type type)
         {
             var objectType = FindElementType(type);
 
@@ -125,9 +125,9 @@ namespace IV.DX.Kernel.Helpers
             return attribute.BlockName;
         }
 
-        public static string GetTypeName(this DXUnit esqlObject)
+        public static string GetTypeName(this DXUnit dxUnit)
         {
-            return GetESQLObjectTypeName(esqlObject.GetType());
+            return GetESQLObjectTypeName(dxUnit.GetType());
         }
 
 

@@ -15,13 +15,13 @@ namespace IV.DX.Persistence
             this._coreRepo = coreRepo;
         }
 
-        public bool Delete(DXUnit esqlObject)
+        public bool Delete(DXUnit dxUnit)
         {
-            ArgumentNullException.ThrowIfNull(esqlObject);
+            ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlTypeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
+            var esqlTypeName = AttributeReader.GetESQLObjectTypeName(dxUnit.GetType());
 
-            return this._coreRepo.Delete(esqlTypeName, esqlObject.ID);
+            return this._coreRepo.Delete(esqlTypeName, dxUnit.ID);
         }
 
         public T GetItem<T>(Guid id) where T : DXUnit
@@ -45,43 +45,43 @@ namespace IV.DX.Persistence
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetItems<T>(string esqlWhereExpression) where T : DXUnit
+        public IEnumerable<T> GetItems<T>(string dxsqlWhereExpression) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), esqlWhereExpression, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public Guid Insert(DXUnit esqlObject)
+        public Guid Insert(DXUnit dxUnit)
         {
-            ArgumentNullException.ThrowIfNull(esqlObject);
+            ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlModel = esqlObject.ConvertToESQLModel();
+            var esqlModel = dxUnit.ConvertToESQLModel();
 
             return this._coreRepo.Insert(esqlModel);
         }
 
-        public Guid InsertOrUpdate(DXUnit esqlObject)
+        public Guid InsertOrUpdate(DXUnit dxUnit)
         {
-            var definition = DXModelDefinitionHelper.GetESQLModelDefinition(esqlObject.GetType());
+            var definition = DXModelDefinitionHelper.GetESQLModelDefinition(dxUnit.GetType());
 
-            var existingEntity = this._coreRepo.GetItem(definition, esqlObject.ID, DXLoadingType.Base);
+            var existingEntity = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
 
             if (existingEntity == null)
             {
-                return this.Insert(esqlObject);
+                return this.Insert(dxUnit);
             }
             else
             {
-                return this.Update(esqlObject);
+                return this.Update(dxUnit);
             }
         }
 
-        public Guid Update(DXUnit esqlObject)
+        public Guid Update(DXUnit dxUnit)
         {
-            ArgumentNullException.ThrowIfNull(esqlObject);
+            ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlModel = esqlObject.ConvertToESQLModel();
+            var esqlModel = dxUnit.ConvertToESQLModel();
 
             return this._coreRepo.Update(esqlModel);
         }
@@ -110,40 +110,40 @@ namespace IV.DX.Persistence
                 relationItem.DXRelationItemMainElement.ObjectIDRight);
         }
 
-        public Guid InsertBlock(string esqlModelType, DXElement esqlBlock)
+        public Guid InsertBlock(string esqlModelType, DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
-            ArgumentNullException.ThrowIfNull(esqlBlock);
+            ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = esqlBlock.ConvertToSingleItem();
+            var singleBlock = dxElement.ConvertToSingleItem();
 
             return this._coreRepo.InsertSingleBlock(esqlModelType, singleBlock);
         }
 
-        public Guid UpdateBlock(string esqlModelType, DXElement esqlBlock)
+        public Guid UpdateBlock(string esqlModelType, DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
-            ArgumentNullException.ThrowIfNull(esqlBlock);
+            ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = esqlBlock.ConvertToSingleItem();
+            var singleBlock = dxElement.ConvertToSingleItem();
 
             return this._coreRepo.UpdateSingleBlock(esqlModelType, singleBlock);
         }
 
-        public bool DeleteBlock(DXElement esqlBlock)
+        public bool DeleteBlock(DXElement dxElement)
         {
-            ArgumentNullException.ThrowIfNull(esqlBlock);
+            ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = esqlBlock.ConvertToSingleItem();
+            var singleBlock = dxElement.ConvertToSingleItem();
 
-            return this._coreRepo.DeleteSingleBlock(singleBlock.Name, esqlBlock.ID);
+            return this._coreRepo.DeleteSingleBlock(singleBlock.Name, dxElement.ID);
         }
 
         public T GetBlock<T>(Guid id) where T : DXElement
         {
-            var blockName = AttributeReader.GetESQLBlockTypeName(typeof(T));
+            var blockName = AttributeReader.GetDXBlockTypeName(typeof(T));
 
-            var block = DXModelDefinitionHelper.GetESQLBlockDefinition(blockName, typeof(T));
+            var block = DXModelDefinitionHelper.GetDXElementDefinition(blockName, typeof(T));
 
             var result = this._coreRepo.GetSingleBlock(block, id);
 

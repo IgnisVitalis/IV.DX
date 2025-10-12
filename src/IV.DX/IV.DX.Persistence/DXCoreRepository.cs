@@ -39,27 +39,27 @@ namespace IV.DX.Persistence
 
             var mainEntityInfo = this.GetEntity(typeName);
 
-            var entityHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainEntityInfo);
+            var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainEntityInfo);
 
             return this.RunRequestInTransaction((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                foreach (var entityInfo in entityHierarchy)
+                foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    var relatedBlocks = this.GetRelatedBlocks(entityInfo);
+                    var relatedBlocks = this.GetRelatedBlocks(dxUnitInfo);
 
                     if (relatedBlocks != null)
                     {
                         // Delete related blocks
                         foreach (var relatedBlock in relatedBlocks)
                         {
-                            this.DeleteESQLBlocksFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                            this.DeleteDXBlocksFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                         }
                     }
 
-                    // Delete entity
-                    this.DeleteESQLSEntityFromDataSet(entityInfo.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                    // Delete dxUnit
+                    this.DeleteESQLSEntityFromDataSet(dxUnitInfo.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                 }
 
                 dataSet.AcceptChanges();
@@ -227,20 +227,20 @@ namespace IV.DX.Persistence
             return this.GetItems(modelDefinition, ids, DXLoadingType.Full);
         }
 
-        public IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression)
+        public IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression)
         {
             var modelDefinition = this.GetModelDefinition(typeName);
 
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItems(modelDefinition, esqlWhereExpression, DXLoadingType.Full);
+            return this.GetItems(modelDefinition, dxsqlWhereExpression, DXLoadingType.Full);
         }
 
         // TODO: need to check what kind of data is loaded. Because this method should load only IDs
-        public IEnumerable<Guid> GetItemIDs(string typeName, string? esqlWhereExpression = default)
+        public IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default)
         {
-            string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this._dxStructureCache.Relations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.Relations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -280,30 +280,30 @@ namespace IV.DX.Persistence
             List<DXElementDefinitionUnit> multiMandatoryBlocks = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> multiOptionalBlocks = new List<DXElementDefinitionUnit>();
 
-            foreach (var entity in entities)
+            foreach (var dxUnit in entities)
             {
-                var singleMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.SingleMandatory);
+                var singleMandatoryBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
 
                 if (singleMandatoryBlocksTemp != null)
                 {
                     singleMandatoryBlocks.AddRange(singleMandatoryBlocksTemp);
                 }
 
-                var singleOptionalBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.SingleOptional);
+                var singleOptionalBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
 
                 if (singleOptionalBlocksTemp != null)
                 {
                     singleOptionalBlocks.AddRange(singleOptionalBlocksTemp);
                 }
 
-                var multiMandatoryBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.MultiMandatory);
+                var multiMandatoryBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
 
                 if (multiMandatoryBlocksTemp != null)
                 {
                     multiMandatoryBlocks.AddRange(multiMandatoryBlocksTemp);
                 }
 
-                var multiOptionalBlocksTemp = this.GetRelatedBlocks(entity, DXElementInUnitTypeEnum.MultiOptional);
+                var multiOptionalBlocksTemp = this.GetRelatedBlocks(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
 
                 if (multiOptionalBlocksTemp != null)
                 {
@@ -326,10 +326,10 @@ namespace IV.DX.Persistence
             return GetItems(container, string.Empty, typeOfLoading);
         }
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition container, string esqlWhereExpression, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxsqlWhereExpression, DXLoadingType typeOfLoading)
         {
             string typeName = container.OwnSingleItem.Type;
-            string sqlQuery = this._queryHelper.GetQuery(typeName, esqlWhereExpression, this._dxStructureCache.Relations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.Relations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -537,9 +537,9 @@ namespace IV.DX.Persistence
 
             if (mainEntityInfo != null)
             {
-                var entityHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntityInfo);
+                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntityInfo);
 
-                this.ProcessESQLModelAsESQLEntity(typeName, model, entityHierarchy, processingType);
+                this.ProcessESQLModelAsESQLEntity(typeName, model, dxUnitHierarchy, processingType);
             }
 
             var enumInfo = this.GetEnum(typeName);
@@ -557,23 +557,23 @@ namespace IV.DX.Persistence
             return model.OwnSingleItem.Item.ID.Value;
         }
 
-        private void ProcessESQLModelAsESQLEntity(string typeName, DXModel model, IEnumerable<DXUnitDefinitionUnit> entityHierarchy, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEntity(string typeName, DXModel model, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                foreach (var entityInfo in entityHierarchy)
+                foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    this.InsertOrUpdateESQLOwnItemToDataSet(model, entityInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                    this.InsertOrUpdateESQLOwnItemToDataSet(model, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
-                    var relatedBlocksSM = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedBlocksSO = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.SingleOptional);
-                    var relatedBlocksMM = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedBlocksMO = this.GetRelatedBlocks(entityInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    var relatedBlocksSM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedBlocksSO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    var relatedBlocksMM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedBlocksMO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var objectID = model.OwnSingleItem.Item.ID.Value;
-                    var entityType = entityInfo.DXUnitDefinitionMainElement.Name;
+                    var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
                     // Process ESQL single items
                     if (relatedBlocksSM != null)
                     {
@@ -585,7 +585,7 @@ namespace IV.DX.Persistence
                             if (block == null)
                                 continue;
 
-                            this.InsertOrUpdateESQLSingleItemToDataSet(block, entityType, objectID, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLSingleItemToDataSet(block, dxUnitType, objectID, dataSet, conn, processingType);
                         }
                     }
 
@@ -599,7 +599,7 @@ namespace IV.DX.Persistence
                             if (block == null)
                                 continue;
 
-                            this.InsertOrUpdateESQLSingleItemToDataSet(block, entityType, objectID, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLSingleItemToDataSet(block, dxUnitType, objectID, dataSet, conn, processingType);
                         }
                     }
 
@@ -608,7 +608,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var multiItem in relatedBlocksMM)
                         {
-                            this.InsertOrUpdateESQLMultiItemToDataSet(model, entityInfo, multiItem, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLMultiItemToDataSet(model, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
                     }
 
@@ -616,7 +616,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var multiItem in relatedBlocksMO)
                         {
-                            this.InsertOrUpdateESQLMultiItemToDataSet(model, entityInfo, multiItem, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLMultiItemToDataSet(model, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
                     }
                 }
@@ -627,13 +627,13 @@ namespace IV.DX.Persistence
             });
         }
 
-        private void ProcessESQLModelAsESQLEnum(string typeName, DXEnumDefinitionUnit entity, DXModel model, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEnum(string typeName, DXEnumDefinitionUnit dxUnit, DXModel model, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                this.InsertOrUpdateESQLOwnItemToDataSet(model, entity.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                this.InsertOrUpdateESQLOwnItemToDataSet(model, dxUnit.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
                 dataSet.AcceptChanges();
 
@@ -674,26 +674,26 @@ namespace IV.DX.Persistence
             return this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(derivedEntity).Reverse();
         }
 
-        private void DeleteESQLSEntityFromDataSet(string entityName, Guid id, DataSet dataSet, DbConnection conn)
+        private void DeleteESQLSEntityFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)
         {
-            var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, entityName,
+            var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
                 whereClause: this._queryHelper.GetWhereExpressionForID(id));
 
             var esqlModelBuilder = this._queryHelper.GetDbCommandBuilder(esqlModelAdapter);
 
             esqlModelBuilder.GetDeleteCommand();
 
-            DataTable dataTable = dataSet.Tables[entityName];
+            DataTable dataTable = dataSet.Tables[dxUnitName];
 
             foreach (DataRow row in dataTable.Rows)
             {
                 row.Delete();
             }
 
-            esqlModelAdapter.Update(dataSet, entityName);
+            esqlModelAdapter.Update(dataSet, dxUnitName);
         }
 
-        private void DeleteESQLBlocksFromDataSet(string blockName, Guid objectID, DataSet dataSet, DbConnection conn)
+        private void DeleteDXBlocksFromDataSet(string blockName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
             var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName, whereClause:
                 this._queryHelper.GetWhereExpressionForObjectID(objectID));
@@ -712,12 +712,12 @@ namespace IV.DX.Persistence
             esqlModelAdapter.Update(dataSet, blockName);
         }
 
-        private void InsertOrUpdateESQLOwnItemToDataSet(DXModel model, string entityType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateESQLOwnItemToDataSet(DXModel model, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
-            var entityName = entityType;
+            var dxUnitName = dxUnitType;
             var objectID = model.OwnSingleItem.Item.ID;
 
-            var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, entityName,
+            var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
                 whereClause: this._queryHelper.GetWhereExpressionForID(objectID.Value));
 
             var esqlModelBuilder = this._queryHelper.GetDbCommandBuilder(esqlModelAdapter);
@@ -735,26 +735,26 @@ namespace IV.DX.Persistence
                     return;
             }
 
-            DataTable dataTable = dataSet.Tables[entityName];
+            DataTable dataTable = dataSet.Tables[dxUnitName];
 
             if (dataTable.Rows.Count == 0)
             {
                 var row = dataTable.NewRow();
-                MapESQLItemToRow(model.OwnSingleItem.Item, row, entityName);
+                MapESQLItemToRow(model.OwnSingleItem.Item, row, dxUnitName);
                 dataTable.Rows.Add(row);
             }
             else
             {
                 var row = dataTable.Rows[0];
-                MapESQLItemToRow(model.OwnSingleItem.Item, row, entityName);
+                MapESQLItemToRow(model.OwnSingleItem.Item, row, dxUnitName);
             }
 
-            esqlModelAdapter.Update(dataSet, entityName);
+            esqlModelAdapter.Update(dataSet, dxUnitName);
         }
 
         private Guid InsertOrUpdateESQLSingleItemToDataSet(
             DXSingleItem block,
-            string entityType,
+            string dxUnitType,
             Guid objectID,
             DataSet dataSet,
             DbConnection conn,
@@ -789,13 +789,13 @@ namespace IV.DX.Persistence
             if (dataTable.Rows.Count == 0)
             {
                 var row = dataTable.NewRow();
-                MapESQLItemToRow(block.Item, row, entityType);
+                MapESQLItemToRow(block.Item, row, dxUnitType);
                 dataTable.Rows.Add(row);
             }
             else
             {
                 var row = dataTable.Rows[0];
-                MapESQLItemToRow(block.Item, row, entityType);
+                MapESQLItemToRow(block.Item, row, dxUnitType);
             }
 
             esqlModelAdapter.Update(dataSet, blockName);
@@ -803,11 +803,11 @@ namespace IV.DX.Persistence
             return block.Item.ID.Value;
         }
 
-        private void InsertOrUpdateESQLMultiItemToDataSet(DXModel model, DXUnitDefinitionUnit entityInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateESQLMultiItemToDataSet(DXModel model, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
             var blockName = blockInfo.DXUnitDefinitionMainElement.Name.Trim();
             var objectID = model.OwnSingleItem.Item.ID;
-            var entityType = entityInfo.DXUnitDefinitionMainElement.Name;
+            var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
 
             var block = model.MultiItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 

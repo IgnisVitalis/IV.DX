@@ -82,15 +82,15 @@ namespace IV.DX.Kernel.Converters
         {
             var asqlTypeName = AttributeReader.GetESQLObjectTypeName(type);
 
-            var ownItem = GetESQLBlockDefinition(asqlTypeName, type);
+            var ownItem = GetDXElementDefinition(asqlTypeName, type);
 
             DXModelDefinition result = new DXModelDefinition(ownItem);
 
             var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
             var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
 
-            var singleItemDefinitions = singleItemInfos.Select(x => GetESQLBlockDefinition(x.Name, x.PropertyType)).ToList();
-            var mutliItemDefinitions = multiItemInfos.Select(x => GetESQLBlockDefinition(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
+            var singleItemDefinitions = singleItemInfos.Select(x => GetDXElementDefinition(x.Name, x.PropertyType)).ToList();
+            var mutliItemDefinitions = multiItemInfos.Select(x => GetDXElementDefinition(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
 
             result.AppendToSingleItemDefinitions(singleItemDefinitions);
             result.AppendToMultiItemDefinitions(mutliItemDefinitions);
@@ -98,12 +98,12 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static DXElementDefinition GetESQLBlockDefinition(string type, Type esqlBlockType)
+        public static DXElementDefinition GetDXElementDefinition(string type, Type dxElementType)
         {
-            DXElementDefinition esqlBlockDefinition = new DXElementDefinition(type, type);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type);
             JObject jObject = new JObject();
 
-            var properties = esqlBlockType.GetProperties()
+            var properties = dxElementType.GetProperties()
                 .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null);
 
             foreach (var property in properties)
@@ -112,15 +112,15 @@ namespace IV.DX.Kernel.Converters
 
                 DXPropertyDefinition item = new DXPropertyDefinition(property.Name, attribute);
 
-                esqlBlockDefinition.AddPropertyDefinition(item);
+                dxElementDefinition.AddPropertyDefinition(item);
             }
 
-            return esqlBlockDefinition;
+            return dxElementDefinition;
         }
 
-        public static DXElementDefinition GetESQLBlockDefinition(DXEnumDefinitionUnit enumDesc)
+        public static DXElementDefinition GetDXElementDefinition(DXEnumDefinitionUnit enumDesc)
         {
-            DXElementDefinition esqlBlockDefinition = new DXElementDefinition(enumDesc.DXUnitDefinitionMainElement.Name, enumDesc.DXUnitDefinitionMainElement.Name);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXUnitDefinitionMainElement.Name, enumDesc.DXUnitDefinitionMainElement.Name);
 
             JObject jObject = new JObject();
 
@@ -128,17 +128,17 @@ namespace IV.DX.Kernel.Converters
             {
                 DXPropertyDefinition item = new DXPropertyDefinition(column.Name, new DXColumnAttribute(column.Name));
 
-                esqlBlockDefinition.AddPropertyDefinition(item);
+                dxElementDefinition.AddPropertyDefinition(item);
             }
 
-            if (esqlBlockDefinition.SingleOrDefault(x => x.ColumnDefinition.ESQLExpression == Constants.ID) == null)
+            if (dxElementDefinition.SingleOrDefault(x => x.ColumnDefinition.ESQLExpression == Constants.ID) == null)
             {
                 DXPropertyDefinition item = new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID));
 
-                esqlBlockDefinition.AddPropertyDefinition(item);
+                dxElementDefinition.AddPropertyDefinition(item);
             }
 
-            return esqlBlockDefinition;
+            return dxElementDefinition;
         }
     }
 }

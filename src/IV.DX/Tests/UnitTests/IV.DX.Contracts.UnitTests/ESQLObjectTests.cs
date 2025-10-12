@@ -10,10 +10,10 @@ namespace IV.DX.Contracts.UnitTests
         public void ConvertToESQLModel_UsingDerivedEntity_CorrectESQLModel()
         {
             // Init
-            DerivedUnit1 entity = new DerivedUnit1();
+            DerivedUnit1 dxUnit = new DerivedUnit1();
 
             // Action
-            var esqlModel = entity.ConvertToESQLModel();
+            var esqlModel = dxUnit.ConvertToESQLModel();
 
             // Checking result
             Assert.Equal(1, 1);

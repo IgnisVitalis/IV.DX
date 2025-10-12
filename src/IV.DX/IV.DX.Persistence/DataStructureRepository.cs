@@ -18,18 +18,18 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void CreateDataStructure(DXRelationDefinitionUnit entity)
+        public void CreateDataStructure(DXRelationDefinitionUnit dxUnit)
         {
-            var sqlQuery = this.GetSQLQueryToCreateRelation(entity);
+            var sqlQuery = this.GetSQLQueryToCreateRelation(dxUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DXRelationDefinitionUnit entity)
+        public void DropDataStructure(DXRelationDefinitionUnit dxUnit)
         {
-            var sqlQuery = this.GetSQLQueryToDeleteRelation(entity);
+            var sqlQuery = this.GetSQLQueryToDeleteRelation(dxUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
@@ -159,13 +159,13 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        private string GetSQLQueryToDeleteRelationManyToMany(DXRelationDefinitionUnit entity)
+        private string GetSQLQueryToDeleteRelationManyToMany(DXRelationDefinitionUnit dxUnit)
         {
             string relationTableName;
 
-            if (string.IsNullOrEmpty(entity.DXRelationDefinitionMainElement.RelationTable))
+            if (string.IsNullOrEmpty(dxUnit.DXRelationDefinitionMainElement.RelationTable))
             {
-                var existingModel = this.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), entity.ID, DXLoadingType.Full);
+                var existingModel = this.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
                 var existingEntity = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 
@@ -173,7 +173,7 @@ namespace IV.DX.Persistence
             }
             else
             {
-                relationTableName = entity.DXRelationDefinitionMainElement.RelationTable;
+                relationTableName = dxUnit.DXRelationDefinitionMainElement.RelationTable;
             }
 
             return this._queryHelper.GetSQLQueryToDropTable(relationTableName);
@@ -215,27 +215,27 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DXUnitDefinitionUnit GetEntity(string entityType)
+        public DXUnitDefinitionUnit GetEntity(string dxUnitType)
         {
-            var result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(entityType));
+            var result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(entityType));
+                result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
             }
 
             return result;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DXElementInUnitTypeEnum relationType)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
         {
-            if (entity.DXElementInUnitDefinitionMainElement == null)
+            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
             var relatedBlockIds =
-              entity.DXElementInUnitDefinitionMainElement
+              dxUnit.DXElementInUnitDefinitionMainElement
               .Announced
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
@@ -245,13 +245,13 @@ namespace IV.DX.Persistence
             return relatedBlocks;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity)
+        public IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit)
         {
-            if (entity.DXElementInUnitDefinitionMainElement == null)
+            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
             var relatedBlockIds =
-                entity.DXElementInUnitDefinitionMainElement
+                dxUnit.DXElementInUnitDefinitionMainElement
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 

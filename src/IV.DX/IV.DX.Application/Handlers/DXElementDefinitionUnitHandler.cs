@@ -61,9 +61,9 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        private void ProcessRelations(DXElementDefinitionUnit entity)
+        private void ProcessRelations(DXElementDefinitionUnit dxUnit)
         {
-            this.ProcessEnumRelations(entity);
+            this.ProcessEnumRelations(dxUnit);
         }
     }
 }

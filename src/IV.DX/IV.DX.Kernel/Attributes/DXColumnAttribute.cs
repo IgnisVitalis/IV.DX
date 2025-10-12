@@ -10,12 +10,12 @@ namespace IV.DX.Kernel.Attributes
 
         public DXColumnAttribute(
             string columnName,
-            string esqlExpression = null,
+            string dxsqlExpression = null,
             DXLoadingType typeOfEntityLoading = DXLoadingType.Full)
         {
             ColumnName = columnName;
-            ESQLExpression = string.IsNullOrEmpty(esqlExpression) ?
-                                    ColumnName : esqlExpression;
+            ESQLExpression = string.IsNullOrEmpty(dxsqlExpression) ?
+                                    ColumnName : dxsqlExpression;
             TypeOfEntityLoading = typeOfEntityLoading;
         }
 

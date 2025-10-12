@@ -6,7 +6,6 @@ using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
-using System.Reflection.Metadata;
 
 namespace IV.DX.Application
 {
@@ -69,9 +68,9 @@ namespace IV.DX.Application
             throw new Exception($"There are an error to get dxUnit by ids: {result.Error}");
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(string esqlWhereExpression, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxsqlWhereExpression, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.GetItemsAsync<T>(esqlWhereExpression, context, ct);
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(dxsqlWhereExpression, context, ct);
 
             if (result.IsSuccess)
             {
@@ -85,12 +84,12 @@ namespace IV.DX.Application
                 }
             }
 
-            throw new Exception($"There are an error to get dxUnit by query ({esqlWhereExpression}): {result.Error}");
+            throw new Exception($"There are an error to get dxUnit by query ({dxsqlWhereExpression}): {result.Error}");
         }
 
-        public async Task<T> InsertAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.InsertAsync<T>(esqlObject, context, ct);
+            var result = await dxPipelineExecutor.InsertAsync<T>(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
@@ -102,25 +101,25 @@ namespace IV.DX.Application
             }
         }
 
-        public async Task<T> InsertOrUpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertOrUpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var typeName = AttributeReader.GetESQLObjectTypeName(esqlObject.GetType());
+            var typeName = AttributeReader.GetESQLObjectTypeName(dxUnit.GetType());
 
-            var itemIsExisting = coreRepo.IsItemExisting(typeName, esqlObject.ID);
+            var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
 
             if (itemIsExisting)
             {
-                return await this.UpdateAsync(esqlObject, context, ct);
+                return await this.UpdateAsync(dxUnit, context, ct);
             }
             else
             {
-                return await this.InsertAsync(esqlObject, context, ct);
+                return await this.InsertAsync(dxUnit, context, ct);
             }
         }
 
-        public async Task<T> UpdateAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> UpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.UpdateAsync<T>(esqlObject, context, ct);
+            var result = await dxPipelineExecutor.UpdateAsync<T>(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
@@ -185,9 +184,9 @@ namespace IV.DX.Application
             throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {result.Error}");
         }
 
-        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string esqlWhereExpression, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxsqlWhereExpression, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            var result = await dxPipelineExecutor.GetItemsAsync(typeName, esqlWhereExpression, context, ct);
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxsqlWhereExpression, context, ct);
 
             if (result.IsSuccess)
             {
@@ -201,7 +200,7 @@ namespace IV.DX.Application
                 }
             }
 
-            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({esqlWhereExpression}): {result.Error}");
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxsqlWhereExpression}): {result.Error}");
         }
 
         public async Task<JObject> GetItemAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)
@@ -223,9 +222,9 @@ namespace IV.DX.Application
             throw new Exception($"There are an error to get dxModel by ID ({id}): {result.Error}");
         }
 
-        public async Task<bool> DeleteAsync<T>(T esqlObject, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<bool> DeleteAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.DeleteAsync<T>(esqlObject, context, ct);
+            var result = await dxPipelineExecutor.DeleteAsync<T>(dxUnit, context, ct);
 
             if (result.IsSuccess)
             {
@@ -281,12 +280,12 @@ namespace IV.DX.Application
 
         public async Task<JObject> InsertOrUpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
+            var dxModel = DXModel.CreateInstance(jObject);
 
-            var objId = esqlModel.OwnSingleItem.Item.ID;
+            var objId = dxModel.OwnSingleItem.Item.ID;
 
             if (objId.HasValue
-                && await this.IsItemExistingAsync(esqlModel.OwnSingleItem.ObjectInfo.ObjectName, objId.Value, context, ct))
+                && await this.IsItemExistingAsync(dxModel.OwnSingleItem.ObjectInfo.ObjectName, objId.Value, context, ct))
             {
                 return await this.UpdateAsync(jObject, context, ct);
             }

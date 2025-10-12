@@ -76,7 +76,7 @@ namespace IV.DX.Persistence.IntTests
         }
 
 
-        // TODO: this test should be update to check multifragments also. Also need to use another entity because DXObjectDefinitionUnit can be used in another tests.
+        // TODO: this test should be update to check multifragments also. Also need to use another dxUnit because DXObjectDefinitionUnit can be used in another tests.
         [Fact]
         public void CRUD_UsingEnities_EntitysAreProcessedCorrectly()
         {
@@ -177,7 +177,7 @@ namespace IV.DX.Persistence.IntTests
         }
 
         [Fact]
-        public void CrudBlock_UsingSingleESQLBlock_BlockIsProcessedCorrectly()
+        public void CrudBlock_UsingSingleDXBlock_BlockIsProcessedCorrectly()
         {
             // Init
             var objectId = new Guid("57499CB1-1C08-4480-A274-2C71CE943B43");

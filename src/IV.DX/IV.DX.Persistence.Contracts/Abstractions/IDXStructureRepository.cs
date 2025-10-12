@@ -8,8 +8,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         void CreateDataStructure(DXObjectDefinitionUnit dataBlock);
         void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock);
         void DropDataStructure(DXObjectDefinitionUnit dataBlock);
-        void CreateDataStructure(DXRelationDefinitionUnit entity);
-        void DropDataStructure(DXRelationDefinitionUnit entity);
+        void CreateDataStructure(DXRelationDefinitionUnit dxUnit);
+        void DropDataStructure(DXRelationDefinitionUnit dxUnit);
         void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
         void SetEntityInheritance(string childEntity, string baseEntity);
@@ -18,8 +18,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         DXEnumDefinitionUnit GetEnum(string enumName);
         IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids);
         DXElementDefinitionUnit GetBlock(Guid id);
-        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity, DXElementInUnitTypeEnum relationType);
-        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit entity);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType);
+        IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit);
         DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight);
         IEnumerable<DXEnumDefinitionUnit> GetEnums(IEnumerable<Guid> ids);
         DXEnumDefinitionUnit GetEnum(Guid id);

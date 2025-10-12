@@ -67,7 +67,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            DXUnitDefinitionUnit entityDescObject = new DXUnitDefinitionUnit()
+            DXUnitDefinitionUnit dxUnitDescObject = new DXUnitDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -106,14 +106,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     this._dataService.DeleteAsync(item).Wait();
                 });
 
-                this._dataService.UpdateAsync(entityDescObject).Wait();
-                this._dataService.DeleteAsync(entityDescObject).Wait();
+                this._dataService.UpdateAsync(dxUnitDescObject).Wait();
+                this._dataService.DeleteAsync(dxUnitDescObject).Wait();
                 this._dataService.DeleteAsync(blockDescObject).Wait();
             };
 
             // Action
             this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
-            this._dataService.InsertOrUpdateAsync(entityDescObject).Wait();
+            this._dataService.InsertOrUpdateAsync(dxUnitDescObject).Wait();
 
             this._dataService.InsertOrUpdateAsync(item).Wait();
 
@@ -191,7 +191,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DXUnitDefinitionUnit()
+            var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -203,17 +203,17 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(dxUnit).Wait();
                 this._dataService.DeleteAsync(blockToAdd).Wait();
                 this._dataService.DeleteAsync(blockToDelete).Wait();
             };
 
-            this._dataService.InsertAsync(entity).Wait();
+            this._dataService.InsertAsync(dxUnit).Wait();
             this._dataService.InsertAsync(blockToAdd).Wait();
             this._dataService.InsertAsync(blockToDelete).Wait();
 
             // Action
-            entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            dxUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = MultiElementsMode.Target,
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
@@ -236,7 +236,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.UpdateAsync(entity).Wait();
+            this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
             var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
@@ -281,7 +281,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DXUnitDefinitionUnit()
+            var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -305,15 +305,15 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(dxUnit).Wait();
                 this._dataService.DeleteAsync(block).Wait();
             };
 
             this._dataService.InsertAsync(block).Wait();
-            this._dataService.InsertAsync(entity).Wait();
+            this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
-            this._dataService.DeleteAsync(entity).Wait();
+            this._dataService.DeleteAsync(dxUnit).Wait();
 
             // Assert
             var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
@@ -359,7 +359,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            var entity = new DXUnitDefinitionUnit()
+            var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -395,7 +395,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             base._finalizationAction = () =>
             {
-                this._dataService.DeleteAsync(entity).Wait();
+                this._dataService.DeleteAsync(dxUnit).Wait();
                 this._dataService.DeleteAsync(block1).Wait();
                 this._dataService.DeleteAsync(block2).Wait();
                 this._dataService.DeleteAsync(block3).Wait();
@@ -404,17 +404,17 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertAsync(block1).Wait();
             this._dataService.InsertAsync(block2).Wait();
             this._dataService.InsertAsync(block3).Wait();
-            this._dataService.InsertAsync(entity).Wait();
+            this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
-            entity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            dxUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = MultiElementsMode.Target,
-                Deleted = entity.DXElementInUnitDefinitionMainElement.Announced,
+                Deleted = dxUnit.DXElementInUnitDefinitionMainElement.Announced,
                 Announced = new List<DXElementInUnitDefinitionMainElement>()
             };
 
-            this._dataService.UpdateAsync(entity).Wait();
+            this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
             var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);

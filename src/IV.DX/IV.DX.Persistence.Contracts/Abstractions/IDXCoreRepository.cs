@@ -5,18 +5,18 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXCoreRepository
     {
-        IEnumerable<Guid> GetItemIDs(string typeName, string? esqlWhereExpression = default);
+        IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default);
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
         DXModel GetItem(DXModelDefinition definitionContainer, Guid id, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(string typeName);
         IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
-        IEnumerable<DXModel> GetItems(string typeName, string esqlWhereExpression);
+        IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression);
         DXModel GetItem(string typeName, Guid objectId);
         IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
-        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, string esqlWhereExpression, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, string dxsqlWhereExpression, DXLoadingType typeOfLoading);
         Guid Insert(DXModel model);
         Guid Update(DXModel model);
         Guid InsertOrUpdate(DXModel model);

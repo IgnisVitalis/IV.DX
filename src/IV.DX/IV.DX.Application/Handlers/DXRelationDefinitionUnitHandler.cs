@@ -86,9 +86,9 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit entity)
+        private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit dxUnit)
         {
-            var modelDefinition = genericRepo.GetItems<DXRelationDefinitionUnit>(entity.GetQueryForInvertedRelationObject());
+            var modelDefinition = genericRepo.GetItems<DXRelationDefinitionUnit>(dxUnit.GetQueryForInvertedRelationObject());
 
             return modelDefinition.SingleOrDefault();
         }

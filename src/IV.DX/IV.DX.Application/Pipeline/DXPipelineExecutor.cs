@@ -101,7 +101,7 @@ namespace IV.DX.Application.Pipeline
                 var id = genericRepo.Insert(dxUnit);
                 var reloaded = genericRepo.GetItem<T>(id);
 
-                if (reloaded is null) return DXResult<T>.Fail("Inserted entity not found.");
+                if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
                 dxUnit = reloaded;
             }
 
@@ -187,7 +187,7 @@ namespace IV.DX.Application.Pipeline
                 var id = genericRepo.Update(dxUnit);
                 var reloaded = genericRepo.GetItem<T>(id);
 
-                if (reloaded is null) return DXResult<T>.Fail("Inserted entity not found.");
+                if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
                 dxUnit = reloaded;
             }
 
@@ -270,7 +270,7 @@ namespace IV.DX.Application.Pipeline
             {
                 var result = genericRepo.Delete(dxUnit);
 
-                if (!result) return DXResult<T>.Fail("Inserted entity not found.");
+                if (!result) return DXResult<T>.Fail("Inserted dxUnit not found.");
             }
 
             foreach (var h in deleteHandlerProvider.GetAfterDeleteHandlers<T>())

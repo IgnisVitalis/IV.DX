@@ -62,9 +62,9 @@ namespace IV.DX.Application.Handlers
             return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
         }
 
-        private void DeleteRelations(DXUnitDefinitionUnit entity)
+        private void DeleteRelations(DXUnitDefinitionUnit dxUnit)
         {
-            var existingEntity = genericRepo.GetItem<DXUnitDefinitionUnit>(entity.ID);
+            var existingEntity = genericRepo.GetItem<DXUnitDefinitionUnit>(dxUnit.ID);
 
             if (existingEntity == null)
                 return;
@@ -75,7 +75,7 @@ namespace IV.DX.Application.Handlers
 
             foreach (var relatedBlock in relatedBlocks)
             {
-                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(entity, relatedBlock)).Wait();
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, relatedBlock)).Wait();
             }
         }
 
