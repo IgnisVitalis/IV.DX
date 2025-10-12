@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXSingleItem
+    public class DXSingleElement
     {
         public string Name { get; set; }
-        public DXElementAttribute BlockInfo { get; set; }
+        public DXElementAttribute ElementInfo { get; set; }
         public DXItem Item { get; set; }
 
         public JProperty ConvertToJProperty()
@@ -17,7 +17,7 @@ namespace IV.DX.Kernel.Models
             {   
                 jObject = new JObject(this.Item.ConvertToJObject())
                 {
-                    [Constants.SystemPropertyTypeName] = this.BlockInfo.BlockName
+                    [Constants.SystemPropertyTypeName] = this.ElementInfo.BlockName
                 };
             }
 
@@ -38,14 +38,14 @@ namespace IV.DX.Kernel.Models
             return jProperty;
         }
 
-        public static DXSingleItem ConvertFromJProperty(JProperty jProperty)
+        public static DXSingleElement ConvertFromJProperty(JProperty jProperty)
         {
             if (jProperty == null)
                 return null;
 
-            DXSingleItem singleFragment = new DXSingleItem
+            DXSingleElement singleFragment = new DXSingleElement
             {
-                BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                ElementInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name
             };
 
@@ -57,20 +57,20 @@ namespace IV.DX.Kernel.Models
             return singleFragment;
         }
 
-        public static bool DeepEquals(DXSingleItem item1, DXSingleItem item2)
+        public static bool DeepEquals(DXSingleElement item1, DXSingleElement item2)
         {
             if (item1 == null || item2 == null)
                 return false;
 
             var result =
                 item1.Name == item2.Name
-                && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
+                && DXElementAttribute.DeepEquals(item1.ElementInfo, item2.ElementInfo)
                 && DXItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
         }
 
-        public static bool DeepEquals(IEnumerable<DXSingleItem> list1, IEnumerable<DXSingleItem> list2)
+        public static bool DeepEquals(IEnumerable<DXSingleElement> list1, IEnumerable<DXSingleElement> list2)
         {
             if (list1 == null && list2 == null)
                 return false;
@@ -85,18 +85,18 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!DXSingleItem.DeepEquals(item1, item2))
+                if (!DXSingleElement.DeepEquals(item1, item2))
                     return false;
             }
 
             return true;
         }
 
-        public DXSingleItem DeepClone()
+        public DXSingleElement DeepClone()
         {
-            return new DXSingleItem()
+            return new DXSingleElement()
             {
-                BlockInfo = this.BlockInfo?.DeepClone(),
+                ElementInfo = this.ElementInfo?.DeepClone(),
                 Name = this.Name,
                 Item = this.Item.DeepClone()
             };

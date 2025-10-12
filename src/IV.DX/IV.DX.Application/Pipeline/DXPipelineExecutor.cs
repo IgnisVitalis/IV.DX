@@ -378,7 +378,7 @@ namespace IV.DX.Application.Pipeline
             IDXHandlerContext ctx,
             CancellationToken ct) where T : DXUnit, new()
         {
-            var typeName = AttributeReader.GetESQLObjectTypeName(typeof(T));
+            var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
             var ids = coreRepo.GetItemIDs(typeName, query);
 
             return await GetItemsAsync<T>(ids, ctx, ct);

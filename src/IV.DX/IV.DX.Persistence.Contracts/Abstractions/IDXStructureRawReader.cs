@@ -4,9 +4,9 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXStructureRawReader
     {
-        IEnumerable<DXElementDefinitionUnit> LoadBlockInfosRaw();
-        IEnumerable<DXUnitDefinitionUnit> LoadEntityInfosRaw();
-        IEnumerable<DXEnumDefinitionUnit> LoadEnumInfosRaw();
-        IEnumerable<DXRelationDefinitionUnit> LoadRelationInfosRaw();
+        IEnumerable<DXElementDefinitionUnit> LoadDXElementInfosRaw();
+        IEnumerable<DXUnitDefinitionUnit> LoadDXUnitInfosRaw();
+        IEnumerable<DXEnumDefinitionUnit> LoadDXEnumInfosRaw();
+        IEnumerable<DXRelationDefinitionUnit> LoadDXRelationInfosRaw();
     }
 }

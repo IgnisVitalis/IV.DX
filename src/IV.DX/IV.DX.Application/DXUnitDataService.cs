@@ -103,7 +103,7 @@ namespace IV.DX.Application
 
         public async Task<T> InsertOrUpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var typeName = AttributeReader.GetESQLObjectTypeName(dxUnit.GetType());
+            var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
 
             var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
 

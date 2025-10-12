@@ -8,7 +8,7 @@ namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
     {
-        public IEnumerable<DXElementDefinitionUnit> LoadBlockInfosRaw()
+        public IEnumerable<DXElementDefinitionUnit> LoadDXElementInfosRaw()
         {
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
@@ -23,7 +23,7 @@ namespace IV.DX.Persistence
             return DXCoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
         }
 
-        public IEnumerable<DXUnitDefinitionUnit> LoadEntityInfosRaw()
+        public IEnumerable<DXUnitDefinitionUnit> LoadDXUnitInfosRaw()
         {
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
@@ -38,7 +38,7 @@ namespace IV.DX.Persistence
             return DXCoreDataStructureRepository.CoreEntityInfos.Concat(dxUnitInfosWithoutCore).ToList();
         }
 
-        public IEnumerable<DXEnumDefinitionUnit> LoadEnumInfosRaw()
+        public IEnumerable<DXEnumDefinitionUnit> LoadDXEnumInfosRaw()
         {
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
@@ -53,7 +53,7 @@ namespace IV.DX.Persistence
             return DXCoreDataStructureRepository.CoreEnumInfos.Concat(enumInfosWithoutCore).ToList();
         }
 
-        public IEnumerable<DXRelationDefinitionUnit> LoadRelationInfosRaw()
+        public IEnumerable<DXRelationDefinitionUnit> LoadDXRelationInfosRaw()
         {
             if (DXMaintenanceToken.IsCoreInitializing)
                 return Enumerable.Empty<DXRelationDefinitionUnit>();

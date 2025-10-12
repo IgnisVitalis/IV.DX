@@ -203,13 +203,13 @@ namespace IV.DX.Persistence
             if (derivedEntity == null || derivedEntity.DXUnitInheritanceElement?.BaseEntity == null)
                 return null;
 
-            var result = this._dxStructureCache.Entities.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = this._dxStructureCache.Entities.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
             }
 
             return result;
@@ -217,13 +217,13 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetEntity(string dxUnitType)
         {
-            var result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = this._dxStructureCache.Entities.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
             }
 
             return result;
@@ -240,7 +240,7 @@ namespace IV.DX.Persistence
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = this._dxStructureCache.Blocks.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
+            var relatedBlocks = this._dxStructureCache.DXElements.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
 
             return relatedBlocks;
         }
@@ -255,7 +255,7 @@ namespace IV.DX.Persistence
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = this._dxStructureCache.Blocks.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
+            var relatedBlocks = this._dxStructureCache.DXElements.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
 
             return relatedBlocks;
         }
@@ -291,7 +291,7 @@ namespace IV.DX.Persistence
 
         public DXRelationDefinitionUnit GetRelation(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
         {
-            var existingRelation = this._dxStructureCache.Relations.SingleOrDefault(x =>
+            var existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
                 x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
                 && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
                 && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
@@ -301,7 +301,7 @@ namespace IV.DX.Persistence
             {
                 this.UpdateCache();
 
-                existingRelation = this._dxStructureCache.Relations.SingleOrDefault(x =>
+                existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
                 x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
                 && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
                 && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
@@ -323,13 +323,13 @@ namespace IV.DX.Persistence
 
         public DXElementDefinitionUnit GetBlock(Guid id)
         {
-            var existingBlock = this._dxStructureCache.Blocks.SingleOrDefault(x => x.ID == id);
+            var existingBlock = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
 
             if (existingBlock == null)
             {
                 this.UpdateCache();
 
-                existingBlock = this._dxStructureCache.Blocks.SingleOrDefault(x => x.ID == id);
+                existingBlock = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
             }
 
             return existingBlock;
@@ -347,13 +347,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetEnum(Guid id)
         {
-            var existingEnum = this._dxStructureCache.Enums.SingleOrDefault(x => x.ID == id);
+            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
 
             if (existingEnum == null)
             {
                 this.UpdateCache();
 
-                existingEnum = this._dxStructureCache.Enums.SingleOrDefault(x => x.ID == id);
+                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
             }
 
             return existingEnum;
@@ -361,13 +361,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetEnum(string enumName)
         {
-            var existingEnum = this._dxStructureCache.Enums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
+            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
 
             if (existingEnum == null)
             {
                 this.UpdateCache();
 
-                existingEnum = this._dxStructureCache.Enums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
+                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
             }
 
             return existingEnum;

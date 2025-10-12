@@ -21,7 +21,7 @@ namespace IV.DX.Kernel.Converters
 
         public static string GetTypeName(Type type)
         {
-            return AttributeReader.GetESQLObjectTypeName(type);
+            return AttributeReader.GetDXUnitTypeName(type);
         }
 
         public static Guid GetID(JObject jObject)
@@ -65,16 +65,16 @@ namespace IV.DX.Kernel.Converters
                 }
             };
 
-            DXModel model = new DXModel(ownItem)
+            DXModel dxModel = new DXModel(ownItem)
             {
                 SingleItems = GetESQLSingleItems(dxUnit),
                 MultiItems = GetESQLMutliItems(dxUnit)
             };
 
-            return model;
+            return dxModel;
         }
 
-        private static IEnumerable<DXSingleItem> GetESQLSingleItems(DXUnit dxUnit)
+        private static IEnumerable<DXSingleElement> GetESQLSingleItems(DXUnit dxUnit)
         {
             var singleItemInfos = AttributeReader.GetSingleItemInfos(dxUnit);
 
@@ -82,9 +82,9 @@ namespace IV.DX.Kernel.Converters
             {
                 var singleItem = x.GetValue(dxUnit) as DXElement;
 
-                DXSingleItem esqlSingleItem = new DXSingleItem()
+                DXSingleElement esqlSingleItem = new DXSingleElement()
                 {
-                    BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
+                    ElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
                     Item = new DXItem()
                     {
                         ID = singleItem?.ID,
@@ -100,13 +100,13 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static DXSingleItem ConvertToSingleItem(this DXElement block)
+        public static DXSingleElement ConvertToSingleItem(this DXElement block)
         {
             var blockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(block.GetType());
 
-            DXSingleItem singleItem = new DXSingleItem()
+            DXSingleElement singleItem = new DXSingleElement()
             {
-                BlockInfo = blockInfo,
+                ElementInfo = blockInfo,
                 Item = new DXItem()
                 {
                     ID = block.ID,
@@ -289,17 +289,17 @@ namespace IV.DX.Kernel.Converters
             return esqlObj;
         }
 
-        public static T CreateInstance<T>(DXModel model) where T : DXUnit
+        public static T CreateInstance<T>(DXModel dxModel) where T : DXUnit
         {
-            return ConvertToESQLObject(model, typeof(T)) as T;
+            return ConvertToESQLObject(dxModel, typeof(T)) as T;
         }
 
-        public static DXUnit CreateInstance(DXModel model, Type type)
+        public static DXUnit CreateInstance(DXModel dxModel, Type type)
         {
-            return ConvertToESQLObject(model, type);
+            return ConvertToESQLObject(dxModel, type);
         }
 
-        public static T CreateBlockInstance<T>(DXSingleItem item) where T : DXElement
+        public static T CreateBlockInstance<T>(DXSingleElement item) where T : DXElement
         {
             if (item == null)
                 return null;
@@ -314,27 +314,27 @@ namespace IV.DX.Kernel.Converters
             return singleFragmetInstance as T;
         }
 
-        private static DXUnit ConvertToESQLObject(DXModel model, Type type)
+        private static DXUnit ConvertToESQLObject(DXModel dxModel, Type type)
         {
-            if (model == null)
+            if (dxModel == null)
                 return null;
 
             if (type == null)
                 return null;
 
-            var obj = model.OwnSingleItem.ConvertToJPropertyWithoutSystemProperties().Value.ToObject(type);
+            var obj = dxModel.OwnSingleItem.ConvertToJPropertyWithoutSystemProperties().Value.ToObject(type);
 
             var objIdProperty = type.GetProperty(Constants.ID);
-            objIdProperty.SetValue(obj, model.OwnSingleItem.Item.ID);
+            objIdProperty.SetValue(obj, dxModel.OwnSingleItem.Item.ID);
 
             var singleItemProperties = AttributeReader.GetSingleItemInfos(type);
 
-            if (model.SingleItems != null)
+            if (dxModel.SingleItems != null)
             {
                 foreach (var singleItemProperty in singleItemProperties)
                 {
                     var singleItemName = singleItemProperty.Name;
-                    var asqlModelSingleItem = model.SingleItems.SingleOrDefault(x => x.Name == singleItemName);
+                    var asqlModelSingleItem = dxModel.SingleItems.SingleOrDefault(x => x.Name == singleItemName);
 
                     if (asqlModelSingleItem == null)
                     {
@@ -356,12 +356,12 @@ namespace IV.DX.Kernel.Converters
 
             var multiItemProperties = AttributeReader.GetMultiItemInfos(type);
 
-            if (model.MultiItems != null)
+            if (dxModel.MultiItems != null)
             {
                 foreach (var multiItemProperty in multiItemProperties)
                 {
                     var multiItemName = multiItemProperty.Name;
-                    var asqlModelMultiItem = model.MultiItems.SingleOrDefault(x => x.Name == multiItemName);
+                    var asqlModelMultiItem = dxModel.MultiItems.SingleOrDefault(x => x.Name == multiItemName);
 
                     if (asqlModelMultiItem == null)
                     {

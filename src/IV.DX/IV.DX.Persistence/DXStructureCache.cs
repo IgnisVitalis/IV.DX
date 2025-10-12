@@ -13,10 +13,10 @@ namespace IV.DX.Persistence
 
         public DXStructureCache(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
-        public IReadOnlyList<DXElementDefinitionUnit> Blocks => _snapshot.Blocks;
-        public IReadOnlyList<DXUnitDefinitionUnit> Entities => _snapshot.Entities;
-        public IReadOnlyList<DXEnumDefinitionUnit> Enums => _snapshot.Enums;
-        public IReadOnlyList<DXRelationDefinitionUnit> Relations => _snapshot.Relations;
+        public IReadOnlyList<DXElementDefinitionUnit> DXElements => _snapshot.Blocks;
+        public IReadOnlyList<DXUnitDefinitionUnit> DXUnits => _snapshot.Entities;
+        public IReadOnlyList<DXEnumDefinitionUnit> DXEnums => _snapshot.Enums;
+        public IReadOnlyList<DXRelationDefinitionUnit> DXRelations => _snapshot.Relations;
         public int Version => _snapshot.Version;
 
         public async Task WarmUpAsync(CancellationToken ct = default)
@@ -32,10 +32,10 @@ namespace IV.DX.Persistence
                 using var scope = _scopeFactory.CreateScope();
                 var repo = scope.ServiceProvider.GetRequiredService<IDXStructureRawReader>();
             
-                var blocks = repo.LoadBlockInfosRaw();
-                var entities = repo.LoadEntityInfosRaw();
-                var enums = repo.LoadEnumInfosRaw();
-                var relations = repo.LoadRelationInfosRaw();
+                var blocks = repo.LoadDXElementInfosRaw();
+                var entities = repo.LoadDXUnitInfosRaw();
+                var enums = repo.LoadDXEnumInfosRaw();
+                var relations = repo.LoadDXRelationInfosRaw();
 
                 var snap = new Snapshot(
                     blocks.ToImmutableArray(),

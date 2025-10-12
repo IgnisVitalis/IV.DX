@@ -4,10 +4,10 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXStructureCache
     {
-        IReadOnlyList<DXElementDefinitionUnit> Blocks { get; }
-        IReadOnlyList<DXUnitDefinitionUnit> Entities { get; }
-        IReadOnlyList<DXEnumDefinitionUnit> Enums { get; }
-        IReadOnlyList<DXRelationDefinitionUnit> Relations { get; }
+        IReadOnlyList<DXElementDefinitionUnit> DXElements { get; }
+        IReadOnlyList<DXUnitDefinitionUnit> DXUnits { get; }
+        IReadOnlyList<DXEnumDefinitionUnit> DXEnums { get; }
+        IReadOnlyList<DXRelationDefinitionUnit> DXRelations { get; }
 
         int Version { get; }
         Task WarmUpAsync(CancellationToken ct = default);

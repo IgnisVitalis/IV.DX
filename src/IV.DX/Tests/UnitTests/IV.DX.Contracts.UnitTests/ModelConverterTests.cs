@@ -81,12 +81,12 @@ namespace IV.DX.Contracts.UnitTests
 
             esqlModel = new DXModel(ownItem)
             {
-                SingleItems = new List<DXSingleItem>()
+                SingleItems = new List<DXSingleElement>()
                 {
-                    new DXSingleItem
+                    new DXSingleElement
                     {
                         Name = "MyBlockSingleItem",
-                        BlockInfo = new DXElementAttribute("MyBlockDefinition"),
+                        ElementInfo = new DXElementAttribute("MyBlockDefinition"),
                         Item = new DXItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),

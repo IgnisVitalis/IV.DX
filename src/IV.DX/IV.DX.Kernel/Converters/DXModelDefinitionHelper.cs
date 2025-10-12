@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Converters
             var singleItemDefinitions =
                 dxModel.SingleItems.Select(x =>
                 {
-                    var item = new DXElementDefinition(x.BlockInfo.BlockName, x.Name);
+                    var item = new DXElementDefinition(x.ElementInfo.BlockName, x.Name);
 
                     var propertyNames = x.Item.Content.Children().Select(y => y as JProperty).Select(y => y.Name).ToList();
 
@@ -80,7 +80,7 @@ namespace IV.DX.Kernel.Converters
 
         public static DXModelDefinition GetESQLModelDefinition(Type type)
         {
-            var asqlTypeName = AttributeReader.GetESQLObjectTypeName(type);
+            var asqlTypeName = AttributeReader.GetDXUnitTypeName(type);
 
             var ownItem = GetDXElementDefinition(asqlTypeName, type);
 

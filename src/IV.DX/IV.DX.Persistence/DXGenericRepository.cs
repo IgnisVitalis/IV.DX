@@ -19,7 +19,7 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlTypeName = AttributeReader.GetESQLObjectTypeName(dxUnit.GetType());
+            var esqlTypeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
 
             return this._coreRepo.Delete(esqlTypeName, dxUnit.ID);
         }

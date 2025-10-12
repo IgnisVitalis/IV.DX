@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class DXModel
     {
         public DXMainItem OwnSingleItem { get; set; }
-        public IEnumerable<DXSingleItem> SingleItems { get; set; }
+        public IEnumerable<DXSingleElement> SingleItems { get; set; }
         public IEnumerable<DXMultiItem> MultiItems { get; set; }
 
         public DXModel(DXMainItem ownSingleItem)
@@ -23,7 +23,7 @@ namespace IV.DX.Kernel.Models
 
             result = result
                 && DXMainItem.DeepEquals(item1.OwnSingleItem, item2.OwnSingleItem)
-                && DXSingleItem.DeepEquals(item1.SingleItems, item2.SingleItems)
+                && DXSingleElement.DeepEquals(item1.SingleItems, item2.SingleItems)
                 && DXMultiItem.DeepEquals(item1.MultiItems, item2.MultiItems);
 
             return result;
@@ -95,13 +95,13 @@ namespace IV.DX.Kernel.Models
                     .Select(x => GetESQLMutliItem(x, ownItem.Item.ID))
                     .ToList();
 
-            DXModel model = new DXModel(ownItem)
+            DXModel dxModel = new DXModel(ownItem)
             {
                 SingleItems = singleItems,
                 MultiItems = multiItems
             };
 
-            return model;
+            return dxModel;
         }
 
         public static DXModel CreateInstance(string json)
@@ -111,12 +111,12 @@ namespace IV.DX.Kernel.Models
             return CreateInstance(jObject);
         }
 
-        private static DXSingleItem GetESQLSingleItem(JProperty property, Guid? objId)
+        private static DXSingleElement GetESQLSingleItem(JProperty property, Guid? objId)
         {
-            DXSingleItem singleItem = new DXSingleItem()
+            DXSingleElement singleItem = new DXSingleElement()
             {
                 Name = property.Name,
-                BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                ElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Item = GetESQLItem((JObject)property.Value, objId)
             };
 

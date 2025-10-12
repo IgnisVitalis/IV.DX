@@ -101,7 +101,7 @@ namespace IV.DX.Kernel.Helpers
             return type?.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
         }
 
-        public static string GetESQLObjectTypeName(Type type)
+        public static string GetDXUnitTypeName(Type type)
         {
             var objectType = FindElementType(type);
 
@@ -127,7 +127,7 @@ namespace IV.DX.Kernel.Helpers
 
         public static string GetTypeName(this DXUnit dxUnit)
         {
-            return GetESQLObjectTypeName(dxUnit.GetType());
+            return GetDXUnitTypeName(dxUnit.GetType());
         }
 
 

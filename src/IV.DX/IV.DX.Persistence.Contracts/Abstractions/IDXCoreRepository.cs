@@ -9,26 +9,26 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
-        DXModel GetItem(DXModelDefinition definitionContainer, Guid id, DXLoadingType typeOfLoading);
+        DXModel GetItem(DXModelDefinition dxModelDefinition, Guid id, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(string typeName);
         IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
         IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression);
         DXModel GetItem(string typeName, Guid objectId);
-        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, DXLoadingType typeOfLoading);
-        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
-        IEnumerable<DXModel> GetItems(DXModelDefinition definitionContainer, string dxsqlWhereExpression, DXLoadingType typeOfLoading);
-        Guid Insert(DXModel model);
-        Guid Update(DXModel model);
-        Guid InsertOrUpdate(DXModel model);
+        IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, string dxsqlWhereExpression, DXLoadingType typeOfLoading);
+        Guid Insert(DXModel dxModel);
+        Guid Update(DXModel dxModel);
+        Guid InsertOrUpdate(DXModel dxModel);
         bool Delete(string typeName, Guid objectId);
         IEnumerable<Guid> GetRelations(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         bool AddRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
         bool RemoveRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
-        Guid InsertSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
-        Guid UpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
-        Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock);
+        Guid InsertSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
+        Guid UpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
+        Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
         bool DeleteSingleBlock(string typeName, Guid objectId);
-        DXSingleItem GetSingleBlock(DXElementDefinition container, Guid id);
+        DXSingleElement GetSingleBlock(DXElementDefinition container, Guid id);
     }
 }

@@ -164,7 +164,7 @@ namespace IV.DX.Persistence
             // Process ESQL single items
             resultItem.SingleItems = container.SingleFragmentDefinitions.Select(item =>
             {
-                DXSingleItem singleItem = this.ConvertToESQLSingleItem(item);
+                DXSingleElement singleItem = this.ConvertToESQLSingleItem(item);
 
                 this.PopulateESQLSingleItem(singleItem, item, dataSet.Tables[singleItem.Name].Rows.Cast<DataRow>()
                     .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID));
@@ -189,12 +189,12 @@ namespace IV.DX.Persistence
             return resultItem;
         }
 
-        private DXSingleItem ConvertToESQLSingleItem(DXElementDefinition item)
+        private DXSingleElement ConvertToESQLSingleItem(DXElementDefinition item)
         {
-            return new DXSingleItem()
+            return new DXSingleElement()
             {
                 Name = item.Name,
-                BlockInfo = new DXElementAttribute(item.Name)
+                ElementInfo = new DXElementAttribute(item.Name)
             };
         }
 
@@ -240,7 +240,7 @@ namespace IV.DX.Persistence
         // TODO: need to check what kind of data is loaded. Because this method should load only IDs
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default)
         {
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.Relations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -329,7 +329,7 @@ namespace IV.DX.Persistence
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxsqlWhereExpression, DXLoadingType typeOfLoading)
         {
             string typeName = container.OwnSingleItem.Type;
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.Relations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -408,7 +408,7 @@ namespace IV.DX.Persistence
         }
 
         private void PopulateESQLSingleItem(
-            DXSingleItem singleItem,
+            DXSingleElement singleItem,
             DXElementDefinition fragmentDefinition,
             DataRow dataRow)
         {
@@ -486,30 +486,30 @@ namespace IV.DX.Persistence
             return value;
         }
 
-        public Guid Insert(DXModel model)
+        public Guid Insert(DXModel dxModel)
         {
-            return this.InsertOrUpdate(model, ProcessingType.Insert);
+            return this.InsertOrUpdate(dxModel, ProcessingType.Insert);
         }
 
-        public Guid Update(DXModel model)
+        public Guid Update(DXModel dxModel)
         {
-            return this.InsertOrUpdate(model, ProcessingType.Update);
+            return this.InsertOrUpdate(dxModel, ProcessingType.Update);
         }
 
-        public Guid InsertOrUpdate(DXModel model)
+        public Guid InsertOrUpdate(DXModel dxModel)
         {
-            var objId = model.OwnSingleItem.Item.ID;
-            var type = model.OwnSingleItem.ObjectInfo.ObjectName;
+            var objId = dxModel.OwnSingleItem.Item.ID;
+            var type = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
 
             if (objId.HasValue
                 && !string.IsNullOrEmpty(type)
                 && this.IsItemExisting(type, objId.Value))
             {
-                return this.Update(model);
+                return this.Update(dxModel);
             }
             else
             {
-                return this.Insert(model);
+                return this.Insert(dxModel);
             }
         }
 
@@ -522,16 +522,16 @@ namespace IV.DX.Persistence
             return item != null;
         }
 
-        private Guid InsertOrUpdate(DXModel model, ProcessingType processingType)
+        private Guid InsertOrUpdate(DXModel dxModel, ProcessingType processingType)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            ArgumentNullException.ThrowIfNull(dxModel);
 
-            if (!model.OwnSingleItem.Item.ID.HasValue)
+            if (!dxModel.OwnSingleItem.Item.ID.HasValue)
             {
-                model.OwnSingleItem.Item.ID = Guid.NewGuid();
+                dxModel.OwnSingleItem.Item.ID = Guid.NewGuid();
             }
 
-            var typeName = model.OwnSingleItem.ObjectInfo.ObjectName;
+            var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
 
             var mainEntityInfo = this.GetEntity(typeName);
 
@@ -539,25 +539,25 @@ namespace IV.DX.Persistence
             {
                 var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntityInfo);
 
-                this.ProcessESQLModelAsESQLEntity(typeName, model, dxUnitHierarchy, processingType);
+                this.ProcessESQLModelAsESQLEntity(typeName, dxModel, dxUnitHierarchy, processingType);
             }
 
             var enumInfo = this.GetEnum(typeName);
 
             if (enumInfo != null)
             {
-                this.ProcessESQLModelAsESQLEnum(typeName, enumInfo, model, processingType);
+                this.ProcessESQLModelAsESQLEnum(typeName, enumInfo, dxModel, processingType);
             }
 
             if (enumInfo == null && mainEntityInfo == null)
             {
-                throw new Exception($"Type '{model.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
+                throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
             }
 
-            return model.OwnSingleItem.Item.ID.Value;
+            return dxModel.OwnSingleItem.Item.ID.Value;
         }
 
-        private void ProcessESQLModelAsESQLEntity(string typeName, DXModel model, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEntity(string typeName, DXModel dxModel, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
@@ -565,14 +565,14 @@ namespace IV.DX.Persistence
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    this.InsertOrUpdateESQLOwnItemToDataSet(model, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                    this.InsertOrUpdateESQLOwnItemToDataSet(dxModel, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
                     var relatedBlocksSM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
                     var relatedBlocksSO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
                     var relatedBlocksMM = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
                     var relatedBlocksMO = this.GetRelatedBlocks(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
-                    var objectID = model.OwnSingleItem.Item.ID.Value;
+                    var objectID = dxModel.OwnSingleItem.Item.ID.Value;
                     var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
                     // Process ESQL single items
                     if (relatedBlocksSM != null)
@@ -580,7 +580,7 @@ namespace IV.DX.Persistence
                         foreach (var singleItem in relatedBlocksSM)
                         {
                             var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
-                            var block = model.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+                            var block = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 
                             if (block == null)
                                 continue;
@@ -594,7 +594,7 @@ namespace IV.DX.Persistence
                         foreach (var singleItem in relatedBlocksSO)
                         {
                             var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
-                            var block = model.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+                            var block = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 
                             if (block == null)
                                 continue;
@@ -608,7 +608,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var multiItem in relatedBlocksMM)
                         {
-                            this.InsertOrUpdateESQLMultiItemToDataSet(model, dxUnitInfo, multiItem, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
                     }
 
@@ -616,7 +616,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var multiItem in relatedBlocksMO)
                         {
-                            this.InsertOrUpdateESQLMultiItemToDataSet(model, dxUnitInfo, multiItem, dataSet, conn, processingType);
+                            this.InsertOrUpdateESQLMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
                     }
                 }
@@ -627,13 +627,13 @@ namespace IV.DX.Persistence
             });
         }
 
-        private void ProcessESQLModelAsESQLEnum(string typeName, DXEnumDefinitionUnit dxUnit, DXModel model, ProcessingType processingType)
+        private void ProcessESQLModelAsESQLEnum(string typeName, DXEnumDefinitionUnit dxUnit, DXModel dxModel, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                this.InsertOrUpdateESQLOwnItemToDataSet(model, dxUnit.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                this.InsertOrUpdateESQLOwnItemToDataSet(dxModel, dxUnit.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
                 dataSet.AcceptChanges();
 
@@ -712,10 +712,10 @@ namespace IV.DX.Persistence
             esqlModelAdapter.Update(dataSet, blockName);
         }
 
-        private void InsertOrUpdateESQLOwnItemToDataSet(DXModel model, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateESQLOwnItemToDataSet(DXModel dxModel, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
             var dxUnitName = dxUnitType;
-            var objectID = model.OwnSingleItem.Item.ID;
+            var objectID = dxModel.OwnSingleItem.Item.ID;
 
             var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
                 whereClause: this._queryHelper.GetWhereExpressionForID(objectID.Value));
@@ -740,20 +740,20 @@ namespace IV.DX.Persistence
             if (dataTable.Rows.Count == 0)
             {
                 var row = dataTable.NewRow();
-                MapESQLItemToRow(model.OwnSingleItem.Item, row, dxUnitName);
+                MapESQLItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitName);
                 dataTable.Rows.Add(row);
             }
             else
             {
                 var row = dataTable.Rows[0];
-                MapESQLItemToRow(model.OwnSingleItem.Item, row, dxUnitName);
+                MapESQLItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitName);
             }
 
             esqlModelAdapter.Update(dataSet, dxUnitName);
         }
 
         private Guid InsertOrUpdateESQLSingleItemToDataSet(
-            DXSingleItem block,
+            DXSingleElement block,
             string dxUnitType,
             Guid objectID,
             DataSet dataSet,
@@ -767,7 +767,7 @@ namespace IV.DX.Persistence
                 block.Item.ID = Guid.NewGuid();
             }
 
-            var blockName = block.BlockInfo.BlockName;
+            var blockName = block.ElementInfo.BlockName;
 
             var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName,
                 whereClause: this._queryHelper.GetWhereExpressionForID(block.Item.ID.Value));
@@ -803,13 +803,13 @@ namespace IV.DX.Persistence
             return block.Item.ID.Value;
         }
 
-        private void InsertOrUpdateESQLMultiItemToDataSet(DXModel model, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateESQLMultiItemToDataSet(DXModel dxModel, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
             var blockName = blockInfo.DXUnitDefinitionMainElement.Name.Trim();
-            var objectID = model.OwnSingleItem.Item.ID;
+            var objectID = dxModel.OwnSingleItem.Item.ID;
             var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
 
-            var block = model.MultiItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+            var block = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == blockName);
 
             if (block == null)
                 return;
@@ -1205,22 +1205,22 @@ namespace IV.DX.Persistence
             }
         }
 
-        public Guid InsertSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock)
+        public Guid InsertSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock)
         {
             return this.InsertOrUpdateSingleBlockPrivate(esqlModelType, esqlSingleBlock, ProcessingType.Insert);
         }
 
-        public Guid UpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock)
+        public Guid UpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock)
         {
             return this.InsertOrUpdateSingleBlockPrivate(esqlModelType, esqlSingleBlock, ProcessingType.Update);
         }
 
-        public Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleItem esqlSingleBlock)
+        public Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock)
         {
             throw new NotImplementedException("InsertOrUpdateSingleBlock is not implemted yet.");
         }
 
-        private Guid InsertOrUpdateSingleBlockPrivate(string esqlModelType, DXSingleItem esqlSingleBlock, ProcessingType processingType)
+        private Guid InsertOrUpdateSingleBlockPrivate(string esqlModelType, DXSingleElement esqlSingleBlock, ProcessingType processingType)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
             ArgumentNullException.ThrowIfNull(esqlSingleBlock);
@@ -1282,12 +1282,12 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXSingleItem GetSingleBlock(DXElementDefinition container, Guid id)
+        public DXSingleElement GetSingleBlock(DXElementDefinition container, Guid id)
         {
             if (container == null)
                 return null;
 
-            DXSingleItem result = null;
+            DXSingleElement result = null;
 
             this.RunRequest((conn) =>
             {
