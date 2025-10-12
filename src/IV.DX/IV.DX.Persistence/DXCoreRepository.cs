@@ -37,7 +37,7 @@ namespace IV.DX.Persistence
             if (id == Guid.Empty)
                 throw new ArgumentException("Id must be a non-empty GUID.", nameof(id));
 
-            var mainEntityInfo = this.GetEntity(typeName);
+            var mainEntityInfo = this.GetDXUnitDefinition(typeName);
 
             var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainEntityInfo);
 
@@ -268,7 +268,7 @@ namespace IV.DX.Persistence
 
         private DXModelDefinition GetModelDefinition(string type)
         {
-            var mainEntity = this.GetEntity(type);
+            var mainEntity = this.GetDXUnitDefinition(type);
 
             if (mainEntity == null)
                 return null;
@@ -533,7 +533,7 @@ namespace IV.DX.Persistence
 
             var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
 
-            var mainEntityInfo = this.GetEntity(typeName);
+            var mainEntityInfo = this.GetDXUnitDefinition(typeName);
 
             if (mainEntityInfo != null)
             {
@@ -542,7 +542,7 @@ namespace IV.DX.Persistence
                 this.ProcessESQLModelAsESQLEntity(typeName, dxModel, dxUnitHierarchy, processingType);
             }
 
-            var enumInfo = this.GetEnum(typeName);
+            var enumInfo = this.GetDXEnumDefinition(typeName);
 
             if (enumInfo != null)
             {
@@ -652,7 +652,7 @@ namespace IV.DX.Persistence
 
             while (true)
             {
-                var baseClass = this.GetBaseEntity(derivedEntityInfo);
+                var baseClass = this.GetBaseDXUnit(derivedEntityInfo);
 
                 result.Add(baseClass);
 

@@ -70,7 +70,7 @@ namespace IV.DX.Application.IntTests
             IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetRequiredService<IDXStructureRepository>();
             IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetRequiredService<IDXEnumCoreRepository>();
 
-            var enumInfo = dataStructureRepository.GetEnum("DXObjectKindEnum");
+            var enumInfo = dataStructureRepository.GetDXEnumDefinition("DXObjectKindEnum");
 
             var blockDefinition = DXModelDefinitionHelper.GetDXElementDefinition(enumInfo);
 

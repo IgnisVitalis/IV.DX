@@ -5,18 +5,18 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXStructureRepository
     {
-        void CreateDataStructure(DXObjectDefinitionUnit dataBlock);
-        void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock);
-        void DropDataStructure(DXObjectDefinitionUnit dataBlock);
-        void CreateDataStructure(DXRelationDefinitionUnit dxUnit);
-        void DropDataStructure(DXRelationDefinitionUnit dxUnit);
-        void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
-        void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
-        void SetEntityInheritance(string childEntity, string baseEntity);
-        DXUnitDefinitionUnit GetBaseEntity(DXUnitDefinitionUnit derivedEntity);
-        DXUnitDefinitionUnit GetEntity(string name);
-        DXEnumDefinitionUnit GetEnum(string enumName);
-        IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids);
+        void CreateDataStructure(DXObjectDefinitionUnit dxElementDefinition);
+        void UpdatedDataStructure(DXObjectDefinitionUnit dxElementDefinition);
+        void DropDataStructure(DXObjectDefinitionUnit dxElementDefinition);
+        void CreateDataStructure(DXRelationDefinitionUnit dxRelationDefinition);
+        void DropDataStructure(DXRelationDefinitionUnit dxRelationDefinition);
+        void CreateDataStructure(DXUnitDefinitionUnit dxUnitDefinition, DXElementDefinitionUnit dxElementDefinition);
+        void DropDataStructure(DXUnitDefinitionUnit dxUnitDefinition, DXElementDefinitionUnit dxElementDefinition);
+        void SetDXUnitInheritance(string childEntity, string baseEntity);
+        DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedEntity);
+        DXUnitDefinitionUnit GetDXUnitDefinition(string name);
+        DXEnumDefinitionUnit GetDXEnumDefinition(string enumName);
+        IEnumerable<DXElementDefinitionUnit> GetDXElementDefinitions(IEnumerable<Guid> ids);
         DXElementDefinitionUnit GetBlock(Guid id);
         IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType);
         IEnumerable<DXElementDefinitionUnit> GetRelatedBlocks(DXUnitDefinitionUnit dxUnit);

@@ -71,7 +71,7 @@ namespace IV.DX.Application.Handlers
 
             var relatedBlockIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = dataStructureRepo.GetBlocks(relatedBlockIds);
+            var relatedBlocks = dataStructureRepo.GetDXElementDefinitions(relatedBlockIds);
 
             foreach (var relatedBlock in relatedBlocks)
             {
@@ -118,8 +118,8 @@ namespace IV.DX.Application.Handlers
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
 
-            var blocksToAssign = dataStructureRepo.GetBlocks(announcedIds);
-            var blocksToUnassign = dataStructureRepo.GetBlocks(deletedIds);
+            var blocksToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
+            var blocksToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
 
             this.AssignBlocks(dxUnit, blocksToAssign);
             this.UnassingBlocks(dxUnit, blocksToUnassign);
@@ -128,10 +128,10 @@ namespace IV.DX.Application.Handlers
         private void ProcessBlocksIndxUnitRelationsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
         {
             var announcedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
-            var blocksToAssign = dataStructureRepo.GetBlocks(announcedIds);
+            var blocksToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
 
             var deletedIds = dxUnit.DXElementInUnitDefinitionMainElement.Deleted.Select(x => x.DXElementDefinitionUnit);
-            var blocksToUnassign = dataStructureRepo.GetBlocks(deletedIds);
+            var blocksToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
 
             this.AssignBlocks(dxUnit, blocksToAssign);
             this.UnassingBlocks(dxUnit, blocksToUnassign);

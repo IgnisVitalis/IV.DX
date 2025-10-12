@@ -189,7 +189,7 @@ namespace IV.DX.Persistence
             return this._queryHelper.GetSQLQueryToDeleteRelationOneToMany(obj);
         }
 
-        public void SetEntityInheritance(string childEntity, string baseEntity)
+        public void SetDXUnitInheritance(string childEntity, string baseEntity)
         {
             var query = this._queryHelper.GetQueryToSetEntityInheritance(childEntity, baseEntity);
 
@@ -198,7 +198,7 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public DXUnitDefinitionUnit GetBaseEntity(DXUnitDefinitionUnit derivedEntity)
+        public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedEntity)
         {
             if (derivedEntity == null || derivedEntity.DXUnitInheritanceElement?.BaseEntity == null)
                 return null;
@@ -215,7 +215,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DXUnitDefinitionUnit GetEntity(string dxUnitType)
+        public DXUnitDefinitionUnit GetDXUnitDefinition(string dxUnitType)
         {
             var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
 
@@ -311,7 +311,7 @@ namespace IV.DX.Persistence
             return existingRelation;
         }
 
-        public IEnumerable<DXElementDefinitionUnit> GetBlocks(IEnumerable<Guid> ids)
+        public IEnumerable<DXElementDefinitionUnit> GetDXElementDefinitions(IEnumerable<Guid> ids)
         {
             if (ids == null)
                 return null;
@@ -359,7 +359,7 @@ namespace IV.DX.Persistence
             return existingEnum;
         }
 
-        public DXEnumDefinitionUnit GetEnum(string enumName)
+        public DXEnumDefinitionUnit GetDXEnumDefinition(string enumName)
         {
             var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
 
