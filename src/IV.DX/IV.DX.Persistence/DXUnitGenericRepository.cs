@@ -65,9 +65,9 @@ namespace IV.DX.Persistence
         {
             var definition = DXModelDefinitionHelper.GetDXModelDefinition(dxUnit.GetType());
 
-            var existingEntity = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
+            var existingDXUnit = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
 
-            if (existingEntity == null)
+            if (existingDXUnit == null)
             {
                 return this.Insert(dxUnit);
             }

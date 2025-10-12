@@ -90,18 +90,18 @@ namespace IV.DX.Kernel.Models
         }
 
         public static DXModelDefinition BuildModelDefinition(
-            DXUnitDefinitionUnit mainEntity,
+            DXUnitDefinitionUnit mainDXUnit,
             IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements,
             IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements,
             IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements,
             IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements)
         {
-            if (mainEntity == null)
+            if (mainDXUnit == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
+            var ownDXElementDefinition = new DXElementDefinition(mainDXUnit.DXUnitDefinitionMainElement.Name, mainDXUnit.DXUnitDefinitionMainElement.Name);
 
-            var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+            var props = mainDXUnit.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
             ownDXElementDefinition.AddPropertyDefinitions(props);
 

@@ -28,7 +28,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public void UpdateEntityDefinition_UsingTargetModeForColumnDefinitionWithEmptyDefinitions_Ok()
+        public void UpdateDXUnitDefinition_UsingTargetModeForColumnDefinitionWithEmptyDefinitions_Ok()
         {
             // Init
             var id = new Guid("f0ff00d1-303e-42e6-9769-e482b0bf79ff");
@@ -73,7 +73,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestEntity"
+                    Name = "TestDXUnit"
                 },
                 DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
@@ -89,7 +89,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            var item = new TestEntity()
+            var item = new TestDXUnit()
             {
                 ID = Guid.NewGuid(),
                 TestDXElement = new TestDXElement()
@@ -118,7 +118,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertOrUpdateAsync(item).Wait();
 
             // Assert
-            var existingItems = this._genericRepo.GetDXUnits<TestEntity>();
+            var existingItems = this._genericRepo.GetDXUnits<TestDXUnit>();
 
             Assert.Single(existingItems);
 
@@ -143,7 +143,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertOrUpdateAsync(dxElementDescObject).Wait();
 
             // Assert
-            var existingModifiedItems = this._genericRepo.GetDXUnits<TestEntityModified>();
+            var existingModifiedItems = this._genericRepo.GetDXUnits<TestDXUnitModified>();
 
             Assert.Single(existingItems);
 
@@ -166,7 +166,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public async Task UpdateEntity_UsingAddedDeletedDXElementsWithTargetMode_Ok()
+        public async Task UpdateDXUnit_UsingAddedDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("622c2056-9797-47ab-82c2-5c3eeb6a68ce");
@@ -197,7 +197,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestEntity5c3eeb6a68ce"
+                    Name = "TestDXUnit5c3eeb6a68ce"
                 }
             };
 
@@ -239,16 +239,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
+            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
 
-            Assert.Single(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
+            Assert.Single(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
 
-            var announcedDXElement = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Single();
+            var announcedDXElement = existingDXUnit.DXElementInUnitDefinitionMainElement.Announced.Single();
 
             Assert.Equal(dxElementToAdd.ID, announcedDXElement.DXElementDefinitionUnit);
 
             // Action
-            existingEntity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            existingDXUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
             {
                 Mode = MultiElementsMode.Target,
                 Deleted = new List<DXElementInUnitDefinitionMainElement>()
@@ -257,16 +257,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.UpdateAsync(existingEntity).Wait();
+            this._dataService.UpdateAsync(existingDXUnit).Wait();
 
             // Assert
-            existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
+            existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
+            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
         }
 
 
         [Fact]
-        public async Task DeleteEntity_WithDXElements_Ok()
+        public async Task DeleteDXUnit_WithDXElements_Ok()
         {
             // Init
             var id = new Guid("1c4e8f3e-3f4b-4c6a-9f7e-8f9e7d6c5b4a");
@@ -287,7 +287,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestEntity8f9e7d6c5b4a"
+                    Name = "TestDXUnit8f9e7d6c5b4a"
                 },
                 DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
@@ -316,15 +316,15 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.DeleteAsync(dxUnit).Wait();
 
             // Assert
-            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
-            Assert.Null(existingEntity);
+            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
+            Assert.Null(existingDXUnit);
 
             var existingDXElement = await this._dataService.GetItemAsync<DXElementDefinitionUnit>(dxElement.ID);
             Assert.NotNull(existingDXElement);
         }
 
         [Fact]
-        public async Task UpdateEntity_UsingMoreThanOnelDeletedDXElementsWithTargetMode_Ok()
+        public async Task UpdateDXUnit_UsingMoreThanOnelDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("1873aa67-8f3e-4044-8659-c44f7a2dd5f6");
@@ -365,7 +365,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestEntityc44f7a2dd5f6"
+                    Name = "TestDXUnitc44f7a2dd5f6"
                 },
                 DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
@@ -417,13 +417,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
+            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
+            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
         }
     }
 
-    [DXUnit("TestEntity")]
-    public class TestEntity : DXUnit
+    [DXUnit("TestDXUnit")]
+    public class TestDXUnit : DXUnit
     {
         public TestDXElement TestDXElement { get; set; }
     }
@@ -435,8 +435,8 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public int IntCln { get; set; }
     }
 
-    [DXUnit("TestEntity")]
-    public class TestEntityModified : DXUnit
+    [DXUnit("TestDXUnit")]
+    public class TestDXUnitModified : DXUnit
     {
         public TestDXElementModified TestDXElement { get; set; }
     }

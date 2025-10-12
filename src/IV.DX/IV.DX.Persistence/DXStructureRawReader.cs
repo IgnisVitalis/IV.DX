@@ -32,10 +32,10 @@ namespace IV.DX.Persistence
 
             var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
-            var dxUnitInfosWithoutCore = dxUnitInfos.Except(DXCoreDataStructureRepository.CoreEntityInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var dxUnitInfosWithoutCore = dxUnitInfos.Except(DXCoreDataStructureRepository.CoreDXUnitInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
 
-            return DXCoreDataStructureRepository.CoreEntityInfos.Concat(dxUnitInfosWithoutCore).ToList();
+            return DXCoreDataStructureRepository.CoreDXUnitInfos.Concat(dxUnitInfosWithoutCore).ToList();
         }
 
         public IEnumerable<DXEnumDefinitionUnit> LoadDXEnumInfosRaw()

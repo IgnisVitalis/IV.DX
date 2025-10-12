@@ -193,7 +193,7 @@
       "ObjectNameLeft": "DXUnitInheritanceElement",
       "RelationNameLeft": "ChildEntities",
       "ObjectNameRight": "DXUnitDefinitionUnit",
-      "RelationNameRight": "BaseEntity",
+      "RelationNameRight": "BaseDXUnit",
       "RelationTable": null,
       "RelationType": 4,
       "Kind": 1

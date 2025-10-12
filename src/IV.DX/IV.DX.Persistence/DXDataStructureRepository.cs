@@ -166,9 +166,9 @@ namespace IV.DX.Persistence
             {
                 var existingModel = this.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
-                var existingEntity = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
+                var existingDXUnit = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 
-                relationTableName = existingEntity.DXRelationDefinitionMainElement.RelationTable;
+                relationTableName = existingDXUnit.DXRelationDefinitionMainElement.RelationTable;
             }
             else
             {
@@ -188,27 +188,27 @@ namespace IV.DX.Persistence
             return this._queryHelper.GetSQLQueryToDeleteRelationOneToMany(obj);
         }
 
-        public void SetDXUnitInheritance(string childEntity, string baseEntity)
+        public void SetDXUnitInheritance(string childDXUnit, string baseDXUnit)
         {
-            var query = this._queryHelper.GetQueryToSetEntityInheritance(childEntity, baseEntity);
+            var query = this._queryHelper.GetQueryToSetDXUnitInheritance(childDXUnit, baseDXUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
 
             this.UpdateCache();
         }
 
-        public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedEntity)
+        public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
         {
-            if (derivedEntity == null || derivedEntity.DXUnitInheritanceElement?.BaseEntity == null)
+            if (derivedDXUnit == null || derivedDXUnit.DXUnitInheritanceElement?.BaseDXUnit == null)
                 return null;
 
-            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.DXUnitInheritanceElement.BaseDXUnit);
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedEntity.DXUnitInheritanceElement.BaseEntity);
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.DXUnitInheritanceElement.BaseDXUnit);
             }
 
             return result;

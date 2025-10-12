@@ -25,7 +25,7 @@ namespace IV.DX.Persistence.IntTests
         }
 
         [Fact]
-        private void CRUD_UsingEnity_EntityIsProcessedCorrectly_Action()
+        private void CRUD_UsingEnity_DXUnitIsProcessedCorrectly_Action()
         {
             // Init
             var objectId = new Guid("8C29571C-3784-4D11-AD3E-F1D055023FD6");
@@ -78,7 +78,7 @@ namespace IV.DX.Persistence.IntTests
 
         // TODO: this test should be update to check multifragments also. Also need to use another dxUnit because DXObjectDefinitionUnit can be used in another tests.
         [Fact]
-        public void CRUD_UsingEnities_EntitysAreProcessedCorrectly()
+        public void CRUD_UsingEnities_DXUnitsAreProcessedCorrectly()
         {
             // Init
             var objectId1 = new Guid("3DBA464B-542F-484B-A121-2D2FFEE9FEAC");

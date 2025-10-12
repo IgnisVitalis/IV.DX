@@ -125,7 +125,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             {
                 if ((item.StartsWith("r(") || item.StartsWith("R(")) && item.EndsWith(')'))
                 {
-                    lastExistingNode = lastExistingNode.CreateEntityNodeInstanceChild(level, this.GetLastYByX(level) + 1, item);
+                    lastExistingNode = lastExistingNode.CreateDXUnitNodeInstanceChild(level, this.GetLastYByX(level) + 1, item);
                 }
                 else
                 {
@@ -176,7 +176,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 if (ProcessNodeAsCoreNode(item, relationInfos))
                     continue;
 
-                if (ProcessNodeAsEntityNode(item, relationInfos))
+                if (ProcessNodeAsDXUnitNode(item, relationInfos))
                     continue;
 
                 if (ProcessNodeAsDXElementNode(item, relationInfos))
@@ -199,7 +199,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsEntityNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsDXUnitNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var dxUnitNode = node as DXUnitNode;
 
@@ -210,13 +210,13 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             DXRelationDefinitionUnit relationInfo = null;
 
-            var motherNodeAsEntityNode = dxUnitNode.Mother as DXUnitNode;
+            var motherNodeAsDXUnitNode = dxUnitNode.Mother as DXUnitNode;
             var motherNodeAsCoreNode = dxUnitNode.Mother as DXCoreNode;
 
-            if (motherNodeAsEntityNode != null)
+            if (motherNodeAsDXUnitNode != null)
             {
                 relationInfo = relationInfos.SingleOrDefault(x =>
-                    x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsEntityNode.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight
+                    x.DXRelationDefinitionMainElement.ObjectNameLeft == motherNodeAsDXUnitNode.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight
                     && x.DXRelationDefinitionMainElement.RelationNameRight == dxUnitNode.RelationName);
             }
             else if (motherNodeAsCoreNode != null)

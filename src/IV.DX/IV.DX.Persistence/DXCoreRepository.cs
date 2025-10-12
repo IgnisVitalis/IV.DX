@@ -37,9 +37,9 @@ namespace IV.DX.Persistence
             if (id == Guid.Empty)
                 throw new ArgumentException("Id must be a non-empty GUID.", nameof(id));
 
-            var mainEntityInfo = this.GetDXUnitDefinition(typeName);
+            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
 
-            var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainEntityInfo);
+            var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainDXUnitInfo);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -77,7 +77,7 @@ namespace IV.DX.Persistence
 
             this.RunRequest((conn) =>
             {
-                var dataSet = this.PopulateDataSetForTargetEntity(container, id, conn);
+                var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
 
                 result = this.GetDXModel(container, id);
 
@@ -143,7 +143,7 @@ namespace IV.DX.Persistence
 
             IEnumerable<DXModel> resultItems = null;
 
-            var dataSet = this.PopulateDataSetForTargetEntitys(container, objIds, conn);
+            var dataSet = this.PopulateDataSetForTargetDXUnits(container, objIds, conn);
 
             var items = dataSet.Tables[container.OwnSingleItem.Type].Rows;
 
@@ -268,12 +268,12 @@ namespace IV.DX.Persistence
 
         private DXModelDefinition GetModelDefinition(string type)
         {
-            var mainEntity = this.GetDXUnitDefinition(type);
+            var mainDXUnit = this.GetDXUnitDefinition(type);
 
-            if (mainEntity == null)
+            if (mainDXUnit == null)
                 return null;
 
-            var entities = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntity);
+            var entities = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnit);
 
             List<DXElementDefinitionUnit> singleMandatoryDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> singleOptionalDXElements = new List<DXElementDefinitionUnit>();
@@ -312,7 +312,7 @@ namespace IV.DX.Persistence
             }
 
             var modelDefinition = DXModelDefinition.BuildModelDefinition(
-                mainEntity,
+                mainDXUnit,
                 singleMandatoryDXElements,
                 singleOptionalDXElements,
                 multiMandatoryDXElements,
@@ -345,7 +345,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private DataSet PopulateDataSetForTargetEntity(DXModelDefinition container, Guid id, DbConnection conn)
+        private DataSet PopulateDataSetForTargetDXUnit(DXModelDefinition container, Guid id, DbConnection conn)
         {
             DataSet dataSet = new DataSet(container.OwnSingleItem.Type);
 
@@ -371,7 +371,7 @@ namespace IV.DX.Persistence
             return dataSet;
         }
 
-        private DataSet PopulateDataSetForTargetEntitys(DXModelDefinition container, IEnumerable<Guid> ids, DbConnection conn)
+        private DataSet PopulateDataSetForTargetDXUnits(DXModelDefinition container, IEnumerable<Guid> ids, DbConnection conn)
         {
             DataSet dataSet = new DataSet(container.OwnSingleItem.Type);
 
@@ -533,13 +533,13 @@ namespace IV.DX.Persistence
 
             var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
 
-            var mainEntityInfo = this.GetDXUnitDefinition(typeName);
+            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
 
-            if (mainEntityInfo != null)
+            if (mainDXUnitInfo != null)
             {
-                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntityInfo);
+                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnitInfo);
 
-                this.ProcessDXModelAsDXEntity(typeName, dxModel, dxUnitHierarchy, processingType);
+                this.ProcessDXModelAsDXDXUnit(typeName, dxModel, dxUnitHierarchy, processingType);
             }
 
             var enumInfo = this.GetDXEnumDefinition(typeName);
@@ -549,7 +549,7 @@ namespace IV.DX.Persistence
                 this.ProcessDXModelAsDXEnum(typeName, enumInfo, dxModel, processingType);
             }
 
-            if (enumInfo == null && mainEntityInfo == null)
+            if (enumInfo == null && mainDXUnitInfo == null)
             {
                 throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
             }
@@ -557,7 +557,7 @@ namespace IV.DX.Persistence
             return dxModel.OwnSingleItem.Item.ID.Value;
         }
 
-        private void ProcessDXModelAsDXEntity(string typeName, DXModel dxModel, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
+        private void ProcessDXModelAsDXDXUnit(string typeName, DXModel dxModel, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
         {
             this.RunRequestInTransaction((conn) =>
             {
@@ -641,24 +641,24 @@ namespace IV.DX.Persistence
             });
         }
 
-        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DXUnitDefinitionUnit derivedEntity)
+        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DXUnitDefinitionUnit derivedDXUnit)
         {
-            var result = new List<DXUnitDefinitionUnit>() { derivedEntity };
+            var result = new List<DXUnitDefinitionUnit>() { derivedDXUnit };
 
-            if (derivedEntity.DXUnitInheritanceElement?.BaseEntity == null)
+            if (derivedDXUnit.DXUnitInheritanceElement?.BaseDXUnit == null)
                 return result;
 
-            var derivedEntityInfo = derivedEntity;
+            var derivedDXUnitInfo = derivedDXUnit;
 
             while (true)
             {
-                var baseClass = this.GetBaseDXUnit(derivedEntityInfo);
+                var baseClass = this.GetBaseDXUnit(derivedDXUnitInfo);
 
                 result.Add(baseClass);
 
                 if (baseClass.DXUnitInheritanceElement != null)
                 {
-                    derivedEntityInfo = baseClass;
+                    derivedDXUnitInfo = baseClass;
                 }
                 else
                 {
@@ -669,9 +669,9 @@ namespace IV.DX.Persistence
             return result.ToList();
         }
 
-        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromBaseToDerived(DXUnitDefinitionUnit derivedEntity)
+        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromBaseToDerived(DXUnitDefinitionUnit derivedDXUnit)
         {
-            return this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(derivedEntity).Reverse();
+            return this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(derivedDXUnit).Reverse();
         }
 
         private void DeleteDXUnitFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)

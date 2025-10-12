@@ -6,17 +6,17 @@ namespace IV.DX.Kernel.Attributes
     {
         public string Name { get; private set; }
         public string DXExpression { get; private set; }
-        public DXLoadingType TypeOfEntityLoading { get; private set; }
+        public DXLoadingType TypeOfDXUnitLoading { get; private set; }
 
         public DXColumnAttribute(
             string name,
             string dxExpression = null,
-            DXLoadingType typeOfEntityLoading = DXLoadingType.Full)
+            DXLoadingType typeOfDXUnitLoading = DXLoadingType.Full)
         {
             Name = name;
             DXExpression = string.IsNullOrEmpty(dxExpression) ?
                                     Name : dxExpression;
-            TypeOfEntityLoading = typeOfEntityLoading;
+            TypeOfDXUnitLoading = typeOfDXUnitLoading;
         }
 
         public static bool DeepEquals(DXColumnAttribute item1, DXColumnAttribute item2)
@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Attributes
             if (item1 == null || item2 == null)
                 return false;
 
-            var result = item1.Name == item2.Name && item1.DXExpression == item2.DXExpression && item1.TypeOfEntityLoading == item2.TypeOfEntityLoading;
+            var result = item1.Name == item2.Name && item1.DXExpression == item2.DXExpression && item1.TypeOfDXUnitLoading == item2.TypeOfDXUnitLoading;
 
             return result;
         }
@@ -53,7 +53,7 @@ namespace IV.DX.Kernel.Attributes
 
         public DXColumnAttribute DeepClone()
         {
-            return new DXColumnAttribute(Name, DXExpression, TypeOfEntityLoading);
+            return new DXColumnAttribute(Name, DXExpression, TypeOfDXUnitLoading);
         }
 
         public bool DeepEquals(DXColumnAttribute columnDefinition)
@@ -67,7 +67,7 @@ namespace IV.DX.Kernel.Attributes
             if (DXExpression != columnDefinition.DXExpression)
                 return false;
 
-            if (TypeOfEntityLoading != columnDefinition.TypeOfEntityLoading)
+            if (TypeOfDXUnitLoading != columnDefinition.TypeOfDXUnitLoading)
                 return false;
 
             return true;

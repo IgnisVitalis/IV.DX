@@ -32,12 +32,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             foreach (var item in expressionTree.AllNodesWithoutCoreAndLeaves)
             {
-                var nodeAsEntityNode = item as DXUnitNode;
+                var nodeAsDXUnitNode = item as DXUnitNode;
                 var nodeAsDXElementNode = item as DXElementNode;
 
-                if (nodeAsEntityNode != null)
+                if (nodeAsDXUnitNode != null)
                 {
-                    leftJoins = leftJoins.Concat(nodeAsEntityNode.QueryInfos.Select(x => this.GetLeftJoinQuery(x)));
+                    leftJoins = leftJoins.Concat(nodeAsDXUnitNode.QueryInfos.Select(x => this.GetLeftJoinQuery(x)));
                 }
                 else if (nodeAsDXElementNode != null)
                 {
@@ -147,14 +147,14 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return result.Query;
         }
 
-        public string GetQueryToSetEntityInheritance(string childEntity, string baseEntity)
+        public string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{childEntity}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{childEntity}_{baseEntity}_Base\" ");
+            sb.Append($"ALTER TABLE \"{childDXUnit}\" ");
+            sb.Append($"ADD CONSTRAINT \"FK_{childDXUnit}_{baseDXUnit}_Base\" ");
             sb.Append($"FOREIGN KEY (\"ID\") ");
-            sb.Append($"REFERENCES \"{baseEntity}\" (\"ID\") ");
+            sb.Append($"REFERENCES \"{baseDXUnit}\" (\"ID\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
@@ -670,9 +670,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (obj == null || dxElement == null)
                 return null;
 
-            var dxElementInEntityInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
+            var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
 
-            if (dxElementInEntityInfo == null)
+            if (dxElementInDXUnitInfo == null)
                 return null;
 
             StringBuilder sb = new StringBuilder();
@@ -680,8 +680,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
             sb.Append($"ADD COLUMN \"{obj.DXUnitDefinitionMainElement.Name}ID\" uuid; ");
 
-            if (dxElementInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
-            || dxElementInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
+            if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
+            || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
             )
             {
                 sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");

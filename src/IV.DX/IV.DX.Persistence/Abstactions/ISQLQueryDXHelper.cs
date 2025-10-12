@@ -32,7 +32,7 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQueryToSelectIDFromTable(string tableName);
         string GetSelectQuery(DXCoreNode coreNode);
         string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
-        string GetQueryToSetEntityInheritance(string childEntity, string baseEntity);
+        string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
         string GetWhereExpressionForID(Guid id);
         string GetWhereExpressionForObjectID(Guid id);
         string GetWhereExpressionForID(IEnumerable<Guid> ids);

@@ -12,7 +12,7 @@ namespace IV.DX.Application.Handlers
 
         public Task<DXResult<DXInheritanceInitCore>> BeforeInsertAsync(DXInheritanceInitCore dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            dataStructureRepo.SetDXUnitInheritance(dxUnit.ChildEntity, dxUnit.BaseEntity);
+            dataStructureRepo.SetDXUnitInheritance(dxUnit.ChildDXUnit, dxUnit.BaseDXUnit);
 
             return Task.Run(() => DXResult<DXInheritanceInitCore>.OkSkipProcess(dxUnit));
         }

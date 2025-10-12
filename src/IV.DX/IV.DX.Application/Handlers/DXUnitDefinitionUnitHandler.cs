@@ -64,12 +64,12 @@ namespace IV.DX.Application.Handlers
 
         private void DeleteRelations(DXUnitDefinitionUnit dxUnit)
         {
-            var existingEntity = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
+            var existingDXUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
 
-            if (existingEntity == null)
+            if (existingDXUnit == null)
                 return;
 
-            var relatedDXElementIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+            var relatedDXElementIds = existingDXUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedDXElements = dataStructureRepo.GetDXElementDefinitions(relatedDXElementIds);
 

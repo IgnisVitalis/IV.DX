@@ -7,14 +7,14 @@ namespace IV.DX.Persistence
     {
         public static IEnumerable<DXElementDefinitionUnit> CoreDXElementInfos { get; set; }
         public static IEnumerable<DXEnumDefinitionUnit> CoreEnumInfos { get; set; }
-        public static IEnumerable<DXUnitDefinitionUnit> CoreEntityInfos { get; set; }
+        public static IEnumerable<DXUnitDefinitionUnit> CoreDXUnitInfos { get; set; }
         public static IEnumerable<DXRelationDefinitionUnit> CoreRelationInfos { get; set; }
 
         static DXCoreDataStructureRepository()
         {
             InitCoreEnumInfos();
             InitCoreDXElementInfos();
-            InitCoreEntityInfos();
+            InitCoreDXUnitInfos();
         }
 
         private static void InitCoreEnumInfos()
@@ -413,7 +413,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "BaseEntity",
+                            Name = "BaseDXUnit",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = true
                         }
@@ -712,7 +712,7 @@ namespace IV.DX.Persistence
             };
         }
 
-        private static void InitCoreEntityInfos()
+        private static void InitCoreDXUnitInfos()
         {
             #region DXObjectDefinitionUnit
             var DXObjectDefinitionUnit = new DXUnitDefinitionUnit()
@@ -765,7 +765,7 @@ namespace IV.DX.Persistence
                 DXUnitInheritanceElement = new DXUnitInheritanceElement()
                 {
                     ID = new Guid("710b1d0b-9343-4739-8126-ab4baefe5763"),
-                    BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
+                    BaseDXUnit = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
                 },
                 DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
                 {
@@ -802,7 +802,7 @@ namespace IV.DX.Persistence
                 DXUnitInheritanceElement = new DXUnitInheritanceElement()
                 {
                     ID = new Guid("61b4c43f-cc9b-460e-80f9-9f2a7f4f7ca9"),
-                    BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
+                    BaseDXUnit = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
                 }
             };
             #endregion
@@ -820,7 +820,7 @@ namespace IV.DX.Persistence
                 DXUnitInheritanceElement = new DXUnitInheritanceElement()
                 {
                     ID = new Guid("408785e8-7e42-4e7f-b60a-d5c686911612"),
-                    BaseEntity = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
+                    BaseDXUnit = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"),
                 }
             };
             #endregion
@@ -879,7 +879,7 @@ namespace IV.DX.Persistence
 
 
 
-            CoreEntityInfos = new List<DXUnitDefinitionUnit>()
+            CoreDXUnitInfos = new List<DXUnitDefinitionUnit>()
             {
                 DXObjectDefinitionUnit,
                 DXUnitDefinitionUnit,

@@ -50,7 +50,7 @@
             return child;
         }
 
-        public DXUnitNode CreateEntityNodeInstanceChild(int x, int y, string value)
+        public DXUnitNode CreateDXUnitNodeInstanceChild(int x, int y, string value)
         {
             var leaf = DXUnitNode.CreateInstance(x, y, value);
 

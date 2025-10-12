@@ -248,7 +248,7 @@ namespace IV.DX.Persistence.CoreData
                         ObjectNameLeft = "DXUnitInheritanceElement",
                         RelationNameLeft = "ChildEntities",
                         ObjectNameRight = "DXUnitDefinitionUnit",
-                        RelationNameRight = "BaseEntity",
+                        RelationNameRight = "BaseDXUnit",
                         RelationTable = null,
                         RelationType = DXRelationTypeEnum.ManyToOne,
                         Kind = DXObjectKindEnum.Core

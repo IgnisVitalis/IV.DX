@@ -45,8 +45,8 @@ namespace IV.DX.Shared.IntTests
     //        var sp = services.BuildServiceProvider();
     //        sp.InitializeDXHandlers();
 
-    //        EntityHandlerProvider.InitCore(sp);
-    //        EntityHandlerProvider.Init();
+    //        DXUnitHandlerProvider.InitCore(sp);
+    //        DXUnitHandlerProvider.Init();
 
     //        using (var scope = sp.CreateScope())
     //        {

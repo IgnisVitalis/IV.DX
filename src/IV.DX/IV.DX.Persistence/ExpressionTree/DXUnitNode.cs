@@ -62,7 +62,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
         private IEnumerable<DXJoinedQueryInfo> GetQueryInfos()
         {
             var motherAsCoreNode = this.Mother as DXCoreNode;
-            var motherAsEntityNode = this.Mother as DXUnitNode;
+            var motherAsDXUnitNode = this.Mother as DXUnitNode;
 
             switch (this.RelationInfo.DXRelationDefinitionMainElement.RelationType)
             {
@@ -82,9 +82,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                         {
                             queryInfo.MainTableAlias = motherAsCoreNode.MainTableAlias;
                         }
-                        else if (motherAsEntityNode != null)
+                        else if (motherAsDXUnitNode != null)
                         {
-                            queryInfo.MainTableAlias = motherAsEntityNode.QueryInfos.Last().JoinedTableAlias;
+                            queryInfo.MainTableAlias = motherAsDXUnitNode.QueryInfos.Last().JoinedTableAlias;
                         }
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
@@ -107,9 +107,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                         {
                             queryInfo.MainTableAlias = motherAsCoreNode.MainTableAlias;
                         }
-                        else if (motherAsEntityNode != null)
+                        else if (motherAsDXUnitNode != null)
                         {
-                            queryInfo.MainTableAlias = motherAsEntityNode.QueryInfos.Last().JoinedTableAlias;
+                            queryInfo.MainTableAlias = motherAsDXUnitNode.QueryInfos.Last().JoinedTableAlias;
                         }
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
@@ -140,9 +140,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                         {
                             queryInfo.MainTableAlias = motherAsCoreNode.MainTableAlias;
                         }
-                        else if (motherAsEntityNode != null)
+                        else if (motherAsDXUnitNode != null)
                         {
-                            queryInfo.MainTableAlias = motherAsEntityNode.QueryInfos.Last().JoinedTableAlias;
+                            queryInfo.MainTableAlias = motherAsDXUnitNode.QueryInfos.Last().JoinedTableAlias;
                         }
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
@@ -172,9 +172,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                             intermediate.MainTableAlias = motherAsCoreNode.MainTableAlias;
                             motherTableName = motherAsCoreNode.Value;
                         }
-                        else if (motherAsEntityNode != null)
+                        else if (motherAsDXUnitNode != null)
                         {
-                            var motherLastQueryInfo = motherAsEntityNode.QueryInfos.Last();
+                            var motherLastQueryInfo = motherAsDXUnitNode.QueryInfos.Last();
 
                             intermediate.MainTableAlias = motherLastQueryInfo.JoinedTableAlias;
                             motherTableName = motherLastQueryInfo.JoinedTableName;

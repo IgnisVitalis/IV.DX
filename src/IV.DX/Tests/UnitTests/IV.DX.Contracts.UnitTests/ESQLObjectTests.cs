@@ -7,7 +7,7 @@ namespace IV.DX.Contracts.UnitTests
     public class dxUnitectTests
     {
         [Fact]
-        public void ConvertToDXModel_UsingDerivedEntity_CorrectDXModel()
+        public void ConvertToDXModel_UsingDerivedDXUnit_CorrectDXModel()
         {
             // Init
             DerivedUnit1 dxUnit = new DerivedUnit1();
