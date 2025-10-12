@@ -13,14 +13,14 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
+            var dxElementModelsFromDB = this.GetItems(DXElementDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
 
-            var blockInfos = blockModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
+            var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
-            var blockInfosWithoutCore = blockInfos.Except(DXCoreDataStructureRepository.CoreBlockInfos, DXObjectDefinitionUnitIDComparer.Instance)
+            var dxElementInfosWithoutCore = dxElementInfos.Except(DXCoreDataStructureRepository.CoreDXElementInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXElementDefinitionUnit);
 
-            return DXCoreDataStructureRepository.CoreBlockInfos.Concat(blockInfosWithoutCore).ToList();
+            return DXCoreDataStructureRepository.CoreDXElementInfos.Concat(dxElementInfosWithoutCore).ToList();
         }
 
         public IEnumerable<DXUnitDefinitionUnit> LoadDXUnitInfosRaw()

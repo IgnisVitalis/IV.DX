@@ -5,6 +5,6 @@ namespace IV.DX.Shared.UnitTests.DXObjects.DXUnits
 {
     public abstract class BaseUnit1 : DXUnit
     {
-        public BaseElement1 BaseBlock1 { get; set; }
+        public BaseElement1 BaseDXElement1 { get; set; }
     }
 }

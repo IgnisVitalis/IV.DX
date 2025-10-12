@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Converters
             var multiItemDefinitions =
                   dxModel.MultiItems.Select(x =>
                   {
-                      var item = new DXElementDefinition(x.BlockInfo.Name, x.Name);
+                      var item = new DXElementDefinition(x.DXElementInfo.Name, x.Name);
 
                       var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : (x.Deleted.Count() > 0 ? x.Deleted.First() : null);
 

@@ -58,7 +58,7 @@
                 return result;
             }
 
-            throw new Exception("BlockNode can have only CoreNode or EntityNode as mother node. Please check DX query.");
+            throw new Exception("DXElementNode can have only CoreNode or EntityNode as mother node. Please check DX query.");
         }
     }
 }

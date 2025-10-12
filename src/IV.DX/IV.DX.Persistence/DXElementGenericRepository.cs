@@ -7,44 +7,44 @@ namespace IV.DX.Persistence
 {
     internal class DXElementGenericRepository(IDXCoreRepository coreRepo) : IDXElementGenericRepository
     {
-        public Guid InsertBlock(string dxModelType, DXElement dxElement)
+        public Guid InsertDXElement(string dxModelType, DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = dxElement.ConvertToSingleItem();
+            var singleDXElement = dxElement.ConvertToSingleItem();
 
-            return coreRepo.InsertSingleBlock(dxModelType, singleBlock);
+            return coreRepo.InsertSingleDXElement(dxModelType, singleDXElement);
         }
 
-        public Guid UpdateBlock(string dxModelType, DXElement dxElement)
+        public Guid UpdateDXElement(string dxModelType, DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = dxElement.ConvertToSingleItem();
+            var singleDXElement = dxElement.ConvertToSingleItem();
 
-            return coreRepo.UpdateSingleBlock(dxModelType, singleBlock);
+            return coreRepo.UpdateSingleDXElement(dxModelType, singleDXElement);
         }
 
-        public bool DeleteBlock(DXElement dxElement)
+        public bool DeleteDXElement(DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleBlock = dxElement.ConvertToSingleItem();
+            var singleDXElement = dxElement.ConvertToSingleItem();
 
-            return coreRepo.DeleteSingleBlock(singleBlock.Name, dxElement.ID);
+            return coreRepo.DeleteSingleDXElement(singleDXElement.Name, dxElement.ID);
         }
 
-        public T GetBlock<T>(Guid id) where T : DXElement
+        public T GetDXElement<T>(Guid id) where T : DXElement
         {
-            var blockName = AttributeReader.GetDXElementTypeName(typeof(T));
+            var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
-            var block = DXModelDefinitionHelper.GetDXElementDefinition(blockName, typeof(T));
+            var dxElement = DXModelDefinitionHelper.GetDXElementDefinition(dxElementName, typeof(T));
 
-            var result = coreRepo.GetSingleBlock(block, id);
+            var result = coreRepo.GetSingleDXElement(dxElement, id);
 
-            return DXUnitHelper.CreateBlockInstance<T>(result);
+            return DXUnitHelper.CreateDXElementInstance<T>(result);
         }
     }
 }

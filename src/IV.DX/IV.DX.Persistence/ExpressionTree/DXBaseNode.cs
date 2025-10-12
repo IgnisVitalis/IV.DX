@@ -28,7 +28,7 @@
             this.Childs = Enumerable.Empty<DXBaseNode>();
         }
 
-        public DXElementNode CreateBlockNodeInstanceChild(int x, int y, string value)
+        public DXElementNode CreateDXElementNodeInstanceChild(int x, int y, string value)
         {
             var child = DXElementNode.CreateInstance(x, y, value);
 

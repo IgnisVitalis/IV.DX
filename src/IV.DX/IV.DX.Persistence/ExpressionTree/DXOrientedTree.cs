@@ -129,7 +129,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 }
                 else
                 {
-                    lastExistingNode = lastExistingNode.CreateBlockNodeInstanceChild(level, this.GetLastYByX(level) + 1, item);
+                    lastExistingNode = lastExistingNode.CreateDXElementNodeInstanceChild(level, this.GetLastYByX(level) + 1, item);
                 }
 
                 level++;
@@ -179,7 +179,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 if (ProcessNodeAsEntityNode(item, relationInfos))
                     continue;
 
-                if (ProcessNodeAsBlockNode(item, relationInfos))
+                if (ProcessNodeAsDXElementNode(item, relationInfos))
                     continue;
 
                 if (ProcessNodeAsPropertyNode(item, relationInfos))
@@ -236,11 +236,11 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsBlockNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsDXElementNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var blockNode = node as DXElementNode;
+            var dxElementNode = node as DXElementNode;
 
-            if (blockNode == null)
+            if (dxElementNode == null)
             {
                 return false;
             }

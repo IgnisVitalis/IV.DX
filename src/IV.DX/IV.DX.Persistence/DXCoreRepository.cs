@@ -47,14 +47,14 @@ namespace IV.DX.Persistence
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    var relatedBlocks = this.GetRelatedDXElementDefinitions(dxUnitInfo);
+                    var relatedDXElements = this.GetRelatedDXElementDefinitions(dxUnitInfo);
 
-                    if (relatedBlocks != null)
+                    if (relatedDXElements != null)
                     {
-                        // Delete related blocks
-                        foreach (var relatedBlock in relatedBlocks)
+                        // Delete related dxElements
+                        foreach (var relatedDXElement in relatedDXElements)
                         {
-                            this.DeleteDXElementsFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                            this.DeleteDXElementsFromDataSet(relatedDXElement.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                         }
                     }
 
@@ -203,7 +203,7 @@ namespace IV.DX.Persistence
             return new DXMultiElement()
             {
                 Name = item.Name,
-                BlockInfo = new DXElementAttribute(item.Name)
+                DXElementInfo = new DXElementAttribute(item.Name)
             };
         }
 
@@ -275,48 +275,48 @@ namespace IV.DX.Persistence
 
             var entities = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainEntity);
 
-            List<DXElementDefinitionUnit> singleMandatoryBlocks = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> singleOptionalBlocks = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> multiMandatoryBlocks = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> multiOptionalBlocks = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> singleMandatoryDXElements = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> singleOptionalDXElements = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> multiMandatoryDXElements = new List<DXElementDefinitionUnit>();
+            List<DXElementDefinitionUnit> multiOptionalDXElements = new List<DXElementDefinitionUnit>();
 
             foreach (var dxUnit in entities)
             {
-                var singleMandatoryBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
+                var singleMandatoryDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
 
-                if (singleMandatoryBlocksTemp != null)
+                if (singleMandatoryDXElementsTemp != null)
                 {
-                    singleMandatoryBlocks.AddRange(singleMandatoryBlocksTemp);
+                    singleMandatoryDXElements.AddRange(singleMandatoryDXElementsTemp);
                 }
 
-                var singleOptionalBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
+                var singleOptionalDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
 
-                if (singleOptionalBlocksTemp != null)
+                if (singleOptionalDXElementsTemp != null)
                 {
-                    singleOptionalBlocks.AddRange(singleOptionalBlocksTemp);
+                    singleOptionalDXElements.AddRange(singleOptionalDXElementsTemp);
                 }
 
-                var multiMandatoryBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
+                var multiMandatoryDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
 
-                if (multiMandatoryBlocksTemp != null)
+                if (multiMandatoryDXElementsTemp != null)
                 {
-                    multiMandatoryBlocks.AddRange(multiMandatoryBlocksTemp);
+                    multiMandatoryDXElements.AddRange(multiMandatoryDXElementsTemp);
                 }
 
-                var multiOptionalBlocksTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
+                var multiOptionalDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
 
-                if (multiOptionalBlocksTemp != null)
+                if (multiOptionalDXElementsTemp != null)
                 {
-                    multiOptionalBlocks.AddRange(multiOptionalBlocksTemp);
+                    multiOptionalDXElements.AddRange(multiOptionalDXElementsTemp);
                 }
             }
 
             var modelDefinition = DXModelDefinition.BuildModelDefinition(
                 mainEntity,
-                singleMandatoryBlocks,
-                singleOptionalBlocks,
-                multiMandatoryBlocks,
-                multiOptionalBlocks);
+                singleMandatoryDXElements,
+                singleOptionalDXElements,
+                multiMandatoryDXElements,
+                multiOptionalDXElements);
 
             return modelDefinition;
         }
@@ -567,54 +567,54 @@ namespace IV.DX.Persistence
                 {
                     this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
 
-                    var relatedBlocksSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedBlocksSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
-                    var relatedBlocksMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedBlocksMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    var relatedDXElementsSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedDXElementsSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    var relatedDXElementsMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedDXElementsMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var objectID = dxModel.OwnSingleItem.Item.ID.Value;
                     var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
                     // Process DX single items
-                    if (relatedBlocksSM != null)
+                    if (relatedDXElementsSM != null)
                     {
-                        foreach (var singleItem in relatedBlocksSM)
+                        foreach (var singleItem in relatedDXElementsSM)
                         {
-                            var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
-                            var block = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+                            var dxElementName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
+                            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 
-                            if (block == null)
+                            if (dxElement == null)
                                 continue;
 
-                            this.InsertOrUpdatedxSingleItemToDataSet(block, dxUnitType, objectID, dataSet, conn, processingType);
+                            this.InsertOrUpdatedxSingleItemToDataSet(dxElement, dxUnitType, objectID, dataSet, conn, processingType);
                         }
                     }
 
-                    if (relatedBlocksSO != null)
+                    if (relatedDXElementsSO != null)
                     {
-                        foreach (var singleItem in relatedBlocksSO)
+                        foreach (var singleItem in relatedDXElementsSO)
                         {
-                            var blockName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
-                            var block = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+                            var dxElementName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
+                            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 
-                            if (block == null)
+                            if (dxElement == null)
                                 continue;
 
-                            this.InsertOrUpdatedxSingleItemToDataSet(block, dxUnitType, objectID, dataSet, conn, processingType);
+                            this.InsertOrUpdatedxSingleItemToDataSet(dxElement, dxUnitType, objectID, dataSet, conn, processingType);
                         }
                     }
 
                     // Process DX mutli items
-                    if (relatedBlocksMM != null)
+                    if (relatedDXElementsMM != null)
                     {
-                        foreach (var multiItem in relatedBlocksMM)
+                        foreach (var multiItem in relatedDXElementsMM)
                         {
                             this.InsertOrUpdateDXMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
                     }
 
-                    if (relatedBlocksMO != null)
+                    if (relatedDXElementsMO != null)
                     {
-                        foreach (var multiItem in relatedBlocksMO)
+                        foreach (var multiItem in relatedDXElementsMO)
                         {
                             this.InsertOrUpdateDXMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
                         }
@@ -693,23 +693,23 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxUnitName);
         }
 
-        private void DeleteDXElementsFromDataSet(string blockName, Guid objectID, DataSet dataSet, DbConnection conn)
+        private void DeleteDXElementsFromDataSet(string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName, whereClause:
+            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName, whereClause:
                 this._queryHelper.GetWhereExpressionForObjectID(objectID));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
             dxModelBuilder.GetDeleteCommand();
 
-            DataTable dataTable = dataSet.Tables[blockName];
+            DataTable dataTable = dataSet.Tables[dxElementName];
 
             foreach (DataRow row in dataTable.Rows)
             {
                 row.Delete();
             }
 
-            dxModelAdapter.Update(dataSet, blockName);
+            dxModelAdapter.Update(dataSet, dxElementName);
         }
 
         private void InsertOrUpdateDXOwnItemToDataSet(DXModel dxModel, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
@@ -753,24 +753,24 @@ namespace IV.DX.Persistence
         }
 
         private Guid InsertOrUpdatedxSingleItemToDataSet(
-            DXSingleElement block,
+            DXSingleElement dxElement,
             string dxUnitType,
             Guid objectID,
             DataSet dataSet,
             DbConnection conn,
             ProcessingType processingType)
         {
-            ArgumentNullException.ThrowIfNull(block);
+            ArgumentNullException.ThrowIfNull(dxElement);
 
-            if (!block.Item.ID.HasValue)
+            if (!dxElement.Item.ID.HasValue)
             {
-                block.Item.ID = Guid.NewGuid();
+                dxElement.Item.ID = Guid.NewGuid();
             }
 
-            var blockName = block.ElementInfo.Name;
+            var dxElementName = dxElement.ElementInfo.Name;
 
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName,
-                whereClause: this._queryHelper.GetWhereExpressionForID(block.Item.ID.Value));
+            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName,
+                whereClause: this._queryHelper.GetWhereExpressionForID(dxElement.Item.ID.Value));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -784,37 +784,37 @@ namespace IV.DX.Persistence
                     break;
             }
 
-            DataTable dataTable = dataSet.Tables[blockName];
+            DataTable dataTable = dataSet.Tables[dxElementName];
 
             if (dataTable.Rows.Count == 0)
             {
                 var row = dataTable.NewRow();
-                MapdxItemToRow(block.Item, row, dxUnitType);
+                MapdxItemToRow(dxElement.Item, row, dxUnitType);
                 dataTable.Rows.Add(row);
             }
             else
             {
                 var row = dataTable.Rows[0];
-                MapdxItemToRow(block.Item, row, dxUnitType);
+                MapdxItemToRow(dxElement.Item, row, dxUnitType);
             }
 
-            dxModelAdapter.Update(dataSet, blockName);
+            dxModelAdapter.Update(dataSet, dxElementName);
 
-            return block.Item.ID.Value;
+            return dxElement.Item.ID.Value;
         }
 
-        private void InsertOrUpdateDXMultiItemToDataSet(DXModel dxModel, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit blockInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void InsertOrUpdateDXMultiItemToDataSet(DXModel dxModel, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit dxElementInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
-            var blockName = blockInfo.DXUnitDefinitionMainElement.Name.Trim();
+            var dxElementName = dxElementInfo.DXUnitDefinitionMainElement.Name.Trim();
             var objectID = dxModel.OwnSingleItem.Item.ID;
             var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
 
-            var block = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == blockName);
+            var dxElement = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 
-            if (block == null)
+            if (dxElement == null)
                 return;
 
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName, whereClause:
+            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName, whereClause:
                 this._queryHelper.GetWhereExpressionForObjectID(objectID.Value));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
@@ -828,17 +828,17 @@ namespace IV.DX.Persistence
                 dxModelBuilder.GetUpdateCommand();
             }
 
-            DataTable dataTable = dataSet.Tables[blockName];
+            DataTable dataTable = dataSet.Tables[dxElementName];
 
-            if (block.Mode == MultiElementsMode.Full)
+            if (dxElement.Mode == MultiElementsMode.Full)
             {
-                this.ProcessAnnouncedItems(block, dataTable, dataSet.DataSetName);
+                this.ProcessAnnouncedItems(dxElement, dataTable, dataSet.DataSetName);
 
                 var rowsToDelete = dataTable.Rows.Cast<DataRow>()
                     .Where(row =>
                     {
                         var id = Guid.Parse(Convert.ToString(row[Constants.ID]));
-                        return !block.Announced.Any(x => x.ID == id);
+                        return !dxElement.Announced.Any(x => x.ID == id);
                     })
                     .ToList();
 
@@ -848,13 +848,13 @@ namespace IV.DX.Persistence
                 }
 
             }
-            else if (block.Mode == MultiElementsMode.Target)
+            else if (dxElement.Mode == MultiElementsMode.Target)
             {
-                this.ProcessAnnouncedItems(block, dataTable, dataSet.DataSetName);
-                this.ProcessDeletedItems(block, dataTable);
+                this.ProcessAnnouncedItems(dxElement, dataTable, dataSet.DataSetName);
+                this.ProcessDeletedItems(dxElement, dataTable);
             }
 
-            dxModelAdapter.Update(dataSet, block.BlockInfo.Name);
+            dxModelAdapter.Update(dataSet, dxElement.DXElementInfo.Name);
         }
 
         private void ProcessAnnouncedItems(DXMultiElement dxMultiItem, DataTable dataTable, string dxModelType)
@@ -1205,34 +1205,34 @@ namespace IV.DX.Persistence
             }
         }
 
-        public Guid InsertSingleBlock(string dxModelType, DXSingleElement dxSingleBlock)
+        public Guid InsertSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
         {
-            return this.InsertOrUpdateSingleBlockPrivate(dxModelType, dxSingleBlock, ProcessingType.Insert);
+            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Insert);
         }
 
-        public Guid UpdateSingleBlock(string dxModelType, DXSingleElement dxSingleBlock)
+        public Guid UpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
         {
-            return this.InsertOrUpdateSingleBlockPrivate(dxModelType, dxSingleBlock, ProcessingType.Update);
+            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
         }
 
-        public Guid InsertOrUpdateSingleBlock(string dxModelType, DXSingleElement dxSingleBlock)
+        public Guid InsertOrUpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
         {
-            throw new NotImplementedException("InsertOrUpdateSingleBlock is not implemted yet.");
+            throw new NotImplementedException("InsertOrUpdateSingleDXElement is not implemted yet.");
         }
 
-        private Guid InsertOrUpdateSingleBlockPrivate(string dxModelType, DXSingleElement dxSingleBlock, ProcessingType processingType)
+        private Guid InsertOrUpdateSingleDXElementPrivate(string dxModelType, DXSingleElement dxSingleDXElement, ProcessingType processingType)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
-            ArgumentNullException.ThrowIfNull(dxSingleBlock);
+            ArgumentNullException.ThrowIfNull(dxSingleDXElement);
 
             return this.RunRequestInTransaction((conn) =>
             {
-                var dataSet = new DataSet(dxSingleBlock.Name);
+                var dataSet = new DataSet(dxSingleDXElement.Name);
 
                 var id = this.InsertOrUpdatedxSingleItemToDataSet(
-                    dxSingleBlock,
+                    dxSingleDXElement,
                     dxModelType,
-                    dxSingleBlock.Item.ObjectID.Value,
+                    dxSingleDXElement.Item.ObjectID.Value,
                     dataSet,
                     conn,
                     processingType);
@@ -1243,7 +1243,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        public bool DeleteSingleBlock(string typeName, Guid id)
+        public bool DeleteSingleDXElement(string typeName, Guid id)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(typeName);
 
@@ -1282,7 +1282,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXSingleElement GetSingleBlock(DXElementDefinition container, Guid id)
+        public DXSingleElement GetSingleDXElement(DXElementDefinition container, Guid id)
         {
             if (container == null)
                 return null;

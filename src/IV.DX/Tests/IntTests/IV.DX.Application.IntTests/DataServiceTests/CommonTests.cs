@@ -102,35 +102,35 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public async Task GetItems_UsingDXElementDefinitionUnit_ExistingBlocksWithAllInformation()
+        public async Task GetItems_UsingDXElementDefinitionUnit_ExistingDXElementsWithAllInformation()
         {
             // Init
 
             // Action
-            var blocks = await _dataService.GetItemsAsync<DXElementDefinitionUnit>();
+            var dxElements = await _dataService.GetItemsAsync<DXElementDefinitionUnit>();
 
             // Checking result
-            Assert.NotEmpty(blocks);
+            Assert.NotEmpty(dxElements);
 
-            Assert.Equal(blocks.Count(), blocks.Where(x => x.DXUnitDefinitionMainElement != null).Count());
+            Assert.Equal(dxElements.Count(), dxElements.Where(x => x.DXUnitDefinitionMainElement != null).Count());
         }
 
         [Fact]
-        public async Task GetItemNonParameterized_UsingDXElementDefinitionUnit_ExistingBlockWithAllInformation()
+        public async Task GetItemNonParameterized_UsingDXElementDefinitionUnit_ExistingDXElementWithAllInformation()
         {
             // Init
 
             // Action           
-            var blockJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"));
+            var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"));
 
-            var block = DXModel.CreateInstance(blockJObject);
+            var dxElement = DXModel.CreateInstance(dxElementJObject);
 
             // Checking result
-            Assert.NotNull(block);
+            Assert.NotNull(dxElement);
 
-            var genBlock = block.SingleItems.SingleOrDefault(x => x.Name == "DXUnitDefinitionMainElement");
+            var genDXElement = dxElement.SingleItems.SingleOrDefault(x => x.Name == "DXUnitDefinitionMainElement");
 
-            Assert.NotNull(genBlock);
+            Assert.NotNull(genDXElement);
         }
 
         [Fact]

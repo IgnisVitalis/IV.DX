@@ -49,13 +49,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 ColumnType = DXColumnTypeEnum.String
             };
 
-            DXElementDefinitionUnit blockDescObject = new DXElementDefinitionUnit()
+            DXElementDefinitionUnit dxElementDescObject = new DXElementDefinitionUnit()
             {
                 ID = id,
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlock"
+                    Name = "TestDXElement"
                 },
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
@@ -83,7 +83,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = blockDescObject.ID
+                            DXElementDefinitionUnit = dxElementDescObject.ID
                         }
                     }
                 }
@@ -92,7 +92,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var item = new TestEntity()
             {
                 ID = Guid.NewGuid(),
-                TestBlock = new TestBlock()
+                TestDXElement = new TestDXElement()
                 {
                     ID = Guid.NewGuid(),
                     IntCln = 123
@@ -108,11 +108,11 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
                 this._dataService.UpdateAsync(dxUnitDescObject).Wait();
                 this._dataService.DeleteAsync(dxUnitDescObject).Wait();
-                this._dataService.DeleteAsync(blockDescObject).Wait();
+                this._dataService.DeleteAsync(dxElementDescObject).Wait();
             };
 
             // Action
-            this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
+            this._dataService.InsertOrUpdateAsync(dxElementDescObject).Wait();
             this._dataService.InsertOrUpdateAsync(dxUnitDescObject).Wait();
 
             this._dataService.InsertOrUpdateAsync(item).Wait();
@@ -124,10 +124,10 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             var existingItem = existingItems.Single();
 
-            Assert.Equal(item.TestBlock.IntCln, existingItem.TestBlock.IntCln);
+            Assert.Equal(item.TestDXElement.IntCln, existingItem.TestDXElement.IntCln);
 
             // Action
-            blockDescObject.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+            dxElementDescObject.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
             {
                 Mode = MultiElementsMode.Target,
                 Announced = new List<DXColumnDefinitionElement>()
@@ -140,7 +140,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
+            this._dataService.InsertOrUpdateAsync(dxElementDescObject).Wait();
 
             // Assert
             var existingModifiedItems = this._genericRepo.GetDXUnits<TestEntityModified>();
@@ -149,11 +149,11 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             var existingItemModified = existingModifiedItems.Single();
 
-            Assert.Equal("", existingItemModified.TestBlock.StrCln);
+            Assert.Equal("", existingItemModified.TestDXElement.StrCln);
         }
 
         [Fact]
-        public async Task GetItem_UsingMultiblockWithRelation_Ok()
+        public async Task GetItem_UsingMultidxElementWithRelation_Ok()
         {
             // Init
             var id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
@@ -166,28 +166,28 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         [Fact]
-        public async Task UpdateEntity_UsingAddedDeletedBlocksWithTargetMode_Ok()
+        public async Task UpdateEntity_UsingAddedDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("622c2056-9797-47ab-82c2-5c3eeb6a68ce");
 
-            var blockToAdd = new DXElementDefinitionUnit()
+            var dxElementToAdd = new DXElementDefinitionUnit()
             {
                 ID = new Guid("4b95f498-f0cb-407d-be16-e7a1518fc070"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlockToAdde7a1518fc070"
+                    Name = "TestDXElementToAdde7a1518fc070"
                 }
             };
 
-            var blockToDelete = new DXElementDefinitionUnit()
+            var dxElementToDelete = new DXElementDefinitionUnit()
             {
                 ID = new Guid("d3b5e1e2-3f3a-4f7c-8f0c-5e2b8e6f4a1c"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlockToDelete5e2b8e6f4a1c"
+                    Name = "TestDXElementToDelete5e2b8e6f4a1c"
                 }
             };
 
@@ -204,13 +204,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             base._finalizationAction = () =>
             {
                 this._dataService.DeleteAsync(dxUnit).Wait();
-                this._dataService.DeleteAsync(blockToAdd).Wait();
-                this._dataService.DeleteAsync(blockToDelete).Wait();
+                this._dataService.DeleteAsync(dxElementToAdd).Wait();
+                this._dataService.DeleteAsync(dxElementToDelete).Wait();
             };
 
             this._dataService.InsertAsync(dxUnit).Wait();
-            this._dataService.InsertAsync(blockToAdd).Wait();
-            this._dataService.InsertAsync(blockToDelete).Wait();
+            this._dataService.InsertAsync(dxElementToAdd).Wait();
+            this._dataService.InsertAsync(dxElementToDelete).Wait();
 
             // Action
             dxUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
@@ -222,7 +222,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                        DXElementDefinitionUnit = blockToAdd.ID
+                        DXElementDefinitionUnit = dxElementToAdd.ID
                     }
                 },
                 Deleted = new List<DXElementInUnitDefinitionMainElement>()
@@ -231,7 +231,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                        DXElementDefinitionUnit = blockToDelete.ID
+                        DXElementDefinitionUnit = dxElementToDelete.ID
                     }
                 }
             };
@@ -243,9 +243,9 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             Assert.Single(existingEntity.DXElementInUnitDefinitionMainElement.Announced);
 
-            var announcedBlock = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Single();
+            var announcedDXElement = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Single();
 
-            Assert.Equal(blockToAdd.ID, announcedBlock.DXElementDefinitionUnit);
+            Assert.Equal(dxElementToAdd.ID, announcedDXElement.DXElementDefinitionUnit);
 
             // Action
             existingEntity.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
@@ -253,7 +253,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 Mode = MultiElementsMode.Target,
                 Deleted = new List<DXElementInUnitDefinitionMainElement>()
                 {
-                    announcedBlock
+                    announcedDXElement
                 }
             };
 
@@ -266,18 +266,18 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
 
         [Fact]
-        public async Task DeleteEntity_WithBlocks_Ok()
+        public async Task DeleteEntity_WithDXElements_Ok()
         {
             // Init
             var id = new Guid("1c4e8f3e-3f4b-4c6a-9f7e-8f9e7d6c5b4a");
 
-            var block = new DXElementDefinitionUnit()
+            var dxElement = new DXElementDefinitionUnit()
             {
                 ID = new Guid("02449441-f8c4-483a-950f-6b47f2f216b4"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlock6b47f2f216b4"
+                    Name = "TestDXElement6b47f2f216b4"
                 }
             };
 
@@ -297,7 +297,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = block.ID
+                            DXElementDefinitionUnit = dxElement.ID
                         }
                     }
                 }
@@ -306,10 +306,10 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             base._finalizationAction = () =>
             {
                 this._dataService.DeleteAsync(dxUnit).Wait();
-                this._dataService.DeleteAsync(block).Wait();
+                this._dataService.DeleteAsync(dxElement).Wait();
             };
 
-            this._dataService.InsertAsync(block).Wait();
+            this._dataService.InsertAsync(dxElement).Wait();
             this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
@@ -319,43 +319,43 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var existingEntity = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
             Assert.Null(existingEntity);
 
-            var existingBlock = await this._dataService.GetItemAsync<DXElementDefinitionUnit>(block.ID);
-            Assert.NotNull(existingBlock);
+            var existingDXElement = await this._dataService.GetItemAsync<DXElementDefinitionUnit>(dxElement.ID);
+            Assert.NotNull(existingDXElement);
         }
 
         [Fact]
-        public async Task UpdateEntity_UsingMoreThanOnelDeletedBlocksWithTargetMode_Ok()
+        public async Task UpdateEntity_UsingMoreThanOnelDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
             var id = new Guid("1873aa67-8f3e-4044-8659-c44f7a2dd5f6");
 
-            var block1 = new DXElementDefinitionUnit()
+            var dxElement1 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("f8f68404-6143-433e-aa2c-f45215f6be1c"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlockf45215f6be1c"
+                    Name = "TestDXElementf45215f6be1c"
                 }
             };
 
-            var block2 = new DXElementDefinitionUnit()
+            var dxElement2 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("63c28d39-1561-4c97-b212-fa7db5443a11"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlockfa7db5443a11"
+                    Name = "TestDXElementfa7db5443a11"
                 }
             };
 
-            var block3 = new DXElementDefinitionUnit()
+            var dxElement3 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("8ae093df-d6b8-4d13-acc7-801b464bfb0f"),
                 DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    Name = "TestBlock801b464bfb0f"
+                    Name = "TestDXElement801b464bfb0f"
                 }
             };
 
@@ -375,19 +375,19 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = block1.ID
+                            DXElementDefinitionUnit = dxElement1.ID
                         },
                         new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = block2.ID
+                            DXElementDefinitionUnit = dxElement2.ID
                         },
                         new DXElementInUnitDefinitionMainElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = block3.ID
+                            DXElementDefinitionUnit = dxElement3.ID
                         }
                     }
                 }
@@ -396,14 +396,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             base._finalizationAction = () =>
             {
                 this._dataService.DeleteAsync(dxUnit).Wait();
-                this._dataService.DeleteAsync(block1).Wait();
-                this._dataService.DeleteAsync(block2).Wait();
-                this._dataService.DeleteAsync(block3).Wait();
+                this._dataService.DeleteAsync(dxElement1).Wait();
+                this._dataService.DeleteAsync(dxElement2).Wait();
+                this._dataService.DeleteAsync(dxElement3).Wait();
             };
 
-            this._dataService.InsertAsync(block1).Wait();
-            this._dataService.InsertAsync(block2).Wait();
-            this._dataService.InsertAsync(block3).Wait();
+            this._dataService.InsertAsync(dxElement1).Wait();
+            this._dataService.InsertAsync(dxElement2).Wait();
+            this._dataService.InsertAsync(dxElement3).Wait();
             this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
@@ -425,11 +425,11 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     [DXUnit("TestEntity")]
     public class TestEntity : DXUnit
     {
-        public TestBlock TestBlock { get; set; }
+        public TestDXElement TestDXElement { get; set; }
     }
 
-    [DXElement("TestBlock")]
-    public class TestBlock : DXElement
+    [DXElement("TestDXElement")]
+    public class TestDXElement : DXElement
     {
         [DXColumn("IntCln")]
         public int IntCln { get; set; }
@@ -438,11 +438,11 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     [DXUnit("TestEntity")]
     public class TestEntityModified : DXUnit
     {
-        public TestBlockModified TestBlock { get; set; }
+        public TestDXElementModified TestDXElement { get; set; }
     }
 
-    [DXElement("TestBlock")]
-    public class TestBlockModified : DXElement
+    [DXElement("TestDXElement")]
+    public class TestDXElementModified : DXElement
     {
         [DXColumn("StrCln")]
         public string StrCln { get; set; }

@@ -33,15 +33,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             foreach (var item in expressionTree.AllNodesWithoutCoreAndLeaves)
             {
                 var nodeAsEntityNode = item as DXUnitNode;
-                var nodeAsBlockNode = item as DXElementNode;
+                var nodeAsDXElementNode = item as DXElementNode;
 
                 if (nodeAsEntityNode != null)
                 {
                     leftJoins = leftJoins.Concat(nodeAsEntityNode.QueryInfos.Select(x => this.GetLeftJoinQuery(x)));
                 }
-                else if (nodeAsBlockNode != null)
+                else if (nodeAsDXElementNode != null)
                 {
-                    leftJoins = leftJoins.Append(this.GetLeftJoinQuery(nodeAsBlockNode.QueryInfo));
+                    leftJoins = leftJoins.Append(this.GetLeftJoinQuery(nodeAsDXElementNode.QueryInfo));
                 }
             }
 
@@ -82,7 +82,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (!this.IsDatabaseExisting(args.Item2, args.Item1))
             {
                 this.RunSQLQuery(args.Item2, string.Format(closeSessionToDatabaseQuery, "template1"));
-                this.RunSQLQueryWithoutTransactionBlock(args.Item2, $"CREATE DATABASE \"{args.Item1}\";");
+                this.RunSQLQueryWithoutTransactionDXElement(args.Item2, $"CREATE DATABASE \"{args.Item1}\";");
             }
         }
 
@@ -112,7 +112,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 return;
 
             this.RunSQLQuery(args.Item2, string.Format(closeSessionToDatabaseQuery, args.Item1));
-            this.RunSQLQueryWithoutTransactionBlock(args.Item2, $"DROP DATABASE IF EXISTS \"{args.Item1}\" WITH (FORCE);");
+            this.RunSQLQueryWithoutTransactionDXElement(args.Item2, $"DROP DATABASE IF EXISTS \"{args.Item1}\" WITH (FORCE);");
         }
 
         public DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter)
@@ -319,67 +319,67 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataBlockNew, DXObjectDefinitionUnit dataBlockExisting)
+        public string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataDXElementNew, DXObjectDefinitionUnit dataDXElementExisting)
         {
             StringBuilder sb = new StringBuilder();
 
-            var columnsToAdd = this.GetColumnDescBlocksToAdd(dataBlockNew, dataBlockExisting);
-            var columnsToDrop = this.GetColumnDescBlocksToDrop(dataBlockNew, dataBlockExisting);
-            var columnIDsToChange = this.GetColumnDescBlockIDsToChange(dataBlockNew, dataBlockExisting);
+            var columnsToAdd = this.GetColumnDescDXElementsToAdd(dataDXElementNew, dataDXElementExisting);
+            var columnsToDrop = this.GetColumnDescDXElementsToDrop(dataDXElementNew, dataDXElementExisting);
+            var columnIDsToChange = this.GetColumnDescDXElementIDsToChange(dataDXElementNew, dataDXElementExisting);
 
             var columnsToDropMySQLCommand = columnsToDrop.Select(x => $"DROP COLUMN \"{x.Name}\"");
             var columnsToAddMySQLCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
             var columnsToAlterColumnSetTypeCommand = columnIDsToChange.Select(x =>
                 this.GetSQLColumnDefinitionToAlterColumnSetType(
-                    dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                    dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                    dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                    dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToAlterColumnSetAllowNullCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetAllowNull(
-                dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToAlterColumnSetDefaultValueCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetDefaultValue(
-                dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             var columnsToChangeNamesCommand = columnIDsToChange.Select(x =>
               this.GetSQLColumnDefinitionToChangeColumnNames(
-                  dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                  dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                  dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
+                  dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
             if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToDropMySQLCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAddMySQLCommand != null && columnsToAddMySQLCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAddMySQLCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetTypeCommand != null && columnsToAlterColumnSetTypeCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetTypeCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetAllowNullCommand != null && columnsToAlterColumnSetAllowNullCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetAllowNullCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetDefaultValueCommand != null && columnsToAlterColumnSetDefaultValueCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetDefaultValueCommand)}");
                 sb.Append(";");
             }
@@ -388,40 +388,40 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
                 foreach (var item in columnsToChangeNamesCommand)
                 {
-                    sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
+                    sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
                     sb.Append(item);
                     sb.Append(";");
                 }
             }
 
-            if (!dataBlockExisting.DXUnitDefinitionMainElement.Name.Equals(dataBlockNew.DXUnitDefinitionMainElement.Name))
+            if (!dataDXElementExisting.DXUnitDefinitionMainElement.Name.Equals(dataDXElementNew.DXUnitDefinitionMainElement.Name))
             {
-                sb.Append($"ALTER TABLE \"{dataBlockExisting.DXUnitDefinitionMainElement.Name}\" ");
-                sb.Append($"RENAME TO \"{dataBlockNew.DXUnitDefinitionMainElement.Name}\";");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"RENAME TO \"{dataDXElementNew.DXUnitDefinitionMainElement.Name}\";");
             }
 
             return sb.ToString();
         }
 
-        private IEnumerable<Guid> GetColumnDescBlockIDsToChange(
-            DXObjectDefinitionUnit dataBlockNew,
-            DXObjectDefinitionUnit dataBlockExisting)
+        private IEnumerable<Guid> GetColumnDescDXElementIDsToChange(
+            DXObjectDefinitionUnit dataDXElementNew,
+            DXObjectDefinitionUnit dataDXElementExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
+            if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => columnDescBlockExistingIds.Contains(x.ID)).Select(x => x.ID).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => columnDescDXElementExistingIds.Contains(x.ID)).Select(x => x.ID).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                var idsToChange = columnDescBlockNewIds.Intersect(columnDescBlockExistingIds).Where(x =>
+                var idsToChange = columnDescDXElementNewIds.Intersect(columnDescDXElementExistingIds).Where(x =>
                 {
-                    var DXColumnDefinitionElementNew = dataBlockNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
-                    var DXColumnDefinitionElementExisting = dataBlockExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
+                    var DXColumnDefinitionElementNew = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
+                    var DXColumnDefinitionElementExisting = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
 
                     var result = !(DXColumnDefinitionElementNew.AllowNull == DXColumnDefinitionElementExisting.AllowNull
                     && this.AreEqual(DXColumnDefinitionElementNew.DefaultValue, DXColumnDefinitionElementExisting.DefaultValue)
@@ -448,45 +448,45 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
         }
 
-        private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToDrop(
-            DXObjectDefinitionUnit dataBlockNew,
-            DXObjectDefinitionUnit dataBlockExisting)
+        private IEnumerable<DXColumnDefinitionElement> GetColumnDescDXElementsToDrop(
+            DXObjectDefinitionUnit dataDXElementNew,
+            DXObjectDefinitionUnit dataDXElementExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
+            if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DXColumnDefinitionElement.Deleted.Where(x => columnDescBlockExistingIds.Contains(x.ID)).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Deleted.Where(x => columnDescDXElementExistingIds.Contains(x.ID)).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                var idsToRemove = columnDescBlockExistingIds.Where(x => !columnDescBlockNewIds.Contains(x));
+                var idsToRemove = columnDescDXElementExistingIds.Where(x => !columnDescDXElementNewIds.Contains(x));
 
-                return dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
+                return dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
             }
         }
 
-        private IEnumerable<DXColumnDefinitionElement> GetColumnDescBlocksToAdd(
-            DXObjectDefinitionUnit dataBlockNew,
-            DXObjectDefinitionUnit dataBlockExisting)
+        private IEnumerable<DXColumnDefinitionElement> GetColumnDescDXElementsToAdd(
+            DXObjectDefinitionUnit dataDXElementNew,
+            DXObjectDefinitionUnit dataDXElementExisting)
         {
-            if (dataBlockNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
+            if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => !columnDescBlockExistingIds.Contains(x.ID)).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => !columnDescDXElementExistingIds.Contains(x.ID)).ToList();
             }
             else
             {
-                var columnDescBlockNewIds = dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescBlockExistingIds = dataBlockExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
 
-                var idsToAdd = columnDescBlockNewIds.Where(x => !columnDescBlockExistingIds.Contains(x));
+                var idsToAdd = columnDescDXElementNewIds.Where(x => !columnDescDXElementExistingIds.Contains(x));
 
-                return dataBlockNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
             }
         }
 
@@ -642,15 +642,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock)
+        public string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataDXElement)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataBlock.DXUnitDefinitionMainElement.Name}\"(");
+            sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataDXElement.DXUnitDefinitionMainElement.Name}\"(");
 
-            var clmDefList = dataBlock.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
+            var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
-            var clmUniqueList = dataBlock.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataBlock.DXUnitDefinitionMainElement.Name, x));
+            var clmUniqueList = dataDXElement.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataDXElement.DXUnitDefinitionMainElement.Name, x));
 
             sb.Append(string.Join(",", clmDefList));
 
@@ -665,33 +665,33 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            if (obj == null || block == null)
+            if (obj == null || dxElement == null)
                 return null;
 
-            var blockInEntityInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == block.ID);
+            var dxElementInEntityInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
 
-            if (blockInEntityInfo == null)
+            if (dxElementInEntityInfo == null)
                 return null;
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
             sb.Append($"ADD COLUMN \"{obj.DXUnitDefinitionMainElement.Name}ID\" uuid; ");
 
-            if (blockInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
-            || blockInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
+            if (dxElementInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
+            || dxElementInEntityInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
             )
             {
-                sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
                 sb.Append($"ADD CONSTRAINT \"{obj.DXUnitDefinitionMainElement.Name}ID_unique\" UNIQUE(\"{obj.DXUnitDefinitionMainElement.Name}ID\"); ");
             }
 
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
-            sb.Append($"ADD INDEX \"FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx\" (\"{obj.DXUnitDefinitionMainElement.Name}ID\" ASC) VISIBLE; ");
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000\" ");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"ADD INDEX \"FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx\" (\"{obj.DXUnitDefinitionMainElement.Name}ID\" ASC) VISIBLE; ");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"ADD CONSTRAINT \"FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000\" ");
             sb.Append($"FOREIGN KEY (\"{obj.DXUnitDefinitionMainElement.Name}ID\") ");
             sb.Append($"REFERENCES \"{obj.DXUnitDefinitionMainElement.Name}\" (\"ID\") ");
             sb.Append($"ON DELETE NO ACTION ");
@@ -753,10 +753,10 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataBlock)
+        public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
         {
             // TODO: need to find solution how to drop table by ObjectID
-            return GetSQLQueryToDropTable(dataBlock.DXUnitDefinitionMainElement.Name);
+            return GetSQLQueryToDropTable(dataDXElement.DXUnitDefinitionMainElement.Name);
         }
 
         public string GetSQLQueryToDropTable(string tableName)
@@ -765,15 +765,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"DROP TABLE IF EXISTS \"{tableName}\"";
         }
 
-        public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000\"; ");
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
-            sb.Append($"DROP INDEX \"FK_{block.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx\";");
-            sb.Append($"ALTER TABLE \"{block.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000\"; ");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
+            sb.Append($"DROP INDEX \"FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx\";");
+            sb.Append($"ALTER TABLE \"{dxElement.DXUnitDefinitionMainElement.Name}\" ");
             sb.Append($"DROP COLUMN \"{obj.DXUnitDefinitionMainElement.Name}ID;\" ");
 
             return sb.ToString();
@@ -819,7 +819,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
         }
 
-        private void RunSQLQueryWithoutTransactionBlock(string connectionString, string query)
+        private void RunSQLQueryWithoutTransactionDXElement(string connectionString, string query)
         {
             using (var conn = new NpgsqlConnection(connectionString))
             {

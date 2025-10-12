@@ -91,64 +91,64 @@ namespace IV.DX.Kernel.Models
 
         public static DXModelDefinition BuildModelDefinition(
             DXUnitDefinitionUnit mainEntity,
-            IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryBlocks,
-            IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalBlocks,
-            IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryBlocks,
-            IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalBlocks)
+            IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements,
+            IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements)
         {
             if (mainEntity == null)
                 return null;
 
-            var ownBlockDefinition = new DXElementDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
+            var ownDXElementDefinition = new DXElementDefinition(mainEntity.DXUnitDefinitionMainElement.Name, mainEntity.DXUnitDefinitionMainElement.Name);
 
             var props = mainEntity.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
-            ownBlockDefinition.AddPropertyDefinitions(props);
+            ownDXElementDefinition.AddPropertyDefinitions(props);
 
-            var singleBlocks = new List<DXElementDefinitionUnit>();
-            var multiBlocks = new List<DXElementDefinitionUnit>();
+            var singleDXElements = new List<DXElementDefinitionUnit>();
+            var multiDXElements = new List<DXElementDefinitionUnit>();
 
-            var dxModel = new DXModelDefinition(ownBlockDefinition);
+            var dxModel = new DXModelDefinition(ownDXElementDefinition);
 
-            if (relatedSingleMandatoryBlocks != null)
+            if (relatedSingleMandatoryDXElements != null)
             {
-                singleBlocks.AddRange(relatedSingleMandatoryBlocks);
+                singleDXElements.AddRange(relatedSingleMandatoryDXElements);
             }
 
-            if (relatedSingleOptionalBlocks != null)
+            if (relatedSingleOptionalDXElements != null)
             {
-                singleBlocks.AddRange(relatedSingleOptionalBlocks);
+                singleDXElements.AddRange(relatedSingleOptionalDXElements);
             }
 
-            if (relatedMultiMandatoryBlocks != null)
+            if (relatedMultiMandatoryDXElements != null)
             {
-                multiBlocks.AddRange(relatedMultiMandatoryBlocks);
+                multiDXElements.AddRange(relatedMultiMandatoryDXElements);
             }
 
-            if (relatedMultiOptionalBlocks != null)
+            if (relatedMultiOptionalDXElements != null)
             {
-                multiBlocks.AddRange(relatedMultiOptionalBlocks);
+                multiDXElements.AddRange(relatedMultiOptionalDXElements);
             }
 
-            if (singleBlocks.Count > 0)
+            if (singleDXElements.Count > 0)
             {
-                dxModel.SingleFragmentDefinitions = singleBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
+                dxModel.SingleFragmentDefinitions = singleDXElements.Select(x => ConvertToDXElementDefinition(x)).ToList();
             }
 
-            if (multiBlocks.Count > 0)
+            if (multiDXElements.Count > 0)
             {
-                dxModel.MultiFragmentDefinitions = multiBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
+                dxModel.MultiFragmentDefinitions = multiDXElements.Select(x => ConvertToDXElementDefinition(x)).ToList();
             }
 
             return dxModel;
         }
 
-        private static DXElementDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)
+        private static DXElementDefinition ConvertToDXElementDefinition(DXElementDefinitionUnit dxElement)
         {
-            var props = block.DXColumnDefinitionElement.Announced
+            var props = dxElement.DXColumnDefinitionElement.Announced
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
 
-            var singleFragmentDefinition = new DXElementDefinition(block.DXUnitDefinitionMainElement.Name, block.DXUnitDefinitionMainElement.Name);
+            var singleFragmentDefinition = new DXElementDefinition(dxElement.DXUnitDefinitionMainElement.Name, dxElement.DXUnitDefinitionMainElement.Name);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 

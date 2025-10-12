@@ -4,9 +4,9 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXElementGenericRepository
     {
-        Guid InsertBlock(string dxModelType, DXElement dxElement);
-        Guid UpdateBlock(string dxModelType, DXElement dxElement);
-        bool DeleteBlock(DXElement dxElement);
-        T GetBlock<T>(Guid id) where T : DXElement;
+        Guid InsertDXElement(string dxModelType, DXElement dxElement);
+        Guid UpdateDXElement(string dxModelType, DXElement dxElement);
+        bool DeleteDXElement(DXElement dxElement);
+        T GetDXElement<T>(Guid id) where T : DXElement;
     }
 }

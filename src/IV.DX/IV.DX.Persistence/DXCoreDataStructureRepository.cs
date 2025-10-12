@@ -5,7 +5,7 @@ namespace IV.DX.Persistence
 {
     internal static class DXCoreDataStructureRepository
     {
-        public static IEnumerable<DXElementDefinitionUnit> CoreBlockInfos { get; set; }
+        public static IEnumerable<DXElementDefinitionUnit> CoreDXElementInfos { get; set; }
         public static IEnumerable<DXEnumDefinitionUnit> CoreEnumInfos { get; set; }
         public static IEnumerable<DXUnitDefinitionUnit> CoreEntityInfos { get; set; }
         public static IEnumerable<DXRelationDefinitionUnit> CoreRelationInfos { get; set; }
@@ -13,7 +13,7 @@ namespace IV.DX.Persistence
         static DXCoreDataStructureRepository()
         {
             InitCoreEnumInfos();
-            InitCoreBlockInfos();
+            InitCoreDXElementInfos();
             InitCoreEntityInfos();
         }
 
@@ -209,7 +209,7 @@ namespace IV.DX.Persistence
             };
         }
 
-        private static void InitCoreBlockInfos()
+        private static void InitCoreDXElementInfos()
         {
             #region DXUnitDefinitionMainElement
             var DXUnitDefinitionMainElement = new DXElementDefinitionUnit()
@@ -700,7 +700,7 @@ namespace IV.DX.Persistence
             };
             #endregion
 
-            CoreBlockInfos = new List<DXElementDefinitionUnit>()
+            CoreDXElementInfos = new List<DXElementDefinitionUnit>()
             {
                 DXUnitDefinitionMainElement,
                 DXColumnDefinitionElement,

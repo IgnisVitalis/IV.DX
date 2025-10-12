@@ -8,9 +8,9 @@ namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
     {
-        public void CreateDataStructure(DXObjectDefinitionUnit dataBlock)
+        public void CreateDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dataBlock);
+            var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dataDXElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
@@ -35,52 +35,52 @@ namespace IV.DX.Persistence
             this.UpdateCache();
         }
 
-        public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            var sqlQuery = this.GetSQLQueryToCreateTable(obj, block);
+            var sqlQuery = this.GetSQLQueryToCreateTable(obj, dxElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            var sqlQuery = this.GetSQLQueryToDropTable(obj, block);
+            var sqlQuery = this.GetSQLQueryToDropTable(obj, dxElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
             this.UpdateCache();
         }
 
-        public void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock)
+        public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var result = this.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, DXLoadingType.Full);
-            var existingDataBlock = DXUnitHelper.CreateInstance<DXObjectDefinitionUnit>(result);
+            var result = this.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
+            var existingDataDXElement = DXUnitHelper.CreateInstance<DXObjectDefinitionUnit>(result);
 
-            var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataBlock, existingDataBlock);
+            var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
             this.UpdateCache();
         }
 
-        public void DropDataStructure(DXObjectDefinitionUnit dataBlock)
+        public void DropDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataBlock);
+            var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataDXElement);
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
             this.UpdateCache();
         }
 
-        private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            return this._queryHelper.GetSQLQueryToDropTable(obj, block);
+            return this._queryHelper.GetSQLQueryToDropTable(obj, dxElement);
         }
 
-        private string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block)
+        private string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            return this._queryHelper.GetSQLQueryToCreateTable(obj, block);
+            return this._queryHelper.GetSQLQueryToCreateTable(obj, dxElement);
         }
 
         private string GetSQLQueryToCreateRelation(DXRelationDefinitionUnit obj)
@@ -233,15 +233,15 @@ namespace IV.DX.Persistence
             if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
-            var relatedBlockIds =
+            var relatedDXElementIds =
               dxUnit.DXElementInUnitDefinitionMainElement
               .Announced
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = this._dxStructureCache.DXElements.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
+            var relatedDXElements = this._dxStructureCache.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToList();
 
-            return relatedBlocks;
+            return relatedDXElements;
         }
 
         public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
@@ -249,14 +249,14 @@ namespace IV.DX.Persistence
             if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return null;
 
-            var relatedBlockIds =
+            var relatedDXElementIds =
                 dxUnit.DXElementInUnitDefinitionMainElement
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = this._dxStructureCache.DXElements.Where(x => relatedBlockIds.Contains(x.ID)).ToList();
+            var relatedDXElements = this._dxStructureCache.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToList();
 
-            return relatedBlocks;
+            return relatedDXElements;
         }
 
         private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
@@ -322,16 +322,16 @@ namespace IV.DX.Persistence
 
         public DXElementDefinitionUnit GetDXElementDefinition(Guid id)
         {
-            var existingBlock = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
+            var existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
 
-            if (existingBlock == null)
+            if (existingDXElement == null)
             {
                 this.UpdateCache();
 
-                existingBlock = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
+                existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
             }
 
-            return existingBlock;
+            return existingDXElement;
         }
 
         public IEnumerable<DXEnumDefinitionUnit> GetDXEnumDefinitions(IEnumerable<Guid> ids)

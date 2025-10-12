@@ -17,7 +17,7 @@
     //            }
     //        };
 
-    //        var userGenBlock = new DXObjectDefinitionUnit()
+    //        var userGenDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -51,12 +51,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("7f052b48-7008-4418-84fe-e51d42e2170d"),
-    //            DPBlock = userGenBlock.ID,
+    //            DPDXElement = userGenDXElement.ID,
     //            DPObject = userObject.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("55a9d478-e4ef-4bb2-8743-290216b22979"),
     //                ObjectID = new Guid("7f052b48-7008-4418-84fe-e51d42e2170d"),
@@ -66,14 +66,14 @@
 
     //        // Action
     //        this._dataService.Insert(userObject);
-    //        this._dataService.Insert(userGenBlock);
-    //        this._dataService.Insert(blockInObjectInfo);
+    //        this._dataService.Insert(userGenDXElement);
+    //        this._dataService.Insert(dxElementInObjectInfo);
     //    }
 
     //    //[Fact]
     //    public void UpdateUserStructure()
     //    {
-    //        var userGenBlock = new DXObjectDefinitionUnit()
+    //        var userGenDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -116,7 +116,7 @@
     //            }
     //        };
 
-    //        this._dataService.Update(userGenBlock);
+    //        this._dataService.Update(userGenDXElement);
     //    }
 
     //    //[Fact]
@@ -134,7 +134,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DXObjectDefinitionUnit()
+    //        var genDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -160,12 +160,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("72f5d23f-2fd5-44ac-886a-3da7dd3f70ea"),
-    //            DPBlock = genBlock.ID,
+    //            DPDXElement = genDXElement.ID,
     //            DPObject = obj.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("fd309653-967e-40e1-862f-92b906689d70"),
     //                ObjectID = new Guid("72f5d23f-2fd5-44ac-886a-3da7dd3f70ea"),
@@ -175,8 +175,8 @@
 
     //        // Action
     //        this._dataService.Insert(obj);
-    //        this._dataService.Insert(genBlock);
-    //        this._dataService.Insert(blockInObjectInfo);
+    //        this._dataService.Insert(genDXElement);
+    //        this._dataService.Insert(dxElementInObjectInfo);
     //    }
 
     //    //[Fact]
@@ -204,7 +204,7 @@
     //    public void UpdateDeviceStructure()
     //    {
     //        // Init   
-    //        var genBlock = new DXObjectDefinitionUnit()
+    //        var genDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -239,7 +239,7 @@
     //        };
 
     //        // Action           
-    //        this._dataService.Update(genBlock);
+    //        this._dataService.Update(genDXElement);
     //    }
 
     //    //[Fact]
@@ -278,7 +278,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DXObjectDefinitionUnit()
+    //        var genDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -304,12 +304,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("fc4ec5ba-6371-4824-8123-603b62df32f4"),
     //            DPObject = obj.ID,
-    //            DPBlock = genBlock.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElement = genDXElement.ID,
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("d598414d-5c48-40c5-ba7a-b56a871e62b5"),
     //                ObjectID = new Guid("fc4ec5ba-6371-4824-8123-603b62df32f4"),
@@ -319,8 +319,8 @@
 
     //        // Action
     //        this._dataService.Insert(obj);
-    //        this._dataService.Insert(genBlock);
-    //        this._dataService.Insert(blockInObjectInfo);
+    //        this._dataService.Insert(genDXElement);
+    //        this._dataService.Insert(dxElementInObjectInfo);
     //    }
 
     //    //Fact]
@@ -359,7 +359,7 @@
     //            }
     //        };
 
-    //        var genBlock = new DXObjectDefinitionUnit()
+    //        var genDXElement = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -385,12 +385,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("a132f7ef-5bf2-4ebf-bc51-c95f6eddd78c"),
     //            DPObject = obj.ID,
-    //            DPBlock = genBlock.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElement = genDXElement.ID,
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("3109ea24-f209-4aac-9414-e7f3493aa41a"),
     //                ObjectID = new Guid("a132f7ef-5bf2-4ebf-bc51-c95f6eddd78c"),
@@ -400,8 +400,8 @@
 
     //        // Action
     //        this._dataService.Insert(obj);
-    //        this._dataService.Insert(genBlock);
-    //        this._dataService.Insert(blockInObjectInfo);
+    //        this._dataService.Insert(genDXElement);
+    //        this._dataService.Insert(dxElementInObjectInfo);
     //    }
 
     //    //[Fact]
@@ -440,7 +440,7 @@
     //            }
     //        };
 
-    //        var genBlock1 = new DXObjectDefinitionUnit()
+    //        var genDXElement1 = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -466,7 +466,7 @@
     //            }
     //        };
 
-    //        var genBlock2 = new DXObjectDefinitionUnit()
+    //        var genDXElement2 = new DXObjectDefinitionUnit()
     //        {
     //            ID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //            DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
@@ -499,12 +499,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo1 = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo1 = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("db3cdce4-a71f-4129-8d1b-a1b8662ad1dd"),
     //            DPObject = obj.ID,
-    //            DPBlock = genBlock1.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElement = genDXElement1.ID,
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("07fb6348-a3f8-4b6c-924d-f6533316156e"),
     //                ObjectID = new Guid("db3cdce4-a71f-4129-8d1b-a1b8662ad1dd"),
@@ -512,12 +512,12 @@
     //            }
     //        };
 
-    //        var blockInObjectInfo2 = new DPBlockInObjectDescObject()
+    //        var dxElementInObjectInfo2 = new DPDXElementInObjectDescObject()
     //        {
     //            ID = new Guid("f9bf6850-49e3-4515-9299-4a9f07674b22"),
     //            DPObject = obj.ID,
-    //            DPBlock = genBlock2.ID,
-    //            DPBlockInObjectDescGenBlock = new DPBlockInObjectDescGenBlock()
+    //            DPDXElement = genDXElement2.ID,
+    //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("963b1a70-bff1-49c4-8360-f7c34c02b2cb"),
     //                ObjectID = new Guid("f9bf6850-49e3-4515-9299-4a9f07674b22"),
@@ -527,10 +527,10 @@
 
     //        // Action
     //        this._dataService.Insert(obj);
-    //        this._dataService.Insert(genBlock1);
-    //        this._dataService.Insert(blockInObjectInfo1);
-    //        this._dataService.Insert(genBlock2);
-    //        this._dataService.Insert(blockInObjectInfo2);
+    //        this._dataService.Insert(genDXElement1);
+    //        this._dataService.Insert(dxElementInObjectInfo1);
+    //        this._dataService.Insert(genDXElement2);
+    //        this._dataService.Insert(dxElementInObjectInfo2);
     //    }
 
     //    //[Fact]

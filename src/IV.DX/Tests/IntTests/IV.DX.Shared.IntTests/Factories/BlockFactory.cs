@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace IV.DX.Shared.IntTests.Factories
 {
-    public static class BlockFactory
+    public static class DXElementFactory
     {
         public static DXElementDefinitionUnit GetItem(Guid id)
         {

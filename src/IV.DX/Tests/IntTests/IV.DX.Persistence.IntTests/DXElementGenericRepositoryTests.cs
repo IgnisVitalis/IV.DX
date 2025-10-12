@@ -24,7 +24,7 @@ namespace IV.DX.Persistence.IntTests
         }
 
         [Fact]
-        public void CrudBlock_UsingSingleDXElement_DXElementIsProcessedCorrectly()
+        public void CrudDXElement_UsingSingleDXElement_DXElementIsProcessedCorrectly()
         {
             // Init
             var objectId = new Guid("57499CB1-1C08-4480-A274-2C71CE943B43");
@@ -46,38 +46,38 @@ namespace IV.DX.Persistence.IntTests
             };
 
             // Action Insert
-            this._dxElementGenericRepo.InsertBlock("TBookUnit", page5);
+            this._dxElementGenericRepo.InsertDXElement("TBookUnit", page5);
 
             // Checking result
-            var createdBlock = this._dxElementGenericRepo.GetBlock<TBookChapterElement>(page5.ID);
+            var createdDXElement = this._dxElementGenericRepo.GetDXElement<TBookChapterElement>(page5.ID);
 
-            Assert.NotNull(createdBlock);
-            Assert.Equal(page5.ID, createdBlock.ID);
-            Assert.Equal(page5.ObjectID, createdBlock.ObjectID);
-            Assert.Equal(page5.Number, createdBlock.Number);
-            Assert.Equal(page5.Text, createdBlock.Text);
+            Assert.NotNull(createdDXElement);
+            Assert.Equal(page5.ID, createdDXElement.ID);
+            Assert.Equal(page5.ObjectID, createdDXElement.ObjectID);
+            Assert.Equal(page5.Number, createdDXElement.Number);
+            Assert.Equal(page5.Text, createdDXElement.Text);
 
             // Action Update 
             page5.Number = 6;
             page5.Text = "Page6";
-            this._dxElementGenericRepo.UpdateBlock("TBookUnit", page5);
+            this._dxElementGenericRepo.UpdateDXElement("TBookUnit", page5);
 
             // Checking result
-            var updatedBlock = this._dxElementGenericRepo.GetBlock<TBookChapterElement>(page5.ID);
+            var updatedDXElement = this._dxElementGenericRepo.GetDXElement<TBookChapterElement>(page5.ID);
 
-            Assert.NotNull(updatedBlock);
-            Assert.Equal(page5.ID, updatedBlock.ID);
-            Assert.Equal(page5.ObjectID, updatedBlock.ObjectID);
-            Assert.Equal(page5.Number, updatedBlock.Number);
-            Assert.Equal(page5.Text, updatedBlock.Text);
+            Assert.NotNull(updatedDXElement);
+            Assert.Equal(page5.ID, updatedDXElement.ID);
+            Assert.Equal(page5.ObjectID, updatedDXElement.ObjectID);
+            Assert.Equal(page5.Number, updatedDXElement.Number);
+            Assert.Equal(page5.Text, updatedDXElement.Text);
 
             // Action Update            
-            this._dxElementGenericRepo.DeleteBlock(page5);
+            this._dxElementGenericRepo.DeleteDXElement(page5);
 
             // Checking result
-            var deletedBlock = this._dxElementGenericRepo.GetBlock<TBookChapterElement>(page5.ID);
+            var deletedDXElement = this._dxElementGenericRepo.GetDXElement<TBookChapterElement>(page5.ID);
 
-            Assert.Null(deletedBlock);
+            Assert.Null(deletedDXElement);
 
             var existingBook = this._dxUnitGenericRepo.GetDXUnit<TBookUnit>(objectId);
 

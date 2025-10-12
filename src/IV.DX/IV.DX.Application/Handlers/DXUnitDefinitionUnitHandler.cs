@@ -69,23 +69,23 @@ namespace IV.DX.Application.Handlers
             if (existingEntity == null)
                 return;
 
-            var relatedBlockIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+            var relatedDXElementIds = existingEntity.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedBlocks = dataStructureRepo.GetDXElementDefinitions(relatedBlockIds);
+            var relatedDXElements = dataStructureRepo.GetDXElementDefinitions(relatedDXElementIds);
 
-            foreach (var relatedBlock in relatedBlocks)
+            foreach (var relatedDXElement in relatedDXElements)
             {
-                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, relatedBlock)).Wait();
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, relatedDXElement)).Wait();
             }
         }
 
         private void ProcessRelations(DXUnitDefinitionUnit dxUnit)
         {
-            this.ProcessBlocksIndxUnitRelations(dxUnit);
+            this.ProcessDXElementsIndxUnitRelations(dxUnit);
             this.ProcessEnumRelations(dxUnit);
         }
 
-        private void ProcessBlocksIndxUnitRelations(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXElementsIndxUnitRelations(DXUnitDefinitionUnit dxUnit)
         {
             if (dxUnit.DXElementInUnitDefinitionMainElement == null)
                 return;
@@ -94,11 +94,11 @@ namespace IV.DX.Application.Handlers
 
             if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionMainElement.Mode == MultiElementsMode.Target)
             {
-                this.ProcessBlocksIndxUnitRelationsUsingTragetMode(dxUnit);
+                this.ProcessDXElementsIndxUnitRelationsUsingTragetMode(dxUnit);
             }
             else
             {
-                this.ProcessBlocksIndxUnitRelationsUsingFullMode(dxUnit, objectInfoFromDB);
+                this.ProcessDXElementsIndxUnitRelationsUsingFullMode(dxUnit, objectInfoFromDB);
             }
         }
 
@@ -110,7 +110,7 @@ namespace IV.DX.Application.Handlers
             return genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectInfoIncome.ID);
         }
 
-        private void ProcessBlocksIndxUnitRelationsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
+        private void ProcessDXElementsIndxUnitRelationsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {
             var newAnnouncedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
             var existingAnnouncedIds = existingdxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
@@ -118,58 +118,58 @@ namespace IV.DX.Application.Handlers
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
 
-            var blocksToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
-            var blocksToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
+            var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
+            var dxElementsToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
 
-            this.AssignBlocks(dxUnit, blocksToAssign);
-            this.UnassingBlocks(dxUnit, blocksToUnassign);
+            this.AssignDXElements(dxUnit, dxElementsToAssign);
+            this.UnassingDXElements(dxUnit, dxElementsToUnassign);
         }
 
-        private void ProcessBlocksIndxUnitRelationsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXElementsIndxUnitRelationsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
         {
             var announcedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
-            var blocksToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
+            var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
 
             var deletedIds = dxUnit.DXElementInUnitDefinitionMainElement.Deleted.Select(x => x.DXElementDefinitionUnit);
-            var blocksToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
+            var dxElementsToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
 
-            this.AssignBlocks(dxUnit, blocksToAssign);
-            this.UnassingBlocks(dxUnit, blocksToUnassign);
+            this.AssignDXElements(dxUnit, dxElementsToAssign);
+            this.UnassingDXElements(dxUnit, dxElementsToUnassign);
         }
 
-        private void AssignBlocks(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> blocksToAssign)
+        private void AssignDXElements(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> dxElementsToAssign)
         {
-            foreach (var blockToAssign in blocksToAssign)
+            foreach (var dxElementToAssign in dxElementsToAssign)
             {
-                var relationType = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == blockToAssign.ID).RelationType;
+                var relationType = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
 
-                dxUnitService.InsertAsync(this.GetRelationObject(dxUnit, blockToAssign, relationType)).Wait();
+                dxUnitService.InsertAsync(this.GetRelationObject(dxUnit, dxElementToAssign, relationType)).Wait();
             }
         }
 
-        private void UnassingBlocks(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> blocksToUnassign)
+        private void UnassingDXElements(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> dxElementsToUnassign)
         {
-            foreach (var blockToUnassign in blocksToUnassign)
+            foreach (var dxElementToUnassign in dxElementsToUnassign)
             {
-                var existingBlock = this.GetExistingRelatonObject(dxUnit, blockToUnassign);
+                var existingDXElement = this.GetExistingRelatonObject(dxUnit, dxElementToUnassign);
 
-                if (existingBlock == null)
+                if (existingDXElement == null)
                     continue;
 
-                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, blockToUnassign)).Wait();
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, dxElementToUnassign)).Wait();
             }
         }
 
-        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit block, DXElementInUnitTypeEnum relationType)
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement, DXElementInUnitTypeEnum relationType)
         {
-            var result = this.GetRelationObject(dxUnit, block);
+            var result = this.GetRelationObject(dxUnit, dxElement);
 
-            result.DXRelationDefinitionMainElement.RelationType = this.ConvertBlockIndxUnitRelationTypeToCommonRelationType(relationType);
+            result.DXRelationDefinitionMainElement.RelationType = this.ConvertDXElementIndxUnitRelationTypeToCommonRelationType(relationType);
 
             return result;
         }
 
-        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit block)
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
         {
             return new DXRelationDefinitionUnit()
             {
@@ -179,26 +179,26 @@ namespace IV.DX.Application.Handlers
                     ID = Guid.NewGuid(),
                     ObjectNameLeft = dxUnit.DXUnitDefinitionMainElement.Name,
                     RelationNameLeft = $"{dxUnit.DXUnitDefinitionMainElement.Name}ID",
-                    ObjectNameRight = block.DXUnitDefinitionMainElement.Name,
-                    RelationNameRight = block.DXUnitDefinitionMainElement.Name,
+                    ObjectNameRight = dxElement.DXUnitDefinitionMainElement.Name,
+                    RelationNameRight = dxElement.DXUnitDefinitionMainElement.Name,
                     Kind = dxUnit.DXUnitDefinitionMainElement.Kind
                 }
             };
         }
 
-        private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit block)
+        private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
         {
             var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}' " +
-               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{block.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}' " +
                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}ID' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{block.DXUnitDefinitionMainElement.Name}'";
+               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 
             return items.SingleOrDefault();
         }
 
-        private DXRelationTypeEnum ConvertBlockIndxUnitRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
+        private DXRelationTypeEnum ConvertDXElementIndxUnitRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
         {
             switch (relationType)
             {

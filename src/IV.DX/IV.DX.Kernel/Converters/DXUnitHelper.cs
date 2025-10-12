@@ -100,20 +100,20 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static DXSingleElement ConvertToSingleItem(this DXElement block)
+        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement)
         {
-            var blockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(block.GetType());
+            var dxElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(dxElement.GetType());
 
             DXSingleElement singleItem = new DXSingleElement()
             {
-                ElementInfo = blockInfo,
+                ElementInfo = dxElementInfo,
                 Item = new DXItem()
                 {
-                    ID = block.ID,
-                    ObjectID = block.ObjectID,
-                    Content = GetContent(block)
+                    ID = dxElement.ID,
+                    ObjectID = dxElement.ObjectID,
+                    Content = GetContent(dxElement)
                 },
-                Name = blockInfo.Name
+                Name = dxElementInfo.Name
             };
             return singleItem;
         }
@@ -134,7 +134,7 @@ namespace IV.DX.Kernel.Converters
 
                 DXMultiElement multiItem = new DXMultiElement()
                 {
-                    BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
+                    DXElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
                     Name = x.Name,
                     Mode = mode
                 };
@@ -194,14 +194,14 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        private static JObject GetContent(DXElement block)
+        private static JObject GetContent(DXElement dxElement)
         {
-            if (block == null)
+            if (dxElement == null)
                 return null;
 
             JObject jObject = new JObject();
 
-            var properties = block.GetType().GetProperties()
+            var properties = dxElement.GetType().GetProperties()
                 .Where(x => AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(x) != null)
                 .ToList();
 
@@ -209,7 +209,7 @@ namespace IV.DX.Kernel.Converters
             {
                 var attribute = AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(property);
 
-                jObject[property.Name] = new JValue(property.GetValue(block));
+                jObject[property.Name] = new JValue(property.GetValue(dxElement));
             }
 
             return jObject;
@@ -299,7 +299,7 @@ namespace IV.DX.Kernel.Converters
             return ConvertTodxUnitect(dxModel, type);
         }
 
-        public static T CreateBlockInstance<T>(DXSingleElement item) where T : DXElement
+        public static T CreateDXElementInstance<T>(DXSingleElement item) where T : DXElement
         {
             if (item == null)
                 return null;

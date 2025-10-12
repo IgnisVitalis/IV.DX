@@ -1,9 +1,9 @@
 {
-  "S_Type": "DPBlockInObjectDescObject",
+  "S_Type": "DPDXElementInObjectDescObject",
   "ID": "9AC9AF44-B9C6-486F-909E-58DED0712368",
-  "DPBlock": "BB0C80F4-7E4B-4768-AEC7-39E5B454A973",
+  "DPDXElement": "BB0C80F4-7E4B-4768-AEC7-39E5B454A973",
   "DPObject": "A320C5B4-8C14-460C-91EA-3DB885CCFD3D",
-  "DPBlockInObjectDescGenBlock": {
+  "DPDXElementInObjectDescGenDXElement": {
     "ObjectID": "9AC9AF44-B9C6-486F-909E-58DED0712368",
     "ID": "FFCA88A5-D849-40C8-9CE5-5CF01EE67797",
     "DXElementInUnitTypeEnum": "1"

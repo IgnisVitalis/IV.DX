@@ -4,7 +4,7 @@
   "DXUnitDefinitionMainElement": {
     "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
     "ID": "EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4",
-    "Name": "NewDataBlock",
+    "Name": "UpdatedDataDXElement",
     "Type": 1,
     "Kind": 2
   },
@@ -26,18 +26,27 @@
       },
       {
         "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+        "ID": "E042EF31-397E-4614-BABC-79132D4A68DF",
+        "ColumnType": 3,
+        "Name": "StringColumnNew",
+        "Length": 200,
+        "AllowNull": false,
+        "DefaultValue": "'StringValueNew'"
+      },
+      {
+        "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
         "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
         "ColumnType": 12,
-        "Name": "CurrencyColumn",
-        "AllowNull": true,
-        "DefaultValue": "0"
+        "Name": "CurrencyColumnUpdated",
+        "AllowNull": false,
+        "DefaultValue": "1"
       },
       {
         "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
         "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
         "ColumnType": 13,
-        "Name": "BlobColumn",
-        "AllowNull": true
+        "Name": "BlobColumnUpdated",
+        "AllowNull": false
       }
     ]
   }

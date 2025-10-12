@@ -9,21 +9,21 @@ namespace IV.DX.Application.Handlers
     {
         protected readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
 
-        protected void Validate(DXObjectDefinitionUnit dataBlock)
+        protected void Validate(DXObjectDefinitionUnit dataDXElement)
         {
-            if (dataBlock == null)
+            if (dataDXElement == null)
                 throw new Exception("DXObjectDefinitionUnit is NULL;");
 
-            if (dataBlock.ID == default(Guid))
+            if (dataDXElement.ID == default(Guid))
                 throw new Exception("DXObjectDefinitionUnit.ID has Default value;");
 
-            if (dataBlock.DXUnitDefinitionMainElement == null)
+            if (dataDXElement.DXUnitDefinitionMainElement == null)
                 throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement is NULL;");
 
-            if (dataBlock.DXUnitDefinitionMainElement.ID == default(Guid))
+            if (dataDXElement.DXUnitDefinitionMainElement.ID == default(Guid))
                 throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.ID has Default value;");
 
-            if (string.IsNullOrEmpty(dataBlock.DXUnitDefinitionMainElement.Name))
+            if (string.IsNullOrEmpty(dataDXElement.DXUnitDefinitionMainElement.Name))
                 throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.Name is NULL or Empty;");
         }
 
@@ -232,30 +232,30 @@ namespace IV.DX.Application.Handlers
             timeStamplColumnDesc.Name = "TimeStamp";
         }
 
-        private void OrderColumn(DXObjectDefinitionUnit dataBlock)
+        private void OrderColumn(DXObjectDefinitionUnit dataDXElement)
         {
-            var idColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "id");
-            var objectIdColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "objectid");
-            var timeStampColumn = dataBlock.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "timestamp");
+            var idColumn = dataDXElement.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "id");
+            var objectIdColumn = dataDXElement.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "objectid");
+            var timeStampColumn = dataDXElement.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name.Trim().ToLower() == "timestamp");
 
-            dataBlock.DXColumnDefinitionElement.Announced =
-                dataBlock.DXColumnDefinitionElement.Announced
+            dataDXElement.DXColumnDefinitionElement.Announced =
+                dataDXElement.DXColumnDefinitionElement.Announced
                 .Where(x =>
                     x.Name.Trim().ToLower() != "id"
                     && x.Name.Trim().ToLower() != "objectid"
                     && x.Name.Trim().ToLower() != "timestamp");
 
             // Third
-            dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(timeStampColumn);
+            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(timeStampColumn);
 
             // Second
             if (objectIdColumn != null)
             {
-                dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(objectIdColumn);
+                dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(objectIdColumn);
             }
 
             // First
-            dataBlock.DXColumnDefinitionElement.Announced = dataBlock.DXColumnDefinitionElement.Announced.Prepend(idColumn);
+            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(idColumn);
         }
     }
 }

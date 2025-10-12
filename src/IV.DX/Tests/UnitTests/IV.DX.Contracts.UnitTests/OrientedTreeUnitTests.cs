@@ -104,8 +104,8 @@ namespace IV.DX.Contracts.UnitTests
             var childThirdLevel0 = childsThirdLevel0.First() as DXElementNode;
             var childThirdLevel1 = childsThirdLevel0.Skip(1).First() as DXElementNode;
 
-            this.AssertBlockNode(childThirdLevel0, "Third", childSecondLevel0);
-            this.AssertBlockNode(childThirdLevel1, "3", childSecondLevel0);
+            this.AssertDXElementNode(childThirdLevel0, "Third", childSecondLevel0);
+            this.AssertDXElementNode(childThirdLevel1, "3", childSecondLevel0);
             this.AssertNodeCoordinates(childThirdLevel0, 3, 0);
             this.AssertNodeCoordinates(childThirdLevel1, 3, 2);
 
@@ -174,7 +174,7 @@ namespace IV.DX.Contracts.UnitTests
             Assert.Equal(expectedMotherNode, node.Mother);
         }
 
-        private void AssertBlockNode(DXElementNode node, string expectedValue, DXBaseNode expectedMotherNode)
+        private void AssertDXElementNode(DXElementNode node, string expectedValue, DXBaseNode expectedMotherNode)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);

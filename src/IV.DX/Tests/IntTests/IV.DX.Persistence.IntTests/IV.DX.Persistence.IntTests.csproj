@@ -35,34 +35,34 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Assets\JSON\Blocks\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Blocks\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Blocks\DXObjectDefinitionUnit0002.json">
+        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0002.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Blocks\DXObjectDefinitionUnit0003.json">
+        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0003.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Blocks\DXObjectDefinitionUnit0004.json">
+        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0004.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXElementDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXElementDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DPBlockInObjectDescObject0001.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DPDXElementInObjectDescObject0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0000.json">
@@ -86,19 +86,19 @@
         <None Update="Assets\JSON\DXObjectDefinitionUnit\DXObjectDefinitionUnit0004.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DPBlockInObjectDescObject0000.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DPDXElementInObjectDescObject0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DPBlockInObjectDescObject\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0000.json">

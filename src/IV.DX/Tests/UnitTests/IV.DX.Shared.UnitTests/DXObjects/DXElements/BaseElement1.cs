@@ -3,7 +3,7 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Shared.UnitTests.DXObjects.DXElements
 {
-    [DXElement("BaseBlock1")]
+    [DXElement("BaseDXElement1")]
     public class BaseElement1 : DXElement
     {
     }

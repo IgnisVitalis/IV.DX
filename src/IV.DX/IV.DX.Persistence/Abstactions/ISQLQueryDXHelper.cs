@@ -10,11 +10,11 @@ namespace IV.DX.Persistence.Abstractions
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
         DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
-        string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock);
+        string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataDXElement);
         string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
         string GetSQLQueryToDropTable(string tableName);
-        string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataBlock);
-        string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataBlockNew, DXObjectDefinitionUnit dataBlockExisting);
+        string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement);
+        string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataDXElementNew, DXObjectDefinitionUnit dataDXElementExisting);
         string GetSQLQueryToDeleteRelationZeroOneToOne(DXRelationDefinitionUnit obj);
         string GetSQLQueryToDeleteRelationOneToZeroOne(DXRelationDefinitionUnit obj);
         string GetSQLQueryToDeleteRelationManyToOne(DXRelationDefinitionUnit obj);
@@ -22,8 +22,8 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique);
         string GetSQLQueryToCreateRelationManyTo(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique);
         string GetSQLQueryToCreateRelationManyToMany(DXRelationDefinitionUnit obj, string connectionStr);
-        string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
-        string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit block);
+        string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement);
+        string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement);
         DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter);
         DbDataAdapter GetDbDataAdapter(DbConnection dbconnection, string query);
         DbConnection GetDBConnection(string connectionStr);

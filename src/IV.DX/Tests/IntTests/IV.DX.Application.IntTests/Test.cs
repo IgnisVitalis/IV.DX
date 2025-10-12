@@ -72,9 +72,9 @@ namespace IV.DX.Application.IntTests
 
             var enumInfo = dataStructureRepository.GetDXEnumDefinition("DXObjectKindEnum");
 
-            var blockDefinition = DXModelDefinitionHelper.GetDXElementDefinition(enumInfo);
+            var dxElementDefinition = DXModelDefinitionHelper.GetDXElementDefinition(enumInfo);
 
-            var enums = enumCoreRepository.Get(blockDefinition);
+            var enums = enumCoreRepository.Get(dxElementDefinition);
         }
     }
 
@@ -142,23 +142,23 @@ namespace IV.DX.Application.IntTests
 
     public class Model
     {
-        public IEnumerable<SingleDataBlock> SingleDataBlocks { get; set; }
-        public IEnumerable<MultiDataBlock> MultiDataBlocks { get; set; }
+        public IEnumerable<SingleDataDXElement> SingleDataDXElements { get; set; }
+        public IEnumerable<MultiDataDXElement> MultiDataDXElements { get; set; }
     }
 
-    public class SingleDataBlock
+    public class SingleDataDXElement
     {
-        public DataBlock DataBlock { get; set; }
+        public DataDXElement DataDXElement { get; set; }
     }
 
-    public class MultiDataBlock
+    public class MultiDataDXElement
     {
         public int Mode { get; set; }
-        public IEnumerable<DataBlock> AnnouncedDataBlocks { get; set; }
-        public IEnumerable<DataBlock> DestroyedDataBlocks { get; set; }
+        public IEnumerable<DataDXElement> AnnouncedDataDXElements { get; set; }
+        public IEnumerable<DataDXElement> DestroyedDataDXElements { get; set; }
     }
 
-    public class DataBlock
+    public class DataDXElement
     {
         public Guid ID { get; set; }
 

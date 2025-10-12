@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class DXMultiElement
     {
         public string Name { get; set; }
-        public DXElementAttribute BlockInfo { get; set; }
+        public DXElementAttribute DXElementInfo { get; set; }
         public MultiElementsMode Mode { get; set; }
         public IEnumerable<DXItem> Announced { get; set; }
         public IEnumerable<DXItem> Deleted { get; set; }
@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.Models
         {
             JObject jObject = new JObject
             {
-                [Constants.SystemPropertyTypeName] = this.BlockInfo.Name,
+                [Constants.SystemPropertyTypeName] = this.DXElementInfo.Name,
                 [Constants.Mode] = (int)this.Mode
             };
 
@@ -87,7 +87,7 @@ namespace IV.DX.Kernel.Models
 
             DXMultiElement multiFragment = new DXMultiElement
             {
-                BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                DXElementInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
                 Mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>()
             };
@@ -122,7 +122,7 @@ namespace IV.DX.Kernel.Models
 
             var result =
                 item1.Name == item2.Name
-                && DXElementAttribute.DeepEquals(item1.BlockInfo, item2.BlockInfo)
+                && DXElementAttribute.DeepEquals(item1.DXElementInfo, item2.DXElementInfo)
                 && item1.Mode == item2.Mode
                 && DXItem.DeepEquals(item1.Announced, item2.Announced)
                 && DXItem.DeepEquals(item1.Deleted, item2.Deleted);
@@ -160,7 +160,7 @@ namespace IV.DX.Kernel.Models
                 Name = this.Name,
                 Announced = this.Announced?.Select(x => x.DeepClone()),
                 Deleted = this.Deleted?.Select(x => x.DeepClone()),
-                BlockInfo = this.BlockInfo.DeepClone()
+                DXElementInfo = this.DXElementInfo.DeepClone()
             };
         }
     }

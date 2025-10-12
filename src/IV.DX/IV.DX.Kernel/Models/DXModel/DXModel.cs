@@ -128,7 +128,7 @@ namespace IV.DX.Kernel.Models
             DXMultiElement dxMultiItem = new DXMultiElement()
             {
                 Name = property.Name,
-                BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                DXElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
                 Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
                 Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()

@@ -21,7 +21,7 @@ namespace IV.DX.Contracts.UnitTests
             {
                 ID = objectId,
                 TimeStamp = new DateTime(2020, 12, 1),
-                MyBlockSingleItem = new MyBlock()
+                MyDXElementSingleItem = new MyDXElement()
                 {
                     ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
                     ObjectID = objectId,
@@ -30,12 +30,12 @@ namespace IV.DX.Contracts.UnitTests
                     Value = 1,
                     TimeStamp = new DateTime(2020, 12, 1)
                 },
-                MyBlockMultiItems = new DXMultiElementsContainer<MyBlock>()
+                MyDXElementMultiItems = new DXMultiElementsContainer<MyDXElement>()
                 {
                     Mode = MultiElementsMode.Target,
-                    Announced = new List<MyBlock>()
+                    Announced = new List<MyDXElement>()
                     {
-                        new MyBlock()
+                        new MyDXElement()
                         {
                             ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
                             ObjectID = objectId,
@@ -44,7 +44,7 @@ namespace IV.DX.Contracts.UnitTests
                             Value = 2,
                             Date = new DateTime(2020, 12, 2),
                         },
-                        new MyBlock()
+                        new MyDXElement()
                         {
                             ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
                             ObjectID = objectId,
@@ -54,9 +54,9 @@ namespace IV.DX.Contracts.UnitTests
                             Date = new DateTime(2020, 12, 3),
                         },
                     },
-                    Deleted = new List<MyBlock>()
+                    Deleted = new List<MyDXElement>()
                     {
-                        new MyBlock()
+                        new MyDXElement()
                         {
                             ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
                             ObjectID = objectId,
@@ -85,8 +85,8 @@ namespace IV.DX.Contracts.UnitTests
                 {
                     new DXSingleElement
                     {
-                        Name = "MyBlockSingleItem",
-                        ElementInfo = new DXElementAttribute("MyBlockDefinition"),
+                        Name = "MyDXElementSingleItem",
+                        ElementInfo = new DXElementAttribute("MyDXElementDefinition"),
                         Item = new DXItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
@@ -105,8 +105,8 @@ namespace IV.DX.Contracts.UnitTests
                 {
                     new DXMultiElement()
                     {
-                        Name = "MyBlockMultiItems",
-                        BlockInfo = new DXElementAttribute("MyBlockDefinition"),
+                        Name = "MyDXElementMultiItems",
+                        DXElementInfo = new DXElementAttribute("MyDXElementDefinition"),
                         Mode = MultiElementsMode.Target,
                         Announced = new List<DXItem>()
                         {
@@ -185,13 +185,13 @@ namespace IV.DX.Contracts.UnitTests
     [DXUnit("MyObjectDefinition")]
     internal class MyObject : DXUnit
     {
-        public MyBlock MyBlockSingleItem { get; set; }
+        public MyDXElement MyDXElementSingleItem { get; set; }
 
-        public DXMultiElementsContainer<MyBlock> MyBlockMultiItems { get; set; }
+        public DXMultiElementsContainer<MyDXElement> MyDXElementMultiItems { get; set; }
     }
 
-    [DXElement("MyBlockDefinition")]
-    internal class MyBlock : DXElement
+    [DXElement("MyDXElementDefinition")]
+    internal class MyDXElement : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }
