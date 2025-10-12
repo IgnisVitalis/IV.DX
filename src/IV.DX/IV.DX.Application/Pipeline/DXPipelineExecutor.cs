@@ -12,7 +12,7 @@ namespace IV.DX.Application.Pipeline
 {
     internal class DXPipelineExecutor(
         IDXCoreRepository coreRepo,
-        IDXGenericRepository genericRepo,
+        IDXUnitGenericRepository genericRepo,
         IDXUnitGetHandlerProvider getHandlerProvider,
         IDXUnitInsertHandlerProvider insertHandlerProvider,
         IDXUnitUpdateHandlerProvider updateHandlerProvider,
@@ -36,7 +36,7 @@ namespace IV.DX.Application.Pipeline
 
             if (flow != DXFlow.SkipProcess)
             {
-                dxUnit = genericRepo.GetItem<T>(id);
+                dxUnit = genericRepo.GetDXUnit<T>(id);
                 if (dxUnit is null) return DXResult<T?>.NotFound();
             }
 
@@ -99,7 +99,7 @@ namespace IV.DX.Application.Pipeline
             if (flow != DXFlow.SkipProcess)
             {
                 var id = genericRepo.Insert(dxUnit);
-                var reloaded = genericRepo.GetItem<T>(id);
+                var reloaded = genericRepo.GetDXUnit<T>(id);
 
                 if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
                 dxUnit = reloaded;
@@ -185,7 +185,7 @@ namespace IV.DX.Application.Pipeline
             if (flow != DXFlow.SkipProcess)
             {
                 var id = genericRepo.Update(dxUnit);
-                var reloaded = genericRepo.GetItem<T>(id);
+                var reloaded = genericRepo.GetDXUnit<T>(id);
 
                 if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
                 dxUnit = reloaded;
@@ -350,7 +350,7 @@ namespace IV.DX.Application.Pipeline
 
             if (flow != DXFlow.SkipProcess)
             {
-                dxUnits = genericRepo.GetItems<T>(ids);
+                dxUnits = genericRepo.GetDXUnits<T>(ids);
 
                 if (dxUnits is null || dxUnits.Count() == 0)
                     return DXResult<IEnumerable<T>?>.NotFound();

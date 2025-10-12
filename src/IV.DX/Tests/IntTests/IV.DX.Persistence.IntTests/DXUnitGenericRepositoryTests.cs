@@ -14,14 +14,14 @@ using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
 namespace IV.DX.Persistence.IntTests
 {
     [Collection("DX:one-time")]
-    public class GenericRepositoryTests : IntTestController
+    public class DXUnitGenericRepositoryTests : IntTestController
     {
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
 
-        public GenericRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+        public DXUnitGenericRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Insert(item);
 
             // Checking result
-            var result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
+            var result = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -56,7 +56,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Update(item);
 
             // Checking result
-            result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
+            result = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
@@ -70,7 +70,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Delete(item);
 
             // Checking result
-            result = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId);
+            result = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId);
 
             Assert.Null(result);
         }
@@ -107,7 +107,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Insert(item2);
 
             // Checking result
-            var result = this._genericRepo.GetItems<DXUnitDefinitionUnit>();
+            var result = this._genericRepo.GetDXUnits<DXUnitDefinitionUnit>();
 
             var resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -137,7 +137,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Update(item2);
 
             // Checking result
-            result = this._genericRepo.GetItems<DXUnitDefinitionUnit>();
+            result = this._genericRepo.GetDXUnits<DXUnitDefinitionUnit>();
 
             resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
 
@@ -163,7 +163,7 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Delete(item1);
 
             // Checking result
-            resultItem1 = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId1);
+            resultItem1 = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId1);
 
             Assert.Null(resultItem1);
 
@@ -171,72 +171,9 @@ namespace IV.DX.Persistence.IntTests
             this._genericRepo.Delete(item2);
 
             // Checking result
-            resultItem2 = this._genericRepo.GetItem<DXUnitDefinitionUnit>(objectId2);
+            resultItem2 = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId2);
 
             Assert.Null(resultItem2);
-        }
-
-        [Fact]
-        public void CrudBlock_UsingSingleDXBlock_BlockIsProcessedCorrectly()
-        {
-            // Init
-            var objectId = new Guid("57499CB1-1C08-4480-A274-2C71CE943B43");
-            var book = TBookUnitFactory.GetItemWithText(objectId, "MyBook", new[] { "Page1", "Page2", "Page3", "Page4" });
-
-            base._finalizationAction = new Action(() =>
-            {
-                this._genericRepo.Delete(book);
-            });
-
-            this._genericRepo.Insert(book);
-
-            var page5 = new TBookChapterElement()
-            {
-                ID = Guid.NewGuid(),
-                ObjectID = objectId,
-                Number = 5,
-                Text = "Page5"
-            };
-
-            // Action Insert
-            this._genericRepo.InsertBlock("TBookUnit", page5);
-
-            // Checking result
-            var createdBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
-
-            Assert.NotNull(createdBlock);
-            Assert.Equal(page5.ID, createdBlock.ID);
-            Assert.Equal(page5.ObjectID, createdBlock.ObjectID);
-            Assert.Equal(page5.Number, createdBlock.Number);
-            Assert.Equal(page5.Text, createdBlock.Text);
-
-            // Action Update 
-            page5.Number = 6;
-            page5.Text = "Page6";
-            this._genericRepo.UpdateBlock("TBookUnit", page5);
-
-            // Checking result
-            var updatedBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
-
-            Assert.NotNull(updatedBlock);
-            Assert.Equal(page5.ID, updatedBlock.ID);
-            Assert.Equal(page5.ObjectID, updatedBlock.ObjectID);
-            Assert.Equal(page5.Number, updatedBlock.Number);
-            Assert.Equal(page5.Text, updatedBlock.Text);
-
-            // Action Update            
-            this._genericRepo.DeleteBlock(page5);
-
-            // Checking result
-            var deletedBlock = this._genericRepo.GetBlock<TBookChapterElement>(page5.ID);
-
-            Assert.Null(deletedBlock);
-
-            var existingBook = this._genericRepo.GetItem<TBookUnit>(objectId);
-
-            Assert.Equal(existingBook.TBookChapterElement.Announced.Count(), book.TBookChapterElement.Announced.Count());
-
-            Assert.True(existingBook.TBookChapterElement.Announced.All(x => x.ID != page5.ID));
         }
     }
 }

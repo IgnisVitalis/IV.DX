@@ -6,7 +6,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXRelationDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
+    internal class DXRelationDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXUnitGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
         IDXBeforeInsertHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXAfterInsertHandler<DXRelationDefinitionUnit>, IDXUniqueAfterInsertHandler,
         IDXBeforeUpdateHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
@@ -88,7 +88,7 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit dxUnit)
         {
-            var modelDefinition = genericRepo.GetItems<DXRelationDefinitionUnit>(dxUnit.GetQueryForInvertedRelationObject());
+            var modelDefinition = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(dxUnit.GetQueryForInvertedRelationObject());
 
             return modelDefinition.SingleOrDefault();
         }

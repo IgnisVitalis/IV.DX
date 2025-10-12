@@ -5,7 +5,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXRelationItemUnitHandler(IDXGenericRepository genericRepo) :
+    internal class DXRelationItemUnitHandler(IDXUnitGenericRepository genericRepo) :
         IDXIsItemExistingHandler<DXRelationItemUnit>, IDXUniqueIsItemExistingHandler,
         IDXBeforeInsertHandler<DXRelationItemUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXRelationItemUnit>, IDXUniqueBeforeUpdateHandler
@@ -19,7 +19,7 @@ namespace IV.DX.Application.Handlers
 
         public Task<DXResult<DXRelationItemUnit>> BeforeInsertAsync(DXRelationItemUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            genericRepo.AddRelation(dxUnit);
+            genericRepo.AddDXRelation(dxUnit);
 
             return Task.Run(() => DXResult<DXRelationItemUnit>.OkSkipProcess(dxUnit));
         }

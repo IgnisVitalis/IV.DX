@@ -7,7 +7,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXUnitDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
+    internal class DXUnitDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXUnitGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
         DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
         IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
@@ -64,7 +64,7 @@ namespace IV.DX.Application.Handlers
 
         private void DeleteRelations(DXUnitDefinitionUnit dxUnit)
         {
-            var existingEntity = genericRepo.GetItem<DXUnitDefinitionUnit>(dxUnit.ID);
+            var existingEntity = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
 
             if (existingEntity == null)
                 return;
@@ -107,7 +107,7 @@ namespace IV.DX.Application.Handlers
             if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            return genericRepo.GetItem<DXUnitDefinitionUnit>(objectInfoIncome.ID);
+            return genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectInfoIncome.ID);
         }
 
         private void ProcessBlocksIndxUnitRelationsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
@@ -193,7 +193,7 @@ namespace IV.DX.Application.Handlers
                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}ID' " +
                $"AND DXRelationDefinitionMainElement.RelationNameRight = '{block.DXUnitDefinitionMainElement.Name}'";
 
-            var items = genericRepo.GetItems<DXRelationDefinitionUnit>(query);
+            var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 
             return items.SingleOrDefault();
         }

@@ -113,7 +113,7 @@ namespace IV.DX.Kernel.Helpers
             return dataDefinitionNameForFragment.ObjectName;
         }
 
-        public static string GetDXBlockTypeName(Type type)
+        public static string GetDXElementTypeName(Type type)
         {
             var objectType = FindElementType(type);
 

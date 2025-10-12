@@ -14,13 +14,13 @@ namespace IV.DX.Persistence.IntTests
     [Collection("DX:one-time")]
     public class ObjectRepositoryTests : IntTestController
     {
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
         IDXUnitDataService _dataService;
 
         public ObjectRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
@@ -41,7 +41,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objDesc).Wait();
 
             // Checking
-            var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
@@ -70,7 +70,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.UpdateAsync(objDesc1).Wait();
 
             // Checking
-            var objDefinition = this._genericRepo.GetItem<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
             Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);

@@ -10,11 +10,11 @@ namespace IV.DX.Application
     internal class MigrationService : IDXMigrationService
     {
         private readonly IDXUnitDataService _dataService;
-        private readonly IDXGenericRepository _genericRepo;
+        private readonly IDXUnitGenericRepository _genericRepo;
         private readonly Mutex mutex = new Mutex(false, "1e12dbb9-37ff-4e13-a9b1-5efa33cea05f");
 
         public MigrationService(
-            IDXGenericRepository genericRepo,
+            IDXUnitGenericRepository genericRepo,
             IDXUnitDataService dataService)
         {
             this._genericRepo = genericRepo;
@@ -113,7 +113,7 @@ namespace IV.DX.Application
 
         private IEnumerable<DXMigrationScriptsMainElement> GetScriptsHistoryIfExisting()
         {
-            var result = this._genericRepo.GetItems<DXMigrationScriptsUnit>().Select(x => x.DXMigrationScriptsMainElement);
+            var result = this._genericRepo.GetDXUnits<DXMigrationScriptsUnit>().Select(x => x.DXMigrationScriptsMainElement);
 
             return result;
         }

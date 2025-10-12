@@ -26,13 +26,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public IEnumerable<TBookUnit> books;
 
         ISQLQueryDXHelper _sqlQueryHelper;
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._sqlQueryHelper = this.ServiceProvider.GetRequiredService<ISQLQueryDXHelper>();
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
 
             InitData();
         }
@@ -85,7 +85,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
         private IEnumerable<DXRelationDefinitionUnit> GetAllRelations()
         {
-            var result = this._genericRepo.GetItems<DXRelationDefinitionUnit>();
+            var result = this._genericRepo.GetDXUnits<DXRelationDefinitionUnit>();
 
             return result;
         }
@@ -120,7 +120,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -160,7 +160,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var passportsExisting = this._genericRepo.GetItems<TPassportUnit>(whereExpression);
+            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
 
             // Checking result
             Assert.Single(passportsExisting);
@@ -200,7 +200,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -241,7 +241,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var devicesExisting = this._genericRepo.GetItems<TDeviceUnit>(whereExpression);
+            var devicesExisting = this._genericRepo.GetDXUnits<TDeviceUnit>(whereExpression);
 
             // Checking result
             Assert.Equal(2, devicesExisting.Count());
@@ -284,7 +284,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
 
             // Checking result
             Assert.Empty(usersExisting);
@@ -320,7 +320,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -359,7 +359,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetItems<TPositionUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(whereExpression);
 
             // Checking result
             Assert.Empty(positionsExisting);
@@ -395,7 +395,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetItems<TPositionUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(whereExpression);
 
             // Checking result
             Assert.Single(positionsExisting);
@@ -434,7 +434,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var documentsExisting = this._genericRepo.GetItems<TDocumentUnit>(whereExpression);
+            var documentsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(whereExpression);
 
             // Checking result
             Assert.Empty(documentsExisting);
@@ -471,7 +471,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetItems<TDocumentUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(whereExpression);
 
             // Checking result
             Assert.Equal(2, positionsExisting.Count());
@@ -514,7 +514,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var booksExisting = this._genericRepo.GetItems<TBookUnit>(whereExpression);
+            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(whereExpression);
 
             // Checking result
             Assert.Empty(booksExisting);
@@ -551,7 +551,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var booksExisting = this._genericRepo.GetItems<TBookUnit>(whereExpression);
+            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(whereExpression);
 
             // Checking result
             Assert.Equal(2, booksExisting.Count());
@@ -594,7 +594,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
         }
 
         [Fact]
@@ -628,7 +628,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetItems<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
 
             // Checking result
             Assert.Equal(2, usersExisting.Count());
@@ -672,7 +672,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var passportsExisting = this._genericRepo.GetItems<TPassportUnit>(whereExpression);
+            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
 
             // Checking result
             Assert.Single(passportsExisting);
@@ -713,7 +713,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
                 Assert.Equal(expectedSQLQuery, query);
 
                 // Action
-                var passportsExisting = this._genericRepo.GetItems<TPassportUnit>(whereExpression);
+                var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
 
                 Assert.NotNull(passportsExisting);
             }

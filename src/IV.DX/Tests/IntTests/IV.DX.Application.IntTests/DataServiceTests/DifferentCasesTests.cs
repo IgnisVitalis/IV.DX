@@ -18,13 +18,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     public class DifferentCasesTests : IntTestController
     {
         IDXUnitDataService _dataService;
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
 
         public DifferentCasesTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertOrUpdateAsync(item).Wait();
 
             // Assert
-            var existingItems = this._genericRepo.GetItems<TestEntity>();
+            var existingItems = this._genericRepo.GetDXUnits<TestEntity>();
 
             Assert.Single(existingItems);
 
@@ -143,7 +143,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertOrUpdateAsync(blockDescObject).Wait();
 
             // Assert
-            var existingModifiedItems = this._genericRepo.GetItems<TestEntityModified>();
+            var existingModifiedItems = this._genericRepo.GetDXUnits<TestEntityModified>();
 
             Assert.Single(existingItems);
 

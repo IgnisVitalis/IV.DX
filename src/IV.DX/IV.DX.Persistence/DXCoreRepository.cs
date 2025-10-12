@@ -54,7 +54,7 @@ namespace IV.DX.Persistence
                         // Delete related blocks
                         foreach (var relatedBlock in relatedBlocks)
                         {
-                            this.DeleteDXBlocksFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                            this.DeleteDXElementsFromDataSet(relatedBlock.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
                         }
                     }
 
@@ -693,7 +693,7 @@ namespace IV.DX.Persistence
             esqlModelAdapter.Update(dataSet, dxUnitName);
         }
 
-        private void DeleteDXBlocksFromDataSet(string blockName, Guid objectID, DataSet dataSet, DbConnection conn)
+        private void DeleteDXElementsFromDataSet(string blockName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
             var esqlModelAdapter = this.PopulateTableToDataSet(conn, dataSet, blockName, whereClause:
                 this._queryHelper.GetWhereExpressionForObjectID(objectID));

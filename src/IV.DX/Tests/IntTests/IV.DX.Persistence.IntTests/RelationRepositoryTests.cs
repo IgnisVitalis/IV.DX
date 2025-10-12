@@ -18,14 +18,14 @@ namespace IV.DX.Persistence.IntTests
     [Collection("DX:one-time")]
     public class RelationRepositoryTests : IntTestController
     {
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
         IDXCoreRepository _coreRepo;
         IDXUnitDataService _dataService;
 
         public RelationRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._coreRepo = this.ServiceProvider.GetRequiredService<IDXCoreRepository>();
             this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
@@ -70,7 +70,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -135,7 +135,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -199,7 +199,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -263,7 +263,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -413,7 +413,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -563,7 +563,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -583,7 +583,7 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesLeftCreated = this._genericRepo.GetItems<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
+            var relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
 
             Assert.Equal(entriesCount, relTablesLeftCreated.Count());
             Assert.Equal(entriesCount, relTablesLeftCreated.Select(x => x.ID).Intersect(relTablesLeft.Select(x => x.ID)).Count());
@@ -611,7 +611,7 @@ namespace IV.DX.Persistence.IntTests
                 Assert.Equal(relTableFirstRight.ID, relationRightIDs.Single());
             }
 
-            relTablesLeftCreated = this._genericRepo.GetItems<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
+            relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
 
             foreach (var item in relTablesLeftCreated)
             {
@@ -678,7 +678,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -698,7 +698,7 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesRightCreated = this._genericRepo.GetItems<RelTableRight5>(relTablesRight.Select(x => x.ID));
+            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.ID));
 
             Assert.Equal(entriesCount, relTablesRightCreated.Count());
             Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.ID).Intersect(relTablesRight.Select(x => x.ID)).Count());
@@ -726,7 +726,7 @@ namespace IV.DX.Persistence.IntTests
                 Assert.Equal(relTableFirstLeft.ID, relationLeftIDs.Single());
             }
 
-            relTablesRightCreated = this._genericRepo.GetItems<RelTableRight5>(relTablesRight.Select(x => x.ID));
+            relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.ID));
 
             foreach (var item in relTablesRightCreated)
             {
@@ -793,7 +793,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetItem<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -813,7 +813,7 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesRightCreated = this._genericRepo.GetItems<RelTableRight8>(relTablesRight.Select(x => x.ID));
+            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight8>(relTablesRight.Select(x => x.ID));
 
             Assert.Equal(entriesCount, relTablesRightCreated.Count());
             Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.ID).Intersect(relTablesRight.Select(x => x.ID)).Count());

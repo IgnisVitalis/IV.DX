@@ -18,14 +18,14 @@ namespace IV.DX.Persistence.IntTests
     {
         private readonly TimeSpan difference = new TimeSpan(0, 0, 10);
 
-        IDXGenericRepository _genericRepo;
+        IDXUnitGenericRepository _genericRepo;
 
         IDXUnitDataService _dataService;
 
         public DataBlockRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXGenericRepository>();
+            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 
@@ -195,11 +195,11 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(blockDesc).Wait();
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetDXUnit<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Check(blockDefinition);
 
-            var blockDefinitions = this._genericRepo.GetItems<DXElementDefinitionUnit>();
+            var blockDefinitions = this._genericRepo.GetDXUnits<DXElementDefinitionUnit>();
 
             Assert.True(blockDefinitions.Count() > 0);
             blockDefinition = blockDefinitions.SingleOrDefault(x => x.ID == new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
@@ -227,7 +227,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.UpdateAsync(blockDesc1).Wait();
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetDXUnit<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -396,7 +396,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.UpdateAsync(blockDesc2).Wait();
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetDXUnit<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -467,7 +467,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.UpdateAsync(blockDesc3).Wait();
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetDXUnit<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);
@@ -551,7 +551,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.UpdateAsync(blockDesc4).Wait();
 
             // Checking
-            var blockDefinition = this._genericRepo.GetItem<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
+            var blockDefinition = this._genericRepo.GetDXUnit<DXElementDefinitionUnit>(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"));
 
             Assert.NotNull(blockDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blockDefinition.ID);

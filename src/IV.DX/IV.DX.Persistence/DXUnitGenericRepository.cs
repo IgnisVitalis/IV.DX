@@ -6,11 +6,11 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal class DXGenericRepository : IDXGenericRepository
+    internal class DXUnitGenericRepository : IDXUnitGenericRepository
     {
         private readonly IDXCoreRepository _coreRepo;
 
-        public DXGenericRepository(IDXCoreRepository coreRepo)
+        public DXUnitGenericRepository(IDXCoreRepository coreRepo)
         {
             this._coreRepo = coreRepo;
         }
@@ -24,28 +24,28 @@ namespace IV.DX.Persistence
             return this._coreRepo.Delete(esqlTypeName, dxUnit.ID);
         }
 
-        public T GetItem<T>(Guid id) where T : DXUnit
+        public T GetDXUnit<T>(Guid id) where T : DXUnit
         {
             var result = this._coreRepo.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
             return DXUnitHelper.CreateInstance<T>(result);
         }
 
-        public IEnumerable<T> GetItems<T>() where T : DXUnit
+        public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetItems<T>(IEnumerable<Guid> ids) where T : DXUnit
+        public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetItems<T>(string dxsqlWhereExpression) where T : DXUnit
+        public IEnumerable<T> GetDXUnits<T>(string dxsqlWhereExpression) where T : DXUnit
         {
             var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
 
@@ -86,7 +86,7 @@ namespace IV.DX.Persistence
             return this._coreRepo.Update(esqlModel);
         }
 
-        public bool AddRelation(DXRelationItemUnit relationItem)
+        public bool AddDXRelation(DXRelationItemUnit relationItem)
         {
             ArgumentNullException.ThrowIfNull(relationItem);
 
@@ -98,7 +98,7 @@ namespace IV.DX.Persistence
                      relationItem.DXRelationItemMainElement.ObjectIDRight);
         }
 
-        public bool RemoveRelation(DXRelationItemUnit relationItem)
+        public bool RemoveDXRelation(DXRelationItemUnit relationItem)
         {
             ArgumentNullException.ThrowIfNull(relationItem);
 
@@ -108,46 +108,6 @@ namespace IV.DX.Persistence
                 relationItem.DXRelationItemMainElement.RelationNameRight,
                 relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
                 relationItem.DXRelationItemMainElement.ObjectIDRight);
-        }
-
-        public Guid InsertBlock(string esqlModelType, DXElement dxElement)
-        {
-            ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
-            ArgumentNullException.ThrowIfNull(dxElement);
-
-            var singleBlock = dxElement.ConvertToSingleItem();
-
-            return this._coreRepo.InsertSingleBlock(esqlModelType, singleBlock);
-        }
-
-        public Guid UpdateBlock(string esqlModelType, DXElement dxElement)
-        {
-            ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
-            ArgumentNullException.ThrowIfNull(dxElement);
-
-            var singleBlock = dxElement.ConvertToSingleItem();
-
-            return this._coreRepo.UpdateSingleBlock(esqlModelType, singleBlock);
-        }
-
-        public bool DeleteBlock(DXElement dxElement)
-        {
-            ArgumentNullException.ThrowIfNull(dxElement);
-
-            var singleBlock = dxElement.ConvertToSingleItem();
-
-            return this._coreRepo.DeleteSingleBlock(singleBlock.Name, dxElement.ID);
-        }
-
-        public T GetBlock<T>(Guid id) where T : DXElement
-        {
-            var blockName = AttributeReader.GetDXBlockTypeName(typeof(T));
-
-            var block = DXModelDefinitionHelper.GetDXElementDefinition(blockName, typeof(T));
-
-            var result = this._coreRepo.GetSingleBlock(block, id);
-
-            return DXUnitHelper.CreateBlockInstance<T>(result);
         }
     }
 }
