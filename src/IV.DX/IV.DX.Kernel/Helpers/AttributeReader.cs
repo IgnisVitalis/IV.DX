@@ -122,7 +122,7 @@ namespace IV.DX.Kernel.Helpers
             if (attribute == null)
                 return string.Empty;
 
-            return attribute.BlockName;
+            return attribute.Name;
         }
 
         public static string GetTypeName(this DXUnit dxUnit)

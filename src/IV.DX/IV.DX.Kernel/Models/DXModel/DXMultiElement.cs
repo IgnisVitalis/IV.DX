@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXMultiItem
+    public class DXMultiElement
     {
         public string Name { get; set; }
         public DXElementAttribute BlockInfo { get; set; }
@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.Models
         {
             JObject jObject = new JObject
             {
-                [Constants.SystemPropertyTypeName] = this.BlockInfo.BlockName,
+                [Constants.SystemPropertyTypeName] = this.BlockInfo.Name,
                 [Constants.Mode] = (int)this.Mode
             };
 
@@ -80,12 +80,12 @@ namespace IV.DX.Kernel.Models
             return jProperty;
         }
 
-        public static DXMultiItem ConvertFromJProperty(JProperty jProperty)
+        public static DXMultiElement ConvertFromJProperty(JProperty jProperty)
         {
             if (jProperty == null)
                 return null;
 
-            DXMultiItem multiFragment = new DXMultiItem
+            DXMultiElement multiFragment = new DXMultiElement
             {
                 BlockInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
@@ -115,7 +115,7 @@ namespace IV.DX.Kernel.Models
             return multiFragment;
         }
 
-        public static bool DeepEquals(DXMultiItem item1, DXMultiItem item2)
+        public static bool DeepEquals(DXMultiElement item1, DXMultiElement item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -130,7 +130,7 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        public static bool DeepEquals(IEnumerable<DXMultiItem> list1, IEnumerable<DXMultiItem> list2)
+        public static bool DeepEquals(IEnumerable<DXMultiElement> list1, IEnumerable<DXMultiElement> list2)
         {
             if (list1 == null && list2 == null)
                 return false;
@@ -145,16 +145,16 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!DXMultiItem.DeepEquals(item1, item2))
+                if (!DXMultiElement.DeepEquals(item1, item2))
                     return false;
             }
 
             return true;
         }
 
-        public DXMultiItem DeepClone()
+        public DXMultiElement DeepClone()
         {
-            return new DXMultiItem()
+            return new DXMultiElement()
             {
                 Mode = this.Mode,
                 Name = this.Name,

@@ -19,35 +19,35 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlTypeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
+            var dxTypeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
 
-            return this._coreRepo.Delete(esqlTypeName, dxUnit.ID);
+            return this._coreRepo.Delete(dxTypeName, dxUnit.ID);
         }
 
         public T GetDXUnit<T>(Guid id) where T : DXUnit
         {
-            var result = this._coreRepo.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(T)), id, DXLoadingType.Full);
+            var result = this._coreRepo.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
             return DXUnitHelper.CreateInstance<T>(result);
         }
 
         public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<T>(), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(string dxsqlWhereExpression) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetESQLModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitHelper.CreateInstance<T>(x)).ToList();
         }
@@ -56,14 +56,14 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlModel = dxUnit.ConvertToESQLModel();
+            var dxModel = dxUnit.ConvertToDXModel();
 
-            return this._coreRepo.Insert(esqlModel);
+            return this._coreRepo.Insert(dxModel);
         }
 
         public Guid InsertOrUpdate(DXUnit dxUnit)
         {
-            var definition = DXModelDefinitionHelper.GetESQLModelDefinition(dxUnit.GetType());
+            var definition = DXModelDefinitionHelper.GetDXModelDefinition(dxUnit.GetType());
 
             var existingEntity = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
 
@@ -81,9 +81,9 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var esqlModel = dxUnit.ConvertToESQLModel();
+            var dxModel = dxUnit.ConvertToDXModel();
 
-            return this._coreRepo.Update(esqlModel);
+            return this._coreRepo.Update(dxModel);
         }
 
         public bool AddDXRelation(DXRelationItemUnit relationItem)

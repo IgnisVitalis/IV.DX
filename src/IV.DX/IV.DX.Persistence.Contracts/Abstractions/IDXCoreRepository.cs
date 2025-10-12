@@ -25,9 +25,9 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         bool AddRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
         bool RemoveRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
-        Guid InsertSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
-        Guid UpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
-        Guid InsertOrUpdateSingleBlock(string esqlModelType, DXSingleElement esqlSingleBlock);
+        Guid InsertSingleBlock(string dxModelType, DXSingleElement dxSingleBlock);
+        Guid UpdateSingleBlock(string dxModelType, DXSingleElement dxSingleBlock);
+        Guid InsertOrUpdateSingleBlock(string dxModelType, DXSingleElement dxSingleBlock);
         bool DeleteSingleBlock(string typeName, Guid objectId);
         DXSingleElement GetSingleBlock(DXElementDefinition container, Guid id);
     }

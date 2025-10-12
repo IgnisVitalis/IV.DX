@@ -108,7 +108,7 @@ namespace IV.DX.Kernel.Models
             var singleBlocks = new List<DXElementDefinitionUnit>();
             var multiBlocks = new List<DXElementDefinitionUnit>();
 
-            var esqlModel = new DXModelDefinition(ownBlockDefinition);
+            var dxModel = new DXModelDefinition(ownBlockDefinition);
 
             if (relatedSingleMandatoryBlocks != null)
             {
@@ -132,15 +132,15 @@ namespace IV.DX.Kernel.Models
 
             if (singleBlocks.Count > 0)
             {
-                esqlModel.SingleFragmentDefinitions = singleBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
+                dxModel.SingleFragmentDefinitions = singleBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
             }
 
             if (multiBlocks.Count > 0)
             {
-                esqlModel.MultiFragmentDefinitions = multiBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
+                dxModel.MultiFragmentDefinitions = multiBlocks.Select(x => ConvertToBlockDefinition(x)).ToList();
             }
 
-            return esqlModel;
+            return dxModel;
         }
 
         private static DXElementDefinition ConvertToBlockDefinition(DXElementDefinitionUnit block)

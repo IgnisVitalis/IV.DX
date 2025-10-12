@@ -26,7 +26,7 @@
     //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                Name = "TUserMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -82,7 +82,7 @@
     //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                Name = "TUserMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -143,7 +143,7 @@
     //                ObjectID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //                Name = "TPassportMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -213,7 +213,7 @@
     //                ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                Name = "TDeviceMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -287,7 +287,7 @@
     //                ObjectID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //                Name = "TPositionMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -368,7 +368,7 @@
     //                ObjectID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //                Name = "TDocumentMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -449,7 +449,7 @@
     //                ObjectID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //                Name = "TBookMainElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {
@@ -475,7 +475,7 @@
     //                ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                Name = "TBookChapterElement"
     //            },
-    //            DXColumnDefinitionElement = new ESQLMultiItemsContainer<DXColumnDefinitionElement>()
+    //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
     //            {
     //                Announced = new List<DXColumnDefinitionElement>()
     //                {

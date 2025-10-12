@@ -58,7 +58,7 @@
                 return result;
             }
 
-            throw new Exception("BlockNode can have only CoreNode or EntityNode as mother node. Please check ESQL query.");
+            throw new Exception("BlockNode can have only CoreNode or EntityNode as mother node. Please check DX query.");
         }
     }
 }

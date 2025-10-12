@@ -79,7 +79,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             {
                 if (existingExpression.Value != logicOpeation)
                 {
-                    throw new Exception($"Please check esql expression {expression}. It's duplicate and has wrong logic opeation {logicOpeation}.");
+                    throw new Exception($"Please check dx expression {expression}. It's duplicate and has wrong logic opeation {logicOpeation}.");
                 }
 
                 return;

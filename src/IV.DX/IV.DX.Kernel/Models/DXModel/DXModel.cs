@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     {
         public DXMainItem OwnSingleItem { get; set; }
         public IEnumerable<DXSingleElement> SingleItems { get; set; }
-        public IEnumerable<DXMultiItem> MultiItems { get; set; }
+        public IEnumerable<DXMultiElement> MultiItems { get; set; }
 
         public DXModel(DXMainItem ownSingleItem)
         {
@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Models
             result = result
                 && DXMainItem.DeepEquals(item1.OwnSingleItem, item2.OwnSingleItem)
                 && DXSingleElement.DeepEquals(item1.SingleItems, item2.SingleItems)
-                && DXMultiItem.DeepEquals(item1.MultiItems, item2.MultiItems);
+                && DXMultiElement.DeepEquals(item1.MultiItems, item2.MultiItems);
 
             return result;
         }
@@ -83,16 +83,16 @@ namespace IV.DX.Kernel.Models
                 return x.Value[Constants.Mode] != null && (x.Value[Constants.Announced] != null || x.Value[Constants.Deleted] != null);
             });
 
-            var ownItem = GetQwnESQLSingleItem(jObject);
+            var ownItem = GetQwndxSingleItem(jObject);
 
             var singleItems = jProperties
                     .Where(x => !expressionToFilterMultiItems(x))
-                    .Select(x => GetESQLSingleItem(x, ownItem.Item.ID))
+                    .Select(x => GetDXSingleItem(x, ownItem.Item.ID))
                     .ToList();
 
             var multiItems = jProperties
                     .Where(x => expressionToFilterMultiItems(x))
-                    .Select(x => GetESQLMutliItem(x, ownItem.Item.ID))
+                    .Select(x => GetDXMutliItem(x, ownItem.Item.ID))
                     .ToList();
 
             DXModel dxModel = new DXModel(ownItem)
@@ -111,33 +111,33 @@ namespace IV.DX.Kernel.Models
             return CreateInstance(jObject);
         }
 
-        private static DXSingleElement GetESQLSingleItem(JProperty property, Guid? objId)
+        private static DXSingleElement GetDXSingleItem(JProperty property, Guid? objId)
         {
             DXSingleElement singleItem = new DXSingleElement()
             {
                 Name = property.Name,
                 ElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Item = GetESQLItem((JObject)property.Value, objId)
+                Item = GetdxItem((JObject)property.Value, objId)
             };
 
             return singleItem;
         }
 
-        private static DXMultiItem GetESQLMutliItem(JProperty property, Guid? objId)
+        private static DXMultiElement GetDXMutliItem(JProperty property, Guid? objId)
         {
-            DXMultiItem esqlMultiItem = new DXMultiItem()
+            DXMultiElement dxMultiItem = new DXMultiElement()
             {
                 Name = property.Name,
                 BlockInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
-                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetESQLItem((JObject)x, objId)).ToList(),
+                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
+                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
                 Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()
             };
 
-            return esqlMultiItem;
+            return dxMultiItem;
         }
 
-        private static DXMainItem GetQwnESQLSingleItem(JObject jObject)
+        private static DXMainItem GetQwndxSingleItem(JObject jObject)
         {
             var jObjectCopy = jObject.DeepClone() as JObject;
             string type = null;
@@ -165,7 +165,7 @@ namespace IV.DX.Kernel.Models
 
             var result = new DXMainItem(new DXUnitAttribute(type))
             {
-                Item = GetESQLItem(jObjectCopy, id)
+                Item = GetdxItem(jObjectCopy, id)
             };
 
             result.Item.ID = id;
@@ -174,9 +174,9 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        private static DXItem GetESQLItem(JObject jObject, Guid? objId)
+        private static DXItem GetdxItem(JObject jObject, Guid? objId)
         {
-            DXItem esqlItem = new DXItem
+            DXItem dxItem = new DXItem
             {
                 ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
                 ObjectID = objId
@@ -194,9 +194,9 @@ namespace IV.DX.Kernel.Models
                 content.Remove(Constants.ObjectID);
             }
 
-            esqlItem.Content = content;
+            dxItem.Content = content;
 
-            return esqlItem;
+            return dxItem;
         }
         #endregion
     }

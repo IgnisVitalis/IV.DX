@@ -10,14 +10,14 @@ namespace IV.DX.Contracts.UnitTests
 {
     public class ModelConverterTests
     {
-        private readonly MyObject esqlObject;
-        private readonly DXModel esqlModel;
+        private readonly MyObject dxUnitect;
+        private readonly DXModel dxModel;
 
         public ModelConverterTests()
         {
             var objectId = new Guid("032169A1-FDFA-45B8-B0EC-381A6888FF35");
 
-            this.esqlObject = new MyObject()
+            this.dxUnitect = new MyObject()
             {
                 ID = objectId,
                 TimeStamp = new DateTime(2020, 12, 1),
@@ -79,7 +79,7 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
 
-            esqlModel = new DXModel(ownItem)
+            dxModel = new DXModel(ownItem)
             {
                 SingleItems = new List<DXSingleElement>()
                 {
@@ -101,9 +101,9 @@ namespace IV.DX.Contracts.UnitTests
                         }
                     }
                 },
-                MultiItems = new List<DXMultiItem>()
+                MultiItems = new List<DXMultiElement>()
                 {
-                    new DXMultiItem()
+                    new DXMultiElement()
                     {
                         Name = "MyBlockMultiItems",
                         BlockInfo = new DXElementAttribute("MyBlockDefinition"),
@@ -157,28 +157,28 @@ namespace IV.DX.Contracts.UnitTests
 
 
         [Fact]
-        public void ConvertToESQLModel_UsingStongType_CorrectESQLModel()
+        public void ConvertToDXModel_UsingStongType_CorrectDXModel()
         {
             // Init                     
 
             // Action            
-            var result = this.esqlObject.ConvertToESQLModel();
+            var result = this.dxUnitect.ConvertToDXModel();
 
             // Checking result
-            Assert.True(DXModel.DeepEquals(this.esqlModel, result));
+            Assert.True(DXModel.DeepEquals(this.dxModel, result));
         }
 
         [Fact]
-        public void ConvertToESQLObject_UsingStongType_CorrectESQLObject()
+        public void ConvertTodxUnitect_UsingStongType_CorrectdxUnitect()
         {
             // Init                     
 
             // Action            
-            var esqlObjectResult = DXUnitHelper.CreateInstance<MyObject>(this.esqlModel);
-            var result = this.esqlObject.ConvertToESQLModel();
+            var dxUnitectResult = DXUnitHelper.CreateInstance<MyObject>(this.dxModel);
+            var result = this.dxUnitect.ConvertToDXModel();
 
             // Checking result
-            Assert.True(DXModel.DeepEquals(this.esqlModel, result));
+            Assert.True(DXModel.DeepEquals(this.dxModel, result));
         }
     }
 

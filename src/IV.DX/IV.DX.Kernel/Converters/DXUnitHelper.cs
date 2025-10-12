@@ -32,7 +32,7 @@ namespace IV.DX.Kernel.Converters
         #region Convert to JObject       
         public static JObject ConvertToJObject(this DXUnit dxUnit)
         {
-            var result = dxUnit.ConvertToESQLModel().ConvertToJObject();
+            var result = dxUnit.ConvertToDXModel().ConvertToJObject();
 
             return result;
         }
@@ -46,8 +46,8 @@ namespace IV.DX.Kernel.Converters
         }
         #endregion
 
-        #region Convert to ESQLModel
-        public static DXModel? ConvertToESQLModel(this DXUnit dxUnit)
+        #region Convert to DXModel
+        public static DXModel? ConvertToDXModel(this DXUnit dxUnit)
         {
             if (dxUnit == null)
                 return null;
@@ -67,14 +67,14 @@ namespace IV.DX.Kernel.Converters
 
             DXModel dxModel = new DXModel(ownItem)
             {
-                SingleItems = GetESQLSingleItems(dxUnit),
-                MultiItems = GetESQLMutliItems(dxUnit)
+                SingleItems = GetDXSingleElements(dxUnit),
+                MultiItems = GetDXMutliElements(dxUnit)
             };
 
             return dxModel;
         }
 
-        private static IEnumerable<DXSingleElement> GetESQLSingleItems(DXUnit dxUnit)
+        private static IEnumerable<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
         {
             var singleItemInfos = AttributeReader.GetSingleItemInfos(dxUnit);
 
@@ -82,7 +82,7 @@ namespace IV.DX.Kernel.Converters
             {
                 var singleItem = x.GetValue(dxUnit) as DXElement;
 
-                DXSingleElement esqlSingleItem = new DXSingleElement()
+                DXSingleElement dxSingleItem = new DXSingleElement()
                 {
                     ElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
                     Item = new DXItem()
@@ -94,7 +94,7 @@ namespace IV.DX.Kernel.Converters
                     Name = x.Name
                 };
 
-                return esqlSingleItem;
+                return dxSingleItem;
             }).ToList();
 
             return result;
@@ -113,12 +113,12 @@ namespace IV.DX.Kernel.Converters
                     ObjectID = block.ObjectID,
                     Content = GetContent(block)
                 },
-                Name = blockInfo.BlockName
+                Name = blockInfo.Name
             };
             return singleItem;
         }
 
-        private static IEnumerable<DXMultiItem> GetESQLMutliItems(DXUnit dxUnit)
+        private static IEnumerable<DXMultiElement> GetDXMutliElements(DXUnit dxUnit)
         {
             var multiItemsInfos = AttributeReader.GetMultiItemInfos(dxUnit);
 
@@ -132,7 +132,7 @@ namespace IV.DX.Kernel.Converters
                 if (multiItemValue != null)
                     mode = (MultiElementsMode)multiItemType.GetProperty("Mode").GetValue(multiItemValue);
 
-                DXMultiItem multiItem = new DXMultiItem()
+                DXMultiElement multiItem = new DXMultiElement()
                 {
                     BlockInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
                     Name = x.Name,
@@ -149,14 +149,14 @@ namespace IV.DX.Kernel.Converters
                         {
                             var content = GetContent(y);
 
-                            var esqlItem = new DXItem()
+                            var dxItem = new DXItem()
                             {
                                 ID = y.ID,
                                 ObjectID = dxUnit.ID,
                                 Content = content
                             };
 
-                            return esqlItem;
+                            return dxItem;
                         }).ToList();
                     }
                     else
@@ -172,14 +172,14 @@ namespace IV.DX.Kernel.Converters
                         {
                             var content = GetContent(y);
 
-                            var esqlItem = new DXItem()
+                            var dxItem = new DXItem()
                             {
                                 ID = y.ID,
                                 ObjectID = dxUnit.ID,
                                 Content = content
                             };
 
-                            return esqlItem;
+                            return dxItem;
                         }).ToList();
                     }
                     else
@@ -240,11 +240,11 @@ namespace IV.DX.Kernel.Converters
         #region Create instance
         public static T CreateInstance<T>(string json) where T : DXUnit
         {
-            var esqlModel = DXModel.CreateInstance(json);
+            var dxModel = DXModel.CreateInstance(json);
 
-            T esqlObj = CreateInstance<T>(esqlModel);
+            T dxUnit = CreateInstance<T>(dxModel);
 
-            return esqlObj;
+            return dxUnit;
         }
 
         public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit
@@ -264,39 +264,39 @@ namespace IV.DX.Kernel.Converters
 
         public static T CreateInstance<T>(JObject jObject) where T : DXUnit
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
+            var dxModel = DXModel.CreateInstance(jObject);
 
-            T esqlObj = CreateInstance<T>(esqlModel);
+            T dxUnit = CreateInstance<T>(dxModel);
 
-            return esqlObj;
+            return dxUnit;
         }
 
         public static DXUnit CreateInstance(string json, Type type)
         {
-            var esqlModel = DXModel.CreateInstance(json);
+            var dxModel = DXModel.CreateInstance(json);
 
-            DXUnit esqlObj = CreateInstance(esqlModel, type);
+            DXUnit dxUnit = CreateInstance(dxModel, type);
 
-            return esqlObj;
+            return dxUnit;
         }
 
         public static DXUnit CreateInstance(JObject jObject, Type type)
         {
-            var esqlModel = DXModel.CreateInstance(jObject);
+            var dxModel = DXModel.CreateInstance(jObject);
 
-            DXUnit esqlObj = CreateInstance(esqlModel, type);
+            DXUnit dxUnit = CreateInstance(dxModel, type);
 
-            return esqlObj;
+            return dxUnit;
         }
 
         public static T CreateInstance<T>(DXModel dxModel) where T : DXUnit
         {
-            return ConvertToESQLObject(dxModel, typeof(T)) as T;
+            return ConvertTodxUnitect(dxModel, typeof(T)) as T;
         }
 
         public static DXUnit CreateInstance(DXModel dxModel, Type type)
         {
-            return ConvertToESQLObject(dxModel, type);
+            return ConvertTodxUnitect(dxModel, type);
         }
 
         public static T CreateBlockInstance<T>(DXSingleElement item) where T : DXElement
@@ -314,7 +314,7 @@ namespace IV.DX.Kernel.Converters
             return singleFragmetInstance as T;
         }
 
-        private static DXUnit ConvertToESQLObject(DXModel dxModel, Type type)
+        private static DXUnit ConvertTodxUnitect(DXModel dxModel, Type type)
         {
             if (dxModel == null)
                 return null;

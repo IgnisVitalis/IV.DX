@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXElementDefinitionUnit")]
     public class DXElementDefinitionUnit : DXObjectDefinitionUnit
     {
-        public static DXModelDefinition ESQLModelDefinition { get; } 
-            = DXModelDefinitionHelper.GetESQLModelDefinition<DXElementDefinitionUnit>();
+        public static DXModelDefinition DXModelDefinition { get; } 
+            = DXModelDefinitionHelper.GetDXModelDefinition<DXElementDefinitionUnit>();
     }
 }

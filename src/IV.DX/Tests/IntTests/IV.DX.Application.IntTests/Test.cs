@@ -54,8 +54,8 @@ namespace IV.DX.Application.IntTests
 
             var dxUnitMetadata = await _dataService.GetItemAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             var objectMetadata = await _dataService.GetItemAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
-            //var dxUnitMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
-            //var objectMetadata = await ESQLObjectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
+            //var dxUnitMetadata = await dxUnitectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            //var objectMetadata = await dxUnitectApiClient.GetEntityAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
 
             var item = await _dataService.GetItemAsync<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             // Action

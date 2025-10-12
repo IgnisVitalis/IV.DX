@@ -13,7 +13,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            var blockModelsFromDB = this.GetItems(DXElementDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
 
             var blockInfos = blockModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
@@ -28,7 +28,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var dxUnitModelsFromDB = this.GetItems(DXUnitDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            var dxUnitModelsFromDB = this.GetItems(DXUnitDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
 
             var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
@@ -43,7 +43,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
 
-            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
 
             var enumInfos = enumsModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
@@ -58,7 +58,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
-            var result = this.GetItems(DXRelationDefinitionUnit.ESQLModelDefinition, DXLoadingType.Full);
+            var result = this.GetItems(DXRelationDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
             return result.Select(x => DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
         }
     }

@@ -154,7 +154,7 @@ namespace IV.DX.Application.Pipeline
             else
             {
                 var dxModel = DXModel.CreateInstance(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetESQLModelDefinition(dxModel);
+                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
 
                 var id = coreRepo.Insert(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
@@ -241,7 +241,7 @@ namespace IV.DX.Application.Pipeline
             else
             {
                 var dxModel = DXModel.CreateInstance(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetESQLModelDefinition(dxModel);
+                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
 
                 var id = coreRepo.Update(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
@@ -314,7 +314,7 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitHelper.ConvertToESQLModel(baseRes.Value!);
+                var dxModelResult = DXUnitHelper.ConvertToDXModel(baseRes.Value!);
 
                 return DXResult<JObject>.Ok(dxModelResult.ConvertToJObject(), baseRes.Flow);
             }

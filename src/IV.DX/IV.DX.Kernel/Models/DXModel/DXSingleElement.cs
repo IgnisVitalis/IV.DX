@@ -17,7 +17,7 @@ namespace IV.DX.Kernel.Models
             {   
                 jObject = new JObject(this.Item.ConvertToJObject())
                 {
-                    [Constants.SystemPropertyTypeName] = this.ElementInfo.BlockName
+                    [Constants.SystemPropertyTypeName] = this.ElementInfo.Name
                 };
             }
 

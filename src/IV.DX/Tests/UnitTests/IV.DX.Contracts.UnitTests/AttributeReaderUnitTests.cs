@@ -14,7 +14,7 @@ namespace IV.DX.Contracts.UnitTests
         }
 
         [Fact]
-        public void GetESQLObjectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues()
+        public void GetdxUnitectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues()
         {
             // Init
 
@@ -40,11 +40,11 @@ namespace IV.DX.Contracts.UnitTests
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.BlockName == "DXUnitDefinitionMainElement");
+            Assert.True(attr.Name == "DXUnitDefinitionMainElement");
         }
 
         [Fact]
-        public void GetESQLColumnDefinitionAttributes_FromDXUnitDefinitionMainElement_AttributesWithCorrectValues()
+        public void GetDXColumnDefinitionAttributes_FromDXUnitDefinitionMainElement_AttributesWithCorrectValues()
         {
             // Init
 
@@ -56,22 +56,22 @@ namespace IV.DX.Contracts.UnitTests
             // Checking result
             Assert.True(attributes.Count() == 6);
 
-            var displayValueAttr = attributes.SingleOrDefault(x => x.ColumnName == "DisplayValue");
+            var displayValueAttr = attributes.SingleOrDefault(x => x.Name == "DisplayValue");
             Assert.NotNull(displayValueAttr);
 
-            var namePropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "Name");
+            var namePropertyAttr = attributes.SingleOrDefault(x => x.Name == "Name");
             Assert.NotNull(namePropertyAttr);
 
-            var idPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "ID");
+            var idPropertyAttr = attributes.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idPropertyAttr);
 
-            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "ObjectID");
+            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.Name == "ObjectID");
             Assert.NotNull(objectIdPropertyAttr);
 
-            var kindPropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "Kind");
+            var kindPropertyAttr = attributes.SingleOrDefault(x => x.Name == "Kind");
             Assert.NotNull(kindPropertyAttr);
 
-            var timeStampePropertyAttr = attributes.SingleOrDefault(x => x.ColumnName == "TimeStamp");
+            var timeStampePropertyAttr = attributes.SingleOrDefault(x => x.Name == "TimeStamp");
             Assert.NotNull(timeStampePropertyAttr);
         }
     }

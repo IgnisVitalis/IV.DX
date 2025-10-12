@@ -55,7 +55,7 @@ namespace IV.DX.Persistence
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataBlock)
         {
-            var result = this.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, DXLoadingType.Full);
+            var result = this.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataBlock.ID, DXLoadingType.Full);
             var existingDataBlock = DXUnitHelper.CreateInstance<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataBlock, existingDataBlock);
@@ -164,7 +164,7 @@ namespace IV.DX.Persistence
 
             if (string.IsNullOrEmpty(dxUnit.DXRelationDefinitionMainElement.RelationTable))
             {
-                var existingModel = this.GetItem(DXModelDefinitionHelper.GetESQLModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
+                var existingModel = this.GetItem(DXModelDefinitionHelper.GetDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
                 var existingEntity = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
 

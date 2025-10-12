@@ -7,14 +7,14 @@ namespace IV.DX.Kernel.Converters
 {
     internal static class DXModelDefinitionHelper
     {
-        public static DXModelDefinition GetESQLModelDefinition<T>() where T : DXUnit
+        public static DXModelDefinition GetDXModelDefinition<T>() where T : DXUnit
         {
             Type type = typeof(T);
 
-            return GetESQLModelDefinition(type);
+            return GetDXModelDefinition(type);
         }
 
-        public static DXModelDefinition GetESQLModelDefinition(DXModel dxModel)
+        public static DXModelDefinition GetDXModelDefinition(DXModel dxModel)
         {
             var mainItemDefinition = new DXElementDefinition(dxModel.OwnSingleItem.ObjectInfo.ObjectName, dxModel.OwnSingleItem.ObjectInfo.ObjectName);
 
@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Converters
             var singleItemDefinitions =
                 dxModel.SingleItems.Select(x =>
                 {
-                    var item = new DXElementDefinition(x.ElementInfo.BlockName, x.Name);
+                    var item = new DXElementDefinition(x.ElementInfo.Name, x.Name);
 
                     var propertyNames = x.Item.Content.Children().Select(y => y as JProperty).Select(y => y.Name).ToList();
 
@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Converters
             var multiItemDefinitions =
                   dxModel.MultiItems.Select(x =>
                   {
-                      var item = new DXElementDefinition(x.BlockInfo.BlockName, x.Name);
+                      var item = new DXElementDefinition(x.BlockInfo.Name, x.Name);
 
                       var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : (x.Deleted.Count() > 0 ? x.Deleted.First() : null);
 
@@ -78,7 +78,7 @@ namespace IV.DX.Kernel.Converters
             return result;
         }
 
-        public static DXModelDefinition GetESQLModelDefinition(Type type)
+        public static DXModelDefinition GetDXModelDefinition(Type type)
         {
             var asqlTypeName = AttributeReader.GetDXUnitTypeName(type);
 
@@ -131,7 +131,7 @@ namespace IV.DX.Kernel.Converters
                 dxElementDefinition.AddPropertyDefinition(item);
             }
 
-            if (dxElementDefinition.SingleOrDefault(x => x.ColumnDefinition.ESQLExpression == Constants.ID) == null)
+            if (dxElementDefinition.SingleOrDefault(x => x.ColumnDefinition.DXExpression == Constants.ID) == null)
             {
                 DXPropertyDefinition item = new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID));
 

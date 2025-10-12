@@ -4,16 +4,16 @@ using Xunit;
 
 namespace IV.DX.Contracts.UnitTests
 {
-    public class ESQLObjectTests
+    public class dxUnitectTests
     {
         [Fact]
-        public void ConvertToESQLModel_UsingDerivedEntity_CorrectESQLModel()
+        public void ConvertToDXModel_UsingDerivedEntity_CorrectDXModel()
         {
             // Init
             DerivedUnit1 dxUnit = new DerivedUnit1();
 
             // Action
-            var esqlModel = dxUnit.ConvertToESQLModel();
+            var dxModel = dxUnit.ConvertToDXModel();
 
             // Checking result
             Assert.Equal(1, 1);

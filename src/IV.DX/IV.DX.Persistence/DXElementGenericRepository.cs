@@ -7,24 +7,24 @@ namespace IV.DX.Persistence
 {
     internal class DXElementGenericRepository(IDXCoreRepository coreRepo) : IDXElementGenericRepository
     {
-        public Guid InsertBlock(string esqlModelType, DXElement dxElement)
+        public Guid InsertBlock(string dxModelType, DXElement dxElement)
         {
-            ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
+            ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
             var singleBlock = dxElement.ConvertToSingleItem();
 
-            return coreRepo.InsertSingleBlock(esqlModelType, singleBlock);
+            return coreRepo.InsertSingleBlock(dxModelType, singleBlock);
         }
 
-        public Guid UpdateBlock(string esqlModelType, DXElement dxElement)
+        public Guid UpdateBlock(string dxModelType, DXElement dxElement)
         {
-            ArgumentNullException.ThrowIfNullOrEmpty(esqlModelType);
+            ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
             var singleBlock = dxElement.ConvertToSingleItem();
 
-            return coreRepo.UpdateSingleBlock(esqlModelType, singleBlock);
+            return coreRepo.UpdateSingleBlock(dxModelType, singleBlock);
         }
 
         public bool DeleteBlock(DXElement dxElement)

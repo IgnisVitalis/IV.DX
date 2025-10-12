@@ -2,10 +2,10 @@ namespace IV.DX.Kernel.Attributes
 {
     public class DXElementAttribute : Attribute
     {
-        public string BlockName { get; private set; }
-        public DXElementAttribute(string blockName)
+        public string Name { get; private set; }
+        public DXElementAttribute(string name)
         {
-            BlockName = blockName;
+            Name = name;
         }
 
         public static bool DeepEquals(DXElementAttribute item1, DXElementAttribute item2)
@@ -13,14 +13,14 @@ namespace IV.DX.Kernel.Attributes
             if (item1 == null || item2 == null)
                 return false;
 
-            var result = item1.BlockName == item2.BlockName;
+            var result = item1.Name == item2.Name;
 
             return result;
         }
 
         public DXElementAttribute DeepClone()
         {
-            return new DXElementAttribute(BlockName);
+            return new DXElementAttribute(Name);
         }
     }
 }

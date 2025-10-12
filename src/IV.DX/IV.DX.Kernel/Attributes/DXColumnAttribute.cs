@@ -4,18 +4,18 @@ namespace IV.DX.Kernel.Attributes
 {
     public class DXColumnAttribute : Attribute
     {
-        public string ColumnName { get; private set; }
-        public string ESQLExpression { get; private set; }
+        public string Name { get; private set; }
+        public string DXExpression { get; private set; }
         public DXLoadingType TypeOfEntityLoading { get; private set; }
 
         public DXColumnAttribute(
-            string columnName,
-            string dxsqlExpression = null,
+            string name,
+            string dxExpression = null,
             DXLoadingType typeOfEntityLoading = DXLoadingType.Full)
         {
-            ColumnName = columnName;
-            ESQLExpression = string.IsNullOrEmpty(dxsqlExpression) ?
-                                    ColumnName : dxsqlExpression;
+            Name = name;
+            DXExpression = string.IsNullOrEmpty(dxExpression) ?
+                                    Name : dxExpression;
             TypeOfEntityLoading = typeOfEntityLoading;
         }
 
@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Attributes
             if (item1 == null || item2 == null)
                 return false;
 
-            var result = item1.ColumnName == item2.ColumnName && item1.ESQLExpression == item2.ESQLExpression && item1.TypeOfEntityLoading == item2.TypeOfEntityLoading;
+            var result = item1.Name == item2.Name && item1.DXExpression == item2.DXExpression && item1.TypeOfEntityLoading == item2.TypeOfEntityLoading;
 
             return result;
         }
@@ -53,7 +53,7 @@ namespace IV.DX.Kernel.Attributes
 
         public DXColumnAttribute DeepClone()
         {
-            return new DXColumnAttribute(ColumnName, ESQLExpression, TypeOfEntityLoading);
+            return new DXColumnAttribute(Name, DXExpression, TypeOfEntityLoading);
         }
 
         public bool DeepEquals(DXColumnAttribute columnDefinition)
@@ -61,10 +61,10 @@ namespace IV.DX.Kernel.Attributes
             if (columnDefinition == null)
                 return false;
 
-            if (ColumnName != columnDefinition.ColumnName)
+            if (Name != columnDefinition.Name)
                 return false;
 
-            if (ESQLExpression != columnDefinition.ESQLExpression)
+            if (DXExpression != columnDefinition.DXExpression)
                 return false;
 
             if (TypeOfEntityLoading != columnDefinition.TypeOfEntityLoading)

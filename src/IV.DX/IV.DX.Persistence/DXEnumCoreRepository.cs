@@ -6,19 +6,19 @@ namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
     {
-        public DXMultiItem Get(DXElementDefinition container)
+        public DXMultiElement Get(DXElementDefinition container)
         {
             if (container == null)
                 return null;
 
-            DXMultiItem result = null;
+            DXMultiElement result = null;
 
             this.RunRequest((conn) =>
             {
                 DataSet dataSet = new DataSet(container.Type);
 
                 this.PopulateTableToDataSet(conn, dataSet, container.Type,
-                    columnNames: container.Select(x => x.ColumnDefinition.ESQLExpression));
+                    columnNames: container.Select(x => x.ColumnDefinition.DXExpression));
 
                 if (dataSet.Tables[container.Type].Rows.Count == 0)
                 {
@@ -26,9 +26,9 @@ namespace IV.DX.Persistence
                 }
                 else
                 {
-                    result = this.ConvertToESQLMultiItem(container);
+                    result = this.ConvertToDXMultiItem(container);
 
-                    this.PopulateESQLMultiItem(result, container, dataSet.Tables[result.Name].Rows.Cast<DataRow>());
+                    this.PopulateDXMultiItem(result, container, dataSet.Tables[result.Name].Rows.Cast<DataRow>());
                 }
             });
 
