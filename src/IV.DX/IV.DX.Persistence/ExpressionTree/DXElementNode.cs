@@ -1,10 +1,10 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class BlockNode : BaseNode
+    internal class DXElementNode : DXBaseNode
     {
-        private JoinedQueryInfo _queryInfo;
+        private DXJoinedQueryInfo _queryInfo;
 
-        public JoinedQueryInfo QueryInfo
+        public DXJoinedQueryInfo QueryInfo
         {
             get
             {
@@ -17,22 +17,22 @@
             }
         }
 
-        private BlockNode(int x, int y, string value)
+        private DXElementNode(int x, int y, string value)
             : base(x, y, value)
         {
 
         }
 
-        public static BlockNode CreateInstance(int x, int y, string value)
+        public static DXElementNode CreateInstance(int x, int y, string value)
         {
-            var instance = new BlockNode(x, y, value);
+            var instance = new DXElementNode(x, y, value);
 
             return instance;
         }
 
-        private JoinedQueryInfo GetQueryInfo()
+        private DXJoinedQueryInfo GetQueryInfo()
         {
-            var result = new JoinedQueryInfo()
+            var result = new DXJoinedQueryInfo()
             {
                 JoinedTableName = this.Value,
                 JoinedTableAlias = base.TableNameAliasBase,
@@ -40,7 +40,7 @@
                 MainTableKey = "ID"
             };
 
-            var motherAsCoreNode = this.Mother as CoreNode;
+            var motherAsCoreNode = this.Mother as DXCoreNode;
 
             if (motherAsCoreNode != null)
             {

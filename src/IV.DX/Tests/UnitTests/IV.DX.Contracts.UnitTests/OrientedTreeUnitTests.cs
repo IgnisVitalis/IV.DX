@@ -22,7 +22,7 @@ namespace IV.DX.Contracts.UnitTests
             var expressionFull = $"{expression1} AND {expression2} OR {expression3} AND {expression4} AND {expression5} OR {expression6}";
 
             // Action
-            var instance = OrientedTree.CreateInstance(type);
+            var instance = DXOrientedTree.CreateInstance(type);
             instance.Load(expressionFull);
 
             // Checking results
@@ -36,16 +36,16 @@ namespace IV.DX.Contracts.UnitTests
             var expression4Loaded = instance.Expressions.Skip(3).First();
 
             Assert.Equal(expression1, expression1Loaded.Key);
-            Assert.Equal(LogicOperation.AND, expression1Loaded.Value);
+            Assert.Equal(DXLogicOperation.AND, expression1Loaded.Value);
 
             Assert.Equal(expression2, expression2Loaded.Key);
-            Assert.Equal(LogicOperation.AND, expression2Loaded.Value);
+            Assert.Equal(DXLogicOperation.AND, expression2Loaded.Value);
 
             Assert.Equal(expression3, expression3Loaded.Key);
-            Assert.Equal(LogicOperation.OR, expression3Loaded.Value);
+            Assert.Equal(DXLogicOperation.OR, expression3Loaded.Value);
 
             Assert.Equal(expression4, expression4Loaded.Key);
-            Assert.Equal(LogicOperation.AND, expression4Loaded.Value);
+            Assert.Equal(DXLogicOperation.AND, expression4Loaded.Value);
 
             // Checking results
             var coreNode = instance.CoreNode;
@@ -101,8 +101,8 @@ namespace IV.DX.Contracts.UnitTests
             Assert.Single(childsThirdLevel1);
             Assert.Single(childsThirdLevel2);
 
-            var childThirdLevel0 = childsThirdLevel0.First() as BlockNode;
-            var childThirdLevel1 = childsThirdLevel0.Skip(1).First() as BlockNode;
+            var childThirdLevel0 = childsThirdLevel0.First() as DXElementNode;
+            var childThirdLevel1 = childsThirdLevel0.Skip(1).First() as DXElementNode;
 
             this.AssertBlockNode(childThirdLevel0, "Third", childSecondLevel0);
             this.AssertBlockNode(childThirdLevel1, "3", childSecondLevel0);
@@ -134,24 +134,24 @@ namespace IV.DX.Contracts.UnitTests
             Assert.Single(childsFourthLevel2);
             Assert.Single(childsFourthLevel3);
 
-            var childFourthLevel0 = childsFourthLevel0.First() as PropertyNode;
+            var childFourthLevel0 = childsFourthLevel0.First() as DXPropertyNode;
 
-            this.AssertPropertyNode(childFourthLevel0, "4", childThirdLevel0, 0, LogicOperation.AND);
+            this.AssertPropertyNode(childFourthLevel0, "4", childThirdLevel0, 0, DXLogicOperation.AND);
             this.AssertNodeCoordinates(childFourthLevel0, 4, 0);
 
-            var childFourthLevel1 = childsFourthLevel1.First() as PropertyNode;
+            var childFourthLevel1 = childsFourthLevel1.First() as DXPropertyNode;
 
-            this.AssertPropertyNode(childFourthLevel1, "4", childThirdLevel1, 2, LogicOperation.OR);
+            this.AssertPropertyNode(childFourthLevel1, "4", childThirdLevel1, 2, DXLogicOperation.OR);
             this.AssertNodeCoordinates(childFourthLevel1, 4, 2);
 
-            var childFourthLevel2 = childsFourthLevel2.First() as PropertyNode;
+            var childFourthLevel2 = childsFourthLevel2.First() as DXPropertyNode;
 
-            this.AssertPropertyNode(childFourthLevel2, "Fourth", childThirdLevel2, 1, LogicOperation.AND);
+            this.AssertPropertyNode(childFourthLevel2, "Fourth", childThirdLevel2, 1, DXLogicOperation.AND);
             this.AssertNodeCoordinates(childFourthLevel2, 4, 1);
 
-            var childFourthLevel3 = childsFourthLevel3.First() as PropertyNode;
+            var childFourthLevel3 = childsFourthLevel3.First() as DXPropertyNode;
 
-            this.AssertPropertyNode(childFourthLevel3, "Fourth", childThirdLevel3, 3, LogicOperation.AND);
+            this.AssertPropertyNode(childFourthLevel3, "Fourth", childThirdLevel3, 3, DXLogicOperation.AND);
             this.AssertNodeCoordinates(childFourthLevel3, 4, 3);
 
             Assert.True(instance.AllNodes.Skip(4).First() == childFourthLevel0);
@@ -160,28 +160,28 @@ namespace IV.DX.Contracts.UnitTests
             Assert.True(instance.AllNodes.Skip(13).First() == childFourthLevel3);
         }
 
-        private void AssertCoreNode(CoreNode node, string expectedValue)
+        private void AssertCoreNode(DXCoreNode node, string expectedValue)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);
             Assert.Null(node.Mother);
         }
 
-        private void AssertEntityNode(DXUnitNode node, string expectedValue, BaseNode expectedMotherNode)
+        private void AssertEntityNode(DXUnitNode node, string expectedValue, DXBaseNode expectedMotherNode)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);
             Assert.Equal(expectedMotherNode, node.Mother);
         }
 
-        private void AssertBlockNode(BlockNode node, string expectedValue, BaseNode expectedMotherNode)
+        private void AssertBlockNode(DXElementNode node, string expectedValue, DXBaseNode expectedMotherNode)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);
             Assert.Equal(expectedMotherNode, node.Mother);
         }
 
-        private void AssertPropertyNode(PropertyNode node, string expectedValue, BaseNode expectedMotherNode, int expectedOrder, LogicOperation expectedLogicOpeation)
+        private void AssertPropertyNode(DXPropertyNode node, string expectedValue, DXBaseNode expectedMotherNode, int expectedOrder, DXLogicOperation expectedLogicOpeation)
         {
             Assert.NotNull(node);
             Assert.Equal(expectedValue, node.Value);
@@ -190,7 +190,7 @@ namespace IV.DX.Contracts.UnitTests
             Assert.Equal(expectedOrder, node.Y);
         }
 
-        private void AssertNodeCoordinates(BaseNode node, int xEpxected, int yExpected)
+        private void AssertNodeCoordinates(DXBaseNode node, int xEpxected, int yExpected)
         {
             Assert.Equal(xEpxected, node.X);
             Assert.Equal(yExpected, node.Y);

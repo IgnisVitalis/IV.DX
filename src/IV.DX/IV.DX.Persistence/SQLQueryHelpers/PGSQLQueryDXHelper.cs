@@ -15,15 +15,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
 
-        public QueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            OrientedTree expressionTree = OrientedTree.CreateInstance(dxUnitType);
+            DXOrientedTree expressionTree = DXOrientedTree.CreateInstance(dxUnitType);
 
             expressionTree.Load(dxsqlWhereExpression);
 
             expressionTree.LoadAdditionalInfosToNodes(relationInfos);
 
-            QueryContainer result = new QueryContainer
+            DXQueryContainer result = new DXQueryContainer
             {
                 SelectExpression = this.GetSelectQuery(expressionTree.CoreNode)
             };
@@ -33,7 +33,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             foreach (var item in expressionTree.AllNodesWithoutCoreAndLeaves)
             {
                 var nodeAsEntityNode = item as DXUnitNode;
-                var nodeAsBlockNode = item as BlockNode;
+                var nodeAsBlockNode = item as DXElementNode;
 
                 if (nodeAsEntityNode != null)
                 {
@@ -52,12 +52,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return result;
         }
 
-        private string GetLeftJoinQuery(JoinedQueryInfo queryInfo)
+        private string GetLeftJoinQuery(DXJoinedQueryInfo queryInfo)
         {
             return $"LEFT JOIN \"{queryInfo.JoinedTableName}\" AS \"{queryInfo.JoinedTableAlias}\" ON \"{queryInfo.JoinedTableAlias}\".\"{queryInfo.JoinedTableKey}\" = \"{queryInfo.MainTableAlias}\".\"{queryInfo.MainTableKey}\"";
         }
 
-        public string GetWhereExpressionWithPropertyAndLogicOpeation(PropertyNode propertyNode)
+        public string GetWhereExpressionWithPropertyAndLogicOpeation(DXPropertyNode propertyNode)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -161,7 +161,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sb.ToString();
         }
 
-        public string GetSelectQuery(CoreNode coreNode)
+        public string GetSelectQuery(DXCoreNode coreNode)
         {
             return $"SELECT \"{coreNode.MainTableAlias}\".\"ID\" FROM \"{coreNode.Value}\" AS \"{coreNode.MainTableAlias}\"";
         }

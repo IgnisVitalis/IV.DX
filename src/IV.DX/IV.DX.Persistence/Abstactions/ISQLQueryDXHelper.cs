@@ -9,7 +9,7 @@ namespace IV.DX.Persistence.Abstractions
     {
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
-        QueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
+        DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataBlock);
         string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
         string GetSQLQueryToDropTable(string tableName);
@@ -30,7 +30,7 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQuery(string tableName, IEnumerable<string> columnNames = null, string whereClause = null, IDictionary<string, string> orderBy = null, int? limit = null);
         void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
-        string GetSelectQuery(CoreNode coreNode);
+        string GetSelectQuery(DXCoreNode coreNode);
         string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetQueryToSetEntityInheritance(string childEntity, string baseEntity);
         string GetWhereExpressionForID(Guid id);

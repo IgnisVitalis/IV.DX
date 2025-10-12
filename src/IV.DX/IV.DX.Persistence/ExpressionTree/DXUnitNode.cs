@@ -3,11 +3,11 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class DXUnitNode : BaseNode
+    internal class DXUnitNode : DXBaseNode
     {
-        private IEnumerable<JoinedQueryInfo> _queryInfos;
+        private IEnumerable<DXJoinedQueryInfo> _queryInfos;
 
-        public IEnumerable<JoinedQueryInfo> QueryInfos
+        public IEnumerable<DXJoinedQueryInfo> QueryInfos
         {
             get
             {
@@ -59,9 +59,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return instance;
         }
 
-        private IEnumerable<JoinedQueryInfo> GetQueryInfos()
+        private IEnumerable<DXJoinedQueryInfo> GetQueryInfos()
         {
-            var motherAsCoreNode = this.Mother as CoreNode;
+            var motherAsCoreNode = this.Mother as DXCoreNode;
             var motherAsEntityNode = this.Mother as DXUnitNode;
 
             switch (this.RelationInfo.DXRelationDefinitionMainElement.RelationType)
@@ -70,7 +70,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
                 case DXRelationTypeEnum.OneToMany:
                 case DXRelationTypeEnum.ZeroOneToMany:
                     {
-                        JoinedQueryInfo queryInfo = new JoinedQueryInfo()
+                        DXJoinedQueryInfo queryInfo = new DXJoinedQueryInfo()
                         {
                             JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight,
                             JoinedTableKey = this.RelationInfo.DXRelationDefinitionMainElement.RelationNameLeft,
@@ -89,13 +89,13 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
 
-                        return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
+                        return Enumerable.Empty<DXJoinedQueryInfo>().Append(queryInfo);
                     };
                 case DXRelationTypeEnum.ZeroOneToOne:
                 case DXRelationTypeEnum.ManyToOne:
                 case DXRelationTypeEnum.ManyToZeroOne:
                     {
-                        JoinedQueryInfo queryInfo = new JoinedQueryInfo()
+                        DXJoinedQueryInfo queryInfo = new DXJoinedQueryInfo()
                         {
                             JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.ObjectNameRight,
                             JoinedTableKey = "ID",
@@ -114,11 +114,11 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
 
-                        return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
+                        return Enumerable.Empty<DXJoinedQueryInfo>().Append(queryInfo);
                     };
                 case DXRelationTypeEnum.ZeroOneToZeroOne:
                     {
-                        JoinedQueryInfo queryInfo = new JoinedQueryInfo()
+                        DXJoinedQueryInfo queryInfo = new DXJoinedQueryInfo()
                         {
                             JoinedTableAlias = this.TableNameAliasBase
                         };
@@ -147,20 +147,20 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
 
-                        return Enumerable.Empty<JoinedQueryInfo>().Append(queryInfo);
+                        return Enumerable.Empty<DXJoinedQueryInfo>().Append(queryInfo);
                     };
                 case DXRelationTypeEnum.ManyToMany:
                     {
                         string motherTableName = null;
 
-                        JoinedQueryInfo intermediate = new JoinedQueryInfo()
+                        DXJoinedQueryInfo intermediate = new DXJoinedQueryInfo()
                         {
                             JoinedTableAlias = this.TableNameAliasBase + "_int",
                             JoinedTableName = this.RelationInfo.DXRelationDefinitionMainElement.RelationTable,
                             MainTableKey = "ID"
                         };
 
-                        JoinedQueryInfo main = new JoinedQueryInfo()
+                        DXJoinedQueryInfo main = new DXJoinedQueryInfo()
                         {
                             JoinedTableAlias = this.TableNameAliasBase,
                             JoinedTableKey = "ID",
@@ -197,7 +197,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
                         this._tableNameAliasToJoin = this.TableNameAliasBase;
 
-                        return Enumerable.Empty<JoinedQueryInfo>().Append(intermediate).Append(main);
+                        return Enumerable.Empty<DXJoinedQueryInfo>().Append(intermediate).Append(main);
                     }
                 default:
                     break;

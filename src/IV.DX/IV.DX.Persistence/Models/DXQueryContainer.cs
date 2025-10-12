@@ -2,7 +2,7 @@
 
 namespace IV.DX.Persistence.Models
 {
-    internal class QueryContainer
+    internal class DXQueryContainer
     {
         public string SelectExpression { get; set; }
         public string LeftJoinsExpression { get; set; }

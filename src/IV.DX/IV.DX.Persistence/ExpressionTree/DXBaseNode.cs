@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal abstract class BaseNode
+    internal abstract class DXBaseNode
     {
         public string Value { get; private set; }
         public int X { get; private set; }
@@ -16,21 +16,21 @@
             }
         }
 
-        public IEnumerable<BaseNode> Childs { get; protected set; }
-        public BaseNode Mother { get; protected set; }
+        public IEnumerable<DXBaseNode> Childs { get; protected set; }
+        public DXBaseNode Mother { get; protected set; }
 
-        protected BaseNode(int x, int y, string value)
+        protected DXBaseNode(int x, int y, string value)
         {
             this.X = x;
             this.Y = y;
             this.Value = value;
             this.TableNameAliasBase = $"t_{x}_{y}";
-            this.Childs = Enumerable.Empty<BaseNode>();
+            this.Childs = Enumerable.Empty<DXBaseNode>();
         }
 
-        public BlockNode CreateBlockNodeInstanceChild(int x, int y, string value)
+        public DXElementNode CreateBlockNodeInstanceChild(int x, int y, string value)
         {
-            var child = BlockNode.CreateInstance(x, y, value);
+            var child = DXElementNode.CreateInstance(x, y, value);
 
             child.Mother = this;
 
@@ -39,9 +39,9 @@
             return child;
         }
 
-        public PropertyNode CreatePropertyNodeInstanceChild(int x, int y, string value, int expressiony, LogicOperation logicOperation)
+        public DXPropertyNode CreatePropertyNodeInstanceChild(int x, int y, string value, int expressiony, DXLogicOperation logicOperation)
         {
-            var child = PropertyNode.CreateInstance(x, y, value, expressiony, logicOperation);
+            var child = DXPropertyNode.CreateInstance(x, y, value, expressiony, logicOperation);
 
             child.Mother = this;
 
@@ -61,7 +61,7 @@
             return leaf;
         }
 
-        public BaseNode FindChildByVaue(string value)
+        public DXBaseNode FindChildByVaue(string value)
         {
             var nodeValueTrimed = value.Trim().ToLower();
 

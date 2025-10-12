@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class JoinedQueryInfo
+    internal class DXJoinedQueryInfo
     {
         public string JoinedTableName { get; set; }
         public string JoinedTableAlias { get; set; }

@@ -2,16 +2,16 @@
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class PropertyNode : BaseNode
+    internal class DXPropertyNode : DXBaseNode
     {
-        public LogicOperation LogicOperation { get; private set; }
+        public DXLogicOperation LogicOperation { get; private set; }
         public int ExpressionOrder { get; private set; }
 
         public string LeftValue { get; private set; }
         public string Operator { get; private set; }
         public string RightValue { get; private set; }
 
-        private PropertyNode(int x, int y, string value, int expressionOrder, LogicOperation logicOperation)
+        private DXPropertyNode(int x, int y, string value, int expressionOrder, DXLogicOperation logicOperation)
             : base(x, y, value)
         {
             this.LogicOperation = logicOperation;
@@ -48,9 +48,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        public static PropertyNode CreateInstance(int level, int order, string value, int expressionOrder, LogicOperation logicOperation)
+        public static DXPropertyNode CreateInstance(int level, int order, string value, int expressionOrder, DXLogicOperation logicOperation)
         {
-            var instance = new PropertyNode(level, order, value, expressionOrder, logicOperation);
+            var instance = new DXPropertyNode(level, order, value, expressionOrder, logicOperation);
 
             return instance;
         }

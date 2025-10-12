@@ -3,34 +3,34 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class OrientedTree
+    internal class DXOrientedTree
     {
-        public CoreNode CoreNode { get; private set; }
+        public DXCoreNode CoreNode { get; private set; }
 
-        public IEnumerable<PropertyNode> Leaves { get; private set; }
+        public IEnumerable<DXPropertyNode> Leaves { get; private set; }
 
-        public IEnumerable<BaseNode> AllNodes { get; private set; }
+        public IEnumerable<DXBaseNode> AllNodes { get; private set; }
 
-        public IEnumerable<BaseNode> AllNodesWithoutCoreAndLeaves { get; private set; }
+        public IEnumerable<DXBaseNode> AllNodesWithoutCoreAndLeaves { get; private set; }
 
         public bool IsValid { get; private set; }
 
-        public IEnumerable<KeyValuePair<string, LogicOperation>> Expressions { get; private set; }
+        public IEnumerable<KeyValuePair<string, DXLogicOperation>> Expressions { get; private set; }
 
-        private OrientedTree(CoreNode coreNode)
+        private DXOrientedTree(DXCoreNode coreNode)
         {
             this.CoreNode = coreNode;
-            this.Leaves = Enumerable.Empty<PropertyNode>();
-            this.AllNodesWithoutCoreAndLeaves = Enumerable.Empty<BaseNode>();
-            this.AllNodes = Enumerable.Empty<BaseNode>().Append(this.CoreNode);
-            this.Expressions = Enumerable.Empty<KeyValuePair<string, LogicOperation>>();
+            this.Leaves = Enumerable.Empty<DXPropertyNode>();
+            this.AllNodesWithoutCoreAndLeaves = Enumerable.Empty<DXBaseNode>();
+            this.AllNodes = Enumerable.Empty<DXBaseNode>().Append(this.CoreNode);
+            this.Expressions = Enumerable.Empty<KeyValuePair<string, DXLogicOperation>>();
         }
 
-        public static OrientedTree CreateInstance(string type)
+        public static DXOrientedTree CreateInstance(string type)
         {
-            var coreNode = CoreNode.CreateInstance(type.Trim());
+            var coreNode = DXCoreNode.CreateInstance(type.Trim());
 
-            var instance = new OrientedTree(coreNode);
+            var instance = new DXOrientedTree(coreNode);
 
             return instance;
         }
@@ -43,7 +43,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             if (expressions != null && expressions.Any())
             {
-                this.Load(expressions.First().Key, counter++, LogicOperation.AND);
+                this.Load(expressions.First().Key, counter++, DXLogicOperation.AND);
 
                 foreach (var expression in expressions.Skip(1))
                 {
@@ -52,22 +52,22 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        private LogicOperation ConvertToLogicOperation(string logicOpeationStr)
+        private DXLogicOperation ConvertToLogicOperation(string logicOpeationStr)
         {
             switch (logicOpeationStr)
             {
                 case " AND ":
                 case " And ":
-                case " and ": return LogicOperation.AND;
+                case " and ": return DXLogicOperation.AND;
                 case " OR ":
                 case " Or ":
-                case " or ": return LogicOperation.OR;
+                case " or ": return DXLogicOperation.OR;
                 default:
                     throw new Exception($"Logic operation '{logicOpeationStr}' isn't supported yet.");
             }
         }
 
-        public void Load(string expression, int expressionOrder, LogicOperation logicOpeation)
+        public void Load(string expression, int expressionOrder, DXLogicOperation logicOpeation)
         {
             int level = 0;
 
@@ -75,7 +75,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
 
             var existingExpression = this.Expressions.SingleOrDefault(x => x.Key == expression);
 
-            if (!existingExpression.Equals(default(KeyValuePair<string, LogicOperation>)))
+            if (!existingExpression.Equals(default(KeyValuePair<string, DXLogicOperation>)))
             {
                 if (existingExpression.Value != logicOpeation)
                 {
@@ -86,14 +86,14 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
             else
             {
-                this.Expressions = this.Expressions.Append(new KeyValuePair<string, LogicOperation>(loweredExpression, logicOpeation));
+                this.Expressions = this.Expressions.Append(new KeyValuePair<string, DXLogicOperation>(loweredExpression, logicOpeation));
             }
 
             var expressionItems = loweredExpression.Split('.');
 
             var existingChilds = this.CoreNode.Childs;
 
-            BaseNode lastExistingNode = null;
+            DXBaseNode lastExistingNode = null;
 
             var levelCounter = 0;
 
@@ -140,7 +140,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             lastExistingNode = lastExistingNode.CreatePropertyNodeInstanceChild(level, this.GetLastYByX(level) + 1, expressionItems.Last(), expressionOrder, logicOpeation);
 
             this.AllNodes = this.AllNodes.Append(lastExistingNode);
-            this.Leaves = this.Leaves.Append(lastExistingNode as PropertyNode);
+            this.Leaves = this.Leaves.Append(lastExistingNode as DXPropertyNode);
         }
 
         public int GetLastYByX(int x)
@@ -155,7 +155,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return maxY;
         }
 
-        public BaseNode GetNode(int x, int y)
+        public DXBaseNode GetNode(int x, int y)
         {
             var result = this.AllNodes.SingleOrDefault(node => node.X == x && node.Y == y);
 
@@ -187,9 +187,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             }
         }
 
-        private bool ProcessNodeAsCoreNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsCoreNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var coreNode = node as CoreNode;
+            var coreNode = node as DXCoreNode;
 
             if (coreNode == null)
             {
@@ -199,7 +199,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsEntityNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsEntityNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             var dxUnitNode = node as DXUnitNode;
 
@@ -211,7 +211,7 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             DXRelationDefinitionUnit relationInfo = null;
 
             var motherNodeAsEntityNode = dxUnitNode.Mother as DXUnitNode;
-            var motherNodeAsCoreNode = dxUnitNode.Mother as CoreNode;
+            var motherNodeAsCoreNode = dxUnitNode.Mother as DXCoreNode;
 
             if (motherNodeAsEntityNode != null)
             {
@@ -236,9 +236,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsBlockNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsBlockNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var blockNode = node as BlockNode;
+            var blockNode = node as DXElementNode;
 
             if (blockNode == null)
             {
@@ -248,9 +248,9 @@ namespace IV.DX.Contracts.Persistence.ExpressionTree
             return true;
         }
 
-        private bool ProcessNodeAsPropertyNode(BaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        private bool ProcessNodeAsPropertyNode(DXBaseNode node, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
-            var propertyNode = node as PropertyNode;
+            var propertyNode = node as DXPropertyNode;
 
             if (propertyNode == null)
             {

@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
 {
-    internal class CoreNode : BaseNode
+    internal class DXCoreNode : DXBaseNode
     {
         public string MainTableAlias
         {
@@ -10,15 +10,15 @@
             }
         }
 
-        private CoreNode(string value)
+        private DXCoreNode(string value)
             : base(0, 0, value)
         {
 
         }
 
-        public static CoreNode CreateInstance(string value)
+        public static DXCoreNode CreateInstance(string value)
         {
-            return new CoreNode(value);
+            return new DXCoreNode(value);
         }
     }
 }
