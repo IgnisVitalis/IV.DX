@@ -35,19 +35,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0002.json">
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0002.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0003.json">
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0003.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0004.json">
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0004.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0000.json">
@@ -65,25 +65,16 @@
         <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0001.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Assets\JSON\DXObjectDefinitionUnit\DXObjectDefinitionUnit0002.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Assets\JSON\DXObjectDefinitionUnit\DXObjectDefinitionUnit0003.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Assets\JSON\DXObjectDefinitionUnit\DXObjectDefinitionUnit0004.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\DPDXElementInObjectDescObject\DPDXElementInObjectDescObject0000.json">
@@ -101,10 +92,10 @@
         <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\Objects\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

@@ -28,7 +28,7 @@ namespace IV.DX.Persistence.IntTests
         public void CreateObject_WithDefaultValues_Success()
         {
             // Init
-            string json = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0000.json");
+            string json = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0000.json");
 
             DXObjectDefinitionUnit objDesc = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json);
 
@@ -55,8 +55,8 @@ namespace IV.DX.Persistence.IntTests
         public void UpdateObject_UsingNewValues_Success()
         {
             // Ini
-            string json0 = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0000.json");
-            string json1 = File.ReadAllText("Assets/JSON/Objects/DXObjectDefinitionUnit0001.json");
+            string json0 = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0000.json");
+            string json1 = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0001.json");
             var objDesc0 = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json0);
             var objDesc1 = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json1);
 
