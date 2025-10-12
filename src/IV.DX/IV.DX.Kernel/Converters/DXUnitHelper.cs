@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters
 {
-    public static class DXUnitHelper
+    internal static class DXUnitHelper
     {
         public static string GetTypeName(string json)
         {
