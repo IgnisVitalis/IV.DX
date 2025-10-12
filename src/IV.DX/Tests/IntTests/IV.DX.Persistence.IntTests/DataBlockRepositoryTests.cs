@@ -33,7 +33,7 @@ namespace IV.DX.Persistence.IntTests
         public void CreateNewDataDXElement_IncludedColumnsWithAllDataTypes_Success()
         {
             // Init
-            string json = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0000.json");
+            string json = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0000.json");
             DXElementDefinitionUnit dxElementDesc = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
@@ -211,8 +211,8 @@ namespace IV.DX.Persistence.IntTests
         public void UpdateDataDXElement_UpdateAllColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0000.json");
-            string json1 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0001.json");
+            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0000.json");
+            string json1 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0001.json");
 
             DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit dxElementDesc1 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json1);
@@ -381,8 +381,8 @@ namespace IV.DX.Persistence.IntTests
         public void UpdateDataDXElement_RemoveSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0000.json");
-            string json2 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0002.json");
+            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0000.json");
+            string json2 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0002.json");
             DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit dxElementDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
 
@@ -448,9 +448,9 @@ namespace IV.DX.Persistence.IntTests
         public void UpdateDataDXElement_RemoveAndAddSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0000.json");
-            string json2 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0002.json");
-            string json3 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0003.json");
+            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0000.json");
+            string json2 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0002.json");
+            string json3 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0003.json");
 
             DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit dxElementDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
@@ -536,8 +536,8 @@ namespace IV.DX.Persistence.IntTests
         public void UpdateDataDXElement_RemoveAndAddAndUpdateSeveralColumns_Success()
         {
             // Init
-            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0000.json");
-            string json4 = File.ReadAllText("Assets/JSON/DXElements/DXObjectDefinitionUnit0004.json");
+            string json0 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0000.json");
+            string json4 = File.ReadAllText("Assets/JSON/DXElements/DXElementDefinitionUnit0004.json");
             DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
             DXElementDefinitionUnit dxElementDesc4 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json4);
 

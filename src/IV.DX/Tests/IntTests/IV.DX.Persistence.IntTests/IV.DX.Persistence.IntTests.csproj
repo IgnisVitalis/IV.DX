@@ -35,19 +35,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0000.json">
+        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0000.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0001.json">
+        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0001.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0002.json">
+        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0002.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0003.json">
+        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0003.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Assets\JSON\DXElements\DXObjectDefinitionUnit0004.json">
+        <None Update="Assets\JSON\DXElements\DXElementDefinitionUnit0004.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0000.json">
