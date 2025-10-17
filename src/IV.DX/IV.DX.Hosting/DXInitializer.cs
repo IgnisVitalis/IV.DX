@@ -1,7 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Persistence;
 using IV.DX.Persistence.Contracts.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace IV.DX.Hosting
 {
@@ -10,18 +9,19 @@ namespace IV.DX.Hosting
         private readonly IDXCoreRepository _coreRepo;
         private readonly IDXStructureRepository _structureRepo;
         private readonly IDXMigrationService _migration;
+        private readonly IDXStructureCache _dXStructureCache;
 
         public DXInitializer(
             IDXCoreRepository coreRepo,
             IDXStructureRepository structureRepo,
-            IDXMigrationService migration)
+            IDXMigrationService migration, 
+            IDXStructureCache dXStructureCache)
         {
             _coreRepo = coreRepo;
             _structureRepo = structureRepo;
             _migration = migration;
+            _dXStructureCache = dXStructureCache;
         }
-
-        public void DropDatabase() => _coreRepo.DropDataBase();
 
         public void InitCoreData()
         {
@@ -36,12 +36,9 @@ namespace IV.DX.Hosting
             _migration.LoadStructure(configPath);
         }
 
-        public async Task InitCacheAsync(IServiceScope scope, CancellationToken ct = default)
+        public void InitCache()
         {
-            await scope.ServiceProvider.GetRequiredService<IDXStructureCache>().WarmUpAsync(ct);
-
-            //_structureRepo.UpdateCache();
-            //(_coreRepo as IDXStructureRepository)?.UpdateCache();
+            this._dXStructureCache.WarmUpAsync().Wait();
         }
     }
 }

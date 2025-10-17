@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.101.0] - 2025-10-17
+
+### Changed
+
+- IDXInitializer to init cache;
+
 ## [0.100.0] - 2025-10-07
 
 ### Chaned

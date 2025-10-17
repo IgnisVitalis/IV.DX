@@ -1,5 +1,5 @@
-﻿using IV.DX.Application.Handlers;
-using IV.DX.Hosting;
+﻿using IV.DX.Hosting;
+using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,29 +19,20 @@ namespace IV.DX.Shared.IntTests
         public DXTestFixtureBase()
         {
             IConfiguration configuration = new ConfigurationBuilder()
-            .AddEnvironmentVariables()
-            .Build();
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    { "Database:Type", "PostgreSQL"},
+                    { "Database:ConnectionString", $"Server=localhost;Database={Database};User ID=postgres;password=root;" }
+                })
+                .AddEnvironmentVariables()
+                .Build();
 
-            if (configuration["Database:Type"] == null)
-            {
-                configuration["Database:Type"] = "PostgreSQL";
-            }
-
-            if (configuration["Database:ConnectionString"] == null)
-            {
-                configuration["Database:ConnectionString"] = $"Server=localhost;Database={Database};User ID=postgres;password=root;";
-            }
-            else
-            {
-                configuration["Database:ConnectionString"] = $"{ReplaceDatabase(configuration["Database:ConnectionString"], Database)}";
-            }
+            configuration["Database:ConnectionString"] = $"{ReplaceDatabase(configuration["Database:ConnectionString"], Database)}";
 
             var services = new ServiceCollection();
 
-            //services.AddLogging();
             services.AddDXCore(configuration);
             services.AddDXPipeline();
-            //services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
             services.AddDXInitializer();
 
             Root = services.BuildServiceProvider();
@@ -51,11 +42,12 @@ namespace IV.DX.Shared.IntTests
             using var scope = Root.CreateScope();
             var init = scope.ServiceProvider.GetRequiredService<IDXInitializer>();
 
-            init.DropDatabase();
+            var coreRepo = scope.ServiceProvider.GetRequiredService<IDXCoreRepository>();
+
+            coreRepo.DropDataBase();
             init.InitCoreData();
             init.InitCustomData("MigrationScripts/Test.json");
-            init.InitCacheAsync(scope).Wait();
-            //await Root.GetRequiredService<IDXStructureCache>().RefreshAsync();
+            init.InitCache();
         }
 
         public static string ReplaceDatabase(string connectionString, string newDatabase)
