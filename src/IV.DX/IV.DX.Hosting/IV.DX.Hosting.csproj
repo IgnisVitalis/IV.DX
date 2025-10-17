@@ -36,7 +36,6 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="MySql.Data" Version="8.0.18" />
         <PackageReference Include="Npgsql" Version="5.0.18" />
         <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0">
             <PrivateAssets>all</PrivateAssets>
@@ -52,10 +51,6 @@
         <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\IV.DX.Persistence\IV.DX.Persistence.csproj" PrivateAssets="all" />
     </ItemGroup>
-
-    <PropertyGroup>
-        <IncludeReferencedProjects>true</IncludeReferencedProjects>
-    </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\..\README.md" Pack="true" PackagePath="" />

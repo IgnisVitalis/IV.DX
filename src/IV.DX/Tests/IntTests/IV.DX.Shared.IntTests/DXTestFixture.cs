@@ -41,7 +41,7 @@ namespace IV.DX.Shared.IntTests
             //services.AddLogging();
             services.AddDXCore(configuration);
             services.AddDXPipeline();
-            services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
+            //services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
             services.AddDXInitializer();
 
             Root = services.BuildServiceProvider();

@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application;
 using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Handlers;
 using IV.DX.Persistence;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -58,7 +59,14 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXMigrationService, MigrationService>();
 
+            services.RegisterCoreHandlers();
+
             return services;
+        }
+
+        private static void RegisterCoreHandlers(this IServiceCollection services)
+        {
+            services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
         }
     }
 }
