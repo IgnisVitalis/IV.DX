@@ -185,9 +185,9 @@ jobs:
         run: |
           mkdir -p artifacts
           if [ -n "${{ steps.v.outputs.version }}" ]; then
-            dotnet pack "$PROJECT_PATH" -c Release --no-restore -o ./artifacts -p:Version=${{ steps.v.outputs.version }}
+            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts -p:Version=${{ steps.v.outputs.version }}
           else
-            dotnet pack "$PROJECT_PATH" -c Release --no-restore -o ./artifacts
+            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts
           fi
 
       - name: Upload test results & coverage
