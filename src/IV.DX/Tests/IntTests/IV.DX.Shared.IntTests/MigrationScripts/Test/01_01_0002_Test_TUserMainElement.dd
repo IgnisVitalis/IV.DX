@@ -1,0 +1,39 @@
+[
+  {
+    "S_Type": "DXElementDefinitionUnit",
+    "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+    "DXUnitDefinitionMainElement": {
+      "ID": "e8a16147-6885-4588-a467-7f30f9c8603b",
+      "Name": "TUserMainElement",
+      "Kind": 3
+    },
+    "DXColumnDefinitionElement": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "cddb8804-83c0-4631-97bf-39822988720f",
+          "ColumnType": 3,
+          "Name": "Name",
+          "Length": 50,
+          "AllowNull": true,
+          "DefaultValue": null
+        },
+        {
+          "ID": "3d7110eb-3827-47f6-b3fc-3de4a871e87f",
+          "ColumnType": 3,
+          "Name": "Surname",
+          "Length": 50,
+          "AllowNull": true,
+          "DefaultValue": null
+        },
+        {
+          "ID": "f9f982c1-385e-4906-a616-c849875f08cc",
+          "ColumnType": 5,
+          "Name": "Birth",
+          "AllowNull": true,
+          "DefaultValue": null
+        }
+      ]
+    }
+  }
+]

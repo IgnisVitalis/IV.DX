@@ -1,0 +1,20 @@
+[
+  {
+    "S_Type": "DXInheritanceInitCore",
+    "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
+    "BaseDXUnit": "DXObjectDefinitionUnit",
+    "ChildDXUnit": "DXUnitDefinitionUnit"
+  },
+  {
+    "S_Type": "DXInheritanceInitCore",
+    "ID": "6354ab0c-4ac3-4f44-a001-384fb87c5835",
+    "BaseDXUnit": "DXObjectDefinitionUnit",
+    "ChildDXUnit": "DXElementDefinitionUnit"
+  },
+  {
+    "S_Type": "DXInheritanceInitCore",
+    "ID": "d141b1d1-5f40-411f-ad06-fabe84b34b81",
+    "BaseDXUnit": "DXObjectDefinitionUnit",
+    "ChildDXUnit": "DXEnumDefinitionUnit"
+  }
+]

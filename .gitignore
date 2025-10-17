@@ -1,0 +1,9 @@
+*.user
+bin/
+obj/
+packages/
+TestResults/
+.vs/
+artifacts/
+
+!packages/

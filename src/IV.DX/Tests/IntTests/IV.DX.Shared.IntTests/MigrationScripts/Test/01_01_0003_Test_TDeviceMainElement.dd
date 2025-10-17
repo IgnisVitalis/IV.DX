@@ -1,0 +1,31 @@
+[
+  {
+    "S_Type": "DXElementDefinitionUnit",
+    "ID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+    "DXUnitDefinitionMainElement": {
+      "ID": "bc4f2c48-dbff-4fea-965d-61557fe6013c",
+      "Name": "TDeviceMainElement",
+      "Kind": 3
+    },
+    "DXColumnDefinitionElement": {
+      "Mode": 1,
+      "Announced": [
+        {
+          "ID": "68e37e0b-3f5c-41ad-bb31-69b09859fd57",
+          "ColumnType": 3,
+          "Name": "Model",
+          "Length": 50,
+          "AllowNull": true,
+          "DefaultValue": null
+        },
+        {
+          "ID": "81f95b0d-fb05-43c4-9d56-91173ca3e585",
+          "ColumnType": 1,
+          "Name": "UUID",
+          "AllowNull": true,
+          "DefaultValue": null
+        }
+      ]
+    }
+  }
+]

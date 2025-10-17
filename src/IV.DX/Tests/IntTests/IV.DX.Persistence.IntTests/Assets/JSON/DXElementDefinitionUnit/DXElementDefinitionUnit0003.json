@@ -1,0 +1,44 @@
+{
+  "S_Type": "DXElementDefinitionUnit",
+  "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+  "DXUnitDefinitionMainElement": {
+    "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+    "ID": "EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4",
+    "Name": "NewDataDXElement",
+    "Type": 1,
+    "Kind": 2
+  },
+  "DXColumnDefinitionElement": {
+    "Mode": 1,
+    "Announced": [
+      {
+        "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+        "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+        "ColumnType": 1,
+        "Name": "GuidColumn"
+      },
+      {
+        "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+        "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
+        "ColumnType": 2,
+        "Name": "TimeStampColumn",
+        "DefaultValue": "CURRENT_TIMESTAMP"
+      },
+      {
+        "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+        "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
+        "ColumnType": 12,
+        "Name": "CurrencyColumn",
+        "AllowNull": true,
+        "DefaultValue": "0"
+      },
+      {
+        "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+        "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
+        "ColumnType": 13,
+        "Name": "BlobColumn",
+        "AllowNull": true
+      }
+    ]
+  }
+}

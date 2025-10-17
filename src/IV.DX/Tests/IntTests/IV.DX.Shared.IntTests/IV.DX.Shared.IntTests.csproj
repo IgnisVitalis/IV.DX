@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <IsTestProject>false</IsTestProject>
+        <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+        <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Application\IV.DX.Application.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Domain\IV.DX.Domain.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Hosting\IV.DX.Hosting.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Kernel\IV.DX.Kernel.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\IV.DX.Persistence\IV.DX.Persistence.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="MigrationScripts\Test.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0000_Test_TPassportMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0001_Test_TPositionMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0002_Test_TUserMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0003_Test_TDeviceMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0004_Test_TBookMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0005_Test_TBookChapterElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0006_Test_TDocumentMainElement.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0007_Test_TPassportUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0008_Test_TPositionUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0009_Test_TUserUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0010_Test_TDeviceUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0011_Test_TBookUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0012_Test_TDocumentUnit.dd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0019_Test_TUserUnit.rd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0020_Test_TUserUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0021_Test_TPassportUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0022_Test_TPositionUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0023_Test_TDeviceUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0024_Test_TBookUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0025_Test_TDocumentUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Test\01_01_0026_Test_DXRelationItemUnit.dat">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

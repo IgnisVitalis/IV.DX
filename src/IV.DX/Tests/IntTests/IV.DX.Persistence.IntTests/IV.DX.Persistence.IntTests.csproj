@@ -1,0 +1,110 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="MySQL\**" />
+        <EmbeddedResource Remove="MySQL\**" />
+        <None Remove="MySQL\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="MySql.Data" Version="8.0.18" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Npgsql" Version="5.0.18" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+        <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Application\IV.DX.Application.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Domain\IV.DX.Domain.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Hosting\IV.DX.Hosting.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Kernel\IV.DX.Kernel.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\IV.DX.Persistence\IV.DX.Persistence.csproj" />
+        <ProjectReference Include="..\IV.DX.Shared.IntTests\IV.DX.Shared.IntTests.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0002.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0003.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXElementDefinitionUnit\DXElementDefinitionUnit0004.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXElementDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DPDXElementInObjectDescObject0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DPDXElementInObjectDescObject0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DPDXElementInObjectDescObject\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0000.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\JSON\DXUnitDefinitionUnit\DXObjectDefinitionUnit0001.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

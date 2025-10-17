@@ -1,0 +1,218 @@
+﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Handlers;
+using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
+
+namespace IV.DX.Application.Handlers
+{
+    internal class DXUnitDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXUnitGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
+        DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
+        IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
+        IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
+        IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler
+    {
+        public int BeforeOrder => 1;
+
+        public Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            if (ctx is DXUnitHandlerPreInitCoreContext)
+            {
+                dataStructureRepo.CreateDataStructure(dxUnit);
+
+                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkSkipProcess(dxUnit));
+            }
+            else if (ctx is DXUnitHandlerPostInitCoreContext)
+            {
+                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+            }
+            else
+            {
+                dataStructureRepo.CreateDataStructure(dxUnit);
+
+                this.ProcessRelations(dxUnit);
+                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+            }
+        }
+
+        public Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            dataStructureRepo.UpdatedDataStructure(dxUnit);
+
+            this.ProcessRelations(dxUnit);
+            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+        }
+
+        public Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            base.Validate(dxUnit);
+            base.Process(dxUnit);
+
+            this.DeleteRelations(dxUnit);
+
+            dataStructureRepo.DropDataStructure(dxUnit);
+
+            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+        }
+
+        private void DeleteRelations(DXUnitDefinitionUnit dxUnit)
+        {
+            var existingDXUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
+
+            if (existingDXUnit == null)
+                return;
+
+            var relatedDXElementIds = existingDXUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+
+            var relatedDXElements = dataStructureRepo.GetDXElementDefinitions(relatedDXElementIds);
+
+            foreach (var relatedDXElement in relatedDXElements)
+            {
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, relatedDXElement)).Wait();
+            }
+        }
+
+        private void ProcessRelations(DXUnitDefinitionUnit dxUnit)
+        {
+            this.ProcessDXElementsIndxUnitRelations(dxUnit);
+            this.ProcessEnumRelations(dxUnit);
+        }
+
+        private void ProcessDXElementsIndxUnitRelations(DXUnitDefinitionUnit dxUnit)
+        {
+            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
+                return;
+
+            var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
+
+            if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionMainElement.Mode == MultiElementsMode.Target)
+            {
+                this.ProcessDXElementsIndxUnitRelationsUsingTragetMode(dxUnit);
+            }
+            else
+            {
+                this.ProcessDXElementsIndxUnitRelationsUsingFullMode(dxUnit, objectInfoFromDB);
+            }
+        }
+
+        private DXUnitDefinitionUnit GetObjectInfoFromDB(DXUnitDefinitionUnit objectInfoIncome)
+        {
+            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
+                return null;
+
+            return genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectInfoIncome.ID);
+        }
+
+        private void ProcessDXElementsIndxUnitRelationsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
+        {
+            var newAnnouncedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var existingAnnouncedIds = existingdxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+
+            var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
+            var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
+
+            var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
+            var dxElementsToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
+
+            this.AssignDXElements(dxUnit, dxElementsToAssign);
+            this.UnassingDXElements(dxUnit, dxElementsToUnassign);
+        }
+
+        private void ProcessDXElementsIndxUnitRelationsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
+        {
+            var announcedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
+
+            var deletedIds = dxUnit.DXElementInUnitDefinitionMainElement.Deleted.Select(x => x.DXElementDefinitionUnit);
+            var dxElementsToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
+
+            this.AssignDXElements(dxUnit, dxElementsToAssign);
+            this.UnassingDXElements(dxUnit, dxElementsToUnassign);
+        }
+
+        private void AssignDXElements(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> dxElementsToAssign)
+        {
+            foreach (var dxElementToAssign in dxElementsToAssign)
+            {
+                var relationType = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
+
+                dxUnitService.InsertAsync(this.GetRelationObject(dxUnit, dxElementToAssign, relationType)).Wait();
+            }
+        }
+
+        private void UnassingDXElements(DXUnitDefinitionUnit dxUnit, IEnumerable<DXElementDefinitionUnit> dxElementsToUnassign)
+        {
+            foreach (var dxElementToUnassign in dxElementsToUnassign)
+            {
+                var existingDXElement = this.GetExistingRelatonObject(dxUnit, dxElementToUnassign);
+
+                if (existingDXElement == null)
+                    continue;
+
+                dxUnitService.DeleteAsync(this.GetExistingRelatonObject(dxUnit, dxElementToUnassign)).Wait();
+            }
+        }
+
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement, DXElementInUnitTypeEnum relationType)
+        {
+            var result = this.GetRelationObject(dxUnit, dxElement);
+
+            result.DXRelationDefinitionMainElement.RelationType = this.ConvertDXElementIndxUnitRelationTypeToCommonRelationType(relationType);
+
+            return result;
+        }
+
+        private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
+        {
+            return new DXRelationDefinitionUnit()
+            {
+                ID = Guid.NewGuid(),
+                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
+                {
+                    ID = Guid.NewGuid(),
+                    ObjectNameLeft = dxUnit.DXUnitDefinitionMainElement.Name,
+                    RelationNameLeft = $"{dxUnit.DXUnitDefinitionMainElement.Name}ID",
+                    ObjectNameRight = dxElement.DXUnitDefinitionMainElement.Name,
+                    RelationNameRight = dxElement.DXUnitDefinitionMainElement.Name,
+                    Kind = dxUnit.DXUnitDefinitionMainElement.Kind
+                }
+            };
+        }
+
+        private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
+        {
+            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}ID' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}'";
+
+            var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
+
+            return items.SingleOrDefault();
+        }
+
+        private DXRelationTypeEnum ConvertDXElementIndxUnitRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
+        {
+            switch (relationType)
+            {
+                case DXElementInUnitTypeEnum.SingleMandatory:
+                    return DXRelationTypeEnum.ZeroOneToZeroOne;
+                case DXElementInUnitTypeEnum.SingleOptional:
+                    return DXRelationTypeEnum.ZeroOneToZeroOne;
+                case DXElementInUnitTypeEnum.MultiMandatory:
+                    return DXRelationTypeEnum.ZeroOneToMany;
+                case DXElementInUnitTypeEnum.MultiOptional:
+                    return DXRelationTypeEnum.ZeroOneToMany;
+                default:
+                    throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
+            }
+        }
+    }
+}
