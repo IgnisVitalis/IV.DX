@@ -1,38 +1,31 @@
-﻿using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
-using System.Data;
 
 namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
     {
-        public DXMultiElement Get(DXElementDefinition container)
+        IEnumerable<DXModel> IDXEnumCoreRepository.GetItems(string enumType)
         {
-            if (container == null)
+            var modelDefinition = this.GetEnumModelDefinition(enumType);
+
+            if (modelDefinition == null)
                 return null;
 
-            DXMultiElement result = null;
+            return this.GetItems(modelDefinition, DXLoadingType.Full);
+        }
 
-            this.RunRequest((conn) =>
-            {
-                DataSet dataSet = new DataSet(container.Type);
+        private DXModelDefinition GetEnumModelDefinition(string type)
+        {
+            var mainDXUnit = this.GetDXEnumDefinition(type);
 
-                this.PopulateTableToDataSet(conn, dataSet, container.Type,
-                    columnNames: container.Select(x => x.ColumnDefinition.DXExpression));
+            if (mainDXUnit == null)
+                return null;
 
-                if (dataSet.Tables[container.Type].Rows.Count == 0)
-                {
-                    result = null;
-                }
-                else
-                {
-                    result = this.ConvertToDXMultiItem(container);
+            var modelDefinition = DXModelDefinition.BuildModelDefinition(mainDXUnit);
 
-                    this.PopulateDXMultiItem(result, container, dataSet.Tables[result.Name].Rows.Cast<DataRow>());
-                }
-            });
-
-            return result;
+            return modelDefinition;
         }
     }
 }

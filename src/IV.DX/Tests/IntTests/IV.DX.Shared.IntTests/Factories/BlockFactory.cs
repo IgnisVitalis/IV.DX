@@ -12,7 +12,7 @@ namespace IV.DX.Shared.IntTests.Factories
             return new DXElementDefinitionUnit()
             {
                 ID = id,
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "Name",

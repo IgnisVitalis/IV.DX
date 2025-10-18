@@ -7,7 +7,7 @@ namespace IV.DX.Application.Handlers
 {
     internal class DXObjectDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXStructureRepository dataStructureRepo, IDXUnitGenericRepository genericRepo)
     {
-        protected readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionMainElement", "DXUnitDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
+        protected readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionElement", "DXObjectDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
 
         protected void Validate(DXObjectDefinitionUnit dataDXElement)
         {
@@ -17,14 +17,14 @@ namespace IV.DX.Application.Handlers
             if (dataDXElement.ID == default(Guid))
                 throw new Exception("DXObjectDefinitionUnit.ID has Default value;");
 
-            if (dataDXElement.DXUnitDefinitionMainElement == null)
-                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement is NULL;");
+            if (dataDXElement.DXObjectDefinitionMainElement == null)
+                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement is NULL;");
 
-            if (dataDXElement.DXUnitDefinitionMainElement.ID == default(Guid))
-                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.ID has Default value;");
+            if (dataDXElement.DXObjectDefinitionMainElement.ID == default(Guid))
+                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement.ID has Default value;");
 
-            if (string.IsNullOrEmpty(dataDXElement.DXUnitDefinitionMainElement.Name))
-                throw new Exception("DXObjectDefinitionUnit.DXUnitDefinitionMainElement.Name is NULL or Empty;");
+            if (string.IsNullOrEmpty(dataDXElement.DXObjectDefinitionMainElement.Name))
+                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement.Name is NULL or Empty;");
         }
 
         protected void Process(DXObjectDefinitionUnit objectInfoIncome)
@@ -102,14 +102,14 @@ namespace IV.DX.Application.Handlers
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectNameLeft = obj.DXUnitDefinitionMainElement.Name,
-                    RelationNameLeft = obj.DXUnitDefinitionMainElement.Name,
-                    ObjectNameRight = enumObj.DXUnitDefinitionMainElement.Name,
+                    ObjectNameLeft = obj.DXObjectDefinitionMainElement.Name,
+                    RelationNameLeft = obj.DXObjectDefinitionMainElement.Name,
+                    ObjectNameRight = enumObj.DXObjectDefinitionMainElement.Name,
                     RelationNameRight = columnWithEnumValue.Name,
                     RelationType = DXRelationTypeEnum.ManyToOne,
                     RelationColumnNameRight = enumColumn.Name,
                     RelationColumnTypeRight = enumColumn.ColumnType,
-                    Kind = obj.DXUnitDefinitionMainElement.Kind
+                    Kind = obj.DXObjectDefinitionMainElement.Kind
                 }
             };
         }
@@ -160,7 +160,7 @@ namespace IV.DX.Application.Handlers
 
         private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
         {
-            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
+            if (systemObjectNames.Contains(objectInfoIncome.DXObjectDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
             return genericRepo.GetDXUnit<DXObjectDefinitionUnit>(objectInfoIncome.ID);

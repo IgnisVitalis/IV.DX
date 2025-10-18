@@ -55,7 +55,7 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
-            switch (dxUnit.DXUnitDefinitionMainElement.Kind)
+            switch (dxUnit.DXObjectDefinitionMainElement.Kind)
             {
                 case DXObjectKindEnum.Core:
                     return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit));

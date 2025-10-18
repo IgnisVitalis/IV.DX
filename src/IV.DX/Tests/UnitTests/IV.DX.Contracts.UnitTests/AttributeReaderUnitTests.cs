@@ -29,29 +29,29 @@ namespace IV.DX.Contracts.UnitTests
         }
 
         [Fact]
-        public void GetDXElementDefinitionAttribute_FromDXUnitDefinitionMainElement_AttributeWithCorrectValues()
+        public void GetDXElementDefinitionAttribute_FromDXObjectDefinitionMainElement_AttributeWithCorrectValues()
         {
             // Init
 
             // Action
             var attr = AttributeReader
                 .GetSingleAttribute<DXElementAttribute>
-                (typeof(DXUnitDefinitionMainElement));
+                (typeof(DXObjectDefinitionMainElement));
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.Name == "DXUnitDefinitionMainElement");
+            Assert.True(attr.Name == "DXObjectDefinitionMainElement");
         }
 
         [Fact]
-        public void GetDXColumnDefinitionAttributes_FromDXUnitDefinitionMainElement_AttributesWithCorrectValues()
+        public void GetDXColumnDefinitionAttributes_FromDXObjectDefinitionMainElement_AttributesWithCorrectValues()
         {
             // Init
 
             // Action
             var attributes = AttributeReader
                     .GetAllSinglePropertyAttributes<DXColumnAttribute>
-                    (typeof(DXUnitDefinitionMainElement));
+                    (typeof(DXObjectDefinitionMainElement));
 
             // Checking result
             Assert.True(attributes.Count() == 6);

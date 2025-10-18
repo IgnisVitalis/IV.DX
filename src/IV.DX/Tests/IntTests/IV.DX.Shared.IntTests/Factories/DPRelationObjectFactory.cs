@@ -25,8 +25,8 @@ namespace IV.DX.Shared.IntTests.Factories
                     RelationType = relationType,
                     RelationNameLeft = relationNameLeft,
                     RelationNameRight = relationNameRight,
-                    ObjectNameLeft = objectNameLeft.DXUnitDefinitionMainElement.Name,
-                    ObjectNameRight = objectNameRight.DXUnitDefinitionMainElement.Name,
+                    ObjectNameLeft = objectNameLeft.DXObjectDefinitionMainElement.Name,
+                    ObjectNameRight = objectNameRight.DXObjectDefinitionMainElement.Name,
                     RelationTable = realationTable
                 }
             };

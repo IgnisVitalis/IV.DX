@@ -1,11 +1,10 @@
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
-using System;
 
 namespace IV.DX.Kernel.Models
 {
-    [DXElement("DXElementInUnitDefinitionMainElement")]
-    public class DXElementInUnitDefinitionMainElement : DXElement
+    [DXElement("DXElementInUnitDefinitionElement")]
+    public class DXElementInUnitDefinitionElement : DXElement
     {
         [DXColumn("RelationType")]
         public DXElementInUnitTypeEnum RelationType { get; set; }

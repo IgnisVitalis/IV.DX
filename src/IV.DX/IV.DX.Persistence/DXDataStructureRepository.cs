@@ -216,13 +216,13 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetDXUnitDefinition(string dxUnitType)
         {
-            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(dxUnitType));
 
             if (result == null)
             {
                 this.UpdateCache();
 
-                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(dxUnitType));
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(dxUnitType));
             }
 
             return result;
@@ -230,11 +230,11 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
         {
-            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
+            if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return null;
 
             var relatedDXElementIds =
-              dxUnit.DXElementInUnitDefinitionMainElement
+              dxUnit.DXElementInUnitDefinitionElement
               .Announced
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
@@ -246,11 +246,11 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
         {
-            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
+            if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return null;
 
             var relatedDXElementIds =
-                dxUnit.DXElementInUnitDefinitionMainElement
+                dxUnit.DXElementInUnitDefinitionElement
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 
@@ -360,13 +360,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetDXEnumDefinition(string enumName)
         {
-            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
+            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(enumName));
 
             if (existingEnum == null)
             {
                 this.UpdateCache();
 
-                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXUnitDefinitionMainElement.Name.Equals(enumName));
+                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(enumName));
             }
 
             return existingEnum;

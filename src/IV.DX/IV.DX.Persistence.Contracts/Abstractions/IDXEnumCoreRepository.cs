@@ -4,6 +4,6 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXEnumCoreRepository
     {
-        DXMultiElement Get(DXElementDefinition container);
+        IEnumerable<DXModel> GetItems(string enumType);
     }
 }

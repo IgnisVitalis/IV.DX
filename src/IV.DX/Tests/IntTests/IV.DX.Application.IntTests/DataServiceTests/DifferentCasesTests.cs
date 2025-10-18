@@ -52,7 +52,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             DXElementDefinitionUnit dxElementDescObject = new DXElementDefinitionUnit()
             {
                 ID = id,
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElement"
@@ -70,16 +70,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             DXUnitDefinitionUnit dxUnitDescObject = new DXUnitDefinitionUnit()
             {
                 ID = Guid.NewGuid(),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXUnit"
                 },
-                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
-                    Announced = new List<DXElementInUnitDefinitionMainElement>()
+                    Announced = new List<DXElementInUnitDefinitionElement>()
                     {
-                        new DXElementInUnitDefinitionMainElement()
+                        new DXElementInUnitDefinitionElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -174,7 +174,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElementToAdd = new DXElementDefinitionUnit()
             {
                 ID = new Guid("4b95f498-f0cb-407d-be16-e7a1518fc070"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElementToAdde7a1518fc070"
@@ -184,7 +184,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElementToDelete = new DXElementDefinitionUnit()
             {
                 ID = new Guid("d3b5e1e2-3f3a-4f7c-8f0c-5e2b8e6f4a1c"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElementToDelete5e2b8e6f4a1c"
@@ -194,7 +194,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXUnit5c3eeb6a68ce"
@@ -213,21 +213,21 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertAsync(dxElementToDelete).Wait();
 
             // Action
-            dxUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            dxUnit.DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
             {
                 Mode = MultiElementsMode.Target,
-                Announced = new List<DXElementInUnitDefinitionMainElement>()
+                Announced = new List<DXElementInUnitDefinitionElement>()
                 {
-                    new DXElementInUnitDefinitionMainElement()
+                    new DXElementInUnitDefinitionElement()
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                         DXElementDefinitionUnit = dxElementToAdd.ID
                     }
                 },
-                Deleted = new List<DXElementInUnitDefinitionMainElement>()
+                Deleted = new List<DXElementInUnitDefinitionElement>()
                 {
-                    new DXElementInUnitDefinitionMainElement()
+                    new DXElementInUnitDefinitionElement()
                     {
                         ID = Guid.NewGuid(),
                         RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -241,17 +241,17 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Assert
             var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
 
-            Assert.Single(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
+            Assert.Single(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
 
-            var announcedDXElement = existingDXUnit.DXElementInUnitDefinitionMainElement.Announced.Single();
+            var announcedDXElement = existingDXUnit.DXElementInUnitDefinitionElement.Announced.Single();
 
             Assert.Equal(dxElementToAdd.ID, announcedDXElement.DXElementDefinitionUnit);
 
             // Action
-            existingDXUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            existingDXUnit.DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
             {
                 Mode = MultiElementsMode.Target,
-                Deleted = new List<DXElementInUnitDefinitionMainElement>()
+                Deleted = new List<DXElementInUnitDefinitionElement>()
                 {
                     announcedDXElement
                 }
@@ -261,7 +261,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             // Assert
             existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
+            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
 
 
@@ -274,7 +274,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElement = new DXElementDefinitionUnit()
             {
                 ID = new Guid("02449441-f8c4-483a-950f-6b47f2f216b4"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElement6b47f2f216b4"
@@ -284,16 +284,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXUnit8f9e7d6c5b4a"
                 },
-                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
-                    Announced = new List<DXElementInUnitDefinitionMainElement>()
+                    Announced = new List<DXElementInUnitDefinitionElement>()
                     {
-                        new DXElementInUnitDefinitionMainElement()
+                        new DXElementInUnitDefinitionElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -332,7 +332,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElement1 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("f8f68404-6143-433e-aa2c-f45215f6be1c"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElementf45215f6be1c"
@@ -342,7 +342,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElement2 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("63c28d39-1561-4c97-b212-fa7db5443a11"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElementfa7db5443a11"
@@ -352,7 +352,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElement3 = new DXElementDefinitionUnit()
             {
                 ID = new Guid("8ae093df-d6b8-4d13-acc7-801b464bfb0f"),
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXElement801b464bfb0f"
@@ -362,28 +362,28 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     Name = "TestDXUnitc44f7a2dd5f6"
                 },
-                DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+                DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
-                    Announced = new List<DXElementInUnitDefinitionMainElement>()
+                    Announced = new List<DXElementInUnitDefinitionElement>()
                     {
-                        new DXElementInUnitDefinitionMainElement()
+                        new DXElementInUnitDefinitionElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement1.ID
                         },
-                        new DXElementInUnitDefinitionMainElement()
+                        new DXElementInUnitDefinitionElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement2.ID
                         },
-                        new DXElementInUnitDefinitionMainElement()
+                        new DXElementInUnitDefinitionElement()
                         {
                             ID = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
@@ -407,18 +407,18 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
-            dxUnit.DXElementInUnitDefinitionMainElement = new DXMultiElementsContainer<DXElementInUnitDefinitionMainElement>()
+            dxUnit.DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
             {
                 Mode = MultiElementsMode.Target,
-                Deleted = dxUnit.DXElementInUnitDefinitionMainElement.Announced,
-                Announced = new List<DXElementInUnitDefinitionMainElement>()
+                Deleted = dxUnit.DXElementInUnitDefinitionElement.Announced,
+                Announced = new List<DXElementInUnitDefinitionElement>()
             };
 
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
             var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(id);
-            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionMainElement.Announced);
+            Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
     }
 

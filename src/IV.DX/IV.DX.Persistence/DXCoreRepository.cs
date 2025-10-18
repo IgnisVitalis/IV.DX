@@ -51,12 +51,12 @@ namespace IV.DX.Persistence
                         // Delete related dxElements
                         foreach (var relatedDXElement in relatedDXElements)
                         {
-                            this.DeleteDXElementsFromDataSet(relatedDXElement.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                            this.DeleteDXElementsFromDataSet(relatedDXElement.DXObjectDefinitionMainElement.Name, id, dataSet, conn);
                         }
                     }
 
                     // Delete dxUnit
-                    this.DeleteDXUnitFromDataSet(dxUnitInfo.DXUnitDefinitionMainElement.Name, id, dataSet, conn);
+                    this.DeleteDXUnitFromDataSet(dxUnitInfo.DXObjectDefinitionMainElement.Name, id, dataSet, conn);
                 }
 
                 dataSet.AcceptChanges();
@@ -562,7 +562,7 @@ namespace IV.DX.Persistence
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnitInfo.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                    this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnitInfo.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
 
                     var relatedDXElementsSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
                     var relatedDXElementsSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
@@ -570,13 +570,13 @@ namespace IV.DX.Persistence
                     var relatedDXElementsMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var objectID = dxModel.OwnSingleItem.Item.ID.Value;
-                    var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
+                    var dxUnitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
                     // Process DX single items
                     if (relatedDXElementsSM != null)
                     {
                         foreach (var singleItem in relatedDXElementsSM)
                         {
-                            var dxElementName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
+                            var dxElementName = singleItem.DXObjectDefinitionMainElement.Name.Trim();
                             var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 
                             if (dxElement == null)
@@ -590,7 +590,7 @@ namespace IV.DX.Persistence
                     {
                         foreach (var singleItem in relatedDXElementsSO)
                         {
-                            var dxElementName = singleItem.DXUnitDefinitionMainElement.Name.Trim();
+                            var dxElementName = singleItem.DXObjectDefinitionMainElement.Name.Trim();
                             var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 
                             if (dxElement == null)
@@ -630,7 +630,7 @@ namespace IV.DX.Persistence
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnit.DXUnitDefinitionMainElement.Name, dataSet, conn, processingType);
+                this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnit.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
 
                 dataSet.AcceptChanges();
 
@@ -802,9 +802,9 @@ namespace IV.DX.Persistence
 
         private void InsertOrUpdateDXMultiItemToDataSet(DXModel dxModel, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit dxElementInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
-            var dxElementName = dxElementInfo.DXUnitDefinitionMainElement.Name.Trim();
+            var dxElementName = dxElementInfo.DXObjectDefinitionMainElement.Name.Trim();
             var objectID = dxModel.OwnSingleItem.Item.ID;
-            var dxUnitType = dxUnitInfo.DXUnitDefinitionMainElement.Name;
+            var dxUnitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
 
             var dxElement = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
 

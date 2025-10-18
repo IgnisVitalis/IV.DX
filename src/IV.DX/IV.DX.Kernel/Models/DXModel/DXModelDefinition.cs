@@ -89,27 +89,44 @@ namespace IV.DX.Kernel.Models
             return clone;
         }
 
-        public static DXModelDefinition BuildModelDefinition(
-            DXUnitDefinitionUnit mainDXUnit,
-            IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements,
-            IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements,
-            IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements,
-            IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements)
+        public static DXModelDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit)
         {
-            if (mainDXUnit == null)
+            var dxModel = BuildBaseModelDefinition(mainDXUnit);
+
+            return dxModel;
+        }
+
+        private static DXModelDefinition BuildBaseModelDefinition(DXObjectDefinitionUnit mainDXObject)
+        {
+            if (mainDXObject == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(mainDXUnit.DXUnitDefinitionMainElement.Name, mainDXUnit.DXUnitDefinitionMainElement.Name);
+            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.DXObjectDefinitionMainElement.Name, mainDXObject.DXObjectDefinitionMainElement.Name);
 
-            var props = mainDXUnit.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+            var props = mainDXObject.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
             ownDXElementDefinition.AddPropertyDefinitions(props);
 
-            var singleDXElements = new List<DXElementDefinitionUnit>();
-            var multiDXElements = new List<DXElementDefinitionUnit>();
-
             var dxModel = new DXModelDefinition(ownDXElementDefinition);
 
+            return dxModel;
+        }
+
+        public static DXModelDefinition BuildModelDefinition(
+            DXUnitDefinitionUnit mainDXUnit,
+            IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements = null,
+            IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements = null,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements = null,
+            IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements = null)
+        {
+            var dxModel = BuildBaseModelDefinition(mainDXUnit);
+
+            if (dxModel == null)
+                return null;
+
+            var singleDXElements = new List<DXElementDefinitionUnit>();
+            var multiDXElements = new List<DXElementDefinitionUnit>();
+       
             if (relatedSingleMandatoryDXElements != null)
             {
                 singleDXElements.AddRange(relatedSingleMandatoryDXElements);
@@ -148,7 +165,7 @@ namespace IV.DX.Kernel.Models
             var props = dxElement.DXColumnDefinitionElement.Announced
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
 
-            var singleFragmentDefinition = new DXElementDefinition(dxElement.DXUnitDefinitionMainElement.Name, dxElement.DXUnitDefinitionMainElement.Name);
+            var singleFragmentDefinition = new DXElementDefinition(dxElement.DXObjectDefinitionMainElement.Name, dxElement.DXObjectDefinitionMainElement.Name);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 

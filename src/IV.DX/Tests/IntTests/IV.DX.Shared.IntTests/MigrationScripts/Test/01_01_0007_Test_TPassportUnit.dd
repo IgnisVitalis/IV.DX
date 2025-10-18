@@ -2,12 +2,12 @@
   {
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
-    "DXUnitDefinitionMainElement": {
+    "DXObjectDefinitionMainElement": {
       "ID": "80fe228e-6c3e-41da-b900-6d09f27c5309",
       "Name": "TPassportUnit",
       "Kind": 3
     },
-    "DXElementInUnitDefinitionMainElement": {
+    "DXElementInUnitDefinitionElement": {
       "Mode": 1,
       "Announced": [
         {

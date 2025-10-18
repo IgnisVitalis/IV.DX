@@ -269,7 +269,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //        StringBuilder sb = new StringBuilder();
 
-    //        sb.Append($"CREATE TABLE IF NOT EXISTS {dataDXElement.DXUnitDefinitionMainElement.Name}(");
+    //        sb.Append($"CREATE TABLE IF NOT EXISTS {dataDXElement.DXObjectDefinitionMainElement.Name}(");
 
     //        var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
 
@@ -302,7 +302,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
     //    {
     //        // TODO: need to find solution how to drop table by ObjectID
-    //        return GetSQLQueryToDropTable(dataDXElement.DXUnitDefinitionMainElement.Name);
+    //        return GetSQLQueryToDropTable(dataDXElement.DXObjectDefinitionMainElement.Name);
     //    }
 
     //    public string GetSQLQueryToDropTable(string tableName)
@@ -377,7 +377,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
     //                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
 
-    //        sb.Append($"ALTER TABLE {dataDXElementExisting.DXUnitDefinitionMainElement.Name} ");
+    //        sb.Append($"ALTER TABLE {dataDXElementExisting.DXObjectDefinitionMainElement.Name} ");
     //        if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
     //        {
     //            sb.Append($"{string.Join(",", columnsToDropMySQLCommand)},");
@@ -390,7 +390,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        {
     //            sb.Append($"{string.Join(",", columnsToChangeMySQLCommand)},");
     //        }
-    //        sb.Append($"RENAME TO {dataDXElementNew.DXUnitDefinitionMainElement.Name}");
+    //        sb.Append($"RENAME TO {dataDXElementNew.DXObjectDefinitionMainElement.Name}");
 
     //        return sb.ToString();
     //    }
@@ -432,12 +432,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //        StringBuilder sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"DROP FOREIGN KEY `FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000`; ");
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"DROP INDEX `FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx`;");
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"DROP COLUMN {obj.DXUnitDefinitionMainElement.Name}ID; ");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"DROP FOREIGN KEY `FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000`; ");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"DROP INDEX `FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000_idx`;");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"DROP COLUMN {obj.DXObjectDefinitionMainElement.Name}ID; ");
 
     //        return sb.ToString();
     //    }
@@ -459,30 +459,30 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        if (obj == null || dxElement == null)
     //            return null;
 
-    //        var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionMainElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
+    //        var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
 
     //        if (dxElementInDXUnitInfo == null)
     //            return null;
 
     //        StringBuilder sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"ADD COLUMN {obj.DXUnitDefinitionMainElement.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"ADD COLUMN {obj.DXObjectDefinitionMainElement.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
 
     //        if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
     //        || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
     //        )
     //        {
-    //            sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //            sb.Append($"ADD CONSTRAINT {obj.DXUnitDefinitionMainElement.Name}ID_unique UNIQUE({obj.DXUnitDefinitionMainElement.Name}ID); ");
+    //            sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //            sb.Append($"ADD CONSTRAINT {obj.DXObjectDefinitionMainElement.Name}ID_unique UNIQUE({obj.DXObjectDefinitionMainElement.Name}ID); ");
     //        }
 
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"ADD INDEX `FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000_idx` (`{obj.DXUnitDefinitionMainElement.Name}ID` ASC) VISIBLE; ");
-    //        sb.Append($"ALTER TABLE {dxElement.DXUnitDefinitionMainElement.Name} ");
-    //        sb.Append($"ADD CONSTRAINT `FK_{dxElement.DXUnitDefinitionMainElement.Name}_{obj.DXUnitDefinitionMainElement.Name}_0000` ");
-    //        sb.Append($"FOREIGN KEY (`{obj.DXUnitDefinitionMainElement.Name}ID`) ");
-    //        sb.Append($"REFERENCES `{obj.DXUnitDefinitionMainElement.Name}` (`ID`) ");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"ADD INDEX `FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000_idx` (`{obj.DXObjectDefinitionMainElement.Name}ID` ASC) VISIBLE; ");
+    //        sb.Append($"ALTER TABLE {dxElement.DXObjectDefinitionMainElement.Name} ");
+    //        sb.Append($"ADD CONSTRAINT `FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000` ");
+    //        sb.Append($"FOREIGN KEY (`{obj.DXObjectDefinitionMainElement.Name}ID`) ");
+    //        sb.Append($"REFERENCES `{obj.DXObjectDefinitionMainElement.Name}` (`ID`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION;");
 

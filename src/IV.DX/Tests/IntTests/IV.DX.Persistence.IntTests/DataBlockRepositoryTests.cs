@@ -46,10 +46,10 @@ namespace IV.DX.Persistence.IntTests
                 Assert.NotNull(dxElementDefinition);
                 Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.ID);
 
-                Assert.NotNull(dxElementDefinition.DXUnitDefinitionMainElement);
-                Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXUnitDefinitionMainElement.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXUnitDefinitionMainElement.ObjectID);
-                Assert.Equal("NewDataDXElement", dxElementDefinition.DXUnitDefinitionMainElement.Name);
+                Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
+                Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+                Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
                 Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
                 Assert.NotNull(dxElementDefinition.DXColumnDefinitionElement);
@@ -232,10 +232,10 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxElementDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.ID);
 
-            Assert.NotNull(dxElementDefinition.DXUnitDefinitionMainElement);
-            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXUnitDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
+            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(dxElementDefinition.DXColumnDefinitionElement);
@@ -401,10 +401,10 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxElementDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.ID);
 
-            Assert.NotNull(dxElementDefinition.DXUnitDefinitionMainElement);
-            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXUnitDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("NewDataDXElement", dxElementDefinition.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
+            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(dxElementDefinition.DXColumnDefinitionElement);
@@ -472,10 +472,10 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxElementDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.ID);
 
-            Assert.NotNull(dxElementDefinition.DXUnitDefinitionMainElement);
-            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXUnitDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("NewDataDXElement", dxElementDefinition.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
+            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(dxElementDefinition.DXColumnDefinitionElement);
@@ -556,10 +556,10 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxElementDefinition);
             Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.ID);
 
-            Assert.NotNull(dxElementDefinition.DXUnitDefinitionMainElement);
-            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXUnitDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
+            Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
             Assert.NotNull(dxElementDefinition.DXColumnDefinitionElement);

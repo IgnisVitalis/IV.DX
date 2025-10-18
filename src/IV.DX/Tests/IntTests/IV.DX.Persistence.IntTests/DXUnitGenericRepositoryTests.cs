@@ -45,14 +45,14 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
-            Assert.NotNull(result.DXUnitDefinitionMainElement);
-            Assert.True(result.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId, result.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("SomeTestName", result.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(result.DXObjectDefinitionMainElement);
+            Assert.True(result.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName", result.DXObjectDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Update
-            item.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName";
+            item.DXObjectDefinitionMainElement.Name = "UpdatedSomeTestName";
             this._genericRepo.Update(item);
 
             // Checking result
@@ -60,10 +60,10 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(result);
             Assert.Equal(objectId, result.ID);
-            Assert.NotNull(result.DXUnitDefinitionMainElement);
-            Assert.True(result.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId, result.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("UpdatedSomeTestName", result.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(result.DXObjectDefinitionMainElement);
+            Assert.True(result.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName", result.DXObjectDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
             // Action Delete
@@ -113,27 +113,27 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(resultItem1);
             Assert.Equal(objectId1, resultItem1.ID);
-            Assert.NotNull(resultItem1.DXUnitDefinitionMainElement);
-            Assert.True(resultItem1.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("SomeTestName1", resultItem1.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(resultItem1.DXObjectDefinitionMainElement);
+            Assert.True(resultItem1.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName1", resultItem1.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             var resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
             Assert.NotNull(resultItem2);
             Assert.Equal(objectId2, resultItem2.ID);
-            Assert.NotNull(resultItem2.DXUnitDefinitionMainElement);
-            Assert.True(resultItem2.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("SomeTestName2", resultItem2.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(resultItem2.DXObjectDefinitionMainElement);
+            Assert.True(resultItem2.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("SomeTestName2", resultItem2.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Update
-            item1.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName1";
+            item1.DXObjectDefinitionMainElement.Name = "UpdatedSomeTestName1";
             this._genericRepo.Update(item1);
 
-            item2.DXUnitDefinitionMainElement.Name = "UpdatedSomeTestName2";
+            item2.DXObjectDefinitionMainElement.Name = "UpdatedSomeTestName2";
             this._genericRepo.Update(item2);
 
             // Checking result
@@ -143,20 +143,20 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(resultItem1);
             Assert.Equal(objectId1, resultItem1.ID);
-            Assert.NotNull(resultItem1.DXUnitDefinitionMainElement);
-            Assert.True(resultItem1.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("UpdatedSomeTestName1", resultItem1.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(resultItem1.DXObjectDefinitionMainElement);
+            Assert.True(resultItem1.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName1", resultItem1.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
             resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
 
             Assert.NotNull(resultItem2);
             Assert.Equal(objectId2, resultItem2.ID);
-            Assert.NotNull(resultItem2.DXUnitDefinitionMainElement);
-            Assert.True(resultItem2.DXUnitDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DXUnitDefinitionMainElement.ObjectID);
-            Assert.Equal("UpdatedSomeTestName2", resultItem2.DXUnitDefinitionMainElement.Name);
+            Assert.NotNull(resultItem2.DXObjectDefinitionMainElement);
+            Assert.True(resultItem2.DXObjectDefinitionMainElement.ID != default(Guid));
+            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal("UpdatedSomeTestName2", resultItem2.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
             // Action Delete

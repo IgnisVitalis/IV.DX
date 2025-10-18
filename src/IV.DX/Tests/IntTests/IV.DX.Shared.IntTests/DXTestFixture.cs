@@ -44,9 +44,9 @@ namespace IV.DX.Shared.IntTests
 
             var coreRepo = scope.ServiceProvider.GetRequiredService<IDXCoreRepository>();
 
-            coreRepo.DropDataBase();
-            init.InitCoreData();
-            init.InitCustomData("MigrationScripts/Test.json");
+            //coreRepo.DropDataBase();
+            //init.InitCoreData();
+            //init.InitCustomData("MigrationScripts/Test.json");
             init.InitCache();
         }
 

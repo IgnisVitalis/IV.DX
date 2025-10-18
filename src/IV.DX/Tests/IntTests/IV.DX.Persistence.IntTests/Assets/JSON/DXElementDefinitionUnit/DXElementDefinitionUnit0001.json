@@ -1,7 +1,7 @@
 {
   "S_Type": "DXElementDefinitionUnit",
   "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-  "DXUnitDefinitionMainElement": {
+  "DXObjectDefinitionMainElement": {
     "ObjectID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
     "ID": "EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4",
     "Name": "UpdatedDataDXElement",

@@ -120,7 +120,7 @@ namespace IV.DX.Kernel.Converters
 
         public static DXElementDefinition GetDXElementDefinition(DXEnumDefinitionUnit enumDesc)
         {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXUnitDefinitionMainElement.Name, enumDesc.DXUnitDefinitionMainElement.Name);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name);
 
             JObject jObject = new JObject();
 

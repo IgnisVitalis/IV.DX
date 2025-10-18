@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [DXElement("DXUnitDefinitionMainElement")]
-    public class DXUnitDefinitionMainElement : DXElement
+    [DXElement("DXObjectDefinitionMainElement")]
+    public class DXObjectDefinitionMainElement : DXElement
     {
         [DXColumn("Name")]
         public string Name { get; set; }
@@ -13,7 +13,7 @@ namespace IV.DX.Kernel.Models
         [DXColumn("Kind")]
         public DXObjectKindEnum Kind { get; set; }
 
-        public DXUnitDefinitionMainElement()
+        public DXObjectDefinitionMainElement()
         {
             this.Kind = DXObjectKindEnum.Custom;
         }

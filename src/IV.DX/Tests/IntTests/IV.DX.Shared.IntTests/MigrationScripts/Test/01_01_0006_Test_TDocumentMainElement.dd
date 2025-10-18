@@ -2,7 +2,7 @@
   {
     "S_Type": "DXElementDefinitionUnit",
     "ID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
-    "DXUnitDefinitionMainElement": {
+    "DXObjectDefinitionMainElement": {
       "ID": "8b4aefa8-d0ee-4519-8213-87523862bf3b",
       "Name": "TDocumentMainElement",
       "Kind": 3

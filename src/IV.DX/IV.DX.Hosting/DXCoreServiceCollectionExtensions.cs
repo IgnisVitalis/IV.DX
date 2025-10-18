@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application;
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Handlers;
+using IV.DX.Application.Services;
 using IV.DX.Persistence;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -57,6 +58,8 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitGenericRepository, DXUnitGenericRepository>();
             services.AddScoped<IDXElementGenericRepository, DXElementGenericRepository>();
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
+            services.AddScoped<IDXEnumDataService, DXEnumDataService>();            
+            services.AddScoped<IDXUnitStructureService, DXUnitStructureService>();
             services.AddScoped<IDXMigrationService, MigrationService>();
 
             services.RegisterCoreHandlers();

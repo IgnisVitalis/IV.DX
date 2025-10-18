@@ -61,21 +61,6 @@ namespace IV.DX.Application.IntTests
             // Action
 
         }
-
-        [Fact]
-        public void Test4()
-        {
-            // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
-            IDXStructureRepository dataStructureRepository = this.ServiceProvider.GetRequiredService<IDXStructureRepository>();
-            IDXEnumCoreRepository enumCoreRepository = this.ServiceProvider.GetRequiredService<IDXEnumCoreRepository>();
-
-            var enumInfo = dataStructureRepository.GetDXEnumDefinition("DXObjectKindEnum");
-
-            var dxElementDefinition = DXModelDefinitionHelper.GetDXElementDefinition(enumInfo);
-
-            var enums = enumCoreRepository.Get(dxElementDefinition);
-        }
     }
 
     public class DataSourceManager

@@ -7,7 +7,7 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 
-namespace IV.DX.Application
+namespace IV.DX.Application.Services
 {
     internal class DXUnitDataService(IDXCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
     {
@@ -89,7 +89,7 @@ namespace IV.DX.Application
 
         public async Task<T> InsertAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.InsertAsync<T>(dxUnit, context, ct);
+            var result = await dxPipelineExecutor.InsertAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
@@ -109,17 +109,17 @@ namespace IV.DX.Application
 
             if (itemIsExisting)
             {
-                return await this.UpdateAsync(dxUnit, context, ct);
+                return await UpdateAsync(dxUnit, context, ct);
             }
             else
             {
-                return await this.InsertAsync(dxUnit, context, ct);
+                return await InsertAsync(dxUnit, context, ct);
             }
         }
 
         public async Task<T> UpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.UpdateAsync<T>(dxUnit, context, ct);
+            var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
@@ -224,7 +224,7 @@ namespace IV.DX.Application
 
         public async Task<bool> DeleteAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.DeleteAsync<T>(dxUnit, context, ct);
+            var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
             if (result.IsSuccess)
             {
@@ -285,13 +285,13 @@ namespace IV.DX.Application
             var objId = dxModel.OwnSingleItem.Item.ID;
 
             if (objId.HasValue
-                && await this.IsItemExistingAsync(dxModel.OwnSingleItem.ObjectInfo.ObjectName, objId.Value, context, ct))
+                && await IsItemExistingAsync(dxModel.OwnSingleItem.ObjectInfo.ObjectName, objId.Value, context, ct))
             {
-                return await this.UpdateAsync(jObject, context, ct);
+                return await UpdateAsync(jObject, context, ct);
             }
             else
             {
-                return await this.InsertAsync(jObject, context, ct);
+                return await InsertAsync(jObject, context, ct);
             }
         }
     }

@@ -49,6 +49,11 @@ namespace IV.DX.Persistence
             }
         }
 
+        public DXEnumDefinitionUnit GetEnum(string name)
+        {
+            return this.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
         private sealed record Snapshot(
             ImmutableArray<DXElementDefinitionUnit> DXElements,
             ImmutableArray<DXUnitDefinitionUnit> Entities,

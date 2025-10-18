@@ -20,8 +20,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("a0e9308c-7e20-4eff-add8-9ce21e1de13b"),
                         ObjectNameLeft = "DXObjectDefinitionUnit",
                         RelationNameLeft = "DXObjectDefinitionUnitID",
-                        ObjectNameRight = "DXUnitDefinitionMainElement",
-                        RelationNameRight = "DXUnitDefinitionMainElement",
+                        ObjectNameRight = "DXObjectDefinitionMainElement",
+                        RelationNameRight = "DXObjectDefinitionMainElement",
                         RelationTable = null,
                         RelationType = DXRelationTypeEnum.ZeroOneToZeroOne,
                         Kind = DXObjectKindEnum.Core
@@ -122,8 +122,8 @@ namespace IV.DX.Persistence.CoreData
                         ID = new Guid("f60dd08e-cf27-4592-8f84-4a8ba1fca8ff"),
                         ObjectNameLeft = "DXUnitDefinitionUnit",
                         RelationNameLeft = "DXUnitDefinitionUnitID",
-                        ObjectNameRight = "DXElementInUnitDefinitionMainElement",
-                        RelationNameRight = "DXElementInUnitDefinitionMainElement",
+                        ObjectNameRight = "DXElementInUnitDefinitionElement",
+                        RelationNameRight = "DXElementInUnitDefinitionElement",
                         RelationTable = null,
                         RelationType = DXRelationTypeEnum.ZeroOneToMany,
                         Kind = DXObjectKindEnum.Core
@@ -137,8 +137,8 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("d38cf673-89c7-47d7-9f48-5a3a49396ed2"),
-                        ObjectNameLeft = "DXUnitDefinitionMainElement",
-                        RelationNameLeft = "DXUnitDefinitionMainElement",
+                        ObjectNameLeft = "DXObjectDefinitionMainElement",
+                        RelationNameLeft = "DXObjectDefinitionMainElement",
                         ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
@@ -209,8 +209,8 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("4aafad60-92df-41ee-b9be-a57125740b12"),
-                        ObjectNameLeft = "DXElementInUnitDefinitionMainElement",
-                        RelationNameLeft = "DXElementInUnitDefinitionMainElement",
+                        ObjectNameLeft = "DXElementInUnitDefinitionElement",
+                        RelationNameLeft = "DXElementInUnitDefinitionElement",
                         ObjectNameRight = "DXElementInUnitTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
@@ -228,7 +228,7 @@ namespace IV.DX.Persistence.CoreData
                     DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                     {
                         ID = new Guid("fe83cc43-0d3a-412b-bd93-d337717967af"),
-                        ObjectNameLeft = "DXElementInUnitDefinitionMainElement",
+                        ObjectNameLeft = "DXElementInUnitDefinitionElement",
                         RelationNameLeft = "DXUnitDefinitionUnit",
                         ObjectNameRight = "DXElementDefinitionUnit",
                         RelationNameRight = "DXElementDefinitionUnit",

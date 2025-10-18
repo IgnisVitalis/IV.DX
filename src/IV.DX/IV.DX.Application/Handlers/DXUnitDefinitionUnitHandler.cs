@@ -69,7 +69,7 @@ namespace IV.DX.Application.Handlers
             if (existingDXUnit == null)
                 return;
 
-            var relatedDXElementIds = existingDXUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
+            var relatedDXElementIds = existingDXUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedDXElements = dataStructureRepo.GetDXElementDefinitions(relatedDXElementIds);
 
@@ -87,12 +87,12 @@ namespace IV.DX.Application.Handlers
 
         private void ProcessDXElementsIndxUnitRelations(DXUnitDefinitionUnit dxUnit)
         {
-            if (dxUnit.DXElementInUnitDefinitionMainElement == null)
+            if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return;
 
             var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
 
-            if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionMainElement.Mode == MultiElementsMode.Target)
+            if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionElement.Mode == MultiElementsMode.Target)
             {
                 this.ProcessDXElementsIndxUnitRelationsUsingTragetMode(dxUnit);
             }
@@ -104,7 +104,7 @@ namespace IV.DX.Application.Handlers
 
         private DXUnitDefinitionUnit GetObjectInfoFromDB(DXUnitDefinitionUnit objectInfoIncome)
         {
-            if (systemObjectNames.Contains(objectInfoIncome.DXUnitDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
+            if (systemObjectNames.Contains(objectInfoIncome.DXObjectDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
             return genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectInfoIncome.ID);
@@ -112,8 +112,8 @@ namespace IV.DX.Application.Handlers
 
         private void ProcessDXElementsIndxUnitRelationsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {
-            var newAnnouncedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
-            var existingAnnouncedIds = existingdxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var newAnnouncedIds = dxUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var existingAnnouncedIds = existingdxUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit);
 
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
@@ -127,10 +127,10 @@ namespace IV.DX.Application.Handlers
 
         private void ProcessDXElementsIndxUnitRelationsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
         {
-            var announcedIds = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Select(x => x.DXElementDefinitionUnit);
+            var announcedIds = dxUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit);
             var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);
 
-            var deletedIds = dxUnit.DXElementInUnitDefinitionMainElement.Deleted.Select(x => x.DXElementDefinitionUnit);
+            var deletedIds = dxUnit.DXElementInUnitDefinitionElement.Deleted.Select(x => x.DXElementDefinitionUnit);
             var dxElementsToUnassign = dataStructureRepo.GetDXElementDefinitions(deletedIds);
 
             this.AssignDXElements(dxUnit, dxElementsToAssign);
@@ -141,7 +141,7 @@ namespace IV.DX.Application.Handlers
         {
             foreach (var dxElementToAssign in dxElementsToAssign)
             {
-                var relationType = dxUnit.DXElementInUnitDefinitionMainElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
+                var relationType = dxUnit.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
 
                 dxUnitService.InsertAsync(this.GetRelationObject(dxUnit, dxElementToAssign, relationType)).Wait();
             }
@@ -177,21 +177,21 @@ namespace IV.DX.Application.Handlers
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectNameLeft = dxUnit.DXUnitDefinitionMainElement.Name,
-                    RelationNameLeft = $"{dxUnit.DXUnitDefinitionMainElement.Name}ID",
-                    ObjectNameRight = dxElement.DXUnitDefinitionMainElement.Name,
-                    RelationNameRight = dxElement.DXUnitDefinitionMainElement.Name,
-                    Kind = dxUnit.DXUnitDefinitionMainElement.Kind
+                    ObjectNameLeft = dxUnit.DXObjectDefinitionMainElement.Name,
+                    RelationNameLeft = $"{dxUnit.DXObjectDefinitionMainElement.Name}ID",
+                    ObjectNameRight = dxElement.DXObjectDefinitionMainElement.Name,
+                    RelationNameRight = dxElement.DXObjectDefinitionMainElement.Name,
+                    Kind = dxUnit.DXObjectDefinitionMainElement.Kind
                 }
             };
         }
 
         private DXRelationDefinitionUnit GetExistingRelatonObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
         {
-            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}' " +
-               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.DXUnitDefinitionMainElement.Name}ID' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxElement.DXUnitDefinitionMainElement.Name}'";
+            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.DXObjectDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxElement.DXObjectDefinitionMainElement.Name}' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.DXObjectDefinitionMainElement.Name}ID' " +
+               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxElement.DXObjectDefinitionMainElement.Name}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 

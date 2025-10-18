@@ -11,14 +11,14 @@ namespace IV.DX.Persistence.CoreData
         {
             Items = new List<DXElementDefinitionUnit>()
             {
-                #region DXUnitDefinitionMainElement
+                #region DXObjectDefinitionMainElement
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("3a911afb-9c07-4cf8-99b5-0ba02c4eb3f0"),
-                        Name = "DXUnitDefinitionMainElement",
+                        Name = "DXObjectDefinitionMainElement",
                         Kind = DXObjectKindEnum.Core
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
@@ -51,7 +51,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("ce754889-4efb-4281-ad1f-14d710b30007"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("7725e3cb-e831-4ddc-86d8-c71bea59f9d7"),
                         Name = "DXColumnDefinitionElement",
@@ -119,7 +119,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("38402309-6239-4e54-8640-ac70772b76bd"),
                         Name = "DXUniqueColumnsElement",
@@ -146,7 +146,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("eeb499d0-4e20-41aa-8a24-9981c3cbf511"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("5b452ce3-cb10-4e7d-91e9-16c0fb569350"),
                         Name = "DXUnitInheritanceElement",
@@ -154,14 +154,14 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
-                #region DXElementInUnitDefinitionMainElement
+                #region DXElementInUnitDefinitionElement
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("abd3be0e-3d54-4cde-a909-fccf7293c661"),
-                        Name = "DXElementInUnitDefinitionMainElement",
+                        Name = "DXElementInUnitDefinitionElement",
                         Kind = DXObjectKindEnum.Core
                     }
                 },
@@ -170,7 +170,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("5786ba46-1374-475a-baef-446954feea3f"),
                         Name = "DXRelationDefinitionMainElement",
@@ -283,7 +283,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXElementDefinitionUnit()
                 {
                     ID = new Guid("4502e21d-4d38-475d-88eb-3159d3b7c514"),
-                    DXUnitDefinitionMainElement = new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("923c3122-0cc6-4c8a-9679-0017f3b7f59d"),
                         Name = "DXMigrationScriptsMainElement",

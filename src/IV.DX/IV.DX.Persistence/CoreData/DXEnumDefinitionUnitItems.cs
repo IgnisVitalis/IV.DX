@@ -15,7 +15,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e"),
-                    DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement= new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("59b115c5-cc8b-4c88-b1e0-d94af8745e99"),
                         Name = "DXElementInUnitTypeEnum",
@@ -61,7 +61,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("971d538a-1489-483a-bc84-86596ed0c51a"),
-                    DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement= new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("261cfd33-65cb-4f36-8712-be15e6621cc0"),
                         Name = "DXColumnTypeEnum",
@@ -107,7 +107,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
-                    DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement= new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("179f9be7-dc54-4ac7-a9c5-ea50c7524752"),
                         Name = "DXObjectKindEnum",
@@ -153,7 +153,7 @@ namespace IV.DX.Persistence.CoreData
                 new DXEnumDefinitionUnit()
                 {
                     ID = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
-                    DXUnitDefinitionMainElement= new DXUnitDefinitionMainElement()
+                    DXObjectDefinitionMainElement= new DXObjectDefinitionMainElement()
                     {
                         ID = new Guid("dbb5012a-958a-4272-8633-cdf04049fff4"),
                         Name = "DXRelationTypeEnum",

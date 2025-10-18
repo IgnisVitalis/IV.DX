@@ -9,6 +9,6 @@ namespace IV.DX.Kernel.Models
         public static DXModelDefinition DXModelDefinition { get; } = DXModelDefinitionHelper.GetDXModelDefinition<DXUnitDefinitionUnit>();
 
         public DXUnitInheritanceElement DXUnitInheritanceElement { get; set; }
-        public DXMultiElementsContainer<DXElementInUnitDefinitionMainElement> DXElementInUnitDefinitionMainElement { get; set; }
+        public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
     }
 }

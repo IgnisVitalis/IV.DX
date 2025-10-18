@@ -9,6 +9,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         IReadOnlyList<DXEnumDefinitionUnit> DXEnums { get; }
         IReadOnlyList<DXRelationDefinitionUnit> DXRelations { get; }
 
+        DXEnumDefinitionUnit GetEnum(string name);
+
         int Version { get; }
         Task WarmUpAsync(CancellationToken ct = default);
         Task RefreshAsync(CancellationToken ct = default);
