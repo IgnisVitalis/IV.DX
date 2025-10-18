@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.102.0] - 2025-10-18
+
+### Added
+
+- Method for DXUnit to convert it to JObject;
+
 ## [0.101.0] - 2025-10-17
 
 ### Changed
@@ -10,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.100.0] - 2025-10-07
 
-### Chaned
+### Changed
 
 - Adapted solution to clean architecture;
 
