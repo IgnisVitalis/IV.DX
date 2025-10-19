@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -26,7 +27,7 @@ namespace IV.DX.Application.IntTests.Services
             // Action
             var dxUnitStructureDefinition = await this._service.GetAsync(dxUnitName);
 
-            // Assert
+            // Assert            
         }
     }
 }
