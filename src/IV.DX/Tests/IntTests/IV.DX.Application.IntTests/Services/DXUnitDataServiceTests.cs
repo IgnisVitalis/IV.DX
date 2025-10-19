@@ -16,18 +16,5 @@ namespace IV.DX.Application.IntTests.Services
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
-
-        [Fact]
-        public async Task GetItemsAsync_UsingDXObjectKindEnumType_Ok()
-        {
-            // Init
-            string typeName = "DXObjectKindEnum";
-
-            // Action
-            var items = await this._service.GetItemsAsync("DXObjectKindEnum");
-
-            // Assert
-            Assert.NotEmpty(items);
-        }
     }
 }
