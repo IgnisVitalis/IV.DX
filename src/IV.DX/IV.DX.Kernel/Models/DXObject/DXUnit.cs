@@ -48,8 +48,16 @@ namespace IV.DX.Kernel.Models
             return DXUnitHelper.CreateInstance<T>(jObjectStr);
         }
 
-        public static string GetTypeName(Type t) => DXUnitHelper.GetTypeName(t);
+        public static IEnumerable<T> ParseItems<T>(string jArrayStr) where T : DXUnit
+        {
+            return DXUnitHelper.CreateInstances<T>(jArrayStr);
+        }
 
-        public static string GetTypeName<T>() => DXUnitHelper.GetTypeName(typeof(T));
+        public static IEnumerable<T> ParseItems<T>(JArray jArray) where T : DXUnit
+        {
+            return DXUnitHelper.CreateInstances<T>(jArray);
+        }
+
+        public static string GetTypeName<T>() where T : DXUnit => DXUnitHelper.GetTypeName(typeof(T));
     }    
 }

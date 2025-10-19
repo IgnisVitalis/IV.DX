@@ -16,5 +16,20 @@ namespace IV.DX.Application.IntTests.Services
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
+
+        [Fact]
+        public async Task GetItemsAsync_UsingFilterForNonExistingItems_EmptyEnumerable()
+        {
+            // Init
+            string typeName = "DXElementDefinitionUnit";
+            string filter = "DXObjectDefinitionMainElement.Kind = 999888777";
+
+            // Action
+            var items = await this._service.GetItemsAsync(typeName, filter);
+
+            // Assert
+            Assert.NotNull(items);
+            Assert.Empty(items);
+        }
     }
 }

@@ -158,7 +158,7 @@ namespace IV.DX.Application.Services
                 }
                 else if (result.Outcome == DXOutcome.NotFound)
                 {
-                    return null;
+                    return Enumerable.Empty<JObject>();
                 }
             }
 
@@ -177,7 +177,7 @@ namespace IV.DX.Application.Services
                 }
                 else if (result.Outcome == DXOutcome.NotFound)
                 {
-                    return null;
+                    return Enumerable.Empty<JObject>();
                 }
             }
 
@@ -196,7 +196,7 @@ namespace IV.DX.Application.Services
                 }
                 else if (result.Outcome == DXOutcome.NotFound)
                 {
-                    return null;
+                    return Enumerable.Empty<JObject>();
                 }
             }
 
