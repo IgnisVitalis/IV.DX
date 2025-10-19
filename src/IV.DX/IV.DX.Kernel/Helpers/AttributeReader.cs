@@ -1,182 +1,107 @@
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace IV.DX.Kernel.Helpers
 {
     internal static class AttributeReader
     {
-        public static T GetSingleAttribute<T>(PropertyInfo propertyInfo) where T : Attribute
+        // --- Caches ---
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertiesCache = new();
+        private static readonly ConcurrentDictionary<(Type type, Type attr), Attribute?> TypeAttrCache = new();
+        private static readonly ConcurrentDictionary<(PropertyInfo prop, Type attr), Attribute?> PropAttrCache = new();
+        private static readonly ConcurrentDictionary<Type, Type> ElementTypeCache = new();
+
+        // ----- Basic helpers -----
+        public static T? GetAttribute<T>(Type type, bool inherit = true) where T : Attribute
         {
-            if (propertyInfo == null)
-                return null;
-
-            var attribute =
-                propertyInfo
-                .GetCustomAttribute(typeof(T)) as T;
-
-            return attribute;
+            if (type is null) return default;
+            var key = (type, typeof(T));
+            if (TypeAttrCache.TryGetValue(key, out var cached)) return (T?)cached;
+            var attr = type.GetCustomAttribute(typeof(T), inherit) as T;
+            TypeAttrCache[key] = attr;
+            return attr;
         }
 
-        public static T GetSingleAttribute<T>(Type type)
-            where T : Attribute
+        public static T? GetAttribute<T>(PropertyInfo prop, bool inherit = true) where T : Attribute
         {
-            if (type == null)
-                return null;
-
-            var attribute =
-               type.GetCustomAttribute(typeof(T)) as T;
-
-            return attribute;
+            if (prop is null) return default;
+            var key = (prop, typeof(T));
+            if (PropAttrCache.TryGetValue(key, out var cached)) return (T?)cached;
+            var attr = prop.GetCustomAttribute(typeof(T), inherit) as T;
+            PropAttrCache[key] = attr;
+            return attr;
         }
 
-        public static T GetSinglePropertyAttribute<T>(PropertyInfo propertyInfo)
-            where T : Attribute
-        {
-            if (propertyInfo == null)
-                return null;
+        public static IEnumerable<T> GetAttributesOnProperties<T>(Type type, bool inherit = true) where T : Attribute
+            => GetProperties(type).Select(p => GetAttribute<T>(p, inherit)).Where(a => a is not null)!.Cast<T>();
 
-            var attribute =
-                propertyInfo
-                .GetCustomAttribute(typeof(T)) as T;
-
-            return attribute;
-        }
-
-        public static IEnumerable<T> GetAllSinglePropertyAttributes<T>(Type type)
-            where T : Attribute
-        {
-            if (type == null)
-                return null;
-
-            var attributes = type.GetProperties()
-                        .Select(x => GetSinglePropertyAttribute<T>(x))
-                        .Where(x => x != null);
-
-            return attributes;
-        }
-
+        // ----- Property discovery -----
         public static IEnumerable<PropertyInfo> GetSingleItemInfos(DXUnit dxUnit)
-        {
-            if (dxUnit == null)
-                return null;
-
-            return GetSingleItemInfos(dxUnit.GetType()).Where(x => x.GetValue(dxUnit) != null);
-        }
+            => dxUnit is null ? Array.Empty<PropertyInfo>()
+                              : GetSingleItemInfos(dxUnit.GetType()).Where(p => p.GetValue(dxUnit) is not null);
 
         public static IEnumerable<PropertyInfo> GetSingleItemInfos(Type type)
-        {
-            var singleFragmentProperties =
-              GetProperties(type)
-              .Where(x => x.PropertyType.BaseType == typeof(DXElement)).ToList();
-
-            return singleFragmentProperties;
-        }
+            => GetProperties(type).Where(p =>
+                   p.PropertyType.BaseType == typeof(DXElement)
+                   && p.GetMethod is not null && !p.GetMethod.IsStatic);
 
         public static IEnumerable<PropertyInfo> GetMultiItemInfos(DXUnit dxUnit)
-        {
-            if (dxUnit == null)
-                return null;
-
-            return GetMultiItemInfos(dxUnit.GetType()).Where(x => x.GetValue(dxUnit) != null);
-        }
+            => dxUnit is null ? Array.Empty<PropertyInfo>()
+                              : GetMultiItemInfos(dxUnit.GetType()).Where(p => p.GetValue(dxUnit) is not null);
 
         public static IEnumerable<PropertyInfo> GetMultiItemInfos(Type type)
-        {
-            var multiFragmentProperties =
-                GetProperties(type)
-                .Where(x => x.PropertyType.IsGenericType).ToList()
-                .Where(x => x.PropertyType.GetGenericTypeDefinition() == typeof(DXMultiElementsContainer<>)).ToList();
-
-            return multiFragmentProperties;
-        }
+            => GetProperties(type).Where(p =>
+                   p.PropertyType.IsGenericType
+                   && p.PropertyType.GetGenericTypeDefinition() == typeof(DXMultiElementsContainer<>)
+                   && p.GetMethod is not null && !p.GetMethod.IsStatic);
 
         private static PropertyInfo[] GetProperties(Type type)
         {
-            return type?.GetProperties();
+            if (type is null) return Array.Empty<PropertyInfo>();
+           
+            return PropertiesCache.GetOrAdd(type, t => t.GetProperties());
         }
-        
+
+
         public static string GetDXUnitTypeName(Type type)
         {
             var objectType = FindElementType(type);
-
-            var dataDefinitionNameForFragment = GetAttribute<DXUnitAttribute>(objectType);
-
-            if (dataDefinitionNameForFragment == null)
-                return string.Empty;
-
-            return dataDefinitionNameForFragment.ObjectName;
+            var attr = GetAttribute<DXUnitAttribute>(objectType);
+            return attr?.ObjectName ?? string.Empty;
         }
 
         public static string GetDXElementTypeName(Type type)
         {
             var objectType = FindElementType(type);
-
-            var attribute = GetAttribute<DXElementAttribute>(objectType);
-
-            if (attribute == null)
-                return string.Empty;
-
-            return attribute.Name;
+            var attr = GetAttribute<DXElementAttribute>(objectType);
+            return attr?.Name ?? string.Empty;
         }
 
         public static string GetTypeName(this DXUnit dxUnit)
-        {
-            return GetDXUnitTypeName(dxUnit.GetType());
-        }
+            => dxUnit is null ? string.Empty : GetDXUnitTypeName(dxUnit.GetType());
 
-
-        public static T GetAttribute<T>(Type configurationType) where T : Attribute
-        {
-            var attribute =
-                configurationType
-                .GetCustomAttribute(typeof(T)) as T;
-
-            return attribute;
-        }
-
-        /// <summary>Finds the type of the element of a type. Returns null if this type does not enumerate.</summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns>The element type, if found; otherwise, <see langword="null"/>.</returns>
+        // ----- Element type discovery -----
         private static Type FindElementType(Type type)
         {
-            if (type.IsArray)
-                return type.GetElementType();
+            if (type is null) return typeof(object);
+            return ElementTypeCache.GetOrAdd(type, static t =>
+            {
+                if (t.IsArray) return t.GetElementType()!;
+                if (ImplIEnumT(t)) return t.GetGenericArguments()[0];
 
-            // type is IEnumerable<T>;
-            if (ImplIEnumT(type))
-                return type.GetGenericArguments().First();
+                var viaIface = t.GetInterfaces().FirstOrDefault(ImplIEnumT);
+                if (viaIface is not null) return viaIface.GetGenericArguments()[0];
 
-            // type implements/extends IEnumerable<T>;
-            var enumType = type.GetInterfaces().Where(ImplIEnumT).Select(t => t.GetGenericArguments().First()).FirstOrDefault();
-            if (enumType != null)
-                return enumType;
-
-            // type is IEnumerable
-            if (IsIEnum(type) || type.GetInterfaces().Any(IsIEnum))
-                return typeof(object);
-
-            // Return target type
-            return type;
+                if (IsIEnum(t) || t.GetInterfaces().Any(IsIEnum)) return typeof(object);
+                return t;
+            });
         }
 
-        private static bool ImplIEnumT(Type t)
-        {
-            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>);
-        }
+        private static bool ImplIEnumT(Type t) =>
+            t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>);
 
-        private static bool IsIEnum(Type t)
-        {
-            return t == typeof(System.Collections.IEnumerable);
-        }
-
-        public static T GetAttribute<T>(PropertyInfo propertyInfo) where T : Attribute
-        {
-            var attribute =
-                propertyInfo
-                .GetCustomAttribute(typeof(T)) as T;
-
-            return attribute;
-        }
+        private static bool IsIEnum(Type t) => t == typeof(System.Collections.IEnumerable);
     }
 }

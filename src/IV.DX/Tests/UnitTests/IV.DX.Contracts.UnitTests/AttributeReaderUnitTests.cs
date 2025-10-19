@@ -20,7 +20,7 @@ namespace IV.DX.Contracts.UnitTests
 
             // Action
             var attr = AttributeReader
-                .GetSingleAttribute<DXUnitAttribute>
+                .GetAttribute<DXUnitAttribute>
                 (typeof(DXObjectDefinitionUnit));
 
             // Checking results
@@ -35,7 +35,7 @@ namespace IV.DX.Contracts.UnitTests
 
             // Action
             var attr = AttributeReader
-                .GetSingleAttribute<DXElementAttribute>
+                .GetAttribute<DXElementAttribute>
                 (typeof(DXObjectDefinitionMainElement));
 
             // Checking results
@@ -50,7 +50,7 @@ namespace IV.DX.Contracts.UnitTests
 
             // Action
             var attributes = AttributeReader
-                    .GetAllSinglePropertyAttributes<DXColumnAttribute>
+                    .GetAttributesOnProperties<DXColumnAttribute>
                     (typeof(DXObjectDefinitionMainElement));
 
             // Checking result

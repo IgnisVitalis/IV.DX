@@ -53,7 +53,7 @@ namespace IV.DX.Kernel.Converters
             if (dxUnit == null)
                 return null;
 
-            var objectInfo = AttributeReader.GetSingleAttribute<DXUnitAttribute>
+            var objectInfo = AttributeReader.GetAttribute<DXUnitAttribute>
                    (dxUnit.GetType());
 
             var ownItem = new DXMainItem(objectInfo)
@@ -85,7 +85,7 @@ namespace IV.DX.Kernel.Converters
 
                 DXSingleElement dxSingleItem = new DXSingleElement()
                 {
-                    ElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType),
+                    ElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(x.PropertyType),
                     Item = new DXItem()
                     {
                         ID = singleItem?.ID,
@@ -103,7 +103,7 @@ namespace IV.DX.Kernel.Converters
 
         public static DXSingleElement ConvertToSingleItem(this DXElement dxElement)
         {
-            var dxElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(dxElement.GetType());
+            var dxElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(dxElement.GetType());
 
             DXSingleElement singleItem = new DXSingleElement()
             {
@@ -135,7 +135,7 @@ namespace IV.DX.Kernel.Converters
 
                 DXMultiElement multiItem = new DXMultiElement()
                 {
-                    DXElementInfo = AttributeReader.GetSingleAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
+                    DXElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
                     Name = x.Name,
                     Mode = mode
                 };
@@ -203,12 +203,12 @@ namespace IV.DX.Kernel.Converters
             JObject jObject = new JObject();
 
             var properties = dxElement.GetType().GetProperties()
-                .Where(x => AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(x) != null)
+                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null)
                 .ToList();
 
             foreach (var property in properties)
             {
-                var attribute = AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(property);
+                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
 
                 jObject[property.Name] = new JValue(property.GetValue(dxElement));
             }
@@ -224,12 +224,12 @@ namespace IV.DX.Kernel.Converters
             JObject jObject = new JObject();
 
             var properties = obj.GetType().GetProperties()
-                .Where(x => AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(x) != null)
+                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null)
                 .ToList();
 
             foreach (var property in properties)
             {
-                var attribute = AttributeReader.GetSinglePropertyAttribute<DXColumnAttribute>(property);
+                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
 
                 jObject[property.Name] = new JValue(property.GetValue(obj));
             }
