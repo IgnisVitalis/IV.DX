@@ -2,25 +2,26 @@
 
 namespace IV.DX.Application.Contracts.Models
 {
-    public class DXUnitStructure
+    public class DXUnitDefinitionStructure
     {
         public string Name { get; set; }
-        public List<DXElementDefinion> SingleItemMandatory { get; set; }
-        public List<DXElementDefinion> SingleItemOptional { get; set; }
-        public List<DXElementDefinion> MultiItemsMandatory { get; set; }
-        public List<DXElementDefinion> MultiItemsOptional { get; set; }
+        public List<DXElementDefinitionStructure> SingleItemMandatory { get; set; }
+        public List<DXElementDefinitionStructure> SingleItemOptional { get; set; }
+        public List<DXElementDefinitionStructure> MultiItemsMandatory { get; set; }
+        public List<DXElementDefinitionStructure> MultiItemsOptional { get; set; }
     }
 
-    public class DXElementDefinion
+    public class DXElementDefinitionStructure
     {
         public string Name { get; set; }
 
-        public IEnumerable<DXColumnDefinition> Columns { get; set; }
+        public IEnumerable<DXColumnDefinitionStructure> Columns { get; set; }
     }
 
-    public class DXColumnDefinition
+    public class DXColumnDefinitionStructure
     {
         public string Name { get; set; }
+        public string Title { get { return Name; } }
         public DXColumnTypeEnum ColumnType { get; set; }
         public int? Length { get; set; }
         public int? Precision { get; set; }

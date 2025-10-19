@@ -4,6 +4,6 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXUnitStructureService
     {
-        Task<DXUnitStructure> GetAsync(string name, CancellationToken ct = default);
+        Task<DXUnitDefinitionStructure> GetAsync(string name, CancellationToken ct = default);
     }
 }
