@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXItem
+    internal class DXItem
     {
         public Guid? ID { get; set; }
         public Guid? ObjectID { get; set; }

@@ -1,5 +1,7 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
+using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 
 namespace IV.DX.Kernel.Models
@@ -27,6 +29,11 @@ namespace IV.DX.Kernel.Models
                         $"Type {type.FullName} should have [{nameof(DXElementAttribute)}] attribute.");
                 return true;
             });
+        }
+
+        public JObject ToJObject()
+        {
+            return DXUnitHelper.ConvertToJObject(this);
         }
     }
 }

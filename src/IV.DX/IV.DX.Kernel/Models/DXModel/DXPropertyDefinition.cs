@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXPropertyDefinition
+    internal class DXPropertyDefinition
     {
         public string Name { get; set; }
         public DXColumnAttribute ColumnDefinition { get; set; }

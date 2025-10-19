@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXModel
+    internal class DXModel
     {
         public DXMainItem OwnSingleItem { get; set; }
         public IEnumerable<DXSingleElement> SingleItems { get; set; }

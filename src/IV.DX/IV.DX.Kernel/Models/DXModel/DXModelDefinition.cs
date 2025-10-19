@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXModelDefinition
+    internal class DXModelDefinition
     {
         public DXElementDefinition OwnSingleItem { get; private set; }
         public IEnumerable<DXElementDefinition> SingleFragmentDefinitions { get; private set; }

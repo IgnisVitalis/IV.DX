@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXMultiElement
+    internal class DXMultiElement
     {
         public string Name { get; set; }
         public DXElementAttribute DXElementInfo { get; set; }

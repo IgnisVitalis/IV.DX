@@ -1,5 +1,4 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
@@ -7,8 +6,6 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXRelationDefinitionUnit")]
     public class DXRelationDefinitionUnit : DXUnit
     {
-        public static DXModelDefinition DXModelDefinition { get; } = DXModelDefinitionHelper.GetDXModelDefinition<DXRelationDefinitionUnit>();
-
         public DXRelationDefinitionMainElement DXRelationDefinitionMainElement { get; set; }
 
         public DXRelationDefinitionUnit CreateInvertedRelationObject()

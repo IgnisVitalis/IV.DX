@@ -1,6 +1,6 @@
 ﻿namespace IV.DX.Kernel.Models
 {
-    public class DXPropertyItem
+    internal class DXPropertyItem
     {
     }
 }

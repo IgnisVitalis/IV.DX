@@ -13,7 +13,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var dxElementModelsFromDB = this.GetItems(DXElementDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
+            var dxElementModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXElementDefinitionUnit>(), DXLoadingType.Full);
 
             var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
@@ -28,7 +28,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var dxUnitModelsFromDB = this.GetItems(DXUnitDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
+            var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXUnitDefinitionUnit>(), DXLoadingType.Full);
 
             var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
@@ -43,7 +43,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
 
-            var enumsModelsFromDB = this.GetItems(DXEnumDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
+            var enumsModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXEnumDefinitionUnit>(), DXLoadingType.Full);
 
             var enumInfos = enumsModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
@@ -58,7 +58,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
-            var result = this.GetItems(DXRelationDefinitionUnit.DXModelDefinition, DXLoadingType.Full);
+            var result = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
             return result.Select(x => DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
         }
     }

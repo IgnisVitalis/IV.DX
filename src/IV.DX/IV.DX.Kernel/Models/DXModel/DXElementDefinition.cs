@@ -2,7 +2,7 @@
 
 namespace IV.DX.Kernel.Models
 {
-    public class DXElementDefinition : IEnumerable<DXPropertyDefinition>
+    internal class DXElementDefinition : IEnumerable<DXPropertyDefinition>
     {
         private readonly List<DXPropertyDefinition> _items;
 
