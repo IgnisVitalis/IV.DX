@@ -49,5 +49,7 @@ namespace IV.DX.Kernel.Models
         }
 
         public static string GetTypeName(Type t) => DXUnitHelper.GetTypeName(t);
+
+        public static string GetTypeName<T>() => DXUnitHelper.GetTypeName(typeof(T));
     }    
 }
