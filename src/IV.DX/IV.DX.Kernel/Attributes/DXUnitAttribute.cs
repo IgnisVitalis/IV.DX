@@ -1,5 +1,6 @@
 namespace IV.DX.Kernel.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class DXUnitAttribute : Attribute
     {
         public string ObjectName { get; set; }

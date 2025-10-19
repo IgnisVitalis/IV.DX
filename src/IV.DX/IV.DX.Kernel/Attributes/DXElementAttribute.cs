@@ -1,5 +1,6 @@
 namespace IV.DX.Kernel.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class DXElementAttribute : Attribute
     {
         public string Name { get; private set; }

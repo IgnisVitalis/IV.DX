@@ -2,6 +2,7 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 
 namespace IV.DX.Kernel.Converters
 {
@@ -22,7 +23,7 @@ namespace IV.DX.Kernel.Converters
         public static string GetTypeName(Type type)
         {
             return AttributeReader.GetDXUnitTypeName(type);
-        }
+        }        
 
         public static Guid GetID(JObject jObject)
         {

@@ -95,12 +95,7 @@ namespace IV.DX.Kernel.Helpers
         {
             return type?.GetProperties();
         }
-
-        private static PropertyInfo[] GetDeclaredOnlyProperties(Type type)
-        {
-            return type?.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
-        }
-
+        
         public static string GetDXUnitTypeName(Type type)
         {
             var objectType = FindElementType(type);

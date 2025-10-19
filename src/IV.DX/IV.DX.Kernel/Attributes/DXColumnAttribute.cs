@@ -2,6 +2,7 @@
 
 namespace IV.DX.Kernel.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class DXColumnAttribute : Attribute
     {
         public string Name { get; private set; }
