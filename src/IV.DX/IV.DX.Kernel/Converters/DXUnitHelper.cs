@@ -2,63 +2,39 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
-using System.Collections.Concurrent;
 
 namespace IV.DX.Kernel.Converters
 {
     internal static class DXUnitHelper
     {
-        public static string GetTypeName(string json)
-        {
-            var jObject = JObject.Parse(json);
+        public static string GetTypeName(string json) => GetTypeName(JObject.Parse(json));
 
-            return GetTypeName(jObject);
-        }
+        public static string? GetTypeName(JObject jObject) =>
+            (string?)jObject[Constants.SystemPropertyTypeName];
 
-        public static string GetTypeName(JObject jObject)
-        {
-            return (string)jObject[Constants.SystemPropertyTypeName];
-        }
+        public static string GetTypeName(Type type) =>
+            AttributeReader.GetDXUnitTypeName(type);
 
-        public static string GetTypeName(Type type)
-        {
-            return AttributeReader.GetDXUnitTypeName(type);
-        }        
+        public static Guid GetID(JObject jObject) => (Guid)jObject[Constants.ID];
 
-        public static Guid GetID(JObject jObject)
-        {
-            return (Guid)jObject[Constants.ID];
-        }
+        #region Convert to JObject / string
+        public static JObject ConvertToJObject(this DXUnit dxUnit) =>
+            dxUnit.ConvertToDXModel().ConvertToJObject();
 
-        #region Convert to JObject       
-        public static JObject ConvertToJObject(this DXUnit dxUnit)
-        {
-            var result = dxUnit.ConvertToDXModel().ConvertToJObject();
-
-            return result;
-        }
-
-        public static string ConvertToString(this DXUnit dxUnit)
-        {
-            var jObject = dxUnit.ConvertToJObject();
-            var str = jObject.ToString();
-
-            return str;
-        }
+        public static string ConvertToString(this DXUnit dxUnit) =>
+            dxUnit.ConvertToJObject().ToString();
         #endregion
 
         #region Convert to DXModel
-        public static DXModel? ConvertToDXModel(this DXUnit dxUnit)
+        public static DXModel? ConvertToDXModel(this DXUnit? dxUnit)
         {
-            if (dxUnit == null)
-                return null;
+            if (dxUnit is null) return null;
 
-            var objectInfo = AttributeReader.GetAttribute<DXUnitAttribute>
-                   (dxUnit.GetType());
+            var unitAttr = DXReflectionHelper.GetAttr<DXUnitAttribute>(dxUnit.GetType());
 
-            var ownItem = new DXMainItem(objectInfo)
+            var ownItem = new DXMainItem(unitAttr)
             {
-                Item = new DXItem()
+                Item = new DXItem
                 {
                     ID = dxUnit.ID,
                     ObjectID = dxUnit.ID,
@@ -66,298 +42,179 @@ namespace IV.DX.Kernel.Converters
                 }
             };
 
-            DXModel dxModel = new DXModel(ownItem)
+            return new DXModel(ownItem)
             {
                 SingleItems = GetDXSingleElements(dxUnit),
-                MultiItems = GetDXMutliElements(dxUnit)
+                MultiItems = GetDXMultiElements(dxUnit)
             };
-
-            return dxModel;
         }
 
         private static IEnumerable<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
         {
-            var singleItemInfos = AttributeReader.GetSingleItemInfos(dxUnit);
-
-            var result = singleItemInfos.Select(x =>
+            var singleInfos = AttributeReader.GetSingleItemInfos(dxUnit);
+            return singleInfos.Select(pi =>
             {
-                var singleItem = x.GetValue(dxUnit) as DXElement;
-
-                DXSingleElement dxSingleItem = new DXSingleElement()
+                var element = pi.GetValue(dxUnit) as DXElement;
+                var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(pi.PropertyType);
+                return new DXSingleElement
                 {
-                    ElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(x.PropertyType),
-                    Item = new DXItem()
+                    ElementInfo = elementInfo,
+                    Item = new DXItem
                     {
-                        ID = singleItem?.ID,
+                        ID = element?.ID,
                         ObjectID = dxUnit.ID,
-                        Content = DXElementHelper.GetContent(singleItem),
+                        Content = element.GetContent()
                     },
-                    Name = x.Name
+                    Name = pi.Name
                 };
-
-                return dxSingleItem;
             }).ToList();
-
-            return result;
         }
 
-        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement)
+        private static IEnumerable<DXMultiElement> GetDXMultiElements(DXUnit dxUnit)
         {
-            var dxElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(dxElement.GetType());
+            var multiInfos = AttributeReader.GetMultiItemInfos(dxUnit);
 
-            DXSingleElement singleItem = new DXSingleElement()
+            return multiInfos.Select(pi =>
             {
-                ElementInfo = dxElementInfo,
-                Item = new DXItem()
+                var value = pi.GetValue(dxUnit);
+                var multiType = pi.PropertyType;
+
+                var mode = value is null
+                    ? MultiElementsMode.Full
+                    : (MultiElementsMode)(multiType.GetProperty("Mode")?.GetValue(value) ?? (int)MultiElementsMode.Full);
+
+                var elementType = pi.PropertyType.GenericTypeArguments[0];
+                var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
+
+                var announcedList = new List<DXItem>();
+                var deletedList = new List<DXItem>();
+
+                if (value != null)
                 {
-                    ID = dxElement.ID,
-                    ObjectID = dxElement.ObjectID,
-                    Content = DXElementHelper.GetContent(dxElement)
-                },
-                Name = dxElementInfo.Name
-            };
-            return singleItem;
-        }
-
-        private static IEnumerable<DXMultiElement> GetDXMutliElements(DXUnit dxUnit)
-        {
-            var multiItemsInfos = AttributeReader.GetMultiItemInfos(dxUnit);
-
-            var result = multiItemsInfos.Select(x =>
-            {
-                var multiItemType = x.PropertyType;
-                var multiItemValue = x.GetValue(dxUnit);
-
-                MultiElementsMode mode = MultiElementsMode.Full;
-
-                if (multiItemValue != null)
-                    mode = (MultiElementsMode)multiItemType.GetProperty("Mode").GetValue(multiItemValue);
-
-                DXMultiElement multiItem = new DXMultiElement()
-                {
-                    DXElementInfo = AttributeReader.GetAttribute<DXElementAttribute>(x.PropertyType.GenericTypeArguments[0]),
-                    Name = x.Name,
-                    Mode = mode
-                };
-
-                if (multiItemValue != null)
-                {
-                    var announcedArray = multiItemType.GetProperty(Constants.Announced).GetValue(multiItemValue) as IEnumerable<DXElement>;
-
-                    if (announcedArray != null)
+                    void Fill(string propertyName, List<DXItem> target)
                     {
-                        multiItem.Announced = announcedArray.Select(y =>
+                        var src = multiType.GetProperty(propertyName)?.GetValue(value) as IEnumerable<DXElement>;
+                        if (src == null) return;
+
+                        foreach (var e in src)
                         {
-                            var content = DXElementHelper.GetContent(y);
-
-                            var dxItem = new DXItem()
+                            target.Add(new DXItem
                             {
-                                ID = y.ID,
+                                ID = e.ID,
                                 ObjectID = dxUnit.ID,
-                                Content = content
-                            };
-
-                            return dxItem;
-                        }).ToList();
-                    }
-                    else
-                    {
-                        multiItem.Announced = new List<DXItem>();
+                                Content = e.GetContent()
+                            });
+                        }
                     }
 
-                    var destroyedArray = multiItemType.GetProperty(Constants.Deleted).GetValue(multiItemValue) as IEnumerable<DXElement>;
-
-                    if (destroyedArray != null)
-                    {
-                        multiItem.Deleted = destroyedArray.Select(y =>
-                        {
-                            var content = DXElementHelper.GetContent(y);
-
-                            var dxItem = new DXItem()
-                            {
-                                ID = y.ID,
-                                ObjectID = dxUnit.ID,
-                                Content = content
-                            };
-
-                            return dxItem;
-                        }).ToList();
-                    }
-                    else
-                    {
-                        multiItem.Deleted = new List<DXItem>();
-                    }
+                    Fill(Constants.Announced, announcedList);
+                    Fill(Constants.Deleted, deletedList);
                 }
 
-                return multiItem;
-            }).ToList();
+                var multi = new DXMultiElement
+                {
+                    DXElementInfo = elementInfo,
+                    Name = pi.Name,
+                    Mode = mode,
+                    Announced = announcedList,
+                    Deleted = deletedList
+                };
 
-            return result;
+                return multi;
+            }).ToList();
         }
 
-        private static JObject GetContent(DXUnit obj)
+
+        private static JObject? GetContent(DXUnit? obj)
         {
-            if (obj == null)
-                return null;
+            if (obj is null) return null;
 
-            JObject jObject = new JObject();
-
-            var properties = obj.GetType().GetProperties()
-                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null)
-                .ToList();
-
-            foreach (var property in properties)
+            var jObject = new JObject();
+            foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(obj.GetType()))
             {
-                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
-
-                jObject[property.Name] = new JValue(property.GetValue(obj));
+                var value = prop.GetValue(obj);
+                jObject[prop.Name] = new JValue(value);
             }
-
             return jObject;
         }
         #endregion
 
         #region Create instance
-        public static T CreateInstance<T>(string json) where T : DXUnit
-        {
-            var dxModel = DXModel.CreateInstance(json);
+        public static T CreateInstance<T>(string json) where T : DXUnit =>
+            CreateInstance<T>(DXModel.CreateInstance(json));
 
-            T dxUnit = CreateInstance<T>(dxModel);
-
-            return dxUnit;
-        }
-
-        public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit
-        {
-            var jArray = JArray.Parse(json);
-
-            return CreateInstances<T>(jArray);
-        }
+        public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit =>
+            CreateInstances<T>(JArray.Parse(json));
 
         public static IEnumerable<T> CreateInstances<T>(JArray jArray) where T : DXUnit
         {
             foreach (JObject jObject in jArray)
-            {
                 yield return CreateInstance<T>(jObject);
-            }
         }
 
-        public static T CreateInstance<T>(JObject jObject) where T : DXUnit
+        public static T? CreateInstance<T>(JObject jObject) where T : DXUnit =>
+            CreateInstance<T>(DXModel.CreateInstance(jObject));
+
+        public static DXUnit? CreateInstance(string json, Type type) =>
+            CreateInstance(DXModel.CreateInstance(json), type);
+
+        public static DXUnit? CreateInstance(JObject jObject, Type type) =>
+            CreateInstance(DXModel.CreateInstance(jObject), type);
+
+        public static T? CreateInstance<T>(DXModel dxModel) where T : DXUnit =>
+            (T?)ConvertToDxUnitObject(dxModel, typeof(T));
+
+        public static DXUnit? CreateInstance(DXModel dxModel, Type type) =>
+            ConvertToDxUnitObject(dxModel, type);
+
+        public static T? CreateDXElementInstance<T>(DXSingleElement? item) where T : DXElement
         {
-            var dxModel = DXModel.CreateInstance(jObject);
+            if (item is null) return null;
 
-            T dxUnit = CreateInstance<T>(dxModel);
-
-            return dxUnit;
+            var jProp = item.ConvertToJPropertyWithoutSystemProperties();
+            return (T?)jProp?.Value?.ToObject(typeof(T));
         }
 
-        public static DXUnit CreateInstance(string json, Type type)
+        private static DXUnit? ConvertToDxUnitObject(DXModel? dxModel, Type? type)
         {
-            var dxModel = DXModel.CreateInstance(json);
-
-            DXUnit dxUnit = CreateInstance(dxModel, type);
-
-            return dxUnit;
-        }
-
-        public static DXUnit CreateInstance(JObject jObject, Type type)
-        {
-            var dxModel = DXModel.CreateInstance(jObject);
-
-            DXUnit dxUnit = CreateInstance(dxModel, type);
-
-            return dxUnit;
-        }
-
-        public static T CreateInstance<T>(DXModel dxModel) where T : DXUnit
-        {
-            return ConvertTodxUnitect(dxModel, typeof(T)) as T;
-        }
-
-        public static DXUnit CreateInstance(DXModel dxModel, Type type)
-        {
-            return ConvertTodxUnitect(dxModel, type);
-        }
-
-        public static T CreateDXElementInstance<T>(DXSingleElement item) where T : DXElement
-        {
-            if (item == null)
+            if (dxModel is null || type is null)
                 return null;
 
-            var singleItemName = item.Name;
-            var asqlModelSingleItem = singleItemName;
+            var own = dxModel.OwnSingleItem.ConvertToJPropertyWithoutSystemProperties();
+            var obj = (own?.Value?.ToObject(type)) ?? Activator.CreateInstance(type)!;
 
-            var jProperty = item.ConvertToJPropertyWithoutSystemProperties();
+            var idProp = type.GetProperty(Constants.ID);
+            idProp?.SetValue(obj, dxModel.OwnSingleItem.Item.ID);
 
-            var singleFragmetInstance = jProperty.Value.ToObject(typeof(T));
-
-            return singleFragmetInstance as T;
-        }
-
-        private static DXUnit ConvertTodxUnitect(DXModel dxModel, Type type)
-        {
-            if (dxModel == null)
-                return null;
-
-            if (type == null)
-                return null;
-
-            var obj = dxModel.OwnSingleItem.ConvertToJPropertyWithoutSystemProperties().Value.ToObject(type);
-
-            var objIdProperty = type.GetProperty(Constants.ID);
-            objIdProperty.SetValue(obj, dxModel.OwnSingleItem.Item.ID);
-
-            var singleItemProperties = AttributeReader.GetSingleItemInfos(type);
-
+            var singleProps = AttributeReader.GetSingleItemInfos(type);
             if (dxModel.SingleItems != null)
             {
-                foreach (var singleItemProperty in singleItemProperties)
+                foreach (var sp in singleProps)
                 {
-                    var singleItemName = singleItemProperty.Name;
-                    var asqlModelSingleItem = dxModel.SingleItems.SingleOrDefault(x => x.Name == singleItemName);
+                    var modelItem = dxModel.SingleItems.SingleOrDefault(x => x.Name == sp.Name);
+                    if (modelItem is null) continue;
 
-                    if (asqlModelSingleItem == null)
-                    {
-                        continue;
-                    }
+                    var jProp = modelItem.ConvertToJPropertyWithoutSystemProperties();
+                    if (jProp?.Value == null) continue;
 
-                    var singleItemPropertyType = singleItemProperty.PropertyType;
-
-                    var jProperty = asqlModelSingleItem.ConvertToJPropertyWithoutSystemProperties();
-
-                    if (jProperty == null)
-                        continue;
-
-                    var singleFragmetInstance = jProperty.Value.ToObject(singleItemPropertyType);
-
-                    singleItemProperty.SetValue(obj, singleFragmetInstance);
+                    var instance = jProp.Value.ToObject(sp.PropertyType);
+                    sp.SetValue(obj, instance);
                 }
             }
 
-            var multiItemProperties = AttributeReader.GetMultiItemInfos(type);
-
+            var multiProps = AttributeReader.GetMultiItemInfos(type);
             if (dxModel.MultiItems != null)
             {
-                foreach (var multiItemProperty in multiItemProperties)
+                foreach (var mp in multiProps)
                 {
-                    var multiItemName = multiItemProperty.Name;
-                    var asqlModelMultiItem = dxModel.MultiItems.SingleOrDefault(x => x.Name == multiItemName);
+                    var modelItem = dxModel.MultiItems.SingleOrDefault(x => x.Name == mp.Name);
+                    if (modelItem is null) continue;
 
-                    if (asqlModelMultiItem == null)
-                    {
-                        continue;
-                    }
+                    var jProp = modelItem.ConvertToJProperty();
+                    if (jProp?.Value == null) continue;
 
-                    var multiItemPropertyType = multiItemProperty.PropertyType;
-
-                    var jProperty = asqlModelMultiItem.ConvertToJProperty();
-
-                    if (jProperty == null)
-                        continue;
-
-                    var multiFragmetInstance = jProperty.Value.ToObject(multiItemPropertyType);
-
-                    multiItemProperty.SetValue(obj, multiFragmetInstance);
+                    var instance = jProp.Value.ToObject(mp.PropertyType);
+                    mp.SetValue(obj, instance);
                 }
             }
 
@@ -365,20 +222,10 @@ namespace IV.DX.Kernel.Converters
         }
         #endregion
 
-        public static string ConvertToJArrayString(this IEnumerable<DXUnit> objects)
+        public static string? ConvertToJArrayString(this IEnumerable<DXUnit>? objects)
         {
-            if (objects == null)
-                return null;
-
-            JArray array = new JArray();
-
-            var jObjects = objects.Select(x => x.ConvertToJObject());
-
-            foreach (var jObject in jObjects)
-            {
-                array.Add(jObject);
-            }
-
+            if (objects is null) return null;
+            var array = new JArray(objects.Select(o => o.ConvertToJObject()));
             return array.ToString();
         }
     }

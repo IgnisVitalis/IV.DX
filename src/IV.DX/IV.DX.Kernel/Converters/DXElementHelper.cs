@@ -2,62 +2,67 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
-using System.Linq.Expressions;
 
 namespace IV.DX.Kernel.Converters
 {
     internal static class DXElementHelper
     {
-        public static JObject GetContent(this DXElement dxElement)
+        public static JObject? GetContent(this DXElement? dxElement)
         {
-            if (dxElement == null)
-                return null;
+            if (dxElement is null) return null;
 
-            JObject jObject = new JObject();
-            
-            var properties = dxElement.GetType().GetProperties()
-                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null)
-                .ToList();       
-
-            foreach (var property in properties)
+            var jObject = new JObject();
+            foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(dxElement.GetType()))
             {
-                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
-
-                jObject[property.Name] = new JValue(property.GetValue(dxElement));
+                var value = prop.GetValue(dxElement);
+                jObject[prop.Name] = new JValue(value);
             }
-
             return jObject;
         }
 
         public static JObject ConvertToJObject(this DXElement dxElement)
         {
-            var jObject = dxElement.GetContent();
-
-            var elementInfo = AttributeReader.GetAttribute<DXElementAttribute>(dxElement.GetType());
-
-            jObject[Constants.SystemPropertyTypeName] = elementInfo.Name;
-
+            var jObject = dxElement.GetContent() ?? new JObject();
+            var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
+            if (elementInfo != null)
+            {
+                jObject[Constants.SystemPropertyTypeName] = elementInfo.Name;
+            }
             return jObject;
-        }          
+        }
 
-        public static DXSingleElement? ConvertToDXSingleElement(this DXElement dxElement)
+        public static DXSingleElement? ConvertToDXSingleElement(this DXElement? dxElement)
         {
-            var elementInfo = AttributeReader.GetAttribute<DXElementAttribute>(dxElement.GetType());
+            if (dxElement is null) return null;
 
-            DXSingleElement dxSingleItem = new DXSingleElement()
+            var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
+            return new DXSingleElement
             {
                 ElementInfo = elementInfo,
-
-                Item = new DXItem()
+                Item = new DXItem
                 {
-                    ID = dxElement?.ID,
+                    ID = dxElement.ID,
                     ObjectID = dxElement.ObjectID,
-                    Content = ConvertToJObject(dxElement),
+                    Content = dxElement.ConvertToJObject()
                 },
-                Name = elementInfo.Name
+                Name = elementInfo?.Name
             };
+        }
 
-            return dxSingleItem;
+        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement)
+        {
+            var dxElementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
+            return new DXSingleElement
+            {
+                ElementInfo = dxElementInfo,
+                Item = new DXItem
+                {
+                    ID = dxElement.ID,
+                    ObjectID = dxElement.ObjectID,
+                    Content = dxElement.GetContent()
+                },
+                Name = dxElementInfo?.Name
+            };
         }
     }
 }

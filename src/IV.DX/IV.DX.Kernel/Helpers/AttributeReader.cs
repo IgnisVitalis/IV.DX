@@ -103,5 +103,17 @@ namespace IV.DX.Kernel.Helpers
             t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>);
 
         private static bool IsIEnum(Type t) => t == typeof(System.Collections.IEnumerable);
+
+        public static T? GetAttribute<T>(MemberInfo member, bool inherit = true) where T : Attribute
+        {
+            if (member is null) return default;
+
+            return member switch
+            {
+                Type t => GetAttribute<T>(t, inherit),
+                PropertyInfo pi => GetAttribute<T>(pi, inherit),
+                _ => member.GetCustomAttribute(typeof(T), inherit) as T
+            };
+        }
     }
 }
