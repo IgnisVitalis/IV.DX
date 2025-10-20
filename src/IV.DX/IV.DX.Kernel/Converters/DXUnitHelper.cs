@@ -90,7 +90,7 @@ namespace IV.DX.Kernel.Converters
                     {
                         ID = singleItem?.ID,
                         ObjectID = dxUnit.ID,
-                        Content = GetContent(singleItem),
+                        Content = DXElementHelper.GetContent(singleItem),
                     },
                     Name = x.Name
                 };
@@ -112,7 +112,7 @@ namespace IV.DX.Kernel.Converters
                 {
                     ID = dxElement.ID,
                     ObjectID = dxElement.ObjectID,
-                    Content = GetContent(dxElement)
+                    Content = DXElementHelper.GetContent(dxElement)
                 },
                 Name = dxElementInfo.Name
             };
@@ -148,7 +148,7 @@ namespace IV.DX.Kernel.Converters
                     {
                         multiItem.Announced = announcedArray.Select(y =>
                         {
-                            var content = GetContent(y);
+                            var content = DXElementHelper.GetContent(y);
 
                             var dxItem = new DXItem()
                             {
@@ -171,7 +171,7 @@ namespace IV.DX.Kernel.Converters
                     {
                         multiItem.Deleted = destroyedArray.Select(y =>
                         {
-                            var content = GetContent(y);
+                            var content = DXElementHelper.GetContent(y);
 
                             var dxItem = new DXItem()
                             {
@@ -193,27 +193,6 @@ namespace IV.DX.Kernel.Converters
             }).ToList();
 
             return result;
-        }
-
-        private static JObject GetContent(DXElement dxElement)
-        {
-            if (dxElement == null)
-                return null;
-
-            JObject jObject = new JObject();
-
-            var properties = dxElement.GetType().GetProperties()
-                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null)
-                .ToList();
-
-            foreach (var property in properties)
-            {
-                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
-
-                jObject[property.Name] = new JValue(property.GetValue(dxElement));
-            }
-
-            return jObject;
         }
 
         private static JObject GetContent(DXUnit obj)
