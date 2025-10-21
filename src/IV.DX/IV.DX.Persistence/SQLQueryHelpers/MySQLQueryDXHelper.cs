@@ -3,6 +3,8 @@ using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Models;
+using Npgsql;
+
 
 //using MySql.Data.MySqlClient;
 using System.Data;
@@ -14,6 +16,16 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 {
     internal class MySQLQueryDXHelper : ISQLQueryDXHelper
     {
+        public void BulkInsert(NpgsqlConnection conn, DataTable table, string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BulkUpsert(NpgsqlConnection conn, DataTable table, string tableName, string keyColumn = "ID")
+        {
+            throw new NotImplementedException();
+        }
+
         public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             throw new NotImplementedException();

@@ -1,6 +1,8 @@
 ﻿using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Models;
+using Npgsql;
+using System.Data;
 using System.Data.Common;
 
 namespace IV.DX.Persistence.Abstractions
@@ -37,6 +39,6 @@ namespace IV.DX.Persistence.Abstractions
         string GetWhereExpressionForObjectID(Guid id);
         string GetWhereExpressionForID(IEnumerable<Guid> ids);
         string GetWhereExpressionForObjectID(IEnumerable<Guid> ids);
-        string GetWhereExpressionWithAnd(IDictionary<string, object> values);
+        string GetWhereExpressionWithAnd(IDictionary<string, object> values);     
     }
 }

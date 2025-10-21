@@ -2,8 +2,10 @@
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
+using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.Models;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 using System.Data.Common;
 using System.Text;
@@ -11,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Persistence.SQLQueryHelpers
 {
-    internal class PGSQLQueryDXHelper : ISQLQueryDXHelper
+    internal class PGSQLQueryDXHelper : ISQLQueryDXHelper, IDXBulkInsertCapable
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
 
@@ -962,6 +964,73 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
             return $"\"ObjectID\" IN ({idsString})";
+        }
+
+        public void BulkInsert(DbConnection connection, DataTable table, string tableName)
+        {
+            if (connection is not NpgsqlConnection conn)
+                throw new ArgumentException("BulkInsert requires NpgsqlConnection.", nameof(connection));
+
+            if (table.Rows.Count == 0) return;
+
+            var columns = string.Join(",", table.Columns.Cast<DataColumn>().Select(c => $"\"{c.ColumnName}\""));
+            var sql = $"COPY \"{tableName}\" ({columns}) FROM STDIN (FORMAT BINARY)";
+
+            using var writer = conn.BeginBinaryImport(sql);
+            foreach (DataRow row in table.Rows)
+            {
+                writer.StartRow();
+                foreach (DataColumn col in table.Columns)
+                {
+                    var val = row[col];
+                    if (val == DBNull.Value)
+                    {
+                        writer.WriteNull();
+                        continue;
+                    }
+
+                    if (val is DateTime dt)
+                    {
+                        if (dt.Kind == DateTimeKind.Unspecified)
+                            dt = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+
+                        writer.Write(dt, NpgsqlDbType.TimestampTz);
+                        continue;
+                    }
+
+                    writer.Write(val);
+                }
+            }
+            writer.Complete();
+        }
+
+        public void BulkUpsert(DbConnection connection, DataTable table, string tableName, string keyColumn = "ID")
+        {
+            if (connection is not NpgsqlConnection conn)
+                throw new ArgumentException("BulkUpsert requires NpgsqlConnection.", nameof(connection));
+
+            if (table.Rows.Count == 0) return;
+
+            var temp = $"temp_{tableName}_{Guid.NewGuid():N}";
+
+            using (var cmd = new NpgsqlCommand($@"CREATE TEMP TABLE ""{temp}"" AS SELECT * FROM ""{tableName}"" WITH NO DATA;", conn))
+                cmd.ExecuteNonQuery();
+
+            BulkInsert(conn, table, temp);
+
+            var allCols = table.Columns.Cast<DataColumn>().Select(c => $"\"{c.ColumnName}\"");
+            var updates = string.Join(", ",
+                table.Columns.Cast<DataColumn>()
+                    .Where(c => !string.Equals(c.ColumnName, keyColumn, StringComparison.OrdinalIgnoreCase))
+                    .Select(c => $"\"{c.ColumnName}\" = EXCLUDED.\"{c.ColumnName}\""));
+
+            var mergeSql = $@"
+                INSERT INTO ""{tableName}"" ({string.Join(",", allCols)})
+                SELECT {string.Join(",", allCols)} FROM ""{temp}""
+                ON CONFLICT (""{keyColumn}"") DO UPDATE SET {updates};";
+
+            using (var cmd = new NpgsqlCommand(mergeSql, conn))
+                cmd.ExecuteNonQuery();
         }
     }
 }
