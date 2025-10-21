@@ -55,18 +55,7 @@ namespace IV.DX.Kernel.Converters
             return singleInfos.Select(pi =>
             {
                 var element = pi.GetValue(dxUnit) as DXElement;
-                var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(pi.PropertyType);
-                return new DXSingleElement
-                {
-                    ElementInfo = elementInfo,
-                    Item = new DXItem
-                    {
-                        ID = element?.ID,
-                        ObjectID = dxUnit.ID,
-                        Content = element.GetContent()
-                    },
-                    Name = pi.Name
-                };
+                return DXElementHelper.ConvertToSingleItem(element, pi.Name);
             }).ToList();
         }
 

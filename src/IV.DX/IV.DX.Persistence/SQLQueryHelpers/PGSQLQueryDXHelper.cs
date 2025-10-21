@@ -134,7 +134,10 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             var conn = dbconnection as NpgsqlConnection;
 
-            return new NpgsqlDataAdapter(query, conn);
+            return new NpgsqlDataAdapter(query, conn)
+            {
+                
+            };
         }
 
         public string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
@@ -879,54 +882,54 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         private string GetPostgreSQLDataType(DXColumnTypeEnum clmType)
         {
-            string mysqlDataType = null;
+            string pgbSqlDataType = null;
 
             switch (clmType)
             {
                 case DXColumnTypeEnum.Bool:
-                    mysqlDataType = "boolean";
+                    pgbSqlDataType = "boolean";
                     break;
                 case DXColumnTypeEnum.DateTime:
                     //mysqlDataType = "time";
-                    mysqlDataType = "timestamp with time zone";
+                    pgbSqlDataType = "timestamp with time zone";
                     break;
                 case DXColumnTypeEnum.Decimal:
-                    mysqlDataType = "decimal";
+                    pgbSqlDataType = "decimal";
                     break;
                 case DXColumnTypeEnum.GUID:
-                    mysqlDataType = "uuid";
+                    pgbSqlDataType = "uuid";
                     break;
                 case DXColumnTypeEnum.Int:
-                    mysqlDataType = "integer";
+                    pgbSqlDataType = "integer";
                     break;
                 case DXColumnTypeEnum.String:
-                    mysqlDataType = "varchar";
+                    pgbSqlDataType = "varchar";
                     break;
                 case DXColumnTypeEnum.TimeStamp:
-                    mysqlDataType = "timestamp";
-                    //mysqlDataType = "timestamp with time zone";
+                    //pgbSqlDataType = "timestamp";
+                    pgbSqlDataType = "timestamp with time zone";
                     break;
                 case DXColumnTypeEnum.Text:
-                    mysqlDataType = "text";
+                    pgbSqlDataType = "text";
                     break;
                 case DXColumnTypeEnum.Short:
-                    mysqlDataType = "smallint";
+                    pgbSqlDataType = "smallint";
                     break;
                 case DXColumnTypeEnum.Long:
-                    mysqlDataType = "bigint";
+                    pgbSqlDataType = "bigint";
                     break;
                 case DXColumnTypeEnum.Float:
-                    mysqlDataType = "real";
+                    pgbSqlDataType = "real";
                     break;
                 case DXColumnTypeEnum.Currency:
-                    mysqlDataType = "NUMERIC(13,4)";
+                    pgbSqlDataType = "NUMERIC(13,4)";
                     break;
                 case DXColumnTypeEnum.Blob:
-                    mysqlDataType = "bytea";
+                    pgbSqlDataType = "bytea";
                     break;
             }
 
-            return mysqlDataType;
+            return pgbSqlDataType;
         }
 
         public string GetWhereExpressionForID(Guid id)

@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel;
+﻿using IV.DX.Contracts.Persistence.ExpressionTree;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -70,21 +71,20 @@ namespace IV.DX.Persistence
             if (container == null)
                 return null;
 
-            DXModel result = null;
+            DXModel result = this.GetDXModel(container, id);
 
             this.RunRequest((conn) =>
             {
                 var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
+                var dataTable = dataSet.Tables[result.OwnSingleItem.ObjectInfo.ObjectName];
 
-                result = this.GetDXModel(container, id);
-
-                if (dataSet.Tables[result.OwnSingleItem.ObjectInfo.ObjectName].Rows.Count == 0)
+                if (dataTable.Rows.Count == 0)
                 {
                     result = null;
                 }
                 else
                 {
-                    var dataRow = dataSet.Tables[result.OwnSingleItem.ObjectInfo.ObjectName].Rows[0];
+                    var dataRow = dataTable.Rows[0];
 
                     result = this.ConvertToDXModel(dataSet, dataRow, container);
                 }
@@ -141,8 +141,9 @@ namespace IV.DX.Persistence
             IEnumerable<DXModel> resultItems = null;
 
             var dataSet = this.PopulateDataSetForTargetDXUnits(container, objIds, conn);
+            var dataTable = dataSet.Tables[container.OwnSingleItem.Type];
 
-            var items = dataSet.Tables[container.OwnSingleItem.Type].Rows;
+            var items = dataTable.Rows;
 
             resultItems = items.Cast<DataRow>().Select(x => this.ConvertToDXModel(dataSet, x, container)).ToList();
 
@@ -163,20 +164,24 @@ namespace IV.DX.Persistence
             {
                 DXSingleElement singleItem = this.ConvertTodxSingleItem(item);
 
-                this.PopulatedxSingleItem(singleItem, item, dataSet.Tables[singleItem.Name].Rows.Cast<DataRow>()
+                var dataTable = dataSet.Tables[singleItem.Name];
+
+                this.PopulatedxSingleItem(singleItem, item, dataTable.Rows.Cast<DataRow>()
                     .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID));
 
                 return singleItem;
             }).ToList();
 
-            // Process DX multi items
+            // Process DX multi items          
             resultItem.MultiItems = container.MultiFragmentDefinitions.Select(item =>
             {
                 DXMultiElement multiItem = this.ConvertToDXMultiItem(item);
 
+                var dataTable = dataSet.Tables[multiItem.Name];
+
                 var rows =
-                   dataSet.Tables[multiItem.Name].Rows.Cast<DataRow>()
-                   .Where(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID).ToList();
+                    dataTable.Rows.Cast<DataRow>()
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID).ToList();
 
                 this.PopulateDXMultiItem(multiItem, item, rows);
 
@@ -247,7 +252,9 @@ namespace IV.DX.Persistence
 
                 adapter.Fill(dataSet, typeName);
 
-                var ids = dataSet.Tables[typeName].Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID])).ToList();
+                var table = dataSet.Tables[typeName];
+
+                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID])).ToList();
 
                 return ids;
             });
@@ -336,7 +343,9 @@ namespace IV.DX.Persistence
 
                 adapter.Fill(dataSet, typeName);
 
-                var ids = dataSet.Tables[typeName].Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
+                var table = dataSet.Tables[typeName];
+
+                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
 
                 return this.GetItems(conn, container, ids, typeOfLoading);
             });
@@ -538,17 +547,18 @@ namespace IV.DX.Persistence
 
                 this.ProcessDXModelAsDXDXUnit(typeName, dxModel, dxUnitHierarchy, processingType);
             }
-
-            var enumInfo = this.GetDXEnumDefinition(typeName);
-
-            if (enumInfo != null)
+            else
             {
-                this.ProcessDXModelAsDXEnum(typeName, enumInfo, dxModel, processingType);
-            }
+                var enumInfo = this.GetDXEnumDefinition(typeName);
 
-            if (enumInfo == null && mainDXUnitInfo == null)
-            {
-                throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
+                if (enumInfo != null)
+                {
+                    this.ProcessDXModelAsDXEnum(typeName, enumInfo, dxModel, processingType);
+                }
+                else
+                {
+                    throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
+                }
             }
 
             return dxModel.OwnSingleItem.Item.ID.Value;
@@ -711,11 +721,12 @@ namespace IV.DX.Persistence
 
         private void InsertOrUpdateDXOwnItemToDataSet(DXModel dxModel, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
-            var dxUnitName = dxUnitType;
             var objectID = dxModel.OwnSingleItem.Item.ID;
 
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
+            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitType,
                 whereClause: this._queryHelper.GetWhereExpressionForID(objectID.Value));
+
+            DataTable dataTable = this.GetDataTable(dataSet, dxUnitType);
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -732,21 +743,37 @@ namespace IV.DX.Persistence
                     return;
             }
 
-            DataTable dataTable = dataSet.Tables[dxUnitName];
-
             if (dataTable.Rows.Count == 0)
             {
                 var row = dataTable.NewRow();
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitName);
+                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
                 dataTable.Rows.Add(row);
             }
             else
             {
                 var row = dataTable.Rows[0];
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitName);
+                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
             }
 
-            dxModelAdapter.Update(dataSet, dxUnitName);
+            dxModelAdapter.Update(dataSet, dxUnitType);
+        }
+
+        private DataTable GetDataTable(DataSet dataset, string tableName)
+        {
+            DataTable dataTable = dataset.Tables[tableName];
+
+            if (dataTable.Rows.Count > 0)
+                return dataTable;
+
+            foreach (DataColumn column in dataTable.Columns)
+            {
+                if (column.DataType == typeof(DateTime))
+                {
+                    column.DateTimeMode = DataSetDateTime.Utc;
+                }
+            }
+
+            return dataTable;
         }
 
         private Guid InsertOrUpdatedxSingleItemToDataSet(
@@ -781,7 +808,7 @@ namespace IV.DX.Persistence
                     break;
             }
 
-            DataTable dataTable = dataSet.Tables[dxElementName];
+            DataTable dataTable = this.GetDataTable(dataSet, dxElementName);
 
             if (dataTable.Rows.Count == 0)
             {
@@ -825,7 +852,7 @@ namespace IV.DX.Persistence
                 dxModelBuilder.GetUpdateCommand();
             }
 
-            DataTable dataTable = dataSet.Tables[dxElementName];
+            DataTable dataTable = this.GetDataTable(dataSet, dxElementName);
 
             if (dxElement.Mode == MultiElementsMode.Full)
             {
@@ -901,7 +928,7 @@ namespace IV.DX.Persistence
 
             if (row.Table.Columns.Contains("TimeStamp"))
             {
-                row[$"TimeStamp"] = DateTime.UtcNow;
+                row["TimeStamp"] = DateTime.UtcNow;
             }
 
             if (dxItem.Content == null)
@@ -996,7 +1023,7 @@ namespace IV.DX.Persistence
             else
             if (dataColumn.DataType == typeof(DateTime))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseDateTime(jValue.Value).ToUniversalTime();
+                dataRow[dataColumn] = ConvertHelper.ParseDateTime(jValue.Value);
             }
             else
             if (dataColumn.DataType == typeof(bool))
@@ -1043,7 +1070,7 @@ namespace IV.DX.Persistence
             else
             if (dataColumn.DataType == typeof(DateTime))
             {
-                dataRow[dataColumn] = new DateTime(1753, 1, 1);
+                dataRow[dataColumn] = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             }
             else
             if (dataColumn.DataType == typeof(bool))
@@ -1289,6 +1316,7 @@ namespace IV.DX.Persistence
             this.RunRequest((conn) =>
             {
                 DataSet dataSet = new DataSet(container.Type);
+                var dataTable = this.GetDataTable(dataSet, container.Type);
 
                 var whereClauseForID = this._queryHelper.GetWhereExpressionForID(id);
 
@@ -1296,7 +1324,7 @@ namespace IV.DX.Persistence
                     columnNames: container.Select(x => x.ColumnDefinition.DXExpression),
                     whereClause: whereClauseForID);
 
-                if (dataSet.Tables[container.Type].Rows.Count == 0)
+                if (dataTable.Rows.Count == 0)
                 {
                     result = null;
                 }
@@ -1329,12 +1357,14 @@ namespace IV.DX.Persistence
                         })
                      );
 
-                if (dataSet.Tables["DXRelationDefinitionMainElement"].Rows.Count == 0)
+                var table = this.GetDataTable(dataSet, "DXRelationDefinitionMainElement");
+
+                if (table.Rows.Count == 0)
                 {
                     throw new Exception($"Relation pair {obj1Name}-{relationToObj2Name} is not existing in system");
                 }
 
-                var row = dataSet.Tables["DXRelationDefinitionMainElement"].Rows[0];
+                var row = table.Rows[0];
 
                 return new DXRelationDefinitionMainElement()
                 {
@@ -1370,27 +1400,31 @@ namespace IV.DX.Persistence
                         })
                     );
 
+                var table = this.GetDataTable(dataSet, relationInfo.RelationTable);
                 DataRow dataRow;
 
-                if (dataSet.Tables[relationInfo.RelationTable].Rows.Count == 0)
+                if (table.Rows.Count == 0)
                 {
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetInsertCommand();
 
-                    dataRow = dataSet.Tables[relationInfo.RelationTable].NewRow();
+                    dataRow = table.NewRow();
 
-                    dataSet.Tables[relationInfo.RelationTable].Rows.Add(dataRow);
+                    dataRow[relationInfo.RelationNameLeft] = obj1Id;
+                    dataRow[relationInfo.RelationNameRight] = obj2Id;
+
+                    table.Rows.Add(dataRow);
                 }
                 else
                 {
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
-                    dataRow = dataSet.Tables[relationInfo.RelationTable].Rows[0];
-                }
+                    dataRow = table.Rows[0];
 
-                dataRow[relationInfo.RelationNameLeft] = obj1Id;
-                dataRow[relationInfo.RelationNameRight] = obj2Id;
+                    dataRow[relationInfo.RelationNameLeft] = obj1Id;
+                    dataRow[relationInfo.RelationNameRight] = obj2Id;
+                }          
 
                 adapter.Update(dataSet, relationInfo.RelationTable);
                 dataSet.AcceptChanges();
@@ -1410,7 +1444,8 @@ namespace IV.DX.Persistence
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
                     , whereClause: this._queryHelper.GetWhereExpressionForID(obj1Id));
 
-                var rows = dataSet.Tables[tableName].Rows;
+                var table = this.GetDataTable(dataSet, tableName);
+                var rows = table.Rows;
 
                 if (rows.Count == 1)
                 {
@@ -1444,7 +1479,8 @@ namespace IV.DX.Persistence
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
                     , whereClause: this._queryHelper.GetWhereExpressionForID(obj2Id));
 
-                var rows = dataSet.Tables[tableName].Rows;
+                var table = this.GetDataTable(dataSet, tableName);
+                var rows = table.Rows;
 
                 if (rows.Count == 1)
                 {
@@ -1497,14 +1533,17 @@ namespace IV.DX.Persistence
                         })
                     );
 
-                if (dataSet.Tables[relationInfo.RelationTable].Rows.Count > 0)
+                var table = this.GetDataTable(dataSet, relationInfo.RelationTable);
+                var rows = table.Rows;
+
+                if (rows.Count > 0)
                 {
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetDeleteCommand();
 
-                    for (int i = 0; i < dataSet.Tables[relationInfo.RelationTable].Rows.Count; i++)
+                    for (int i = 0; i < rows.Count; i++)
                     {
-                        var row = dataSet.Tables[relationInfo.RelationTable].Rows[i];
+                        var row = rows[i];
                         row.Delete();
                     }
 
@@ -1538,7 +1577,8 @@ namespace IV.DX.Persistence
                         })
                      );
 
-                var rows = dataSet.Tables[tableName].Rows;
+                var table = this.GetDataTable(dataSet, tableName);
+                var rows = table.Rows;
 
                 if (rows.Count == 1)
                 {
@@ -1592,7 +1632,8 @@ namespace IV.DX.Persistence
                         })
                     );
 
-                var rows = dataSet.Tables[tableName].Rows;
+                var table = this.GetDataTable(dataSet, tableName);
+                var rows = table.Rows;
 
                 if (rows.Count == 1)
                 {
@@ -1629,7 +1670,10 @@ namespace IV.DX.Persistence
                         })
                     );
 
-                return dataSet.Tables[relationInfo.RelationTable].Rows.Cast<DataRow>().Select(x =>
+                var table = this.GetDataTable(dataSet, relationInfo.RelationTable);
+                var rows = table.Rows;
+
+                return rows.Cast<DataRow>().Select(x =>
                 {
                     var relatedId = ConvertHelper.ParseGuid(x[relationInfo.RelationNameRight]);
 
@@ -1649,7 +1693,10 @@ namespace IV.DX.Persistence
                 this.PopulateTableToDataSet(conn, dataSet, tableName
                     , whereClause: this._queryHelper.GetWhereExpressionForID(obj1Id));
 
-                return dataSet.Tables[tableName].Rows.Cast<DataRow>()
+                var table = this.GetDataTable(dataSet, tableName);
+                var rows = table.Rows;
+
+                return rows.Cast<DataRow>()
                     .Where(x => x[relationInfo.RelationNameRight] != DBNull.Value)
                     .Select(x => ConvertHelper.ParseGuid(x[relationInfo.RelationNameRight]));
             });
@@ -1673,7 +1720,11 @@ namespace IV.DX.Persistence
                         })
                     );
 
-                return dataSet.Tables[tableName].Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
+                var table = this.GetDataTable(dataSet, tableName);
+
+                var rows = table.Rows;
+
+                return rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
             });
         }
 
@@ -1694,6 +1745,14 @@ namespace IV.DX.Persistence
             int? limit = null)
         {
             var adapter = this._queryHelper.GetDbDataAdapter(conn, this._queryHelper.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit));
+
+            adapter.FillSchema(dataSet, SchemaType.Source, tableName);
+
+            foreach (DataColumn col in dataSet.Tables[tableName].Columns)
+            {
+                if (col.DataType == typeof(DateTime))
+                    col.DateTimeMode = DataSetDateTime.Utc;
+            }
 
             adapter.Fill(dataSet, tableName);
 

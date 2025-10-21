@@ -461,19 +461,45 @@ namespace IV.DX.Kernel.Helpers
 
         public static DateTime ParseDateTime(object value)
         {
-            if (value is DateTime)
-            {
-                return (DateTime)value;
-            }
+            if (value is DateTime dt)
+                return NormalizeToUtc(dt);
 
-            else if (value is string)
+            if (value is string s)
+                return ParseDateTime(s);
+        
+            var conv = (DateTime)Convert.ChangeType(value, typeof(DateTime), CultureInfo.InvariantCulture);
+            return NormalizeToUtc(conv);
+        }
+
+        public static DateTime ParseDateTime(string value)
+        {         
+            if (DateTimeOffset.TryParseExact(
+                    value,
+                    _allowedDateTimeFormats,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                    out var dto))
             {
-                return ParseDateTime(System.Convert.ToString(value));
+                return dto.UtcDateTime;
             }
-            else
+       
+            var dt = DateTime.ParseExact(
+                value,
+                _allowedDateTimeFormats,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind | DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
+            return NormalizeToUtc(dt);
+        }
+
+        private static DateTime NormalizeToUtc(DateTime dt)
+        {
+            return dt.Kind switch
             {
-                return (DateTime)System.Convert.ChangeType(value, typeof(DateTime));
-            }
+                DateTimeKind.Utc => dt,
+                DateTimeKind.Local => dt.ToUniversalTime(),
+                DateTimeKind.Unspecified => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+            };
         }
 
         public static TimeSpan ParseTimeSpan(object value)
@@ -493,10 +519,6 @@ namespace IV.DX.Kernel.Helpers
             }
         }
 
-        public static DateTime ParseDateTime(string value)
-        {
-            return DateTime.ParseExact(value, _allowedDateTimeFormats, null, DateTimeStyles.AllowWhiteSpaces);
-        }
 
         public static TimeSpan ParseTimeSpan(string value)
         {

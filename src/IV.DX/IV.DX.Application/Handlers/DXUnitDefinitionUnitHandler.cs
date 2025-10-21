@@ -171,12 +171,15 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
         {
+            var id = Guid.NewGuid();
+
             return new DXRelationDefinitionUnit()
             {
-                ID = Guid.NewGuid(),
+                ID = id,
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
+                    ObjectID = id,
                     ObjectNameLeft = dxUnit.DXObjectDefinitionMainElement.Name,
                     RelationNameLeft = $"{dxUnit.DXObjectDefinitionMainElement.Name}ID",
                     ObjectNameRight = dxElement.DXObjectDefinitionMainElement.Name,

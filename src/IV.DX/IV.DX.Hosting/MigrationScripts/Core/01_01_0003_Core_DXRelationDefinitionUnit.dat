@@ -1,234 +1,250 @@
 [
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
-    "DXRelationDefinitionMainElement": {
-      "ID": "a0e9308c-7e20-4eff-add8-9ce21e1de13b",
-      "ObjectNameLeft": "DXObjectDefinitionUnit",
-      "RelationNameLeft": "DXObjectDefinitionUnitID",
-      "ObjectNameRight": "DXObjectDefinitionMainElement",
-      "RelationNameRight": "DXObjectDefinitionMainElement",
-      "RelationTable": null,
-      "RelationType": 8,
-      "Kind": 1
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
+        "DXRelationDefinitionMainElement": {
+            "ID": "a0e9308c-7e20-4eff-add8-9ce21e1de13b",
+            "ObjectID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
+            "ObjectNameLeft": "DXObjectDefinitionUnit",
+            "RelationNameLeft": "DXObjectDefinitionUnitID",
+            "ObjectNameRight": "DXObjectDefinitionMainElement",
+            "RelationNameRight": "DXObjectDefinitionMainElement",
+            "RelationTable": null,
+            "RelationType": 8,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "f802e73c-e512-4655-8067-94e80aea143c",
+        "DXRelationDefinitionMainElement": {
+            "ID": "e7ec1df8-e169-406c-9323-52e5e6459c95",
+            "ObjectID": "f802e73c-e512-4655-8067-94e80aea143c",
+            "ObjectNameLeft": "DXObjectDefinitionUnit",
+            "RelationNameLeft": "DXObjectDefinitionUnitID",
+            "ObjectNameRight": "DXColumnDefinitionElement",
+            "RelationNameRight": "DXColumnDefinitionElement",
+            "RelationTable": null,
+            "RelationType": 5,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "bedc1f2b-2b9b-404f-89e5-5179bd87f60f",
+        "DXRelationDefinitionMainElement": {
+            "ID": "afd2a155-e21e-44b3-b719-139b7a7deefc",
+            "ObjectID": "bedc1f2b-2b9b-404f-89e5-5179bd87f60f",
+            "ObjectNameLeft": "DXObjectDefinitionUnit",
+            "RelationNameLeft": "DXObjectDefinitionUnitID",
+            "ObjectNameRight": "DXUniqueColumnsElement",
+            "RelationNameRight": "DXUniqueColumnsElement",
+            "RelationTable": null,
+            "RelationType": 5,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "78462c7e-4658-422d-9ae5-9e9c55b24276",
+        "DXRelationDefinitionMainElement": {
+            "ID": "ff669d1b-7635-4e23-b5f2-17563fe1e369",
+            "ObjectID": "78462c7e-4658-422d-9ae5-9e9c55b24276",
+            "ObjectNameLeft": "DXRelationDefinitionUnit",
+            "RelationNameLeft": "DXRelationDefinitionUnitID",
+            "ObjectNameRight": "DXRelationDefinitionMainElement",
+            "RelationNameRight": "DXRelationDefinitionMainElement",
+            "RelationTable": null,
+            "RelationType": 8,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "87f7a8f1-caea-4d67-b9d3-6c85aae00174",
+        "DXRelationDefinitionMainElement": {
+            "ID": "e0e600cc-00aa-4b96-982c-e2ccdd750403",
+            "ObjectID": "87f7a8f1-caea-4d67-b9d3-6c85aae00174",
+            "ObjectNameLeft": "DXMigrationScriptsUnit",
+            "RelationNameLeft": "DXMigrationScriptsUnitID",
+            "ObjectNameRight": "DXMigrationScriptsMainElement",
+            "RelationNameRight": "DXMigrationScriptsMainElement",
+            "RelationTable": null,
+            "RelationType": 8,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "87964e3e-ed1b-42f5-a18e-9f7102ebb352",
+        "DXRelationDefinitionMainElement": {
+            "ID": "dfedf1fb-7573-4408-8618-2ff65a4ebf6c",
+            "ObjectID": "87964e3e-ed1b-42f5-a18e-9f7102ebb352",
+            "ObjectNameLeft": "DXUnitDefinitionUnit",
+            "RelationNameLeft": "DXUnitDefinitionUnitID",
+            "ObjectNameRight": "DXUnitInheritanceElement",
+            "RelationNameRight": "DXUnitInheritanceElement",
+            "RelationType": 8,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc",
+        "DXRelationDefinitionMainElement": {
+            "ID": "f60dd08e-cf27-4592-8f84-4a8ba1fca8ff",
+            "ObjectID": "d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc",
+            "ObjectNameLeft": "DXUnitDefinitionUnit",
+            "RelationNameLeft": "DXUnitDefinitionUnitID",
+            "ObjectNameRight": "DXElementInUnitDefinitionElement",
+            "RelationNameRight": "DXElementInUnitDefinitionElement",
+            "RelationType": 5,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
+        "DXRelationDefinitionMainElement": {
+            "ID": "d38cf673-89c7-47d7-9f48-5a3a49396ed2",
+            "ObjectID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
+            "ObjectNameLeft": "DXObjectDefinitionMainElement",
+            "RelationNameLeft": "DXObjectDefinitionMainElement",
+            "ObjectNameRight": "DXObjectKindEnum",
+            "RelationNameRight": "Kind",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91",
+        "DXRelationDefinitionMainElement": {
+            "ID": "7b843027-7c06-40ac-9872-8572cadc66f2",
+            "ObjectID": "fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91",
+            "ObjectNameLeft": "DXColumnDefinitionElement",
+            "RelationNameLeft": "DXColumnDefinitionElement",
+            "ObjectNameRight": "DXColumnTypeEnum",
+            "RelationNameRight": "ColumnType",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
+        "DXRelationDefinitionMainElement": {
+            "ID": "572d875f-66cf-4850-8bc7-45805b93e093",
+            "ObjectID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
+            "ObjectNameLeft": "DXColumnDefinitionElement",
+            "RelationNameLeft": "Enums",
+            "ObjectNameRight": "DXColumnDefinitionElement",
+            "RelationNameRight": "EnumKey",
+            "RelationTable": null,
+            "RelationType": 6,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "298099bc-d243-40a0-8807-769a8f307809",
+        "DXRelationDefinitionMainElement": {
+            "ID": "5ccfd33e-f6b4-4374-bcbe-de3823b6ada4",
+            "ObjectID": "298099bc-d243-40a0-8807-769a8f307809",
+            "ObjectNameLeft": "DXColumnDefinitionElement",
+            "RelationNameLeft": "Enums",
+            "ObjectNameRight": "DXEnumDefinitionUnit",
+            "RelationNameRight": "EnumType",
+            "RelationTable": null,
+            "RelationType": 6,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "f665b056-ee22-482e-8da2-f55aa26a384c",
+        "DXRelationDefinitionMainElement": {
+            "ID": "4aafad60-92df-41ee-b9be-a57125740b12",
+            "ObjectID": "f665b056-ee22-482e-8da2-f55aa26a384c",
+            "ObjectNameLeft": "DXElementInUnitDefinitionElement",
+            "RelationNameLeft": "DXElementInUnitDefinitionElement",
+            "ObjectNameRight": "DXElementInUnitTypeEnum",
+            "RelationNameRight": "RelationType",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "4f58bcbb-8398-4481-8a8f-ee936c79431f",
+        "DXRelationDefinitionMainElement": {
+            "ID": "fe83cc43-0d3a-412b-bd93-d337717967af",
+            "ObjectID": "4f58bcbb-8398-4481-8a8f-ee936c79431f",
+            "ObjectNameLeft": "DXElementInUnitDefinitionElement",
+            "RelationNameLeft": "DXUnitDefinitionUnit",
+            "ObjectNameRight": "DXElementDefinitionUnit",
+            "RelationNameRight": "DXElementDefinitionUnit",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
+        "DXRelationDefinitionMainElement": {
+            "ID": "ebde3bed-352c-40e7-ac75-c05066f8ca05",
+            "ObjectID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
+            "ObjectNameLeft": "DXUnitInheritanceElement",
+            "RelationNameLeft": "ChildEntities",
+            "ObjectNameRight": "DXUnitDefinitionUnit",
+            "RelationNameRight": "BaseDXUnit",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "2b64ee1d-6ed4-49c0-ba57-93b41f7fabff",
+        "DXRelationDefinitionMainElement": {
+            "ID": "60537419-4cbc-47f8-bdec-f55ab4391cd6",
+            "ObjectID": "2b64ee1d-6ed4-49c0-ba57-93b41f7fabff",
+            "ObjectNameLeft": "DXRelationDefinitionMainElement",
+            "RelationNameLeft": "DXRelationDefinitionMainElement",
+            "ObjectNameRight": "DXObjectKindEnum",
+            "RelationNameRight": "Kind",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "7328a3c1-0d27-474c-90be-c96c5967d54f",
+        "DXRelationDefinitionMainElement": {
+            "ID": "c5bc5c06-1d3c-4767-b13c-887623ecb2ae",
+            "ObjectID": "7328a3c1-0d27-474c-90be-c96c5967d54f",
+            "ObjectNameLeft": "DXRelationDefinitionMainElement",
+            "RelationNameLeft": "DXRelationDefinitionMainElement",
+            "ObjectNameRight": "DXRelationTypeEnum",
+            "RelationNameRight": "RelationType",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
     }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "f802e73c-e512-4655-8067-94e80aea143c",
-    "DXRelationDefinitionMainElement": {
-      "ID": "e7ec1df8-e169-406c-9323-52e5e6459c95",
-      "ObjectNameLeft": "DXObjectDefinitionUnit",
-      "RelationNameLeft": "DXObjectDefinitionUnitID",
-      "ObjectNameRight": "DXColumnDefinitionElement",
-      "RelationNameRight": "DXColumnDefinitionElement",
-      "RelationTable": null,
-      "RelationType": 5,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "bedc1f2b-2b9b-404f-89e5-5179bd87f60f",
-    "DXRelationDefinitionMainElement": {
-      "ID": "afd2a155-e21e-44b3-b719-139b7a7deefc",
-      "ObjectNameLeft": "DXObjectDefinitionUnit",
-      "RelationNameLeft": "DXObjectDefinitionUnitID",
-      "ObjectNameRight": "DXUniqueColumnsElement",
-      "RelationNameRight": "DXUniqueColumnsElement",
-      "RelationTable": null,
-      "RelationType": 5,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "78462c7e-4658-422d-9ae5-9e9c55b24276",
-    "DXRelationDefinitionMainElement": {
-      "ID": "ff669d1b-7635-4e23-b5f2-17563fe1e369",
-      "ObjectNameLeft": "DXRelationDefinitionUnit",
-      "RelationNameLeft": "DXRelationDefinitionUnitID",
-      "ObjectNameRight": "DXRelationDefinitionMainElement",
-      "RelationNameRight": "DXRelationDefinitionMainElement",
-      "RelationTable": null,
-      "RelationType": 8,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "87f7a8f1-caea-4d67-b9d3-6c85aae00174",
-    "DXRelationDefinitionMainElement": {
-      "ID": "e0e600cc-00aa-4b96-982c-e2ccdd750403",
-      "ObjectNameLeft": "DXMigrationScriptsUnit",
-      "RelationNameLeft": "DXMigrationScriptsUnitID",
-      "ObjectNameRight": "DXMigrationScriptsMainElement",
-      "RelationNameRight": "DXMigrationScriptsMainElement",
-      "RelationTable": null,
-      "RelationType": 8,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "87964e3e-ed1b-42f5-a18e-9f7102ebb352",
-    "DXRelationDefinitionMainElement": {
-      "ID": "dfedf1fb-7573-4408-8618-2ff65a4ebf6c",
-      "ObjectNameLeft": "DXUnitDefinitionUnit",
-      "RelationNameLeft": "DXUnitDefinitionUnitID",
-      "ObjectNameRight": "DXUnitInheritanceElement",
-      "RelationNameRight": "DXUnitInheritanceElement",
-      "RelationType": 8,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc",
-    "DXRelationDefinitionMainElement": {
-      "ID": "f60dd08e-cf27-4592-8f84-4a8ba1fca8ff",
-      "ObjectNameLeft": "DXUnitDefinitionUnit",
-      "RelationNameLeft": "DXUnitDefinitionUnitID",
-      "ObjectNameRight": "DXElementInUnitDefinitionElement",
-      "RelationNameRight": "DXElementInUnitDefinitionElement",
-      "RelationType": 5,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
-    "DXRelationDefinitionMainElement": {
-      "ID": "d38cf673-89c7-47d7-9f48-5a3a49396ed2",
-      "ObjectNameLeft": "DXObjectDefinitionMainElement",
-      "RelationNameLeft": "DXObjectDefinitionMainElement",
-      "ObjectNameRight": "DXObjectKindEnum",
-      "RelationNameRight": "Kind",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1,
-      "RelationColumnNameRight": "Key",
-      "RelationColumnTypeRight": 8
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91",
-    "DXRelationDefinitionMainElement": {
-      "ID": "7b843027-7c06-40ac-9872-8572cadc66f2",
-      "ObjectNameLeft": "DXColumnDefinitionElement",
-      "RelationNameLeft": "DXColumnDefinitionElement",
-      "ObjectNameRight": "DXColumnTypeEnum",
-      "RelationNameRight": "ColumnType",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1,
-      "RelationColumnNameRight": "Key",
-      "RelationColumnTypeRight": 8
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
-    "DXRelationDefinitionMainElement": {
-      "ID": "572d875f-66cf-4850-8bc7-45805b93e093",
-      "ObjectNameLeft": "DXColumnDefinitionElement",
-      "RelationNameLeft": "Enums",
-      "ObjectNameRight": "DXColumnDefinitionElement",
-      "RelationNameRight": "EnumKey",
-      "RelationTable": null,
-      "RelationType": 6,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "298099bc-d243-40a0-8807-769a8f307809",
-    "DXRelationDefinitionMainElement": {
-      "ID": "5ccfd33e-f6b4-4374-bcbe-de3823b6ada4",
-      "ObjectNameLeft": "DXColumnDefinitionElement",
-      "RelationNameLeft": "Enums",
-      "ObjectNameRight": "DXEnumDefinitionUnit",
-      "RelationNameRight": "EnumType",
-      "RelationTable": null,
-      "RelationType": 6,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "f665b056-ee22-482e-8da2-f55aa26a384c",
-    "DXRelationDefinitionMainElement": {
-      "ID": "4aafad60-92df-41ee-b9be-a57125740b12",
-      "ObjectNameLeft": "DXElementInUnitDefinitionElement",
-      "RelationNameLeft": "DXElementInUnitDefinitionElement",
-      "ObjectNameRight": "DXElementInUnitTypeEnum",
-      "RelationNameRight": "RelationType",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1,
-      "RelationColumnNameRight": "Key",
-      "RelationColumnTypeRight": 8
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "4f58bcbb-8398-4481-8a8f-ee936c79431f",
-    "DXRelationDefinitionMainElement": {
-      "ID": "fe83cc43-0d3a-412b-bd93-d337717967af",
-      "ObjectNameLeft": "DXElementInUnitDefinitionElement",
-      "RelationNameLeft": "DXUnitDefinitionUnit",
-      "ObjectNameRight": "DXElementDefinitionUnit",
-      "RelationNameRight": "DXElementDefinitionUnit",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
-    "DXRelationDefinitionMainElement": {
-      "ID": "ebde3bed-352c-40e7-ac75-c05066f8ca05",
-      "ObjectNameLeft": "DXUnitInheritanceElement",
-      "RelationNameLeft": "ChildEntities",
-      "ObjectNameRight": "DXUnitDefinitionUnit",
-      "RelationNameRight": "BaseDXUnit",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
-    "DXRelationDefinitionMainElement": {
-      "ID": "ebde3bed-352c-40e7-ac75-c05066f8ca05",
-      "ObjectNameLeft": "DXRelationDefinitionMainElement",
-      "RelationNameLeft": "DXRelationDefinitionMainElement",
-      "ObjectNameRight": "DXObjectKindEnum",
-      "RelationNameRight": "Kind",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1,
-      "RelationColumnNameRight": "Key",
-      "RelationColumnTypeRight": 8
-    }
-  },
-  {
-    "S_Type": "DXRelationDefinitionUnit",
-    "ID": "7328a3c1-0d27-474c-90be-c96c5967d54f",
-    "DXRelationDefinitionMainElement": {
-      "ID": "c5bc5c06-1d3c-4767-b13c-887623ecb2ae",
-      "ObjectNameLeft": "DXRelationDefinitionMainElement",
-      "RelationNameLeft": "DXRelationDefinitionMainElement",
-      "ObjectNameRight": "DXRelationTypeEnum",
-      "RelationNameRight": "RelationType",
-      "RelationTable": null,
-      "RelationType": 4,
-      "Kind": 1,
-      "RelationColumnNameRight": "Key",
-      "RelationColumnTypeRight": 8
-    }
-  }
 ]

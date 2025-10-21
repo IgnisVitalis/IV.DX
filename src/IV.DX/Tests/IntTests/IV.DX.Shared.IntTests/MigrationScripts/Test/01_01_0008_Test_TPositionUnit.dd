@@ -1,21 +1,23 @@
 [
-  {
-    "S_Type": "DXUnitDefinitionUnit",
-    "ID": "e9622428-0578-402e-9d96-f57e670499c4",
-    "DXObjectDefinitionMainElement": {
-      "ID": "34365153-0139-4746-840b-09bfe9463985",
-      "Name": "TPositionUnit",
-      "Kind": 3
-    },
-    "DXElementInUnitDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "1c41d48d-8561-44ca-903c-2ceb45d7fc79",
-          "RelationType": 1,
-          "DXElementDefinitionUnit": "d8b2ddce-8c18-436e-8e54-c360c781123f"
+    {
+        "S_Type": "DXUnitDefinitionUnit",
+        "ID": "e9622428-0578-402e-9d96-f57e670499c4",
+        "DXObjectDefinitionMainElement": {
+            "ID": "34365153-0139-4746-840b-09bfe9463985",
+            "ObjectID": "e9622428-0578-402e-9d96-f57e670499c4",
+            "Name": "TPositionUnit",
+            "Kind": 3
+        },
+        "DXElementInUnitDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "1c41d48d-8561-44ca-903c-2ceb45d7fc79",
+                    "ObjectID": "e9622428-0578-402e-9d96-f57e670499c4",
+                    "RelationType": 1,
+                    "DXElementDefinitionUnit": "d8b2ddce-8c18-436e-8e54-c360c781123f"
+                }
+            ]
         }
-      ]
     }
-  }
 ]

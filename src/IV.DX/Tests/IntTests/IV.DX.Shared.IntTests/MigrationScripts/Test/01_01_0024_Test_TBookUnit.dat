@@ -1,86 +1,98 @@
 [
-  {
-    "S_Type": "TBookUnit",
-    "ID": "1b51edff-1d99-4043-9a69-209996729b69",
-    "TBookMainElement": {
-      "ID": "272aad21-f8c9-4bf2-91d2-472f65bc9058",
-      "Name": "book1"
-    },
-    "TBookChapterElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "e473840b-1c2f-4fa3-a083-5b32319713f0",
-          "Number": 1,
-          "Text": "book1.page1"
+    {
+        "S_Type": "TBookUnit",
+        "ID": "1b51edff-1d99-4043-9a69-209996729b69",
+        "TBookMainElement": {
+            "ID": "272aad21-f8c9-4bf2-91d2-472f65bc9058",
+            "ObjectID": "1b51edff-1d99-4043-9a69-209996729b69",
+            "Name": "book1"
         },
-        {
-          "ID": "0cb1d170-baed-4ce3-90fd-a4cae741b224",
-          "Number": 2,
-          "Text": "book1.page2"
+        "TBookChapterElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "e473840b-1c2f-4fa3-a083-5b32319713f0",
+                    "ObjectID": "1b51edff-1d99-4043-9a69-209996729b69",
+                    "Number": 1,
+                    "Text": "book1.page1"
+                },
+                {
+                    "ID": "0cb1d170-baed-4ce3-90fd-a4cae741b224",
+                    "ObjectID": "1b51edff-1d99-4043-9a69-209996729b69",
+                    "Number": 2,
+                    "Text": "book1.page2"
+                }
+            ]
         }
-      ]
-    }
-  },
-  {
-    "S_Type": "TBookUnit",
-    "ID": "4782b530-6343-4d11-846a-65127cf71f3b",
-    "TBookMainElement": {
-      "ID": "022ab2e9-d79c-453e-abbb-92586e37c51e",
-      "Name": "book2"
     },
-    "TBookChapterElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "b4573b94-8073-43a0-b25c-1a37bb724bab",
-          "Number": 1,
-          "Text": "book2.page1"
+    {
+        "S_Type": "TBookUnit",
+        "ID": "4782b530-6343-4d11-846a-65127cf71f3b",
+        "TBookMainElement": {
+            "ID": "022ab2e9-d79c-453e-abbb-92586e37c51e",
+            "ObjectID": "4782b530-6343-4d11-846a-65127cf71f3b",
+            "Name": "book2"
         },
-        {
-          "ID": "5eae326b-375f-4551-9fff-3067c60dae16",
-          "Number": 2,
-          "Text": "book2.page2"
-        },
-        {
-          "ID": "2c001799-54cb-4eba-8819-2c6ef11f8214",
-          "Number": 3,
-          "Text": "book2.page3"
+        "TBookChapterElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "b4573b94-8073-43a0-b25c-1a37bb724bab",
+                    "ObjectID": "4782b530-6343-4d11-846a-65127cf71f3b",
+                    "Number": 1,
+                    "Text": "book2.page1"
+                },
+                {
+                    "ID": "5eae326b-375f-4551-9fff-3067c60dae16",
+                    "ObjectID": "4782b530-6343-4d11-846a-65127cf71f3b",
+                    "Number": 2,
+                    "Text": "book2.page2"
+                },
+                {
+                    "ID": "2c001799-54cb-4eba-8819-2c6ef11f8214",
+                    "ObjectID": "4782b530-6343-4d11-846a-65127cf71f3b",
+                    "Number": 3,
+                    "Text": "book2.page3"
+                }
+            ]
         }
-      ]
-    }
-  },
-  {
-    "S_Type": "TBookUnit",
-    "ID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
-    "TBookMainElement": {
-      "ID": "e241e31e-8e9a-4174-8d95-4aac63ec211d",
-      "Name": "book3"
     },
-    "TBookChapterElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "a68c4cc5-f939-4f29-bfb9-4e9fa8239964",
-          "Number": 1,
-          "Text": "book3.page1"
+    {
+        "S_Type": "TBookUnit",
+        "ID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+        "TBookMainElement": {
+            "ID": "e241e31e-8e9a-4174-8d95-4aac63ec211d",
+            "ObjectID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+            "Name": "book3"
         },
-        {
-          "ID": "066d0a83-2c3e-456b-8ded-8a3ef7b38fc2",
-          "Number": 2,
-          "Text": "book3.page2"
-        },
-        {
-          "ID": "37246768-7f48-49ad-a4c6-e4a5fb14a847",
-          "Number": 3,
-          "Text": "book3.page3"
-        },
-        {
-          "ID": "b6a03032-0a4b-448e-a0d2-8883850a5593",
-          "Number": 4,
-          "Text": "book3.page4"
+        "TBookChapterElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "a68c4cc5-f939-4f29-bfb9-4e9fa8239964",
+                    "ObjectID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+                    "Number": 1,
+                    "Text": "book3.page1"
+                },
+                {
+                    "ID": "066d0a83-2c3e-456b-8ded-8a3ef7b38fc2",
+                    "ObjectID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+                    "Number": 2,
+                    "Text": "book3.page2"
+                },
+                {
+                    "ID": "37246768-7f48-49ad-a4c6-e4a5fb14a847",
+                    "ObjectID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+                    "Number": 3,
+                    "Text": "book3.page3"
+                },
+                {
+                    "ID": "b6a03032-0a4b-448e-a0d2-8883850a5593",
+                    "ObjectID": "456fb3b7-6d98-40d2-a127-753d38fb5848",
+                    "Number": 4,
+                    "Text": "book3.page4"
+                }
+            ]
         }
-      ]
     }
-  }
 ]

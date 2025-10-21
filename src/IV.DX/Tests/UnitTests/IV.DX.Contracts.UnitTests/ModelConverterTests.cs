@@ -96,7 +96,7 @@ namespace IV.DX.Contracts.UnitTests
                                 new JProperty("Value", 1),
                                 new JProperty("Date", new DateTime(2020, 12, 1)),
                                 new JProperty("ID", new Guid("B2669009-536A-4252-A920-CCEF4456A08A")),
-                                new JProperty("ObjectID",  new Guid("032169a1-fdfa-45b8-b0ec-381a6888ff35")),
+                                new JProperty("ObjectID",  objectId),
                                 new JProperty("TimeStamp", new DateTime(2020, 12, 1)))
                         }
                     }
@@ -119,7 +119,7 @@ namespace IV.DX.Contracts.UnitTests
                                     new JProperty("Value", 2),
                                     new JProperty("Date", new DateTime(2020, 12, 2)),
                                     new JProperty("ID", new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A")),
-                                    new JProperty("ObjectID",  new Guid("032169a1-fdfa-45b8-b0ec-381a6888ff35")),
+                                    new JProperty("ObjectID",  objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 2))),
                             },
                             new DXItem()
@@ -131,7 +131,7 @@ namespace IV.DX.Contracts.UnitTests
                                     new JProperty("Value", 3),
                                     new JProperty("Date", new DateTime(2020, 12, 3)),
                                     new JProperty("ID", new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2")),
-                                    new JProperty("ObjectID", new Guid("032169a1-fdfa-45b8-b0ec-381a6888ff35")),
+                                    new JProperty("ObjectID", objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 3)))
                             }
                         },
@@ -146,7 +146,7 @@ namespace IV.DX.Contracts.UnitTests
                                     new JProperty("Value", 4),
                                     new JProperty("Date", new DateTime(2020, 12, 4)),
                                     new JProperty("ID", new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6")),
-                                    new JProperty("ObjectID",  new Guid("032169a1-fdfa-45b8-b0ec-381a6888ff35")),
+                                    new JProperty("ObjectID", objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 4)))
                             }
                         }

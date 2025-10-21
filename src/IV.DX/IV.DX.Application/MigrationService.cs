@@ -90,7 +90,14 @@ namespace IV.DX.Application
 
                 foreach (var script in scriptsPreInit)
                 {
-                    this.ProcessFileForPreInitCore(script);
+                    try
+                    {
+                        this.ProcessFileForPreInitCore(script);
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception($"Error is occured when Pre Init migration script '{script}' was applied.", exc);
+                    }
                 }
 
                 var corePostInitFiles = File.ReadAllText(this.GetFullPath("MigrationScripts/CorePostInit.json"));
@@ -99,7 +106,14 @@ namespace IV.DX.Application
 
                 foreach (var script in scriptsPostInit)
                 {
-                    this.ProcessFileForPostInitCore(script);
+                    try
+                    {
+                        this.ProcessFileForPostInitCore(script);
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception($"Error is occured when Post Init migration script '{script}' was applied.", exc);
+                    }
                 }
 
                 foreach (var script in scriptsPreInit)
@@ -132,12 +146,15 @@ namespace IV.DX.Application
 
                 var match = regex.Match(x.Name);
 
+                var id = Guid.NewGuid();
+
                 return new DXMigrationScriptsUnit()
                 {
-                    ID = Guid.NewGuid(),
+                    ID = id,
                     DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement()
                     {
                         ID = Guid.NewGuid(),
+                        ObjectID = id,
                         FilePath = x.FullName,
                         Name = match.Groups["Name"].Value,
                         Version = match.Groups["Version"].Value,

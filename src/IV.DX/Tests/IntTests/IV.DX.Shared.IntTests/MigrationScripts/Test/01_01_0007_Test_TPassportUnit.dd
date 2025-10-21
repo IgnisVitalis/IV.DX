@@ -1,21 +1,23 @@
 [
-  {
-    "S_Type": "DXUnitDefinitionUnit",
-    "ID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
-    "DXObjectDefinitionMainElement": {
-      "ID": "80fe228e-6c3e-41da-b900-6d09f27c5309",
-      "Name": "TPassportUnit",
-      "Kind": 3
-    },
-    "DXElementInUnitDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "203f9137-b7e0-46a5-b12b-551dd4493c67",
-          "RelationType": 1,
-          "DXElementDefinitionUnit": "f7f2185a-a933-41af-9b84-e37c98b33ef7"
+    {
+        "S_Type": "DXUnitDefinitionUnit",
+        "ID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
+        "DXObjectDefinitionMainElement": {
+            "ID": "80fe228e-6c3e-41da-b900-6d09f27c5309",
+            "ObjectID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
+            "Name": "TPassportUnit",
+            "Kind": 3
+        },
+        "DXElementInUnitDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "203f9137-b7e0-46a5-b12b-551dd4493c67",
+                    "ObjectID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
+                    "RelationType": 1,
+                    "DXElementDefinitionUnit": "f7f2185a-a933-41af-9b84-e37c98b33ef7"
+                }
+            ]
         }
-      ]
     }
-  }
 ]

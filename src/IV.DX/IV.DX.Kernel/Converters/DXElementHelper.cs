@@ -31,27 +31,15 @@ namespace IV.DX.Kernel.Converters
             return jObject;
         }
 
-        public static DXSingleElement? ConvertToDXSingleElement(this DXElement? dxElement)
+        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement, string propertyName = null)
         {
-            if (dxElement is null) return null;
+            if (dxElement.ObjectID == default)
+                throw new Exception($"DXElement should have ObjectID value");
 
-            var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
-            return new DXSingleElement
-            {
-                ElementInfo = elementInfo,
-                Item = new DXItem
-                {
-                    ID = dxElement.ID,
-                    ObjectID = dxElement.ObjectID,
-                    Content = dxElement.ConvertToJObject()
-                },
-                Name = elementInfo?.Name
-            };
-        }
-
-        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement)
-        {
             var dxElementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
+
+            var content = dxElement.GetContent();
+
             return new DXSingleElement
             {
                 ElementInfo = dxElementInfo,
@@ -59,9 +47,9 @@ namespace IV.DX.Kernel.Converters
                 {
                     ID = dxElement.ID,
                     ObjectID = dxElement.ObjectID,
-                    Content = dxElement.GetContent()
+                    Content = content
                 },
-                Name = dxElementInfo?.Name
+                Name = propertyName ?? dxElementInfo.Name
             };
         }
     }

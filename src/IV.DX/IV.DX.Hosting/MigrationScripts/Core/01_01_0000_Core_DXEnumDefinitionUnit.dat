@@ -1,154 +1,170 @@
 [
-  {
-    "S_Type": "DXEnumDefinitionUnit",
-    "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
-    "DXObjectDefinitionMainElement": {
-      "ID": "59b115c5-cc8b-4c88-b1e0-d94af8745e99",
-      "Name": "DXElementInUnitTypeEnum",
-      "Kind": 1
-    },
-    "DXColumnDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "72d914ae-c902-45dd-b405-fb12d5021597",
-          "ColumnType": 3,
-          "Name": "Value",
-          "Length": 50,
-          "AllowNull": false,
-          "DefaultValue": null
+    {
+        "S_Type": "DXEnumDefinitionUnit",
+        "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
+        "DXObjectDefinitionMainElement": {
+            "ID": "59b115c5-cc8b-4c88-b1e0-d94af8745e99",
+            "ObjectID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
+            "Name": "DXElementInUnitTypeEnum",
+            "Kind": 1
         },
-        {
-          "ID": "d214fd3a-99a2-4446-ba90-dd1e863e56e1",
-          "ColumnType": 8,
-          "Name": "Key",
-          "AllowNull": false,
-          "DefaultValue": null
-        }
-      ]
-    },
-    "DXUniqueColumnsElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "44892f0b-5f87-4373-b3c2-a7eac4a41ffd",
-          "Columns": "Key"
-        }
-      ]
-    }
-  },
-  {
-    "S_Type": "DXEnumDefinitionUnit",
-    "ID": "971d538a-1489-483a-bc84-86596ed0c51a",
-    "DXObjectDefinitionMainElement": {
-      "ID": "261cfd33-65cb-4f36-8712-be15e6621cc0",
-      "Name": "DXColumnTypeEnum",
-      "Kind": 1
-    },
-    "DXColumnDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "940d5067-9271-4dc2-9ae0-b1b83c519e11",
-          "ColumnType": 3,
-          "Name": "Value",
-          "Length": 50,
-          "AllowNull": false,
-          "DefaultValue": null
+        "DXColumnDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "72d914ae-c902-45dd-b405-fb12d5021597",
+                    "ObjectID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
+                    "ColumnType": 3,
+                    "Name": "Value",
+                    "Length": 50,
+                    "AllowNull": false,
+                    "DefaultValue": null
+                },
+                {
+                    "ID": "d214fd3a-99a2-4446-ba90-dd1e863e56e1",
+                    "ObjectID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
+                    "ColumnType": 8,
+                    "Name": "Key",
+                    "AllowNull": false,
+                    "DefaultValue": null
+                }
+            ]
         },
-        {
-          "ID": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2",
-          "ColumnType": 8,
-          "Name": "Key",
-          "AllowNull": false,
-          "DefaultValue": null
+        "DXUniqueColumnsElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "44892f0b-5f87-4373-b3c2-a7eac4a41ffd",
+                    "ObjectID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
+                    "Columns": "Key"
+                }
+            ]
         }
-      ]
     },
-    "DXUniqueColumnsElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "ff9aab92-03c6-4c38-8147-08c77e694fe9",
-          "Columns": "Key"
-        }
-      ]
-    }
-  },
-  {
-    "S_Type": "DXEnumDefinitionUnit",
-    "ID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
-    "DXObjectDefinitionMainElement": {
-      "ID": "179f9be7-dc54-4ac7-a9c5-ea50c7524752",
-      "Name": "DXObjectKindEnum",
-      "Kind": 1
-    },
-    "DXColumnDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "6212d559-2cf3-4341-a517-89f3a57abe78",
-          "ColumnType": 3,
-          "Name": "Value",
-          "Length": 50,
-          "AllowNull": false,
-          "DefaultValue": null
+    {
+        "S_Type": "DXEnumDefinitionUnit",
+        "ID": "971d538a-1489-483a-bc84-86596ed0c51a",
+        "DXObjectDefinitionMainElement": {
+            "ID": "261cfd33-65cb-4f36-8712-be15e6621cc0",
+            "ObjectID": "971d538a-1489-483a-bc84-86596ed0c51a",
+            "Name": "DXColumnTypeEnum",
+            "Kind": 1
         },
-        {
-          "ID": "15d97f21-fd2d-4019-8e0b-bd480fdc8798",
-          "ColumnType": 8,
-          "Name": "Key",
-          "AllowNull": false,
-          "DefaultValue": null
-        }
-      ]
-    },
-    "DXUniqueColumnsElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "2038343f-0d46-4534-8408-963ab18e763f",
-          "Columns": "Key"
-        }
-      ]
-    }
-  },
-  {
-    "S_Type": "DXEnumDefinitionUnit",
-    "ID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
-    "DXObjectDefinitionMainElement": {
-      "ID": "dbb5012a-958a-4272-8633-cdf04049fff4",
-      "Name": "DXRelationTypeEnum",
-      "Kind": 1
-    },
-    "DXColumnDefinitionElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "c16e1093-6e36-4963-9a20-707429832b4d",
-          "ColumnType": 3,
-          "Name": "Value",
-          "Length": 50,
-          "AllowNull": false,
-          "DefaultValue": null
+        "DXColumnDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "940d5067-9271-4dc2-9ae0-b1b83c519e11",
+                    "ObjectID": "971d538a-1489-483a-bc84-86596ed0c51a",
+                    "ColumnType": 3,
+                    "Name": "Value",
+                    "Length": 50,
+                    "AllowNull": false,
+                    "DefaultValue": null
+                },
+                {
+                    "ID": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2",
+                    "ObjectID": "971d538a-1489-483a-bc84-86596ed0c51a",
+                    "ColumnType": 8,
+                    "Name": "Key",
+                    "AllowNull": false,
+                    "DefaultValue": null
+                }
+            ]
         },
-        {
-          "ID": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
-          "ColumnType": 8,
-          "Name": "Key",
-          "AllowNull": false,
-          "DefaultValue": null
+        "DXUniqueColumnsElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "ff9aab92-03c6-4c38-8147-08c77e694fe9",
+                    "ObjectID": "971d538a-1489-483a-bc84-86596ed0c51a",
+                    "Columns": "Key"
+                }
+            ]
         }
-      ]
     },
-    "DXUniqueColumnsElement": {
-      "Mode": 1,
-      "Announced": [
-        {
-          "ID": "f3e6e16c-6dc0-4056-aab2-6176e17c7ab4",
-          "Columns": "Key"
+    {
+        "S_Type": "DXEnumDefinitionUnit",
+        "ID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+        "DXObjectDefinitionMainElement": {
+            "ID": "179f9be7-dc54-4ac7-a9c5-ea50c7524752",
+            "ObjectID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+            "Name": "DXObjectKindEnum",
+            "Kind": 1
+        },
+        "DXColumnDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "6212d559-2cf3-4341-a517-89f3a57abe78",
+                    "ObjectID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+                    "ColumnType": 3,
+                    "Name": "Value",
+                    "Length": 50,
+                    "AllowNull": false,
+                    "DefaultValue": null
+                },
+                {
+                    "ID": "15d97f21-fd2d-4019-8e0b-bd480fdc8798",
+                    "ObjectID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+                    "ColumnType": 8,
+                    "Name": "Key",
+                    "AllowNull": false,
+                    "DefaultValue": null
+                }
+            ]
+        },
+        "DXUniqueColumnsElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "2038343f-0d46-4534-8408-963ab18e763f",
+                    "ObjectID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+                    "Columns": "Key"
+                }
+            ]
         }
-      ]
+    },
+    {
+        "S_Type": "DXEnumDefinitionUnit",
+        "ID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+        "DXObjectDefinitionMainElement": {
+            "ID": "dbb5012a-958a-4272-8633-cdf04049fff4",
+            "ObjectID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+            "Name": "DXRelationTypeEnum",
+            "Kind": 1
+        },
+        "DXColumnDefinitionElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "c16e1093-6e36-4963-9a20-707429832b4d",
+                    "ObjectID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+                    "ColumnType": 3,
+                    "Name": "Value",
+                    "Length": 50,
+                    "AllowNull": false,
+                    "DefaultValue": null
+                },
+                {
+                    "ID": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
+                    "ObjectID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+                    "ColumnType": 8,
+                    "Name": "Key",
+                    "AllowNull": false,
+                    "DefaultValue": null
+                }
+            ]
+        },
+        "DXUniqueColumnsElement": {
+            "Mode": 1,
+            "Announced": [
+                {
+                    "ID": "f3e6e16c-6dc0-4056-aab2-6176e17c7ab4",
+                    "ObjectID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+                    "Columns": "Key"
+                }
+            ]
+        }
     }
-  }
 ]

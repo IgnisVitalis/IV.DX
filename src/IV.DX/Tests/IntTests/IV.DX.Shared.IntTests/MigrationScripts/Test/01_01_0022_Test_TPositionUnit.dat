@@ -1,27 +1,30 @@
 [
-  {
-    "S_Type": "TPositionUnit",
-    "ID": "3040fe09-2ec2-4472-ae32-724f028b374e",
-    "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
-    "TPositionMainElement": {
-      "ID": "adaeaf9b-f976-4756-aacd-b46c5d899352",
-      "Name": "Master"
+    {
+        "S_Type": "TPositionUnit",
+        "ID": "3040fe09-2ec2-4472-ae32-724f028b374e",
+        "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+        "TPositionMainElement": {
+            "ID": "adaeaf9b-f976-4756-aacd-b46c5d899352",
+            "ObjectID": "3040fe09-2ec2-4472-ae32-724f028b374e",
+            "Name": "Master"
+        }
+    },
+    {
+        "S_Type": "TPositionUnit",
+        "ID": "14c92f6a-88b7-4d72-9777-5f655f0914bf",
+        "TPositionMainElement": {
+            "ID": "b0bb2cf1-eb72-46a4-b7c1-0dba34b9468e",
+            "ObjectID": "14c92f6a-88b7-4d72-9777-5f655f0914bf",
+            "Name": "Middle"
+        }
+    },
+    {
+        "S_Type": "TPositionUnit",
+        "ID": "1f852be3-f851-4807-807f-cfd45a0b4093",
+        "TPositionMainElement": {
+            "ID": "bdfbbf29-6432-4809-94f8-cb2cfa2bbb3d",
+            "ObjectID": "1f852be3-f851-4807-807f-cfd45a0b4093",
+            "Name": "Junior"
+        }
     }
-  },
-  {
-    "S_Type": "TPositionUnit",
-    "ID": "14c92f6a-88b7-4d72-9777-5f655f0914bf",
-    "TPositionMainElement": {
-      "ID": "b0bb2cf1-eb72-46a4-b7c1-0dba34b9468e",
-      "Name": "Middle"
-    }
-  },
-  {
-    "S_Type": "TPositionUnit",
-    "ID": "1f852be3-f851-4807-807f-cfd45a0b4093",
-    "TPositionMainElement": {
-      "ID": "bdfbbf29-6432-4809-94f8-cb2cfa2bbb3d",
-      "Name": "Junior"
-    }
-  }
 ]

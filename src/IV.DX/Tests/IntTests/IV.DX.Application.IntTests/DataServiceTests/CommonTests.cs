@@ -40,6 +40,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     TBookMainElement = new TBookMainElement()
                     {
                         ID = id,
+                        ObjectID = x,
                         Name = $"Name{id}"
                     },
                     TBookChapterElement = new DXMultiElementsContainer<TBookChapterElement>()
@@ -49,18 +50,21 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                             new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
+                                ObjectID = x,
                                 Number = 12345,
                                 Text = "Seleucus VI Epiphanes (c. 115 – 94 BC) was a Seleucid monarch who reigned as King of Syria between 96 and 94 BC during the Hellenistic period. He was the son of Antiochus VIII and his Egyptian wife Tryphaena."
                             },
                             new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
+                                ObjectID = x,
                                 Number = 9132423,
                                 Text = "According to the ancient historian Appian, Seleucus VI was a violent ruler. He taxed his dominions extensively to support his wars, and resisted allowing the cities a measure of autonomy, as former kings allowed. His reign did not last long; in 94 BC, he was expelled from Antioch by Antiochus X, who followed him to the Cilician city of Mopsuestia, where his attempts to raise money led to riots that eventually claimed his life."
                             },
                             new TBookChapterElement()
                             {
                                 ID = Guid.NewGuid(),
+                                ObjectID = x,
                                 Number = 42543,
                                 Text = "A period of civil war between his father and his uncle Antiochus IX ended in 96 BC when his father was assassinated. Antiochus IX then occupied the capital Antioch while Seleucus VI established his power base in western Cilicia. After his uncle was killed, Seleucus VI became the master of the capital but shared Syria with his brother Demetrius III and his cousin Antiochus X."
                             }
@@ -73,7 +77,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             {
                 foreach (var book in books)
                 {
-                    _dataService.InsertAsync(book).Wait();
+                    await _dataService.InsertAsync(book);
                 }
             }, $"Inserting x {ids.Count()}");
 

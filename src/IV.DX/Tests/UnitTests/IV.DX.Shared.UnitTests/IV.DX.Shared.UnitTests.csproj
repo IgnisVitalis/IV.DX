@@ -7,6 +7,10 @@
         <IsTestProject>false</IsTestProject>
         <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql" Version="6.0.13" />
+    </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />
         <ProjectReference Include="..\..\..\IV.DX.Application\IV.DX.Application.csproj" />
