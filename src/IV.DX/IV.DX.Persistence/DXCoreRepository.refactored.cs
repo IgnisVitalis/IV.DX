@@ -628,10 +628,6 @@ namespace IV.DX.Persistence
                 return;
             }
 
-            //using var adapter = _queryHelper.GetDbDataAdapter(conn, _queryHelper.GetSQLQuery(tableName, null, null, null, limit: 0));
-            //adapter.AcceptChangesDuringUpdate = false;
-            //try { adapter.UpdateBatchSize = 256; } catch {  }
-
             _queryHelper.GetDbCommandBuilder(adapter);
             adapter.Update(table);
         }
