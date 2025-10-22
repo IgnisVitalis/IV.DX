@@ -77,5 +77,30 @@ namespace IV.DX.Shared.IntTests
                 File.AppendAllText("Performance.txt", result + Environment.NewLine);
             }
         }
+
+        protected async Task<T> EstimatePerformanceAsync<T>(Func<Task<T>> func, string message)
+        {
+            if (func is null) return default(T);
+
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                return await func();
+            }
+            catch (Exception ex)
+            {
+                var err = $"{message} : ERROR: {ex.GetType().Name} - {ex.Message}";
+                Output.WriteLine(err);
+                File.AppendAllText("Performance.txt", err + Environment.NewLine);
+                throw;
+            }
+            finally
+            {
+                sw.Stop();
+                var result = $"{message} : {sw.ElapsedMilliseconds} ms; {sw.ElapsedTicks} ticks";
+                Output.WriteLine(result);
+                File.AppendAllText("Performance.txt", result + Environment.NewLine);
+            }
+        }
     }
 }

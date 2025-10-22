@@ -18,7 +18,7 @@ namespace IV.DX.Persistence
     //    protected ISQLQueryDXHelper _queryHelper;
     //    IDXStructureCache _dxStructureCache;
 
-    //    public DXCoreRepository(
+    //    public DXCoreRepository(2
     //        DXDatabaseOptions options,
     //        IDXStructureCache dxStructureCache,
     //        ISQLQueryDXHelper queryHelper)

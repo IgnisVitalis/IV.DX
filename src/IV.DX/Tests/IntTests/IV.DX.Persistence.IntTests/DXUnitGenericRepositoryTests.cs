@@ -1,12 +1,15 @@
-﻿using IV.DX.Shared.IntTests.Factories.Test;
-using IV.DX.Shared.IntTests.Models.Test;
-using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
+using IV.DX.Shared.IntTests.Factories.Test;
+using IV.DX.Shared.IntTests.Models.Test;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using ObjectFactory = IV.DX.Shared.IntTests.Factories.ObjectFactory;
@@ -174,6 +177,56 @@ namespace IV.DX.Persistence.IntTests
             resultItem2 = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId2);
 
             Assert.Null(resultItem2);
+        }
+
+        [Fact]
+        public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
+        {
+            // Init
+            var id = new Guid("27bf2430-f8a5-4293-ac66-5d834ce244c9");
+            var itemAmount = 10000;
+            var textLength = 10000;
+
+            var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToList();
+            var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
+
+            // Action
+            await EstimatePerformanceAsync(async () =>
+            {
+                this._genericRepo.Insert(item);
+            }, $"Insert unit with {itemAmount} multi items. Each multi item has text with {textLength} length");
+
+            // Assert         
+            var existingItem = await EstimatePerformanceAsync(async () =>
+            {
+                return this._genericRepo.GetDXUnit<TBookUnit>(id);
+            }, $"GetItemAsync unit with {itemAmount} multi items");
+
+            Assert.NotNull(existingItem);
+            Assert.Equal(text.Count(), existingItem.TBookChapterElement.Announced.Count(x => text.Contains(x.Text)));
+        }
+
+        private const string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        public static string GetRandomString(int length)
+        {
+            if (length <= 0)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            var result = new StringBuilder(length);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                var buffer = new byte[sizeof(uint)];
+
+                for (int i = 0; i < length; i++)
+                {
+                    rng.GetBytes(buffer);
+                    uint num = BitConverter.ToUInt32(buffer, 0);
+                    result.Append(_chars[(int)(num % (uint)_chars.Length)]);
+                }
+            }
+
+            return result.ToString();
         }
     }
 }

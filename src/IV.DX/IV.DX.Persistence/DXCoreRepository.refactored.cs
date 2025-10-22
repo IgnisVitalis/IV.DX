@@ -1,5 +1,4 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel;
+﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -9,8 +8,6 @@ using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.Common;
-using Npgsql;
-using NpgsqlTypes;
 
 namespace IV.DX.Persistence
 {
@@ -503,6 +500,25 @@ namespace IV.DX.Persistence
         {
             return this.InsertOrUpdate(dxModel, ProcessingType.Update);
         }
+        private Guid InsertOrUpdate(DXModel dxModel, ProcessingType processingType)
+        {
+            ArgumentNullException.ThrowIfNull(dxModel);
+
+            if (!dxModel.OwnSingleItem.Item.ID.HasValue)
+                dxModel.OwnSingleItem.Item.ID = Guid.NewGuid();
+
+            var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
+
+            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
+            if (mainDXUnitInfo != null)
+                return this.InsertOrUpdateDXUnit(mainDXUnitInfo, dxModel, processingType);
+
+            var enumInfo = this.GetDXEnumDefinition(typeName);
+            if (enumInfo != null)
+                return this.InsertOrUpdateDXEnum(enumInfo, dxModel, processingType);
+
+            throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
+        }
 
         public Guid InsertOrUpdate(DXModel dxModel)
         {
@@ -530,124 +546,206 @@ namespace IV.DX.Persistence
             return item != null;
         }
 
-        private Guid InsertOrUpdate(DXModel dxModel, ProcessingType processingType)
+        private Guid InsertOrUpdateDXEnum(DXEnumDefinitionUnit enumInfo, DXModel dxModel, ProcessingType processingType)
         {
-            ArgumentNullException.ThrowIfNull(dxModel);
-
-            if (!dxModel.OwnSingleItem.Item.ID.HasValue)
+            this.RunRequestInTransaction(conn =>
             {
-                dxModel.OwnSingleItem.Item.ID = Guid.NewGuid();
-            }
+                var dataSet = new DataSet(enumInfo.DXObjectDefinitionMainElement.Name);
+                var enumTable = enumInfo.DXObjectDefinitionMainElement.Name;
 
-            var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, enumTable,
+                    whereClause: _queryHelper.GetWhereExpressionForID(dxModel.OwnSingleItem.Item.ID.Value));
+                UpsertOwnRow(dxModel, dataSet.Tables[enumTable], enumTable, processingType);
 
-            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
+                SaveTable(adapter, conn, dataSet, dataSet.Tables[enumTable], false);
 
-            if (mainDXUnitInfo != null)
-            {
-                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnitInfo);
-
-                this.ProcessDXModelAsDXDXUnit(typeName, dxModel, dxUnitHierarchy, processingType);
-            }
-            else
-            {
-                var enumInfo = this.GetDXEnumDefinition(typeName);
-
-                if (enumInfo != null)
-                {
-                    this.ProcessDXModelAsDXEnum(typeName, enumInfo, dxModel, processingType);
-                }
-                else
-                {
-                    throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
-                }
-            }
+                dataSet.AcceptChanges();
+                return true;
+            });
 
             return dxModel.OwnSingleItem.Item.ID.Value;
         }
 
-        private void ProcessDXModelAsDXDXUnit(string typeName, DXModel dxModel, IEnumerable<DXUnitDefinitionUnit> dxUnitHierarchy, ProcessingType processingType)
+        private Guid InsertOrUpdateDXUnit(DXUnitDefinitionUnit mainDXUnitInfo, DXModel dxModel, ProcessingType processingType)
         {
-            this.RunRequestInTransaction((conn) =>
+            this.RunRequestInTransaction(conn =>
             {
-                DataSet dataSet = new DataSet(typeName);
+                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnitInfo);
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnitInfo.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+                    var dataSet = new DataSet(dxUnitInfo.DXObjectDefinitionMainElement.Name);
 
-                    var relatedDXElementsSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedDXElementsSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
-                    var relatedDXElementsMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedDXElementsMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    var multiTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    var relatedMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    if (relatedMM != null) foreach (var el in relatedMM) multiTables.Add(el.DXObjectDefinitionMainElement.Name.Trim());
+                    if (relatedMO != null) foreach (var el in relatedMO) multiTables.Add(el.DXObjectDefinitionMainElement.Name.Trim());
 
-                    var objectID = dxModel.OwnSingleItem.Item.ID.Value;
-                    var dxUnitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
-                    // Process DX single items
-                    if (relatedDXElementsSM != null)
-                    {
-                        foreach (var singleItem in relatedDXElementsSM)
-                        {
-                            var dxElementName = singleItem.DXObjectDefinitionMainElement.Name.Trim();
-                            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+                    var unitTable = dxUnitInfo.DXObjectDefinitionMainElement.Name;
+                    var objectId = dxModel.OwnSingleItem.Item.ID!.Value;
 
-                            if (dxElement == null)
-                                continue;
+                    // 1) OWN
+                    var adapter = PopulateTableToDataSet(conn, dataSet, unitTable, whereClause: _queryHelper.GetWhereExpressionForID(objectId));
 
-                            this.InsertOrUpdatedxSingleItemToDataSet(dxElement, dxUnitType, objectID, dataSet, conn, processingType);
-                        }
-                    }
+                    UpsertOwnRow(dxModel, dataSet.Tables[unitTable], unitTable, processingType);
 
-                    if (relatedDXElementsSO != null)
-                    {
-                        foreach (var singleItem in relatedDXElementsSO)
-                        {
-                            var dxElementName = singleItem.DXObjectDefinitionMainElement.Name.Trim();
-                            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+                    SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable], false);
 
-                            if (dxElement == null)
-                                continue;
 
-                            this.InsertOrUpdatedxSingleItemToDataSet(dxElement, dxUnitType, objectID, dataSet, conn, processingType);
-                        }
-                    }
+                    // 2) SINGLE
+                    var relatedSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    if (relatedSM != null) foreach (var el in relatedSM)
+                            UpsertSingle(dxModel, el, unitTable, objectId, dataSet, conn, processingType);
+                    if (relatedSO != null) foreach (var el in relatedSO)
+                            UpsertSingle(dxModel, el, unitTable, objectId, dataSet, conn, processingType);
 
-                    // Process DX mutli items
-                    if (relatedDXElementsMM != null)
-                    {
-                        foreach (var multiItem in relatedDXElementsMM)
-                        {
-                            this.InsertOrUpdateDXMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
-                        }
-                    }
+                    // 3) MULTI
+                    if (relatedMM != null) foreach (var el in relatedMM)
+                            UpsertMulti(dxModel, dxUnitInfo, el, dataSet, conn, processingType);
+                    if (relatedMO != null) foreach (var el in relatedMO)
+                            UpsertMulti(dxModel, dxUnitInfo, el, dataSet, conn, processingType);
 
-                    if (relatedDXElementsMO != null)
-                    {
-                        foreach (var multiItem in relatedDXElementsMO)
-                        {
-                            this.InsertOrUpdateDXMultiItemToDataSet(dxModel, dxUnitInfo, multiItem, dataSet, conn, processingType);
-                        }
-                    }
+
+                    dataSet.AcceptChanges();
                 }
 
-                dataSet.AcceptChanges();
-
                 return true;
             });
+
+            return dxModel.OwnSingleItem.Item.ID!.Value;
         }
 
-        private void ProcessDXModelAsDXEnum(string typeName, DXEnumDefinitionUnit dxUnit, DXModel dxModel, ProcessingType processingType)
+        private void SaveTable(DbDataAdapter adapter, DbConnection conn, DataSet dataSet, DataTable table, bool isMultiTable, int bulkThreshold = 500)
         {
-            this.RunRequestInTransaction((conn) =>
+            if (table == null || table.Rows.Count == 0) return;
+
+            // bulk только для multi-таблиц
+            if (isMultiTable && _queryHelper is IDXBulkInsertCapable bulk && table.Rows.Count >= bulkThreshold)
             {
-                DataSet dataSet = new DataSet(typeName);
+                bulk.BulkUpsert(conn, table, table.TableName);
+                return;
+            }
 
-                this.InsertOrUpdateDXOwnItemToDataSet(dxModel, dxUnit.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+            //using var adapter = _queryHelper.GetDbDataAdapter(conn, _queryHelper.GetSQLQuery(tableName, null, null, null, limit: 0));
+            //adapter.AcceptChangesDuringUpdate = false;
+            //try { adapter.UpdateBatchSize = 256; } catch {  }
 
-                dataSet.AcceptChanges();
+            _queryHelper.GetDbCommandBuilder(adapter);
+            adapter.Update(table);
+        }
 
-                return true;
-            });
+        private void UpsertOwnRow(DXModel dxModel, DataTable table, string dxUnitType, ProcessingType processingType)
+        {
+            var id = dxModel.OwnSingleItem.Item.ID!.Value;
+
+            var row = table.Rows.Find(id);
+
+            if (row == null)
+            {
+                row = table.NewRow();
+                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
+                table.Rows.Add(row);
+            }
+            else
+            {
+                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
+            }
+        }
+
+        private void UpsertSingle(DXModel dxModel, DXElementDefinitionUnit singleDef, string dxUnitType, Guid objectID,
+                          DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        {
+            var dxElementName = singleDef.DXObjectDefinitionMainElement.Name.Trim();
+            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+            if (dxElement == null) return;
+
+            var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
+                whereClause: _queryHelper.GetWhereExpressionForID(dxElement.Item.ID ?? Guid.Empty));
+
+            var table = dataSet.Tables[dxElementName];
+            var id = dxElement.Item.ID ?? Guid.Empty;
+            var row = id != Guid.Empty ? table.Rows.Find(id) : null;
+
+            if (row == null)
+            {
+                row = table.NewRow();
+                MapdxItemToRow(dxElement.Item, row, dxUnitType);
+                table.Rows.Add(row);
+            }
+            else
+            {
+                MapdxItemToRow(dxElement.Item, row, dxUnitType);
+            }
+
+            SaveTable(adapter, conn, dataSet, table, false);
+        }
+
+        private void UpsertMulti(
+            DXModel dxModel,
+            DXUnitDefinitionUnit dxUnitInfo,
+            DXElementDefinitionUnit multiDef,
+            DataSet dataSet,
+            DbConnection conn,
+            ProcessingType processingType)
+        {
+            var tableName = multiDef.DXObjectDefinitionMainElement.Name.Trim();
+            var parentId = dxModel.OwnSingleItem.Item.ID!.Value;
+            var unitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
+
+
+            var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName, whereClause: _queryHelper.GetWhereExpressionForObjectID(parentId));
+
+            var table = dataSet.Tables[tableName];
+            if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
+            {
+                if (table.Columns.Contains("ID"))
+                    table.PrimaryKey = new[] { table.Columns["ID"] };
+            }
+
+            var dxElement = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == tableName);
+            if (dxElement == null) return;
+
+            foreach (var item in dxElement.Announced)
+            {
+                var id = item.ID ?? Guid.Empty;
+                DataRow row = id != Guid.Empty ? table.Rows.Find(id) : null;
+
+                if (row == null)
+                {
+                    row = table.NewRow();
+                    MapdxItemToRow(item, row, unitType);
+                    table.Rows.Add(row);
+                }
+                else
+                {
+                    MapdxItemToRow(item, row, unitType);
+                }
+            }
+
+            // Full
+            if (dxElement.Mode == MultiElementsMode.Full)
+            {
+                var announcedIds = new HashSet<Guid>(
+                    dxElement.Announced.Where(a => a.ID.HasValue).Select(a => a.ID!.Value));
+
+                var toDelete = new List<DataRow>();
+                foreach (DataRow r in table.Rows)
+                {
+                    var rid = r.Table.Columns.Contains("ID") ? ConvertHelper.ParseGuid(r["ID"]) : (Guid?)null;
+                    if (!rid.HasValue || !announcedIds.Contains(rid.Value))
+                        toDelete.Add(r);
+                }
+                foreach (var r in toDelete) r.Delete();
+            }
+            else if (dxElement.Mode == MultiElementsMode.Target)
+            {
+                ProcessAnnouncedItems(dxElement, table, dataSet.DataSetName);
+                ProcessDeletedItems(dxElement, table);
+            }
+
+            this.SaveTable(adapter, conn, dataSet, table, true);
         }
 
         private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DXUnitDefinitionUnit derivedDXUnit)
@@ -721,63 +819,6 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
         }
 
-        private void InsertOrUpdateDXOwnItemToDataSet(DXModel dxModel, string dxUnitType, DataSet dataSet, DbConnection conn, ProcessingType processingType)
-        {
-            var objectID = dxModel.OwnSingleItem.Item.ID;
-
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitType,
-                whereClause: this._queryHelper.GetWhereExpressionForID(objectID.Value));
-
-            DataTable dataTable = dataSet.Tables[dxUnitType];
-
-            var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
-
-            switch (processingType)
-            {
-                case ProcessingType.Insert:
-                    dxModelBuilder.GetInsertCommand();
-                    break;
-                case ProcessingType.Update:
-                    dxModelBuilder.GetUpdateCommand();
-                    break;
-                case ProcessingType.Delete:
-                default:
-                    return;
-            }
-
-            if (dataTable.Rows.Count == 0)
-            {
-                var row = dataTable.NewRow();
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var row = dataTable.Rows[0];
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
-            }
-
-            dxModelAdapter.Update(dataSet, dxUnitType);
-        }
-
-        //private DataTable GetDataTable(DataSet dataset, string tableName)
-        //{
-        //    DataTable dataTable = dataset.Tables[tableName];
-
-        //    if (dataTable.Rows.Count > 0)
-        //        return dataTable;
-
-        //    foreach (DataColumn column in dataTable.Columns)
-        //    {
-        //        if (column.DataType == typeof(DateTime))
-        //        {
-        //            column.DateTimeMode = DataSetDateTime.Utc;
-        //        }
-        //    }
-
-        //    return dataTable;
-        //}
-
         private Guid InsertOrUpdatedxSingleItemToDataSet(
             DXSingleElement dxElement,
             string dxUnitType,
@@ -827,60 +868,6 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
 
             return dxElement.Item.ID.Value;
-        }
-
-        private void InsertOrUpdateDXMultiItemToDataSet(DXModel dxModel, DXUnitDefinitionUnit dxUnitInfo, DXElementDefinitionUnit dxElementInfo, DataSet dataSet, DbConnection conn, ProcessingType processingType)
-        {
-            var dxElementName = dxElementInfo.DXObjectDefinitionMainElement.Name.Trim();
-            var objectID = dxModel.OwnSingleItem.Item.ID;
-            var dxUnitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
-
-            var dxElement = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
-
-            if (dxElement == null)
-                return;
-
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName, whereClause:
-                this._queryHelper.GetWhereExpressionForObjectID(objectID.Value));
-
-            var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
-
-            if (processingType == ProcessingType.Insert)
-            {
-                dxModelBuilder.GetInsertCommand();
-            }
-            else if (processingType == ProcessingType.Update)
-            {
-                dxModelBuilder.GetUpdateCommand();
-            }
-
-            DataTable dataTable = dataSet.Tables[dxElementName];
-
-            if (dxElement.Mode == MultiElementsMode.Full)
-            {
-                this.ProcessAnnouncedItems(dxElement, dataTable, dataSet.DataSetName);
-
-                var rowsToDelete = dataTable.Rows.Cast<DataRow>()
-                    .Where(row =>
-                    {
-                        var id = Guid.Parse(Convert.ToString(row[Constants.ID]));
-                        return !dxElement.Announced.Any(x => x.ID == id);
-                    })
-                    .ToList();
-
-                foreach (var row in rowsToDelete)
-                {
-                    row.Delete();
-                }
-
-            }
-            else if (dxElement.Mode == MultiElementsMode.Target)
-            {
-                this.ProcessAnnouncedItems(dxElement, dataTable, dataSet.DataSetName);
-                this.ProcessDeletedItems(dxElement, dataTable);
-            }
-
-            dxModelAdapter.Update(dataSet, dxElement.DXElementInfo.Name);
         }
 
         private void ProcessAnnouncedItems(DXMultiElement dxMultiItem, DataTable dataTable, string dxModelType)
@@ -979,7 +966,6 @@ namespace IV.DX.Persistence
                     }
                 }
             }
-
         }
 
         private bool IsNullOrEmpty(JValue jValue)
@@ -1430,15 +1416,8 @@ namespace IV.DX.Persistence
                     dataRow[relationInfo.RelationNameRight] = obj2Id;
                 }
 
-                if (dataSet.Tables[relationInfo.RelationTable].Rows.Count >= 500)
-                {
-                    SmartUpdateOrBulk(conn, dataSet, relationInfo.RelationTable, adapter, bulkThreshold: 500, upsert: true);
-                }
-                else
-                {
-                    adapter.Update(dataSet, relationInfo.RelationTable);
-                    dataSet.AcceptChanges();
-                }
+                SaveTable(adapter, conn, dataSet, table, true);
+                dataSet.AcceptChanges();
 
                 return true;
             });
@@ -1467,16 +1446,8 @@ namespace IV.DX.Persistence
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
-                    // Try bulk when many rows; falls back to adapter if small
-                    if (dataSet.Tables[tableName].Rows.Count >= 500)
-                    {
-                        SmartUpdateOrBulk(conn, dataSet, tableName, adapter, bulkThreshold: 500, upsert: true);
-                    }
-                    else
-                    {
-                        adapter.Update(dataSet, tableName);
-                        dataSet.AcceptChanges();
-                    }
+                    SaveTable(adapter, conn, dataSet, table, true);
+                    dataSet.AcceptChanges();
 
                     return true;
                 }
@@ -1510,16 +1481,8 @@ namespace IV.DX.Persistence
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
-                    // Try bulk when many rows; falls back to adapter if small
-                    if (dataSet.Tables[tableName].Rows.Count >= 500)
-                    {
-                        SmartUpdateOrBulk(conn, dataSet, tableName, adapter, bulkThreshold: 500, upsert: true);
-                    }
-                    else
-                    {
-                        adapter.Update(dataSet, tableName);
-                        dataSet.AcceptChanges();
-                    }
+                    SaveTable(adapter, conn, dataSet, table, true);
+                    dataSet.AcceptChanges();
 
                     return true;
                 }
@@ -1574,15 +1537,8 @@ namespace IV.DX.Persistence
                         row.Delete();
                     }
 
-                    if (dataSet.Tables[relationInfo.RelationTable].Rows.Count >= 500)
-                    {
-                        SmartUpdateOrBulk(conn, dataSet, relationInfo.RelationTable, adapter, bulkThreshold: 500, upsert: true);
-                    }
-                    else
-                    {
-                        adapter.Update(dataSet, relationInfo.RelationTable);
-                        dataSet.AcceptChanges();
-                    }
+                    SaveTable(adapter, conn, dataSet, table, true);
+                    dataSet.AcceptChanges();
 
                     return true;
                 }
@@ -1623,16 +1579,8 @@ namespace IV.DX.Persistence
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
-                    // Try bulk when many rows; falls back to adapter if small
-                    if (dataSet.Tables[tableName].Rows.Count >= 500)
-                    {
-                        SmartUpdateOrBulk(conn, dataSet, tableName, adapter, bulkThreshold: 500, upsert: true);
-                    }
-                    else
-                    {
-                        adapter.Update(dataSet, tableName);
-                        dataSet.AcceptChanges();
-                    }
+                    SaveTable(adapter, conn, dataSet, table, true);
+                    dataSet.AcceptChanges();
 
                     return true;
                 }
@@ -1686,16 +1634,8 @@ namespace IV.DX.Persistence
                     var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
-                    // Try bulk when many rows; falls back to adapter if small
-                    if (dataSet.Tables[tableName].Rows.Count >= 500)
-                    {
-                        SmartUpdateOrBulk(conn, dataSet, tableName, adapter, bulkThreshold: 500, upsert: true);
-                    }
-                    else
-                    {
-                        adapter.Update(dataSet, tableName);
-                        dataSet.AcceptChanges();
-                    }
+                    SaveTable(adapter, conn, dataSet, table, true);
+                    dataSet.AcceptChanges();
 
                     return true;
                 }
@@ -1800,12 +1740,12 @@ namespace IV.DX.Persistence
                 _queryHelper.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit));
 
             if (fillSchema)
-            {                
+            {
                 adapter.MissingSchemaAction = MissingSchemaAction.Add;
                 adapter.MissingMappingAction = MissingMappingAction.Passthrough;
-                                
+
                 adapter.FillSchema(dataSet, SchemaType.Mapped, tableName);
-                               
+
                 var table = dataSet.Tables[tableName];
 
                 foreach (DataColumn col in table.Columns)
@@ -1814,7 +1754,7 @@ namespace IV.DX.Persistence
                         col.DateTimeMode = DataSetDateTime.Utc;
                 }
             }
-        
+
             var oldConstraints = dataSet.EnforceConstraints;
             dataSet.EnforceConstraints = false;
 
@@ -1880,45 +1820,6 @@ namespace IV.DX.Persistence
             Insert = 1,
             Update = 2,
             Delete = 3
-        }
-
-        private void SmartUpdateOrBulk(DbConnection conn, DataSet dataSet, string tableName,
-                               DbDataAdapter? adapter = null, int bulkThreshold = 500, bool upsert = true)
-        {
-            if (dataSet == null)
-                throw new ArgumentNullException(nameof(dataSet));
-
-            if (string.IsNullOrEmpty(tableName))
-                throw new ArgumentNullException(nameof(tableName));
-
-            var table = dataSet.Tables[tableName];
-            if (table == null || table.Rows.Count == 0)
-                return;
-
-            if (_queryHelper is IDXBulkInsertCapable bulkHelper && conn != null)
-            {
-                if (table.Rows.Count >= bulkThreshold)
-                {
-                    if (upsert)
-                        bulkHelper.BulkUpsert(conn, table, tableName);
-                    else
-                        bulkHelper.BulkInsert(conn, table, tableName);
-
-                    dataSet.AcceptChanges();
-                    return;
-                }
-            }
-            else
-            {
-                if (adapter == null)
-                {
-                    adapter = _queryHelper.GetDbDataAdapter(conn, $"SELECT * FROM \"{tableName}\" LIMIT 0");
-                    _queryHelper.GetDbCommandBuilder(adapter);
-                }
-
-                adapter.Update(table);
-                dataSet.AcceptChanges();
-            }
         }
     }
 }
