@@ -154,7 +154,7 @@ namespace IV.DX.Application
                     DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement()
                     {
                         ID = Guid.NewGuid(),
-                        ObjectID = id,
+                        DXUnitID = id,
                         FilePath = x.FullName,
                         Name = match.Groups["Name"].Value,
                         Version = match.Groups["Version"].Value,

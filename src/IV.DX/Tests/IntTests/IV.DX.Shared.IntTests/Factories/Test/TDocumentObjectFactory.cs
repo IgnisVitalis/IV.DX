@@ -14,7 +14,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TDocumentMainElement = new TDocumentMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Name = name
                 }
             };

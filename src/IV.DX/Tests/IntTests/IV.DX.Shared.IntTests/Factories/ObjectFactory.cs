@@ -14,7 +14,7 @@ namespace IV.DX.Shared.IntTests.Factories
                 DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Name = objectName,
                     Kind = DXObjectKindEnum.Custom,
                 }

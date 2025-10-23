@@ -166,10 +166,10 @@ namespace IV.DX.Persistence
                 var dataTable = dataSet.Tables[singleItem.Name];
 
                 this.PopulatedxSingleItem(singleItem, item, dataTable.Rows.Cast<DataRow>()
-                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID));
+                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.OwnSingleItem.Item.ID));
 
                 return singleItem;
-            }).ToList();
+            }).ToHashSet();
 
             // Process DX multi items          
             resultItem.MultiItems = container.MultiFragmentDefinitions.Select(item =>
@@ -180,12 +180,12 @@ namespace IV.DX.Persistence
 
                 var rows =
                     dataTable.Rows.Cast<DataRow>()
-                    .Where(y => ConvertHelper.ParseGuid(y[Constants.ObjectID]) == resultItem.OwnSingleItem.Item.ID).ToList();
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.OwnSingleItem.Item.ID).ToList();
 
                 this.PopulateDXMultiItem(multiItem, item, rows);
 
                 return multiItem;
-            }).ToList();
+            }).ToHashSet();
 
             return resultItem;
         }
@@ -357,20 +357,20 @@ namespace IV.DX.Persistence
             this.PopulateTableToDataSet(conn, dataSet, container.OwnSingleItem.Type,
                 whereClause: this._queryHelper.GetWhereExpressionForID(id), fillSchema: false);
 
-            var whereClauseForObjectID = this._queryHelper.GetWhereExpressionForObjectID(id);
+            var whereClauseForDXUnitID = this._queryHelper.GetWhereExpressionForDXUnitID(id);
 
             foreach (var singleItem in container.SingleFragmentDefinitions)
             {
                 this.PopulateTableToDataSet(conn, dataSet, singleItem.Type,
                     columnNames: singleItem.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: whereClauseForObjectID, fillSchema: false);
+                    whereClause: whereClauseForDXUnitID, fillSchema: false);
             }
 
             foreach (var multiItem in container.MultiFragmentDefinitions)
             {
                 this.PopulateTableToDataSet(conn, dataSet, multiItem.Type,
                     multiItem.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: whereClauseForObjectID, fillSchema: false);
+                    whereClause: whereClauseForDXUnitID, fillSchema: false);
             }
 
             return dataSet;
@@ -384,16 +384,16 @@ namespace IV.DX.Persistence
             {
                 this.PopulateTableToDataSet(conn, dataSet, container.OwnSingleItem.Type, whereClause: this._queryHelper.GetWhereExpressionForID(ids), fillSchema: false);
 
-                var whereClauseForObjectIDs = this._queryHelper.GetWhereExpressionForObjectID(ids);
+                var whereClauseForDXUnitIDs = this._queryHelper.GetWhereExpressionForDXUnitID(ids);
 
                 foreach (var singleItem in container.SingleFragmentDefinitions)
                 {
-                    this.PopulateTableToDataSet(conn, dataSet, singleItem.Type, whereClause: whereClauseForObjectIDs, fillSchema: false);
+                    this.PopulateTableToDataSet(conn, dataSet, singleItem.Type, whereClause: whereClauseForDXUnitIDs, fillSchema: false);
                 }
 
                 foreach (var multiItem in container.MultiFragmentDefinitions)
                 {
-                    this.PopulateTableToDataSet(conn, dataSet, multiItem.Type, whereClause: whereClauseForObjectIDs, fillSchema: false);
+                    this.PopulateTableToDataSet(conn, dataSet, multiItem.Type, whereClause: whereClauseForDXUnitIDs, fillSchema: false);
                 }
             }
 
@@ -460,13 +460,13 @@ namespace IV.DX.Persistence
                 Content = jObjectContainerCopy
             };
 
-            if (row.Table.Columns.Contains(Constants.ObjectID))
+            if (row.Table.Columns.Contains(Constants.DXUnitID))
             {
-                dxItem.ObjectID = ConvertHelper.ParseGuid(row[Constants.ObjectID]);
+                dxItem.DXUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
             }
             else
             {
-                dxItem.ObjectID = dxItem.ID;
+                dxItem.DXUnitID = dxItem.ID;
             }
 
             return dxItem;
@@ -579,9 +579,7 @@ namespace IV.DX.Persistence
                     var multiTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     var relatedMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
                     var relatedMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
-                    if (relatedMM != null) foreach (var el in relatedMM) multiTables.Add(el.DXObjectDefinitionMainElement.Name.Trim());
-                    if (relatedMO != null) foreach (var el in relatedMO) multiTables.Add(el.DXObjectDefinitionMainElement.Name.Trim());
-
+                
                     var unitTable = dxUnitInfo.DXObjectDefinitionMainElement.Name;
                     var objectId = dxModel.OwnSingleItem.Item.ID!.Value;
 
@@ -691,7 +689,7 @@ namespace IV.DX.Persistence
             var unitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
 
 
-            var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName, whereClause: _queryHelper.GetWhereExpressionForObjectID(parentId));
+            var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName, whereClause: _queryHelper.GetWhereExpressionForDXUnitID(parentId));
 
             var table = dataSet.Tables[tableName];
             if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
@@ -799,7 +797,7 @@ namespace IV.DX.Persistence
         private void DeleteDXElementsFromDataSet(string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName, whereClause:
-                this._queryHelper.GetWhereExpressionForObjectID(objectID));
+                this._queryHelper.GetWhereExpressionForDXUnitID(objectID));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -901,14 +899,14 @@ namespace IV.DX.Persistence
         {
             row[Constants.ID] = dxItem.ID;
 
-            if (row.Table.Columns.Contains(Constants.ObjectID))
+            if (row.Table.Columns.Contains(Constants.DXUnitID))
             {
-                row[Constants.ObjectID] = dxItem.ObjectID;
+                row[Constants.DXUnitID] = dxItem.DXUnitID;
             }
 
             if (row.Table.Columns.Contains($"{dxModelType}ID"))
             {
-                row[$"{dxModelType}ID"] = dxItem.ObjectID;
+                row[$"{dxModelType}ID"] = dxItem.DXUnitID;
             }
 
             if (row.Table.Columns.Contains("TimeStamp"))
@@ -926,7 +924,7 @@ namespace IV.DX.Persistence
                 var jProperty = properties.SingleOrDefault(x => x.Name == column.ColumnName);
 
                 if (column.ColumnName == "ID"
-                    || column.ColumnName == "ObjectID"
+                    || column.ColumnName == "DXUnitID"
                     || column.ColumnName == "TimeStamp"
                     || column.ColumnName == $"{dxModelType}ID")
                 {
@@ -1241,7 +1239,7 @@ namespace IV.DX.Persistence
                 var id = this.InsertOrUpdatedxSingleItemToDataSet(
                     dxSingleDXElement,
                     dxModelType,
-                    dxSingleDXElement.Item.ObjectID.Value,
+                    dxSingleDXElement.Item.DXUnitID.Value,
                     dataSet,
                     conn,
                     processingType);
@@ -1357,7 +1355,7 @@ namespace IV.DX.Persistence
                     RelationType = (DXRelationTypeEnum)ConvertHelper.ParseInt(row["RelationType"]),
                     RelationTable = ConvertHelper.ParseString(row["RelationTable"]),
                     ID = ConvertHelper.ParseGuid(row[Constants.ID]),
-                    ObjectID = ConvertHelper.ParseGuid(row[Constants.ObjectID]),
+                    DXUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]),
                     ObjectNameLeft = ConvertHelper.ParseString(row["ObjectNameLeft"]),
                     ObjectNameRight = ConvertHelper.ParseString(row["ObjectNameRight"]),
                     RelationNameLeft = ConvertHelper.ParseString(row["RelationNameLeft"]),

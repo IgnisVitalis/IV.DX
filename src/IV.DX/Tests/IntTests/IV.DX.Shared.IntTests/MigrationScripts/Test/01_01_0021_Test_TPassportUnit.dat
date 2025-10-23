@@ -5,7 +5,7 @@
         "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
         "TPassportMainElement": {
             "ID": "365ee65a-eb05-4865-8988-1d6ed3cbff5c",
-            "ObjectID": "1f852be3-f851-4807-807f-cfd45a0b4093",
+            "DXUnitID": "1f852be3-f851-4807-807f-cfd45a0b4093",
             "SerialNumber": "6bcc2af44aa3"
         }
     },
@@ -15,7 +15,7 @@
         "User": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
         "TPassportMainElement": {
             "ID": "9582877a-b115-41f4-8a0d-98f5b994ce70",
-            "ObjectID": "459276b0-69db-43da-bf9d-c2683c4b4d39",
+            "DXUnitID": "459276b0-69db-43da-bf9d-c2683c4b4d39",
             "SerialNumber": "4a82ceaa1cff"
         }
     },
@@ -25,7 +25,7 @@
         "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
         "TPassportMainElement": {
             "ID": "c13efbf5-348a-4551-806a-206dfc44a861",
-            "ObjectID": "bd56ffdd-0d30-4d9f-b879-7875162fc7b6",
+            "DXUnitID": "bd56ffdd-0d30-4d9f-b879-7875162fc7b6",
             "SerialNumber": "6ca8ae455e82"
         }
     }

@@ -48,7 +48,7 @@ namespace IV.DX.Persistence.IntTests
 
                 Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
                 Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.DXUnitID);
                 Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
                 Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
@@ -57,14 +57,14 @@ namespace IV.DX.Persistence.IntTests
 
                 var idColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
                 Assert.NotNull(idColumn);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.DXUnitID);
                 Assert.Equal("ID", idColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.GUID, idColumn.ColumnType);
 
-                var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+                var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "DXUnitID");
                 Assert.NotNull(objectIdColumn);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
-                Assert.Equal("ObjectID", objectIdColumn.Name);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.DXUnitID);
+                Assert.Equal("DXUnitID", objectIdColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
                 var systemTimeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
@@ -76,14 +76,14 @@ namespace IV.DX.Persistence.IntTests
                 var guidColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
                 Assert.NotNull(guidColumn);
                 Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.DXUnitID);
                 Assert.Equal("GuidColumn", guidColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.GUID, guidColumn.ColumnType);
 
                 var timeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
                 Assert.NotNull(timeStampColumn);
                 Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.DXUnitID);
                 Assert.Equal("TimeStampColumn", timeStampColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
                 Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
@@ -91,7 +91,7 @@ namespace IV.DX.Persistence.IntTests
                 var stringColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
                 Assert.NotNull(stringColumn);
                 Assert.Equal(new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"), stringColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.DXUnitID);
                 Assert.Equal("StringColumn", stringColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.String, stringColumn.ColumnType);
                 Assert.True(stringColumn.AllowNull);
@@ -101,7 +101,7 @@ namespace IV.DX.Persistence.IntTests
                 var textColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
                 Assert.NotNull(textColumn);
                 Assert.Equal(new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"), textColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.DXUnitID);
                 Assert.Equal("TextColumn", textColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Text, textColumn.ColumnType);
                 Assert.True(textColumn.AllowNull);
@@ -109,7 +109,7 @@ namespace IV.DX.Persistence.IntTests
                 var dateTimeColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
                 Assert.NotNull(dateTimeColumn);
                 Assert.Equal(new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"), dateTimeColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.DXUnitID);
                 Assert.Equal("DateTimeColumn", dateTimeColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.DateTime, dateTimeColumn.ColumnType);
                 Assert.True(dateTimeColumn.AllowNull);
@@ -118,7 +118,7 @@ namespace IV.DX.Persistence.IntTests
                 var boolColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
                 Assert.NotNull(boolColumn);
                 Assert.Equal(new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"), boolColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.DXUnitID);
                 Assert.Equal("BoolColumn", boolColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Bool, boolColumn.ColumnType);
                 Assert.True(boolColumn.AllowNull);
@@ -127,7 +127,7 @@ namespace IV.DX.Persistence.IntTests
                 var shortColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
                 Assert.NotNull(shortColumn);
                 Assert.Equal(new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"), shortColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.DXUnitID);
                 Assert.Equal("ShortColumn", shortColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Short, shortColumn.ColumnType);
                 Assert.True(shortColumn.AllowNull);
@@ -136,7 +136,7 @@ namespace IV.DX.Persistence.IntTests
                 var intColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
                 Assert.NotNull(intColumn);
                 Assert.Equal(new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"), intColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.DXUnitID);
                 Assert.Equal("IntColumn", intColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Int, intColumn.ColumnType);
                 Assert.True(intColumn.AllowNull);
@@ -145,7 +145,7 @@ namespace IV.DX.Persistence.IntTests
                 var longColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
                 Assert.NotNull(longColumn);
                 Assert.Equal(new Guid("5482886C-3062-4F37-B550-41353835C744"), longColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.DXUnitID);
                 Assert.Equal("LongColumn", longColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Long, longColumn.ColumnType);
                 Assert.True(longColumn.AllowNull);
@@ -154,7 +154,7 @@ namespace IV.DX.Persistence.IntTests
                 var decimalColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
                 Assert.NotNull(decimalColumn);
                 Assert.Equal(new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"), decimalColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.DXUnitID);
                 Assert.Equal("DecimalColumn", decimalColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Decimal, decimalColumn.ColumnType);
                 Assert.True(decimalColumn.AllowNull);
@@ -165,7 +165,7 @@ namespace IV.DX.Persistence.IntTests
                 var floatColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
                 Assert.NotNull(floatColumn);
                 Assert.Equal(new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"), floatColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.DXUnitID);
                 Assert.Equal("FloatColumn", floatColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Float, floatColumn.ColumnType);
                 Assert.True(floatColumn.AllowNull);
@@ -176,7 +176,7 @@ namespace IV.DX.Persistence.IntTests
                 var currencyColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
                 Assert.NotNull(currencyColumn);
                 Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.DXUnitID);
                 Assert.Equal("CurrencyColumn", currencyColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Currency, currencyColumn.ColumnType);
                 Assert.True(currencyColumn.AllowNull);
@@ -185,7 +185,7 @@ namespace IV.DX.Persistence.IntTests
                 var blobColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
                 Assert.NotNull(blobColumn);
                 Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
-                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
+                Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.DXUnitID);
                 Assert.Equal("BlobColumn", blobColumn.Name);
                 Assert.Equal(DXColumnTypeEnum.Blob, blobColumn.ColumnType);
                 Assert.True(blobColumn.AllowNull);
@@ -234,7 +234,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
@@ -243,14 +243,14 @@ namespace IV.DX.Persistence.IntTests
 
             var idColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.DXUnitID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "DXUnitID");
             Assert.NotNull(objectIdColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
-            Assert.Equal("ObjectID", objectIdColumn.Name);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.DXUnitID);
+            Assert.Equal("DXUnitID", objectIdColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
             var systemTimeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
@@ -262,14 +262,14 @@ namespace IV.DX.Persistence.IntTests
             var guidColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.DXUnitID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, guidColumn.ColumnType);
 
             var timeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.DXUnitID);
             Assert.Equal("TimeStampColumnUpdated", timeStampColumn.Name);
             Assert.Equal(DXColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
@@ -277,7 +277,7 @@ namespace IV.DX.Persistence.IntTests
             var stringColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"));
             Assert.NotNull(stringColumn);
             Assert.Equal(new Guid("966EF3FD-B092-4465-9B7C-EBECA6E47CE6"), stringColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.DXUnitID);
             Assert.Equal("StringColumnUpdated", stringColumn.Name);
             Assert.Equal(DXColumnTypeEnum.String, stringColumn.ColumnType);
             Assert.False(stringColumn.AllowNull);
@@ -287,7 +287,7 @@ namespace IV.DX.Persistence.IntTests
             var textColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"));
             Assert.NotNull(textColumn);
             Assert.Equal(new Guid("68EBA29A-BFA8-48C4-9FE6-122DE13DA225"), textColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), textColumn.DXUnitID);
             Assert.Equal("TextColumnUpdated", textColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Text, textColumn.ColumnType);
             Assert.False(textColumn.AllowNull);
@@ -295,7 +295,7 @@ namespace IV.DX.Persistence.IntTests
             var dateTimeColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"));
             Assert.NotNull(dateTimeColumn);
             Assert.Equal(new Guid("2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6"), dateTimeColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dateTimeColumn.DXUnitID);
             Assert.Equal("DateTimeColumnUpdated", dateTimeColumn.Name);
             Assert.Equal(DXColumnTypeEnum.DateTime, dateTimeColumn.ColumnType);
             Assert.False(dateTimeColumn.AllowNull);
@@ -304,7 +304,7 @@ namespace IV.DX.Persistence.IntTests
             var boolColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"));
             Assert.NotNull(boolColumn);
             Assert.Equal(new Guid("BC13DDCE-1241-4515-BA44-A68320B611A1"), boolColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), boolColumn.DXUnitID);
             Assert.Equal("BoolColumnUpdated", boolColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Bool, boolColumn.ColumnType);
             Assert.False(boolColumn.AllowNull);
@@ -313,7 +313,7 @@ namespace IV.DX.Persistence.IntTests
             var shortColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"));
             Assert.NotNull(shortColumn);
             Assert.Equal(new Guid("0C8B0D31-6972-4A93-9355-27E2C873DBAA"), shortColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), shortColumn.DXUnitID);
             Assert.Equal("ShortColumnUpdated", shortColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Short, shortColumn.ColumnType);
             Assert.False(shortColumn.AllowNull);
@@ -322,7 +322,7 @@ namespace IV.DX.Persistence.IntTests
             var intColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"));
             Assert.NotNull(intColumn);
             Assert.Equal(new Guid("F505FCAF-7021-46C6-B8AD-8E54C12325B4"), intColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), intColumn.DXUnitID);
             Assert.Equal("IntColumnUpdated", intColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Int, intColumn.ColumnType);
             Assert.False(intColumn.AllowNull);
@@ -331,7 +331,7 @@ namespace IV.DX.Persistence.IntTests
             var longColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5482886C-3062-4F37-B550-41353835C744"));
             Assert.NotNull(longColumn);
             Assert.Equal(new Guid("5482886C-3062-4F37-B550-41353835C744"), longColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), longColumn.DXUnitID);
             Assert.Equal("LongColumnUpdated", longColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Long, longColumn.ColumnType);
             Assert.False(longColumn.AllowNull);
@@ -340,7 +340,7 @@ namespace IV.DX.Persistence.IntTests
             var decimalColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"));
             Assert.NotNull(decimalColumn);
             Assert.Equal(new Guid("D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89"), decimalColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), decimalColumn.DXUnitID);
             Assert.Equal("DecimalColumnUpdated", decimalColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Decimal, decimalColumn.ColumnType);
             Assert.False(decimalColumn.AllowNull);
@@ -351,7 +351,7 @@ namespace IV.DX.Persistence.IntTests
             var floatColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"));
             Assert.NotNull(floatColumn);
             Assert.Equal(new Guid("7C8954BF-EEF0-4C18-B240-4FD42D53E27C"), floatColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), floatColumn.DXUnitID);
             Assert.Equal("FloatColumnUpdated", floatColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Float, floatColumn.ColumnType);
             Assert.False(floatColumn.AllowNull);
@@ -362,7 +362,7 @@ namespace IV.DX.Persistence.IntTests
             var currencyColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.DXUnitID);
             Assert.Equal("CurrencyColumnUpdated", currencyColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Currency, currencyColumn.ColumnType);
             Assert.False(currencyColumn.AllowNull);
@@ -371,7 +371,7 @@ namespace IV.DX.Persistence.IntTests
             var blobColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.DXUnitID);
             Assert.Equal("BlobColumnUpdated", blobColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Blob, blobColumn.ColumnType);
             Assert.False(blobColumn.AllowNull);
@@ -403,7 +403,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
@@ -412,14 +412,14 @@ namespace IV.DX.Persistence.IntTests
 
             var idColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.DXUnitID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "DXUnitID");
             Assert.NotNull(objectIdColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
-            Assert.Equal("ObjectID", objectIdColumn.Name);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.DXUnitID);
+            Assert.Equal("DXUnitID", objectIdColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
             var systemTimeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
@@ -431,14 +431,14 @@ namespace IV.DX.Persistence.IntTests
             var guidColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.DXUnitID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, guidColumn.ColumnType);
 
             var timeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.DXUnitID);
             Assert.Equal("TimeStampColumn", timeStampColumn.Name);
             Assert.Equal(DXColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
@@ -474,7 +474,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("NewDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
@@ -483,14 +483,14 @@ namespace IV.DX.Persistence.IntTests
 
             var idColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.DXUnitID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "DXUnitID");
             Assert.NotNull(objectIdColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
-            Assert.Equal("ObjectID", objectIdColumn.Name);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.DXUnitID);
+            Assert.Equal("DXUnitID", objectIdColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
             var systemTimeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
@@ -502,14 +502,14 @@ namespace IV.DX.Persistence.IntTests
             var guidColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.DXUnitID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, guidColumn.ColumnType);
 
             var timeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.DXUnitID);
             Assert.Equal("TimeStampColumn", timeStampColumn.Name);
             Assert.Equal(DXColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
@@ -517,7 +517,7 @@ namespace IV.DX.Persistence.IntTests
             var currencyColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.DXUnitID);
             Assert.Equal("CurrencyColumn", currencyColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Currency, currencyColumn.ColumnType);
             Assert.True(currencyColumn.AllowNull);
@@ -526,7 +526,7 @@ namespace IV.DX.Persistence.IntTests
             var blobColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.DXUnitID);
             Assert.Equal("BlobColumn", blobColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Blob, blobColumn.ColumnType);
             Assert.True(blobColumn.AllowNull);
@@ -558,7 +558,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(dxElementDefinition.DXObjectDefinitionMainElement);
             Assert.Equal(new Guid("EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4"), dxElementDefinition.DXObjectDefinitionMainElement.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), dxElementDefinition.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("UpdatedDataDXElement", dxElementDefinition.DXObjectDefinitionMainElement.Name);
             Assert.True(dxElementDefinition is DXElementDefinitionUnit);
 
@@ -567,14 +567,14 @@ namespace IV.DX.Persistence.IntTests
 
             var idColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), idColumn.DXUnitID);
             Assert.Equal("ID", idColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, idColumn.ColumnType);
 
-            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "DXUnitID");
             Assert.NotNull(objectIdColumn);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.ObjectID);
-            Assert.Equal("ObjectID", objectIdColumn.Name);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), objectIdColumn.DXUnitID);
+            Assert.Equal("DXUnitID", objectIdColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, objectIdColumn.ColumnType);
 
             var systemTimeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.Name == "TimeStamp");
@@ -586,14 +586,14 @@ namespace IV.DX.Persistence.IntTests
             var guidColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("5BCDF497-6004-4028-BB18-5185576E2094"));
             Assert.NotNull(guidColumn);
             Assert.Equal(new Guid("5BCDF497-6004-4028-BB18-5185576E2094"), guidColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), guidColumn.DXUnitID);
             Assert.Equal("GuidColumn", guidColumn.Name);
             Assert.Equal(DXColumnTypeEnum.GUID, guidColumn.ColumnType);
 
             var timeStampColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"));
             Assert.NotNull(timeStampColumn);
             Assert.Equal(new Guid("C44DB212-4612-4367-8FBF-B5826667EA4C"), timeStampColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), timeStampColumn.DXUnitID);
             Assert.Equal("TimeStampColumn", timeStampColumn.Name);
             Assert.Equal(DXColumnTypeEnum.TimeStamp, timeStampColumn.ColumnType);
             Assert.Equal("CURRENT_TIMESTAMP", timeStampColumn.DefaultValue);
@@ -601,7 +601,7 @@ namespace IV.DX.Persistence.IntTests
             var stringColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("E042EF31-397E-4614-BABC-79132D4A68DF"));
             Assert.NotNull(stringColumn);
             Assert.Equal(new Guid("E042EF31-397E-4614-BABC-79132D4A68DF"), stringColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), stringColumn.DXUnitID);
             Assert.Equal("StringColumnNew", stringColumn.Name);
             Assert.Equal(DXColumnTypeEnum.String, stringColumn.ColumnType);
             Assert.False(stringColumn.AllowNull);
@@ -611,7 +611,7 @@ namespace IV.DX.Persistence.IntTests
             var currencyColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"));
             Assert.NotNull(currencyColumn);
             Assert.Equal(new Guid("3736BFE6-BF1E-41C3-A72C-A0CA073B1F38"), currencyColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), currencyColumn.DXUnitID);
             Assert.Equal("CurrencyColumnUpdated", currencyColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Currency, currencyColumn.ColumnType);
             Assert.False(currencyColumn.AllowNull);
@@ -620,7 +620,7 @@ namespace IV.DX.Persistence.IntTests
             var blobColumn = dxElementDefinition.DXColumnDefinitionElement.Announced.SingleOrDefault(x => x.ID == new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"));
             Assert.NotNull(blobColumn);
             Assert.Equal(new Guid("029B39F4-CF55-49D5-876B-6C69C633B856"), blobColumn.ID);
-            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.ObjectID);
+            Assert.Equal(new Guid("7989B845-6AAA-4ADB-99ED-B4F0840348F8"), blobColumn.DXUnitID);
             Assert.Equal("BlobColumnUpdated", blobColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Blob, blobColumn.ColumnType);
             Assert.False(blobColumn.AllowNull);

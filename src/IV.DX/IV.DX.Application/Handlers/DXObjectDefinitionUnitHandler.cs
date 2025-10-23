@@ -35,7 +35,7 @@ namespace IV.DX.Application.Handlers
             {
                 if (objectInfoIncome is DXElementDefinitionUnit)
                 {
-                    this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.ObjectID);
+                    this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.DXUnitID);
                 }
 
                 this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.ID);
@@ -124,7 +124,7 @@ namespace IV.DX.Application.Handlers
                 var objectIdColumnDesc = new DXColumnDefinitionElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = objectInfoIncome.ID
+                    DXUnitID = objectInfoIncome.ID
                 };
 
                 this.SetImportantValues(objectIdColumnDesc, column);
@@ -133,7 +133,7 @@ namespace IV.DX.Application.Handlers
                     objectInfoIncome
                     .DXColumnDefinitionElement
                     .Announced
-                    .Append(objectIdColumnDesc);
+                    .Append(objectIdColumnDesc).ToHashSet();
             }
             else if (objectIdColumnDescFromDataBase != null && objectIdColumnDescFromModel == null)
             {
@@ -143,7 +143,7 @@ namespace IV.DX.Application.Handlers
                     objectInfoIncome
                     .DXColumnDefinitionElement
                     .Announced
-                    .Append(objectIdColumnDescFromDataBase);
+                    .Append(objectIdColumnDescFromDataBase).ToHashSet();
             }
             else if (objectIdColumnDescFromDataBase == null && objectIdColumnDescFromModel != null)
             {
@@ -175,7 +175,7 @@ namespace IV.DX.Application.Handlers
                 case ImportantColumn.ID:
                     columnName = "id";
                     break;
-                case ImportantColumn.ObjectID:
+                case ImportantColumn.DXUnitID:
                     columnName = "objectid";
                     break;
                 case ImportantColumn.TimeStamp:
@@ -189,7 +189,7 @@ namespace IV.DX.Application.Handlers
         private enum ImportantColumn
         {
             ID,
-            ObjectID,
+            DXUnitID,
             TimeStamp
         }
 
@@ -200,8 +200,8 @@ namespace IV.DX.Application.Handlers
                 case ImportantColumn.ID:
                     this.SetImportantValuesForIDColumn(columnInfo);
                     break;
-                case ImportantColumn.ObjectID:
-                    this.SetImportantValuesForObjectIDColumn(columnInfo);
+                case ImportantColumn.DXUnitID:
+                    this.SetImportantValuesForDXUnitIDColumn(columnInfo);
                     break;
                 case ImportantColumn.TimeStamp:
                     this.SetImportantValuesForTimeStampColumn(columnInfo);
@@ -217,12 +217,12 @@ namespace IV.DX.Application.Handlers
             idColumn.Name = "ID";
         }
 
-        private void SetImportantValuesForObjectIDColumn(DXColumnDefinitionElement objectIDColumn)
+        private void SetImportantValuesForDXUnitIDColumn(DXColumnDefinitionElement objectIDColumn)
         {
             objectIDColumn.AllowNull = false;
             objectIDColumn.DefaultValue = string.Empty;
             objectIDColumn.ColumnType = DXColumnTypeEnum.GUID;
-            objectIDColumn.Name = "ObjectID";
+            objectIDColumn.Name = "DXUnitID";
         }
 
         private void SetImportantValuesForTimeStampColumn(DXColumnDefinitionElement timeStamplColumnDesc)
@@ -243,19 +243,19 @@ namespace IV.DX.Application.Handlers
                 .Where(x =>
                     x.Name.Trim().ToLower() != "id"
                     && x.Name.Trim().ToLower() != "objectid"
-                    && x.Name.Trim().ToLower() != "timestamp");
+                    && x.Name.Trim().ToLower() != "timestamp").ToHashSet();
 
             // Third
-            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(timeStampColumn);
+            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(timeStampColumn).ToHashSet();
 
             // Second
             if (objectIdColumn != null)
             {
-                dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(objectIdColumn);
+                dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(objectIdColumn).ToHashSet();
             }
 
             // First
-            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(idColumn);
+            dataDXElement.DXColumnDefinitionElement.Announced = dataDXElement.DXColumnDefinitionElement.Announced.Prepend(idColumn).ToHashSet();
         }
     }
 }

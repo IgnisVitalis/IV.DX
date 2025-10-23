@@ -36,9 +36,9 @@ namespace IV.DX.Persistence.Abstractions
         string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
         string GetWhereExpressionForID(Guid id);
-        string GetWhereExpressionForObjectID(Guid id);
+        string GetWhereExpressionForDXUnitID(Guid id);
         string GetWhereExpressionForID(IEnumerable<Guid> ids);
-        string GetWhereExpressionForObjectID(IEnumerable<Guid> ids);
+        string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids);
         string GetWhereExpressionWithAnd(IDictionary<string, object> values);     
     }
 }

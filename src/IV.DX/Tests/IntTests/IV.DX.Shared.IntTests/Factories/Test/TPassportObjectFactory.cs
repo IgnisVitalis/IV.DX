@@ -14,7 +14,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TPassportMainElement = new TPassportMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     SerialNumber = serialNumber
                 }
             };

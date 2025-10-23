@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Factories.Test;
@@ -50,9 +49,9 @@ namespace IV.DX.Application.IntTests.Services
             var itemAmount = 10000;
             var textLength = 10000;
 
-            var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToList();
+            var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
             var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
-
+           
             // Action
             var result = await EstimatePerformanceAsync(async () =>
             {

@@ -36,7 +36,7 @@
             {
                 JoinedTableName = this.Value,
                 JoinedTableAlias = base.TableNameAliasBase,
-                JoinedTableKey = "ObjectID",
+                JoinedTableKey = "DXUnitID",
                 MainTableKey = "ID"
             };
 

@@ -17,24 +17,24 @@ namespace IV.DX.Shared.IntTests.Factories
                     ID = Guid.NewGuid(),
                     Name = "Name",
                     Kind = DXObjectKindEnum.Custom,
-                    ObjectID = id
+                    DXUnitID = id
                 },
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
                             ID= Guid.NewGuid(),
-                            ObjectID = id,
+                            DXUnitID = id,
                             ColumnType = DXColumnTypeEnum.GUID,
                             Name = "NameGUID"
                         },
                         new DXColumnDefinitionElement()
                         {
                             ID= Guid.NewGuid(),
-                            ObjectID = id,
+                            DXUnitID = id,
                             ColumnType = DXColumnTypeEnum.String,
                             Name = "NameString"
                         }

@@ -32,7 +32,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -52,7 +52,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -77,7 +77,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -97,7 +97,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -123,7 +123,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -143,7 +143,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -168,7 +168,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -188,7 +188,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -224,7 +224,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -234,7 +234,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -272,7 +272,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -282,7 +282,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -357,7 +357,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -367,7 +367,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -397,7 +397,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -407,7 +407,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -435,7 +435,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -445,7 +445,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -476,7 +476,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -486,7 +486,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -583,7 +583,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -613,7 +613,7 @@ namespace IV.DX.Persistence
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                         new DXColumnDefinitionElement()
                         {
@@ -623,7 +623,7 @@ namespace IV.DX.Persistence
                         },
                         new DXColumnDefinitionElement()
                         {
-                            Name = "ObjectID",
+                            Name = "DXUnitID",
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
@@ -688,7 +688,7 @@ namespace IV.DX.Persistence
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXUniqueColumnsElement>()
+                    Announced = new HashSet<DXUniqueColumnsElement>()
                     {
                         new DXUniqueColumnsElement()
                         {
@@ -727,7 +727,7 @@ namespace IV.DX.Persistence
                 DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXElementInUnitDefinitionElement>()
+                    Announced = new HashSet<DXElementInUnitDefinitionElement>()
                     {
                         new DXElementInUnitDefinitionElement()
                         {
@@ -770,7 +770,7 @@ namespace IV.DX.Persistence
                 DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXElementInUnitDefinitionElement>()
+                    Announced = new HashSet<DXElementInUnitDefinitionElement>()
                     {
                         new DXElementInUnitDefinitionElement()
                         {
@@ -838,7 +838,7 @@ namespace IV.DX.Persistence
                 DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXElementInUnitDefinitionElement>()
+                    Announced = new HashSet<DXElementInUnitDefinitionElement>()
                     {
                         new DXElementInUnitDefinitionElement()
                         {
@@ -864,7 +864,7 @@ namespace IV.DX.Persistence
                 DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new List<DXElementInUnitDefinitionElement>()
+                    Announced = new HashSet<DXElementInUnitDefinitionElement>()
                     {
                         new DXElementInUnitDefinitionElement()
                         {

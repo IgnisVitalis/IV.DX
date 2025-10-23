@@ -5,7 +5,7 @@ namespace IV.DX.Kernel.Models
     internal class DXItem
     {
         public Guid? ID { get; set; }
-        public Guid? ObjectID { get; set; }
+        public Guid? DXUnitID { get; set; }
 
         public JObject Content { get; set; }
 
@@ -28,7 +28,7 @@ namespace IV.DX.Kernel.Models
             JObject jObject = this.Content != null ? new JObject(this.Content) : new JObject();
 
             jObject[Constants.ID] = this.ID;
-            jObject[Constants.ObjectID] = this.ObjectID;
+            jObject[Constants.DXUnitID] = this.DXUnitID;
 
             return jObject;
         }
@@ -55,13 +55,13 @@ namespace IV.DX.Kernel.Models
             DXItem fragment = new DXItem
             {
                 ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
-                ObjectID = jObject[Constants.ObjectID] != null ? (Guid?)jObject[Constants.ObjectID] : null
+                DXUnitID = jObject[Constants.DXUnitID] != null ? (Guid?)jObject[Constants.DXUnitID] : null
             };
 
             var jObjectCopy = jObject.DeepClone() as JObject;
 
             jObjectCopy.Remove(Constants.ID);
-            jObjectCopy.Remove(Constants.ObjectID);
+            jObjectCopy.Remove(Constants.DXUnitID);
 
             fragment.Content = jObjectCopy;
 
@@ -155,13 +155,13 @@ namespace IV.DX.Kernel.Models
                 result = result && (item1.ID == item2.ID);
             }
 
-            if (item1.ObjectID.HasValue && item2.ObjectID.HasValue)
+            if (item1.DXUnitID.HasValue && item2.DXUnitID.HasValue)
             {
-                result = result && (item1.ObjectID.Value == item2.ObjectID.Value);
+                result = result && (item1.DXUnitID.Value == item2.DXUnitID.Value);
             }
             else
             {
-                result = result && (item1.ObjectID == item2.ObjectID);
+                result = result && (item1.DXUnitID == item2.DXUnitID);
             }
 
             result = result && JToken.DeepEquals(item1.Content, item2.Content);
@@ -199,7 +199,7 @@ namespace IV.DX.Kernel.Models
             return new DXItem()
             {
                 ID = this.ID,
-                ObjectID = this.ObjectID,
+                DXUnitID = this.DXUnitID,
                 Content = this.Content?.DeepClone() as JObject
             };
         }

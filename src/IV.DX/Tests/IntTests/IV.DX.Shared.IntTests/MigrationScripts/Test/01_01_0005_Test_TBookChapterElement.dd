@@ -4,7 +4,7 @@
         "ID": "547a5481-9931-4d48-982c-6f8cf959712e",
         "DXObjectDefinitionMainElement": {
             "ID": "58833600-9b03-40f2-8c74-232aabdab1b6",
-            "ObjectID": "547a5481-9931-4d48-982c-6f8cf959712e",
+            "DXUnitID": "547a5481-9931-4d48-982c-6f8cf959712e",
             "Name": "TBookChapterElement",
             "Kind": 3
         },
@@ -13,7 +13,7 @@
             "Announced": [
                 {
                     "ID": "c6d486e5-b592-45fd-ac73-ebace0f02322",
-                    "ObjectID": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "DXUnitID": "547a5481-9931-4d48-982c-6f8cf959712e",
                     "ColumnType": 8,
                     "Name": "Number",
                     "AllowNull": true,
@@ -21,7 +21,7 @@
                 },
                 {
                     "ID": "6abca4b2-51cf-4237-9593-8387761ba049",
-                    "ObjectID": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "DXUnitID": "547a5481-9931-4d48-982c-6f8cf959712e",
                     "ColumnType": 4,
                     "Name": "Text",
                     "AllowNull": true,

@@ -1,13 +1,14 @@
 ﻿using IV.DX.Kernel.Attributes;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace IV.DX.Kernel.Models
 {
     internal class DXModel
     {
         public DXMainItem OwnSingleItem { get; set; }
-        public IEnumerable<DXSingleElement> SingleItems { get; set; }
-        public IEnumerable<DXMultiElement> MultiItems { get; set; }
+        public HashSet<DXSingleElement> SingleItems { get; set; }
+        public HashSet<DXMultiElement> MultiItems { get; set; }
 
         public DXModel(DXMainItem ownSingleItem)
         {
@@ -35,8 +36,8 @@ namespace IV.DX.Kernel.Models
 
             return new DXModel(ownItemClone)
             {
-                SingleItems = this.SingleItems?.Select(x => x.DeepClone()).ToList(),
-                MultiItems = this.MultiItems?.Select(x => x.DeepClone()).ToList()
+                SingleItems = this.SingleItems?.Select(x => x.DeepClone()).ToHashSet(),
+                MultiItems = this.MultiItems?.Select(x => x.DeepClone()).ToHashSet()
             };
         }
 
@@ -88,12 +89,12 @@ namespace IV.DX.Kernel.Models
             var singleItems = jProperties
                     .Where(x => !expressionToFilterMultiItems(x))
                     .Select(x => GetDXSingleItem(x, ownItem.Item.ID))
-                    .ToList();
+                    .ToHashSet();
 
             var multiItems = jProperties
                     .Where(x => expressionToFilterMultiItems(x))
                     .Select(x => GetDXMutliItem(x, ownItem.Item.ID))
-                    .ToList();
+                    .ToHashSet();
 
             DXModel dxModel = new DXModel(ownItem)
             {
@@ -169,7 +170,7 @@ namespace IV.DX.Kernel.Models
             };
 
             result.Item.ID = id;
-            result.Item.ObjectID = id;
+            result.Item.DXUnitID = id;
 
             return result;
         }
@@ -179,7 +180,7 @@ namespace IV.DX.Kernel.Models
             DXItem dxItem = new DXItem
             {
                 ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
-                ObjectID = objId
+                DXUnitID = objId
             };
 
             var content = jObject.DeepClone() as JObject;
@@ -189,9 +190,9 @@ namespace IV.DX.Kernel.Models
                 content.Remove(Constants.ID);
             }
 
-            if (content[Constants.ObjectID] != null)
+            if (content[Constants.DXUnitID] != null)
             {
-                content.Remove(Constants.ObjectID);
+                content.Remove(Constants.DXUnitID);
             }
 
             dxItem.Content = content;

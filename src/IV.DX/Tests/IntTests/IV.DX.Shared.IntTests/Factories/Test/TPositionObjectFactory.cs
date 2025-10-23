@@ -14,7 +14,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TPositionMainElement = new TPositionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Name = name
                 }
             };

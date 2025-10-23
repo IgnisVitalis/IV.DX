@@ -182,14 +182,14 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 sqlClmDef += $"({clmDesc.Length.Value})";
             }
 
-            if ((!clmDesc.AllowNull || clmDesc.Name == "ObjectID") && clmDesc.Name != "ID")
+            if ((!clmDesc.AllowNull || clmDesc.Name == "DXUnitID") && clmDesc.Name != "ID")
             {
                 sqlClmDef += $" NOT NULL";
             }
 
             if (!string.IsNullOrEmpty(clmDesc.DefaultValue)
             && clmDesc.Name != "ID"
-            && clmDesc.Name != "ObjectID")
+            && clmDesc.Name != "DXUnitID")
             {
                 if (clmDesc.ColumnType == DXColumnTypeEnum.Bool)
                 {
@@ -497,7 +497,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         private bool FilterForNonSystemColumns(string columnName)
         {
-            return columnName != "ID" && columnName != "ObjectID" && columnName != "TimeStamp";
+            return columnName != "ID" && columnName != "DXUnitID" && columnName != "TimeStamp";
         }
 
         public string GetSQLQueryToCreateRelationManyTo(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
@@ -760,13 +760,13 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
         {
-            // TODO: need to find solution how to drop table by ObjectID
+            // TODO: need to find solution how to drop table by DXUnitID
             return GetSQLQueryToDropTable(dataDXElement.DXObjectDefinitionMainElement.Name);
         }
 
         public string GetSQLQueryToDropTable(string tableName)
         {
-            // TODO: need to find solution how to drop table by ObjectID
+            // TODO: need to find solution how to drop table by DXUnitID
             return $"DROP TABLE IF EXISTS \"{tableName}\"";
         }
 
@@ -939,9 +939,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"\"ID\" = '{id}'";
         }
 
-        public string GetWhereExpressionForObjectID(Guid id)
+        public string GetWhereExpressionForDXUnitID(Guid id)
         {
-            return $"\"ObjectID\" = '{id}'";
+            return $"\"DXUnitID\" = '{id}'";
         }
 
         public string GetWhereExpressionWithAnd(IDictionary<string, object> values)
@@ -959,11 +959,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return $"\"ID\" IN ({idsString})";
         }
 
-        public string GetWhereExpressionForObjectID(IEnumerable<Guid> ids)
+        public string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
         {
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-            return $"\"ObjectID\" IN ({idsString})";
+            return $"\"DXUnitID\" IN ({idsString})";
         }
 
         public void BulkInsert(DbConnection connection, DataTable table, string tableName)

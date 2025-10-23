@@ -5,7 +5,7 @@
     "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
     "TDeviceMainElement": {
         "ID": "70102d16-a2be-4a9f-ba40-a1146eb30a3c",
-        "ObjectID": "a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7",
+        "DXUnitID": "a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7",
         "Model": "Model1",
         "UUID": "70f86100-bc9c-4b88-8f5f-759cedf85972"
     }
@@ -16,7 +16,7 @@
     "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
     "TDeviceMainElement": {
         "ID": "7e429895-0220-41df-8688-42ec952ebd63",
-        "ObjectID": "53ced1ab-2582-4aee-b2bc-50e676eebde3",
+        "DXUnitID": "53ced1ab-2582-4aee-b2bc-50e676eebde3",
         "Model": "Model2",
         "UUID": "487704ea-ee63-41be-9e01-d1841dd472b8"
     }
@@ -27,7 +27,7 @@
     "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
     "TDeviceMainElement": {
         "ID": "b2a0bdd7-5c55-4cbc-bb72-9961777d37b8",
-        "ObjectID": "58a98dbf-ce5d-43d1-adb2-670dea20c7bf",
+        "DXUnitID": "58a98dbf-ce5d-43d1-adb2-670dea20c7bf",
         "Model": "Model3",
         "UUID": "75d78874-5f39-4e22-bc30-ccc6743f4622"
     }
@@ -38,7 +38,7 @@
     "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
     "TDeviceMainElement": {
         "ID": "c789c65e-783e-421f-a18d-1594bd321964",
-        "ObjectID": "36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b",
+        "DXUnitID": "36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b",
         "Model": "Model4",
         "UUID": "8f030336-4861-4d9c-980a-38674fa2dcf5"
     }
@@ -49,7 +49,7 @@
     "User": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
     "TDeviceMainElement": {
         "ID": "3711aaac-1062-4aee-982b-12007df360a3",
-        "ObjectID": "24d8f6ff-b411-4acc-8a35-5e958ce7f070",
+        "DXUnitID": "24d8f6ff-b411-4acc-8a35-5e958ce7f070",
         "Model": "Model5",
         "UUID": "9966eb62-5e20-4a49-9eb1-e54614abe807"
     }
@@ -60,7 +60,7 @@
     "User": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
     "TDeviceMainElement": {
         "ID": "93ae5489-dc76-459f-b57a-708e1190e966",
-        "ObjectID": "1c16f974-8e52-408b-9cac-acbb548864fa",
+        "DXUnitID": "1c16f974-8e52-408b-9cac-acbb548864fa",
         "Model": "Model6",
         "UUID": "6b9cab10-692f-4f4c-81b7-570a40d2b561"
     }

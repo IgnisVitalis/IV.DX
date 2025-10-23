@@ -92,10 +92,10 @@ namespace IV.DX.Persistence
 
             return this._coreRepo.AddRelation(
                 relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
-                     relationItem.DXRelationItemMainElement.ObjectIDLeft,
+                     relationItem.DXRelationItemMainElement.DXUnitIDLeft,
                      relationItem.DXRelationItemMainElement.RelationNameRight,
                      relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
-                     relationItem.DXRelationItemMainElement.ObjectIDRight);
+                     relationItem.DXRelationItemMainElement.DXUnitIDRight);
         }
 
         public bool RemoveDXRelation(DXRelationItemUnit relationItem)
@@ -104,10 +104,10 @@ namespace IV.DX.Persistence
 
             return this._coreRepo.RemoveRelation(
                 relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
-                relationItem.DXRelationItemMainElement.ObjectIDLeft,
+                relationItem.DXRelationItemMainElement.DXUnitIDLeft,
                 relationItem.DXRelationItemMainElement.RelationNameRight,
                 relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
-                relationItem.DXRelationItemMainElement.ObjectIDRight);
+                relationItem.DXRelationItemMainElement.DXUnitIDRight);
         }
     }
 }

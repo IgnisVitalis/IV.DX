@@ -40,7 +40,7 @@ namespace IV.DX.Persistence.IntTests
             var page5 = new TBookChapterElement()
             {
                 ID = Guid.NewGuid(),
-                ObjectID = objectId,
+                DXUnitID = objectId,
                 Number = 5,
                 Text = "Page5"
             };
@@ -53,7 +53,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(createdDXElement);
             Assert.Equal(page5.ID, createdDXElement.ID);
-            Assert.Equal(page5.ObjectID, createdDXElement.ObjectID);
+            Assert.Equal(page5.DXUnitID, createdDXElement.DXUnitID);
             Assert.Equal(page5.Number, createdDXElement.Number);
             Assert.Equal(page5.Text, createdDXElement.Text);
 
@@ -67,7 +67,7 @@ namespace IV.DX.Persistence.IntTests
 
             Assert.NotNull(updatedDXElement);
             Assert.Equal(page5.ID, updatedDXElement.ID);
-            Assert.Equal(page5.ObjectID, updatedDXElement.ObjectID);
+            Assert.Equal(page5.DXUnitID, updatedDXElement.DXUnitID);
             Assert.Equal(page5.Number, updatedDXElement.Number);
             Assert.Equal(page5.Text, updatedDXElement.Text);
 

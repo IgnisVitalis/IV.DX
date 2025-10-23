@@ -23,7 +23,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                     {
-                        Announced = new List<DXElementInUnitDefinitionElement>()
+                        Announced = new HashSet<DXElementInUnitDefinitionElement>()
                         {
                             new DXElementInUnitDefinitionElement()
                             {
@@ -65,7 +65,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                     {
-                        Announced = new List<DXElementInUnitDefinitionElement>()
+                        Announced = new HashSet<DXElementInUnitDefinitionElement>()
                         {
                             new DXElementInUnitDefinitionElement()
                             {
@@ -129,7 +129,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                     {
-                        Announced = new List<DXElementInUnitDefinitionElement>()
+                        Announced = new HashSet<DXElementInUnitDefinitionElement>()
                         {
                             new DXElementInUnitDefinitionElement()
                             {
@@ -153,7 +153,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
                     {
-                        Announced = new List<DXElementInUnitDefinitionElement>()
+                        Announced = new HashSet<DXElementInUnitDefinitionElement>()
                         {
                             new DXElementInUnitDefinitionElement()
                             {

@@ -24,7 +24,7 @@ namespace IV.DX.Contracts.UnitTests
                 MyDXElementSingleItem = new MyDXElement()
                 {
                     ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
-                    ObjectID = objectId,
+                    DXUnitID = objectId,
                     Date = new DateTime(2020, 12, 1),
                     Name = "Name1",
                     Value = 1,
@@ -33,12 +33,12 @@ namespace IV.DX.Contracts.UnitTests
                 MyDXElementMultiItems = new DXMultiElementsContainer<MyDXElement>()
                 {
                     Mode = MultiElementsMode.Target,
-                    Announced = new List<MyDXElement>()
+                    Announced = new HashSet<MyDXElement>()
                     {
                         new MyDXElement()
                         {
                             ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
-                            ObjectID = objectId,
+                            DXUnitID = objectId,
                             TimeStamp = new DateTime(2020, 12, 2),
                             Name = "Name2",
                             Value = 2,
@@ -47,19 +47,19 @@ namespace IV.DX.Contracts.UnitTests
                         new MyDXElement()
                         {
                             ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
-                            ObjectID = objectId,
+                            DXUnitID = objectId,
                             TimeStamp =new DateTime(2020, 12, 3),
                             Name = "Name3",
                             Value = 3,
                             Date = new DateTime(2020, 12, 3),
                         },
                     },
-                    Deleted = new List<MyDXElement>()
+                    Deleted = new HashSet<MyDXElement>()
                     {
                         new MyDXElement()
                         {
                             ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
-                            ObjectID = objectId,
+                            DXUnitID = objectId,
                             TimeStamp =  new DateTime(2020, 12, 4),
                             Name = "Name4",
                             Value = 4,
@@ -74,14 +74,14 @@ namespace IV.DX.Contracts.UnitTests
                 Item = new DXItem()
                 {
                     ID = objectId,
-                    ObjectID = objectId,
+                    DXUnitID = objectId,
                     Content = new JObject(new JProperty("TimeStamp", new DateTime(2020, 12, 1))),
                 }
             };
 
             dxModel = new DXModel(ownItem)
             {
-                SingleItems = new List<DXSingleElement>()
+                SingleItems = new HashSet<DXSingleElement>()
                 {
                     new DXSingleElement
                     {
@@ -90,18 +90,18 @@ namespace IV.DX.Contracts.UnitTests
                         Item = new DXItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
-                            ObjectID = objectId,
+                            DXUnitID = objectId,
                             Content = new JObject(
                                 new JProperty("Name", "Name1"),
                                 new JProperty("Value", 1),
                                 new JProperty("Date", new DateTime(2020, 12, 1)),
                                 new JProperty("ID", new Guid("B2669009-536A-4252-A920-CCEF4456A08A")),
-                                new JProperty("ObjectID",  objectId),
+                                new JProperty("DXUnitID",  objectId),
                                 new JProperty("TimeStamp", new DateTime(2020, 12, 1)))
                         }
                     }
                 },
-                MultiItems = new List<DXMultiElement>()
+                MultiItems = new HashSet<DXMultiElement>()
                 {
                     new DXMultiElement()
                     {
@@ -113,25 +113,25 @@ namespace IV.DX.Contracts.UnitTests
                             new DXItem()
                             {
                                 ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
-                                ObjectID = objectId,
+                                DXUnitID = objectId,
                                 Content = new JObject(
                                     new JProperty("Name", "Name2"),
                                     new JProperty("Value", 2),
                                     new JProperty("Date", new DateTime(2020, 12, 2)),
                                     new JProperty("ID", new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A")),
-                                    new JProperty("ObjectID",  objectId),
+                                    new JProperty("DXUnitID",  objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 2))),
                             },
                             new DXItem()
                             {
                                 ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
-                                ObjectID = objectId,
+                                DXUnitID = objectId,
                                 Content = new JObject(
                                     new JProperty("Name", "Name3"),
                                     new JProperty("Value", 3),
                                     new JProperty("Date", new DateTime(2020, 12, 3)),
                                     new JProperty("ID", new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2")),
-                                    new JProperty("ObjectID", objectId),
+                                    new JProperty("DXUnitID", objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 3)))
                             }
                         },
@@ -140,13 +140,13 @@ namespace IV.DX.Contracts.UnitTests
                             new DXItem()
                             {
                                 ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
-                                ObjectID = objectId,
+                                DXUnitID = objectId,
                                 Content = new JObject(
                                     new JProperty("Name", "Name4"),
                                     new JProperty("Value", 4),
                                     new JProperty("Date", new DateTime(2020, 12, 4)),
                                     new JProperty("ID", new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6")),
-                                    new JProperty("ObjectID", objectId),
+                                    new JProperty("DXUnitID", objectId),
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 4)))
                             }
                         }

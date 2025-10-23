@@ -948,7 +948,7 @@ namespace IV.DX.Persistence.IntTests
         {
             Assert.Equal(objRelationInfo.ID, createdEntry.ID);
             Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ID, createdEntry.DXRelationDefinitionMainElement.ID);
-            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.ObjectID, createdEntry.DXRelationDefinitionMainElement.ObjectID);
+            Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.DXUnitID, createdEntry.DXRelationDefinitionMainElement.DXUnitID);
             Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationType, createdEntry.DXRelationDefinitionMainElement.RelationType);
             Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationNameLeft, createdEntry.DXRelationDefinitionMainElement.RelationNameLeft);
             Assert.Equal(objRelationInfo.DXRelationDefinitionMainElement.RelationNameRight, createdEntry.DXRelationDefinitionMainElement.RelationNameRight);

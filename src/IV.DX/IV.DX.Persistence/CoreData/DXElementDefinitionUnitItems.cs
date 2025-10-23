@@ -23,7 +23,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                     {
-                        Announced = new List<DXColumnDefinitionElement>()
+                        Announced = new HashSet<DXColumnDefinitionElement>()
                         {
                             new DXColumnDefinitionElement()
                             {
@@ -59,7 +59,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                     {
-                        Announced = new List<DXColumnDefinitionElement>()
+                        Announced = new HashSet<DXColumnDefinitionElement>()
                         {
                             new DXColumnDefinitionElement()
                             {
@@ -127,7 +127,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                     {
-                        Announced = new List<DXColumnDefinitionElement>()
+                        Announced = new HashSet<DXColumnDefinitionElement>()
                         {
                             new DXColumnDefinitionElement()
                             {
@@ -178,7 +178,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                     {
-                        Announced = new List<DXColumnDefinitionElement>()
+                        Announced = new HashSet<DXColumnDefinitionElement>()
                         {
                             new DXColumnDefinitionElement()
                             {
@@ -263,7 +263,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                     {
-                        Announced = new List<DXUniqueColumnsElement>()
+                        Announced = new HashSet<DXUniqueColumnsElement>()
                         {
                             new DXUniqueColumnsElement()
                             {
@@ -291,7 +291,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                     {
-                        Announced = new List<DXColumnDefinitionElement>()
+                        Announced = new HashSet<DXColumnDefinitionElement>()
                         {
                             new DXColumnDefinitionElement()
                             {
@@ -360,7 +360,7 @@ namespace IV.DX.Persistence.CoreData
                     },
                     DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
                     {
-                        Announced = new List<DXUniqueColumnsElement>()
+                        Announced = new HashSet<DXUniqueColumnsElement>()
                         {
                             new DXUniqueColumnsElement()
                             {

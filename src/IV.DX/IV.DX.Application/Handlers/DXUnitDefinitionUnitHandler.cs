@@ -179,7 +179,7 @@ namespace IV.DX.Application.Handlers
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     ObjectNameLeft = dxUnit.DXObjectDefinitionMainElement.Name,
                     RelationNameLeft = $"{dxUnit.DXObjectDefinitionMainElement.Name}ID",
                     ObjectNameRight = dxElement.DXObjectDefinitionMainElement.Name,

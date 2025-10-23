@@ -14,7 +14,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TDeviceMainElement = new TDeviceMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Model = model,
                     UUID = uuid
                 }

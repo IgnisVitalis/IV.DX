@@ -65,7 +65,7 @@ namespace IV.DX.Contracts.UnitTests
             var idPropertyAttr = attributes.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idPropertyAttr);
 
-            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.Name == "ObjectID");
+            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.Name == "DXUnitID");
             Assert.NotNull(objectIdPropertyAttr);
 
             var kindPropertyAttr = attributes.SingleOrDefault(x => x.Name == "Kind");

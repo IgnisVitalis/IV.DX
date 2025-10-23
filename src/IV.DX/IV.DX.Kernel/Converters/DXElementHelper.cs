@@ -33,8 +33,8 @@ namespace IV.DX.Kernel.Converters
 
         public static DXSingleElement ConvertToSingleItem(this DXElement dxElement, string propertyName = null)
         {
-            if (dxElement.ObjectID == default)
-                throw new Exception($"DXElement should have ObjectID value");
+            if (dxElement.DXUnitID == default)
+                throw new Exception($"DXElement should have DXUnitID value");
 
             var dxElementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
 
@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Converters
                 Item = new DXItem
                 {
                     ID = dxElement.ID,
-                    ObjectID = dxElement.ObjectID,
+                    DXUnitID = dxElement.DXUnitID,
                     Content = content
                 },
                 Name = propertyName ?? dxElementInfo.Name

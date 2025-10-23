@@ -99,11 +99,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPassportUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPassportMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"SerialNumber\" = '6bcc2af44aa3';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPassportUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPassportMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"SerialNumber\" = '6bcc2af44aa3';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPassportUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPassportMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.SerialNumber = '6bcc2af44aa3';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPassportUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPassportMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.SerialNumber = '6bcc2af44aa3';";
             }
             else
             {
@@ -139,11 +139,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
             else
             {
@@ -179,11 +179,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TDeviceUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TDeviceMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TDeviceUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TDeviceMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TDeviceUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TDeviceMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TDeviceUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TDeviceMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
             }
             else
             {
@@ -219,11 +219,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDeviceUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDeviceUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDeviceUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TDeviceUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
             else
             {
@@ -264,11 +264,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Middle';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Middle';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Middle';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Middle';";
             }
             else
             {
@@ -299,11 +299,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Master';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Master';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Master';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Master';";
             }
             else
             {
@@ -339,11 +339,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Victor' AND \"t_2_0\".\"Surname\" = 'Suvorov';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Victor' AND \"t_2_0\".\"Surname\" = 'Suvorov';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Victor' AND t_2_0.Surname = 'Suvorov';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Victor' AND t_2_0.Surname = 'Suvorov';";
             }
             else
             {
@@ -374,11 +374,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
             else
             {
@@ -414,11 +414,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
             }
             else
             {
@@ -449,11 +449,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
             else
             {
@@ -494,11 +494,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
             }
             else
             {
@@ -529,11 +529,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
             }
             else
             {
@@ -574,11 +574,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book3';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book3';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'book3';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'book3';";
             }
             else
             {
@@ -606,11 +606,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"ObjectID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book1';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book1';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.ObjectID = t_1_0.ID WHERE t_2_0.Name = 'book1';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'book1';";
             }
             else
             {
@@ -651,11 +651,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             if (this._sqlQueryHelper is PGSQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"ObjectID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" = 'Master';";
+                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"DXUnitID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" = 'Master';";
             }
             else if (this._sqlQueryHelper is MySQLQueryDXHelper)
             {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.ObjectID = t_2_0.ID WHERE t_3_0.Name = 'Master';";
+                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.DXUnitID = t_2_0.ID WHERE t_3_0.Name = 'Master';";
             }
             else
             {
@@ -693,11 +693,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
                 if (this._sqlQueryHelper is PGSQLQueryDXHelper)
                 {
-                    expectedSQLQuery = $"SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"ObjectID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" {operation} 'Master';";
+                    expectedSQLQuery = $"SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"DXUnitID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" {operation} 'Master';";
                 }
                 else if (this._sqlQueryHelper is MySQLQueryDXHelper)
                 {
-                    expectedSQLQuery = $"SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.ObjectID = t_2_0.ID WHERE t_3_0.Name {operation} 'Master';";
+                    expectedSQLQuery = $"SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.DXUnitID = t_2_0.ID WHERE t_3_0.Name {operation} 'Master';";
                 }
                 else
                 {

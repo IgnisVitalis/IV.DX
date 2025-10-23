@@ -4,7 +4,7 @@
         "ID": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
         "TUserMainElement": {
             "ID": "51449754-6b36-47af-a6af-240b63a589a8",
-            "ObjectID": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
+            "DXUnitID": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
             "Name": "Pavel",
             "Surname": "Plamenev",
             "Birth": "1979-12-31T22:00:00Z"
@@ -15,7 +15,7 @@
         "ID": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
         "TUserMainElement": {
             "ID": "9406a989-6de1-4c5f-b9f5-8f658dc3622e",
-            "ObjectID": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+            "DXUnitID": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
             "Name": "Svitlana",
             "Surname": "Suvorova",
             "Birth": "1993-11-16T22:00:00Z"
@@ -26,7 +26,7 @@
         "ID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
         "TUserMainElement": {
             "ID": "7f54ea01-3a8d-407e-a4d2-2f2188953f5c",
-            "ObjectID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
+            "DXUnitID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
             "Name": "Victor",
             "Surname": "Suvorov",
             "Birth": "1989-09-04T21:00:00Z"

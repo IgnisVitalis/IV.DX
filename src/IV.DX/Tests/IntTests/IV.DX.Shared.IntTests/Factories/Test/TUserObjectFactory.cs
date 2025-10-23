@@ -13,7 +13,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TUserMainElement = new TUserMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Name = name,
                     Surname = surname,
                     Birth = birth

@@ -21,7 +21,7 @@ namespace IV.DX.Shared.IntTests.Factories
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     RelationType = relationType,
                     RelationNameLeft = relationNameLeft,
                     RelationNameRight = relationNameRight,

@@ -14,12 +14,12 @@ namespace IV.DX.Kernel.Models
         {
             this.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>
             {
-                Announced = new List<DXColumnDefinitionElement>()
+                Announced = new HashSet<DXColumnDefinitionElement>()
             };
 
             this.DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>
             {
-                Announced = new List<DXUniqueColumnsElement>()
+                Announced = new HashSet<DXUniqueColumnsElement>()
             };
         }
     }

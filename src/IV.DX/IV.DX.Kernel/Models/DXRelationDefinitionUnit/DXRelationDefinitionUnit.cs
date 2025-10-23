@@ -18,7 +18,7 @@ namespace IV.DX.Kernel.Models
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = objectId,
+                    DXUnitID = objectId,
                     ObjectNameLeft = this.DXRelationDefinitionMainElement.ObjectNameRight,
                     ObjectNameRight = this.DXRelationDefinitionMainElement.ObjectNameLeft,
                     RelationNameLeft = this.DXRelationDefinitionMainElement.RelationNameRight,

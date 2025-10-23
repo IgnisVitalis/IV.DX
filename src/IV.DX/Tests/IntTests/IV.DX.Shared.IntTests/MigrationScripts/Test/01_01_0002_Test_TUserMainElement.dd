@@ -4,7 +4,7 @@
         "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
         "DXObjectDefinitionMainElement": {
             "ID": "e8a16147-6885-4588-a467-7f30f9c8603b",
-            "ObjectID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+            "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
             "Name": "TUserMainElement",
             "Kind": 3
         },
@@ -13,7 +13,7 @@
             "Announced": [
                 {
                     "ID": "cddb8804-83c0-4631-97bf-39822988720f",
-                    "ObjectID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                    "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 3,
                     "Name": "Name",
                     "Length": 50,
@@ -22,7 +22,7 @@
                 },
                 {
                     "ID": "3d7110eb-3827-47f6-b3fc-3de4a871e87f",
-                    "ObjectID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                    "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 3,
                     "Name": "Surname",
                     "Length": 50,
@@ -31,7 +31,7 @@
                 },
                 {
                     "ID": "f9f982c1-385e-4906-a616-c849875f08cc",
-                    "ObjectID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                    "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 5,
                     "Name": "Birth",
                     "AllowNull": true,

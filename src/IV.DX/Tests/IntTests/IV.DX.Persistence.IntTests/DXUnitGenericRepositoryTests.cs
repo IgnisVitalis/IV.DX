@@ -50,7 +50,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId, result.ID);
             Assert.NotNull(result.DXObjectDefinitionMainElement);
             Assert.True(result.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("SomeTestName", result.DXObjectDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
@@ -65,7 +65,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId, result.ID);
             Assert.NotNull(result.DXObjectDefinitionMainElement);
             Assert.True(result.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId, result.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("UpdatedSomeTestName", result.DXObjectDefinitionMainElement.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
@@ -118,7 +118,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId1, resultItem1.ID);
             Assert.NotNull(resultItem1.DXObjectDefinitionMainElement);
             Assert.True(resultItem1.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("SomeTestName1", resultItem1.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
@@ -128,7 +128,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId2, resultItem2.ID);
             Assert.NotNull(resultItem2.DXObjectDefinitionMainElement);
             Assert.True(resultItem2.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("SomeTestName2", resultItem2.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
@@ -148,7 +148,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId1, resultItem1.ID);
             Assert.NotNull(resultItem1.DXObjectDefinitionMainElement);
             Assert.True(resultItem1.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId1, resultItem1.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("UpdatedSomeTestName1", resultItem1.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
@@ -158,7 +158,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal(objectId2, resultItem2.ID);
             Assert.NotNull(resultItem2.DXObjectDefinitionMainElement);
             Assert.True(resultItem2.DXObjectDefinitionMainElement.ID != default(Guid));
-            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.ObjectID);
+            Assert.Equal(objectId2, resultItem2.DXObjectDefinitionMainElement.DXUnitID);
             Assert.Equal("UpdatedSomeTestName2", resultItem2.DXObjectDefinitionMainElement.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
@@ -187,7 +187,7 @@ namespace IV.DX.Persistence.IntTests
             var itemAmount = 10000;
             var textLength = 10000;
 
-            var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToList();
+            var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
             var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
 
             // Action

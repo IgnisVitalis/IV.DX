@@ -12,7 +12,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("b0f45798-4fc0-48e4-b791-a31e36d16e3b"),
-    //                ObjectID = new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"),
+    //                DXUnitID = new Guid("1faf325f-57bc-4ab2-bb3c-03a6ab5ae859"),
     //                Name = "TUserUnit"
     //            }
     //        };
@@ -23,7 +23,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("bea190b6-4138-4775-9157-f3b15ac9d51e"),
-    //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                Name = "TUserMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -33,7 +33,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("c9cd8a6a-1987-4320-933d-128420e55fd5"),
-    //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                        DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Name",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -42,7 +42,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("499867bb-8ce6-4245-862d-b7486e58238a"),
-    //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                        DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Birth",
     //                        ColumnType = DXColumnTypeEnum.DateTime,
     //                        AllowNull = false
@@ -59,7 +59,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("55a9d478-e4ef-4bb2-8743-290216b22979"),
-    //                ObjectID = new Guid("7f052b48-7008-4418-84fe-e51d42e2170d"),
+    //                DXUnitID = new Guid("7f052b48-7008-4418-84fe-e51d42e2170d"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
@@ -79,7 +79,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("bea190b6-4138-4775-9157-f3b15ac9d51e"),
-    //                ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                Name = "TUserMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -89,7 +89,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("c9cd8a6a-1987-4320-933d-128420e55fd5"),
-    //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                        DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Name",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -98,7 +98,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("499867bb-8ce6-4245-862d-b7486e58238a"),
-    //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                        DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Birth",
     //                        ColumnType = DXColumnTypeEnum.DateTime,
     //                        AllowNull = false
@@ -106,7 +106,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("66d24eb6-b30d-4a9a-a31c-c2b7c8e8c69e"),
-    //                        ObjectID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
+    //                        DXUnitID = new Guid("515b9785-6bbc-40b6-8af6-2d862d15b60b"),
     //                        Name = "Surname",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -129,7 +129,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("29f74c7a-4d82-4140-a88e-1a25a68e67ef"),
-    //                ObjectID = new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"),
+    //                DXUnitID = new Guid("8e2c5365-85c0-431d-996e-fbccfe3f856a"),
     //                Name = "TPassportUnit"
     //            }
     //        };
@@ -140,7 +140,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("2218f1da-5c87-424f-843d-964fa095f480"),
-    //                ObjectID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
+    //                DXUnitID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //                Name = "TPassportMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -150,7 +150,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("d6c1126f-1a54-439e-8834-c1b4ba1dd727"),
-    //                        ObjectID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
+    //                        DXUnitID = new Guid("714ee242-8821-4a4f-a28e-c623004d49a4"),
     //                        Name = "SerialNumber",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -168,7 +168,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("fd309653-967e-40e1-862f-92b906689d70"),
-    //                ObjectID = new Guid("72f5d23f-2fd5-44ac-886a-3da7dd3f70ea"),
+    //                DXUnitID = new Guid("72f5d23f-2fd5-44ac-886a-3da7dd3f70ea"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
@@ -210,7 +210,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("57a80968-3195-427b-a49d-8ba69d472f2c"),
-    //                ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
+    //                DXUnitID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                Name = "TDeviceMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -220,7 +220,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("58cc9980-87d0-469b-8b66-33e90962f3ab"),
-    //                        ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
+    //                        DXUnitID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                        Name = "Model",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -229,7 +229,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("9de64e8a-efaa-4759-8e5d-8ec4ff198dd3"),
-    //                        ObjectID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
+    //                        DXUnitID = new Guid("37099cee-e2cd-4d86-bece-8e7a11a96da2"),
     //                        Name = "UUID",
     //                        ColumnType = DXColumnTypeEnum.GUID,
     //                        AllowNull = false
@@ -273,7 +273,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("33b7bf0d-5761-49eb-9d0c-1c6b82fb9304"),
-    //                ObjectID = new Guid("394566d6-93e4-446a-800d-2209898475ac"),
+    //                DXUnitID = new Guid("394566d6-93e4-446a-800d-2209898475ac"),
     //                Name = "TPositionUnit"
     //            }
     //        };
@@ -284,7 +284,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("0a0245c5-65ba-4be1-8747-da4a72974053"),
-    //                ObjectID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
+    //                DXUnitID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //                Name = "TPositionMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -294,7 +294,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("6e021c8b-8b81-493a-bc38-bd84a7cd40de"),
-    //                        ObjectID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
+    //                        DXUnitID = new Guid("408a680c-4012-4dc8-ad8f-2676f699734f"),
     //                        Name = "Name",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -312,7 +312,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("d598414d-5c48-40c5-ba7a-b56a871e62b5"),
-    //                ObjectID = new Guid("fc4ec5ba-6371-4824-8123-603b62df32f4"),
+    //                DXUnitID = new Guid("fc4ec5ba-6371-4824-8123-603b62df32f4"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
@@ -354,7 +354,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("a3a03877-5021-4bb9-9020-ef017b69ce48"),
-    //                ObjectID = new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"),
+    //                DXUnitID = new Guid("3dae1265-e917-4b91-b4c3-f3f835281630"),
     //                Name = "TDocumentUnit"
     //            }
     //        };
@@ -365,7 +365,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("6244f906-587d-4a2c-b3a1-54b90a110e9a"),
-    //                ObjectID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
+    //                DXUnitID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //                Name = "TDocumentMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -375,7 +375,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("dc864e8b-c84f-48a1-8e22-1ecedd742c5f"),
-    //                        ObjectID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
+    //                        DXUnitID = new Guid("29a4d2f3-0f2a-4a60-a12e-8c4dd1af8476"),
     //                        Name = "Name",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -393,7 +393,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("3109ea24-f209-4aac-9414-e7f3493aa41a"),
-    //                ObjectID = new Guid("a132f7ef-5bf2-4ebf-bc51-c95f6eddd78c"),
+    //                DXUnitID = new Guid("a132f7ef-5bf2-4ebf-bc51-c95f6eddd78c"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
@@ -435,7 +435,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("b2561ad0-c5ef-40dd-b460-c7c1330b3e54"),
-    //                ObjectID = new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"),
+    //                DXUnitID = new Guid("6555d7f8-27a6-495d-91e3-df0a49354032"),
     //                Name = "TBookUnit"
     //            }
     //        };
@@ -446,7 +446,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("6e6839b6-8dc6-4e15-86b4-0767f3042f11"),
-    //                ObjectID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
+    //                DXUnitID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //                Name = "TBookMainElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -456,7 +456,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("665b5c55-eb32-488d-8305-1c575344863e"),
-    //                        ObjectID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
+    //                        DXUnitID = new Guid("0ccee9e3-67cb-4692-940c-41929f9df7b0"),
     //                        Name = "Name",
     //                        ColumnType = DXColumnTypeEnum.String,
     //                        Length = 50,
@@ -472,7 +472,7 @@
     //            DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
     //            {
     //                ID = new Guid("06560692-98ca-41e6-9763-331a2aed5a1f"),
-    //                ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
+    //                DXUnitID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                Name = "TBookChapterElement"
     //            },
     //            DXColumnDefinitionElement = new DXMultiItemsContainer<DXColumnDefinitionElement>()
@@ -482,7 +482,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("9c48b070-0332-49ac-982e-ced1bab74368"),
-    //                        ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
+    //                        DXUnitID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                        Name = "Text",
     //                        ColumnType = DXColumnTypeEnum.Text,
     //                        AllowNull = false
@@ -490,7 +490,7 @@
     //                    new DXColumnDefinitionElement()
     //                    {
     //                        ID = new Guid("b0148a60-48c8-4c26-9ab8-fae46037577b"),
-    //                        ObjectID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
+    //                        DXUnitID = new Guid("28644277-705c-4666-8b7b-e33066e2ea27"),
     //                        Name = "Number",
     //                        ColumnType = DXColumnTypeEnum.Int,
     //                        AllowNull = false
@@ -507,7 +507,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("07fb6348-a3f8-4b6c-924d-f6533316156e"),
-    //                ObjectID = new Guid("db3cdce4-a71f-4129-8d1b-a1b8662ad1dd"),
+    //                DXUnitID = new Guid("db3cdce4-a71f-4129-8d1b-a1b8662ad1dd"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.SingleMandatory,
     //            }
     //        };
@@ -520,7 +520,7 @@
     //            DPDXElementInObjectDescGenDXElement = new DPDXElementInObjectDescGenDXElement()
     //            {
     //                ID = new Guid("963b1a70-bff1-49c4-8360-f7c34c02b2cb"),
-    //                ObjectID = new Guid("f9bf6850-49e3-4515-9299-4a9f07674b22"),
+    //                DXUnitID = new Guid("f9bf6850-49e3-4515-9299-4a9f07674b22"),
     //                DXElementInUnitTypeEnum = DXElementInUnitTypeEnum.MultiOptional,
     //            }
     //        };

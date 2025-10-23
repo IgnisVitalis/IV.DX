@@ -2,6 +2,7 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace IV.DX.Kernel.Converters
 {
@@ -37,7 +38,7 @@ namespace IV.DX.Kernel.Converters
                 Item = new DXItem
                 {
                     ID = dxUnit.ID,
-                    ObjectID = dxUnit.ID,
+                    DXUnitID = dxUnit.ID,
                     Content = GetContent(dxUnit)
                 }
             };
@@ -49,17 +50,17 @@ namespace IV.DX.Kernel.Converters
             };
         }
 
-        private static IEnumerable<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
+        private static HashSet<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
         {
             var singleInfos = AttributeReader.GetSingleItemInfos(dxUnit);
             return singleInfos.Select(pi =>
             {
                 var element = pi.GetValue(dxUnit) as DXElement;
                 return DXElementHelper.ConvertToSingleItem(element, pi.Name);
-            }).ToList();
+            }).ToHashSet();
         }
 
-        private static IEnumerable<DXMultiElement> GetDXMultiElements(DXUnit dxUnit)
+        private static HashSet<DXMultiElement> GetDXMultiElements(DXUnit dxUnit)
         {
             var multiInfos = AttributeReader.GetMultiItemInfos(dxUnit);
 
@@ -90,7 +91,7 @@ namespace IV.DX.Kernel.Converters
                             target.Add(new DXItem
                             {
                                 ID = e.ID,
-                                ObjectID = dxUnit.ID,
+                                DXUnitID = dxUnit.ID,
                                 Content = e.GetContent()
                             });
                         }
@@ -110,7 +111,7 @@ namespace IV.DX.Kernel.Converters
                 };
 
                 return multi;
-            }).ToList();
+            }).ToHashSet();
         }
 
 

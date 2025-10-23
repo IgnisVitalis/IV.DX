@@ -33,9 +33,9 @@ namespace IV.DX.Kernel.Converters
                         propertyNames.Add(Constants.ID);
                     }
 
-                    if (!propertyNames.Contains(Constants.ObjectID))
+                    if (!propertyNames.Contains(Constants.DXUnitID))
                     {
-                        propertyNames.Add(Constants.ObjectID);
+                        propertyNames.Add(Constants.DXUnitID);
                     }
 
                     item.AddPropertyDefinitions(propertyNames.Select(y => new DXPropertyDefinition(y, new DXColumnAttribute(y))).ToList());
@@ -60,9 +60,9 @@ namespace IV.DX.Kernel.Converters
                           propertyNames.Add(Constants.ID);
                       }
 
-                      if (!propertyNames.Contains(Constants.ObjectID))
+                      if (!propertyNames.Contains(Constants.DXUnitID))
                       {
-                          propertyNames.Add(Constants.ObjectID);
+                          propertyNames.Add(Constants.DXUnitID);
                       }
 
                       item.AddPropertyDefinitions(propertyNames.Select(y => new DXPropertyDefinition(y, new DXColumnAttribute(y))).ToList());

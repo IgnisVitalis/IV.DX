@@ -16,7 +16,7 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 TBookMainElement = new TBookMainElement()
                 {
                     ID = Guid.NewGuid(),
-                    ObjectID = id,
+                    DXUnitID = id,
                     Name = name
                 }
             };
@@ -34,10 +34,10 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                     new TBookChapterElement()
                     {
                         ID = Guid.NewGuid(),
-                        ObjectID = result.ID,
+                        DXUnitID = result.ID,
                         Text = x,
                         Number = number++
-                    })
+                    }).ToHashSet()
             };
 
             return result;
