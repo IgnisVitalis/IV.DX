@@ -34,7 +34,7 @@ namespace IV.DX.Application
 
             var coreFiles = File.ReadAllText(this.GetFullPath(path));
 
-            var scripts = GetMirgationScripts(coreFiles);
+            var scripts = GetMirgationScripts(path, coreFiles);
 
             foreach (var migrationScript in scripts)
             {
@@ -85,8 +85,10 @@ namespace IV.DX.Application
             }
             catch (Exception)
             {
-                var corePreInitFiles = File.ReadAllText(this.GetFullPath("MigrationScripts/CorePreInit.json"));
-                var scriptsPreInit = GetMirgationScripts(corePreInitFiles);
+                var pathToPreInit = this.GetFullPath("InitScripts/CorePreInit.json");
+
+                var corePreInitFiles = File.ReadAllText(pathToPreInit);
+                var scriptsPreInit = GetMirgationScripts(pathToPreInit, corePreInitFiles);
 
                 foreach (var script in scriptsPreInit)
                 {
@@ -100,9 +102,11 @@ namespace IV.DX.Application
                     }
                 }
 
-                var corePostInitFiles = File.ReadAllText(this.GetFullPath("MigrationScripts/CorePostInit.json"));
+                var pathToPostInit = "InitScripts/CorePostInit.json";
 
-                var scriptsPostInit = GetMirgationScripts(corePostInitFiles);
+                var corePostInitFiles = File.ReadAllText(pathToPostInit);
+
+                var scriptsPostInit = GetMirgationScripts(pathToPostInit, corePostInitFiles);
 
                 foreach (var script in scriptsPostInit)
                 {
@@ -132,14 +136,16 @@ namespace IV.DX.Application
             return result;
         }
 
-        private IEnumerable<DXMigrationScriptsUnit> GetMirgationScripts(string path)
+        private IEnumerable<DXMigrationScriptsUnit> GetMirgationScripts(string path, string content)
         {
-            var jArray = JArray.Parse(path);
+            var directoryName = (new FileInfo(path)).DirectoryName;
+
+            var jArray = JArray.Parse(content);
 
             var pattern = @"(?<Version>[0-9]+)_(?<Build>[0-9]+)_(?<Number>[0-9]+)_(?<Application>[a-zA-z]+)_(?<Name>[a-zA-z]+)\.(?<Extention>[a-z]+)";
             Regex regex = new Regex(pattern);
 
-            var migrationScripts = jArray.Select(x => new FileInfo(this.GetFullPath($"MigrationScripts/{x}"))).Select(x =>
+            var migrationScripts = jArray.Select(x => new FileInfo(this.GetFullPath($"{directoryName}/{x}"))).Select(x =>
             {
                 if (!regex.IsMatch(x.Name))
                     throw new Exception($"Script name {x.Name} has wrong format. Please use this format '<Verion>_<Build>_<Number>_<Application>_<Name>.<Extention>'");

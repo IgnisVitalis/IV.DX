@@ -19,12 +19,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="MigrationScripts\CorePostInit.json">
+      <Compile Remove="MigrationScripts\**" />
+      <EmbeddedResource Remove="MigrationScripts\**" />
+      <None Remove="MigrationScripts\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="InitScripts\CorePostInit.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
             <Pack>true</Pack>
         </Content>
-        <Content Include="MigrationScripts\CorePreInit.json">
+        <Content Include="InitScripts\CorePreInit.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
             <Pack>true</Pack>
@@ -57,35 +63,27 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="MigrationScripts\CorePostInit.json" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </Content>
-        <Content Include="MigrationScripts\CorePreInit.json" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </Content>
-        <None Update="MigrationScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>
-        <None Update="MigrationScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>
-        <None Update="MigrationScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>
-        <None Update="MigrationScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>
-        <None Update="MigrationScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>
-        <None Update="MigrationScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat" Pack="true">
+        <None Update="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat" Pack="true">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </None>

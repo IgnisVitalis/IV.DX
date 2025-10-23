@@ -31,9 +31,9 @@ namespace IV.DX.Kernel.Models
             });
         }
 
-        //public JObject ToJObject()
-        //{
-        //    return DXUnitHelper.ConvertToJObject(this);
-        //}
+        public JObject ToJObject()
+        {
+            return DXElementHelper.ConvertToJObject(this);
+        }
     }
 }
