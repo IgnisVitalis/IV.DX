@@ -324,6 +324,14 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 255
+                },
+                {
+                    "ID": "0e4cdf09-7e54-452e-8fe9-3c7e6fcf0d6e",
+                    "DXUnitID": "4502e21d-4d38-475d-88eb-3159d3b7c514",
+                    "ColumnType": 4,
+                    "Name": "Content",
+                    "AllowNull": false,
+                    "DefaultValue": null
                 }
             ]
         },

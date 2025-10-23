@@ -1,234 +1,283 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace IV.DX.Application
 {
-    internal class MigrationService : IDXMigrationService
+    internal sealed class MigrationService : IDXMigrationService
     {
         private readonly IDXUnitDataService _dataService;
         private readonly IDXUnitGenericRepository _genericRepo;
-        private readonly Mutex mutex = new Mutex(false, "1e12dbb9-37ff-4e13-a9b1-5efa33cea05f");
+
+        private readonly SemaphoreSlim _lock = new(1, 1);
+
+        private static readonly Regex ScriptNameRegex = new(
+            @"^(?<Version>\d+)_(?<Build>\d+)_(?<Number>\d+)_(?<Application>[A-Za-z0-9]+)_(?<Name>[A-Za-z0-9]+)\.(?<Extension>[A-Za-z0-9]+)$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public MigrationService(
             IDXUnitGenericRepository genericRepo,
             IDXUnitDataService dataService)
         {
-            this._genericRepo = genericRepo;
-            this._dataService = dataService;
+            _genericRepo = genericRepo ?? throw new ArgumentNullException(nameof(genericRepo));
+            _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
         }
 
-        public void LoadStructure(string path)
+        public async Task LoadStructureAsync(string path, CancellationToken ct = default)
         {
-            mutex.WaitOne();
-            this.Load(path);
-            mutex.ReleaseMutex();
-        }
-
-        private void Load(string path)
-        {
-            var scriptsHistory = this.GetScriptsHistoryIfExisting();
-
-            var coreFiles = File.ReadAllText(this.GetFullPath(path));
-
-            var scripts = GetMirgationScripts(path, coreFiles);
-
-            foreach (var migrationScript in scripts)
+            await _lock.WaitAsync(ct);
+            try
             {
-                try
-                {
-                    if (scriptsHistory.SingleOrDefault(x => x.Equals(migrationScript.DXMigrationScriptsMainElement)) != null)
-                        continue;
-
-                    if (migrationScript.DXMigrationScriptsMainElement.Extention == "dat")
-                    {
-                        this.ProcessFileToInsertOrUpdate(migrationScript);
-                    }
-                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "dd")
-                    {
-                        this.ProcessFileToInsert(migrationScript);
-                    }
-                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "rd")
-                    {
-                        this.ProcessFileToInsert(migrationScript);
-                    }
-                    else if (migrationScript.DXMigrationScriptsMainElement.Extention == "od")
-                    {
-                        this.ProcessFileToInsert(migrationScript);
-                    }
-                    else
-                    {
-                        throw new Exception($"Migration script {migrationScript} could be processed.");
-                    }
-
-                    this._dataService.InsertAsync(migrationScript, new DXUnitHandlerMigrationServiceContext(migrationScript)).Wait();
-                }
-                catch (Exception exc)
-                {
-                    throw new Exception($"Error is occured when migration script '{migrationScript}' was applied.", exc);
-                }
+                await LoadAsync(path, ct);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
-        public void LoadCoreStructure()
+        public async Task LoadCoreStructureAsync(Assembly assembly, string preInitListPath, string postInitListPath, CancellationToken ct = default)
         {
-            mutex.WaitOne();
-
-            IEnumerable<DXMigrationScriptsMainElement> scriptsHistory;
+            await _lock.WaitAsync(ct);
 
             try
             {
-                scriptsHistory = this.GetScriptsHistoryIfExisting();
+                IEnumerable<DXMigrationScriptsMainElement> scriptsHistory;
+                try
+                {
+                    scriptsHistory = GetScriptsHistoryIfExisting();
+                    if (scriptsHistory != null && scriptsHistory.Any())
+                        return;
+                }
+                catch
+                {
+                    var corePreInitList = ResourceReader.ReadEmbeddedText(assembly, preInitListPath);
+                    var scriptsPreInit = GetMigrationScriptsFromEmbedded(assembly, preInitListPath, corePreInitList);
+
+                    foreach (var script in scriptsPreInit)
+                    {
+                        try
+                        {
+                            await ProcessFileForPreInitCoreAsync(script, ct).ConfigureAwait(false);
+                        }
+                        catch (Exception exc)
+                        {
+                            throw new Exception($"Error occurred when Pre Init migration script '{script}' was applied.", exc);
+                        }
+                    }
+
+                    var corePostInitList = ResourceReader.ReadEmbeddedText(assembly, postInitListPath);
+                    var scriptsPostInit = GetMigrationScriptsFromEmbedded(assembly, postInitListPath, corePostInitList);
+
+                    foreach (var script in scriptsPostInit)
+                    {
+                        try
+                        {
+                            await ProcessFileForPostInitCoreAsync(script, ct).ConfigureAwait(false);
+                        }
+                        catch (Exception exc)
+                        {
+                            throw new Exception($"Error occurred when Post Init migration script '{script}' was applied.", exc);
+                        }
+                    }
+
+                    foreach (var script in scriptsPreInit)
+                    {
+                        await _dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContext(script), ct).ConfigureAwait(false);
+                    }
+                }
             }
-            catch (Exception)
+            finally
             {
-                var pathToPreInit = this.GetFullPath("InitScripts/CorePreInit.json");
+                _lock.Release();
+            }
+        }
 
-                var corePreInitFiles = File.ReadAllText(pathToPreInit);
-                var scriptsPreInit = GetMirgationScripts(pathToPreInit, corePreInitFiles);
+        private async Task LoadAsync(string path, CancellationToken ct)
+        {
+            var scriptsHistory = GetScriptsHistoryIfExisting();
+            var historySet = new HashSet<DXMigrationScriptsMainElement>(scriptsHistory ?? Enumerable.Empty<DXMigrationScriptsMainElement>());
 
-                foreach (var script in scriptsPreInit)
+            var listJson = await File.ReadAllTextAsync(GetFullPath(path), ct).ConfigureAwait(false);
+            var scripts = GetMigrationScriptsFromFs(path, listJson);
+
+            foreach (var script in scripts)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                try
                 {
-                    try
-                    {
-                        this.ProcessFileForPreInitCore(script);
-                    }
-                    catch (Exception exc)
-                    {
-                        throw new Exception($"Error is occured when Pre Init migration script '{script}' was applied.", exc);
-                    }
+                    if (historySet.Contains(script.DXMigrationScriptsMainElement))
+                        continue;
+
+                    await ProcessByExtensionAsync(script, ct).ConfigureAwait(false);
+                    await _dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContext(script), ct).ConfigureAwait(false);
                 }
-
-                var pathToPostInit = "InitScripts/CorePostInit.json";
-
-                var corePostInitFiles = File.ReadAllText(pathToPostInit);
-
-                var scriptsPostInit = GetMirgationScripts(pathToPostInit, corePostInitFiles);
-
-                foreach (var script in scriptsPostInit)
+                catch (Exception exc)
                 {
-                    try
-                    {
-                        this.ProcessFileForPostInitCore(script);
-                    }
-                    catch (Exception exc)
-                    {
-                        throw new Exception($"Error is occured when Post Init migration script '{script}' was applied.", exc);
-                    }
-                }
-
-                foreach (var script in scriptsPreInit)
-                {
-                    this._dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContext(script)).Wait();
+                    throw new Exception($"Error occurred when migration script '{script}' was applied.", exc);
                 }
             }
+        }
 
-            mutex.ReleaseMutex();
+        private async Task ProcessByExtensionAsync(DXMigrationScriptsUnit script, CancellationToken ct)
+        {
+            var ext = script.DXMigrationScriptsMainElement.Extention?.ToLowerInvariant();
+            switch (ext)
+            {
+                case "dat":   // insert or update
+                    await ProcessFileToInsertOrUpdateAsync(script, ct).ConfigureAwait(false);
+                    break;
+
+                case "dd":
+                case "rd":
+                case "od":    // insert only
+                    await ProcessFileToInsertAsync(script, ct).ConfigureAwait(false);
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
+            }
         }
 
         private IEnumerable<DXMigrationScriptsMainElement> GetScriptsHistoryIfExisting()
-        {
-            var result = this._genericRepo.GetDXUnits<DXMigrationScriptsUnit>().Select(x => x.DXMigrationScriptsMainElement);
+            => _genericRepo.GetDXUnits<DXMigrationScriptsUnit>()
+                           .Select(x => x.DXMigrationScriptsMainElement);
 
-            return result;
+        private static bool TryParseScriptMeta(
+            string fileName,
+            out (string Version, string Build, string Number, string App, string Name, string Extension) meta)
+        {
+            var m = ScriptNameRegex.Match(fileName);
+            if (!m.Success) { meta = default; return false; }
+
+            meta = (
+                m.Groups["Version"].Value,
+                m.Groups["Build"].Value,
+                m.Groups["Number"].Value,
+                m.Groups["Application"].Value,
+                m.Groups["Name"].Value,
+                m.Groups["Extension"].Value
+            );
+            return true;
         }
 
-        private IEnumerable<DXMigrationScriptsUnit> GetMirgationScripts(string path, string content)
+        private static IEnumerable<DXMigrationScriptsUnit> GetMigrationScriptsFromEmbedded(
+            Assembly assembly, string listPath, string listContent)
         {
-            var directoryName = (new FileInfo(path)).DirectoryName;
+            var baseDir = NormalizeDirectory(Path.GetDirectoryName(listPath));
+            var list = JArray.Parse(listContent);
 
-            var jArray = JArray.Parse(content);
-
-            var pattern = @"(?<Version>[0-9]+)_(?<Build>[0-9]+)_(?<Number>[0-9]+)_(?<Application>[a-zA-z]+)_(?<Name>[a-zA-z]+)\.(?<Extention>[a-z]+)";
-            Regex regex = new Regex(pattern);
-
-            var migrationScripts = jArray.Select(x => new FileInfo(this.GetFullPath($"{directoryName}/{x}"))).Select(x =>
+            return list.Select(item =>
             {
-                if (!regex.IsMatch(x.Name))
-                    throw new Exception($"Script name {x.Name} has wrong format. Please use this format '<Verion>_<Build>_<Number>_<Application>_<Name>.<Extention>'");
+                var raw = item.ToString();
+                var rawNorm = raw.Replace('\\', '/');
+                var fileName = Path.GetFileName(rawNorm);
 
-                var match = regex.Match(x.Name);
+                if (!TryParseScriptMeta(fileName, out var meta))
+                    throw new FormatException(
+                        $"Script name '{raw}' has wrong format. Expected '<Version>_<Build>_<Number>_<Application>_<Name>.<Extension>'.");
+
+                var fullResourcePath = string.IsNullOrEmpty(baseDir) || rawNorm.StartsWith(baseDir + "/", StringComparison.OrdinalIgnoreCase)
+                    ? rawNorm
+                    : $"{baseDir}/{rawNorm}";
+
+                var content = ResourceReader.ReadEmbeddedText(assembly, fullResourcePath);
 
                 var id = Guid.NewGuid();
-
-                return new DXMigrationScriptsUnit()
+                return new DXMigrationScriptsUnit
                 {
                     ID = id,
-                    DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement()
+                    DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement
                     {
                         ID = Guid.NewGuid(),
                         DXUnitID = id,
-                        FilePath = x.FullName,
-                        Name = match.Groups["Name"].Value,
-                        Version = match.Groups["Version"].Value,
-                        Build = match.Groups["Build"].Value,
-                        Number = match.Groups["Number"].Value,
-                        AppName = match.Groups["Application"].Value,
-                        Extention = match.Groups["Extention"].Value
+                        FilePath = rawNorm,
+                        Name = meta.Name,
+                        Version = meta.Version,
+                        Build = meta.Build,
+                        Number = meta.Number,
+                        AppName = meta.App,
+                        Extention = meta.Extension,
+                        Content = content
                     }
                 };
             }).ToList();
-
-            return migrationScripts;
         }
 
-        private void ProcessFileForPreInitCore(DXMigrationScriptsUnit file)
+        private IEnumerable<DXMigrationScriptsUnit> GetMigrationScriptsFromFs(string listPath, string listContent)
         {
-            var content = File.ReadAllText(file.DXMigrationScriptsMainElement.FilePath);
+            var baseDir = new FileInfo(listPath).DirectoryName ?? string.Empty;
+            var list = JArray.Parse(listContent);
 
-            var jarray = JArray.Parse(content);
+            return list.Select(x => new FileInfo(GetFullPath(Path.Combine(baseDir, x.ToString()))))
+                       .Select(fi =>
+                       {
+                           if (!TryParseScriptMeta(fi.Name, out var meta))
+                               throw new FormatException(
+                                   $"Script name '{fi.Name}' has wrong format. Expected '<Version>_<Build>_<Number>_<Application>_<Name>.<Extension>'.");
 
+                           var id = Guid.NewGuid();
+                           return new DXMigrationScriptsUnit
+                           {
+                               ID = id,
+                               DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement
+                               {
+                                   ID = Guid.NewGuid(),
+                                   DXUnitID = id,
+                                   FilePath = fi.FullName,
+                                   Name = meta.Name,
+                                   Version = meta.Version,
+                                   Build = meta.Build,
+                                   Number = meta.Number,
+                                   AppName = meta.App,
+                                   Extention = meta.Extension,
+                                   Content = File.ReadAllText(fi.FullName)
+                               }
+                           };
+                       })
+                       .ToList();
+        }
+
+        private async Task ProcessFileForPreInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
+        {
+            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
             foreach (JObject item in jarray)
-            {
-                this._dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file)).Wait();
-            }
+                await _dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file), ct).ConfigureAwait(false);
         }
 
-        private void ProcessFileForPostInitCore(DXMigrationScriptsUnit file)
+        private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var content = File.ReadAllText(file.DXMigrationScriptsMainElement.FilePath);
-
-            var jarray = JArray.Parse(content);
-
+            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
             foreach (JObject item in jarray)
-            {
-                this._dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file)).Wait();
-            }
+                await _dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file), ct).ConfigureAwait(false);
         }
 
-        private void ProcessFileToInsert(DXMigrationScriptsUnit relFile)
+        private async Task ProcessFileToInsertAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var content = File.ReadAllText(relFile.DXMigrationScriptsMainElement.FilePath);
-
-            var jarray = JArray.Parse(content);
-
+            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
             foreach (JObject item in jarray)
-            {
-                this._dataService.InsertAsync(item, new DXUnitHandlerMigrationServiceContext(relFile)).Wait();
-            }
+                await _dataService.InsertAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
         }
 
-        private void ProcessFileToInsertOrUpdate(DXMigrationScriptsUnit datFile)
+        private async Task ProcessFileToInsertOrUpdateAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var content = File.ReadAllText(datFile.DXMigrationScriptsMainElement.FilePath);
-
-            var jarray = JArray.Parse(content);
-
+            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
             foreach (JObject item in jarray)
-            {
-                this._dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(datFile)).Wait();
-            }
+                await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
         }
 
-        private string GetFullPath(string pathToFile)
-        {
-            if (Path.IsPathRooted(pathToFile))
-                return pathToFile;
+        private static string NormalizeDirectory(string? dir)
+            => string.IsNullOrWhiteSpace(dir) ? string.Empty : dir.Replace('\\', '/');
 
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToFile);
-        }
+        private static string GetFullPath(string path)
+            => Path.IsPathRooted(path)
+                ? path
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
     }
 }

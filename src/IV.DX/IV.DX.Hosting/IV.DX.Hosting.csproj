@@ -25,16 +25,40 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="InitScripts\CorePostInit.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <None Remove="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" />
+      <None Remove="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" />
+      <None Remove="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" />
+      <None Remove="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" />
+      <None Remove="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat" />
+      <None Remove="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="InitScripts\CorePostInit.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
             <Pack>true</Pack>
-        </Content>
-        <Content Include="InitScripts\CorePreInit.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="InitScripts\CorePreInit.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
             <Pack>true</Pack>
-        </Content>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat">
+      </EmbeddedResource>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat">
+      </EmbeddedResource>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat">
+      </EmbeddedResource>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat">
+      </EmbeddedResource>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat">
+      </EmbeddedResource>
+      <EmbeddedResource Include="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat">
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -60,32 +84,5 @@
 
     <ItemGroup>
         <None Include="..\..\..\README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
-        <None Update="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
-        <None Update="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
-        <None Update="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
-        <None Update="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
-        <None Update="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat" Pack="true">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-        </None>
     </ItemGroup>
 </Project>

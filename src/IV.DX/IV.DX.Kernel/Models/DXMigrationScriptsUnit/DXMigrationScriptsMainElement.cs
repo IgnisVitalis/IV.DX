@@ -19,6 +19,8 @@ namespace IV.DX.Kernel.Models
         public string Name { get; set; }
         [DXColumn("Extention")]
         public string Extention { get; set; }
+        [DXColumn("Content")]
+        public string Content { get; set; }
 
 
         public override int GetHashCode()

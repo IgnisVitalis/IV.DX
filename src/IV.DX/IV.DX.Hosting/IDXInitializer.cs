@@ -2,8 +2,8 @@
 {
     public interface IDXInitializer
     {
-        void InitCoreData();
-        void InitCustomData(string configPath);
-        void InitCache();
+        Task InitCoreDataAsync(CancellationToken ct = default);
+        Task InitCustomDataAsync(string configPath, CancellationToken ct = default);
+        Task InitCacheAsync(CancellationToken ct = default);
     }
 }

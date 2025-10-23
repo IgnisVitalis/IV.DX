@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Persistence;
 using IV.DX.Persistence.Contracts.Abstractions;
+using System.Reflection;
 
 namespace IV.DX.Hosting
 {
@@ -20,22 +21,25 @@ namespace IV.DX.Hosting
             _dXStructureCache = dXStructureCache;
         }
 
-        public void InitCoreData()
+        public async Task InitCoreDataAsync(CancellationToken ct = default)
         {
             _coreRepo.CreateDataBase();
             DXMaintenanceToken.StartMaintenanceCore();
-            _migration.LoadCoreStructure();
+            await _migration.LoadCoreStructureAsync(
+                Assembly.GetAssembly(typeof(DXInitializer)), 
+                "InitScripts/CorePreInit.json", 
+                "InitScripts/CorePostInit.json", ct);
             DXMaintenanceToken.StopMaintenanceCore();
         }
 
-        public void InitCustomData(string configPath)
+        public async Task InitCustomDataAsync(string configPath, CancellationToken ct = default)
         {
-            _migration.LoadStructure(configPath);
+            await _migration.LoadStructureAsync(configPath, ct);
         }
 
-        public void InitCache()
+        public async Task InitCacheAsync(CancellationToken ct = default)
         {
-            this._dXStructureCache.WarmUpAsync().Wait();
+            await this._dXStructureCache.WarmUpAsync(ct);
         }
     }
 }

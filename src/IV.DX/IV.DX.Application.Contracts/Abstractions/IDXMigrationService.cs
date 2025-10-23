@@ -1,8 +1,10 @@
-﻿namespace IV.DX.Application.Contracts.Abstractions
+﻿using System.Reflection;
+
+namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXMigrationService
     {
-        void LoadStructure(string path);
-        void LoadCoreStructure();
+        Task LoadStructureAsync(string path, CancellationToken ct = default);
+        Task LoadCoreStructureAsync(Assembly assembly, string preInitListPath, string postInitListPath, CancellationToken ct = default);
     }
 }
