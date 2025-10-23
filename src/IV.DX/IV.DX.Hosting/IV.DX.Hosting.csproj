@@ -35,14 +35,8 @@
 
     <ItemGroup>
         <EmbeddedResource Include="InitScripts\CorePostInit.json">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-            <Pack>true</Pack>
         </EmbeddedResource>
         <EmbeddedResource Include="InitScripts\CorePreInit.json">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-            <PackageCopyToOutput>true</PackageCopyToOutput>
-            <Pack>true</Pack>
         </EmbeddedResource>
     </ItemGroup>
 
