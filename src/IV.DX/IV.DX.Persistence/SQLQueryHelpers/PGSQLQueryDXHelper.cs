@@ -138,7 +138,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             return new NpgsqlDataAdapter(query, conn)
             {
-                
+
             };
         }
 
@@ -819,6 +819,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                         exceptions.Add(exc2);
                     }
 
+                    exceptions.Add(new Exception($"Query : {query}"));
+
                     throw new AggregateException(exceptions);
                 }
             }
@@ -929,6 +931,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 case DXColumnTypeEnum.Blob:
                     pgbSqlDataType = "bytea";
                     break;
+                default: throw new Exception($"There are no supported type for {clmType}");
             }
 
             return pgbSqlDataType;

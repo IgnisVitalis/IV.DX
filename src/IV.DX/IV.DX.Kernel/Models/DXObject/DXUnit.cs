@@ -8,6 +8,7 @@ namespace IV.DX.Kernel.Models
 {
     public abstract class DXUnit
     {
+        [DXColumn("ID", "ID", DXLoadingType.Base)]
         public Guid ID { get; set; }
 
         [DXColumn("TimeStamp", "TimeStamp", DXLoadingType.Base)]

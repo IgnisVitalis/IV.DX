@@ -7,9 +7,9 @@ namespace IV.DX.Kernel.Models
     {
         public string Name { get; set; }
         public DXElementAttribute DXElementInfo { get; set; }
-        public MultiElementsMode Mode { get; set; }
-        public HashSet<DXItem> Announced { get; set; }
-        public HashSet<DXItem> Deleted { get; set; }
+        public MultiElementsMode Mode { get; set; } = MultiElementsMode.Full;
+        public HashSet<DXItem> Announced { get; set; } = new HashSet<DXItem>();
+        public HashSet<DXItem> Deleted { get; set; } = new HashSet<DXItem>();
 
         public JProperty ConvertToJProperty()
         {
@@ -46,10 +46,25 @@ namespace IV.DX.Kernel.Models
             return jProperty;
         }
 
-        //public void AddToAnnounced()
-        //{
+        public void AddToAnnounced(DXItem dxItem)
+        {
+            this.Announced.Add(dxItem);
+        }
 
-        //}
+        public void RemoveFromAnnounced(DXItem dxItem)
+        {
+            this.Announced.Remove(dxItem);
+        }
+
+        public void AddToDeleted(DXItem dxItem)
+        {
+            this.Deleted.Add(dxItem);
+        }
+
+        public void RemoveFromDeleted(DXItem dxItem)
+        {
+            this.Deleted.Remove(dxItem);
+        }
 
         public JProperty ConvertToJPropertyWithoutSystemProperties()
         {

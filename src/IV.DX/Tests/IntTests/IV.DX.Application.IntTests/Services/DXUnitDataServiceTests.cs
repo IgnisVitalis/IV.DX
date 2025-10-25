@@ -4,7 +4,9 @@ using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Factories.Test;
 using IV.DX.Shared.IntTests.Models.Test;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,6 +26,25 @@ namespace IV.DX.Application.IntTests.Services
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
             this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
+        }
+
+        [Fact]
+        public async Task Insert_UsingDXUnitAsJObject_Ok()
+        {
+            // Init
+            var content = File.ReadAllText("Services/JSON/DXElementDefinitionUnit.json");
+            var jObject = JObject.Parse(content);
+
+            base._finalizationAction = new Action(() =>
+            {
+                this._service.DeleteAsync(jObject).Wait();
+            });
+
+            // Action
+            var createdItem = await this._service.InsertAsync(jObject);
+
+            // Assert
+            Assert.NotNull(createdItem);
         }
 
         [Fact]
@@ -51,7 +72,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
             var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
-           
+
             // Action
             var result = await EstimatePerformanceAsync(async () =>
             {

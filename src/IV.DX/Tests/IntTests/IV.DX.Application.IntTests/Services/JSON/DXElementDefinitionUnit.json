@@ -1,0 +1,33 @@
+{
+    "S_Type": "DXElementDefinitionUnit",
+    "ID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
+    "DXObjectDefinitionMainElement": {
+        "Name": "Vic",
+        "DisplayValue": null,
+        "Kind": 2,
+        "ID": "9232a030-352b-4935-9936-9329c8758778",
+        "DXUnitID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
+        "TimeStamp": "0001-01-01T00:00:00",
+        "S_Type": "DXObjectDefinitionMainElement"
+    },
+    "DXColumnDefinitionElement": {
+        "S_Type": "DXColumnDefinitionElement",
+        "Mode": 2,
+        "Announced": [
+            {
+                "ID": "ff0dc19a-77e0-49a4-872a-3bef4222656b",
+                "DXUnitID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
+                "Name": "str",
+                "ColumnType": 3,
+                "Length": 123
+            }
+        ],
+        "Deleted": []
+    },
+    "DXUniqueColumnsElement": {
+        "S_Type": "DXUniqueColumnsElement",
+        "Mode": 1,
+        "Announced": [],
+        "Deleted": []
+    }
+}

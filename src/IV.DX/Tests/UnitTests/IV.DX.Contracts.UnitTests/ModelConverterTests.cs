@@ -75,7 +75,7 @@ namespace IV.DX.Contracts.UnitTests
                 {
                     ID = objectId,
                     DXUnitID = objectId,
-                    Content = new JObject(new JProperty("TimeStamp", new DateTime(2020, 12, 1))),
+                    Content = new JObject(new JProperty("ID", objectId), new JProperty("TimeStamp", new DateTime(2020, 12, 1))),
                 }
             };
 

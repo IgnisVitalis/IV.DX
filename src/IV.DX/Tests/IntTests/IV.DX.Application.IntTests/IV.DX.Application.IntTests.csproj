@@ -39,5 +39,8 @@
         <None Update="Assets\DXObjectDefinitionUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Services\JSON\DXElementDefinitionUnit.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>
