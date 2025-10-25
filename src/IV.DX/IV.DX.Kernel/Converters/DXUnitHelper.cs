@@ -33,7 +33,7 @@ namespace IV.DX.Kernel.Converters
 
             var unitAttr = DXReflectionHelper.GetAttr<DXUnitAttribute>(dxUnit.GetType());
 
-            var ownItem = new DXMainItem(unitAttr)
+            var ownItem = new DXMainElement(unitAttr)
             {
                 Item = new DXItem
                 {
@@ -45,8 +45,8 @@ namespace IV.DX.Kernel.Converters
 
             return new DXModel(ownItem)
             {
-                SingleItems = GetDXSingleElements(dxUnit),
-                MultiItems = GetDXMultiElements(dxUnit)
+                DXSingleElements = GetDXSingleElements(dxUnit),
+                DXMultiElements = GetDXMultiElements(dxUnit)
             };
         }
 
@@ -76,12 +76,12 @@ namespace IV.DX.Kernel.Converters
                 var elementType = pi.PropertyType.GenericTypeArguments[0];
                 var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
 
-                var announcedList = new List<DXItem>();
-                var deletedList = new List<DXItem>();
+                var announcedList = new HashSet<DXItem>();
+                var deletedList = new HashSet<DXItem>();
 
                 if (value != null)
                 {
-                    void Fill(string propertyName, List<DXItem> target)
+                    void Fill(string propertyName, HashSet<DXItem> target)
                     {
                         var src = multiType.GetProperty(propertyName)?.GetValue(value) as IEnumerable<DXElement>;
                         if (src == null) return;
@@ -170,18 +170,18 @@ namespace IV.DX.Kernel.Converters
             if (dxModel is null || type is null)
                 return null;
 
-            var own = dxModel.OwnSingleItem.ConvertToJPropertyWithoutSystemProperties();
+            var own = dxModel.MainElement.ConvertToJPropertyWithoutSystemProperties();
             var obj = (own?.Value?.ToObject(type)) ?? Activator.CreateInstance(type)!;
 
             var idProp = type.GetProperty(Constants.ID);
-            idProp?.SetValue(obj, dxModel.OwnSingleItem.Item.ID);
+            idProp?.SetValue(obj, dxModel.MainElement.Item.ID);
 
             var singleProps = AttributeReader.GetSingleItemInfos(type);
-            if (dxModel.SingleItems != null)
+            if (dxModel.DXSingleElements != null)
             {
                 foreach (var sp in singleProps)
                 {
-                    var modelItem = dxModel.SingleItems.SingleOrDefault(x => x.Name == sp.Name);
+                    var modelItem = dxModel.DXSingleElements.SingleOrDefault(x => x.Name == sp.Name);
                     if (modelItem is null) continue;
 
                     var jProp = modelItem.ConvertToJPropertyWithoutSystemProperties();
@@ -193,11 +193,11 @@ namespace IV.DX.Kernel.Converters
             }
 
             var multiProps = AttributeReader.GetMultiItemInfos(type);
-            if (dxModel.MultiItems != null)
+            if (dxModel.DXMultiElements != null)
             {
                 foreach (var mp in multiProps)
                 {
-                    var modelItem = dxModel.MultiItems.SingleOrDefault(x => x.Name == mp.Name);
+                    var modelItem = dxModel.DXMultiElements.SingleOrDefault(x => x.Name == mp.Name);
                     if (modelItem is null) continue;
 
                     var jProp = modelItem.ConvertToJProperty();

@@ -3,13 +3,13 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    internal class DXMultiElement
+    public class DXMultiElement
     {
         public string Name { get; set; }
         public DXElementAttribute DXElementInfo { get; set; }
         public MultiElementsMode Mode { get; set; }
-        public IEnumerable<DXItem> Announced { get; set; }
-        public IEnumerable<DXItem> Deleted { get; set; }
+        public HashSet<DXItem> Announced { get; set; }
+        public HashSet<DXItem> Deleted { get; set; }
 
         public JProperty ConvertToJProperty()
         {
@@ -45,6 +45,11 @@ namespace IV.DX.Kernel.Models
 
             return jProperty;
         }
+
+        //public void AddToAnnounced()
+        //{
+
+        //}
 
         public JProperty ConvertToJPropertyWithoutSystemProperties()
         {
@@ -94,22 +99,22 @@ namespace IV.DX.Kernel.Models
 
             if (jProperty[Constants.Announced] == null)
             {
-                multiFragment.Announced = new List<DXItem>();
+                multiFragment.Announced = new HashSet<DXItem>();
             }
             else
             {
                 multiFragment.Announced = (jProperty[Constants.Announced] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x));
+                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x)).ToHashSet();
             }
 
             if (jProperty[Constants.Deleted] == null)
             {
-                multiFragment.Deleted = new List<DXItem>();
+                multiFragment.Deleted = new HashSet<DXItem>();
             }
             else
             {
                 multiFragment.Deleted = (jProperty[Constants.Deleted] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x));
+                    .Select(x => x as JObject).Select(x => DXItem.ConvertFromJObject(x)).ToHashSet();
             }
 
             return multiFragment;
@@ -158,8 +163,8 @@ namespace IV.DX.Kernel.Models
             {
                 Mode = this.Mode,
                 Name = this.Name,
-                Announced = this.Announced?.Select(x => x.DeepClone()),
-                Deleted = this.Deleted?.Select(x => x.DeepClone()),
+                Announced = this.Announced?.Select(x => x.DeepClone()).ToHashSet(),
+                Deleted = this.Deleted?.Select(x => x.DeepClone()).ToHashSet(),
                 DXElementInfo = this.DXElementInfo.DeepClone()
             };
         }

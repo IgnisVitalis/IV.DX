@@ -132,7 +132,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Checking result
             Assert.NotNull(dxElement);
 
-            var genDXElement = dxElement.SingleItems.SingleOrDefault(x => x.Name == "DXObjectDefinitionMainElement");
+            var genDXElement = dxElement.DXSingleElements.SingleOrDefault(x => x.Name == "DXObjectDefinitionMainElement");
 
             Assert.NotNull(genDXElement);
         }

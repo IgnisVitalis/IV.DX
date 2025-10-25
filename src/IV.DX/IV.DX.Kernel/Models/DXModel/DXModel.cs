@@ -1,18 +1,17 @@
 ﻿using IV.DX.Kernel.Attributes;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    internal class DXModel
+    public class DXModel
     {
-        public DXMainItem OwnSingleItem { get; set; }
-        public HashSet<DXSingleElement> SingleItems { get; set; }
-        public HashSet<DXMultiElement> MultiItems { get; set; }
+        public DXMainElement MainElement { get; set; }
+        public HashSet<DXSingleElement> DXSingleElements { get; set; }
+        public HashSet<DXMultiElement> DXMultiElements { get; set; }
 
-        public DXModel(DXMainItem ownSingleItem)
+        public DXModel(DXMainElement mainElement)
         {
-            this.OwnSingleItem = ownSingleItem;
+            this.MainElement = mainElement;
         }
 
         public static bool DeepEquals(DXModel item1, DXModel item2)
@@ -23,21 +22,21 @@ namespace IV.DX.Kernel.Models
             var result = true;
 
             result = result
-                && DXMainItem.DeepEquals(item1.OwnSingleItem, item2.OwnSingleItem)
-                && DXSingleElement.DeepEquals(item1.SingleItems, item2.SingleItems)
-                && DXMultiElement.DeepEquals(item1.MultiItems, item2.MultiItems);
+                && DXMainElement.DeepEquals(item1.MainElement, item2.MainElement)
+                && DXSingleElement.DeepEquals(item1.DXSingleElements, item2.DXSingleElements)
+                && DXMultiElement.DeepEquals(item1.DXMultiElements, item2.DXMultiElements);
 
             return result;
         }
 
         public DXModel DeepClone()
         {
-            var ownItemClone = this.OwnSingleItem.DeepClone();
+            var ownItemClone = this.MainElement.DeepClone();
 
             return new DXModel(ownItemClone)
             {
-                SingleItems = this.SingleItems?.Select(x => x.DeepClone()).ToHashSet(),
-                MultiItems = this.MultiItems?.Select(x => x.DeepClone()).ToHashSet()
+                DXSingleElements = this.DXSingleElements?.Select(x => x.DeepClone()).ToHashSet(),
+                DXMultiElements = this.DXMultiElements?.Select(x => x.DeepClone()).ToHashSet()
             };
         }
 
@@ -46,21 +45,21 @@ namespace IV.DX.Kernel.Models
         {
             JObject result = new JObject
             {
-                { Constants.SystemPropertyTypeName, this.OwnSingleItem.ObjectInfo.ObjectName },
-                { Constants.ID, this.OwnSingleItem.Item.ID }
+                { Constants.SystemPropertyTypeName, this.MainElement.ObjectInfo.ObjectName },
+                { Constants.ID, this.MainElement.Item.ID }
             };
 
-            if (this.SingleItems != null)
+            if (this.DXSingleElements != null)
             {
-                foreach (var item in this.SingleItems)
+                foreach (var item in this.DXSingleElements)
                 {
                     result.Add(item.ConvertToJProperty());
                 }
             }
 
-            if (this.MultiItems != null)
+            if (this.DXMultiElements != null)
             {
-                foreach (var item in this.MultiItems)
+                foreach (var item in this.DXMultiElements)
                 {
                     result.Add(item.ConvertToJProperty());
                 }
@@ -84,7 +83,7 @@ namespace IV.DX.Kernel.Models
                 return x.Value[Constants.Mode] != null && (x.Value[Constants.Announced] != null || x.Value[Constants.Deleted] != null);
             });
 
-            var ownItem = GetQwndxSingleItem(jObject);
+            var ownItem = GetOwnDXSingleItem(jObject);
 
             var singleItems = jProperties
                     .Where(x => !expressionToFilterMultiItems(x))
@@ -98,8 +97,8 @@ namespace IV.DX.Kernel.Models
 
             DXModel dxModel = new DXModel(ownItem)
             {
-                SingleItems = singleItems,
-                MultiItems = multiItems
+                DXSingleElements = singleItems,
+                DXMultiElements = multiItems
             };
 
             return dxModel;
@@ -130,15 +129,15 @@ namespace IV.DX.Kernel.Models
             {
                 Name = property.Name,
                 DXElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
-                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToList(),
+                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
+                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
                 Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()
             };
 
             return dxMultiItem;
         }
 
-        private static DXMainItem GetQwndxSingleItem(JObject jObject)
+        private static DXMainElement GetOwnDXSingleItem(JObject jObject)
         {
             var jObjectCopy = jObject.DeepClone() as JObject;
             string type = null;
@@ -164,7 +163,7 @@ namespace IV.DX.Kernel.Models
                 jObjectCopy.Remove(item.Name);
             }
 
-            var result = new DXMainItem(new DXUnitAttribute(type))
+            var result = new DXMainElement(new DXUnitAttribute(type))
             {
                 Item = GetdxItem(jObjectCopy, id)
             };

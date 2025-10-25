@@ -3,17 +3,17 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
-    internal class DXMainItem
+    public class DXMainElement
     {
         public DXUnitAttribute ObjectInfo { get; private set; }
         public DXItem Item { get; set; }
 
-        public DXMainItem(DXUnitAttribute objectInfo)
+        public DXMainElement(DXUnitAttribute objectInfo)
         {
             this.ObjectInfo = objectInfo;
         }
 
-        public static bool DeepEquals(DXMainItem item1, DXMainItem item2)
+        public static bool DeepEquals(DXMainElement item1, DXMainElement item2)
         {
             if (item1 == null || item2 == null)
                 return false;
@@ -24,9 +24,9 @@ namespace IV.DX.Kernel.Models
 
             return result;
         }
-        public DXMainItem DeepClone()
+        public DXMainElement DeepClone()
         {
-            return new DXMainItem(this.ObjectInfo.DeepClone())
+            return new DXMainElement(this.ObjectInfo.DeepClone())
             {
                 Item = this.Item.DeepClone(),
             };

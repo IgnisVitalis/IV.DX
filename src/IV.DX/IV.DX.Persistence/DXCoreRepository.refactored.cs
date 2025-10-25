@@ -75,7 +75,7 @@ namespace IV.DX.Persistence
             this.RunRequest((conn) =>
             {
                 var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
-                var dataTable = dataSet.Tables[result.OwnSingleItem.ObjectInfo.ObjectName];
+                var dataTable = dataSet.Tables[result.MainElement.ObjectInfo.ObjectName];
 
                 if (dataTable.Rows.Count == 0)
                 {
@@ -94,7 +94,7 @@ namespace IV.DX.Persistence
 
         private DXModel GetDXModel(DXModelDefinition container, Guid id)
         {
-            DXModel result = new DXModel(new DXMainItem(new DXUnitAttribute(container.OwnSingleItem.Name))
+            DXModel result = new DXModel(new DXMainElement(new DXUnitAttribute(container.MainElement.Name))
             {
                 Item = new DXItem()
                 {
@@ -140,7 +140,7 @@ namespace IV.DX.Persistence
             IEnumerable<DXModel> resultItems = null;
 
             var dataSet = this.PopulateDataSetForTargetDXUnits(container, objIds, conn);
-            var dataTable = dataSet.Tables[container.OwnSingleItem.Type];
+            var dataTable = dataSet.Tables[container.MainElement.Type];
 
             var items = dataTable.Rows;
 
@@ -156,23 +156,23 @@ namespace IV.DX.Persistence
             DXModel resultItem = this.GetDXModel(container, ConvertHelper.ParseGuid(x[Constants.ID]));
 
             // Process DX model
-            this.PopulateDXMainItem(resultItem.OwnSingleItem, container.OwnSingleItem, x);
+            this.PopulateDXMainItem(resultItem.MainElement, container.MainElement, x);
 
             // Process DX single items
-            resultItem.SingleItems = container.SingleFragmentDefinitions.Select(item =>
+            resultItem.DXSingleElements = container.SingleFragmentDefinitions.Select(item =>
             {
                 DXSingleElement singleItem = this.ConvertTodxSingleItem(item);
 
                 var dataTable = dataSet.Tables[singleItem.Name];
 
                 this.PopulatedxSingleItem(singleItem, item, dataTable.Rows.Cast<DataRow>()
-                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.OwnSingleItem.Item.ID));
+                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.MainElement.Item.ID));
 
                 return singleItem;
             }).ToHashSet();
 
             // Process DX multi items          
-            resultItem.MultiItems = container.MultiFragmentDefinitions.Select(item =>
+            resultItem.DXMultiElements = container.MultiFragmentDefinitions.Select(item =>
             {
                 DXMultiElement multiItem = this.ConvertToDXMultiItem(item);
 
@@ -180,7 +180,7 @@ namespace IV.DX.Persistence
 
                 var rows =
                     dataTable.Rows.Cast<DataRow>()
-                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.OwnSingleItem.Item.ID).ToList();
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == resultItem.MainElement.Item.ID).ToList();
 
                 this.PopulateDXMultiItem(multiItem, item, rows);
 
@@ -331,7 +331,7 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxsqlWhereExpression, DXLoadingType typeOfLoading)
         {
-            string typeName = container.OwnSingleItem.Type;
+            string typeName = container.MainElement.Type;
             string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
@@ -352,9 +352,9 @@ namespace IV.DX.Persistence
 
         private DataSet PopulateDataSetForTargetDXUnit(DXModelDefinition container, Guid id, DbConnection conn)
         {
-            DataSet dataSet = new DataSet(container.OwnSingleItem.Type);
+            DataSet dataSet = new DataSet(container.MainElement.Type);
 
-            this.PopulateTableToDataSet(conn, dataSet, container.OwnSingleItem.Type,
+            this.PopulateTableToDataSet(conn, dataSet, container.MainElement.Type,
                 whereClause: this._queryHelper.GetWhereExpressionForID(id), fillSchema: false);
 
             var whereClauseForDXUnitID = this._queryHelper.GetWhereExpressionForDXUnitID(id);
@@ -378,11 +378,11 @@ namespace IV.DX.Persistence
 
         private DataSet PopulateDataSetForTargetDXUnits(DXModelDefinition container, IEnumerable<Guid> ids, DbConnection conn)
         {
-            DataSet dataSet = new DataSet(container.OwnSingleItem.Type);
+            DataSet dataSet = new DataSet(container.MainElement.Type);
 
             if (ids != null && ids.Count() > 0)
             {
-                this.PopulateTableToDataSet(conn, dataSet, container.OwnSingleItem.Type, whereClause: this._queryHelper.GetWhereExpressionForID(ids), fillSchema: false);
+                this.PopulateTableToDataSet(conn, dataSet, container.MainElement.Type, whereClause: this._queryHelper.GetWhereExpressionForID(ids), fillSchema: false);
 
                 var whereClauseForDXUnitIDs = this._queryHelper.GetWhereExpressionForDXUnitID(ids);
 
@@ -401,7 +401,7 @@ namespace IV.DX.Persistence
         }
 
         private void PopulateDXMainItem(
-            DXMainItem ownItem,
+            DXMainElement ownItem,
             DXElementDefinition fragmentDefinition,
             DataRow dataRow)
         {
@@ -429,7 +429,7 @@ namespace IV.DX.Persistence
             DXElementDefinition fragmentDefinition,
             IEnumerable<DataRow> rows)
         {
-            multiItem.Announced = rows.OfType<DataRow>().Select(x => this.GetdxItem(x, fragmentDefinition)).ToList();
+            multiItem.Announced = rows.OfType<DataRow>().Select(x => this.GetdxItem(x, fragmentDefinition)).ToHashSet();
             multiItem.Mode = MultiElementsMode.Full;
         }
 
@@ -504,10 +504,10 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxModel);
 
-            if (!dxModel.OwnSingleItem.Item.ID.HasValue)
-                dxModel.OwnSingleItem.Item.ID = Guid.NewGuid();
+            if (!dxModel.MainElement.Item.ID.HasValue)
+                dxModel.MainElement.Item.ID = Guid.NewGuid();
 
-            var typeName = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
+            var typeName = dxModel.MainElement.ObjectInfo.ObjectName;
 
             var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
             if (mainDXUnitInfo != null)
@@ -517,13 +517,13 @@ namespace IV.DX.Persistence
             if (enumInfo != null)
                 return this.InsertOrUpdateDXEnum(enumInfo, dxModel, processingType);
 
-            throw new Exception($"Type '{dxModel.OwnSingleItem.ObjectInfo.ObjectName}' is not registered.");
+            throw new Exception($"Type '{dxModel.MainElement.ObjectInfo.ObjectName}' is not registered.");
         }
 
         public Guid InsertOrUpdate(DXModel dxModel)
         {
-            var objId = dxModel.OwnSingleItem.Item.ID;
-            var type = dxModel.OwnSingleItem.ObjectInfo.ObjectName;
+            var objId = dxModel.MainElement.Item.ID;
+            var type = dxModel.MainElement.ObjectInfo.ObjectName;
 
             if (objId.HasValue
                 && !string.IsNullOrEmpty(type)
@@ -554,7 +554,7 @@ namespace IV.DX.Persistence
                 var enumTable = enumInfo.DXObjectDefinitionMainElement.Name;
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, enumTable,
-                    whereClause: _queryHelper.GetWhereExpressionForID(dxModel.OwnSingleItem.Item.ID.Value));
+                    whereClause: _queryHelper.GetWhereExpressionForID(dxModel.MainElement.Item.ID.Value));
                 UpsertOwnRow(dxModel, dataSet.Tables[enumTable], enumTable, processingType);
 
                 SaveTable(adapter, conn, dataSet, dataSet.Tables[enumTable], false);
@@ -563,7 +563,7 @@ namespace IV.DX.Persistence
                 return true;
             });
 
-            return dxModel.OwnSingleItem.Item.ID.Value;
+            return dxModel.MainElement.Item.ID.Value;
         }
 
         private Guid InsertOrUpdateDXUnit(DXUnitDefinitionUnit mainDXUnitInfo, DXModel dxModel, ProcessingType processingType)
@@ -581,7 +581,7 @@ namespace IV.DX.Persistence
                     var relatedMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
                 
                     var unitTable = dxUnitInfo.DXObjectDefinitionMainElement.Name;
-                    var objectId = dxModel.OwnSingleItem.Item.ID!.Value;
+                    var objectId = dxModel.MainElement.Item.ID!.Value;
 
                     // 1) OWN
                     var adapter = PopulateTableToDataSet(conn, dataSet, unitTable, whereClause: _queryHelper.GetWhereExpressionForID(objectId));
@@ -612,7 +612,7 @@ namespace IV.DX.Persistence
                 return true;
             });
 
-            return dxModel.OwnSingleItem.Item.ID!.Value;
+            return dxModel.MainElement.Item.ID!.Value;
         }
 
         private void SaveTable(DbDataAdapter adapter, DbConnection conn, DataSet dataSet, DataTable table, bool isMultiTable, int bulkThreshold = 500)
@@ -632,19 +632,19 @@ namespace IV.DX.Persistence
 
         private void UpsertOwnRow(DXModel dxModel, DataTable table, string dxUnitType, ProcessingType processingType)
         {
-            var id = dxModel.OwnSingleItem.Item.ID!.Value;
+            var id = dxModel.MainElement.Item.ID!.Value;
 
             var row = table.Rows.Find(id);
 
             if (row == null)
             {
                 row = table.NewRow();
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
+                MapdxItemToRow(dxModel.MainElement.Item, row, dxUnitType);
                 table.Rows.Add(row);
             }
             else
             {
-                MapdxItemToRow(dxModel.OwnSingleItem.Item, row, dxUnitType);
+                MapdxItemToRow(dxModel.MainElement.Item, row, dxUnitType);
             }
         }
 
@@ -652,7 +652,7 @@ namespace IV.DX.Persistence
                           DataSet dataSet, DbConnection conn, ProcessingType processingType)
         {
             var dxElementName = singleDef.DXObjectDefinitionMainElement.Name.Trim();
-            var dxElement = dxModel.SingleItems.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+            var dxElement = dxModel.DXSingleElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
             if (dxElement == null) return;
 
             var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
@@ -685,7 +685,7 @@ namespace IV.DX.Persistence
             ProcessingType processingType)
         {
             var tableName = multiDef.DXObjectDefinitionMainElement.Name.Trim();
-            var parentId = dxModel.OwnSingleItem.Item.ID!.Value;
+            var parentId = dxModel.MainElement.Item.ID!.Value;
             var unitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
 
 
@@ -698,7 +698,7 @@ namespace IV.DX.Persistence
                     table.PrimaryKey = new[] { table.Columns["ID"] };
             }
 
-            var dxElement = dxModel.MultiItems.SingleOrDefault(x => x.Name.Trim() == tableName);
+            var dxElement = dxModel.DXMultiElements.SingleOrDefault(x => x.Name.Trim() == tableName);
             if (dxElement == null) return;
 
             foreach (var item in dxElement.Announced)

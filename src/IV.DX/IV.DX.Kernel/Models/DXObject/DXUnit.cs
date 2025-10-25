@@ -34,6 +34,11 @@ namespace IV.DX.Kernel.Models
             return DXUnitHelper.ConvertToJObject(this);
         }
 
+        public DXModel ToDXModel()
+        {
+            return DXUnitHelper.ConvertToDXModel(this);
+        }
+
         public static T Parse<T>(JObject jObject) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNull(jObject);

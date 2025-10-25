@@ -4,13 +4,13 @@ namespace IV.DX.Kernel.Models
 {
     internal class DXModelDefinition
     {
-        public DXElementDefinition OwnSingleItem { get; private set; }
+        public DXElementDefinition MainElement { get; private set; }
         public IEnumerable<DXElementDefinition> SingleFragmentDefinitions { get; private set; }
         public IEnumerable<DXElementDefinition> MultiFragmentDefinitions { get; private set; }
 
-        public DXModelDefinition(DXElementDefinition ownSingleItem)
+        public DXModelDefinition(DXElementDefinition mainElement)
         {
-            this.OwnSingleItem = ownSingleItem;
+            this.MainElement = mainElement;
             this.SingleFragmentDefinitions = new List<DXElementDefinition>();
             this.MultiFragmentDefinitions = new List<DXElementDefinition>();
         }
@@ -78,7 +78,7 @@ namespace IV.DX.Kernel.Models
 
         public DXModelDefinition DeepClone()
         {
-            var clone = new DXModelDefinition(this.OwnSingleItem);
+            var clone = new DXModelDefinition(this.MainElement);
 
             var singleFragmentDefinitionClones = this.SingleFragmentDefinitions.Select(x => x.DeepClone());
             var multiFragmentDefinitionClones = this.MultiFragmentDefinitions.Select(x => x.DeepClone());

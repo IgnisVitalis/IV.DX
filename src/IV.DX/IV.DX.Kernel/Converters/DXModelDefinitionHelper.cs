@@ -16,13 +16,13 @@ namespace IV.DX.Kernel.Converters
 
         public static DXModelDefinition GetDXModelDefinition(DXModel dxModel)
         {
-            var mainItemDefinition = new DXElementDefinition(dxModel.OwnSingleItem.ObjectInfo.ObjectName, dxModel.OwnSingleItem.ObjectInfo.ObjectName);
+            var mainItemDefinition = new DXElementDefinition(dxModel.MainElement.ObjectInfo.ObjectName, dxModel.MainElement.ObjectInfo.ObjectName);
 
-            mainItemDefinition.AddPropertyDefinitions(dxModel.OwnSingleItem.Item.Content.Children().Select(x => x as JProperty).Where(x => x != null).Select(x =>
+            mainItemDefinition.AddPropertyDefinitions(dxModel.MainElement.Item.Content.Children().Select(x => x as JProperty).Where(x => x != null).Select(x =>
                 new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name))).ToList());
 
             var singleItemDefinitions =
-                dxModel.SingleItems.Select(x =>
+                dxModel.DXSingleElements.Select(x =>
                 {
                     var item = new DXElementDefinition(x.ElementInfo.Name, x.Name);
 
@@ -44,7 +44,7 @@ namespace IV.DX.Kernel.Converters
                 }).ToList();
 
             var multiItemDefinitions =
-                  dxModel.MultiItems.Select(x =>
+                  dxModel.DXMultiElements.Select(x =>
                   {
                       var item = new DXElementDefinition(x.DXElementInfo.Name, x.Name);
 

@@ -69,7 +69,7 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
 
-            var ownItem = new DXMainItem(new DXUnitAttribute("MyObjectDefinition"))
+            var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"))
             {
                 Item = new DXItem()
                 {
@@ -81,7 +81,7 @@ namespace IV.DX.Contracts.UnitTests
 
             dxModel = new DXModel(ownItem)
             {
-                SingleItems = new HashSet<DXSingleElement>()
+                DXSingleElements = new HashSet<DXSingleElement>()
                 {
                     new DXSingleElement
                     {
@@ -101,14 +101,14 @@ namespace IV.DX.Contracts.UnitTests
                         }
                     }
                 },
-                MultiItems = new HashSet<DXMultiElement>()
+                DXMultiElements = new HashSet<DXMultiElement>()
                 {
                     new DXMultiElement()
                     {
                         Name = "MyDXElementMultiItems",
                         DXElementInfo = new DXElementAttribute("MyDXElementDefinition"),
                         Mode = MultiElementsMode.Target,
-                        Announced = new List<DXItem>()
+                        Announced = new HashSet<DXItem>()
                         {
                             new DXItem()
                             {
@@ -135,7 +135,7 @@ namespace IV.DX.Contracts.UnitTests
                                     new JProperty("TimeStamp", new DateTime(2020, 12, 3)))
                             }
                         },
-                        Deleted = new List<DXItem>()
+                        Deleted = new HashSet<DXItem>()
                         {
                             new DXItem()
                             {
