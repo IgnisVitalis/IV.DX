@@ -166,7 +166,7 @@ namespace IV.DX.Kernel.Models
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
 
             var singleFragmentDefinition = new DXElementDefinition(dxElement.DXObjectDefinitionMainElement.Name, dxElement.DXObjectDefinitionMainElement.Name);
-
+                        
             singleFragmentDefinition.AddPropertyDefinitions(props);
 
             return singleFragmentDefinition;

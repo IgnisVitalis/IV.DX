@@ -14,11 +14,8 @@ namespace IV.DX.Kernel.Models
             JObject jObject = null;
 
             if (this.Item != null)
-            {   
-                jObject = new JObject(this.Item.ConvertToJObject())
-                {
-                    [Constants.SystemPropertyTypeName] = this.ElementInfo.Name
-                };
+            {
+                jObject = new JObject(this.Item.ConvertToJObject());
             }
 
             JProperty jProperty = new JProperty(this.Name, jObject);

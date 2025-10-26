@@ -47,6 +47,13 @@ namespace IV.DX.Kernel.Models
             return DXUnitHelper.CreateInstance<T>(jObject);
         }
 
+        public static T Parse<T>(DXModel dxModel) where T : DXUnit
+        {
+            ArgumentNullException.ThrowIfNull(dxModel);
+
+            return DXUnitHelper.CreateInstance<T>(dxModel);
+        }
+
         public static T Parse<T>(string jObjectStr) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNullOrEmpty(jObjectStr);

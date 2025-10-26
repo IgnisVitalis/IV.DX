@@ -2,17 +2,23 @@
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "e8a16147-6885-4588-a467-7f30f9c8603b",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
             "Name": "TUserMainElement",
             "Kind": 3
         },
         "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "cddb8804-83c0-4631-97bf-39822988720f",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 3,
                     "Name": "Name",
@@ -21,7 +27,9 @@
                     "DefaultValue": null
                 },
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "3d7110eb-3827-47f6-b3fc-3de4a871e87f",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 3,
                     "Name": "Surname",
@@ -30,7 +38,9 @@
                     "DefaultValue": null
                 },
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "f9f982c1-385e-4906-a616-c849875f08cc",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                     "ColumnType": 5,
                     "Name": "Birth",

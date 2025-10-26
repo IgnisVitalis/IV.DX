@@ -2,17 +2,23 @@
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "bc4f2c48-dbff-4fea-965d-61557fe6013c",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
             "Name": "TDeviceMainElement",
             "Kind": 3
         },
         "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "68e37e0b-3f5c-41ad-bb31-69b09859fd57",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
                     "ColumnType": 3,
                     "Name": "Model",
@@ -21,7 +27,9 @@
                     "DefaultValue": null
                 },
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "81f95b0d-fb05-43c4-9d56-91173ca3e585",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
                     "ColumnType": 1,
                     "Name": "UUID",

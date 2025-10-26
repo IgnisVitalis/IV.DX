@@ -33,4 +33,8 @@
         <ProjectReference Include="..\IV.DX.Shared.UnitTests\IV.DX.Shared.UnitTests.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="NewFolder\" />
+    </ItemGroup>
+
 </Project>

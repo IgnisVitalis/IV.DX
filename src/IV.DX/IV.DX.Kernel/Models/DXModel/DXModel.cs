@@ -43,11 +43,7 @@ namespace IV.DX.Kernel.Models
         #region Convert to JObject
         public JObject ConvertToJObject()
         {
-            JObject result = new JObject
-            {
-                { Constants.SystemPropertyTypeName, this.MainElement.ObjectInfo.ObjectName },
-                { Constants.ID, this.MainElement.Item.ID }
-            };
+            JObject result = this.MainElement.Item.Content.DeepClone() as JObject;
 
             if (this.DXSingleElements != null)
             {
@@ -70,7 +66,7 @@ namespace IV.DX.Kernel.Models
         #endregion
 
         #region Create instance
-        public static DXModel CreateInstance(JObject jObject)
+        public static DXModel Parse(JObject jObject)
         {
             if (jObject == null)
                 return null;
@@ -83,7 +79,9 @@ namespace IV.DX.Kernel.Models
                 return x.Value[Constants.Mode] != null && (x.Value[Constants.Announced] != null || x.Value[Constants.Deleted] != null);
             });
 
-            var ownItem = GetOwnDXSingleItem(jObject);
+            var jObjectCopy = jObject.DeepClone() as JObject;
+
+            var ownItem = GetOwnDXSingleItem(jObjectCopy);
 
             var singleItems = jProperties
                     .Where(x => !expressionToFilterMultiItems(x))
@@ -104,11 +102,11 @@ namespace IV.DX.Kernel.Models
             return dxModel;
         }
 
-        public static DXModel CreateInstance(string json)
+        public static DXModel Parse(string json)
         {
             var jObject = JObject.Parse(json);
 
-            return CreateInstance(jObject);
+            return Parse(jObject);
         }
 
         private static DXSingleElement GetDXSingleItem(JProperty property, Guid? objId)
@@ -139,33 +137,31 @@ namespace IV.DX.Kernel.Models
 
         private static DXMainElement GetOwnDXSingleItem(JObject jObject)
         {
-            var jObjectCopy = jObject.DeepClone() as JObject;
-            string type = null;
+            if (jObject[Constants.ID] == null)
+                throw new Exception($"JSON for DXMainElement should contain {Constants.ID} property");
 
-            Guid? id = null;
+            if (jObject[Constants.SystemPropertyTypeName] == null)
+                throw new Exception($"JSON for DXMainElement should contain {Constants.SystemPropertyTypeName} property");
 
-            if (jObjectCopy[Constants.ID] != null)
+            if (jObject[Constants.TimeStamp] == null)
+                throw new Exception($"JSON for DXMainElement should contain {Constants.TimeStamp} property");
+
+            Guid id;
+
+            if (jObject[Constants.ID].Type == JTokenType.Guid)
             {
-                id = (Guid?)jObjectCopy[Constants.ID];
-
-                jObjectCopy.Remove(Constants.ID);
+                id = jObject.Value<Guid>(Constants.ID);
+            }
+            else
+            {
+                id = Guid.Parse(jObject.Value<string>(Constants.ID));
             }
 
-            if (jObjectCopy[Constants.SystemPropertyTypeName] != null)
-            {
-                type = (string)jObjectCopy[Constants.SystemPropertyTypeName];
-                jObjectCopy.Remove(Constants.SystemPropertyTypeName);
-            }
-
-            foreach (var item in jObjectCopy.Properties()
-                    .Where(x => x.Value.Type == JTokenType.Object).ToList())
-            {
-                jObjectCopy.Remove(item.Name);
-            }
+            var type = jObject.Value<string>(Constants.SystemPropertyTypeName);
 
             var result = new DXMainElement(new DXUnitAttribute(type))
             {
-                Item = GetdxItem(jObjectCopy, id)
+                Item = GetdxItem(jObject, id)
             };
 
             result.Item.ID = id;
@@ -174,7 +170,7 @@ namespace IV.DX.Kernel.Models
             return result;
         }
 
-        private static DXItem GetdxItem(JObject jObject, Guid? objId)
+        static DXItem GetdxItem(JObject jObject, Guid? objId)
         {
             DXItem dxItem = new DXItem
             {
@@ -182,21 +178,26 @@ namespace IV.DX.Kernel.Models
                 DXUnitID = objId
             };
 
-            var content = jObject.DeepClone() as JObject;
-
-            if (content[Constants.ID] != null)
-            {
-                content.Remove(Constants.ID);
-            }
-
-            if (content[Constants.DXUnitID] != null)
-            {
-                content.Remove(Constants.DXUnitID);
-            }
+            var content = KeepScalarsOnly(jObject);
 
             dxItem.Content = content;
 
             return dxItem;
+        }
+
+        static JObject KeepScalarsOnly(JObject src)
+        {
+            if (src is null) return new JObject();
+
+            var dst = new JObject();
+
+            foreach (var prop in src.Properties())
+            {
+                if (prop.Value is JValue v)
+                    dst.Add(prop.Name, v.DeepClone());
+            }
+
+            return dst;
         }
         #endregion
     }

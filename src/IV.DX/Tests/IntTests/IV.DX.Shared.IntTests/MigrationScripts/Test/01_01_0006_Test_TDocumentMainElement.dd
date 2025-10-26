@@ -2,17 +2,23 @@
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "8b4aefa8-d0ee-4519-8213-87523862bf3b",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
             "Name": "TDocumentMainElement",
             "Kind": 3
         },
         "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "3e273e56-2e26-4b66-b3df-e7f55525a10f",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
                     "ColumnType": 3,
                     "Name": "Name",

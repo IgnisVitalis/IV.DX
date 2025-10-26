@@ -153,7 +153,7 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModel.CreateInstance(jObject);
+                var dxModel = DXModel.Parse(jObject);
                 DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
 
                 var id = coreRepo.Insert(dxModel);
@@ -240,7 +240,7 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModel.CreateInstance(jObject);
+                var dxModel = DXModel.Parse(jObject);
                 DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
 
                 var id = coreRepo.Update(dxModel);

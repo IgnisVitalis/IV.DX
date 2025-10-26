@@ -1,53 +1,67 @@
 {
-  "S_Type": "DXElementDefinitionUnit",
-  "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-  "DXObjectDefinitionMainElement": {
-    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-    "ID": "EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4",
-    "Name": "UpdatedDataDXElement",
-    "Type": 1,
-    "Kind": 2
-  },
-  "DXColumnDefinitionElement": {
-    "Mode": 1,
-    "Announced": [
-      {
+    "S_Type": "DXElementDefinitionUnit",
+    "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+    "TimeStamp": "2021-10-02T00:00:00",
+    "DXObjectDefinitionMainElement": {
+        "S_Type": "DXObjectDefinitionMainElement",
         "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-        "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
-        "ColumnType": 1,
-        "Name": "GuidColumn"
-      },
-      {
-        "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-        "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
-        "ColumnType": 2,
-        "Name": "TimeStampColumn",
-        "DefaultValue": "CURRENT_TIMESTAMP"
-      },
-      {
-        "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-        "ID": "E042EF31-397E-4614-BABC-79132D4A68DF",
-        "ColumnType": 3,
-        "Name": "StringColumnNew",
-        "Length": 200,
-        "AllowNull": false,
-        "DefaultValue": "'StringValueNew'"
-      },
-      {
-        "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-        "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
-        "ColumnType": 12,
-        "Name": "CurrencyColumnUpdated",
-        "AllowNull": false,
-        "DefaultValue": "1"
-      },
-      {
-        "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-        "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
-        "ColumnType": 13,
-        "Name": "BlobColumnUpdated",
-        "AllowNull": false
-      }
-    ]
-  }
+        "ID": "EB217F3B-1CC3-4CB0-8B5C-E7C71AEDACB4",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "Name": "UpdatedDataDXElement",
+        "Type": 1,
+        "Kind": 2
+    },
+    "DXColumnDefinitionElement": {
+        "S_Type": "DXColumnDefinitionElement",
+        "Mode": 1,
+        "Announced": [
+            {
+                "S_Type": "DXColumnDefinitionElement",
+                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "ColumnType": 1,
+                "Name": "GuidColumn"
+            },
+            {
+                "S_Type": "DXColumnDefinitionElement",
+                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "ColumnType": 2,
+                "Name": "TimeStampColumn",
+                "DefaultValue": "CURRENT_TIMESTAMP"
+            },
+            {
+                "S_Type": "DXColumnDefinitionElement",
+                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "ID": "E042EF31-397E-4614-BABC-79132D4A68DF",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "ColumnType": 3,
+                "Name": "StringColumnNew",
+                "Length": 200,
+                "AllowNull": false,
+                "DefaultValue": "'StringValueNew'"
+            },
+            {
+                "S_Type": "DXColumnDefinitionElement",
+                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "ColumnType": 12,
+                "Name": "CurrencyColumnUpdated",
+                "AllowNull": false,
+                "DefaultValue": "1"
+            },
+            {
+                "S_Type": "DXColumnDefinitionElement",
+                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "ColumnType": 13,
+                "Name": "BlobColumnUpdated",
+                "AllowNull": false
+            }
+        ]
+    }
 }

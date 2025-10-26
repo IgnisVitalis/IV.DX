@@ -2,29 +2,39 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "09b4eda6-96d0-4d47-b8bd-d7879a45ea72",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
             "Name": "DXObjectDefinitionUnit",
             "Kind": 1
         },
         "DXElementInUnitDefinitionElement": {
+            "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "c0074af4-a729-49d2-9fe2-f62a54cd6ac0",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2"
                 },
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "4b1500ca-0400-4d2e-ab25-bd77b590ee95",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "ce754889-4efb-4281-ad1f-14d710b30007"
                 },
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "29e7062c-1669-40e6-af24-adf132742a98",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81"
@@ -35,28 +45,38 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "3dd9bba0-102e-4f5a-8161-383fb2ab8a35",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
             "Name": "DXUnitDefinitionUnit",
             "Kind": 1
         },
         "DXUnitInheritanceElement": {
+            "S_Type": "DXUnitInheritanceElement",
             "ID": "710b1d0b-9343-4739-8126-ab4baefe5763",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
             "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
         },
         "DXElementInUnitDefinitionElement": {
+            "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "15399025-98be-4cf1-9761-413b5fde515c",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
                     "RelationType": 2,
                     "DXElementDefinitionUnit": "eeb499d0-4e20-41aa-8a24-9981c3cbf511"
                 },
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "5c9c45e1-6793-418a-a139-fffa3dd386d9",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7"
@@ -67,13 +87,18 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXUnitInheritanceElement": {
+            "S_Type": "DXUnitInheritanceElement",
             "ID": "61b4c43f-cc9b-460e-80f9-9f2a7f4f7ca9",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
             "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
         },
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "a40d4fd0-1bf7-4d0b-a68c-d98f873b326d",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
             "Name": "DXElementDefinitionUnit",
             "Kind": 1
@@ -82,13 +107,18 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "baa62331-fa09-47c6-8d33-f2b25ec29bf1",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXUnitInheritanceElement": {
+            "S_Type": "DXUnitInheritanceElement",
             "ID": "408785e8-7e42-4e7f-b60a-d5c686911612",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "baa62331-fa09-47c6-8d33-f2b25ec29bf1",
             "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
         },
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "415443b9-16dd-46dd-873b-06266a986c0b",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "baa62331-fa09-47c6-8d33-f2b25ec29bf1",
             "Name": "DXEnumDefinitionUnit",
             "Kind": 1
@@ -97,17 +127,23 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "f440497f-f9b9-4b25-a558-e7bdd2354683",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
             "Name": "DXRelationDefinitionUnit",
             "Kind": 1
         },
         "DXElementInUnitDefinitionElement": {
+            "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "3567c5d3-c419-4507-a404-d71924e2cda6",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed"
@@ -118,17 +154,23 @@
     {
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "e4b329e3-9282-40ce-91ac-58f2e8c5433c",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
             "Name": "DXMigrationScriptsUnit",
             "Kind": 1
         },
         "DXElementInUnitDefinitionElement": {
+            "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "6881bd56-1753-472d-9699-a1d640a1f53a",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "4502e21d-4d38-475d-88eb-3159d3b7c514"

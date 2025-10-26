@@ -437,6 +437,8 @@ namespace IV.DX.Persistence
         {
             JObject jObjectContainerCopy = new JObject();
 
+            jObjectContainerCopy[Constants.SystemPropertyTypeName] = structure.Type;
+
             foreach (DataColumn column in row.Table.Columns)
             {
                 var property = structure.SingleOrDefault(x => x.ColumnDefinition.Name == column.ColumnName);
@@ -452,7 +454,7 @@ namespace IV.DX.Persistence
                 {
                     jObjectContainerCopy[property.ColumnDefinition.Name] = null;
                 }
-            }
+            }        
 
             var dxItem = new DXItem()
             {
@@ -909,9 +911,9 @@ namespace IV.DX.Persistence
                 row[$"{dxModelType}ID"] = dxItem.DXUnitID;
             }
 
-            if (row.Table.Columns.Contains("TimeStamp"))
+            if (row.Table.Columns.Contains(Constants.TimeStamp))
             {
-                row["TimeStamp"] = DateTime.UtcNow;
+                row[Constants.TimeStamp] = DateTime.UtcNow;
             }
 
             if (dxItem.Content == null)
@@ -923,9 +925,10 @@ namespace IV.DX.Persistence
             {
                 var jProperty = properties.SingleOrDefault(x => x.Name == column.ColumnName);
 
-                if (column.ColumnName == "ID"
-                    || column.ColumnName == "DXUnitID"
-                    || column.ColumnName == "TimeStamp"
+                if (column.ColumnName == Constants.ID
+                    || column.ColumnName == Constants.DXUnitID
+                    || column.ColumnName == Constants.TimeStamp
+                    || column.ColumnName == Constants.SystemPropertyTypeName
                     || column.ColumnName == $"{dxModelType}ID")
                 {
                     continue;

@@ -28,4 +28,10 @@
         <ProjectReference Include="..\IV.DX.Shared.UnitTests\IV.DX.Shared.UnitTests.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Converters\Assets\MyObjectDefinition.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

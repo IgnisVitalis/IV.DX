@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using IV.DX.Kernel.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
@@ -26,9 +27,6 @@ namespace IV.DX.Kernel.Models
         public JObject ConvertToJObject()
         {
             JObject jObject = this.Content != null ? new JObject(this.Content) : new JObject();
-
-            jObject[Constants.ID] = this.ID;
-            jObject[Constants.DXUnitID] = this.DXUnitID;
 
             return jObject;
         }
@@ -164,7 +162,7 @@ namespace IV.DX.Kernel.Models
                 result = result && (item1.DXUnitID == item2.DXUnitID);
             }
 
-            result = result && JToken.DeepEquals(item1.Content, item2.Content);
+            result = result && JHelper.DeepEquals(item1.Content, item2.Content);
 
             return result;
         }

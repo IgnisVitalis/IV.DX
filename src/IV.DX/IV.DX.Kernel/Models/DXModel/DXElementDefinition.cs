@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using IV.DX.Kernel.Attributes;
+using System.Collections;
 
 namespace IV.DX.Kernel.Models
 {
@@ -37,11 +38,22 @@ namespace IV.DX.Kernel.Models
         {
             this.Name = name;
             this.Type = type;
-            this._items = new List<DXPropertyDefinition>();
+
+            this._items = new List<DXPropertyDefinition>()
+            {
+                new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID)),
+                new DXPropertyDefinition(Constants.TimeStamp, new DXColumnAttribute(Constants.TimeStamp))
+            };
         }
 
         public void AddPropertyDefinition(DXPropertyDefinition item)
         {
+            if (item.Name == Constants.SystemPropertyTypeName
+                || item.Name == Constants.ID
+                || item.Name == Constants.TimeStamp
+                )
+                return;
+
             if (this.GetPropertyDefinitionByName(item.Name) != null)
                 throw new Exception($"ASQLPropertyDefinition with Name {item.Name} is already existing.");
 
@@ -55,13 +67,7 @@ namespace IV.DX.Kernel.Models
 
             foreach (var item in items)
             {
-                if (this.GetPropertyDefinitionByName(item.Name) != null)
-                    throw new Exception($"ASQLPropertyDefinition with Name {item.Name} is already existing.");
-            }
-
-            foreach (var item in items)
-            {
-                this._items.Add(item);
+                this.AddPropertyDefinition(item);
             }
         }
 

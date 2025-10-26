@@ -2,8 +2,11 @@
     {
         "S_Type": "TUserUnit",
         "ID": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
+        "TimeStamp": "2021-10-02T00:00:00",
         "TUserMainElement": {
+            "S_Type": "TUserMainElement",
             "ID": "51449754-6b36-47af-a6af-240b63a589a8",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
             "Name": "Pavel",
             "Surname": "Plamenev",
@@ -13,8 +16,11 @@
     {
         "S_Type": "TUserUnit",
         "ID": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+        "TimeStamp": "2021-10-02T00:00:00",
         "TUserMainElement": {
+            "S_Type": "TUserMainElement",
             "ID": "9406a989-6de1-4c5f-b9f5-8f658dc3622e",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
             "Name": "Svitlana",
             "Surname": "Suvorova",
@@ -24,8 +30,11 @@
     {
         "S_Type": "TUserUnit",
         "ID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
+        "TimeStamp": "2021-10-02T00:00:00",
         "TUserMainElement": {
+            "S_Type": "TUserMainElement",
             "ID": "7f54ea01-3a8d-407e-a4d2-2f2188953f5c",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
             "Name": "Victor",
             "Surname": "Suvorov",

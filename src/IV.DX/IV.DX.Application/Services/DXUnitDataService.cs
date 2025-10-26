@@ -280,7 +280,7 @@ namespace IV.DX.Application.Services
 
         public async Task<JObject> InsertOrUpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
         {
-            var dxModel = DXModel.CreateInstance(jObject);
+            var dxModel = DXModel.Parse(jObject);
 
             var objId = dxModel.MainElement.Item.ID;
 

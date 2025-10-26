@@ -2,17 +2,23 @@
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+        "TimeStamp": "2021-10-02T00:00:00",
         "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
             "ID": "4fd5a626-879b-4fe0-aa30-3276e0f8dd8c",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
             "Name": "TBookMainElement",
             "Kind": 3
         },
         "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
+                    "S_Type": "DXColumnDefinitionElement",
                     "ID": "20e239fb-5775-45cb-97a5-b400c231e707",
+                    "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
                     "ColumnType": 3,
                     "Name": "Name",

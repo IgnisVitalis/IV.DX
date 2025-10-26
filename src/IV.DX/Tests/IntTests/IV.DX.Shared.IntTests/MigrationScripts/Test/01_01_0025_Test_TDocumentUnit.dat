@@ -2,9 +2,12 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "ce7a2422-7df4-426a-b1fe-2a2090443246",
+        "TimeStamp": "2021-10-02T00:00:00",
         "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "15ce8ddc-ad58-4403-a90b-8bd94ffb65c1",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "ce7a2422-7df4-426a-b1fe-2a2090443246",
             "Name": "document1"
         }
@@ -12,9 +15,12 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "a844e32e-fcf3-4f7e-b138-19685347a150",
+        "TimeStamp": "2021-10-02T00:00:00",
         "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "348e16f5-e24e-4a10-80c7-e6a69542cf68",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "a844e32e-fcf3-4f7e-b138-19685347a150",
             "Name": "document2"
         }
@@ -22,9 +28,12 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "ccb9da2b-12ea-41c0-96d1-a774a3f4b22b",
+        "TimeStamp": "2021-10-02T00:00:00",
         "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "c0fa7b4c-b0a6-43f3-aadb-03101885d5c9",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "ccb9da2b-12ea-41c0-96d1-a774a3f4b22b",
             "Name": "document3"
         }
@@ -32,8 +41,11 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "02e1591c-375b-466c-b8fb-0bed19220707",
+        "TimeStamp": "2021-10-02T00:00:00",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "21e94f39-48e6-4c5a-97d0-3b5092fd1fff",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "02e1591c-375b-466c-b8fb-0bed19220707",
             "Name": "document4"
         }
@@ -41,8 +53,11 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "6a7c4e0d-1163-41ca-8a1a-e25fe8797100",
+        "TimeStamp": "2021-10-02T00:00:00",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "e56651b1-707f-4632-8aeb-fb646aaf3aa5",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "6a7c4e0d-1163-41ca-8a1a-e25fe8797100",
             "Name": "document5"
         }
@@ -50,9 +65,12 @@
     {
         "S_Type": "TDocumentUnit",
         "ID": "c2caacbe-f9c8-4409-8c65-535a3b530a3d",
+        "TimeStamp": "2021-10-02T00:00:00",
         "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
         "TDocumentMainElement": {
+            "S_Type": "TDocumentMainElement",
             "ID": "e3875c37-21ea-4699-8ac9-de4644b21e2e",
+            "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "c2caacbe-f9c8-4409-8c65-535a3b530a3d",
             "Name": "document6"
         }
