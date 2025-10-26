@@ -162,12 +162,7 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
         }
-
-
-      
-
         
-
         [Fact]
         public void DXModelParse_UsingJObject_Ok()
         {
@@ -180,6 +175,21 @@ namespace IV.DX.Contracts.UnitTests
 
             // Assert
             Assert.True(DXModel.DeepEquals(this.dxModel, result));
+        }
+
+
+        [Fact]
+        public void ConvertToJObject_UsingDXModel_Ok()
+        {
+            // Init
+            var json = File.ReadAllText("Converters/Assets/MyObjectDefinition.json");
+            var jObject = JObject.Parse(json);
+
+            // Action
+            var result = this.dxModel.ConvertToJObject();
+
+            // Assert
+            Assert.True(JHelper.DeepEquals(jObject, result));
         }
 
         [Fact]
@@ -233,7 +243,6 @@ namespace IV.DX.Contracts.UnitTests
             // Assert
             Assert.True(JHelper.DeepEquals(jObject, result));
         }
-
 
         private void Compare(MyObject dxUnit, MyObject result)
         {
