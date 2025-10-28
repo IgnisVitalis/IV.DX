@@ -188,11 +188,11 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return result;
         }
 
-        static DXItem GetDXItem(JObject jObject, Guid? objId)
+        static DXItem GetDXItem(JObject jObject, Guid objId)
         {
             DXItem dxItem = new DXItem
             {
-                ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
+                ID = (Guid)jObject[Constants.ID],
                 DXUnitID = objId
             };
 
@@ -203,7 +203,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return dxItem;
         }
 
-        static DXSingleElement GetDXSingleItem(JProperty property, Guid? objId)
+        static DXSingleElement GetDXSingleItem(JProperty property, Guid objId)
         {
             var name = property.Name;
             var attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name);
@@ -214,7 +214,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return singleItem;
         }
 
-        static DXMultiElement GetDXMutliItem(JProperty property, Guid? objId)
+        static DXMultiElement GetDXMutliItem(JProperty property, Guid objId)
         {
             DXMultiElement dxMultiItem = new DXMultiElement()
             {

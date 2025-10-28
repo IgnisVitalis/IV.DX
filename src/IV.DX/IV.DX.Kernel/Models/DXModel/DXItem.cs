@@ -5,8 +5,8 @@ namespace IV.DX.Kernel.Models
 {
     public class DXItem
     {
-        public Guid? ID { get; set; }
-        public Guid? DXUnitID { get; set; }
+        public Guid ID { get; set; }
+        public Guid DXUnitID { get; set; }
 
         public JObject Content { get; set; }
 
@@ -31,23 +31,8 @@ namespace IV.DX.Kernel.Models
 
             var result = true;
 
-            if (item1.ID.HasValue && item2.ID.HasValue)
-            {
-                result = result && (item1.ID.Value == item2.ID.Value);
-            }
-            else
-            {
-                result = result && (item1.ID == item2.ID);
-            }
-
-            if (item1.DXUnitID.HasValue && item2.DXUnitID.HasValue)
-            {
-                result = result && (item1.DXUnitID.Value == item2.DXUnitID.Value);
-            }
-            else
-            {
-                result = result && (item1.DXUnitID == item2.DXUnitID);
-            }
+            result = result && (item1.ID == item2.ID);
+            result = result && (item1.DXUnitID == item2.DXUnitID);            
 
             result = result && JHelper.DeepEquals(item1.Content, item2.Content);
 
@@ -63,11 +48,8 @@ namespace IV.DX.Kernel.Models
                 return false;
 
             foreach (var item1 in list1)
-            {
-                if (!item1.ID.HasValue)
-                    return false;
-
-                var item2 = list2.SingleOrDefault(x => x.ID.HasValue && x.ID.Value == item1.ID.Value);
+            {           
+                var item2 = list2.SingleOrDefault(x => x.ID == item1.ID);
 
                 if (item2 == null)
                     return false;

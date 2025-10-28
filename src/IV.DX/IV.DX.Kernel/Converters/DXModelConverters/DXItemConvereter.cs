@@ -9,8 +9,8 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             DXItem fragment = new DXItem
             {
-                ID = jObject[Constants.ID] != null ? (Guid?)jObject[Constants.ID] : null,
-                DXUnitID = jObject[Constants.DXUnitID] != null ? (Guid?)jObject[Constants.DXUnitID] : null
+                ID = (Guid)jObject[Constants.ID],
+                DXUnitID = (Guid)jObject[Constants.DXUnitID]
             };
 
             var jObjectCopy = jObject.DeepClone() as JObject;

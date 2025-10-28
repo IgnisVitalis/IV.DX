@@ -285,8 +285,7 @@ namespace IV.DX.Application.Services
 
             var objId = dxModel.DXMainElement.Item.ID;
 
-            if (objId.HasValue
-                && await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId.Value, context, ct))
+            if ( await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId, context, ct))
             {
                 return await UpdateAsync(jObject, context, ct);
             }

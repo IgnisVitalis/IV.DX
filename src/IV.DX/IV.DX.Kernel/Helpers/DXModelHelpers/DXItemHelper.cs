@@ -14,10 +14,7 @@ namespace IV.DX.Kernel.Helpers.DXModelHelpers
 
             foreach (var fragment in items.Where(x => x != null).ToList())
             {
-                if (fragment.ID.HasValue)
-                {
-                    result.ID = fragment.ID;
-                }
+                result.ID = fragment.ID;
 
                 JObject jObject = fragment.Content;
 
