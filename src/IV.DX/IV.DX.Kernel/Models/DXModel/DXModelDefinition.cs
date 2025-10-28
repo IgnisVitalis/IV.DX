@@ -1,7 +1,4 @@
-﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
-
-namespace IV.DX.Kernel.Models
+﻿namespace IV.DX.Kernel.Models
 {
     internal class DXModelDefinition
     {

@@ -172,7 +172,7 @@ namespace IV.DX.Contracts.UnitTests
             var jObject = JObject.Parse(json);
 
             // Action
-            var result = DXModelConverter.Parse(jObject);
+            var result = DXModelConverter.ToDXModel(jObject);
 
             // Assert
             Assert.True(DXModel.DeepEquals(this.dxModel, result));

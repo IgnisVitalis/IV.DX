@@ -9,31 +9,31 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
     internal static class DXUnitConverter
     {
         #region Create instance
-        public static T ToDXUnit<T>(string json) where T : DXUnit =>
-            ToDXUnits<T>(DXModelConverter.Parse(json));
+        public static T ToDXUnit<T>(this string json) where T : DXUnit =>
+            ToDXUnits<T>(json.ToDXModel());
 
-        public static IEnumerable<T> ToDXUnits<T>(string json) where T : DXUnit =>
+        public static IEnumerable<T> ToDXUnits<T>(this string json) where T : DXUnit =>
             ToDXUnits<T>(JArray.Parse(json));
 
-        public static IEnumerable<T> ToDXUnits<T>(JArray jArray) where T : DXUnit
+        public static IEnumerable<T> ToDXUnits<T>(this JArray jArray) where T : DXUnit
         {
             foreach (JObject jObject in jArray)
                 yield return ToDXUnits<T>(jObject);
         }
 
-        public static T? ToDXUnits<T>(JObject jObject) where T : DXUnit =>
-            ToDXUnits<T>(DXModelConverter.Parse(jObject));
+        public static T? ToDXUnits<T>(this JObject jObject) where T : DXUnit =>
+            ToDXUnits<T>(DXModelConverter.ToDXModel(jObject));
 
-        public static DXUnit? ToDXUnits(string json, Type type) =>
-            ToDXUnits(DXModelConverter.Parse(json), type);
+        public static DXUnit? ToDXUnits(this string json, Type type) =>
+            ToDXUnits(json.ToDXModel(), type);
 
-        public static DXUnit? ToDXUnits(JObject jObject, Type type) =>
-            ToDXUnits(DXModelConverter.Parse(jObject), type);
+        public static DXUnit? ToDXUnits(this JObject jObject, Type type) =>
+            ToDXUnits(DXModelConverter.ToDXModel(jObject), type);
 
-        public static T? ToDXUnits<T>(DXModel dxModel) where T : DXUnit =>
+        public static T? ToDXUnits<T>(this DXModel dxModel) where T : DXUnit =>
             (T?)ToDXUnitPrivate(dxModel, typeof(T));
 
-        public static DXUnit? ToDXUnits(DXModel dxModel, Type type) =>
+        public static DXUnit? ToDXUnits(this DXModel dxModel, Type type) =>
             ToDXUnitPrivate(dxModel, type);
 
         private static DXUnit? ToDXUnitPrivate(DXModel? dxModel, Type? type)

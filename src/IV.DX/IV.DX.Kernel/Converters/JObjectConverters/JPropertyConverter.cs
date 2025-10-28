@@ -1,5 +1,4 @@
-﻿using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters.JObjectConverters
@@ -80,6 +79,32 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
             JObject jObject = new JObject(mainElement.Item.ToJObject(true));
 
             JProperty jProperty = new JProperty(mainElement.Attribute.Type, jObject);
+
+            return jProperty;
+        }
+
+        public static JProperty ConvertToJProperty(this DXSingleElement dxSingleElement)
+        {
+            JObject jObject = null;
+
+            if (dxSingleElement.Item != null)
+            {
+                jObject = new JObject(dxSingleElement.Item.ToJObject());
+            }
+
+            JProperty jProperty = new JProperty(dxSingleElement.Name, jObject);
+
+            return jProperty;
+        }
+
+        public static JProperty ConvertToJPropertyWithoutSystemProperties(this DXSingleElement dxSingleElement)
+        {
+            if (dxSingleElement.Item == null)
+                return null;
+
+            JObject jObject = new JObject(dxSingleElement.Item.ToJObject(true));
+
+            JProperty jProperty = new JProperty(dxSingleElement.Name, jObject);
 
             return jProperty;
         }

@@ -11,50 +11,7 @@ namespace IV.DX.Kernel.Models
         public DXElementAttribute Attribute { get; set; }
         public DXItem Item { get; set; }
 
-        public JProperty ConvertToJProperty()
-        {
-            JObject jObject = null;
-
-            if (this.Item != null)
-            {
-                jObject = new JObject(this.Item.ToJObject());
-            }
-
-            JProperty jProperty = new JProperty(this.Name, jObject);
-
-            return jProperty;
-        }
-
-        public JProperty ConvertToJPropertyWithoutSystemProperties()
-        {
-            if (this.Item == null)
-                return null;
-
-            JObject jObject = new JObject(this.Item.ToJObject(true));
-
-            JProperty jProperty = new JProperty(this.Name, jObject);
-
-            return jProperty;
-        }
-
-        public static DXSingleElement ConvertFromJProperty(JProperty jProperty)
-        {
-            if (jProperty == null)
-                return null;
-
-            DXSingleElement singleFragment = new DXSingleElement
-            {
-                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
-                Name = jProperty.Name
-            };
-
-            var jObjectForContent = jProperty.Value as JObject;
-            jObjectForContent.Remove(Constants.SystemPropertyTypeName);
-
-            singleFragment.Item = jObjectForContent.ToDXItem();
-
-            return singleFragment;
-        }
+     
 
         public static bool DeepEquals(DXSingleElement item1, DXSingleElement item2)
         {

@@ -157,7 +157,7 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModelConverter.Parse(jObject);
+                var dxModel = DXModelConverter.ToDXModel(jObject);
                 DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
 
                 var id = coreRepo.Insert(dxModel);
@@ -244,7 +244,7 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModelConverter.Parse(jObject);
+                var dxModel = DXModelConverter.ToDXModel(jObject);
                 DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
 
                 var id = coreRepo.Update(dxModel);

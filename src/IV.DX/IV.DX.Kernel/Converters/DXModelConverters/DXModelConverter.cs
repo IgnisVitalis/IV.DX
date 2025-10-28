@@ -111,17 +111,17 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return jObject;
         }
 
-
-       
-
-        public static DXModel Parse(string json)
+        public static DXModel? ToDXModel(this string json)
         {
+            if (string.IsNullOrEmpty(json))
+                return null;
+
             var jObject = JObject.Parse(json);
 
-            return Parse(jObject);
+            return ToDXModel(jObject);
         }
 
-        public static DXModel Parse(JObject jObject)
+        public static DXModel? ToDXModel(this JObject? jObject)
         {
             if (jObject == null)
                 return null;
@@ -183,7 +183,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
             var result = new DXMainElement(new DXUnitAttribute(type))
             {
-                Item = GetdxItem(jObject, id)
+                Item = GetDXItem(jObject, id)
             };
 
             result.Item.ID = id;
@@ -192,7 +192,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return result;
         }
 
-        static DXItem GetdxItem(JObject jObject, Guid? objId)
+        static DXItem GetDXItem(JObject jObject, Guid? objId)
         {
             DXItem dxItem = new DXItem
             {
@@ -213,7 +213,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             {
                 Name = property.Name,
                 Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Item = GetdxItem((JObject)property.Value, objId)
+                Item = GetDXItem((JObject)property.Value, objId)
             };
 
             return singleItem;
@@ -225,13 +225,14 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             {
                 Name = property.Name,
                 Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
-                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
+                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
+                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
                 Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()
             };
 
             return dxMultiItem;
         }
+
         static JObject KeepScalarsOnly(JObject src)
         {
             if (src is null) return new JObject();

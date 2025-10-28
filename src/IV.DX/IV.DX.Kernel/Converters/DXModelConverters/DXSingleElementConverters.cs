@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelConverters
 {
@@ -25,6 +26,25 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                 },
                 Name = propertyName ?? dxElementInfo.Type
             };
+        }
+
+        public static DXSingleElement ToDXSingleElement(this JProperty jProperty)
+        {
+            if (jProperty == null)
+                return null;
+
+            DXSingleElement singleFragment = new DXSingleElement
+            {
+                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                Name = jProperty.Name
+            };
+
+            var jObjectForContent = jProperty.Value as JObject;
+            jObjectForContent.Remove(Constants.SystemPropertyTypeName);
+
+            singleFragment.Item = jObjectForContent.ToDXItem();
+
+            return singleFragment;
         }
     }
 }

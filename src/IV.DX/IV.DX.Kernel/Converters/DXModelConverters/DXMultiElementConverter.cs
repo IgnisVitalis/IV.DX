@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 {
     internal static class DXMultiElementConverter
     {
-        public static DXMultiElement Parse(JProperty jProperty)
+        public static DXMultiElement ToDXMultiElement(this JProperty jProperty)
         {
             if (jProperty == null)
                 return null;

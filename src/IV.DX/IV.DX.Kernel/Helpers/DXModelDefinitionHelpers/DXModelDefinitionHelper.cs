@@ -66,12 +66,12 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 
             if (singleDXElements.Count > 0)
             {
-                dxModel.AddToSingleItemDefinitions(singleDXElements.Select(x => DXElementDefinitionConverter.ConvertToDXElementDefinition(x)).ToHashSet());
+                dxModel.AddToSingleItemDefinitions(singleDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x)).ToHashSet());
             }
 
             if (multiDXElements.Count > 0)
             {
-                dxModel.AddToMultiItemDefinitions(multiDXElements.Select(x => DXElementDefinitionConverter.ConvertToDXElementDefinition(x)).ToHashSet());
+                dxModel.AddToMultiItemDefinitions(multiDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x)).ToHashSet());
             }
 
             return dxModel;

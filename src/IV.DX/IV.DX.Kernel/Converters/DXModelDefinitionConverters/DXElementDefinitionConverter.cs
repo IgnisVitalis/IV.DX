@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXElementDefinitionConverter
     {
-        public static DXElementDefinition ConvertToDXElementDefinition(DXElementDefinitionUnit dxElement)
+        public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement)
         {
             var props = dxElement.DXColumnDefinitionElement.Announced
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
