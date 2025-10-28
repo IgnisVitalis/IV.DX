@@ -1,7 +1,7 @@
-﻿using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel;
+﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -171,7 +171,7 @@ namespace IV.DX.Contracts.UnitTests
             var jObject = JObject.Parse(json);
 
             // Action
-            var result = DXModel.Parse(jObject);
+            var result = DXModelConverter.Parse(jObject);
 
             // Assert
             Assert.True(DXModel.DeepEquals(this.dxModel, result));

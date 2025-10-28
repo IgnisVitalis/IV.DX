@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Models.Test;
@@ -127,7 +128,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Action           
             var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"));
 
-            var dxElement = DXModel.Parse(dxElementJObject);
+            var dxElement = DXModelConverter.Parse(dxElementJObject);
 
             // Checking result
             Assert.NotNull(dxElement);

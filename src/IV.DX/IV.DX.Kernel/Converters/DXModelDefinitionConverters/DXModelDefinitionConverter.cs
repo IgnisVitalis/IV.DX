@@ -3,18 +3,18 @@ using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
-namespace IV.DX.Kernel.Converters
+namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
-    internal static class DXModelDefinitionHelper
+    internal static class DXModelDefinitionConverter
     {
-        public static DXModelDefinition GetDXModelDefinition<T>() where T : DXUnit
+        public static DXModelDefinition Get<T>() where T : DXUnit
         {
             Type type = typeof(T);
 
-            return GetDXModelDefinition(type);
+            return Get(type);
         }
 
-        public static DXModelDefinition GetDXModelDefinition(DXModel dxModel)
+        public static DXModelDefinition Get(DXModel dxModel)
         {
             var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type);
 
@@ -48,7 +48,7 @@ namespace IV.DX.Kernel.Converters
                   {
                       var item = new DXElementDefinition(x.Attribute.Type, x.Name);
 
-                      var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : (x.Deleted.Count() > 0 ? x.Deleted.First() : null);
+                      var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : x.Deleted.Count() > 0 ? x.Deleted.First() : null;
 
                       if (existingElement == null)
                           return null;
@@ -72,33 +72,33 @@ namespace IV.DX.Kernel.Converters
 
 
             var result = new DXModelDefinition(mainItemDefinition);
-            result.AppendToSingleItemDefinitions(singleItemDefinitions);
-            result.AppendToMultiItemDefinitions(multiItemDefinitions);
+            result.AddToSingleItemDefinitions(singleItemDefinitions);
+            result.AddToMultiItemDefinitions(multiItemDefinitions);
 
             return result;
         }
 
-        public static DXModelDefinition GetDXModelDefinition(Type type)
+        public static DXModelDefinition Get(Type type)
         {
             var asqlTypeName = AttributeReader.GetDXUnitTypeName(type);
 
-            var ownItem = GetDXElementDefinition(asqlTypeName, type);
+            var ownItem = Get(asqlTypeName, type);
 
             DXModelDefinition result = new DXModelDefinition(ownItem);
 
             var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
             var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
 
-            var singleItemDefinitions = singleItemInfos.Select(x => GetDXElementDefinition(x.Name, x.PropertyType)).ToList();
-            var mutliItemDefinitions = multiItemInfos.Select(x => GetDXElementDefinition(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
+            var singleItemDefinitions = singleItemInfos.Select(x => Get(x.Name, x.PropertyType)).ToList();
+            var mutliItemDefinitions = multiItemInfos.Select(x => Get(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
 
-            result.AppendToSingleItemDefinitions(singleItemDefinitions);
-            result.AppendToMultiItemDefinitions(mutliItemDefinitions);
+            result.AddToSingleItemDefinitions(singleItemDefinitions);
+            result.AddToMultiItemDefinitions(mutliItemDefinitions);
 
             return result;
         }
 
-        public static DXElementDefinition GetDXElementDefinition(string type, Type dxElementType)
+        public static DXElementDefinition Get(string type, Type dxElementType)
         {
             DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type);
             JObject jObject = new JObject();
@@ -118,7 +118,7 @@ namespace IV.DX.Kernel.Converters
             return dxElementDefinition;
         }
 
-        public static DXElementDefinition GetDXElementDefinition(DXEnumDefinitionUnit enumDesc)
+        public static DXElementDefinition Get(DXEnumDefinitionUnit enumDesc)
         {
             DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name);
 

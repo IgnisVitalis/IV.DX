@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -13,7 +14,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var dxElementModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXElementDefinitionUnit>(), DXLoadingType.Full);
+            var dxElementModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXElementDefinitionUnit>(), DXLoadingType.Full);
 
             var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(x));
 
@@ -28,7 +29,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXUnitDefinitionUnit>(), DXLoadingType.Full);
+            var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXUnitDefinitionUnit>(), DXLoadingType.Full);
 
             var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(x));
 
@@ -43,7 +44,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
 
-            var enumsModelsFromDB = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXEnumDefinitionUnit>(), DXLoadingType.Full);
+            var enumsModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXEnumDefinitionUnit>(), DXLoadingType.Full);
 
             var enumInfos = enumsModelsFromDB.Select(x => DXUnitHelper.CreateInstance<DXEnumDefinitionUnit>(x));
 
@@ -58,7 +59,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
-            var result = this.GetItems(DXModelDefinitionHelper.GetDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
+            var result = this.GetItems(DXModelDefinitionConverter.Get<DXRelationDefinitionUnit>(), DXLoadingType.Full);
             return result.Select(x => DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(x)).ToList();
         }
     }

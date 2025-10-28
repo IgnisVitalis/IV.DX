@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -132,7 +133,7 @@ namespace IV.DX.Kernel.Converters
 
         #region Create instance
         public static T CreateInstance<T>(string json) where T : DXUnit =>
-            CreateInstance<T>(DXModel.Parse(json));
+            CreateInstance<T>(DXModelConverter.Parse(json));
 
         public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit =>
             CreateInstances<T>(JArray.Parse(json));
@@ -144,13 +145,13 @@ namespace IV.DX.Kernel.Converters
         }
 
         public static T? CreateInstance<T>(JObject jObject) where T : DXUnit =>
-            CreateInstance<T>(DXModel.Parse(jObject));
+            CreateInstance<T>(DXModelConverter.Parse(jObject));
 
         public static DXUnit? CreateInstance(string json, Type type) =>
-            CreateInstance(DXModel.Parse(json), type);
+            CreateInstance(DXModelConverter.Parse(json), type);
 
         public static DXUnit? CreateInstance(JObject jObject, Type type) =>
-            CreateInstance(DXModel.Parse(jObject), type);
+            CreateInstance(DXModelConverter.Parse(jObject), type);
 
         public static T? CreateInstance<T>(DXModel dxModel) where T : DXUnit =>
             (T?)ConvertToDxUnitObject(dxModel, typeof(T));

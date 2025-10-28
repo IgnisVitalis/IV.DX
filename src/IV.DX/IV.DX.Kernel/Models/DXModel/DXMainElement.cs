@@ -1,5 +1,4 @@
 ﻿using IV.DX.Kernel.Attributes;
-using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
@@ -24,21 +23,13 @@ namespace IV.DX.Kernel.Models
 
             return result;
         }
+
         public DXMainElement DeepClone()
         {
             return new DXMainElement(this.Attribute.DeepClone())
             {
                 Item = this.Item.DeepClone(),
             };
-        }
-
-        public JProperty ConvertToJPropertyWithoutSystemProperties()
-        {
-            JObject jObject = new JObject(this.Item.ConvertToJObjectWithoutSystemProperties());
-
-            JProperty jProperty = new JProperty(this.Attribute.Type, jObject);
-
-            return jProperty;
         }
     }
 }

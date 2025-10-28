@@ -1,6 +1,8 @@
 ﻿using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -153,8 +155,8 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModel.Parse(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
+                var dxModel = DXModelConverter.Parse(jObject);
+                DXModelDefinition modelDefinition = DXModelDefinitionConverter.Get(dxModel);
 
                 var id = coreRepo.Insert(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
@@ -240,8 +242,8 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
-                var dxModel = DXModel.Parse(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionHelper.GetDXModelDefinition(dxModel);
+                var dxModel = DXModelConverter.Parse(jObject);
+                DXModelDefinition modelDefinition = DXModelDefinitionConverter.Get(dxModel);
 
                 var id = coreRepo.Update(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);

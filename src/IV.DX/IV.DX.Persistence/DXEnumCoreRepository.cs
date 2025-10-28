@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers.DXModelDefinitionHelpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 
@@ -23,7 +24,7 @@ namespace IV.DX.Persistence
             if (mainDXUnit == null)
                 return null;
 
-            var modelDefinition = DXModelDefinition.BuildModelDefinition(mainDXUnit);
+            var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(mainDXUnit);
 
             return modelDefinition;
         }

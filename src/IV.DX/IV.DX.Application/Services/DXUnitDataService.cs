@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -280,7 +281,7 @@ namespace IV.DX.Application.Services
 
         public async Task<JObject> InsertOrUpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
         {
-            var dxModel = DXModel.Parse(jObject);
+            var dxModel = DXModelConverter.Parse(jObject);
 
             var objId = dxModel.DXMainElement.Item.ID;
 

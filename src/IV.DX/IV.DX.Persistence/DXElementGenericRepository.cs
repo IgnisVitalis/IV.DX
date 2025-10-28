@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -40,7 +41,7 @@ namespace IV.DX.Persistence
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
-            var dxElement = DXModelDefinitionHelper.GetDXElementDefinition(dxElementName, typeof(T));
+            var dxElement = DXModelDefinitionConverter.Get(dxElementName, typeof(T));
 
             var result = coreRepo.GetSingleDXElement(dxElement, id);
 
