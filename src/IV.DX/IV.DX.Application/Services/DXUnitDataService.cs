@@ -282,10 +282,10 @@ namespace IV.DX.Application.Services
         {
             var dxModel = DXModel.Parse(jObject);
 
-            var objId = dxModel.MainElement.Item.ID;
+            var objId = dxModel.DXMainElement.Item.ID;
 
             if (objId.HasValue
-                && await IsItemExistingAsync(dxModel.MainElement.ObjectInfo.ObjectName, objId.Value, context, ct))
+                && await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId.Value, context, ct))
             {
                 return await UpdateAsync(jObject, context, ct);
             }

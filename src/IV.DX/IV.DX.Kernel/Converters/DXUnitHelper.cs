@@ -102,7 +102,7 @@ namespace IV.DX.Kernel.Converters
 
                 var multi = new DXMultiElement
                 {
-                    DXElementInfo = elementInfo,
+                    Attribute = elementInfo,
                     Name = pi.Name,
                     Mode = mode,
                     Announced = announcedList,
@@ -119,7 +119,7 @@ namespace IV.DX.Kernel.Converters
             if (obj is null) return null;
 
             var jObject = new JObject();
-            jObject[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).ObjectName;
+            jObject[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).Type;
 
             foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(obj.GetType()))
             {
@@ -171,11 +171,11 @@ namespace IV.DX.Kernel.Converters
             if (dxModel is null || type is null)
                 return null;
 
-            var own = dxModel.MainElement.ConvertToJPropertyWithoutSystemProperties();
+            var own = dxModel.DXMainElement.ConvertToJPropertyWithoutSystemProperties();
             var obj = (own?.Value?.ToObject(type)) ?? Activator.CreateInstance(type)!;
 
             var idProp = type.GetProperty(Constants.ID);
-            idProp?.SetValue(obj, dxModel.MainElement.Item.ID);
+            idProp?.SetValue(obj, dxModel.DXMainElement.Item.ID);
 
             var singleProps = AttributeReader.GetSingleItemInfos(type);
             if (dxModel.DXSingleElements != null)

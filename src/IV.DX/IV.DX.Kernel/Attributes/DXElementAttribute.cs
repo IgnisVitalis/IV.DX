@@ -3,10 +3,10 @@ namespace IV.DX.Kernel.Attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class DXElementAttribute : Attribute
     {
-        public string Name { get; private set; }
-        public DXElementAttribute(string name)
+        public string Type { get; private set; }
+        public DXElementAttribute(string type)
         {
-            Name = name;
+            Type = type;
         }
 
         public static bool DeepEquals(DXElementAttribute item1, DXElementAttribute item2)
@@ -14,14 +14,14 @@ namespace IV.DX.Kernel.Attributes
             if (item1 == null || item2 == null)
                 return false;
 
-            var result = item1.Name == item2.Name;
+            var result = item1.Type == item2.Type;
 
             return result;
         }
 
         public DXElementAttribute DeepClone()
         {
-            return new DXElementAttribute(Name);
+            return new DXElementAttribute(Type);
         }
     }
 }

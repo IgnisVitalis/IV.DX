@@ -25,7 +25,7 @@ namespace IV.DX.Contracts.UnitTests
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.ObjectName == "DXObjectDefinitionUnit");
+            Assert.True(attr.Type == "DXObjectDefinitionUnit");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace IV.DX.Contracts.UnitTests
 
             // Checking results
             Assert.NotNull(attr);
-            Assert.True(attr.Name == "DXObjectDefinitionMainElement");
+            Assert.True(attr.Type == "DXObjectDefinitionMainElement");
         }
 
         [Fact]

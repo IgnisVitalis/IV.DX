@@ -3,10 +3,10 @@ namespace IV.DX.Kernel.Attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class DXUnitAttribute : Attribute
     {
-        public string ObjectName { get; set; }
-        public DXUnitAttribute(string objectName)
+        public string Type { get; set; }
+        public DXUnitAttribute(string type)
         {
-            ObjectName = objectName;
+            Type = type;
         }
 
         public static bool DeepEquals(DXUnitAttribute item1, DXUnitAttribute item2)
@@ -14,14 +14,14 @@ namespace IV.DX.Kernel.Attributes
             if (item1 == null || item2 == null)
                 return false;
 
-            var result = item1.ObjectName == item2.ObjectName;
+            var result = item1.Type == item2.Type;
 
             return result;
         }
 
         public DXUnitAttribute DeepClone()
         {
-            return new DXUnitAttribute(ObjectName);
+            return new DXUnitAttribute(Type);
         }
     }
 }

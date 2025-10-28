@@ -16,15 +16,15 @@ namespace IV.DX.Kernel.Converters
 
         public static DXModelDefinition GetDXModelDefinition(DXModel dxModel)
         {
-            var mainItemDefinition = new DXElementDefinition(dxModel.MainElement.ObjectInfo.ObjectName, dxModel.MainElement.ObjectInfo.ObjectName);
+            var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type);
 
-            mainItemDefinition.AddPropertyDefinitions(dxModel.MainElement.Item.Content.Children().Select(x => x as JProperty).Where(x => x != null).Select(x =>
+            mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Children().Select(x => x as JProperty).Where(x => x != null).Select(x =>
                 new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name))).ToList());
 
             var singleItemDefinitions =
                 dxModel.DXSingleElements.Select(x =>
                 {
-                    var item = new DXElementDefinition(x.ElementInfo.Name, x.Name);
+                    var item = new DXElementDefinition(x.Attribute.Type, x.Name);
 
                     var propertyNames = x.Item.Content.Children().Select(y => y as JProperty).Select(y => y.Name).ToList();
 
@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Converters
             var multiItemDefinitions =
                   dxModel.DXMultiElements.Select(x =>
                   {
-                      var item = new DXElementDefinition(x.DXElementInfo.Name, x.Name);
+                      var item = new DXElementDefinition(x.Attribute.Type, x.Name);
 
                       var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : (x.Deleted.Count() > 0 ? x.Deleted.First() : null);
 

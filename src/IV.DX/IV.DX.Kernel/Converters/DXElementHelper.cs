@@ -14,7 +14,7 @@ namespace IV.DX.Kernel.Converters
 
             var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
 
-            jObject[Constants.SystemPropertyTypeName] = elementInfo.Name;
+            jObject[Constants.SystemPropertyTypeName] = elementInfo.Type;
 
             foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(dxElement.GetType()))
             {
@@ -36,14 +36,14 @@ namespace IV.DX.Kernel.Converters
 
             return new DXSingleElement
             {
-                ElementInfo = dxElementInfo,
+                Attribute = dxElementInfo,
                 Item = new DXItem
                 {
                     ID = dxElement.ID,
                     DXUnitID = dxElement.DXUnitID,
                     Content = content
                 },
-                Name = propertyName ?? dxElementInfo.Name
+                Name = propertyName ?? dxElementInfo.Type
             };
         }
     }

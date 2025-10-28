@@ -5,13 +5,13 @@ namespace IV.DX.Kernel.Models
 {
     public class DXModel
     {
-        public DXMainElement MainElement { get; set; }
+        public DXMainElement DXMainElement { get; set; }
         public HashSet<DXSingleElement> DXSingleElements { get; set; }
         public HashSet<DXMultiElement> DXMultiElements { get; set; }
 
         public DXModel(DXMainElement mainElement)
         {
-            this.MainElement = mainElement;
+            this.DXMainElement = mainElement;
         }
 
         public static bool DeepEquals(DXModel item1, DXModel item2)
@@ -22,7 +22,7 @@ namespace IV.DX.Kernel.Models
             var result = true;
 
             result = result
-                && DXMainElement.DeepEquals(item1.MainElement, item2.MainElement)
+                && DXMainElement.DeepEquals(item1.DXMainElement, item2.DXMainElement)
                 && DXSingleElement.DeepEquals(item1.DXSingleElements, item2.DXSingleElements)
                 && DXMultiElement.DeepEquals(item1.DXMultiElements, item2.DXMultiElements);
 
@@ -31,7 +31,7 @@ namespace IV.DX.Kernel.Models
 
         public DXModel DeepClone()
         {
-            var ownItemClone = this.MainElement.DeepClone();
+            var ownItemClone = this.DXMainElement.DeepClone();
 
             return new DXModel(ownItemClone)
             {
@@ -43,7 +43,7 @@ namespace IV.DX.Kernel.Models
         #region Convert to JObject
         public JObject ConvertToJObject()
         {
-            JObject result = this.MainElement.Item.Content.DeepClone() as JObject;
+            JObject result = this.DXMainElement.Item.Content.DeepClone() as JObject;
 
             if (this.DXSingleElements != null)
             {
@@ -114,7 +114,7 @@ namespace IV.DX.Kernel.Models
             DXSingleElement singleItem = new DXSingleElement()
             {
                 Name = property.Name,
-                ElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Item = GetdxItem((JObject)property.Value, objId)
             };
 
@@ -126,7 +126,7 @@ namespace IV.DX.Kernel.Models
             DXMultiElement dxMultiItem = new DXMultiElement()
             {
                 Name = property.Name,
-                DXElementInfo = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
                 Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
                 Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetdxItem((JObject)x, objId)).ToHashSet(),
                 Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()

@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class DXMultiElement
     {
         public string Name { get; set; }
-        public DXElementAttribute DXElementInfo { get; set; }
+        public DXElementAttribute Attribute { get; set; }
         public MultiElementsMode Mode { get; set; } = MultiElementsMode.Full;
         public HashSet<DXItem> Announced { get; set; } = new HashSet<DXItem>();
         public HashSet<DXItem> Deleted { get; set; } = new HashSet<DXItem>();
@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.Models
         {
             JObject jObject = new JObject
             {
-                [Constants.SystemPropertyTypeName] = this.DXElementInfo.Name,
+                [Constants.SystemPropertyTypeName] = this.Attribute.Type,
                 [Constants.Mode] = (int)this.Mode
             };
 
@@ -107,7 +107,7 @@ namespace IV.DX.Kernel.Models
 
             DXMultiElement multiFragment = new DXMultiElement
             {
-                DXElementInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name,
                 Mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>()
             };
@@ -142,7 +142,7 @@ namespace IV.DX.Kernel.Models
 
             var result =
                 item1.Name == item2.Name
-                && DXElementAttribute.DeepEquals(item1.DXElementInfo, item2.DXElementInfo)
+                && DXElementAttribute.DeepEquals(item1.Attribute, item2.Attribute)
                 && item1.Mode == item2.Mode
                 && DXItem.DeepEquals(item1.Announced, item2.Announced)
                 && DXItem.DeepEquals(item1.Deleted, item2.Deleted);
@@ -180,7 +180,7 @@ namespace IV.DX.Kernel.Models
                 Name = this.Name,
                 Announced = this.Announced?.Select(x => x.DeepClone()).ToHashSet(),
                 Deleted = this.Deleted?.Select(x => x.DeepClone()).ToHashSet(),
-                DXElementInfo = this.DXElementInfo.DeepClone()
+                Attribute = this.Attribute.DeepClone()
             };
         }
     }

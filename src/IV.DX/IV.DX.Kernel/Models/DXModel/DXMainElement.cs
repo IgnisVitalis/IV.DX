@@ -5,12 +5,12 @@ namespace IV.DX.Kernel.Models
 {
     public class DXMainElement
     {
-        public DXUnitAttribute ObjectInfo { get; private set; }
+        public DXUnitAttribute Attribute { get; private set; }
         public DXItem Item { get; set; }
 
-        public DXMainElement(DXUnitAttribute objectInfo)
+        public DXMainElement(DXUnitAttribute attribute)
         {
-            this.ObjectInfo = objectInfo;
+            this.Attribute = attribute;
         }
 
         public static bool DeepEquals(DXMainElement item1, DXMainElement item2)
@@ -19,14 +19,14 @@ namespace IV.DX.Kernel.Models
                 return false;
 
             var result =
-                DXUnitAttribute.DeepEquals(item1.ObjectInfo, item2.ObjectInfo)
+                DXUnitAttribute.DeepEquals(item1.Attribute, item2.Attribute)
                 && DXItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
         }
         public DXMainElement DeepClone()
         {
-            return new DXMainElement(this.ObjectInfo.DeepClone())
+            return new DXMainElement(this.Attribute.DeepClone())
             {
                 Item = this.Item.DeepClone(),
             };
@@ -36,7 +36,7 @@ namespace IV.DX.Kernel.Models
         {
             JObject jObject = new JObject(this.Item.ConvertToJObjectWithoutSystemProperties());
 
-            JProperty jProperty = new JProperty(this.ObjectInfo.ObjectName, jObject);
+            JProperty jProperty = new JProperty(this.Attribute.Type, jObject);
 
             return jProperty;
         }

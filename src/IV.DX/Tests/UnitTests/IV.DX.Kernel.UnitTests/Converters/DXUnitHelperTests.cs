@@ -90,7 +90,7 @@ namespace IV.DX.Contracts.UnitTests
                     new DXSingleElement
                     {
                         Name = "MyDXElementSingleItem",
-                        ElementInfo = new DXElementAttribute("MyDXElementDefinition"),
+                        Attribute = new DXElementAttribute("MyDXElementDefinition"),
                         Item = new DXItem()
                         {
                             ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
@@ -111,7 +111,7 @@ namespace IV.DX.Contracts.UnitTests
                     new DXMultiElement()
                     {
                         Name = "MyDXElementMultiItems",
-                        DXElementInfo = new DXElementAttribute("MyDXElementDefinition"),
+                        Attribute = new DXElementAttribute("MyDXElementDefinition"),
                         Mode = MultiElementsMode.Target,
                         Announced = new HashSet<DXItem>()
                         {

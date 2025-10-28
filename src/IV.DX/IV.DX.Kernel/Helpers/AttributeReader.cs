@@ -69,14 +69,14 @@ namespace IV.DX.Kernel.Helpers
         {
             var objectType = FindElementType(type);
             var attr = GetAttribute<DXUnitAttribute>(objectType);
-            return attr?.ObjectName ?? string.Empty;
+            return attr?.Type ?? string.Empty;
         }
 
         public static string GetDXElementTypeName(Type type)
         {
             var objectType = FindElementType(type);
             var attr = GetAttribute<DXElementAttribute>(objectType);
-            return attr?.Name ?? string.Empty;
+            return attr?.Type ?? string.Empty;
         }
 
         public static string GetTypeName(this DXUnit dxUnit)

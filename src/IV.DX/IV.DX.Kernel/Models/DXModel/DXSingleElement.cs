@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Models
     public class DXSingleElement
     {
         public string Name { get; set; }
-        public DXElementAttribute ElementInfo { get; set; }
+        public DXElementAttribute Attribute { get; set; }
         public DXItem Item { get; set; }
 
         public JProperty ConvertToJProperty()
@@ -42,7 +42,7 @@ namespace IV.DX.Kernel.Models
 
             DXSingleElement singleFragment = new DXSingleElement
             {
-                ElementInfo = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
                 Name = jProperty.Name
             };
 
@@ -61,7 +61,7 @@ namespace IV.DX.Kernel.Models
 
             var result =
                 item1.Name == item2.Name
-                && DXElementAttribute.DeepEquals(item1.ElementInfo, item2.ElementInfo)
+                && DXElementAttribute.DeepEquals(item1.Attribute, item2.Attribute)
                 && DXItem.DeepEquals(item1.Item, item2.Item);
 
             return result;
@@ -93,7 +93,7 @@ namespace IV.DX.Kernel.Models
         {
             return new DXSingleElement()
             {
-                ElementInfo = this.ElementInfo?.DeepClone(),
+                Attribute = this.Attribute?.DeepClone(),
                 Name = this.Name,
                 Item = this.Item.DeepClone()
             };
