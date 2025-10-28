@@ -18,15 +18,15 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type);
 
-            mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Children().Select(x => x as JProperty).Where(x => x != null).Select(x =>
-                new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name))).ToList());
+            mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
+                new DXPropertyDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
 
             var singleItemDefinitions =
                 dxModel.DXSingleElements.Select(x =>
                 {
                     var item = new DXElementDefinition(x.Attribute.Type, x.Name);
 
-                    var propertyNames = x.Item.Content.Children().Select(y => y as JProperty).Select(y => y.Name).ToList();
+                    var propertyNames = x.Item.Content.Select(y => y.Key).ToList();
 
                     if (!propertyNames.Contains(Constants.ID))
                     {
@@ -53,7 +53,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                       if (existingElement == null)
                           return null;
 
-                      var propertyNames = existingElement.Content.Children().Select(y => y as JProperty).Select(y => y.Name).ToList();
+                      var propertyNames = existingElement.Content.Select(y => y.Key).ToList();
 
                       if (!propertyNames.Contains(Constants.ID))
                       {

@@ -74,26 +74,29 @@ namespace IV.DX.Contracts.UnitTests
             var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"))
             {
                 Item = new DXItem(
-                            objectId, 
-                            objectId, 
-                            new JObject(
-                                new JProperty(Constants.SystemPropertyTypeName, "MyObjectDefinition"),
-                                new JProperty(Constants.ID, objectId),
-                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 1))))
+                            objectId,
+                            objectId,
+                            new Dictionary<string, object>()
+                            {
+                                { Constants.SystemPropertyTypeName, "MyObjectDefinition" },
+                                { Constants.ID, objectId },
+                                { Constants.TimeStamp, new DateTime(2020, 12, 1)}
+                            })
             };
 
             var dxSingleElement1 = new DXSingleElement(
                  "MyDXElementSingleItem",
                   new DXElementAttribute("MyDXElementDefinition"),
-                  new DXItem(new Guid("B2669009-536A-4252-A920-CCEF4456A08A"), objectId, new JObject(
-                            new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                            new JProperty(Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A")),
-                            new JProperty(Constants.DXUnitID, objectId),
-                            new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 1)),
-                            new JProperty("Name", "Name1"),
-                            new JProperty("Value", 1),
-                            new JProperty("Date", new DateTime(2020, 12, 1))))
-                  );
+                  new DXItem(new Guid("B2669009-536A-4252-A920-CCEF4456A08A"), objectId, new Dictionary<string, object>()
+                            {
+                      { Constants.SystemPropertyTypeName, "MyDXElementDefinition"},
+                            {Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A") },
+                            {Constants.DXUnitID, objectId},
+                            {Constants.TimeStamp, new DateTime(2020, 12, 1)},
+                            { "Name", "Name1"},
+                            { "Value", 1},
+                            { "Date", new DateTime(2020, 12, 1)}
+                  }));
 
             var dxXSingleElements = new HashSet<DXSingleElement>()
             {
@@ -112,41 +115,45 @@ namespace IV.DX.Contracts.UnitTests
                         new DXItem(
                             new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
                             objectId,
-                            new JObject(
-                                new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                new JProperty(Constants.ID, new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A")),
-                                new JProperty(Constants.DXUnitID,  objectId),
-                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 2)),
-                                new JProperty("Name", "Name2"),
-                                new JProperty("Value", 2),
-                                new JProperty("Date", new DateTime(2020, 12, 2)))
-                            ),
+                            new Dictionary<string, object>()
+                            {
+                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
+                                {Constants.ID, new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A") },
+                                {Constants.DXUnitID,  objectId },
+                                {Constants.TimeStamp, new DateTime(2020, 12, 2) },
+                                {"Name", "Name2" },
+                                {"Value", 2 },
+                                {"Date", new DateTime(2020, 12, 2) }
+                             }),
                         new DXItem(
                             new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
                             objectId,
-                            new JObject(
-                                new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                new JProperty(Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2")),
-                                new JProperty(Constants.DXUnitID, objectId),
-                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 3)),
-                                new JProperty("Name", "Name3"),
-                                new JProperty("Value", 3),
-                                new JProperty("Date", new DateTime(2020, 12, 3)))
-                            )
+                             new Dictionary<string, object>()
+                             {
+                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
+                                {Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2") },
+                                {Constants.DXUnitID, objectId },
+                                {Constants.TimeStamp, new DateTime(2020, 12, 3) },
+                                {"Name", "Name3" },
+                                {"Value", 3 },
+                                {"Date", new DateTime(2020, 12, 3) }
+                            }),
                     },
                     Deleted = new HashSet<DXItem>()
                     {
                         new DXItem(
                             new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
                             objectId,
-                            new JObject(
-                                new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                new JProperty(Constants.ID, new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6")),
-                                new JProperty(Constants.DXUnitID, objectId),
-                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 4)),
-                                new JProperty("Name", "Name4"),
-                                new JProperty("Value", 4),
-                                new JProperty("Date", new DateTime(2020, 12, 4))))
+                            new Dictionary<string, object>()
+                            {
+                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
+                                {Constants.ID, new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6") },
+                                {Constants.DXUnitID, objectId },
+                                {Constants.TimeStamp, new DateTime(2020, 12, 4) },
+                                {"Name", "Name4" },
+                                {"Value", 4 },
+                                {"Date", new DateTime(2020, 12, 4) }
+                                 }),
                     }
                 }
             };

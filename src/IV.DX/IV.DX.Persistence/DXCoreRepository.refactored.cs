@@ -394,7 +394,7 @@ namespace IV.DX.Persistence
 
         private DXItem GetDXItem(DataRow row, DXElementDefinition structure)
         {
-            JObject jObjectContainerCopy = new JObject();
+            Dictionary<string, object> jObjectContainerCopy = new Dictionary<string, object>();
 
             jObjectContainerCopy[Constants.SystemPropertyTypeName] = structure.Type;
 
@@ -865,12 +865,8 @@ namespace IV.DX.Persistence
             if (dxItem.Content == null)
                 return;
 
-            var properties = dxItem.Content.Children().Select(x => x as JProperty).Where(x => x != null);
-
             foreach (var column in row.Table.Columns.OfType<DataColumn>())
             {
-                var jProperty = properties.SingleOrDefault(x => x.Name == column.ColumnName);
-
                 if (column.ColumnName == Constants.ID
                     || column.ColumnName == Constants.DXUnitID
                     || column.ColumnName == Constants.TimeStamp
@@ -880,15 +876,17 @@ namespace IV.DX.Persistence
                     continue;
                 }
 
+                var jProperty = dxItem.GetValue(column.ColumnName);
+
                 if (!column.ReadOnly)
                 {
                     if (jProperty != null)
                     {
-                        if (this.IsNullOrEmpty(jProperty.Value as JValue))
+                        if (this.IsNullOrEmpty(jProperty))
                         {
                             if (column.AllowDBNull)
                             {
-                                this.SetNullValueToRowCell(row, column, jProperty);
+                                this.SetNullValueToRowCell(row, column);
                             }
                             else
                             {
@@ -916,65 +914,66 @@ namespace IV.DX.Persistence
             return jValue == null || string.IsNullOrWhiteSpace(jValue.ToString());
         }
 
-        private void SetNullValueToRowCell(DataRow dataRow, DataColumn dataColumn, JProperty jProperty)
+        private bool IsNullOrEmpty(object obj)
         {
-            JValue jValue = jProperty.Value as JValue;
+            return obj == null || string.IsNullOrWhiteSpace(obj.ToString());
+        }
 
+        private void SetNullValueToRowCell(DataRow dataRow, DataColumn dataColumn)
+        {
             dataRow[dataColumn] = DBNull.Value;
         }
 
-        private void SetJPropertyValueToRowCell(DataRow dataRow, DataColumn dataColumn, JProperty jProperty)
+        private void SetJPropertyValueToRowCell(DataRow dataRow, DataColumn dataColumn, object obj)
         {
-            JValue jValue = jProperty.Value as JValue;
-
             if (dataColumn.DataType == typeof(Guid))
             {
-                dataRow[dataColumn] = jValue.Value;
+                dataRow[dataColumn] = obj;
             }
             else
             if (dataColumn.DataType == typeof(decimal))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseDecimal(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseDecimal(obj);
             }
             else
             if (dataColumn.DataType == typeof(double))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseDouble(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseDouble(obj);
             }
             else
             if (dataColumn.DataType == typeof(sbyte))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseSByte(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseSByte(obj);
             }
             else
             if (dataColumn.DataType == typeof(int))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseInt(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseInt(obj);
             }
             else
             if (dataColumn.DataType == typeof(DateTime))
             {
-                var dt = ConvertHelper.ParseDateTime(jValue.Value);
+                var dt = ConvertHelper.ParseDateTime(obj);
                 dataRow[dataColumn] = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
             }
             else
             if (dataColumn.DataType == typeof(bool))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseBool(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseBool(obj);
             }
             else
             if (dataColumn.DataType == typeof(byte[]))
             {
-                dataRow[dataColumn] = (byte[])jValue.Value;
+                dataRow[dataColumn] = (byte[])obj;
             }
             else if (dataColumn.DataType == typeof(TimeSpan))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseTimeSpan(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseTimeSpan(obj);
             }
             else
             //if (dataColumn.DataType == typeof(string))
             {
-                dataRow[dataColumn] = ConvertHelper.ParseString(jValue.Value);
+                dataRow[dataColumn] = ConvertHelper.ParseString(obj);
             }
         }
 

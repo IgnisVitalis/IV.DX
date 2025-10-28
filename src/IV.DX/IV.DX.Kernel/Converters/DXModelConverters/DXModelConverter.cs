@@ -62,7 +62,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
                         foreach (var e in src)
                         {
-                            target.Add(new DXItem(e.ID, dxUnit.ID, e.ToJObject()));
+                            target.Add(new DXItem(e.ID, dxUnit.ID, e.ToDictionary()));
                         }
                     }
 
@@ -83,19 +83,20 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             }).ToHashSet();
         }
 
-        private static JObject? GetContent(DXUnit? obj)
+        private static IDictionary<string, object>? GetContent(DXUnit? obj)
         {
             if (obj is null) return null;
 
-            var jObject = new JObject();
-            jObject[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).Type;
+            var dict = new Dictionary<string, object>();
+            dict[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).Type;
 
             foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(obj.GetType()))
             {
                 var value = prop.GetValue(obj);
-                jObject[prop.Name] = new JValue(value);
+                dict[prop.Name] = value;
             }
-            return jObject;
+
+            return dict;
         }
 
         public static DXModel? ToDXModel(this string json)
@@ -179,7 +180,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var content = KeepScalarsOnly(jObject);
 
-            DXItem dxItem = new DXItem((Guid)jObject[Constants.ID], objId, content);           
+            DXItem dxItem = new DXItem((Guid)jObject[Constants.ID], objId, content.ToDictionary());           
 
             return dxItem;
         }

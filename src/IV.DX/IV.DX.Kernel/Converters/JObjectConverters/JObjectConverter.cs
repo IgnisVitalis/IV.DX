@@ -32,7 +32,12 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
 
         public static JObject ToJObject(this DXItem dxItem, bool exlcudeSystemProperties = false)
         {
-            JObject jObject = dxItem.Content != null ? new JObject(dxItem.Content) : new JObject();
+            JObject jObject = new JObject();
+
+            foreach (var item in dxItem.Content)
+            {
+                jObject.Add(new JProperty(item.Key, item.Value));
+            }
 
             if (exlcudeSystemProperties)
             {
@@ -52,7 +57,7 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
 
         public static JObject ToJObject(this DXModel dxModel)
         {
-            JObject result = dxModel.DXMainElement.Item.Content.DeepClone() as JObject;
+            JObject result = ToJObject(dxModel.DXMainElement.Item);
 
             if (dxModel.DXSingleElements != null)
             {

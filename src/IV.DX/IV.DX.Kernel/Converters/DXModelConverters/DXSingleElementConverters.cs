@@ -11,7 +11,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (dxElement.DXUnitID == default)
                 throw new Exception($"DXElement should have DXUnitID value");
 
-            var content = dxElement.ToJObject();
+            var content = dxElement.ToDictionary();
 
             var attribute = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
             var name = propertyName ?? attribute.Type;

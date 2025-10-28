@@ -9,10 +9,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var jObjectCopy = jObject.DeepClone() as JObject;
 
-            jObjectCopy.Remove(Constants.ID);
-            jObjectCopy.Remove(Constants.DXUnitID);
-
-            DXItem fragment = new DXItem((Guid)jObject[Constants.ID], (Guid)jObject[Constants.DXUnitID], jObjectCopy);
+            DXItem fragment = new DXItem((Guid)jObject[Constants.ID], (Guid)jObject[Constants.DXUnitID], jObjectCopy.ToDictionary());
 
             return fragment;
         }

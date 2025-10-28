@@ -15,7 +15,7 @@ namespace IV.DX.Application.Services
 
         private IDictionary<int, string> GetEnumValues(IEnumerable<DXModel> dxModel)
         {
-            return dxModel?.ToDictionary(x => x.DXMainElement.Item.Content.Value<int>("Key"), x => x.DXMainElement.Item.Content.Value<string>("Value"));
+            return dxModel?.ToDictionary(x => x.DXMainElement.Item.GetValue<int>("Key"), x => x.DXMainElement.Item.GetValue<string>("Value"));
         }
     }
 }
