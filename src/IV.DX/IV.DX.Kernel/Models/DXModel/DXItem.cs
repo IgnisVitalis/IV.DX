@@ -1,18 +1,19 @@
-﻿using IV.DX.Kernel.Converters;
-using Newtonsoft.Json.Linq;
-
-namespace IV.DX.Kernel.Models
+﻿namespace IV.DX.Kernel.Models
 {
     public class DXItem
     {
+        public string Type { get; }
         public Guid ID { get; }
         public Guid DXUnitID { get; }
+        public DateTime TimeStamp { get; }
         public IDictionary<string, object> Content { get; }
 
-        public DXItem(Guid id, Guid dxUnitID, IDictionary<string, object> content)
+        public DXItem(string type, Guid id, Guid dxUnitID, DateTime timeStamp, IDictionary<string, object> content)
         {
+            this.Type = type;
             this.ID = id;
             this.DXUnitID = dxUnitID;
+            this.TimeStamp = timeStamp;
             this.Content = content;
         }
 
@@ -130,7 +131,7 @@ namespace IV.DX.Kernel.Models
 
         public DXItem DeepClone()
         {
-            return new DXItem(this.ID, this.DXUnitID, DeepClone(this.Content));
+            return new DXItem(this.Type, this.ID, this.DXUnitID, this.TimeStamp, DeepClone(this.Content));
         }
 
         public static IDictionary<string, object> DeepClone(

@@ -91,7 +91,7 @@ namespace IV.DX.Persistence
             });
         }
 
-      
+
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
@@ -144,7 +144,7 @@ namespace IV.DX.Persistence
 
             var dxMainElement = new DXMainElement(new DXUnitAttribute(container.MainElement.Name))
             {
-                Item = this.GetDXItem(x, container.MainElement)             
+                Item = this.GetDXItem(x, container.MainElement)
             };
 
             // Process DX single items
@@ -381,7 +381,7 @@ namespace IV.DX.Persistence
             }
 
             return dataSet;
-        }       
+        }
 
         private void PopulateDXMultiItem(
             DXMultiElement multiItem,
@@ -416,16 +416,17 @@ namespace IV.DX.Persistence
             }
 
             var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
 
             if (row.Table.Columns.Contains(Constants.DXUnitID))
             {
                 var dxUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
 
-                return new DXItem(id, dxUnitID, jObjectContainerCopy);
+                return new DXItem(structure.Type, id, dxUnitID, timeStamp, jObjectContainerCopy);
             }
             else
             {
-                return new DXItem(id, id, jObjectContainerCopy);
+                return new DXItem(structure.Type, id, id, timeStamp, jObjectContainerCopy);
             }
         }
 

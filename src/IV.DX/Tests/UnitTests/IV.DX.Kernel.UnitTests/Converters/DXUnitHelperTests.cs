@@ -74,8 +74,10 @@ namespace IV.DX.Contracts.UnitTests
             var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"))
             {
                 Item = new DXItem(
+                            "MyObjectDefinition",
                             objectId,
                             objectId,
+                            new DateTime(2020, 12, 4),
                             new Dictionary<string, object>()
                             {
                                 { Constants.SystemPropertyTypeName, "MyObjectDefinition" },
@@ -87,7 +89,7 @@ namespace IV.DX.Contracts.UnitTests
             var dxSingleElement1 = new DXSingleElement(
                  "MyDXElementSingleItem",
                   new DXElementAttribute("MyDXElementDefinition"),
-                  new DXItem(new Guid("B2669009-536A-4252-A920-CCEF4456A08A"), objectId, new Dictionary<string, object>()
+                  new DXItem("MyDXElementDefinition", new Guid("B2669009-536A-4252-A920-CCEF4456A08A"), objectId, new DateTime(2020, 12, 4), new Dictionary<string, object>()
                             {
                       { Constants.SystemPropertyTypeName, "MyDXElementDefinition"},
                             {Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A") },
@@ -113,8 +115,10 @@ namespace IV.DX.Contracts.UnitTests
                     Announced = new HashSet<DXItem>()
                     {
                         new DXItem(
+                            "MyDXElementDefinition",
                             new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
                             objectId,
+                            new DateTime(2020, 12, 4),
                             new Dictionary<string, object>()
                             {
                                 {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
@@ -126,8 +130,10 @@ namespace IV.DX.Contracts.UnitTests
                                 {"Date", new DateTime(2020, 12, 2) }
                              }),
                         new DXItem(
+                            "MyDXElementDefinition",
                             new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
                             objectId,
+                            new DateTime(2020, 12, 4),
                              new Dictionary<string, object>()
                              {
                                 {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
@@ -142,8 +148,10 @@ namespace IV.DX.Contracts.UnitTests
                     Deleted = new HashSet<DXItem>()
                     {
                         new DXItem(
+                            "MyDXElementDefinition",
                             new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
                             objectId,
+                            new DateTime(2020, 12, 4),
                             new Dictionary<string, object>()
                             {
                                 {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },

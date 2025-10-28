@@ -9,7 +9,12 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var jObjectCopy = jObject.DeepClone() as JObject;
 
-            DXItem fragment = new DXItem((Guid)jObject[Constants.ID], (Guid)jObject[Constants.DXUnitID], jObjectCopy.ToDictionary());
+            DXItem fragment = new DXItem(
+                (string)jObject[Constants.SystemPropertyTypeName],
+                (Guid)jObject[Constants.ID], 
+                (Guid)jObject[Constants.DXUnitID], 
+                (DateTime)jObject[Constants.TimeStamp], 
+                jObjectCopy.ToDictionary());
 
             return fragment;
         }

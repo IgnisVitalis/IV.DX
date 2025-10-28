@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
             var ownItem = new DXMainElement(unitAttr)
             {
-                Item = new DXItem(dxUnit.ID, dxUnit.ID, GetContent(dxUnit))
+                Item = new DXItem(unitAttr.Type, dxUnit.ID, dxUnit.ID, dxUnit.TimeStamp, GetContent(dxUnit))
             };
 
             var dxSingleElements = GetDXSingleElements(dxUnit);
@@ -62,7 +62,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
                         foreach (var e in src)
                         {
-                            target.Add(new DXItem(e.ID, dxUnit.ID, e.ToDictionary()));
+                            target.Add(new DXItem(elementInfo.Type, e.ID, dxUnit.ID, e.TimeStamp, e.ToDictionary()));
                         }
                     }
 
@@ -180,7 +180,12 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var content = KeepScalarsOnly(jObject);
 
-            DXItem dxItem = new DXItem((Guid)jObject[Constants.ID], objId, content.ToDictionary());           
+            DXItem dxItem = new DXItem(
+                (string)jObject[Constants.SystemPropertyTypeName],
+                (Guid)jObject[Constants.ID], 
+                objId, 
+                (DateTime)jObject[Constants.TimeStamp], 
+                content.ToDictionary());
 
             return dxItem;
         }

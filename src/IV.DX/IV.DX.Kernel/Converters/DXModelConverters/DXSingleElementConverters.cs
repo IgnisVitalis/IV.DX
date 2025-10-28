@@ -16,7 +16,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             var attribute = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
             var name = propertyName ?? attribute.Type;
 
-            var item = new DXItem(dxElement.ID, dxElement.DXUnitID, content);
+            var item = new DXItem(attribute.Type, dxElement.ID, dxElement.DXUnitID, dxElement.TimeStamp, content);
 
             return new DXSingleElement(name, attribute, item);
         }
@@ -27,14 +27,14 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                 return null;
 
             var name = jProperty.Name;
-            var attribute  = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name);
+            var attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name);
 
             var jObjectForContent = jProperty.Value as JObject;
             jObjectForContent.Remove(Constants.SystemPropertyTypeName);
 
             var item = jObjectForContent.ToDXItem();
 
-            DXSingleElement singleFragment = new DXSingleElement(name, attribute, item);         
+            DXSingleElement singleFragment = new DXSingleElement(name, attribute, item);
 
             return singleFragment;
         }
