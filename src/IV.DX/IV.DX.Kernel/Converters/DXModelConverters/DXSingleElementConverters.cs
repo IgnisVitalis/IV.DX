@@ -11,21 +11,18 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (dxElement.DXUnitID == default)
                 throw new Exception($"DXElement should have DXUnitID value");
 
-            var dxElementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
-
             var content = dxElement.ToJObject();
 
-            return new DXSingleElement
+            var attribute = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
+            var name = propertyName ?? attribute.Type;            
+            var item = new DXItem
             {
-                Attribute = dxElementInfo,
-                Item = new DXItem
-                {
-                    ID = dxElement.ID,
-                    DXUnitID = dxElement.DXUnitID,
-                    Content = content
-                },
-                Name = propertyName ?? dxElementInfo.Type
+                ID = dxElement.ID,
+                DXUnitID = dxElement.DXUnitID,
+                Content = content
             };
+
+            return new DXSingleElement(name, attribute, item);
         }
 
         public static DXSingleElement ToDXSingleElement(this JProperty jProperty)
@@ -33,16 +30,15 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (jProperty == null)
                 return null;
 
-            DXSingleElement singleFragment = new DXSingleElement
-            {
-                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
-                Name = jProperty.Name
-            };
+            var name = jProperty.Name;
+            var attribute  = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name);
 
             var jObjectForContent = jProperty.Value as JObject;
             jObjectForContent.Remove(Constants.SystemPropertyTypeName);
 
-            singleFragment.Item = jObjectForContent.ToDXItem();
+            var item = jObjectForContent.ToDXItem();
+
+            DXSingleElement singleFragment = new DXSingleElement(name, attribute, item);         
 
             return singleFragment;
         }

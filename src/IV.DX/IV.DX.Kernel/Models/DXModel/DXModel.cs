@@ -2,13 +2,15 @@
 {
     public class DXModel
     {
-        public DXMainElement DXMainElement { get; set; }
-        public HashSet<DXSingleElement> DXSingleElements { get; set; }
-        public HashSet<DXMultiElement> DXMultiElements { get; set; }
+        public DXMainElement DXMainElement { get; }
+        public HashSet<DXSingleElement> DXSingleElements { get;}
+        public HashSet<DXMultiElement> DXMultiElements { get; }
 
-        public DXModel(DXMainElement mainElement)
+        public DXModel(DXMainElement mainElement, HashSet<DXSingleElement> dxSingleElements, HashSet<DXMultiElement> dxMultiElements)
         {
             this.DXMainElement = mainElement;
+            this.DXSingleElements = dxSingleElements;
+            this.DXMultiElements = dxMultiElements;
         }
 
         public static bool DeepEquals(DXModel item1, DXModel item2)
@@ -30,11 +32,10 @@
         {
             var ownItemClone = this.DXMainElement.DeepClone();
 
-            return new DXModel(ownItemClone)
-            {
-                DXSingleElements = this.DXSingleElements?.Select(x => x.DeepClone()).ToHashSet(),
-                DXMultiElements = this.DXMultiElements?.Select(x => x.DeepClone()).ToHashSet()
-            };
+            var dxSingleElements = this.DXSingleElements?.Select(x => x.DeepClone()).ToHashSet();
+            var dxMultiElements = this.DXMultiElements?.Select(x => x.DeepClone()).ToHashSet();
+
+            return new DXModel(ownItemClone, dxSingleElements, dxMultiElements);
         }
     }
 }

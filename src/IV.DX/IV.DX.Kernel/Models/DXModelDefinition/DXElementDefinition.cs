@@ -12,11 +12,11 @@ namespace IV.DX.Kernel.Models
         {
             get
             {
-                return this._name;
+                return _name;
             }
             private set
             {
-                this._name = value?.Trim();
+                _name = value?.Trim();
             }
         }
 
@@ -26,20 +26,20 @@ namespace IV.DX.Kernel.Models
         {
             get
             {
-                return this._type;
+                return _type;
             }
             private set
             {
-                this._type = value?.Trim();
+                _type = value?.Trim();
             }
         }
 
         public DXElementDefinition(string type, string name)
         {
-            this.Name = name;
-            this.Type = type;
+            Name = name;
+            Type = type;
 
-            this._items = new List<DXPropertyDefinition>()
+            _items = new List<DXPropertyDefinition>()
             {
                 new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID)),
                 new DXPropertyDefinition(Constants.TimeStamp, new DXColumnAttribute(Constants.TimeStamp))
@@ -54,10 +54,10 @@ namespace IV.DX.Kernel.Models
                 )
                 return;
 
-            if (this.GetPropertyDefinitionByName(item.Name) != null)
+            if (GetPropertyDefinitionByName(item.Name) != null)
                 throw new Exception($"ASQLPropertyDefinition with Name {item.Name} is already existing.");
 
-            this._items.Add(item);
+            _items.Add(item);
         }
 
         public void AddPropertyDefinitions(IEnumerable<DXPropertyDefinition> items)
@@ -67,33 +67,33 @@ namespace IV.DX.Kernel.Models
 
             foreach (var item in items)
             {
-                this.AddPropertyDefinition(item);
+                AddPropertyDefinition(item);
             }
         }
 
         public DXPropertyDefinition GetPropertyDefinitionByName(string name)
         {
-            var item = this._items.SingleOrDefault(x => x.Name == name);
+            var item = _items.SingleOrDefault(x => x.Name == name);
 
             return item;
         }
 
         public DXElementDefinition DeepClone()
         {
-            var clone = new DXElementDefinition(this.Type, this.Name);
-            clone.AddPropertyDefinitions(this._items);
+            var clone = new DXElementDefinition(Type, Name);
+            clone.AddPropertyDefinitions(_items);
 
             return clone;
         }
 
         public IEnumerator<DXPropertyDefinition> GetEnumerator()
         {
-            return this._items.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._items.GetEnumerator();
+            return _items.GetEnumerator();
         }
     }
 }

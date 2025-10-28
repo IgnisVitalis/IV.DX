@@ -84,86 +84,86 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
 
-            dxModel = new DXModel(ownItem)
+            var dxSingleElement1 = new DXSingleElement(
+                 "MyDXElementSingleItem",
+                  new DXElementAttribute("MyDXElementDefinition"),
+                  new DXItem()
+                  {
+                      ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
+                      DXUnitID = objectId,
+                      Content = new JObject(
+                            new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
+                            new JProperty(Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A")),
+                            new JProperty(Constants.DXUnitID, objectId),
+                            new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 1)),
+                            new JProperty("Name", "Name1"),
+                            new JProperty("Value", 1),
+                            new JProperty("Date", new DateTime(2020, 12, 1)))
+                  });
+
+            var dxXSingleElements = new HashSet<DXSingleElement>()
             {
-                DXSingleElements = new HashSet<DXSingleElement>()
+                dxSingleElement1
+            };
+
+            var dxMultiElements = new HashSet<DXMultiElement>()
+            {
+                new DXMultiElement()
                 {
-                    new DXSingleElement
+                    Name = "MyDXElementMultiItems",
+                    Attribute = new DXElementAttribute("MyDXElementDefinition"),
+                    Mode = MultiElementsMode.Target,
+                    Announced = new HashSet<DXItem>()
                     {
-                        Name = "MyDXElementSingleItem",
-                        Attribute = new DXElementAttribute("MyDXElementDefinition"),
-                        Item = new DXItem()
+                        new DXItem()
                         {
-                            ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
+                            ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
                             DXUnitID = objectId,
                             Content = new JObject(
                                 new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                new JProperty(Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A")),
+                                new JProperty(Constants.ID, new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A")),
                                 new JProperty(Constants.DXUnitID,  objectId),
-                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 1)),
-                                new JProperty("Name", "Name1"),
-                                new JProperty("Value", 1),
-                                new JProperty("Date", new DateTime(2020, 12, 1)))
-                        }
-                    }
-                },
-                DXMultiElements = new HashSet<DXMultiElement>()
-                {
-                    new DXMultiElement()
-                    {
-                        Name = "MyDXElementMultiItems",
-                        Attribute = new DXElementAttribute("MyDXElementDefinition"),
-                        Mode = MultiElementsMode.Target,
-                        Announced = new HashSet<DXItem>()
-                        {
-                            new DXItem()
-                            {
-                                ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
-                                DXUnitID = objectId,
-                                Content = new JObject(
-                                    new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                    new JProperty(Constants.ID, new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A")),
-                                    new JProperty(Constants.DXUnitID,  objectId),
-                                    new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 2)),
-                                    new JProperty("Name", "Name2"),
-                                    new JProperty("Value", 2),
-                                    new JProperty("Date", new DateTime(2020, 12, 2)))
-                            },
-                            new DXItem()
-                            {
-                                ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
-                                DXUnitID = objectId,
-                                Content = new JObject(
-                                    new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                    new JProperty(Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2")),
-                                    new JProperty(Constants.DXUnitID, objectId),
-                                    new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 3)),
-                                    new JProperty("Name", "Name3"),
-                                    new JProperty("Value", 3),
-                                    new JProperty("Date", new DateTime(2020, 12, 3)))
-                            }
+                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 2)),
+                                new JProperty("Name", "Name2"),
+                                new JProperty("Value", 2),
+                                new JProperty("Date", new DateTime(2020, 12, 2)))
                         },
-                        Deleted = new HashSet<DXItem>()
+                        new DXItem()
                         {
-                            new DXItem()
-                            {
-                                ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
-                                DXUnitID = objectId,
-                                Content = new JObject(
-                                    new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
-                                    new JProperty(Constants.ID, new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6")),
-                                    new JProperty(Constants.DXUnitID, objectId),
-                                    new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 4)),
-                                    new JProperty("Name", "Name4"),
-                                    new JProperty("Value", 4),
-                                    new JProperty("Date", new DateTime(2020, 12, 4)))
-                            }
+                            ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
+                            DXUnitID = objectId,
+                            Content = new JObject(
+                                new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
+                                new JProperty(Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2")),
+                                new JProperty(Constants.DXUnitID, objectId),
+                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 3)),
+                                new JProperty("Name", "Name3"),
+                                new JProperty("Value", 3),
+                                new JProperty("Date", new DateTime(2020, 12, 3)))
+                        }
+                    },
+                    Deleted = new HashSet<DXItem>()
+                    {
+                        new DXItem()
+                        {
+                            ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
+                            DXUnitID = objectId,
+                            Content = new JObject(
+                                new JProperty(Constants.SystemPropertyTypeName, "MyDXElementDefinition"),
+                                new JProperty(Constants.ID, new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6")),
+                                new JProperty(Constants.DXUnitID, objectId),
+                                new JProperty(Constants.TimeStamp, new DateTime(2020, 12, 4)),
+                                new JProperty("Name", "Name4"),
+                                new JProperty("Value", 4),
+                                new JProperty("Date", new DateTime(2020, 12, 4)))
                         }
                     }
                 }
             };
+
+            dxModel = new DXModel(ownItem, dxXSingleElements, dxMultiElements);
         }
-        
+
         [Fact]
         public void DXModelParse_UsingJObject_Ok()
         {

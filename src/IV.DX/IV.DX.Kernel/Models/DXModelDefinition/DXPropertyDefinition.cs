@@ -14,16 +14,16 @@ namespace IV.DX.Kernel.Models
 
         public DXPropertyDefinition(string name, DXColumnAttribute columnDefinition)
         {
-            this.Name = name;
-            this.ColumnDefinition = columnDefinition;
+            Name = name;
+            ColumnDefinition = columnDefinition;
         }
 
         public DXPropertyDefinition DeepClone()
         {
             var clone = new DXPropertyDefinition()
             {
-                Name = this.Name,
-                ColumnDefinition = this.ColumnDefinition.DeepClone()
+                Name = Name,
+                ColumnDefinition = ColumnDefinition.DeepClone()
             };
 
             return clone;
@@ -34,10 +34,10 @@ namespace IV.DX.Kernel.Models
             if (columnDefinition == null)
                 return false;
 
-            if (this.Name != columnDefinition.Name)
+            if (Name != columnDefinition.Name)
                 return false;
 
-            if (!this.ColumnDefinition.DeepEquals(columnDefinition.ColumnDefinition))
+            if (!ColumnDefinition.DeepEquals(columnDefinition.ColumnDefinition))
                 return false;
 
             return true;

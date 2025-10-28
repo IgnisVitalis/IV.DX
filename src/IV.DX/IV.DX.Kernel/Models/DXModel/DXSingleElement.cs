@@ -1,17 +1,23 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Converters.JObjectConverters;
-using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
 {
     public class DXSingleElement
     {
-        public string Name { get; set; }
-        public DXElementAttribute Attribute { get; set; }
-        public DXItem Item { get; set; }
+        public string Name { get; }
+        public DXElementAttribute Attribute { get; }
+        public DXItem? Item { get; }
 
-     
+        public DXSingleElement(string name, DXElementAttribute attribute)
+        {
+            this.Name = name;
+            this.Attribute = attribute;
+        }
+
+        public DXSingleElement(string name, DXElementAttribute attribute, DXItem item) : this(name, attribute)
+        {
+            this.Item = item;
+        }
 
         public static bool DeepEquals(DXSingleElement item1, DXSingleElement item2)
         {
@@ -41,7 +47,7 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!DXSingleElement.DeepEquals(item1, item2))
+                if (!DeepEquals(item1, item2))
                     return false;
             }
 
@@ -50,12 +56,7 @@ namespace IV.DX.Kernel.Models
 
         public DXSingleElement DeepClone()
         {
-            return new DXSingleElement()
-            {
-                Attribute = this.Attribute?.DeepClone(),
-                Name = this.Name,
-                Item = this.Item.DeepClone()
-            };
+            return new DXSingleElement(this.Name, this.Attribute.DeepClone(), this.Item.DeepClone());
         }
     }
 }

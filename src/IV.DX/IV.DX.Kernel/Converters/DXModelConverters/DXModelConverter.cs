@@ -1,6 +1,4 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -25,11 +23,10 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                 }
             };
 
-            return new DXModel(ownItem)
-            {
-                DXSingleElements = GetDXSingleElements(dxUnit),
-                DXMultiElements = GetDXMultiElements(dxUnit)
-            };
+            var dxSingleElements = GetDXSingleElements(dxUnit);
+            var dxMultiElements = GetDXMultiElements(dxUnit);
+
+            return new DXModel(ownItem, dxSingleElements, dxMultiElements);
         }
 
         private static HashSet<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
@@ -148,11 +145,10 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                     .Select(x => GetDXMutliItem(x, ownItem.Item.ID))
                     .ToHashSet();
 
-            DXModel dxModel = new DXModel(ownItem)
-            {
-                DXSingleElements = singleItems,
-                DXMultiElements = multiItems
-            };
+            var dxSingleElements = singleItems;
+            var dxMultiElements = multiItems;
+
+            DXModel dxModel = new DXModel(ownItem, dxSingleElements, dxMultiElements);
 
             return dxModel;
         }
@@ -205,16 +201,15 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             dxItem.Content = content;
 
             return dxItem;
-        }       
+        }
 
         static DXSingleElement GetDXSingleItem(JProperty property, Guid? objId)
         {
-            DXSingleElement singleItem = new DXSingleElement()
-            {
-                Name = property.Name,
-                Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Item = GetDXItem((JObject)property.Value, objId)
-            };
+            var name = property.Name;
+            var attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name);
+            var item = GetDXItem((JObject)property.Value, objId);
+
+            DXSingleElement singleItem = new DXSingleElement(name, attribute, item);
 
             return singleItem;
         }
