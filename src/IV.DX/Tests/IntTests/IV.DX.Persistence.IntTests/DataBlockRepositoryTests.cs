@@ -1,5 +1,5 @@
 using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -34,7 +34,7 @@ namespace IV.DX.Persistence.IntTests
         {
             // Init
             string json = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0000.json");
-            DXElementDefinitionUnit dxElementDesc = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json);
+            DXElementDefinitionUnit dxElementDesc = DXUnitConverter.Parse<DXElementDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
@@ -214,8 +214,8 @@ namespace IV.DX.Persistence.IntTests
             string json0 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0000.json");
             string json1 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0001.json");
 
-            DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit dxElementDesc1 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json1);
+            DXElementDefinitionUnit dxElementDesc0 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit dxElementDesc1 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json1);
 
             base._finalizationAction = new Action(() =>
             {
@@ -383,8 +383,8 @@ namespace IV.DX.Persistence.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0000.json");
             string json2 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0002.json");
-            DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit dxElementDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
+            DXElementDefinitionUnit dxElementDesc0 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit dxElementDesc2 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json2);
 
             base._finalizationAction = new Action(() =>
             {
@@ -452,9 +452,9 @@ namespace IV.DX.Persistence.IntTests
             string json2 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0002.json");
             string json3 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0003.json");
 
-            DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit dxElementDesc2 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json2);
-            DXElementDefinitionUnit dxElementDesc3 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json3);
+            DXElementDefinitionUnit dxElementDesc0 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit dxElementDesc2 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json2);
+            DXElementDefinitionUnit dxElementDesc3 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json3);
 
             base._finalizationAction = new Action(() =>
             {
@@ -538,8 +538,8 @@ namespace IV.DX.Persistence.IntTests
             // Init
             string json0 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0000.json");
             string json4 = File.ReadAllText("Assets/JSON/DXElementDefinitionUnit/DXElementDefinitionUnit0004.json");
-            DXElementDefinitionUnit dxElementDesc0 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json0);
-            DXElementDefinitionUnit dxElementDesc4 = DXUnitHelper.CreateInstance<DXElementDefinitionUnit>(json4);
+            DXElementDefinitionUnit dxElementDesc0 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json0);
+            DXElementDefinitionUnit dxElementDesc4 = DXUnitConverter.Parse<DXElementDefinitionUnit>(json4);
 
             base._finalizationAction = new Action(() =>
             {

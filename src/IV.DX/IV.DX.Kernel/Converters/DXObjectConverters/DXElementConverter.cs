@@ -2,11 +2,11 @@
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
-namespace IV.DX.Kernel.Converters
+namespace IV.DX.Kernel.Converters.DXObjectConverters
 {
-    internal static class DXElementHelper
+    internal static class DXElementConverter
     {
-        public static JObject ConvertToJObject(this DXElement? dxElement)
+        public static JObject Parse(this DXElement? dxElement)
         {
             if (dxElement is null) return null;
 
@@ -25,14 +25,14 @@ namespace IV.DX.Kernel.Converters
             return jObject;
         }
 
-        public static DXSingleElement ConvertToSingleItem(this DXElement dxElement, string propertyName = null)
+        public static DXSingleElement ConvertToSingleElement(this DXElement dxElement, string propertyName = null)
         {
             if (dxElement.DXUnitID == default)
                 throw new Exception($"DXElement should have DXUnitID value");
 
             var dxElementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
 
-            var content = dxElement.ConvertToJObject();
+            var content = dxElement.Parse();
 
             return new DXSingleElement
             {
@@ -45,6 +45,14 @@ namespace IV.DX.Kernel.Converters
                 },
                 Name = propertyName ?? dxElementInfo.Type
             };
+        }
+
+        public static T? Parse<T>(DXSingleElement? item) where T : DXElement
+        {
+            if (item is null) return null;
+
+            var jProp = item.ConvertToJPropertyWithoutSystemProperties();
+            return (T?)jProp?.Value?.ToObject(typeof(T));
         }
     }
 }

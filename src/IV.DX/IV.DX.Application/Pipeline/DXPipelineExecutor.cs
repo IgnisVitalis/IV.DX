@@ -1,9 +1,10 @@
 ﻿using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Helpers.DXObjectHelpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
@@ -69,7 +70,7 @@ namespace IV.DX.Application.Pipeline
 
                 var dxModel = baseRes.Value is null
                     ? null
-                    : DXUnitHelper.ConvertToJObject(baseRes.Value);
+                    : DXUnitConverter.ConvertToJObject(baseRes.Value);
 
                 return DXResult<JObject?>.Ok(dxModel, baseRes.Flow);
             }
@@ -136,7 +137,7 @@ namespace IV.DX.Application.Pipeline
                 DXUnit? dxUnit;
                 try
                 {
-                    dxUnit = DXUnitHelper.CreateInstance(jObject, modelType);
+                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -150,7 +151,7 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitHelper.ConvertToJObject(baseRes.Value!);
+                var dxModelResult = DXUnitConverter.ConvertToJObject(baseRes.Value!);
                 return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
             }
             else
@@ -223,7 +224,7 @@ namespace IV.DX.Application.Pipeline
 
                 try
                 {
-                    dxUnit = DXUnitHelper.CreateInstance(jObject, modelType);
+                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -237,7 +238,7 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitHelper.ConvertToJObject(baseRes.Value!);
+                var dxModelResult = DXUnitConverter.ConvertToJObject(baseRes.Value!);
                 return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
             }
             else
@@ -302,7 +303,7 @@ namespace IV.DX.Application.Pipeline
 
                 try
                 {
-                    dxUnit = DXUnitHelper.CreateInstance(jObject, modelType);
+                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -316,7 +317,7 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitHelper.ConvertToDXModel(baseRes.Value!);
+                var dxModelResult = DXUnitConverter.ConvertToDXModel(baseRes.Value!);
 
                 return DXResult<JObject>.Ok(dxModelResult.ConvertToJObject(), baseRes.Flow);
             }
@@ -410,7 +411,7 @@ namespace IV.DX.Application.Pipeline
 
                 var dxModels = baseRes.Value is null
                     ? null
-                    : baseRes.Value.Select(x => DXUnitHelper.ConvertToJObject(x)).ToList();
+                    : baseRes.Value.Select(x => DXUnitConverter.ConvertToJObject(x)).ToList();
 
                 return DXResult<IEnumerable<JObject>?>.Ok(dxModels, baseRes.Flow);
             }

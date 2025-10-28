@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel.Converters;
+﻿using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Shared.UnitTests.DXObjects.DXUnits;
 using Xunit;
 

@@ -1,5 +1,5 @@
-﻿using IV.DX.Kernel.Converters;
-using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -57,7 +57,7 @@ namespace IV.DX.Persistence
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
             var result = this.GetItem(DXModelDefinitionConverter.Get(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
-            var existingDataDXElement = DXUnitHelper.CreateInstance<DXObjectDefinitionUnit>(result);
+            var existingDataDXElement = DXUnitConverter.Parse<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
@@ -167,7 +167,7 @@ namespace IV.DX.Persistence
             {
                 var existingModel = this.GetItem(DXModelDefinitionConverter.Get(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
-                var existingDXUnit = DXUnitHelper.CreateInstance<DXRelationDefinitionUnit>(existingModel);
+                var existingDXUnit = DXUnitConverter.Parse<DXRelationDefinitionUnit>(existingModel);
 
                 relationTableName = existingDXUnit.DXRelationDefinitionMainElement.RelationTable;
             }

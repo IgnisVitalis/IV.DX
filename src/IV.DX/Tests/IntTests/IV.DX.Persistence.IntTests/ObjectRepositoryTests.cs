@@ -1,5 +1,5 @@
 using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
@@ -30,7 +30,7 @@ namespace IV.DX.Persistence.IntTests
             // Init
             string json = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0000.json");
 
-            DXObjectDefinitionUnit objDesc = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json);
+            DXObjectDefinitionUnit objDesc = DXUnitConverter.Parse<DXUnitDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {
@@ -57,8 +57,8 @@ namespace IV.DX.Persistence.IntTests
             // Ini
             string json0 = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0000.json");
             string json1 = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0001.json");
-            var objDesc0 = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json0);
-            var objDesc1 = DXUnitHelper.CreateInstance<DXUnitDefinitionUnit>(json1);
+            var objDesc0 = DXUnitConverter.Parse<DXUnitDefinitionUnit>(json0);
+            var objDesc1 = DXUnitConverter.Parse<DXUnitDefinitionUnit>(json1);
 
             base._finalizationAction = new Action(() =>
             {

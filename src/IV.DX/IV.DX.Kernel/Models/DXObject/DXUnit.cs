@@ -1,6 +1,7 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers.DXObjectHelpers;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 
@@ -32,43 +33,43 @@ namespace IV.DX.Kernel.Models
 
         public JObject ToJObject()
         {
-            return DXUnitHelper.ConvertToJObject(this);
+            return DXUnitConverter.ConvertToJObject(this);
         }
 
         public DXModel ToDXModel()
         {
-            return DXUnitHelper.ConvertToDXModel(this);
+            return DXUnitConverter.ConvertToDXModel(this);
         }
 
         public static T Parse<T>(JObject jObject) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNull(jObject);
 
-            return DXUnitHelper.CreateInstance<T>(jObject);
+            return DXUnitConverter.CreateInstance<T>(jObject);
         }
 
         public static T Parse<T>(DXModel dxModel) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNull(dxModel);
 
-            return DXUnitHelper.CreateInstance<T>(dxModel);
+            return DXUnitConverter.Parse<T>(dxModel);
         }
 
         public static T Parse<T>(string jObjectStr) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNullOrEmpty(jObjectStr);
 
-            return DXUnitHelper.CreateInstance<T>(jObjectStr);
+            return DXUnitConverter.Parse<T>(jObjectStr);
         }
 
         public static IEnumerable<T> ParseItems<T>(string jArrayStr) where T : DXUnit
         {
-            return DXUnitHelper.CreateInstances<T>(jArrayStr);
+            return DXUnitConverter.CreateInstances<T>(jArrayStr);
         }
 
         public static IEnumerable<T> ParseItems<T>(JArray jArray) where T : DXUnit
         {
-            return DXUnitHelper.CreateInstances<T>(jArray);
+            return DXUnitConverter.CreateInstances<T>(jArray);
         }
 
         public static string GetTypeName<T>() where T : DXUnit => DXUnitHelper.GetTypeName(typeof(T));

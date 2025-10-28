@@ -1,5 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
@@ -33,7 +33,7 @@ namespace IV.DX.Kernel.Models
 
         public JObject ToJObject()
         {
-            return DXElementHelper.ConvertToJObject(this);
+            return DXElementConverter.Parse(this);
         }
     }
 }

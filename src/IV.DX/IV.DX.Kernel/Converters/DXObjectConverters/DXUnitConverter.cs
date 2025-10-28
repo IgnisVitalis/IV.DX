@@ -1,23 +1,14 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
-namespace IV.DX.Kernel.Converters
+namespace IV.DX.Kernel.Converters.DXObjectConverters
 {
-    internal static class DXUnitHelper
+    internal static class DXUnitConverter
     {
-        public static string GetTypeName(string json) => GetTypeName(JObject.Parse(json));
-
-        public static string? GetTypeName(JObject jObject) =>
-            (string?)jObject[Constants.SystemPropertyTypeName];
-
-        public static string GetTypeName(Type type) =>
-            AttributeReader.GetDXUnitTypeName(type);
-
-        public static Guid GetID(JObject jObject) => (Guid)jObject[Constants.ID];
-
         #region Convert to JObject / string
         public static JObject ConvertToJObject(this DXUnit dxUnit) =>
             dxUnit.ConvertToDXModel().ConvertToJObject();
@@ -56,7 +47,7 @@ namespace IV.DX.Kernel.Converters
             return singleInfos.Select(pi =>
             {
                 var element = pi.GetValue(dxUnit) as DXElement;
-                return DXElementHelper.ConvertToSingleItem(element, pi.Name);
+                return element.ConvertToSingleElement(pi.Name);
             }).ToHashSet();
         }
 
@@ -92,7 +83,7 @@ namespace IV.DX.Kernel.Converters
                             {
                                 ID = e.ID,
                                 DXUnitID = dxUnit.ID,
-                                Content = e.ConvertToJObject()
+                                Content = e.Parse()
                             });
                         }
                     }
@@ -114,7 +105,6 @@ namespace IV.DX.Kernel.Converters
             }).ToHashSet();
         }
 
-
         private static JObject? GetContent(DXUnit? obj)
         {
             if (obj is null) return null;
@@ -132,8 +122,8 @@ namespace IV.DX.Kernel.Converters
         #endregion
 
         #region Create instance
-        public static T CreateInstance<T>(string json) where T : DXUnit =>
-            CreateInstance<T>(DXModelConverter.Parse(json));
+        public static T Parse<T>(string json) where T : DXUnit =>
+            Parse<T>(DXModelConverter.Parse(json));
 
         public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit =>
             CreateInstances<T>(JArray.Parse(json));
@@ -145,27 +135,21 @@ namespace IV.DX.Kernel.Converters
         }
 
         public static T? CreateInstance<T>(JObject jObject) where T : DXUnit =>
-            CreateInstance<T>(DXModelConverter.Parse(jObject));
+            Parse<T>(DXModelConverter.Parse(jObject));
 
-        public static DXUnit? CreateInstance(string json, Type type) =>
-            CreateInstance(DXModelConverter.Parse(json), type);
+        public static DXUnit? Parse(string json, Type type) =>
+            Parse(DXModelConverter.Parse(json), type);
 
-        public static DXUnit? CreateInstance(JObject jObject, Type type) =>
-            CreateInstance(DXModelConverter.Parse(jObject), type);
+        public static DXUnit? Parse(JObject jObject, Type type) =>
+            Parse(DXModelConverter.Parse(jObject), type);
 
-        public static T? CreateInstance<T>(DXModel dxModel) where T : DXUnit =>
+        public static T? Parse<T>(DXModel dxModel) where T : DXUnit =>
             (T?)ConvertToDxUnitObject(dxModel, typeof(T));
 
-        public static DXUnit? CreateInstance(DXModel dxModel, Type type) =>
+        public static DXUnit? Parse(DXModel dxModel, Type type) =>
             ConvertToDxUnitObject(dxModel, type);
 
-        public static T? CreateDXElementInstance<T>(DXSingleElement? item) where T : DXElement
-        {
-            if (item is null) return null;
-
-            var jProp = item.ConvertToJPropertyWithoutSystemProperties();
-            return (T?)jProp?.Value?.ToObject(typeof(T));
-        }
+    
 
         private static DXUnit? ConvertToDxUnitObject(DXModel? dxModel, Type? type)
         {
