@@ -1,0 +1,87 @@
+﻿using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Models;
+using Newtonsoft.Json.Linq;
+
+namespace IV.DX.Kernel.Converters.JObjectConverters
+{
+    internal static class JPropertyConverter
+    {
+        public static JProperty ToJProperty(this DXMultiElement dxMultiElement)
+        {
+            JObject jObject = new JObject
+            {
+                [Constants.SystemPropertyTypeName] = dxMultiElement.Attribute.Type,
+                [Constants.Mode] = (int)dxMultiElement.Mode
+            };
+
+            JArray announced = new JArray();
+            JArray Deleted = new JArray();
+
+            if (dxMultiElement.Announced != null)
+            {
+                foreach (var item in dxMultiElement.Announced)
+                {
+                    announced.Add(item.ToJObject());
+                }
+            }
+
+            if (dxMultiElement.Deleted != null)
+            {
+                foreach (var item in dxMultiElement.Deleted)
+                {
+                    Deleted.Add(item.ToJObject());
+                }
+            }
+
+            jObject[Constants.Announced] = announced;
+            jObject[Constants.Deleted] = Deleted;
+
+            JProperty jProperty = new JProperty(dxMultiElement.Name, jObject);
+
+            return jProperty;
+        }
+
+        public static JProperty ToJProperty(this DXMultiElement dxMultiElement, bool exlcudeSystemProperties = false)
+        {
+            JObject jObject = new JObject
+            {
+                [Constants.Mode] = (int)dxMultiElement.Mode
+            };
+
+            JArray announced = new JArray();
+            JArray Deleted = new JArray();
+
+            if (dxMultiElement.Announced != null)
+            {
+                foreach (var item in dxMultiElement.Announced)
+                {
+                    announced.Add(item.ToJObject(true));
+                }
+            }
+
+            if (dxMultiElement.Deleted != null)
+            {
+                foreach (var item in dxMultiElement.Deleted)
+                {
+                    Deleted.Add(item.ToJObject(true));
+                }
+            }
+
+            jObject[Constants.Announced] = announced;
+            jObject[Constants.Deleted] = Deleted;
+
+            JProperty jProperty = new JProperty(dxMultiElement.Name, jObject);
+
+            return jProperty;
+        }
+
+        public static JProperty ToJProperty(this DXMainElement mainElement, bool exlcudeSystemProperties = false)
+        {
+            JObject jObject = new JObject(mainElement.Item.ToJObject(true));
+
+            JProperty jProperty = new JProperty(mainElement.Attribute.Type, jObject);
+
+            return jProperty;
+        }
+    }
+}

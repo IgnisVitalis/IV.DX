@@ -7,14 +7,14 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXModelDefinitionConverter
     {
-        public static DXModelDefinition Get<T>() where T : DXUnit
+        public static DXModelDefinition ToDXModelDefinition<T>() where T : DXUnit
         {
             Type type = typeof(T);
 
-            return Get(type);
+            return ToDXModelDefinition(type);
         }
 
-        public static DXModelDefinition Get(DXModel dxModel)
+        public static DXModelDefinition ToDXModelDefinition(this DXModel dxModel)
         {
             var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type);
 
@@ -78,67 +78,24 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             return result;
         }
 
-        public static DXModelDefinition Get(Type type)
+        public static DXModelDefinition ToDXModelDefinition(this Type type)
         {
             var asqlTypeName = AttributeReader.GetDXUnitTypeName(type);
 
-            var ownItem = Get(asqlTypeName, type);
+            var ownItem = DXElementDefinitionConverter.ToDXElementDefinition(asqlTypeName, type);
 
             DXModelDefinition result = new DXModelDefinition(ownItem);
 
             var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
             var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
 
-            var singleItemDefinitions = singleItemInfos.Select(x => Get(x.Name, x.PropertyType)).ToList();
-            var mutliItemDefinitions = multiItemInfos.Select(x => Get(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
+            var singleItemDefinitions = singleItemInfos.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType)).ToList();
+            var mutliItemDefinitions = multiItemInfos.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
 
             result.AddToSingleItemDefinitions(singleItemDefinitions);
             result.AddToMultiItemDefinitions(mutliItemDefinitions);
 
             return result;
-        }
-
-        public static DXElementDefinition Get(string type, Type dxElementType)
-        {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type);
-            JObject jObject = new JObject();
-
-            var properties = dxElementType.GetProperties()
-                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null);
-
-            foreach (var property in properties)
-            {
-                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
-
-                DXPropertyDefinition item = new DXPropertyDefinition(property.Name, attribute);
-
-                dxElementDefinition.AddPropertyDefinition(item);
-            }
-
-            return dxElementDefinition;
-        }
-
-        public static DXElementDefinition Get(DXEnumDefinitionUnit enumDesc)
-        {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name);
-
-            JObject jObject = new JObject();
-
-            foreach (var column in enumDesc.DXColumnDefinitionElement.Announced)
-            {
-                DXPropertyDefinition item = new DXPropertyDefinition(column.Name, new DXColumnAttribute(column.Name));
-
-                dxElementDefinition.AddPropertyDefinition(item);
-            }
-
-            if (dxElementDefinition.SingleOrDefault(x => x.ColumnDefinition.DXExpression == Constants.ID) == null)
-            {
-                DXPropertyDefinition item = new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID));
-
-                dxElementDefinition.AddPropertyDefinition(item);
-            }
-
-            return dxElementDefinition;
         }
     }
 }

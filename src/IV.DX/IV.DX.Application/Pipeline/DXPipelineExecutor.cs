@@ -3,6 +3,7 @@ using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Helpers.DXObjectHelpers;
 using IV.DX.Kernel.Models;
@@ -70,12 +71,12 @@ namespace IV.DX.Application.Pipeline
 
                 var dxModel = baseRes.Value is null
                     ? null
-                    : DXUnitConverter.ConvertToJObject(baseRes.Value);
+                    : JObjectConverter.ToJObject(baseRes.Value);
 
                 return DXResult<JObject?>.Ok(dxModel, baseRes.Flow);
             }
 
-            var dxModelRaw = coreRepo.GetItem(typeName, id)?.ConvertToJObject();
+            var dxModelRaw = coreRepo.GetItem(typeName, id)?.ToJObject();
 
             if (dxModelRaw is null) return DXResult<JObject?>.NotFound();
 
@@ -137,7 +138,7 @@ namespace IV.DX.Application.Pipeline
                 DXUnit? dxUnit;
                 try
                 {
-                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
+                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -151,20 +152,20 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitConverter.ConvertToJObject(baseRes.Value!);
+                var dxModelResult = JObjectConverter.ToJObject(baseRes.Value!);
                 return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
             }
             else
             {
                 var dxModel = DXModelConverter.Parse(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionConverter.Get(dxModel);
+                DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
 
                 var id = coreRepo.Insert(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
 
                 if (saved is null) return DXResult<JObject>.Fail("Inserted DXModel not found.");
 
-                return DXResult<JObject>.OkContinue(saved.ConvertToJObject());
+                return DXResult<JObject>.OkContinue(saved.ToJObject());
             }
         }
 
@@ -224,7 +225,7 @@ namespace IV.DX.Application.Pipeline
 
                 try
                 {
-                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
+                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -238,20 +239,20 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitConverter.ConvertToJObject(baseRes.Value!);
+                var dxModelResult = JObjectConverter.ToJObject(baseRes.Value!);
                 return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
             }
             else
             {
                 var dxModel = DXModelConverter.Parse(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionConverter.Get(dxModel);
+                DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
 
                 var id = coreRepo.Update(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
 
                 if (saved is null) return DXResult<JObject>.Fail("Updated DXModel not found.");
 
-                return DXResult<JObject>.OkContinue(saved.ConvertToJObject());
+                return DXResult<JObject>.OkContinue(saved.ToJObject());
             }
         }
 
@@ -303,7 +304,7 @@ namespace IV.DX.Application.Pipeline
 
                 try
                 {
-                    dxUnit = DXUnitConverter.Parse(jObject, modelType);
+                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
                 }
                 catch (Exception e)
                 {
@@ -317,9 +318,9 @@ namespace IV.DX.Application.Pipeline
                 var baseRes = await inv(this, dxUnit, ctx, ct);
                 if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-                var dxModelResult = DXUnitConverter.ConvertToDXModel(baseRes.Value!);
+                var dxModelResult = DXModelConverter.ToDXModel(baseRes.Value!);
 
-                return DXResult<JObject>.Ok(dxModelResult.ConvertToJObject(), baseRes.Flow);
+                return DXResult<JObject>.Ok(dxModelResult.ToJObject(), baseRes.Flow);
             }
             else
             {
@@ -411,14 +412,14 @@ namespace IV.DX.Application.Pipeline
 
                 var dxModels = baseRes.Value is null
                     ? null
-                    : baseRes.Value.Select(x => DXUnitConverter.ConvertToJObject(x)).ToList();
+                    : baseRes.Value.Select(x => JObjectConverter.ToJObject(x)).ToList();
 
                 return DXResult<IEnumerable<JObject>?>.Ok(dxModels, baseRes.Flow);
             }
 
             var result = coreRepo.GetItems(typeName, ids);
 
-            var dxModelsRaw = result.Select(x => x.ConvertToJObject()).ToList();
+            var dxModelsRaw = result.Select(x => x.ToJObject()).ToList();
 
             if (dxModelsRaw is null || dxModelsRaw.Count() == 0)
                 return DXResult<IEnumerable<JObject>?>.NotFound();

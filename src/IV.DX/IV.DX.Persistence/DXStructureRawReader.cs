@@ -14,9 +14,9 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var dxElementModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXElementDefinitionUnit>(), DXLoadingType.Full);
+            var dxElementModelsFromDB = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXElementDefinitionUnit>(), DXLoadingType.Full);
 
-            var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitConverter.Parse<DXElementDefinitionUnit>(x));
+            var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXElementDefinitionUnit>(x));
 
             var dxElementInfosWithoutCore = dxElementInfos.Except(DXCoreDataStructureRepository.CoreDXElementInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXElementDefinitionUnit);
@@ -29,9 +29,9 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXUnitDefinitionUnit>(), DXLoadingType.Full);
+            var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXUnitDefinitionUnit>(), DXLoadingType.Full);
 
-            var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitConverter.Parse<DXUnitDefinitionUnit>(x));
+            var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXUnitDefinitionUnit>(x));
 
             var dxUnitInfosWithoutCore = dxUnitInfos.Except(DXCoreDataStructureRepository.CoreDXUnitInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
@@ -44,9 +44,9 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
 
-            var enumsModelsFromDB = this.GetItems(DXModelDefinitionConverter.Get<DXEnumDefinitionUnit>(), DXLoadingType.Full);
+            var enumsModelsFromDB = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXEnumDefinitionUnit>(), DXLoadingType.Full);
 
-            var enumInfos = enumsModelsFromDB.Select(x => DXUnitConverter.Parse<DXEnumDefinitionUnit>(x));
+            var enumInfos = enumsModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXEnumDefinitionUnit>(x));
 
             var enumInfosWithoutCore = enumInfos.Except(DXCoreDataStructureRepository.CoreEnumInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXEnumDefinitionUnit);
@@ -59,8 +59,8 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
-            var result = this.GetItems(DXModelDefinitionConverter.Get<DXRelationDefinitionUnit>(), DXLoadingType.Full);
-            return result.Select(x => DXUnitConverter.Parse<DXRelationDefinitionUnit>(x)).ToList();
+            var result = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
+            return result.Select(x => DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(x)).ToList();
         }
     }
 }

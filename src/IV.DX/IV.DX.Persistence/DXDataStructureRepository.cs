@@ -56,8 +56,8 @@ namespace IV.DX.Persistence
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var result = this.GetItem(DXModelDefinitionConverter.Get(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
-            var existingDataDXElement = DXUnitConverter.Parse<DXObjectDefinitionUnit>(result);
+            var result = this.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
+            var existingDataDXElement = DXUnitConverter.ToDXUnits<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
@@ -165,9 +165,9 @@ namespace IV.DX.Persistence
 
             if (string.IsNullOrEmpty(dxUnit.DXRelationDefinitionMainElement.RelationTable))
             {
-                var existingModel = this.GetItem(DXModelDefinitionConverter.Get(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
+                var existingModel = this.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
-                var existingDXUnit = DXUnitConverter.Parse<DXRelationDefinitionUnit>(existingModel);
+                var existingDXUnit = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(existingModel);
 
                 relationTableName = existingDXUnit.DXRelationDefinitionMainElement.RelationTable;
             }

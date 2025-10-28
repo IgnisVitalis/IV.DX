@@ -1,6 +1,5 @@
-﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Converters.DXObjectConverters;
+﻿using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -9,154 +8,40 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 {
     internal static class DXUnitConverter
     {
-        #region Convert to JObject / string
-        public static JObject ConvertToJObject(this DXUnit dxUnit) =>
-            dxUnit.ConvertToDXModel().ConvertToJObject();
-
-        public static string ConvertToString(this DXUnit dxUnit) =>
-            dxUnit.ConvertToJObject().ToString();
-        #endregion
-
-        #region Convert to DXModel
-        public static DXModel? ConvertToDXModel(this DXUnit? dxUnit)
-        {
-            if (dxUnit is null) return null;
-
-            var unitAttr = DXReflectionHelper.GetAttr<DXUnitAttribute>(dxUnit.GetType());
-
-            var ownItem = new DXMainElement(unitAttr)
-            {
-                Item = new DXItem
-                {
-                    ID = dxUnit.ID,
-                    DXUnitID = dxUnit.ID,
-                    Content = GetContent(dxUnit)
-                }
-            };
-
-            return new DXModel(ownItem)
-            {
-                DXSingleElements = GetDXSingleElements(dxUnit),
-                DXMultiElements = GetDXMultiElements(dxUnit)
-            };
-        }
-
-        private static HashSet<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
-        {
-            var singleInfos = AttributeReader.GetSingleItemInfos(dxUnit);
-            return singleInfos.Select(pi =>
-            {
-                var element = pi.GetValue(dxUnit) as DXElement;
-                return element.ConvertToSingleElement(pi.Name);
-            }).ToHashSet();
-        }
-
-        private static HashSet<DXMultiElement> GetDXMultiElements(DXUnit dxUnit)
-        {
-            var multiInfos = AttributeReader.GetMultiItemInfos(dxUnit);
-
-            return multiInfos.Select(pi =>
-            {
-                var value = pi.GetValue(dxUnit);
-                var multiType = pi.PropertyType;
-
-                var mode = value is null
-                    ? MultiElementsMode.Full
-                    : (MultiElementsMode)(multiType.GetProperty("Mode")?.GetValue(value) ?? (int)MultiElementsMode.Full);
-
-                var elementType = pi.PropertyType.GenericTypeArguments[0];
-                var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
-
-                var announcedList = new HashSet<DXItem>();
-                var deletedList = new HashSet<DXItem>();
-
-                if (value != null)
-                {
-                    void Fill(string propertyName, HashSet<DXItem> target)
-                    {
-                        var src = multiType.GetProperty(propertyName)?.GetValue(value) as IEnumerable<DXElement>;
-                        if (src == null) return;
-
-                        foreach (var e in src)
-                        {
-                            target.Add(new DXItem
-                            {
-                                ID = e.ID,
-                                DXUnitID = dxUnit.ID,
-                                Content = e.Parse()
-                            });
-                        }
-                    }
-
-                    Fill(Constants.Announced, announcedList);
-                    Fill(Constants.Deleted, deletedList);
-                }
-
-                var multi = new DXMultiElement
-                {
-                    Attribute = elementInfo,
-                    Name = pi.Name,
-                    Mode = mode,
-                    Announced = announcedList,
-                    Deleted = deletedList
-                };
-
-                return multi;
-            }).ToHashSet();
-        }
-
-        private static JObject? GetContent(DXUnit? obj)
-        {
-            if (obj is null) return null;
-
-            var jObject = new JObject();
-            jObject[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).Type;
-
-            foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(obj.GetType()))
-            {
-                var value = prop.GetValue(obj);
-                jObject[prop.Name] = new JValue(value);
-            }
-            return jObject;
-        }
-        #endregion
-
         #region Create instance
-        public static T Parse<T>(string json) where T : DXUnit =>
-            Parse<T>(DXModelConverter.Parse(json));
+        public static T ToDXUnit<T>(string json) where T : DXUnit =>
+            ToDXUnits<T>(DXModelConverter.Parse(json));
 
-        public static IEnumerable<T> CreateInstances<T>(string json) where T : DXUnit =>
-            CreateInstances<T>(JArray.Parse(json));
+        public static IEnumerable<T> ToDXUnits<T>(string json) where T : DXUnit =>
+            ToDXUnits<T>(JArray.Parse(json));
 
-        public static IEnumerable<T> CreateInstances<T>(JArray jArray) where T : DXUnit
+        public static IEnumerable<T> ToDXUnits<T>(JArray jArray) where T : DXUnit
         {
             foreach (JObject jObject in jArray)
-                yield return CreateInstance<T>(jObject);
+                yield return ToDXUnits<T>(jObject);
         }
 
-        public static T? CreateInstance<T>(JObject jObject) where T : DXUnit =>
-            Parse<T>(DXModelConverter.Parse(jObject));
+        public static T? ToDXUnits<T>(JObject jObject) where T : DXUnit =>
+            ToDXUnits<T>(DXModelConverter.Parse(jObject));
 
-        public static DXUnit? Parse(string json, Type type) =>
-            Parse(DXModelConverter.Parse(json), type);
+        public static DXUnit? ToDXUnits(string json, Type type) =>
+            ToDXUnits(DXModelConverter.Parse(json), type);
 
-        public static DXUnit? Parse(JObject jObject, Type type) =>
-            Parse(DXModelConverter.Parse(jObject), type);
+        public static DXUnit? ToDXUnits(JObject jObject, Type type) =>
+            ToDXUnits(DXModelConverter.Parse(jObject), type);
 
-        public static T? Parse<T>(DXModel dxModel) where T : DXUnit =>
-            (T?)ConvertToDxUnitObject(dxModel, typeof(T));
+        public static T? ToDXUnits<T>(DXModel dxModel) where T : DXUnit =>
+            (T?)ToDXUnitPrivate(dxModel, typeof(T));
 
-        public static DXUnit? Parse(DXModel dxModel, Type type) =>
-            ConvertToDxUnitObject(dxModel, type);
+        public static DXUnit? ToDXUnits(DXModel dxModel, Type type) =>
+            ToDXUnitPrivate(dxModel, type);
 
-    
-
-        private static DXUnit? ConvertToDxUnitObject(DXModel? dxModel, Type? type)
+        private static DXUnit? ToDXUnitPrivate(DXModel? dxModel, Type? type)
         {
             if (dxModel is null || type is null)
                 return null;
 
-            var own = dxModel.DXMainElement.ConvertToJPropertyWithoutSystemProperties();
+            var own = dxModel.DXMainElement.ToJProperty();
             var obj = (own?.Value?.ToObject(type)) ?? Activator.CreateInstance(type)!;
 
             var idProp = type.GetProperty(Constants.ID);
@@ -186,7 +71,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                     var modelItem = dxModel.DXMultiElements.SingleOrDefault(x => x.Name == mp.Name);
                     if (modelItem is null) continue;
 
-                    var jProp = modelItem.ConvertToJProperty();
+                    var jProp = modelItem.ToJProperty();
                     if (jProp?.Value == null) continue;
 
                     var instance = jProp.Value.ToObject(mp.PropertyType);
@@ -196,13 +81,6 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 
             return (DXUnit)obj;
         }
-        #endregion
-
-        public static string? ConvertToJArrayString(this IEnumerable<DXUnit>? objects)
-        {
-            if (objects is null) return null;
-            var array = new JArray(objects.Select(o => o.ConvertToJObject()));
-            return array.ToString();
-        }
+        #endregion      
     }
 }

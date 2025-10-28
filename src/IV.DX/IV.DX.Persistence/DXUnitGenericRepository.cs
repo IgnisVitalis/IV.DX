@@ -27,44 +27,44 @@ namespace IV.DX.Persistence
 
         public T GetDXUnit<T>(Guid id) where T : DXUnit
         {
-            var result = this._coreRepo.GetItem(DXModelDefinitionConverter.Get(typeof(T)), id, DXLoadingType.Full);
+            var result = this._coreRepo.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
-            return DXUnitConverter.Parse<T>(result);
+            return DXUnitConverter.ToDXUnits<T>(result);
         }
 
         public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.Get<T>(), DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.Parse<T>(x)).ToList();
+            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.Get<T>(), ids, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.Parse<T>(x)).ToList();
+            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(string dxsqlWhereExpression) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.Get<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.Parse<T>(x)).ToList();
+            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public Guid Insert(DXUnit dxUnit)
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var dxModel = dxUnit.ConvertToDXModel();
+            var dxModel = dxUnit.ToDXModel();
 
             return this._coreRepo.Insert(dxModel);
         }
 
         public Guid InsertOrUpdate(DXUnit dxUnit)
         {
-            var definition = DXModelDefinitionConverter.Get(dxUnit.GetType());
+            var definition = DXModelDefinitionConverter.ToDXModelDefinition(dxUnit.GetType());
 
             var existingDXUnit = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
 
@@ -82,7 +82,7 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var dxModel = dxUnit.ConvertToDXModel();
+            var dxModel = dxUnit.ToDXModel();
 
             return this._coreRepo.Update(dxModel);
         }

@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+﻿using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -13,7 +14,7 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleDXElement = dxElement.ConvertToSingleElement();
+            var singleDXElement = dxElement.ToDXSingleElement();
 
             return coreRepo.InsertSingleDXElement(dxModelType, singleDXElement);
         }
@@ -23,7 +24,7 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleDXElement = dxElement.ConvertToSingleElement();
+            var singleDXElement = dxElement.ToDXSingleElement();
 
             return coreRepo.UpdateSingleDXElement(dxModelType, singleDXElement);
         }
@@ -32,7 +33,7 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleDXElement = dxElement.ConvertToSingleElement();
+            var singleDXElement = dxElement.ToDXSingleElement();
 
             return coreRepo.DeleteSingleDXElement(singleDXElement.Name, dxElement.ID);
         }
@@ -41,11 +42,11 @@ namespace IV.DX.Persistence
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
-            var dxElement = DXModelDefinitionConverter.Get(dxElementName, typeof(T));
+            var dxElement = DXElementDefinitionConverter.ToDXElementDefinition(dxElementName, typeof(T));
 
             var result = coreRepo.GetSingleDXElement(dxElement, id);
 
-            return DXElementConverter.Parse<T>(result);
+            return DXElementConverter.ToDXElement<T>(result);
         }
     }
 }

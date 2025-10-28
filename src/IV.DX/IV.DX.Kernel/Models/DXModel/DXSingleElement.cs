@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
 using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Models
@@ -16,7 +17,7 @@ namespace IV.DX.Kernel.Models
 
             if (this.Item != null)
             {
-                jObject = new JObject(this.Item.Parse());
+                jObject = new JObject(this.Item.ToJObject());
             }
 
             JProperty jProperty = new JProperty(this.Name, jObject);
@@ -29,7 +30,7 @@ namespace IV.DX.Kernel.Models
             if (this.Item == null)
                 return null;
 
-            JObject jObject = new JObject(this.Item.Parse(true));
+            JObject jObject = new JObject(this.Item.ToJObject(true));
 
             JProperty jProperty = new JProperty(this.Name, jObject);
 
@@ -50,7 +51,7 @@ namespace IV.DX.Kernel.Models
             var jObjectForContent = jProperty.Value as JObject;
             jObjectForContent.Remove(Constants.SystemPropertyTypeName);
 
-            singleFragment.Item = DXItemConvereter.ConvertFromJObject(jObjectForContent);
+            singleFragment.Item = jObjectForContent.ToDXItem();
 
             return singleFragment;
         }

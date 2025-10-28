@@ -1,4 +1,7 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
@@ -6,28 +9,110 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 {
     internal static class DXModelConverter
     {
-        public static JObject ConvertToJObject(this DXModel dxModel)
+        public static DXModel? ToDXModel(this DXUnit? dxUnit)
         {
-            JObject result = dxModel.DXMainElement.Item.Content.DeepClone() as JObject;
+            if (dxUnit is null) return null;
 
-            if (dxModel.DXSingleElements != null)
+            var unitAttr = DXReflectionHelper.GetAttr<DXUnitAttribute>(dxUnit.GetType());
+
+            var ownItem = new DXMainElement(unitAttr)
             {
-                foreach (var item in dxModel.DXSingleElements)
+                Item = new DXItem
                 {
-                    result.Add(item.ConvertToJProperty());
+                    ID = dxUnit.ID,
+                    DXUnitID = dxUnit.ID,
+                    Content = GetContent(dxUnit)
                 }
-            }
+            };
 
-            if (dxModel.DXMultiElements != null)
+            return new DXModel(ownItem)
             {
-                foreach (var item in dxModel.DXMultiElements)
-                {
-                    result.Add(item.ConvertToJProperty());
-                }
-            }
-
-            return result;
+                DXSingleElements = GetDXSingleElements(dxUnit),
+                DXMultiElements = GetDXMultiElements(dxUnit)
+            };
         }
+
+        private static HashSet<DXSingleElement> GetDXSingleElements(DXUnit dxUnit)
+        {
+            var singleInfos = AttributeReader.GetSingleItemInfos(dxUnit);
+            return singleInfos.Select(pi =>
+            {
+                var element = pi.GetValue(dxUnit) as DXElement;
+                return element.ToDXSingleElement(pi.Name);
+            }).ToHashSet();
+        }
+
+        private static HashSet<DXMultiElement> GetDXMultiElements(DXUnit dxUnit)
+        {
+            var multiInfos = AttributeReader.GetMultiItemInfos(dxUnit);
+
+            return multiInfos.Select(pi =>
+            {
+                var value = pi.GetValue(dxUnit);
+                var multiType = pi.PropertyType;
+
+                var mode = value is null
+                    ? MultiElementsMode.Full
+                    : (MultiElementsMode)(multiType.GetProperty("Mode")?.GetValue(value) ?? (int)MultiElementsMode.Full);
+
+                var elementType = pi.PropertyType.GenericTypeArguments[0];
+                var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
+
+                var announcedList = new HashSet<DXItem>();
+                var deletedList = new HashSet<DXItem>();
+
+                if (value != null)
+                {
+                    void Fill(string propertyName, HashSet<DXItem> target)
+                    {
+                        var src = multiType.GetProperty(propertyName)?.GetValue(value) as IEnumerable<DXElement>;
+                        if (src == null) return;
+
+                        foreach (var e in src)
+                        {
+                            target.Add(new DXItem
+                            {
+                                ID = e.ID,
+                                DXUnitID = dxUnit.ID,
+                                Content = e.ToJObject()
+                            });
+                        }
+                    }
+
+                    Fill(Constants.Announced, announcedList);
+                    Fill(Constants.Deleted, deletedList);
+                }
+
+                var multi = new DXMultiElement
+                {
+                    Attribute = elementInfo,
+                    Name = pi.Name,
+                    Mode = mode,
+                    Announced = announcedList,
+                    Deleted = deletedList
+                };
+
+                return multi;
+            }).ToHashSet();
+        }
+
+        private static JObject? GetContent(DXUnit? obj)
+        {
+            if (obj is null) return null;
+
+            var jObject = new JObject();
+            jObject[Constants.SystemPropertyTypeName] = DXReflectionHelper.GetAttr<DXUnitAttribute>(obj.GetType()).Type;
+
+            foreach (var prop in DXReflectionHelper.GetPropsWithAttribute<DXColumnAttribute>(obj.GetType()))
+            {
+                var value = prop.GetValue(obj);
+                jObject[prop.Name] = new JValue(value);
+            }
+            return jObject;
+        }
+
+
+       
 
         public static DXModel Parse(string json)
         {

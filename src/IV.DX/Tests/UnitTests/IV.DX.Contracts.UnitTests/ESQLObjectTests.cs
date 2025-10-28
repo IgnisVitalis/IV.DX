@@ -1,5 +1,4 @@
-﻿using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Shared.UnitTests.DXObjects.DXUnits;
+﻿using IV.DX.Shared.UnitTests.DXObjects.DXUnits;
 using Xunit;
 
 namespace IV.DX.Contracts.UnitTests
@@ -13,7 +12,7 @@ namespace IV.DX.Contracts.UnitTests
             DerivedUnit1 dxUnit = new DerivedUnit1();
 
             // Action
-            var dxModel = dxUnit.ConvertToDXModel();
+            var dxModel = dxUnit.ToDXModel();
 
             // Checking result
             Assert.Equal(1, 1);

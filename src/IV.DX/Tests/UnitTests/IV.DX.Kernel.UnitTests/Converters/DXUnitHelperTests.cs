@@ -2,6 +2,7 @@
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -186,7 +187,7 @@ namespace IV.DX.Contracts.UnitTests
             var jObject = JObject.Parse(json);
 
             // Action
-            var result = this.dxModel.ConvertToJObject();
+            var result = this.dxModel.ToJObject();
 
             // Assert
             Assert.True(JHelper.DeepEquals(jObject, result));
@@ -224,7 +225,7 @@ namespace IV.DX.Contracts.UnitTests
             // Init                     
 
             // Action            
-            var result = this.dxUnit.ConvertToDXModel();
+            var result = DXModelConverter.ToDXModel(this.dxUnit);
 
             // Assert
             Assert.True(DXModel.DeepEquals(this.dxModel, result));
@@ -238,7 +239,7 @@ namespace IV.DX.Contracts.UnitTests
             var jObject = JObject.Parse(json);
 
             // Action            
-            var result = this.dxUnit.ConvertToJObject();
+            var result = JObjectConverter.ToJObject(dxUnit);
 
             // Assert
             Assert.True(JHelper.DeepEquals(jObject, result));

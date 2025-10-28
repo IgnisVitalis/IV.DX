@@ -1,5 +1,7 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
@@ -15,6 +17,49 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             singleFragmentDefinition.AddPropertyDefinitions(props);
 
             return singleFragmentDefinition;
+        }
+
+        public static DXElementDefinition ToDXElementDefinition(string type, Type dxElementType)
+        {
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type);
+            JObject jObject = new JObject();
+
+            var properties = dxElementType.GetProperties()
+                .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null);
+
+            foreach (var property in properties)
+            {
+                var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
+
+                DXPropertyDefinition item = new DXPropertyDefinition(property.Name, attribute);
+
+                dxElementDefinition.AddPropertyDefinition(item);
+            }
+
+            return dxElementDefinition;
+        }
+
+        public static DXElementDefinition ToDXElementDefinition(this DXEnumDefinitionUnit enumDesc)
+        {
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name);
+
+            JObject jObject = new JObject();
+
+            foreach (var column in enumDesc.DXColumnDefinitionElement.Announced)
+            {
+                DXPropertyDefinition item = new DXPropertyDefinition(column.Name, new DXColumnAttribute(column.Name));
+
+                dxElementDefinition.AddPropertyDefinition(item);
+            }
+
+            if (dxElementDefinition.SingleOrDefault(x => x.ColumnDefinition.DXExpression == Constants.ID) == null)
+            {
+                DXPropertyDefinition item = new DXPropertyDefinition(Constants.ID, new DXColumnAttribute(Constants.ID));
+
+                dxElementDefinition.AddPropertyDefinition(item);
+            }
+
+            return dxElementDefinition;
         }
     }
 }
