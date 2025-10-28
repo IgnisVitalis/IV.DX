@@ -7,18 +7,12 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
     {
         public static DXItem ToDXItem(this JObject jObject)
         {
-            DXItem fragment = new DXItem
-            {
-                ID = (Guid)jObject[Constants.ID],
-                DXUnitID = (Guid)jObject[Constants.DXUnitID]
-            };
-
             var jObjectCopy = jObject.DeepClone() as JObject;
 
             jObjectCopy.Remove(Constants.ID);
             jObjectCopy.Remove(Constants.DXUnitID);
 
-            fragment.Content = jObjectCopy;
+            DXItem fragment = new DXItem((Guid)jObject[Constants.ID], (Guid)jObject[Constants.DXUnitID], jObjectCopy);
 
             return fragment;
         }

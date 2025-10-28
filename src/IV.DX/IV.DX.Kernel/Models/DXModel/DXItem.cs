@@ -5,10 +5,16 @@ namespace IV.DX.Kernel.Models
 {
     public class DXItem
     {
-        public Guid ID { get; set; }
-        public Guid DXUnitID { get; set; }
+        public Guid ID { get; }
+        public Guid DXUnitID { get; }
+        public JObject Content { get; }
 
-        public JObject Content { get; set; }
+        public DXItem(Guid id, Guid dxUnitID, JObject content)
+        {
+            this.ID = id;
+            this.DXUnitID = dxUnitID;
+            this.Content = content;
+        }
 
         public bool HasValue(string propertyName)
         {
@@ -32,7 +38,7 @@ namespace IV.DX.Kernel.Models
             var result = true;
 
             result = result && (item1.ID == item2.ID);
-            result = result && (item1.DXUnitID == item2.DXUnitID);            
+            result = result && (item1.DXUnitID == item2.DXUnitID);
 
             result = result && JHelper.DeepEquals(item1.Content, item2.Content);
 
@@ -48,7 +54,7 @@ namespace IV.DX.Kernel.Models
                 return false;
 
             foreach (var item1 in list1)
-            {           
+            {
                 var item2 = list2.SingleOrDefault(x => x.ID == item1.ID);
 
                 if (item2 == null)
@@ -63,12 +69,7 @@ namespace IV.DX.Kernel.Models
 
         public DXItem DeepClone()
         {
-            return new DXItem()
-            {
-                ID = this.ID,
-                DXUnitID = this.DXUnitID,
-                Content = this.Content?.DeepClone() as JObject
-            };
+            return new DXItem(this.ID, this.DXUnitID, this.Content?.DeepClone() as JObject);
         }
     }
 }

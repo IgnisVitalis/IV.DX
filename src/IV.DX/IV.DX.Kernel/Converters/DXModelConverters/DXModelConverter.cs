@@ -15,12 +15,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
             var ownItem = new DXMainElement(unitAttr)
             {
-                Item = new DXItem
-                {
-                    ID = dxUnit.ID,
-                    DXUnitID = dxUnit.ID,
-                    Content = GetContent(dxUnit)
-                }
+                Item = new DXItem(dxUnit.ID, dxUnit.ID, GetContent(dxUnit))
             };
 
             var dxSingleElements = GetDXSingleElements(dxUnit);
@@ -67,12 +62,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
                         foreach (var e in src)
                         {
-                            target.Add(new DXItem
-                            {
-                                ID = e.ID,
-                                DXUnitID = dxUnit.ID,
-                                Content = e.ToJObject()
-                            });
+                            target.Add(new DXItem(e.ID, dxUnit.ID, e.ToJObject()));
                         }
                     }
 
@@ -182,23 +172,14 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                 Item = GetDXItem(jObject, id)
             };
 
-            result.Item.ID = id;
-            result.Item.DXUnitID = id;
-
             return result;
         }
 
         static DXItem GetDXItem(JObject jObject, Guid objId)
         {
-            DXItem dxItem = new DXItem
-            {
-                ID = (Guid)jObject[Constants.ID],
-                DXUnitID = objId
-            };
-
             var content = KeepScalarsOnly(jObject);
 
-            dxItem.Content = content;
+            DXItem dxItem = new DXItem((Guid)jObject[Constants.ID], objId, content);           
 
             return dxItem;
         }

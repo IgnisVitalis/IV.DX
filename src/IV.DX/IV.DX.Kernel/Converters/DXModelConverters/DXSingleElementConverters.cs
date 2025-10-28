@@ -14,13 +14,9 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             var content = dxElement.ToJObject();
 
             var attribute = DXReflectionHelper.GetAttr<DXElementAttribute>(dxElement.GetType());
-            var name = propertyName ?? attribute.Type;            
-            var item = new DXItem
-            {
-                ID = dxElement.ID,
-                DXUnitID = dxElement.DXUnitID,
-                Content = content
-            };
+            var name = propertyName ?? attribute.Type;
+
+            var item = new DXItem(dxElement.ID, dxElement.DXUnitID, content);
 
             return new DXSingleElement(name, attribute, item);
         }

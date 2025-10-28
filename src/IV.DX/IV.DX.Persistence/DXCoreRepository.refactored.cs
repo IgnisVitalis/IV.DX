@@ -91,17 +91,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private DXMainElement GetDXMainElement(DXModelDefinition container, Guid id)
-        {
-            return new DXMainElement(new DXUnitAttribute(container.MainElement.Name))
-            {
-                Item = new DXItem()
-                {
-                    ID = id
-                }
-            };
-        }
-
+      
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
@@ -152,10 +142,10 @@ namespace IV.DX.Persistence
         {
             var id = ConvertHelper.ParseGuid(x[Constants.ID]);
 
-            var dxMainElement = this.GetDXMainElement(container, id);
-
-            // Process DX model
-            this.PopulateDXMainItem(dxMainElement, container.MainElement, x);
+            var dxMainElement = new DXMainElement(new DXUnitAttribute(container.MainElement.Name))
+            {
+                Item = this.GetDXItem(x, container.MainElement)             
+            };
 
             // Process DX single items
             var dxSingleElements = container.SingleFragmentDefinitions.Select(item =>
@@ -391,19 +381,7 @@ namespace IV.DX.Persistence
             }
 
             return dataSet;
-        }
-
-        private void PopulateDXMainItem(
-            DXMainElement ownItem,
-            DXElementDefinition fragmentDefinition,
-            DataRow dataRow)
-        {
-            if (dataRow == null || ownItem == null)
-                return;
-
-            ownItem.Item =
-                this.GetDXItem(dataRow, fragmentDefinition);
-        }
+        }       
 
         private void PopulateDXMultiItem(
             DXMultiElement multiItem,
@@ -437,22 +415,18 @@ namespace IV.DX.Persistence
                 }
             }
 
-            var dxItem = new DXItem()
-            {
-                ID = ConvertHelper.ParseGuid(row[Constants.ID]),
-                Content = jObjectContainerCopy
-            };
+            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
 
             if (row.Table.Columns.Contains(Constants.DXUnitID))
             {
-                dxItem.DXUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
+                var dxUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
+
+                return new DXItem(id, dxUnitID, jObjectContainerCopy);
             }
             else
             {
-                dxItem.DXUnitID = dxItem.ID;
+                return new DXItem(id, id, jObjectContainerCopy);
             }
-
-            return dxItem;
         }
 
         private JValue GetValueFromRow(DataRow dataRow, DataColumn dataColumn)
