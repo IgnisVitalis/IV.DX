@@ -11,5 +11,12 @@
         public static string Announced { get; } = "Announced";
         public static string Deleted { get; } = "Deleted";
         public static string Mode { get; } = "Mode";
+        public static string[] SystemProperties
+        {
+            get
+            {
+                return new[] { ID, DXUnitID, SystemPropertyTypeName };
+            }
+        }
     }
 }

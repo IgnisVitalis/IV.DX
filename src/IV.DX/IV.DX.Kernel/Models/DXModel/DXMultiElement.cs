@@ -7,11 +7,11 @@ namespace IV.DX.Kernel.Models
         public string Name { get; }
         public DXElementAttribute Attribute { get; }
         public MultiElementsMode Mode { get; private set; }
-        public HashSet<DXItem> Announced { get; }
-        public HashSet<DXItem> Deleted { get; }
+        public HashSet<DXItem> Announced { get; private set; }
+        public HashSet<DXItem> Deleted { get; private set; }
 
-        private HashSet<DXItem> announcedOriginal { get; }
-        private HashSet<DXItem> deletedOriginal { get; }
+        private HashSet<DXItem> announcedHistory { get; }
+        private HashSet<DXItem> deletedHistory { get; }
 
         public bool IsRequired { get; }
 
@@ -34,11 +34,16 @@ namespace IV.DX.Kernel.Models
             this.Announced = announced;
             this.Deleted = deleted;
             this.IsRequired = isRequired;
+
+            this.announcedHistory = new HashSet<DXItem>();
+            this.deletedHistory = new HashSet<DXItem>();
+            //this.announcedOriginal = this.Announced.Select(x => x.DeepClone()).ToHashSet();
+            //this.deletedOriginal = this.Deleted.Select(x => x.DeepClone()).ToHashSet();
         }
 
         public static DXMultiElement CreateForFullMode(
             string name,
-            DXElementAttribute attribute,           
+            DXElementAttribute attribute,
             HashSet<DXItem> announced)
         {
             return new DXMultiElement(name, attribute, MultiElementsMode.Full, announced, new HashSet<DXItem>(), false);
@@ -46,22 +51,46 @@ namespace IV.DX.Kernel.Models
 
         public static DXMultiElement CreateForTargetMode(
             string name,
-            DXElementAttribute attribute,          
+            DXElementAttribute attribute,
             HashSet<DXItem> announced,
             HashSet<DXItem> deleted)
         {
             return new DXMultiElement(name, attribute, MultiElementsMode.Target, announced, deleted, false);
         }
 
-        public void ChangeMode(MultiElementsMode mode)
+        public HashSet<DXItem> GetAnnounced(bool excludeSystemItems)
         {
-            this.Mode = mode;
+            if (excludeSystemItems)
+            {
+                return Announced.Where(x => !Constants.SystemProperties.Contains(x.GetValue<string>("Name"))).ToHashSet();
+            }
+            else
+            {
+                return Announced;
+            }
+        }
+
+        public void Add(DXItem dxItem)
+        {
+            this.deletedHistory.Remove(dxItem);
+            this.announcedHistory.Add(dxItem);
+
+            this.Announced.Add(dxItem);
         }
 
         public void Remove(DXItem dxItem)
         {
+            this.announcedHistory.Remove(dxItem);
+            this.deletedHistory.Add(dxItem);
 
+            this.Announced.Remove(dxItem);
+            this.Deleted.Add(dxItem);
         }
+
+        //public void KeepDelta()
+        //{
+
+        //}
 
         public static bool DeepEquals(DXMultiElement item1, DXMultiElement item2)
         {
