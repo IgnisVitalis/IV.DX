@@ -24,5 +24,12 @@ namespace IV.DX.Kernel.Helpers
         {
             return JToken.DeepEquals(Normalize(t1), Normalize(t2));
         }
+
+        public static T? GetValue<T>(JObject jObject, string propertyName)
+        {
+            if (jObject.ContainsKey(propertyName))
+                return jObject.Value<T>(propertyName);
+            return default(T?);
+        }
     }
 }

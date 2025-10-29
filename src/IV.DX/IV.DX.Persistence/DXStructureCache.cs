@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
@@ -49,9 +50,29 @@ namespace IV.DX.Persistence
             }
         }
 
-        public DXEnumDefinitionUnit GetEnum(string name)
+        public DXEnumDefinitionUnit GetDXEnum(string name)
         {
             return this.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public DXUnitDefinitionUnit GetDXUnit(string name)
+        {
+            return this.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public DXElementDefinitionUnit GetDXElement(string name)
+        {
+            return this.DXElements.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public DXElementInUnitTypeEnum GetElementInUnitRelationType(string dxUnitTypeName, string dxElementTypeName)
+        {
+            var dxUnit = this.GetDXUnit(dxUnitTypeName);
+            var dxElement = this.GetDXElement(dxElementTypeName);
+
+            var relation = dxUnit.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElement.ID);
+
+            return relation.RelationType;
         }
 
         private sealed record Snapshot(

@@ -1,20 +1,25 @@
 ﻿using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal class DXElementGenericRepository(IDXCoreRepository coreRepo) : IDXElementGenericRepository
+    internal class DXElementGenericRepository(IDXCoreRepository coreRepo, IDXStructureCache dxStructureCache) : IDXElementGenericRepository
     {
         public Guid InsertDXElement(string dxModelType, DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleDXElement = dxElement.ToDXSingleElement();
+            var dxElementTypeName  = AttributeReader.GetDXElementTypeName(dxElement.GetType());
+            var relationType = dxStructureCache.GetElementInUnitRelationType(dxModelType, dxElementTypeName);
+            var isRequired = relationType == DXElementInUnitTypeEnum.SingleMandatory || relationType == DXElementInUnitTypeEnum.MultiMandatory;
+
+            var singleDXElement = dxElement.ToDXSingleElement(isRequired);
 
             return coreRepo.InsertSingleDXElement(dxModelType, singleDXElement);
         }
@@ -24,7 +29,11 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            var singleDXElement = dxElement.ToDXSingleElement();
+            var dxElementTypeName = AttributeReader.GetDXElementTypeName(dxElement.GetType());
+            var relationType = dxStructureCache.GetElementInUnitRelationType(dxModelType, dxElementTypeName);
+            var isRequired = relationType == DXElementInUnitTypeEnum.SingleMandatory || relationType == DXElementInUnitTypeEnum.MultiMandatory;
+
+            var singleDXElement = dxElement.ToDXSingleElement(isRequired);
 
             return coreRepo.UpdateSingleDXElement(dxModelType, singleDXElement);
         }
@@ -32,8 +41,9 @@ namespace IV.DX.Persistence
         public bool DeleteDXElement(DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNull(dxElement);
-
-            var singleDXElement = dxElement.ToDXSingleElement();
+                       
+            // TODO : need to rework using info about relation type
+            var singleDXElement = dxElement.ToDXSingleElement(false);
 
             return coreRepo.DeleteSingleDXElement(singleDXElement.Name, dxElement.ID);
         }
@@ -42,7 +52,8 @@ namespace IV.DX.Persistence
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
-            var dxElement = DXElementDefinitionConverter.ToDXElementDefinition(dxElementName, typeof(T));
+            // TODO : need to rework using info about relation type
+            var dxElement = DXElementDefinitionConverter.ToDXElementDefinition(dxElementName, typeof(T), false);
 
             var result = coreRepo.GetSingleDXElement(dxElement, id);
 

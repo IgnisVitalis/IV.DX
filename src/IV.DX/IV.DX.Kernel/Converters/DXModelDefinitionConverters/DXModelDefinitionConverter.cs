@@ -16,7 +16,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 
         public static DXModelDefinition ToDXModelDefinition(this DXModel dxModel)
         {
-            var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type);
+            var mainItemDefinition = new DXElementDefinition(dxModel.DXMainElement.Attribute.Type, dxModel.DXMainElement.Attribute.Type, true);
 
             mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
                 new DXPropertyDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
@@ -24,7 +24,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             var singleItemDefinitions =
                 dxModel.DXSingleElements.Select(x =>
                 {
-                    var item = new DXElementDefinition(x.Attribute.Type, x.Name);
+                    var item = new DXElementDefinition(x.Attribute.Type, x.Name, x.IsRequired);
 
                     var propertyNames = x.Item.Content.Select(y => y.Key).ToList();
 
@@ -46,7 +46,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             var multiItemDefinitions =
                   dxModel.DXMultiElements.Select(x =>
                   {
-                      var item = new DXElementDefinition(x.Attribute.Type, x.Name);
+                      var item = new DXElementDefinition(x.Attribute.Type, x.Name, x.IsRequired);
 
                       var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : x.Deleted.Count() > 0 ? x.Deleted.First() : null;
 
@@ -82,15 +82,27 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var asqlTypeName = AttributeReader.GetDXUnitTypeName(type);
 
-            var ownItem = DXElementDefinitionConverter.ToDXElementDefinition(asqlTypeName, type);
+            var ownItem = DXElementDefinitionConverter.ToDXElementDefinition(asqlTypeName, type, true);
 
             DXModelDefinition result = new DXModelDefinition(ownItem);
 
             var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
             var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
 
-            var singleItemDefinitions = singleItemInfos.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType)).ToList();
-            var mutliItemDefinitions = multiItemInfos.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType.GenericTypeArguments[0])).ToList();
+            var singleItemDefinitions = singleItemInfos.Select(x =>
+            {
+                var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+                return DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType, isReqruired != null);
+            }).ToList();
+
+            var mutliItemDefinitions = multiItemInfos.Select(x =>
+            {
+                var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+                return DXElementDefinitionConverter.ToDXElementDefinition(x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
+            }).ToList();
+
 
             result.AddToSingleItemDefinitions(singleItemDefinitions);
             result.AddToMultiItemDefinitions(mutliItemDefinitions);

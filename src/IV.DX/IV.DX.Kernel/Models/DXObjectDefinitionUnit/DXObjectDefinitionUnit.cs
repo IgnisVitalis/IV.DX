@@ -5,9 +5,11 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXObjectDefinitionUnit")]
     public class DXObjectDefinitionUnit : DXUnit
     {
+        [DXRequired]
         public DXObjectDefinitionMainElement DXObjectDefinitionMainElement { get; set; }
 
         public DXMultiElementsContainer<DXColumnDefinitionElement> DXColumnDefinitionElement { get; set; }
+
         public DXMultiElementsContainer<DXUniqueColumnsElement> DXUniqueColumnsElement { get; set; }
 
         public DXObjectDefinitionUnit()

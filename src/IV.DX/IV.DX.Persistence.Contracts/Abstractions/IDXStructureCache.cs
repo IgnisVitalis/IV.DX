@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
@@ -9,7 +10,11 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         IReadOnlyList<DXEnumDefinitionUnit> DXEnums { get; }
         IReadOnlyList<DXRelationDefinitionUnit> DXRelations { get; }
 
-        DXEnumDefinitionUnit GetEnum(string name);
+        DXEnumDefinitionUnit GetDXEnum(string name);
+        DXUnitDefinitionUnit GetDXUnit(string name);
+        DXElementDefinitionUnit GetDXElement(string name);
+
+        DXElementInUnitTypeEnum GetElementInUnitRelationType(string dxUnitTypeName, string dxElementTypeName);
 
         int Version { get; }
         Task WarmUpAsync(CancellationToken ct = default);

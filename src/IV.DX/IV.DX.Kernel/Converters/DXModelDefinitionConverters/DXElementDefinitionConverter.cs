@@ -7,21 +7,25 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXElementDefinitionConverter
     {
-        public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement)
+        public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement, bool isRequired)
         {
             var props = dxElement.DXColumnDefinitionElement.Announced
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
 
-            var singleFragmentDefinition = new DXElementDefinition(dxElement.DXObjectDefinitionMainElement.Name, dxElement.DXObjectDefinitionMainElement.Name);
+            var singleFragmentDefinition =
+                new DXElementDefinition(
+                    dxElement.DXObjectDefinitionMainElement.Name,
+                    dxElement.DXObjectDefinitionMainElement.Name,
+                    isRequired);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 
             return singleFragmentDefinition;
         }
 
-        public static DXElementDefinition ToDXElementDefinition(string type, Type dxElementType)
+        public static DXElementDefinition ToDXElementDefinition(string type, Type dxElementType, bool isRequired)
         {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(type, type, isRequired);
             JObject jObject = new JObject();
 
             var properties = dxElementType.GetProperties()
@@ -39,9 +43,9 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             return dxElementDefinition;
         }
 
-        public static DXElementDefinition ToDXElementDefinition(this DXEnumDefinitionUnit enumDesc)
+        public static DXElementDefinition ToDXElementDefinition(this DXEnumDefinitionUnit enumDesc, bool isRequired)
         {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name, isRequired);
 
             JObject jObject = new JObject();
 

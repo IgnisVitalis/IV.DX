@@ -8,7 +8,7 @@ namespace IV.DX.Kernel.Models
         public Guid ID { get; }
         public Guid DXUnitID { get; }
         public DateTime TimeStamp { get; }
-        public IDictionary<string, object> Content { get; }
+        public IDictionary<string, object> Content { get; }       
 
         public DXItem(string type, Guid id, Guid dxUnitID, DateTime timeStamp, IDictionary<string, object> content)
         {

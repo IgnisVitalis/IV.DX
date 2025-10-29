@@ -34,10 +34,13 @@ namespace IV.DX.Kernel.Models
             }
         }
 
-        public DXElementDefinition(string type, string name)
+        public bool IsRequired { get; }
+
+        public DXElementDefinition(string type, string name, bool isRequired)
         {
-            Name = name;
-            Type = type;
+            this.Name = name;
+            this.Type = type;
+            this.IsRequired = isRequired;
 
             _items = new List<DXPropertyDefinition>()
             {
@@ -80,7 +83,7 @@ namespace IV.DX.Kernel.Models
 
         public DXElementDefinition DeepClone()
         {
-            var clone = new DXElementDefinition(Type, Name);
+            var clone = new DXElementDefinition(Type, Name, this.IsRequired);
             clone.AddPropertyDefinitions(_items);
 
             return clone;

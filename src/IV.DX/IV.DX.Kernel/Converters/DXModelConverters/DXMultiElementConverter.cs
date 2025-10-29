@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
@@ -11,32 +12,30 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (jProperty == null)
                 return null;
 
-            DXMultiElement multiFragment = new DXMultiElement
-            {
-                Attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
-                Name = jProperty.Name,
-                Mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>()
-            };
+            var announced = new HashSet<DXItem>();
+            var deleted = new HashSet<DXItem>();
+            var isRequired = JHelper.GetValue<bool?>(jProperty.Value as JObject, Constants.SystemPropertyIsRequired) ?? false;
 
-            if (jProperty[Constants.Announced] == null)
+            if (jProperty[Constants.Announced] != null)
             {
-                multiFragment.Announced = new HashSet<DXItem>();
-            }
-            else
-            {
-                multiFragment.Announced = (jProperty[Constants.Announced] as JArray).Children()
+                announced = (jProperty[Constants.Announced] as JArray).Children()
                     .Select(x => x as JObject).Select(x => x.ToDXItem()).ToHashSet();
             }
 
-            if (jProperty[Constants.Deleted] == null)
+            if (jProperty[Constants.Deleted] != null)
             {
-                multiFragment.Deleted = new HashSet<DXItem>();
-            }
-            else
-            {
-                multiFragment.Deleted = (jProperty[Constants.Deleted] as JArray).Children()
+                deleted = (jProperty[Constants.Deleted] as JArray).Children()
                     .Select(x => x as JObject).Select(x => x.ToDXItem()).ToHashSet();
             }
+
+            DXMultiElement multiFragment = new DXMultiElement(
+                jProperty.Name,
+                new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
+                (MultiElementsMode)jProperty[Constants.Mode].Value<int>(),
+                announced,
+                deleted,
+                isRequired
+                );
 
             return multiFragment;
         }

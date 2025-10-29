@@ -98,7 +98,7 @@ namespace IV.DX.Contracts.UnitTests
                             { "Name", "Name1"},
                             { "Value", 1},
                             { "Date", new DateTime(2020, 12, 1)}
-                  }));
+                  }), true);
 
             var dxXSingleElements = new HashSet<DXSingleElement>()
             {
@@ -107,12 +107,11 @@ namespace IV.DX.Contracts.UnitTests
 
             var dxMultiElements = new HashSet<DXMultiElement>()
             {
-                new DXMultiElement()
-                {
-                    Name = "MyDXElementMultiItems",
-                    Attribute = new DXElementAttribute("MyDXElementDefinition"),
-                    Mode = MultiElementsMode.Target,
-                    Announced = new HashSet<DXItem>()
+                new DXMultiElement(
+                    "MyDXElementMultiItems",
+                    new DXElementAttribute("MyDXElementDefinition"),
+                    MultiElementsMode.Target,
+                    new HashSet<DXItem>()
                     {
                         new DXItem(
                             "MyDXElementDefinition",
@@ -128,14 +127,14 @@ namespace IV.DX.Contracts.UnitTests
                                 {"Name", "Name2" },
                                 {"Value", 2 },
                                 {"Date", new DateTime(2020, 12, 2) }
-                             }),
+                            }),
                         new DXItem(
                             "MyDXElementDefinition",
                             new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
                             objectId,
                             new DateTime(2020, 12, 3),
-                             new Dictionary<string, object>()
-                             {
+                            new Dictionary<string, object>()
+                            {
                                 {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
                                 {Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2") },
                                 {Constants.DXUnitID, objectId },
@@ -143,9 +142,9 @@ namespace IV.DX.Contracts.UnitTests
                                 {"Name", "Name3" },
                                 {"Value", 3 },
                                 {"Date", new DateTime(2020, 12, 3) }
-                            }),
+                            })
                     },
-                    Deleted = new HashSet<DXItem>()
+                    new HashSet<DXItem>()
                     {
                         new DXItem(
                             "MyDXElementDefinition",
@@ -161,9 +160,8 @@ namespace IV.DX.Contracts.UnitTests
                                 {"Name", "Name4" },
                                 {"Value", 4 },
                                 {"Date", new DateTime(2020, 12, 4) }
-                                 }),
-                    }
-                }
+                            })
+                    }, false)
             };
 
             dxModel = new DXModel(ownItem, dxXSingleElements, dxMultiElements);
@@ -298,6 +296,7 @@ namespace IV.DX.Contracts.UnitTests
     [DXUnit("MyObjectDefinition")]
     internal class MyObject : DXUnit
     {
+        [DXRequired]
         public MyDXElement MyDXElementSingleItem { get; set; }
 
         public DXMultiElementsContainer<MyDXElement> MyDXElementMultiItems { get; set; }

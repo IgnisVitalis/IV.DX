@@ -2,6 +2,7 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelConverters
 {
@@ -30,7 +31,10 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return singleInfos.Select(pi =>
             {
                 var element = pi.GetValue(dxUnit) as DXElement;
-                return element.ToDXSingleElement(pi.Name);
+
+                var isRequiredAttr = AttributeReader.GetAttribute<DXRequiredAttribute>( pi.PropertyType);
+
+                return element.ToDXSingleElement(isRequiredAttr != null, pi.Name);
             }).ToHashSet();
         }
 
@@ -49,6 +53,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
                 var elementType = pi.PropertyType.GenericTypeArguments[0];
                 var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
+                var isRequiredAttr = DXReflectionHelper.GetAttr<DXRequiredAttribute>(elementType);
 
                 var announcedList = new HashSet<DXItem>();
                 var deletedList = new HashSet<DXItem>();
@@ -70,14 +75,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                     Fill(Constants.Deleted, deletedList);
                 }
 
-                var multi = new DXMultiElement
-                {
-                    Attribute = elementInfo,
-                    Name = pi.Name,
-                    Mode = mode,
-                    Announced = announcedList,
-                    Deleted = deletedList
-                };
+                var multi = new DXMultiElement(pi.Name, elementInfo, mode, announcedList, deletedList, isRequiredAttr != null);
 
                 return multi;
             }).ToHashSet();
@@ -182,9 +180,9 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
             DXItem dxItem = new DXItem(
                 (string)jObject[Constants.SystemPropertyTypeName],
-                (Guid)jObject[Constants.ID], 
-                objId, 
-                (DateTime)jObject[Constants.TimeStamp], 
+                (Guid)jObject[Constants.ID],
+                objId,
+                (DateTime)jObject[Constants.TimeStamp],
                 content.ToDictionary());
 
             return dxItem;
@@ -194,23 +192,35 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var name = property.Name;
             var attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name);
-            var item = GetDXItem((JObject)property.Value, objId);
 
-            DXSingleElement singleItem = new DXSingleElement(name, attribute, item);
+            var jObject = (JObject)property.Value;
+
+            bool isRequired = false;
+
+            if (jObject.ContainsKey(Constants.SystemPropertyIsRequired))
+            {
+                isRequired = jObject.Value<bool>(Constants.SystemPropertyIsRequired);
+            }
+
+            var item = GetDXItem(jObject, objId);
+
+            DXSingleElement singleItem = new DXSingleElement(name, attribute, item, isRequired);
 
             return singleItem;
         }
 
         static DXMultiElement GetDXMutliItem(JProperty property, Guid objId)
         {
-            DXMultiElement dxMultiItem = new DXMultiElement()
-            {
-                Name = property.Name,
-                Attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                Announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
-                Deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
-                Mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>()
-            };
+            var isRequired = JHelper.GetValue<bool?>(property.Value as JObject, Constants.SystemPropertyIsRequired) ?? false;
+
+            DXMultiElement dxMultiItem =
+                new DXMultiElement(
+                    property.Name,
+                    new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
+                    (MultiElementsMode)property.Value[Constants.Mode].Value<int>(),
+                    (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
+                    (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
+                    isRequired);
 
             return dxMultiItem;
         }

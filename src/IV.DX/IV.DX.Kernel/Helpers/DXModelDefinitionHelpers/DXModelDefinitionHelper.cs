@@ -18,7 +18,7 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             if (mainDXObject == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.DXObjectDefinitionMainElement.Name, mainDXObject.DXObjectDefinitionMainElement.Name);
+            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.DXObjectDefinitionMainElement.Name, mainDXObject.DXObjectDefinitionMainElement.Name, true);
 
             var props = mainDXObject.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
@@ -41,37 +41,45 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             if (dxModel == null)
                 return null;
 
-            var singleDXElements = new List<DXElementDefinitionUnit>();
-            var multiDXElements = new List<DXElementDefinitionUnit>();
+            var singleDXElements = new List<DXElementDefinition>();
+            var multiDXElements = new List<DXElementDefinition>();
 
             if (relatedSingleMandatoryDXElements != null)
             {
-                singleDXElements.AddRange(relatedSingleMandatoryDXElements);
+                var definitions = relatedSingleMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, true));
+
+                singleDXElements.AddRange(definitions);
             }
 
             if (relatedSingleOptionalDXElements != null)
             {
-                singleDXElements.AddRange(relatedSingleOptionalDXElements);
+                var definitions = relatedSingleOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, false));
+
+                singleDXElements.AddRange(definitions);
             }
 
             if (relatedMultiMandatoryDXElements != null)
             {
-                multiDXElements.AddRange(relatedMultiMandatoryDXElements);
+                var definitions = relatedMultiMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, true));
+
+                multiDXElements.AddRange(definitions);
             }
 
             if (relatedMultiOptionalDXElements != null)
             {
-                multiDXElements.AddRange(relatedMultiOptionalDXElements);
+                var definitions = relatedMultiOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, false));
+
+                multiDXElements.AddRange(definitions);
             }
 
             if (singleDXElements.Count > 0)
             {
-                dxModel.AddToSingleItemDefinitions(singleDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x)).ToHashSet());
+                dxModel.AddToSingleItemDefinitions(singleDXElements);
             }
 
             if (multiDXElements.Count > 0)
             {
-                dxModel.AddToMultiItemDefinitions(multiDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x)).ToHashSet());
+                dxModel.AddToMultiItemDefinitions(multiDXElements);
             }
 
             return dxModel;

@@ -4,30 +4,28 @@ namespace IV.DX.Kernel.Models
 {
     public class DXMultiElement
     {
-        public string Name { get; set; }
-        public DXElementAttribute Attribute { get; set; }
-        public MultiElementsMode Mode { get; set; } = MultiElementsMode.Full;
-        public HashSet<DXItem> Announced { get; set; } = new HashSet<DXItem>();
-        public HashSet<DXItem> Deleted { get; set; } = new HashSet<DXItem>();
+        public string Name { get;  }
+        public DXElementAttribute Attribute { get; }
+        public MultiElementsMode Mode { get;  }
+        public HashSet<DXItem> Announced { get; }
+        public HashSet<DXItem> Deleted { get; }
 
-        public void AddToAnnounced(DXItem dxItem)
-        {
-            this.Announced.Add(dxItem);
-        }
+        public bool IsRequired { get; }
 
-        public void RemoveFromAnnounced(DXItem dxItem)
+        public DXMultiElement(
+            string name, 
+            DXElementAttribute attribute,
+            MultiElementsMode mode,
+            HashSet<DXItem> announced,
+            HashSet<DXItem> deleted,
+            bool isRequired)
         {
-            this.Announced.Remove(dxItem);
-        }
-
-        public void AddToDeleted(DXItem dxItem)
-        {
-            this.Deleted.Add(dxItem);
-        }
-
-        public void RemoveFromDeleted(DXItem dxItem)
-        {
-            this.Deleted.Remove(dxItem);
+            this.Name = name;
+            this.Attribute = attribute;
+            this.Mode = mode;
+            this.Announced = announced;
+            this.Deleted = deleted;
+            this.IsRequired = isRequired;
         }
 
         public static bool DeepEquals(DXMultiElement item1, DXMultiElement item2)
@@ -69,14 +67,7 @@ namespace IV.DX.Kernel.Models
 
         public DXMultiElement DeepClone()
         {
-            return new DXMultiElement()
-            {
-                Mode = this.Mode,
-                Name = this.Name,
-                Announced = this.Announced?.Select(x => x.DeepClone()).ToHashSet(),
-                Deleted = this.Deleted?.Select(x => x.DeepClone()).ToHashSet(),
-                Attribute = this.Attribute.DeepClone()
-            };
+            return new DXMultiElement(this.Name, this.Attribute.DeepClone(), this.Mode, this.Announced, this.Deleted, this.IsRequired);
         }
     }
 }

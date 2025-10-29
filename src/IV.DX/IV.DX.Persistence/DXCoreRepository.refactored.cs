@@ -155,40 +155,40 @@ namespace IV.DX.Persistence
                 var dataRow = dataTable.Rows.Cast<DataRow>().SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id);
 
                 if (dataRow == null)
-                    return new DXSingleElement(item.Name, new DXElementAttribute(item.Name));
+                    return null;// new DXSingleElement(item.Name, new DXElementAttribute(item.Name));
                 else
-                    return new DXSingleElement(item.Name, new DXElementAttribute(item.Name), this.GetDXItem(dataRow, item));
+                    return new DXSingleElement(
+                        item.Name, 
+                        new DXElementAttribute(item.Name), 
+                        this.GetDXItem(dataRow, item),
+                        item.IsRequired);
 
-            }).ToHashSet();
+            }).Where(x => x != null).ToHashSet();
 
             // Process DX multi items          
             var dxMultiElements = container.MultiFragmentDefinitions.Select(item =>
             {
-                DXMultiElement multiItem = this.ConvertToDXMultiItem(item);
+                var dataTable = dataSet.Tables[item.Name];
 
-                var dataTable = dataSet.Tables[multiItem.Name];
-
-                var rows =
+                var announced =
                     dataTable.Rows.Cast<DataRow>()
-                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id).ToList();
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
+                    .Select(x => this.GetDXItem(x, item)).ToHashSet();
 
-                this.PopulateDXMultiItem(multiItem, item, rows);
+                DXMultiElement multiItem = new DXMultiElement(
+                    item.Name,
+                    new DXElementAttribute(item.Name),
+                    MultiElementsMode.Full,
+                    announced,
+                    new HashSet<DXItem>(), 
+                    item.IsRequired);
 
                 return multiItem;
-            }).ToHashSet();
+            }).Where(x => x != null).ToHashSet();
 
             DXModel result = new DXModel(dxMainElement, dxSingleElements, dxMultiElements);
 
             return result;
-        }
-
-        private DXMultiElement ConvertToDXMultiItem(DXElementDefinition item)
-        {
-            return new DXMultiElement()
-            {
-                Name = item.Name,
-                Attribute = new DXElementAttribute(item.Name)
-            };
         }
 
         public IEnumerable<DXModel> GetItems(string typeName)
@@ -383,15 +383,6 @@ namespace IV.DX.Persistence
             return dataSet;
         }
 
-        private void PopulateDXMultiItem(
-            DXMultiElement multiItem,
-            DXElementDefinition fragmentDefinition,
-            IEnumerable<DataRow> rows)
-        {
-            multiItem.Announced = rows.OfType<DataRow>().Select(x => this.GetDXItem(x, fragmentDefinition)).ToHashSet();
-            multiItem.Mode = MultiElementsMode.Full;
-        }
-
         private DXItem GetDXItem(DataRow row, DXElementDefinition structure)
         {
             Dictionary<string, object> jObjectContainerCopy = new Dictionary<string, object>();
@@ -493,7 +484,7 @@ namespace IV.DX.Persistence
 
         public bool IsItemExisting(string type, Guid objectId)
         {
-            DXModelDefinition dd = new DXModelDefinition(new DXElementDefinition(type, type));
+            DXModelDefinition dd = new DXModelDefinition(new DXElementDefinition(type, type, false));
 
             var item = this.GetItem(dd, objectId, DXLoadingType.Base);
 
@@ -1264,9 +1255,14 @@ namespace IV.DX.Persistence
                     var dataRow = dataSet.Tables[container.Type].Rows.Cast<DataRow>().SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.ID]) == id);
 
                     if (dataRow == null)
-                        return new DXSingleElement(container.Type, new DXElementAttribute(container.Type));
+                        return null;// new DXSingleElement(container.Type, new DXElementAttribute(container.Type));
                     else
-                        return new DXSingleElement(container.Type, new DXElementAttribute(container.Type), this.GetDXItem(dataRow, container));
+                        return
+                        new DXSingleElement(
+                            container.Type,
+                            new DXElementAttribute(container.Type),
+                            this.GetDXItem(dataRow, container),
+                            container.IsRequired);
                 }
             });
 

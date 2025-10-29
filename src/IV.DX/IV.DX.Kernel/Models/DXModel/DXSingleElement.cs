@@ -6,17 +6,15 @@ namespace IV.DX.Kernel.Models
     {
         public string Name { get; }
         public DXElementAttribute Attribute { get; }
-        public DXItem? Item { get; }
+        public DXItem Item { get; }
+        public bool IsRequired { get; }
 
-        public DXSingleElement(string name, DXElementAttribute attribute)
-        {
-            this.Name = name;
-            this.Attribute = attribute;
-        }
-
-        public DXSingleElement(string name, DXElementAttribute attribute, DXItem item) : this(name, attribute)
+        public DXSingleElement(string name, DXElementAttribute attribute, DXItem item, bool isRequired)
         {
             this.Item = item;
+            this.IsRequired = isRequired;
+            this.Name = name;
+            this.Attribute = attribute;
         }
 
         public static bool DeepEquals(DXSingleElement item1, DXSingleElement item2)
@@ -56,7 +54,7 @@ namespace IV.DX.Kernel.Models
 
         public DXSingleElement DeepClone()
         {
-            return new DXSingleElement(this.Name, this.Attribute.DeepClone(), this.Item.DeepClone());
+            return new DXSingleElement(this.Name, this.Attribute.DeepClone(), this.Item.DeepClone(), this.IsRequired);
         }
     }
 }
