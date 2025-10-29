@@ -173,13 +173,7 @@ namespace IV.DX.Persistence
                     .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
                     .Select(x => this.GetDXItem(x, item)).ToHashSet();
 
-                DXMultiElement multiItem = new DXMultiElement(
-                    item.Name,
-                    new DXElementAttribute(item.Name),
-                    MultiElementsMode.Full,
-                    announced,
-                    new HashSet<DXItem>(),
-                    item.IsRequired);
+                DXMultiElement multiItem = DXMultiElement.CreateForFullMode(item.Name, new DXElementAttribute(item.Name), announced);
 
                 return multiItem;
             }).Where(x => x != null).ToHashSet();

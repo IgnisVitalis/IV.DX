@@ -28,16 +28,18 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                     .Select(x => x as JObject).Select(x => x.ToDXItem()).ToHashSet();
             }
 
-            DXMultiElement multiFragment = new DXMultiElement(
-                jProperty.Name,
-                new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name),
-                (MultiElementsMode)jProperty[Constants.Mode].Value<int>(),
-                announced,
-                deleted,
-                isRequired
-                );
+            var mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>();
+            var attribute = new DXElementAttribute(jProperty[Constants.SystemPropertyTypeName] != null ? jProperty[Constants.SystemPropertyTypeName].Value<string>() : jProperty.Name);
 
-            return multiFragment;
+
+            if (mode == MultiElementsMode.Full)
+            {
+                return DXMultiElement.CreateForFullMode(jProperty.Name, attribute, announced);
+            }
+            else
+            {
+                return DXMultiElement.CreateForTargetMode(jProperty.Name, attribute, announced, deleted);
+            }
         }
     }
 }

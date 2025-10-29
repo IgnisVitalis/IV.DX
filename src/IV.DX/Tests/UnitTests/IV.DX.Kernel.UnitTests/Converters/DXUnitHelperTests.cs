@@ -104,13 +104,9 @@ namespace IV.DX.Contracts.UnitTests
                 dxSingleElement1
             };
 
-            var dxMultiElements = new HashSet<DXMultiElement>()
-            {
-                new DXMultiElement(
-                    "MyDXElementMultiItems",
-                    new DXElementAttribute("MyDXElementDefinition"),
-                    MultiElementsMode.Target,
-                    new HashSet<DXItem>()
+            var dxMultiElement = DXMultiElement.CreateForTargetMode(
+                "MyDXElementMultiItems",
+                new DXElementAttribute("MyDXElementDefinition"), new HashSet<DXItem>()
                     {
                         new DXItem(
                             "MyDXElementDefinition",
@@ -160,7 +156,11 @@ namespace IV.DX.Contracts.UnitTests
                                 {"Value", 4 },
                                 {"Date", new DateTime(2020, 12, 4) }
                             })
-                    }, false)
+                    });
+
+            var dxMultiElements = new HashSet<DXMultiElement>()
+            {
+                dxMultiElement
             };
 
             dxModel = new DXModel(ownItem, dxXSingleElements, dxMultiElements);

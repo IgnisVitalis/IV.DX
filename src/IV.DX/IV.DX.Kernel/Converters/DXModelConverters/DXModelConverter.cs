@@ -52,7 +52,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
 
                 var elementType = pi.PropertyType.GenericTypeArguments[0];
                 var elementInfo = DXReflectionHelper.GetAttr<DXElementAttribute>(elementType);
-                var isRequiredAttr = DXReflectionHelper.GetAttr<DXRequiredAttribute>(elementType);
+                //var isRequiredAttr = DXReflectionHelper.GetAttr<DXRequiredAttribute>(elementType);
 
                 var announcedList = new HashSet<DXItem>();
                 var deletedList = new HashSet<DXItem>();
@@ -74,9 +74,14 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
                     Fill(Constants.Deleted, deletedList);
                 }
 
-                var multi = new DXMultiElement(pi.Name, elementInfo, mode, announcedList, deletedList, isRequiredAttr != null);
+                if (mode == MultiElementsMode.Full)
+                    return DXMultiElement.CreateForFullMode(pi.Name, elementInfo, announcedList);
+                else
+                    return DXMultiElement.CreateForTargetMode(pi.Name, elementInfo, announcedList, deletedList);
 
-                return multi;
+                    //var multi = DXMultiElement. new DXMultiElement(pi.Name, elementInfo, mode, announcedList, deletedList, isRequiredAttr != null);
+
+                //return multi;
             }).ToHashSet();
         }
 
@@ -207,16 +212,22 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
         {
             var isRequired = JHelper.GetValue<bool?>(property.Value as JObject, Constants.SystemPropertyIsRequired) ?? false;
 
-            DXMultiElement dxMultiItem =
-                new DXMultiElement(
-                    property.Name,
-                    new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name),
-                    (MultiElementsMode)property.Value[Constants.Mode].Value<int>(),
-                    (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
-                    (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet(),
-                    isRequired);
+            var mode = (MultiElementsMode)property.Value[Constants.Mode].Value<int>();
+            var attribute = new DXElementAttribute(property.Value[Constants.SystemPropertyTypeName] != null ? property.Value[Constants.SystemPropertyTypeName].Value<string>() : property.Name);
 
-            return dxMultiItem;
+            if (mode == MultiElementsMode.Full)
+            {
+                var announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet();
+
+                return DXMultiElement.CreateForFullMode(property.Name, attribute, announced);
+            }
+            else
+            {
+                var announced = (property.Value[Constants.Announced] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet();
+                var deleted = (property.Value[Constants.Deleted] as JArray)?.Children().Select(x => GetDXItem((JObject)x, objId)).ToHashSet();
+
+                return DXMultiElement.CreateForTargetMode(property.Name, attribute, announced, deleted);
+            }
         }
 
         static JObject KeepScalarsOnly(JObject src)

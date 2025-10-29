@@ -4,16 +4,24 @@ namespace IV.DX.Kernel.Models
 {
     public class DXMultiElement
     {
-        public string Name { get;  }
+        public string Name { get; }
         public DXElementAttribute Attribute { get; }
-        public MultiElementsMode Mode { get;  }
+        public MultiElementsMode Mode { get; private set; }
         public HashSet<DXItem> Announced { get; }
         public HashSet<DXItem> Deleted { get; }
 
+        private HashSet<DXItem> announcedOriginal { get; }
+        private HashSet<DXItem> deletedOriginal { get; }
+
         public bool IsRequired { get; }
 
-        public DXMultiElement(
-            string name, 
+        private DXMultiElement()
+        {
+
+        }
+
+        private DXMultiElement(
+            string name,
             DXElementAttribute attribute,
             MultiElementsMode mode,
             HashSet<DXItem> announced,
@@ -26,6 +34,33 @@ namespace IV.DX.Kernel.Models
             this.Announced = announced;
             this.Deleted = deleted;
             this.IsRequired = isRequired;
+        }
+
+        public static DXMultiElement CreateForFullMode(
+            string name,
+            DXElementAttribute attribute,           
+            HashSet<DXItem> announced)
+        {
+            return new DXMultiElement(name, attribute, MultiElementsMode.Full, announced, new HashSet<DXItem>(), false);
+        }
+
+        public static DXMultiElement CreateForTargetMode(
+            string name,
+            DXElementAttribute attribute,          
+            HashSet<DXItem> announced,
+            HashSet<DXItem> deleted)
+        {
+            return new DXMultiElement(name, attribute, MultiElementsMode.Target, announced, deleted, false);
+        }
+
+        public void ChangeMode(MultiElementsMode mode)
+        {
+            this.Mode = mode;
+        }
+
+        public void Remove(DXItem dxItem)
+        {
+
         }
 
         public static bool DeepEquals(DXMultiElement item1, DXMultiElement item2)
