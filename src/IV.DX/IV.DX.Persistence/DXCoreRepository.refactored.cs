@@ -141,11 +141,9 @@ namespace IV.DX.Persistence
         private DXModel ConvertToDXModel(DataSet dataSet, DataRow x, DXModelDefinition container)
         {
             var id = ConvertHelper.ParseGuid(x[Constants.ID]);
+            var item = this.GetDXItem(x, container.MainElement);
 
-            var dxMainElement = new DXMainElement(new DXUnitAttribute(container.MainElement.Name))
-            {
-                Item = this.GetDXItem(x, container.MainElement)
-            };
+            var dxMainElement = new DXMainElement(new DXUnitAttribute(container.MainElement.Name), item);
 
             // Process DX single items
             var dxSingleElements = container.SingleFragmentDefinitions.Select(item =>
@@ -158,8 +156,8 @@ namespace IV.DX.Persistence
                     return null;// new DXSingleElement(item.Name, new DXElementAttribute(item.Name));
                 else
                     return new DXSingleElement(
-                        item.Name, 
-                        new DXElementAttribute(item.Name), 
+                        item.Name,
+                        new DXElementAttribute(item.Name),
                         this.GetDXItem(dataRow, item),
                         item.IsRequired);
 
@@ -180,7 +178,7 @@ namespace IV.DX.Persistence
                     new DXElementAttribute(item.Name),
                     MultiElementsMode.Full,
                     announced,
-                    new HashSet<DXItem>(), 
+                    new HashSet<DXItem>(),
                     item.IsRequired);
 
                 return multiItem;
@@ -421,23 +419,19 @@ namespace IV.DX.Persistence
             }
         }
 
-        private JValue GetValueFromRow(DataRow dataRow, DataColumn dataColumn)
+        private object GetValueFromRow(DataRow dataRow, DataColumn dataColumn)
         {
-            JValue value = null;
-
             if (dataColumn.DataType == typeof(DateTime))
             {
                 var dateTime = ConvertHelper.ParseDateTime(dataRow[dataColumn]);
                 dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 
-                value = new JValue(dateTime);
+                return dateTime;
             }
             else
             {
-                value = new JValue(dataRow[dataColumn]);
+                return dataRow[dataColumn];
             }
-
-            return value;
         }
 
         public Guid Insert(DXModel dxModel)
@@ -899,11 +893,6 @@ namespace IV.DX.Persistence
                     }
                 }
             }
-        }
-
-        private bool IsNullOrEmpty(JValue jValue)
-        {
-            return jValue == null || string.IsNullOrWhiteSpace(jValue.ToString());
         }
 
         private bool IsNullOrEmpty(object obj)

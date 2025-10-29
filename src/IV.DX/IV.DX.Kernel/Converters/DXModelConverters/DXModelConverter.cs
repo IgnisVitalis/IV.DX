@@ -3,6 +3,7 @@ using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelConverters
 {
@@ -13,11 +14,9 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (dxUnit is null) return null;
 
             var unitAttr = DXReflectionHelper.GetAttr<DXUnitAttribute>(dxUnit.GetType());
+            var item = new DXItem(unitAttr.Type, dxUnit.ID, dxUnit.ID, dxUnit.TimeStamp, GetContent(dxUnit));
 
-            var ownItem = new DXMainElement(unitAttr)
-            {
-                Item = new DXItem(unitAttr.Type, dxUnit.ID, dxUnit.ID, dxUnit.TimeStamp, GetContent(dxUnit))
-            };
+            var ownItem = new DXMainElement(unitAttr, item);
 
             var dxSingleElements = GetDXSingleElements(dxUnit);
             var dxMultiElements = GetDXMultiElements(dxUnit);
@@ -32,7 +31,7 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             {
                 var element = pi.GetValue(dxUnit) as DXElement;
 
-                var isRequiredAttr = AttributeReader.GetAttribute<DXRequiredAttribute>( pi.PropertyType);
+                var isRequiredAttr = AttributeReader.GetAttribute<DXRequiredAttribute>(pi.PropertyType);
 
                 return element.ToDXSingleElement(isRequiredAttr != null, pi.Name);
             }).ToHashSet();
@@ -97,20 +96,18 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return dict;
         }
 
-        public static DXModel? ToDXModel(this string json)
+        public static DXModel ToDXModel(this string json)
         {
-            if (string.IsNullOrEmpty(json))
-                return null;
+            ArgumentNullException.ThrowIfNullOrEmpty(json);
 
             var jObject = JObject.Parse(json);
 
             return ToDXModel(jObject);
         }
 
-        public static DXModel? ToDXModel(this JObject? jObject)
+        public static DXModel ToDXModel(this JObject jObject)
         {
-            if (jObject == null)
-                return null;
+            ArgumentNullException.ThrowIfNull(jObject);
 
             var jProperties = jObject.Properties()
                     .Where(x => x.Value.Type == JTokenType.Object).ToList();
@@ -165,11 +162,8 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             }
 
             var type = jObject.Value<string>(Constants.SystemPropertyTypeName);
-
-            var result = new DXMainElement(new DXUnitAttribute(type))
-            {
-                Item = GetDXItem(jObject, id)
-            };
+            var item = GetDXItem(jObject, id);
+            var result = new DXMainElement(new DXUnitAttribute(type), item);
 
             return result;
         }

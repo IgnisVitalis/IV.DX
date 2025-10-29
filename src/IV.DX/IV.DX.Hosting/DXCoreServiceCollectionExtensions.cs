@@ -60,6 +60,7 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXEnumDataService, DXEnumDataService>();     
             services.AddScoped<IDXMigrationService, MigrationService>();
+            services.AddScoped<IDXStructureService, DXStructureService>();
 
             services.RegisterCoreHandlers();
 

@@ -1,4 +1,8 @@
-﻿namespace IV.DX.Kernel.Models
+﻿using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.JObjectConverters;
+using Newtonsoft.Json.Linq;
+
+namespace IV.DX.Kernel.Models
 {
     public class DXModel
     {
@@ -11,6 +15,16 @@
             this.DXMainElement = mainElement;
             this.DXSingleElements = dxSingleElements;
             this.DXMultiElements = dxMultiElements;
+        }
+
+        public JObject ToJObject()
+        {
+            return JObjectConverter.ToJObject(this);
+        }
+
+        public static DXModel From(JObject jObject)
+        {
+            return DXModelConverter.ToDXModel(jObject);
         }
 
         public static bool DeepEquals(DXModel item1, DXModel item2)

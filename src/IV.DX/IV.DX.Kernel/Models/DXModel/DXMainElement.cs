@@ -4,11 +4,12 @@ namespace IV.DX.Kernel.Models
 {
     public class DXMainElement
     {
-        public DXUnitAttribute Attribute { get; private set; }
-        public DXItem Item { get; set; }
+        public DXUnitAttribute Attribute { get; }
+        public DXItem Item { get; }
 
-        public DXMainElement(DXUnitAttribute attribute)
+        public DXMainElement(DXUnitAttribute attribute, DXItem item)
         {
+            this.Item = item;
             this.Attribute = attribute;
         }
 
@@ -26,10 +27,7 @@ namespace IV.DX.Kernel.Models
 
         public DXMainElement DeepClone()
         {
-            return new DXMainElement(this.Attribute.DeepClone())
-            {
-                Item = this.Item.DeepClone(),
-            };
+            return new DXMainElement(this.Attribute.DeepClone(), this.Item.DeepClone());
         }
     }
 }

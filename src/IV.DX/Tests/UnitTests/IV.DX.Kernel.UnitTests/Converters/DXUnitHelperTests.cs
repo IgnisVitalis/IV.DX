@@ -71,9 +71,7 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
 
-            var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"))
-            {
-                Item = new DXItem(
+            var ownDXItem = new DXItem(
                             "MyObjectDefinition",
                             objectId,
                             objectId,
@@ -83,8 +81,9 @@ namespace IV.DX.Contracts.UnitTests
                                 { Constants.SystemPropertyTypeName, "MyObjectDefinition" },
                                 { Constants.ID, objectId },
                                 { Constants.TimeStamp, new DateTime(2020, 12, 1)}
-                            })
-            };
+                            });
+
+            var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"), ownDXItem);
 
             var dxSingleElement1 = new DXSingleElement(
                  "MyDXElementSingleItem",
