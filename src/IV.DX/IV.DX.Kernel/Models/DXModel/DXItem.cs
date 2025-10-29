@@ -1,4 +1,6 @@
-﻿namespace IV.DX.Kernel.Models
+﻿using System.Numerics;
+
+namespace IV.DX.Kernel.Models
 {
     public class DXItem
     {
@@ -15,6 +17,33 @@
             this.DXUnitID = dxUnitID;
             this.TimeStamp = timeStamp;
             this.Content = content;
+
+            this.SetValue(Constants.SystemPropertyTypeName, this.Type);
+            this.SetValue(Constants.ID, this.ID);
+
+            if (this.DXUnitID != this.ID)
+            {
+                this.SetValue(Constants.DXUnitID, this.DXUnitID);
+            }
+
+            this.SetValue(Constants.TimeStamp, this.TimeStamp);
+        }
+
+        public void SetValue(string propertyName, object value)
+        {
+            if (!IsSimpleTypeOrByteArray(value))
+            {
+                throw new Exception($"Value {value} is not simple type or byte[]");
+            }
+
+            if (HasValue(propertyName))
+            {
+                this.Content[propertyName] = value;
+            }
+            else
+            {
+                this.Content.Add(propertyName, value);
+            }
         }
 
         public bool HasValue(string propertyName)
@@ -77,34 +106,62 @@
             return true;
         }
 
-        private static bool AreValuesEqual(object v1, object v2)
+        public static bool AreValuesEqual(object v1, object v2)
         {
-            if (ReferenceEquals(v1, v2))
-                return true;
+            if (ReferenceEquals(v1, v2)) return true;
+            if (v1 is null || v2 is null) return false;
 
-            if (v1 == null || v2 == null)
-                return false;
+            if (v1 is Guid g1 && v2 is string s2)
+                return Guid.TryParse(s2, out var parsed2) && g1.Equals(parsed2);
 
-            if (v1 is Guid && v2 is string)
-            {
-                Guid v2Guid;
+            if (v2 is Guid g2 && v1 is string s1)
+                return Guid.TryParse(s1, out var parsed1) && g2.Equals(parsed1);
 
-                Guid.TryParse((string)v2, out v2Guid);
+            if (TryToBigInteger(v1, out var b1) && TryToBigInteger(v2, out var b2))
+                return b1 == b2;
 
-                return Equals(v1, v2Guid);
-            }
+            if (TryToDecimal(v1, out var d1) && TryToDecimal(v2, out var d2))
+                return d1 == d2;
 
-            if (v2 is Guid && v1 is string)
-            {
-                Guid v1Guid;
-
-                Guid.TryParse((string)v1, out v1Guid);
-
-                return Equals(v2, v1Guid);
-            }
-
-            // Простые типы
             return Equals(v1, v2);
+        }
+
+        private static bool TryToBigInteger(object v, out BigInteger result)
+        {
+            switch (v)
+            {
+                case sbyte x: result = x; return true;
+                case byte x: result = x; return true;
+                case short x: result = x; return true;
+                case ushort x: result = x; return true;
+                case int x: result = x; return true;
+                case uint x: result = x; return true;
+                case long x: result = x; return true;
+                case ulong x: result = x; return true;
+                case Enum e: result = new BigInteger(Convert.ToInt64(e)); return true;
+                default: result = default; return false;
+            }
+        }
+
+        private static bool TryToDecimal(object v, out decimal result)
+        {
+            switch (v)
+            {
+                case decimal x: result = x; return true;
+                case float x: if (float.IsNaN(x) || float.IsInfinity(x)) break; result = (decimal)x; return true;
+                case double x: if (double.IsNaN(x) || double.IsInfinity(x)) break; result = (decimal)x; return true;
+                case sbyte x: result = x; return true;
+                case byte x: result = x; return true;
+                case short x: result = x; return true;
+                case ushort x: result = x; return true;
+                case int x: result = x; return true;
+                case uint x: result = x; return true;
+                case long x: result = x; return true;
+                case ulong x: result = x; return true;
+                case Enum e: result = Convert.ToInt64(e); return true;
+            }
+            result = default;
+            return false;
         }
 
         public static bool DeepEquals(IEnumerable<DXItem> list1, IEnumerable<DXItem> list2)
@@ -157,6 +214,23 @@
             var copy = new byte[bytes.Length];
             Buffer.BlockCopy(bytes, 0, copy, 0, bytes.Length);
             return copy;
+        }
+
+        public static bool IsSimpleTypeOrByteArray(object value)
+        {
+            if (value is null)
+                return false;
+
+            var type = value.GetType();
+
+            if (type.IsPrimitive || type.IsEnum)
+                return true;
+
+            if (type == typeof(string) || type == typeof(decimal) || type == typeof(DateTime) ||
+                type == typeof(Guid) || type == typeof(TimeSpan) || type == typeof(byte[]))
+                return true;
+
+            return false;
         }
     }
 }
