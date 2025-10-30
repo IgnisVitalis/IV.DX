@@ -75,6 +75,11 @@ namespace IV.DX.Persistence
             return relation.RelationType;
         }
 
+        public IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name)
+        {
+            return this.DXRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft.Equals(name)).ToList();
+        }
+
         private sealed record Snapshot(
             ImmutableArray<DXElementDefinitionUnit> DXElements,
             ImmutableArray<DXUnitDefinitionUnit> Entities,

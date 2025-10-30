@@ -13,6 +13,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         DXEnumDefinitionUnit GetDXEnum(string name);
         DXUnitDefinitionUnit GetDXUnit(string name);
         DXElementDefinitionUnit GetDXElement(string name);
+        IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name);
 
         DXElementInUnitTypeEnum GetElementInUnitRelationType(string dxUnitTypeName, string dxElementTypeName);
 

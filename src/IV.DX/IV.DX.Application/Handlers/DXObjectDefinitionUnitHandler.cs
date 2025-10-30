@@ -1,7 +1,9 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
+using System.Reflection.Metadata;
 
 namespace IV.DX.Application.Handlers
 {
@@ -214,7 +216,7 @@ namespace IV.DX.Application.Handlers
             idColumn.AllowNull = false;
             idColumn.DefaultValue = string.Empty;
             idColumn.ColumnType = DXColumnTypeEnum.GUID;
-            idColumn.Name = "ID";
+            idColumn.Name = Constants.ID;
         }
 
         private void SetImportantValuesForDXUnitIDColumn(DXColumnDefinitionElement objectIDColumn)
@@ -222,14 +224,14 @@ namespace IV.DX.Application.Handlers
             objectIDColumn.AllowNull = false;
             objectIDColumn.DefaultValue = string.Empty;
             objectIDColumn.ColumnType = DXColumnTypeEnum.GUID;
-            objectIDColumn.Name = "DXUnitID";
+            objectIDColumn.Name = Constants.DXUnitID;
         }
 
         private void SetImportantValuesForTimeStampColumn(DXColumnDefinitionElement timeStamplColumnDesc)
         {
             timeStamplColumnDesc.AllowNull = false;
             timeStamplColumnDesc.ColumnType = DXColumnTypeEnum.TimeStamp;
-            timeStamplColumnDesc.Name = "TimeStamp";
+            timeStamplColumnDesc.Name = Constants.TimeStamp;
         }
 
         private void OrderColumn(DXObjectDefinitionUnit dataDXElement)
