@@ -11,9 +11,26 @@ namespace IV.DX.Application.Services
             return dxStructureCache.GetDXElement(name);
         }
 
+        public IEnumerable<DXElementDefinitionUnit> DXElements
+        {
+            get
+            {
+                return dxStructureCache.DXElements;
+            }
+        }
+
+
         public DXEnumDefinitionUnit GetDXEnum(string name)
         {
             return dxStructureCache.GetDXEnum(name);
+        }
+
+        public IEnumerable<DXEnumDefinitionUnit> DXEnums
+        {
+            get
+            {
+                return dxStructureCache.DXEnums;
+            }
         }
 
         public IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name)
@@ -21,9 +38,25 @@ namespace IV.DX.Application.Services
             return dxStructureCache.GetDXRelations(name);
         }
 
+        public IEnumerable<DXRelationDefinitionUnit> DXRelations
+        {
+            get
+            {
+                return dxStructureCache.DXRelations;
+            }
+        }
+
         public DXUnitDefinitionUnit GetDXUnit(string name)
         {
             return dxStructureCache.GetDXUnit(name);
+        }
+
+        public IEnumerable<DXUnitDefinitionUnit> DXUnits
+        {
+            get
+            {
+                return dxStructureCache.DXUnits;
+            }
         }
     }
 }

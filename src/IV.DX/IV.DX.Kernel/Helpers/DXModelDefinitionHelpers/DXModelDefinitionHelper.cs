@@ -31,6 +31,7 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 
         public static DXModelDefinition BuildModelDefinition(
             DXUnitDefinitionUnit mainDXUnit,
+            IEnumerable<DXRelationDefinitionUnit> relations,
             IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements = null,
@@ -46,28 +47,28 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 
             if (relatedSingleMandatoryDXElements != null)
             {
-                var definitions = relatedSingleMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, true));
+                var definitions = relatedSingleMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, true));
 
                 singleDXElements.AddRange(definitions);
             }
 
             if (relatedSingleOptionalDXElements != null)
             {
-                var definitions = relatedSingleOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, false));
+                var definitions = relatedSingleOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, false));
 
                 singleDXElements.AddRange(definitions);
             }
 
             if (relatedMultiMandatoryDXElements != null)
             {
-                var definitions = relatedMultiMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, true));
+                var definitions = relatedMultiMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, true));
 
                 multiDXElements.AddRange(definitions);
             }
 
             if (relatedMultiOptionalDXElements != null)
             {
-                var definitions = relatedMultiOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, false));
+                var definitions = relatedMultiOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, false));
 
                 multiDXElements.AddRange(definitions);
             }

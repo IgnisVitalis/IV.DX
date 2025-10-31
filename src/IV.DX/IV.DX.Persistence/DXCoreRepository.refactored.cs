@@ -291,6 +291,7 @@ namespace IV.DX.Persistence
 
             var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(
                 mainDXUnit,
+                _dxStructureCache.DXRelations,
                 singleMandatoryDXElements,
                 singleOptionalDXElements,
                 multiMandatoryDXElements,

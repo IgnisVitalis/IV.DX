@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -7,7 +8,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXElementDefinitionConverter
     {
-        public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement, bool isRequired)
+        public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement, IEnumerable<DXRelationDefinitionUnit> relations, bool isRequired)
         {
             var props = dxElement.DXColumnDefinitionElement.Announced
                            .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
@@ -20,7 +21,26 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 
             singleFragmentDefinition.AddPropertyDefinitions(props);
 
+            var relationsAsProperties = GetRelationsAsProperties(dxElement.DXObjectDefinitionMainElement.Name, relations);
+
+            singleFragmentDefinition.AddPropertyDefinitions(relationsAsProperties);
+
             return singleFragmentDefinition;
+        }
+
+        private static IEnumerable<DXPropertyDefinition> GetRelationsAsProperties(string elementName, IEnumerable<DXRelationDefinitionUnit> relations)
+        {
+            return relations
+                .Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == elementName)
+                .Where(x =>
+                    x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToOne
+                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToZeroOne
+                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.OneToZeroOne
+                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToOne
+                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
+                .Where(x => !x.DXRelationDefinitionMainElement.RelationNameRight.EndsWith(Constants.DXUnitIDSuffix))
+                .Select(x => new DXPropertyDefinition(x.DXRelationDefinitionMainElement.RelationNameRight, new DXColumnAttribute(x.DXRelationDefinitionMainElement.RelationNameRight)))
+                .ToList();
         }
 
         public static DXElementDefinition ToDXElementDefinition(string type, Type dxElementType, bool isRequired)

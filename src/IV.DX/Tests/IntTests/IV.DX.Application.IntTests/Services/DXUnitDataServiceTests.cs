@@ -63,6 +63,35 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task GetItemsAsync_UsingFilterForExistingItems_Enumerable()
+        {
+            // Init
+            string typeName = "DXElementDefinitionUnit";
+            string filter = "DXObjectDefinitionMainElement.Kind = 1";
+
+            // Action
+            var items = await this._service.GetItemsAsync(typeName, filter);
+
+            // Assert
+            Assert.NotNull(items);
+            Assert.NotEmpty(items);
+        }
+
+        [Fact]
+        public async Task GetItemAsync_UsingIDForExistingItems_Ok()
+        {
+            // Init
+            string typeName = "DXElementDefinitionUnit";
+            var id = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2");
+
+            // Action
+            var item = await this._service.GetItemAsync(typeName, id);
+
+            // Assert
+            Assert.NotNull(item);
+        }
+
+        [Fact]
         public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
         {
             // Init

@@ -330,15 +330,15 @@ namespace IV.DX.Persistence
                             AllowNull = true,
                             Length = 100
                         },
-                        new DXColumnDefinitionElement()
-                        {
-                            ID = new Guid("86b96626-6d67-4afb-9616-583bd9ae0934"),
-                            ColumnType = DXColumnTypeEnum.Int,
-                            Name = "ColumnType",
-                            AllowNull = false,
-                            EnumKey = new Guid("884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"),
-                            EnumType = new Guid("971d538a-1489-483a-bc84-86596ed0c51a")
-                        }
+                        //new DXColumnDefinitionElement()
+                        //{
+                        //    ID = new Guid("86b96626-6d67-4afb-9616-583bd9ae0934"),
+                        //    ColumnType = DXColumnTypeEnum.Int,
+                        //    Name = "ColumnType",
+                        //    AllowNull = false,
+                        //    EnumKey = new Guid("884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"),
+                        //    EnumType = new Guid("971d538a-1489-483a-bc84-86596ed0c51a")
+                        //}
                     }
                 }
             };
@@ -411,12 +411,12 @@ namespace IV.DX.Persistence
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
-                        new DXColumnDefinitionElement()
-                        {
-                            Name = "BaseDXUnit",
-                            ColumnType = DXColumnTypeEnum.GUID,
-                            AllowNull = true
-                        }
+                        //new DXColumnDefinitionElement()
+                        //{
+                        //    Name = "BaseDXUnit",
+                        //    ColumnType = DXColumnTypeEnum.GUID,
+                        //    AllowNull = true
+                        //}
                     }
                 }
             };
@@ -449,15 +449,15 @@ namespace IV.DX.Persistence
                             ColumnType = DXColumnTypeEnum.GUID,
                             AllowNull = false
                         },
-                        new DXColumnDefinitionElement()
-                        {
-                            ID = new Guid("2881e628-2258-4de9-a9a6-1f5e62f476b5"),
-                            ColumnType = DXColumnTypeEnum.Int,
-                            Name = "RelationType",
-                            AllowNull = false,
-                            EnumKey = new Guid("d214fd3a-99a2-4446-ba90-dd1e863e56e1"),
-                            EnumType = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e")
-                        }
+                        //new DXColumnDefinitionElement()
+                        //{
+                        //    ID = new Guid("2881e628-2258-4de9-a9a6-1f5e62f476b5"),
+                        //    ColumnType = DXColumnTypeEnum.Int,
+                        //    Name = "RelationType",
+                        //    AllowNull = false,
+                        //    EnumKey = new Guid("d214fd3a-99a2-4446-ba90-dd1e863e56e1"),
+                        //    EnumType = new Guid("5e8630a5-e51a-4717-b63e-92a176e2aa8e")
+                        //}
                     }
                 }
             };
@@ -560,24 +560,24 @@ namespace IV.DX.Persistence
                             AllowNull = true,
                             Length = 100
                         },
-                        new DXColumnDefinitionElement()
-                        {
-                            ID = new Guid("4692e78b-002a-4f29-9d78-96739292b1d0"),
-                            ColumnType = DXColumnTypeEnum.Int,
-                            Name = "RelationType",
-                            AllowNull = false,
-                            EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd"),
-                            EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c")
-                        },
-                        new DXColumnDefinitionElement()
-                        {
-                            ID = new Guid("df750be8-2df0-4497-82fe-97eff7bba2eb"),
-                            ColumnType = DXColumnTypeEnum.Int,
-                            Name = "Kind",
-                            AllowNull = false,
-                            EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798"),
-                            EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98")
-                        }
+                        //new DXColumnDefinitionElement()
+                        //{
+                        //    ID = new Guid("4692e78b-002a-4f29-9d78-96739292b1d0"),
+                        //    ColumnType = DXColumnTypeEnum.Int,
+                        //    Name = "RelationType",
+                        //    AllowNull = false,
+                        //    EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd"),
+                        //    EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c")
+                        //},
+                        //new DXColumnDefinitionElement()
+                        //{
+                        //    ID = new Guid("df750be8-2df0-4497-82fe-97eff7bba2eb"),
+                        //    ColumnType = DXColumnTypeEnum.Int,
+                        //    Name = "Kind",
+                        //    AllowNull = false,
+                        //    EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798"),
+                        //    EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98")
+                        //}
                     },
                 },
                 DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>()
