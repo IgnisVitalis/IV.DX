@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     public class DXModel
     {
         public DXMainElement DXMainElement { get; }
-        public HashSet<DXSingleElement> DXSingleElements { get;}
+        public HashSet<DXSingleElement> DXSingleElements { get; }
         public HashSet<DXMultiElement> DXMultiElements { get; }
 
         public DXModel(DXMainElement mainElement, HashSet<DXSingleElement> dxSingleElements, HashSet<DXMultiElement> dxMultiElements)
@@ -25,6 +25,16 @@ namespace IV.DX.Kernel.Models
         public static DXModel From(JObject jObject)
         {
             return DXModelConverter.ToDXModel(jObject);
+        }
+
+        public void AddSingleElement(DXSingleElement singleElement)
+        {
+            this.DXSingleElements.Add(singleElement);
+        }
+
+        public void RemoveSingleElement(DXSingleElement singleElement)
+        {
+            this.DXSingleElements.Remove(singleElement);
         }
 
         public static bool DeepEquals(DXModel item1, DXModel item2)
