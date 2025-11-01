@@ -17,15 +17,15 @@ namespace IV.DX.Kernel.Models
             this.Attribute = attribute;
         }
 
-        public static bool DeepEquals(DXSingleElement item1, DXSingleElement item2)
+        public bool DeepEquals(DXSingleElement item2)
         {
-            if (item1 == null || item2 == null)
+            if (item2 == null)
                 return false;
 
             var result =
-                item1.Name == item2.Name
-                && DXElementAttribute.DeepEquals(item1.Attribute, item2.Attribute)
-                && DXItem.DeepEquals(item1.Item, item2.Item);
+                this.Name == item2.Name
+                && DXElementAttribute.DeepEquals(this.Attribute, item2.Attribute)
+                && this.Item.DeepEquals(item2.Item);
 
             return result;
         }
@@ -45,7 +45,7 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!DeepEquals(item1, item2))
+                if (!item1.DeepEquals(item2))
                     return false;
             }
 

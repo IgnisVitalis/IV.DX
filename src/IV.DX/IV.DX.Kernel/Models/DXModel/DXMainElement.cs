@@ -13,14 +13,14 @@ namespace IV.DX.Kernel.Models
             this.Attribute = attribute;
         }
 
-        public static bool DeepEquals(DXMainElement item1, DXMainElement item2)
+        public bool DeepEquals(DXMainElement item2)
         {
-            if (item1 == null || item2 == null)
+            if (item2 == null)
                 return false;
 
             var result =
-                DXUnitAttribute.DeepEquals(item1.Attribute, item2.Attribute)
-                && DXItem.DeepEquals(item1.Item, item2.Item);
+                DXUnitAttribute.DeepEquals(this.Attribute, item2.Attribute)
+                && this.Item.DeepEquals(item2.Item);
 
             return result;
         }

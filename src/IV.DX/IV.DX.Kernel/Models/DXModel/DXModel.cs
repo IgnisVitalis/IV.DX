@@ -16,7 +16,7 @@ namespace IV.DX.Kernel.Models
             this.DXSingleElements = dxSingleElements;
             this.DXMultiElements = dxMultiElements;
         }
-
+        
         public JObject ToJObject()
         {
             return JObjectConverter.ToJObject(this);
@@ -45,7 +45,7 @@ namespace IV.DX.Kernel.Models
             var result = true;
 
             result = result
-                && DXMainElement.DeepEquals(item1.DXMainElement, item2.DXMainElement)
+                && item1.DXMainElement.DeepEquals(item2.DXMainElement)
                 && DXSingleElement.DeepEquals(item1.DXSingleElements, item2.DXSingleElements)
                 && DXMultiElement.DeepEquals(item1.DXMultiElements, item2.DXMultiElements);
 

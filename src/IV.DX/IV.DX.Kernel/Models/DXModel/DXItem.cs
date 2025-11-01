@@ -67,17 +67,18 @@ namespace IV.DX.Kernel.Models
                 return null;
         }
 
-        public static bool DeepEquals(DXItem item1, DXItem item2)
+        public bool DeepEquals(DXItem item2)
         {
-            if (item1 == null || item2 == null)
+            if (item2 == null)
                 return false;
 
             var result = true;
 
-            result = result && (item1.ID == item2.ID);
-            result = result && (item1.DXUnitID == item2.DXUnitID);
-
-            result = result && DeepEquals(item1.Content, item2.Content);
+            result = result && (this.Type == item2.Type);
+            result = result && (this.ID == item2.ID);
+            result = result && (this.DXUnitID == item2.DXUnitID);
+            result = result && (this.TimeStamp == item2.TimeStamp);
+            result = result && DeepEquals(this.Content, item2.Content);
 
             return result;
         }
@@ -179,7 +180,7 @@ namespace IV.DX.Kernel.Models
                 if (item2 == null)
                     return false;
 
-                if (!DXItem.DeepEquals(item1, item2))
+                if (!item1.DeepEquals(item2))
                     return false;
             }
 
