@@ -7,13 +7,22 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXEnumDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXStructureRepository dataStructureRepo, IDXUnitGenericRepository genericRepo) :
+    internal class DXEnumDefinitionUnitHandler(
+        IDXUnitDataService dxUnitService, 
+        IDXStructureRepository dataStructureRepo, 
+        IDXUnitGenericRepository genericRepo,
+        IDXStructureCache dxStructureCache) :
         DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
         IDXBeforeInsertHandler<DXEnumDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXEnumDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
-        IDXBeforeDeleteHandler<DXEnumDefinitionUnit>, IDXUniqueBeforeDeleteHandler
+        IDXBeforeDeleteHandler<DXEnumDefinitionUnit>, IDXUniqueBeforeDeleteHandler,
+        IDXAfterInsertHandler<DXEnumDefinitionUnit>, IDXUniqueAfterInsertHandler,
+        IDXAfterUpdateHandler<DXEnumDefinitionUnit>, IDXUniqueAfterUpdateHandler,
+        IDXAfterDeleteHandler<DXEnumDefinitionUnit>, IDXUniqueAfterDeleteHandler
     {
         public int BeforeOrder => 1;
+
+        public int AfterOrder => 1;
 
         public Task<DXResult<DXEnumDefinitionUnit>> BeforeInsertAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -63,5 +72,26 @@ namespace IV.DX.Application.Handlers
                     return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
             }
         }
+
+        public async Task<DXResult> AfterInsertAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult> AfterUpdateAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult> AfterDeleteAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }       
     }
 }

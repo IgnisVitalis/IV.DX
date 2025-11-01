@@ -6,15 +6,21 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXRelationDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXUnitGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
+    internal class DXRelationDefinitionUnitHandler(
+        IDXUnitDataService dxUnitService,
+        IDXUnitGenericRepository genericRepo,
+        IDXStructureRepository dataStructureRepo,
+        IDXStructureCache dxStructureCache) :
         IDXBeforeInsertHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeInsertHandler,
-        IDXAfterInsertHandler<DXRelationDefinitionUnit>, IDXUniqueAfterInsertHandler,
         IDXBeforeUpdateHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
-        IDXBeforeDeleteHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeDeleteHandler
+        IDXBeforeDeleteHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeDeleteHandler,
+        IDXAfterInsertHandler<DXRelationDefinitionUnit>, IDXUniqueAfterInsertHandler,
+        IDXAfterUpdateHandler<DXRelationDefinitionUnit>, IDXUniqueAfterUpdateHandler,
+        IDXAfterDeleteHandler<DXRelationDefinitionUnit>, IDXUniqueAfterDeleteHandler
     {
         public int BeforeOrder => 1;
 
-        public int AfterOrder => throw new NotImplementedException();
+        public int AfterOrder => 1;
 
         public Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -43,11 +49,11 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public Task<DXResult> AfterInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
-                return Task.Run(() => DXResult.OkSkipProcess());
+                return DXResult.OkSkipProcess();
             }
             else
             {
@@ -55,7 +61,9 @@ namespace IV.DX.Application.Handlers
 
                 genericRepo.Insert(invertedRelation);
 
-                return Task.Run(() => DXResult.OkContinue());
+                await dxStructureCache.RefreshAsync(ct);               
+
+                return DXResult.OkContinue();
             }
         }
 
@@ -93,9 +101,18 @@ namespace IV.DX.Application.Handlers
             return modelDefinition.SingleOrDefault();
         }
 
-        //private class DXRelationDefinitionUnitInvertedItemContext : IDXHandlerContext
-        //{
+        public async Task<DXResult> AfterDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
 
-        //}
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult> AfterUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
     }
 }

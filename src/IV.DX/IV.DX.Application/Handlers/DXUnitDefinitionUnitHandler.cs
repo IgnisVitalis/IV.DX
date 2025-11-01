@@ -16,11 +16,14 @@ namespace IV.DX.Application.Handlers
         IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
         IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler,
+        IDXAfterInsertHandler<DXUnitDefinitionUnit>, IDXUniqueAfterInsertHandler,
+        IDXAfterUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueAfterUpdateHandler,
         IDXAfterDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueAfterDeleteHandler
+
     {
         public int BeforeOrder => 1;
 
-        public int AfterOrder => throw new NotImplementedException();
+        public int AfterOrder => 1;
 
         public Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -67,6 +70,20 @@ namespace IV.DX.Application.Handlers
             dataStructureRepo.DropDataStructure(dxUnit);
 
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
+        }      
+
+        public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult> AfterInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
         }
 
         public async Task<DXResult> AfterDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
@@ -230,6 +247,6 @@ namespace IV.DX.Application.Handlers
                 default:
                     throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
             }
-        }
+        }       
     }
 }
