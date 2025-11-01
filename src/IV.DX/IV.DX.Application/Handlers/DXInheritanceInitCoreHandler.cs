@@ -10,11 +10,11 @@ namespace IV.DX.Application.Handlers
     {
         public int BeforeOrder => 1;
 
-        public Task<DXResult<DXInheritanceInitCore>> BeforeInsertAsync(DXInheritanceInitCore dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXInheritanceInitCore>> BeforeInsertAsync(DXInheritanceInitCore dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             dataStructureRepo.SetDXUnitInheritance(dxUnit.ChildDXUnit, dxUnit.BaseDXUnit);
 
-            return Task.Run(() => DXResult<DXInheritanceInitCore>.OkSkipProcess(dxUnit));
+            return DXResult<DXInheritanceInitCore>.OkSkipProcess(dxUnit);
         }
     }
 }

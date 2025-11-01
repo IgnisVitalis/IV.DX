@@ -25,7 +25,7 @@ namespace IV.DX.Application.Handlers
 
         public int AfterOrder => 1;
 
-        public Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -34,18 +34,18 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXUnitDefinitionUnit>.OkSkipProcess(dxUnit);
             }
             else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
-                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
             }
             else
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
                 this.ProcessRelations(dxUnit);
-                return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 

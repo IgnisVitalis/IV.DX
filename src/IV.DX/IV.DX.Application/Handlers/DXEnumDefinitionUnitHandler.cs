@@ -24,7 +24,7 @@ namespace IV.DX.Application.Handlers
 
         public int AfterOrder => 1;
 
-        public Task<DXResult<DXEnumDefinitionUnit>> BeforeInsertAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXEnumDefinitionUnit>> BeforeInsertAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -33,31 +33,31 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit);
             }
             else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
-                return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit);
             }
             else
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 
-        public Task<DXResult<DXEnumDefinitionUnit>> BeforeUpdateAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXEnumDefinitionUnit>> BeforeUpdateAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
-            return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        public Task<DXResult<DXEnumDefinitionUnit>> BeforeDeleteAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXEnumDefinitionUnit>> BeforeDeleteAsync(DXEnumDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -67,9 +67,9 @@ namespace IV.DX.Application.Handlers
             switch (dxUnit.DXObjectDefinitionMainElement.Kind)
             {
                 case DXObjectKindEnum.Core:
-                    return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit));
+                    return DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit);
                 default:
-                    return Task.Run(() => DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit));
+                    return DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 

@@ -22,30 +22,30 @@ namespace IV.DX.Application.Handlers
 
         public int AfterOrder => 1;
 
-        public Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation != null)
             {
-                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
             }
 
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
             }
             else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
-                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
             }
             else
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 
@@ -67,12 +67,12 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public Task<DXResult<DXRelationDefinitionUnit>> BeforeUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
+            return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
         }
 
-        public Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             //if (ctx is DXRelationDefinitionUnitInvertedItemContext)
             //{
@@ -84,14 +84,14 @@ namespace IV.DX.Application.Handlers
             var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
             if (existingRelation == null)
-                return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
 
             dxUnit = existingRelation;
             var invertedRelation = this.GetInvertedRelationObject(dxUnit);
 
             genericRepo.Delete(invertedRelation);
 
-            return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
         }
 
         private DXRelationDefinitionUnit GetInvertedRelationObject(DXRelationDefinitionUnit dxUnit)

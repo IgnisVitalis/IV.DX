@@ -23,7 +23,7 @@ namespace IV.DX.Application.Handlers
 
         public int AfterOrder => 1;
 
-        public Task<DXResult<DXElementDefinitionUnit>> BeforeInsertAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXElementDefinitionUnit>> BeforeInsertAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -32,11 +32,11 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkSkipProcess(dxUnit));
+                return DXResult<DXElementDefinitionUnit>.OkSkipProcess(dxUnit);
             }
             else if (ctx is DXUnitHandlerPostInitCoreContext)
             {
-                return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
             }
             else
             {
@@ -44,11 +44,11 @@ namespace IV.DX.Application.Handlers
 
                 this.ProcessRelations(dxUnit);
 
-                return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
+                return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 
-        public Task<DXResult<DXElementDefinitionUnit>> BeforeUpdateAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXElementDefinitionUnit>> BeforeUpdateAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -57,17 +57,17 @@ namespace IV.DX.Application.Handlers
 
             this.ProcessRelations(dxUnit);
 
-            return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        public Task<DXResult<DXElementDefinitionUnit>> BeforeDeleteAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXElementDefinitionUnit>> BeforeDeleteAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
-            return Task.Run(() => DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
         }
 
         private void ProcessRelations(DXElementDefinitionUnit dxUnit)
