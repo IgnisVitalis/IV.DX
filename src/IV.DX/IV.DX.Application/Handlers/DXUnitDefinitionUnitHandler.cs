@@ -7,13 +7,20 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXUnitDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXUnitGenericRepository genericRepo, IDXStructureRepository dataStructureRepo) :
+    internal class DXUnitDefinitionUnitHandler(
+        IDXUnitDataService dxUnitService,
+        IDXUnitGenericRepository genericRepo,
+        IDXStructureRepository dataStructureRepo,
+        IDXStructureCache dxStructureCache) :
         DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
         IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
-        IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler
+        IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler,
+        IDXAfterDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueAfterDeleteHandler
     {
         public int BeforeOrder => 1;
+
+        public int AfterOrder => throw new NotImplementedException();
 
         public Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -39,7 +46,7 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -47,10 +54,10 @@ namespace IV.DX.Application.Handlers
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
             this.ProcessRelations(dxUnit);
-            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        public Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -59,7 +66,14 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.DropDataStructure(dxUnit);
 
-            return Task.Run(() => DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit));
+            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
+        }
+
+        public async Task<DXResult> AfterDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
         }
 
         private void DeleteRelations(DXUnitDefinitionUnit dxUnit)

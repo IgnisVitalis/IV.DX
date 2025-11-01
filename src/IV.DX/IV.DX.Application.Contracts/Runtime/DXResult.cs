@@ -43,10 +43,10 @@
         public static DXResult<T> Ok(T value, DXFlow flow = DXFlow.Continue)
             => new(true, value, null, flow, DXOutcome.Ok);
 
-        public static DXResult<T?> OkContinue(T value)
+        public static DXResult<T> OkContinue(T value)
             => new(true, value, null, DXFlow.Continue, DXOutcome.Ok);
 
-        public static DXResult<T?> OkSkipProcess(T value)
+        public static DXResult<T> OkSkipProcess(T value)
             => new(true, value, null, DXFlow.SkipProcess, DXOutcome.Ok);
 
         public static DXResult<T?> OkStop(T? value = default)
@@ -58,7 +58,7 @@
         public static new DXResult<T?> Fail(string error, DXFlow flow = DXFlow.Stop)
             => new(false, default, error, flow, DXOutcome.Error);
 
-        public static DXResult<T?> MapFrom<Y>(DXResult<Y> original, T? value)
+        public static DXResult<T> MapFrom<Y>(DXResult<Y> original, T? value)
             => new(original.IsSuccess, value, original.Error, original.Flow, original.Outcome);
     }
 }

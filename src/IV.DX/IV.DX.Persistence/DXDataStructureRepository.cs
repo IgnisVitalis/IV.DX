@@ -15,7 +15,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void CreateDataStructure(DXRelationDefinitionUnit dxUnit)
@@ -24,7 +24,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void DropDataStructure(DXRelationDefinitionUnit dxUnit)
@@ -33,7 +33,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -42,7 +42,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -51,7 +51,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
@@ -63,7 +63,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public void DropDataStructure(DXObjectDefinitionUnit dataDXElement)
@@ -71,7 +71,7 @@ namespace IV.DX.Persistence
             var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataDXElement);
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -195,7 +195,7 @@ namespace IV.DX.Persistence
 
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
 
-            this.UpdateCache();
+            this.RefreshCache();
         }
 
         public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
@@ -207,7 +207,7 @@ namespace IV.DX.Persistence
 
             if (result == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.DXUnitInheritanceElement.BaseDXUnit);
             }
@@ -221,7 +221,7 @@ namespace IV.DX.Persistence
 
             if (result == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(dxUnitType));
             }
@@ -299,7 +299,7 @@ namespace IV.DX.Persistence
 
             if (existingRelation == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
                 x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
@@ -327,7 +327,7 @@ namespace IV.DX.Persistence
 
             if (existingDXElement == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
             }
@@ -351,7 +351,7 @@ namespace IV.DX.Persistence
 
             if (existingEnum == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
             }
@@ -365,7 +365,7 @@ namespace IV.DX.Persistence
 
             if (existingEnum == null)
             {
-                this.UpdateCache();
+                this.RefreshCache();
 
                 existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(enumName));
             }
@@ -373,7 +373,7 @@ namespace IV.DX.Persistence
             return existingEnum;
         }
 
-        private void UpdateCache()
+        private void RefreshCache()
         {
             this._dxStructureCache.RefreshAsync().Wait();
         }
