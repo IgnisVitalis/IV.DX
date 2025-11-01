@@ -14,8 +14,6 @@ namespace IV.DX.Persistence
             var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dataDXElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void CreateDataStructure(DXRelationDefinitionUnit dxUnit)
@@ -23,8 +21,6 @@ namespace IV.DX.Persistence
             var sqlQuery = this.GetSQLQueryToCreateRelation(dxUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void DropDataStructure(DXRelationDefinitionUnit dxUnit)
@@ -32,8 +28,6 @@ namespace IV.DX.Persistence
             var sqlQuery = this.GetSQLQueryToDeleteRelation(dxUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -41,8 +35,6 @@ namespace IV.DX.Persistence
             var sqlQuery = this.GetSQLQueryToCreateTable(obj, dxElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -50,8 +42,6 @@ namespace IV.DX.Persistence
             var sqlQuery = this.GetSQLQueryToDropTable(obj, dxElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
@@ -62,16 +52,12 @@ namespace IV.DX.Persistence
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         public void DropDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
             var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataDXElement);
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
-
-            this.RefreshCache();
         }
 
         private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
@@ -194,8 +180,6 @@ namespace IV.DX.Persistence
             var query = this._queryHelper.GetQueryToSetDXUnitInheritance(childDXUnit, baseDXUnit);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
-
-            this.RefreshCache();
         }
 
         public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
