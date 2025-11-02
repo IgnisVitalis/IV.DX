@@ -226,16 +226,16 @@
                     "DefaultValue": null,
                     "Length": 100
                 },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
-                    "ID": "08744099-30bb-46a6-9e44-e46f475b204b",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
-                    "ColumnType": 8,
-                    "Name": "RelationColumnTypeLeft",
-                    "AllowNull": true,
-                    "DefaultValue": null
-                },
+                //{
+                //    "S_Type": "DXColumnDefinitionElement",
+                //    "ID": "08744099-30bb-46a6-9e44-e46f475b204b",
+                //    "TimeStamp": "2021-10-02T00:00:00",
+                //    "DXUnitID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
+                //    "ColumnType": 8,
+                //    "Name": "RelationColumnTypeLeft",
+                //    "AllowNull": true,
+                //    "DefaultValue": null
+                //},
                 {
                     "S_Type": "DXColumnDefinitionElement",
                     "ID": "428c0829-d296-4d94-9b9a-94a65745543d",
@@ -269,16 +269,16 @@
                     "DefaultValue": null,
                     "Length": 100
                 },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
-                    "ID": "acbacb32-5e1f-4bb7-a06b-c50f346da38c",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
-                    "ColumnType": 8,
-                    "Name": "RelationColumnTypeRight",
-                    "AllowNull": true,
-                    "DefaultValue": null
-                },
+                //{
+                //    "S_Type": "DXColumnDefinitionElement",
+                //    "ID": "acbacb32-5e1f-4bb7-a06b-c50f346da38c",
+                //    "TimeStamp": "2021-10-02T00:00:00",
+                //    "DXUnitID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
+                //    "ColumnType": 8,
+                //    "Name": "RelationColumnTypeRight",
+                //    "AllowNull": true,
+                //    "DefaultValue": null
+                //},
                 {
                     "S_Type": "DXColumnDefinitionElement",
                     "ID": "efce7a8d-892a-49d8-9f8f-0dec7cd96f19",

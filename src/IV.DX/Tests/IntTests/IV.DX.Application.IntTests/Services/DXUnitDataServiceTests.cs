@@ -91,6 +91,26 @@ namespace IV.DX.Application.IntTests.Services
             Assert.NotNull(item);
         }
 
+
+        [Fact]
+        public async Task GetItemAsync_UsingIDForExistingItems_Ok1()
+        {
+
+            IDXStructureCache cache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
+
+            await cache.RefreshAsync();
+
+            // Init
+            string typeName = "DXElementDefinitionUnit";
+            var id = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2");
+
+            // Action
+            var item = await this._service.GetItemAsync(typeName, id);
+
+            // Assert
+            Assert.NotNull(item);
+        }
+
         [Fact]
         public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
         {
@@ -101,6 +121,11 @@ namespace IV.DX.Application.IntTests.Services
 
             var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
             var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
+
+            base._finalizationAction = () =>
+            {
+                this._genericRepo.Delete(item);
+            };
 
             // Action
             var result = await EstimatePerformanceAsync(async () =>

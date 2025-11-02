@@ -190,6 +190,11 @@ namespace IV.DX.Persistence.IntTests
             var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
             var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
 
+            base._finalizationAction = () =>
+            {
+                this._genericRepo.Delete(item);
+            };
+
             // Action
             await EstimatePerformanceAsync(async () =>
             {

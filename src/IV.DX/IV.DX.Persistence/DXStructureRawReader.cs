@@ -18,6 +18,8 @@ namespace IV.DX.Persistence
 
             var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXElementDefinitionUnit>(x));
 
+            return dxElementInfos;
+
             var dxElementInfosWithoutCore = dxElementInfos.Except(DXCoreDataStructureRepository.CoreDXElementInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXElementDefinitionUnit);
 
@@ -32,6 +34,8 @@ namespace IV.DX.Persistence
             var dxUnitModelsFromDB = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXUnitDefinitionUnit>(), DXLoadingType.Full);
 
             var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXUnitDefinitionUnit>(x));
+
+            return dxUnitInfos;
 
             var dxUnitInfosWithoutCore = dxUnitInfos.Except(DXCoreDataStructureRepository.CoreDXUnitInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXUnitDefinitionUnit);
@@ -48,6 +52,8 @@ namespace IV.DX.Persistence
 
             var enumInfos = enumsModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXEnumDefinitionUnit>(x));
 
+            return enumInfos;
+
             var enumInfosWithoutCore = enumInfos.Except(DXCoreDataStructureRepository.CoreEnumInfos, DXObjectDefinitionUnitIDComparer.Instance)
                 .Select(x => x as DXEnumDefinitionUnit);
 
@@ -60,6 +66,7 @@ namespace IV.DX.Persistence
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
             var result = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
+                      
             return result.Select(x => DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(x)).ToList();
         }
     }
