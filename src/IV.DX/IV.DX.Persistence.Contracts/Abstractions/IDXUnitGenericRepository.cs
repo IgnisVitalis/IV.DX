@@ -6,7 +6,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
     {
         IEnumerable<T> GetDXUnits<T>() where T : DXUnit;
         IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit;
-        IEnumerable<T> GetDXUnits<T>(string dxsqlWhereExpression) where T : DXUnit;
+        IEnumerable<T> GetDXUnits<T>(string dxFilter) where T : DXUnit;
         T GetDXUnit<T>(Guid id) where T : DXUnit;
         Guid Insert(DXUnit dxUnit);
         Guid Update(DXUnit dxUnit);

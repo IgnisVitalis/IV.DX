@@ -7,8 +7,10 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -203,20 +205,20 @@ namespace IV.DX.Persistence
             return this.GetItems(modelDefinition, ids, DXLoadingType.Full);
         }
 
-        public IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression)
+        public IEnumerable<DXModel> GetItems(string typeName, string dxFilter)
         {
             var modelDefinition = this.GetModelDefinition(typeName);
 
             if (modelDefinition == null)
                 return null;
 
-            return this.GetItems(modelDefinition, dxsqlWhereExpression, DXLoadingType.Full);
+            return this.GetItems(modelDefinition, dxFilter, DXLoadingType.Full);
         }
 
         // TODO: need to check what kind of data is loaded. Because this method should load only IDs
-        public IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default)
+        public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
         {
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -305,10 +307,10 @@ namespace IV.DX.Persistence
             return GetItems(container, string.Empty, typeOfLoading);
         }
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxsqlWhereExpression, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxFilter, DXLoadingType typeOfLoading)
         {
             string typeName = container.MainElement.Type;
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1213,44 +1215,68 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXSingleElement GetSingleDXElement(DXElementDefinition container, Guid id)
+        public DXSingleElement? GetSingleDXElement(DXElementDefinition container, Guid id)
+        {
+            var whereClauseForID = $"ID = '{id}'";
+
+            var result = GetSingleDXElements(container, whereClauseForID);
+
+            return result?.SingleOrDefault();
+        }     
+
+        public IEnumerable<DXSingleElement> GetSingleDXElements(DXElementDefinition container, string dxFilter)
         {
             if (container == null)
                 return null;
+
+            string typeName = container.Type;     
+            var ids = this.GetIDs(typeName, dxFilter);
+
+            if (ids.Count() == 0)
+                return Enumerable.Empty<DXSingleElement>();
+
+            var sqlWhereClause = this._queryHelper.GetWhereExpressionForID(ids);
 
             var result = this.RunRequest((conn) =>
             {
                 DataSet dataSet = new DataSet(container.Type);
 
-                var whereClauseForID = this._queryHelper.GetWhereExpressionForID(id);
-
                 this.PopulateTableToDataSet(conn, dataSet, container.Type,
                     columnNames: container.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: whereClauseForID, fillSchema: false);
+                    whereClause: sqlWhereClause, fillSchema: false);
 
                 var dataTable = dataSet.Tables[container.Type];
 
-                if (dataTable.Rows.Count == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    var dataRow = dataSet.Tables[container.Type].Rows.Cast<DataRow>().SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.ID]) == id);
-
-                    if (dataRow == null)
-                        return null;// new DXSingleElement(container.Type, new DXElementAttribute(container.Type));
-                    else
-                        return
-                        new DXSingleElement(
+                var result = dataSet.Tables[container.Type].Rows.Cast<DataRow>().Select(dataRow => new DXSingleElement(
                             container.Type,
                             new DXElementAttribute(container.Type),
                             this.GetDXItem(dataRow, container),
-                            container.IsRequired);
-                }
+                            container.IsRequired)).ToList();
+
+                return result;
             });
 
             return result;
+        }
+
+        private IEnumerable<Guid> GetIDs(string typeName, string dxFilter)
+        {
+            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
+
+            return this.RunRequestInTransaction((conn) =>
+            {
+                var dataSet = new DataSet(typeName);
+
+                var adapter = this._queryHelper.GetDbDataAdapter(conn, sqlQuery);
+
+                adapter.Fill(dataSet, typeName);
+
+                var table = dataSet.Tables[typeName];
+
+                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
+
+                return ids;
+            });
         }
 
         // TODO: can be refactored using stored procedure
@@ -1658,9 +1684,9 @@ namespace IV.DX.Persistence
             int? limit = null,
             bool fillSchema = true)
         {
-            var adapter = _queryHelper.GetDbDataAdapter(
-                conn,
-                _queryHelper.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit));
+            var query = _queryHelper.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit);
+
+            var adapter = _queryHelper.GetDbDataAdapter(conn, query);
 
             if (fillSchema)
             {

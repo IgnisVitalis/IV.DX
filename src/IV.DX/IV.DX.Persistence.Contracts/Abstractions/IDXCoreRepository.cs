@@ -5,18 +5,18 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXCoreRepository
     {
-        IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default);
+        IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default);
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
         DXModel GetItem(DXModelDefinition dxModelDefinition, Guid id, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(string typeName);
         IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
-        IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression);
+        IEnumerable<DXModel> GetItems(string typeName, string dxFilter);
         DXModel GetItem(string typeName, Guid objectId);
         IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading);
-        IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, string dxsqlWhereExpression, DXLoadingType typeOfLoading);
+        IEnumerable<DXModel> GetItems(DXModelDefinition dxModelDefinition, string dxFilter, DXLoadingType typeOfLoading);
         Guid Insert(DXModel dxModel);
         Guid Update(DXModel dxModel);
         Guid InsertOrUpdate(DXModel dxModel);
@@ -29,6 +29,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid UpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement);
         Guid InsertOrUpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement);
         bool DeleteSingleDXElement(string typeName, Guid objectId);
-        DXSingleElement GetSingleDXElement(DXElementDefinition container, Guid id);
+        DXSingleElement? GetSingleDXElement(DXElementDefinition container, Guid id);
+        IEnumerable<DXSingleElement> GetSingleDXElements(DXElementDefinition container, string dxFilter);
     }
 }

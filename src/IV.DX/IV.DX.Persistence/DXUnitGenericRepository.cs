@@ -46,9 +46,9 @@ namespace IV.DX.Persistence
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
-        public IEnumerable<T> GetDXUnits<T>(string dxsqlWhereExpression) where T : DXUnit
+        public IEnumerable<T> GetDXUnits<T>(string dxFilter) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), dxsqlWhereExpression, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), dxFilter, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }

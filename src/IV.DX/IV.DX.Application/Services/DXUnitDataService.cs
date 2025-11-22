@@ -69,9 +69,9 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get dxUnit by ids: {result.Error}");
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxsqlWhereExpression, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
-            var result = await dxPipelineExecutor.GetItemsAsync<T>(dxsqlWhereExpression, context, ct);
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(dxFilter, context, ct);
 
             if (result.IsSuccess)
             {
@@ -85,7 +85,7 @@ namespace IV.DX.Application.Services
                 }
             }
 
-            throw new Exception($"There are an error to get dxUnit by query ({dxsqlWhereExpression}): {result.Error}");
+            throw new Exception($"There are an error to get dxUnit by query ({dxFilter}): {result.Error}");
         }
 
         public async Task<T> InsertAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
@@ -185,9 +185,9 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {result.Error}");
         }
 
-        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxsqlWhereExpression, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxFilter, IDXHandlerContext? context = default, CancellationToken ct = default)
         {
-            var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxsqlWhereExpression, context, ct);
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxFilter, context, ct);
 
             if (result.IsSuccess)
             {
@@ -201,7 +201,7 @@ namespace IV.DX.Application.Services
                 }
             }
 
-            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxsqlWhereExpression}): {result.Error}");
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxFilter}): {result.Error}");
         }
 
         public async Task<JObject> GetItemAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)

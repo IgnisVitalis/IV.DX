@@ -26,7 +26,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             throw new NotImplementedException();
         }
 
-        public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             throw new NotImplementedException();
         }
@@ -56,7 +56,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             throw new NotImplementedException();
         }
 
-        public string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+        public string GetQuery(string typeName, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             throw new NotImplementedException();
         }
@@ -190,24 +190,24 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    {
     //    }
 
-    //    public string GetQuery(string typeName, string dxsqlWhereExpression, IEnumerable<DXRelationDefinitionUnit> relationInfos)
+    //    public string GetQuery(string typeName, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
     //    {
-    //        if (string.IsNullOrEmpty(dxsqlWhereExpression))
+    //        if (string.IsNullOrEmpty(dxFilter))
     //            return GetSQLQueryToSelectIDFromTable(typeName);
 
-    //        var result = this.ConvertToQueryContainer(typeName, dxsqlWhereExpression, relationInfos);
+    //        var result = this.ConvertToQueryContainer(typeName, dxFilter, relationInfos);
 
     //        return result.Query;
     //    }
 
     //    public DXQueryContainer ConvertToQueryContainer(
     //       string dxUnitType,
-    //       string dxsqlWhereExpression,
+    //       string dxFilter,
     //       IEnumerable<DXRelationDefinitionUnit> relationInfos)
     //    {
     //        DXOrientedTree expressionTree = DXOrientedTree.CreateInstance(dxUnitType);
 
-    //        expressionTree.Load(dxsqlWhereExpression);
+    //        expressionTree.Load(dxFilter);
 
     //        expressionTree.LoadAdditionalInfosToNodes(relationInfos);
 

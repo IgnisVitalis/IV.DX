@@ -58,7 +58,8 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitGenericRepository, DXUnitGenericRepository>();
             services.AddScoped<IDXElementGenericRepository, DXElementGenericRepository>();
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
-            services.AddScoped<IDXEnumDataService, DXEnumDataService>();     
+            services.AddScoped<IDXEnumDataService, DXEnumDataService>();
+            services.AddScoped<IDXElementDataService, DXElementDataService>();            
             services.AddScoped<IDXMigrationService, MigrationService>();
             services.AddScoped<IDXStructureService, DXStructureService>();
 

@@ -229,20 +229,20 @@ namespace IV.DX.Persistence
     //        return this.GetItems(modelDefinition, ids, DXLoadingType.Full);
     //    }
 
-    //    public IEnumerable<DXModel> GetItems(string typeName, string dxsqlWhereExpression)
+    //    public IEnumerable<DXModel> GetItems(string typeName, string dxFilter)
     //    {
     //        var modelDefinition = this.GetModelDefinition(typeName);
 
     //        if (modelDefinition == null)
     //            return null;
 
-    //        return this.GetItems(modelDefinition, dxsqlWhereExpression, DXLoadingType.Full);
+    //        return this.GetItems(modelDefinition, dxFilter, DXLoadingType.Full);
     //    }
 
     //    // TODO: need to check what kind of data is loaded. Because this method should load only IDs
-    //    public IEnumerable<Guid> GetItemIDs(string typeName, string? dxsqlWhereExpression = default)
+    //    public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
     //    {
-    //        string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
+    //        string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 
     //        return this.RunRequestInTransaction((conn) =>
     //        {
@@ -330,10 +330,10 @@ namespace IV.DX.Persistence
     //        return GetItems(container, string.Empty, typeOfLoading);
     //    }
 
-    //    public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxsqlWhereExpression, DXLoadingType typeOfLoading)
+    //    public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxFilter, DXLoadingType typeOfLoading)
     //    {
     //        string typeName = container.MainElement.Type;
-    //        string sqlQuery = this._queryHelper.GetQuery(typeName, dxsqlWhereExpression, this._dxStructureCache.DXRelations);
+    //        string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 
     //        return this.RunRequestInTransaction((conn) =>
     //        {
