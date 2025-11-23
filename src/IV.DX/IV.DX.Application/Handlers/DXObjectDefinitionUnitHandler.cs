@@ -99,12 +99,15 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetRelationObjectForEnum(DXObjectDefinitionUnit obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXColumnDefinitionElement columnWithEnumValue)
         {
+            var objID = Guid.NewGuid();
+
             return new DXRelationDefinitionUnit()
             {
-                ID = Guid.NewGuid(),
+                ID = objID,
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
+                    DXUnitID = objID,
                     ObjectNameLeft = obj.DXObjectDefinitionMainElement.Name,
                     RelationNameLeft = obj.DXObjectDefinitionMainElement.Name,
                     ObjectNameRight = enumObj.DXObjectDefinitionMainElement.Name,

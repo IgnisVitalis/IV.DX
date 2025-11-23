@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -24,11 +25,13 @@ namespace IV.DX.Application.IntTests.Services
     {
         IDXUnitDataService _service;
         IDXUnitGenericRepository _genericRepo;
+        IDXStructureRepository _dataStructureRepo;
 
         public DXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
             this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
+            this._dataStructureRepo = base.ServiceProvider.GetRequiredService<IDXStructureRepository>();
         }
 
         [Fact]
@@ -155,6 +158,17 @@ namespace IV.DX.Application.IntTests.Services
             // Init
             var id = new Guid("b028075c-f460-42c0-a456-36e50ba645a8");
 
+            var objectKindEnum = new DXColumnDefinitionElement()
+            {
+                ID = Guid.NewGuid(),
+                DXUnitID = id,
+                ColumnType = DXColumnTypeEnum.Int,
+                AllowNull = true,
+                Name = "ObjectKind",
+                EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
+                EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
+            };
+
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
@@ -170,16 +184,7 @@ namespace IV.DX.Application.IntTests.Services
                     Mode = MultiElementsMode.Target,
                     Announced = new HashSet<DXColumnDefinitionElement>()
                     {
-                        new DXColumnDefinitionElement()
-                        {
-                            ID= Guid.NewGuid(),
-                            DXUnitID = id,
-                            ColumnType = DXColumnTypeEnum.Int,
-                            AllowNull = true,
-                            Name = "ObjectKind",
-                            EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
-                            EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
-                        }
+                      objectKindEnum
                     }
                 }
             };
@@ -193,6 +198,37 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.InsertAsync(dxUnit);
 
             // Assert
+            var createdDXUnit = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
+
+            Assert.NotNull(createdDXUnit);
+
+            Assert.NotEmpty(createdDXUnit.DXColumnDefinitionElement.Announced);
+
+            var createdEnums = createdDXUnit.DXColumnDefinitionElement.Announced.SingleOrDefault(x => objectKindEnum.ID == x.ID);
+            Assert.NotNull(createdEnums);
+
+            var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnum");
+
+            Assert.NotNull(createdRelation);
+            Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+
+            var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
+
+            Assert.NotNull(createdRelationInverted);
+            Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
+
+            var instances = await this._service.GetItemsAsync<DXUnitWithEnum>();
+
+            Assert.Empty(instances);
+        }
+
+        [DXUnit("DXUnitWithEnum")]
+        public class DXUnitWithEnum : DXUnit
+        {
+            [DXColumn("DXObjectKindEnum")]
+            DXObjectKindEnum ObjectKind { get; set; }
         }
 
         private const string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
