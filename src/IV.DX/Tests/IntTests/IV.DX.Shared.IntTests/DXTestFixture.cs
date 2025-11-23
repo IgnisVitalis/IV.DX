@@ -42,7 +42,7 @@ namespace IV.DX.Shared.IntTests
             using var scope = Root.CreateScope();
             var init = scope.ServiceProvider.GetRequiredService<IDXInitializer>();
 
-            var coreRepo = scope.ServiceProvider.GetRequiredService<IDXCoreRepository>();
+            var coreRepo = scope.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
 
             coreRepo.DropDataBase();
             init.InitCoreDataAsync().Wait();

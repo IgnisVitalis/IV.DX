@@ -50,7 +50,8 @@ namespace IV.DX.Hosting
                 return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, helper);
             };
            
-            services.AddScoped<IDXCoreRepository, DXCoreRepository>(func);
+            services.AddScoped<IDXUnitCoreRepository, DXCoreRepository>(func);
+            services.AddScoped<IDXElementCoreRepository, DXCoreRepository>(func);            
             services.AddScoped<IDXStructureRawReader, DXCoreRepository>(func);
             services.AddScoped<IDXStructureRepository, DXCoreRepository>(func);
             services.AddScoped<IDXEnumCoreRepository, DXCoreRepository>(func);

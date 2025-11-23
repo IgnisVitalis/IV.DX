@@ -130,14 +130,12 @@ namespace IV.DX.Application
             var ext = script.DXMigrationScriptsMainElement.Extention?.ToLowerInvariant();
             switch (ext)
             {
+                case "ann":   // insert or update
                 case "dat":   // insert or update
                     await ProcessFileToInsertOrUpdateAsync(script, ct).ConfigureAwait(false);
                     break;
-
-                case "dd":
-                case "rd":
-                case "od":    // insert only
-                    await ProcessFileToInsertAsync(script, ct).ConfigureAwait(false);
+                case "del":   // delete
+                    await ProcessFileToInsertOrUpdateAsync(script, ct).ConfigureAwait(false);
                     break;
 
                 default:

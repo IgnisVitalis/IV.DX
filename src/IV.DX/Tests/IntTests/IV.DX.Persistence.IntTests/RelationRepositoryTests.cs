@@ -19,14 +19,14 @@ namespace IV.DX.Persistence.IntTests
     public class RelationRepositoryTests : IntTestController
     {
         IDXUnitGenericRepository _genericRepo;
-        IDXCoreRepository _coreRepo;
+        IDXUnitCoreRepository _coreRepo;
         IDXUnitDataService _dataService;
 
         public RelationRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
-            this._coreRepo = this.ServiceProvider.GetRequiredService<IDXCoreRepository>();
+            this._coreRepo = this.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
             this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }
 

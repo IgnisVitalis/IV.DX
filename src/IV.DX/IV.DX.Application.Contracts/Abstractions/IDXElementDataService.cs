@@ -4,6 +4,6 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXElementDataService
     {
-        Task<T> GetItems<T>(string dxFilter, CancellationToken ct = default) where T : DXElement, new();
+        Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, CancellationToken ct = default) where T : DXElement, new();
     }
 }

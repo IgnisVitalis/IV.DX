@@ -58,7 +58,16 @@
                 return result;
             }
 
-            throw new Exception("DXElementNode can have only CoreNode or DXUnitNode as mother node. Please check DX query.");
+            var motherAsDXElementNode = this.Mother as DXElementNode;
+
+            if (motherAsDXElementNode != null)
+            {
+                result.MainTableAlias = motherAsDXElementNode.TableNameAliasToJoin;
+
+                return result;
+            }
+
+            throw new Exception("DXElementNode can have only CoreNode/DXUnitNode/DXElement as mother node. Please check DX query.");
         }
     }
 }

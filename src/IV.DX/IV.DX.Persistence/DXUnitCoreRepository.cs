@@ -6,15 +6,12 @@ using IV.DX.Kernel.Helpers.DXModelDefinitionHelpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
-using Newtonsoft.Json.Linq;
-using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
-using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
     {
         protected string _connectionStr;
         protected ISQLQueryDXHelper _queryHelper;
@@ -68,17 +65,18 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXModel GetItem(DXModelDefinition container, Guid id, DXLoadingType typeOfLoading)
+        public DXModel? GetItem(DXModelDefinition container, Guid id, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
-
-            DXModel result;
 
             return this.RunRequest((conn) =>
             {
                 var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
                 var dataTable = dataSet.Tables[container.MainElement.Name];
+
+                if (dataTable == null)
+                    throw new Exception($"Table '{container.MainElement.Name}' wouldn't load");
 
                 if (dataTable.Rows.Count == 0)
                 {
@@ -309,23 +307,11 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxFilter, DXLoadingType typeOfLoading)
         {
-            string typeName = container.MainElement.Type;
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
+            string typeName = container.MainElement.Type;         
 
-            return this.RunRequestInTransaction((conn) =>
-            {
-                var dataSet = new DataSet(typeName);
+            var ids = this.GetItemIDs(typeName, dxFilter);
 
-                var adapter = this._queryHelper.GetDbDataAdapter(conn, sqlQuery);
-
-                adapter.Fill(dataSet, typeName);
-
-                var table = dataSet.Tables[typeName];
-
-                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
-
-                return this.GetItems(conn, container, ids, typeOfLoading);
-            });
+            return this.GetItems(container, ids, typeOfLoading);
         }
 
         private DataSet PopulateDataSetForTargetDXUnit(DXModelDefinition container, Guid id, DbConnection conn)
@@ -1136,148 +1122,7 @@ namespace IV.DX.Persistence
                 default:
                     throw new NotImplementedException($"Relation type '{relationInfo.RelationType}' is not supported.");
             }
-        }
-
-        public Guid InsertSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Insert);
-        }
-
-        public Guid UpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
-        }
-
-        public Guid InsertOrUpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            throw new NotImplementedException("InsertOrUpdateSingleDXElement is not implemted yet.");
-        }
-
-        private Guid InsertOrUpdateSingleDXElementPrivate(string dxModelType, DXSingleElement dxSingleDXElement, ProcessingType processingType)
-        {
-            ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
-            ArgumentNullException.ThrowIfNull(dxSingleDXElement);
-
-            return this.RunRequestInTransaction((conn) =>
-            {
-                var dataSet = new DataSet(dxSingleDXElement.Name);
-
-                var id = this.InsertOrUpdatedxSingleItemToDataSet(
-                    dxSingleDXElement,
-                    dxModelType,
-                    dxSingleDXElement.Item.DXUnitID,
-                    dataSet,
-                    conn,
-                    processingType);
-
-                dataSet.AcceptChanges();
-
-                return id;
-            });
-        }
-
-        public bool DeleteSingleDXElement(string typeName, Guid id)
-        {
-            ArgumentNullException.ThrowIfNullOrEmpty(typeName);
-
-            if (id == Guid.Empty)
-                throw new ArgumentException("Id must be a non-empty GUID.", nameof(id));
-
-            return this.RunRequestInTransaction((conn) =>
-            {
-                DataSet dataSet = new DataSet(typeName);
-
-                var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, whereClause:
-                    this._queryHelper.GetWhereExpressionForID(id));
-
-                var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
-
-                dxModelBuilder.GetDeleteCommand();
-
-                DataTable dataTable = dataSet.Tables[typeName];
-
-                var existingRow = dataTable.Rows.Cast<DataRow>().SingleOrDefault(x => ConvertHelper.ParseGuid(x["ID"]) == id);
-
-                if (existingRow != null)
-                {
-                    existingRow.Delete();
-
-                    dxModelAdapter.Update(dataSet, typeName);
-
-                    dataSet.AcceptChanges();
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            });
-        }
-
-        public DXSingleElement? GetSingleDXElement(DXElementDefinition container, Guid id)
-        {
-            var whereClauseForID = $"ID = '{id}'";
-
-            var result = GetSingleDXElements(container, whereClauseForID);
-
-            return result?.SingleOrDefault();
-        }     
-
-        public IEnumerable<DXSingleElement> GetSingleDXElements(DXElementDefinition container, string dxFilter)
-        {
-            if (container == null)
-                return null;
-
-            string typeName = container.Type;     
-            var ids = this.GetIDs(typeName, dxFilter);
-
-            if (ids.Count() == 0)
-                return Enumerable.Empty<DXSingleElement>();
-
-            var sqlWhereClause = this._queryHelper.GetWhereExpressionForID(ids);
-
-            var result = this.RunRequest((conn) =>
-            {
-                DataSet dataSet = new DataSet(container.Type);
-
-                this.PopulateTableToDataSet(conn, dataSet, container.Type,
-                    columnNames: container.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: sqlWhereClause, fillSchema: false);
-
-                var dataTable = dataSet.Tables[container.Type];
-
-                var result = dataSet.Tables[container.Type].Rows.Cast<DataRow>().Select(dataRow => new DXSingleElement(
-                            container.Type,
-                            new DXElementAttribute(container.Type),
-                            this.GetDXItem(dataRow, container),
-                            container.IsRequired)).ToList();
-
-                return result;
-            });
-
-            return result;
-        }
-
-        private IEnumerable<Guid> GetIDs(string typeName, string dxFilter)
-        {
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
-
-            return this.RunRequestInTransaction((conn) =>
-            {
-                var dataSet = new DataSet(typeName);
-
-                var adapter = this._queryHelper.GetDbDataAdapter(conn, sqlQuery);
-
-                adapter.Fill(dataSet, typeName);
-
-                var table = dataSet.Tables[typeName];
-
-                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
-
-                return ids;
-            });
-        }
+        }    
 
         // TODO: can be refactored using stored procedure
         private DXRelationDefinitionMainElement GetRelationInfo(string obj1Name, string relationToObj2Name)

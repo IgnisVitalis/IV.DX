@@ -5,7 +5,15 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXRelationItemUnit")]
     public class DXRelationItemUnit : DXUnit
     {
-        [DXRequired]
-        public DXRelationItemMainElement DXRelationItemMainElement { get; set; }
+        [DXColumn("ObjectTypeNameLeft")]
+        public string ObjectTypeNameLeft { get; set; }
+        [DXColumn("DXUnitIDLeft")]
+        public Guid DXUnitIDLeft { get; set; }
+        [DXColumn("RelationNameRight")]
+        public string RelationNameRight { get; set; }
+        [DXColumn("ObjectTypeNameRight")]
+        public string ObjectTypeNameRight { get; set; }
+        [DXColumn("DXUnitIDRight")]
+        public Guid DXUnitIDRight { get; set; }
     }
 }

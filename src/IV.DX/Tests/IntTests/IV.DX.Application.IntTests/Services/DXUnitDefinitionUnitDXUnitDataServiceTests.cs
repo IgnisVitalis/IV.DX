@@ -17,14 +17,14 @@ namespace IV.DX.Application.IntTests.Services
     {
         IDXUnitDataService _service;
         IDXUnitGenericRepository _genericRepo;
-        IDXCoreRepository _coreRepo;
+        IDXUnitCoreRepository _coreRepo;
         IDXStructureCache _dxStructureCache;
 
         public DXUnitDefinitionUnitDXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
             this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
-            this._coreRepo = base.ServiceProvider.GetRequiredService<IDXCoreRepository>();
+            this._coreRepo = base.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
             this._dxStructureCache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
         }
 

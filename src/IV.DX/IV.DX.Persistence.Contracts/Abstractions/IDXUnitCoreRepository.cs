@@ -3,13 +3,13 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
-    internal interface IDXCoreRepository
+    internal interface IDXUnitCoreRepository
     {
         IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default);
         void DropDataBase();
         void CreateDataBase();
         bool IsItemExisting(string typeName, Guid objectId);
-        DXModel GetItem(DXModelDefinition dxModelDefinition, Guid id, DXLoadingType typeOfLoading);
+        DXModel? GetItem(DXModelDefinition dxModelDefinition, Guid id, DXLoadingType typeOfLoading);
         IEnumerable<DXModel> GetItems(string typeName);
         IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> objectIds);
         IEnumerable<DXModel> GetItems(string typeName, string dxFilter);
@@ -25,11 +25,5 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         bool AddRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
         bool RemoveRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName, string rightObjectTypeName, Guid rightObjectId);
-        Guid InsertSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement);
-        Guid UpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement);
-        Guid InsertOrUpdateSingleDXElement(string dxModelType, DXSingleElement dxSingleDXElement);
-        bool DeleteSingleDXElement(string typeName, Guid objectId);
-        DXSingleElement? GetSingleDXElement(DXElementDefinition container, Guid id);
-        IEnumerable<DXSingleElement> GetSingleDXElements(DXElementDefinition container, string dxFilter);
     }
 }

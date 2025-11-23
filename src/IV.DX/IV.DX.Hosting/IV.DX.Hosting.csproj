@@ -25,7 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" />
       <None Remove="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" />
       <None Remove="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" />
       <None Remove="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" />

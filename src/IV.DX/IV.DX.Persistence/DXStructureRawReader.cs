@@ -7,7 +7,7 @@ using IV.DX.Persistence.CoreData;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
     {
         public IEnumerable<DXElementDefinitionUnit> LoadDXElementInfosRaw()
         {
@@ -66,7 +66,7 @@ namespace IV.DX.Persistence
                 return Enumerable.Empty<DXRelationDefinitionUnit>();
 
             var result = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
-                      
+
             return result.Select(x => DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(x)).ToList();
         }
     }

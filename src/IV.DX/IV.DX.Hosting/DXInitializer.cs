@@ -7,12 +7,12 @@ namespace IV.DX.Hosting
 {
     internal sealed class DXInitializer : IDXInitializer
     {
-        private readonly IDXCoreRepository _coreRepo;
+        private readonly IDXUnitCoreRepository _coreRepo;
         private readonly IDXMigrationService _migration;
         private readonly IDXStructureCache _dXStructureCache;
 
         public DXInitializer(
-            IDXCoreRepository coreRepo,
+            IDXUnitCoreRepository coreRepo,
             IDXMigrationService migration, 
             IDXStructureCache dXStructureCache)
         {

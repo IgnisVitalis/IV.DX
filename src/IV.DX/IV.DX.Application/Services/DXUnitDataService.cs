@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Services
 {
-    internal class DXUnitDataService(IDXCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
+    internal class DXUnitDataService(IDXUnitCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
     {
         public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {

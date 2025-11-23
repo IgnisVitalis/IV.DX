@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
     {
         public void CreateDataStructure(DXObjectDefinitionUnit dataDXElement)
         {

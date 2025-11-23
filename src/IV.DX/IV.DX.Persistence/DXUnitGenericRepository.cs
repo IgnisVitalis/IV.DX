@@ -9,9 +9,9 @@ namespace IV.DX.Persistence
 {
     internal class DXUnitGenericRepository : IDXUnitGenericRepository
     {
-        private readonly IDXCoreRepository _coreRepo;
+        private readonly IDXUnitCoreRepository _coreRepo;
 
-        public DXUnitGenericRepository(IDXCoreRepository coreRepo)
+        public DXUnitGenericRepository(IDXUnitCoreRepository coreRepo)
         {
             this._coreRepo = coreRepo;
         }
@@ -92,11 +92,11 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNull(relationItem);
 
             return this._coreRepo.AddRelation(
-                relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
-                     relationItem.DXRelationItemMainElement.DXUnitIDLeft,
-                     relationItem.DXRelationItemMainElement.RelationNameRight,
-                     relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
-                     relationItem.DXRelationItemMainElement.DXUnitIDRight);
+                relationItem.ObjectTypeNameLeft,
+                     relationItem.DXUnitIDLeft,
+                     relationItem.RelationNameRight,
+                     relationItem.ObjectTypeNameRight,
+                     relationItem.DXUnitIDRight);
         }
 
         public bool RemoveDXRelation(DXRelationItemUnit relationItem)
@@ -104,11 +104,11 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNull(relationItem);
 
             return this._coreRepo.RemoveRelation(
-                relationItem.DXRelationItemMainElement.ObjectTypeNameLeft,
-                relationItem.DXRelationItemMainElement.DXUnitIDLeft,
-                relationItem.DXRelationItemMainElement.RelationNameRight,
-                relationItem.DXRelationItemMainElement.ObjectTypeNameRight,
-                relationItem.DXRelationItemMainElement.DXUnitIDRight);
+                relationItem.ObjectTypeNameLeft,
+                relationItem.DXUnitIDLeft,
+                relationItem.RelationNameRight,
+                relationItem.ObjectTypeNameRight,
+                relationItem.DXUnitIDRight);
         }
     }
 }

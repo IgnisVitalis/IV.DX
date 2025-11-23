@@ -15,7 +15,7 @@ using System.Reflection;
 namespace IV.DX.Application.Pipeline
 {
     internal class DXPipelineExecutor(
-        IDXCoreRepository coreRepo,
+        IDXUnitCoreRepository coreRepo,
         IDXUnitGenericRepository genericRepo,
         IDXUnitGetHandlerProvider getHandlerProvider,
         IDXUnitInsertHandlerProvider insertHandlerProvider,
