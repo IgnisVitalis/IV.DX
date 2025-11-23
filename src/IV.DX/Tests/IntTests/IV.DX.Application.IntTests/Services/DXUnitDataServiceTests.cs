@@ -283,7 +283,6 @@ namespace IV.DX.Application.IntTests.Services
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
 
             Assert.Null(createdRelationInverted);
-
             
             var instanceWithRelationType = await this._service.GetItemsAsync<DXUnitWithRelationTypeEnum>();
 

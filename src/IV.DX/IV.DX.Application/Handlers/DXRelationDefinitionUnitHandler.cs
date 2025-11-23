@@ -69,7 +69,7 @@ namespace IV.DX.Application.Handlers
 
         public async Task<DXResult<DXRelationDefinitionUnit>> BeforeUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
+            throw new Exception("The update method for DXRelationDefinitionUnit isn't implemented yet");
         }
 
         public async Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
