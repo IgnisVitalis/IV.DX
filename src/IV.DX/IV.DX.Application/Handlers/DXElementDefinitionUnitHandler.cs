@@ -41,10 +41,11 @@ namespace IV.DX.Application.Handlers
             }
             else
             {
-                dataStructureRepo.CreateDataStructure(dxUnit);
-                dataStructureRepo.UpdateUniqueColumns(dxUnit);
+                dataStructureRepo.CreateDataStructure(dxUnit);               
 
                 await this.ProcessRelationsAsync(dxUnit, ct);
+
+                dataStructureRepo.UpdateUniqueColumns(dxUnit);
 
                 return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
             }
