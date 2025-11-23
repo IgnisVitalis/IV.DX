@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -47,7 +48,7 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        protected void ProcessEnumRelations(DXObjectDefinitionUnit obj)
+        protected async Task ProcessEnumRelationsAsync(DXObjectDefinitionUnit obj, CancellationToken ct)
         {
             if (obj.DXColumnDefinitionElement == null)
                 return;
@@ -58,14 +59,14 @@ namespace IV.DX.Application.Handlers
                 case MultiElementsMode.Full:
                     break;
                 case MultiElementsMode.Target:
-                    ProcessEnumRelationsUsingTargetMode(obj);
+                    await ProcessEnumRelationsUsingTargetModeAsync(obj, ct);
                     break;
                 default:
                     break;
             }
         }
 
-        private void ProcessEnumRelationsUsingTargetMode(DXObjectDefinitionUnit obj)
+        private async Task ProcessEnumRelationsUsingTargetModeAsync(DXObjectDefinitionUnit obj, CancellationToken ct)
         {
             var announcedIds = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).Select(x => x.EnumType.Value);
 
@@ -81,7 +82,7 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
-                dxUnitService.InsertAsync(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue)).Wait();
+                await dxUnitService.InsertAsync(this.GetRelationObjectForEnum(obj, announcedEnumInfo, enumColumn, columnWithEnumValue), new DXUnitHandlerEnumProcessingContext(), ct);
             }
 
             foreach (var deletedEnumInfo in deletedEnumInfos)
@@ -92,7 +93,7 @@ namespace IV.DX.Application.Handlers
 
                 var relationObject = this.GetRelationObjectForEnum(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
-                dxUnitService.DeleteAsync(relationObject).Wait();
+                await dxUnitService.DeleteAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
             }
         }
 

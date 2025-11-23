@@ -209,6 +209,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sqlClmDef;
         }
 
+        private bool IsDXColumnEnum(DXColumnDefinitionElement clmDesc)
+        {
+            return clmDesc.EnumKey.HasValue && clmDesc.EnumType.HasValue;
+        }
+
         private string GetSQLColumnsUniqueToAddInTable(string tableName, DXUniqueColumnsElement clmDesc)
         {
             var columns = clmDesc.Columns.Split(',').Select(x => x.Trim());
@@ -626,21 +631,42 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
+            var result = GetSQLQueryToCreateRelationToMany(
+                    obj.DXRelationDefinitionMainElement.ObjectNameLeft,
+                    obj.DXRelationDefinitionMainElement.RelationNameLeft,
+                    obj.DXRelationDefinitionMainElement.RelationColumnNameLeft,
+                    obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value,
+                    obj.DXRelationDefinitionMainElement.ObjectNameRight,
+                    isNullable,
+                    isUnique);
+
+            return result;
+        }
+
+        private string GetSQLQueryToCreateRelationToMany(
+            string ObjectNameLeft,
+            string RelationNameLeft,
+            string RelationColumnNameLeft,
+            DXColumnTypeEnum RelationColumnTypeLeft,
+            string ObjectNameRight,
+            bool isNullable,
+            bool isUnique)
+        {
             StringBuilder sb = new StringBuilder();
 
             var nullValue = isNullable ? "NULL" : "NOT NULL";
             var uniqueValue = isUnique ? "UNIQUE" : "";
 
-            var leftColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-            var leftColumnType = this.GetPostgreSQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value);
+            var leftColumnName = RelationColumnNameLeft;
+            var leftColumnType = this.GetPostgreSQLDataType(RelationColumnTypeLeft);
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"ADD COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\" {leftColumnType} {nullValue} {uniqueValue};");
+            sb.Append($"ALTER TABLE \"{ObjectNameRight}\" ");
+            sb.Append($"ADD COLUMN \"{RelationNameLeft}\" {leftColumnType} {nullValue} {uniqueValue};");
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}\" ");
-            sb.Append($"FOREIGN KEY(\"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\") ");
-            sb.Append($"REFERENCES \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" (\"{leftColumnName}\") ");
+            sb.Append($"ALTER TABLE \"{ObjectNameRight}\" ");
+            sb.Append($"ADD CONSTRAINT \"FK_{ObjectNameRight}_{RelationNameLeft}\" ");
+            sb.Append($"FOREIGN KEY(\"{RelationNameLeft}\") ");
+            sb.Append($"REFERENCES \"{ObjectNameLeft}\" (\"{leftColumnName}\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION; ");
 

@@ -2,7 +2,7 @@
 
 namespace IV.DX.Application.Contracts.Runtime
 {
-    public class DXUnitHandlerPreInitCoreContext : DXUnitHandlerMigrationServiceContext
+    internal class DXUnitHandlerPreInitCoreContext : DXUnitHandlerMigrationServiceContext
     {
         public DXUnitHandlerPreInitCoreContext(DXMigrationScriptsUnit migrationScriptInfo)
             : base(migrationScriptInfo)

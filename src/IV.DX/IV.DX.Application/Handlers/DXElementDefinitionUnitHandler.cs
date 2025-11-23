@@ -42,7 +42,7 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                this.ProcessRelations(dxUnit);
+                await this.ProcessRelationsAsync(dxUnit, ct);
 
                 return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
             }
@@ -55,7 +55,7 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
-            this.ProcessRelations(dxUnit);
+            await this.ProcessRelationsAsync(dxUnit, ct);
 
             return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
         }
@@ -70,9 +70,9 @@ namespace IV.DX.Application.Handlers
             return DXResult<DXElementDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        private void ProcessRelations(DXElementDefinitionUnit dxUnit)
+        private async Task ProcessRelationsAsync(DXElementDefinitionUnit dxUnit, CancellationToken ct)
         {
-            this.ProcessEnumRelations(dxUnit);
+            await this.ProcessEnumRelationsAsync(dxUnit, ct);
         }
 
         public async Task<DXResult> AfterInsertAsync(DXElementDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)

@@ -2,7 +2,7 @@
 
 namespace IV.DX.Application.Contracts.Runtime
 {
-    public class DXUnitHandlerMigrationServiceContext : IDXHandlerContext
+    internal class DXUnitHandlerMigrationServiceContext : IDXHandlerContext
     {
         public DXMigrationScriptsUnit MigrationScript { get; set; }
 

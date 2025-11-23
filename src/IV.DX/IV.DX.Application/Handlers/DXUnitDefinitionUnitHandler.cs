@@ -44,7 +44,7 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                this.ProcessRelations(dxUnit);
+                await this.ProcessRelationsAsync(dxUnit, ct);
                 return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
             }
         }
@@ -56,7 +56,7 @@ namespace IV.DX.Application.Handlers
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
-            this.ProcessRelations(dxUnit);
+            await this.ProcessRelationsAsync(dxUnit, ct);
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
         }
 
@@ -70,7 +70,7 @@ namespace IV.DX.Application.Handlers
             dataStructureRepo.DropDataStructure(dxUnit);
 
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
-        }      
+        }
 
         public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
@@ -110,10 +110,10 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        private void ProcessRelations(DXUnitDefinitionUnit dxUnit)
+        private async Task ProcessRelationsAsync(DXUnitDefinitionUnit dxUnit, CancellationToken ct)
         {
             this.ProcessDXElementsIndxUnitRelations(dxUnit);
-            this.ProcessEnumRelations(dxUnit);
+            await this.ProcessEnumRelationsAsync(dxUnit, ct);
         }
 
         private void ProcessDXElementsIndxUnitRelations(DXUnitDefinitionUnit dxUnit)
@@ -247,6 +247,6 @@ namespace IV.DX.Application.Handlers
                 default:
                     throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
             }
-        }       
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Factories.Test;
@@ -6,6 +8,7 @@ using IV.DX.Shared.IntTests.Models.Test;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -144,6 +147,52 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(existingItem);
             Assert.Equal(text.Count(), existingItem.TBookChapterElement.Announced.Count(x => text.Contains(x.Text)));
+        }
+
+        [Fact]
+        public async Task InsertDXUnit_UsingEnumColumn_Ok()
+        {
+            // Init
+            var id = new Guid("b028075c-f460-42c0-a456-36e50ba645a8");
+
+            var dxUnit = new DXUnitDefinitionUnit()
+            {
+                ID = id,
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
+                {
+                    ID = Guid.NewGuid(),
+                    DXUnitID = id,
+                    Name = "DXUnitWithEnum",
+                    Kind = DXObjectKindEnum.Test
+                },
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+                {
+                    Mode = MultiElementsMode.Target,
+                    Announced = new HashSet<DXColumnDefinitionElement>()
+                    {
+                        new DXColumnDefinitionElement()
+                        {
+                            ID= Guid.NewGuid(),
+                            DXUnitID = id,
+                            ColumnType = DXColumnTypeEnum.Int,
+                            AllowNull = true,
+                            Name = "ObjectKind",
+                            EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
+                            EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
+                        }
+                    }
+                }
+            };
+
+            base._finalizationAction = () =>
+            {
+                this._service.DeleteAsync(dxUnit).Wait();
+            };
+
+            // Action
+            await this._service.InsertAsync(dxUnit);
+
+            // Assert
         }
 
         private const string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
