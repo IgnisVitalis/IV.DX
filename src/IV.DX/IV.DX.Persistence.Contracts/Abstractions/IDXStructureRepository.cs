@@ -5,9 +5,10 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXStructureRepository
     {
-        void CreateDataStructure(DXObjectDefinitionUnit dxElementDefinition);
-        void UpdatedDataStructure(DXObjectDefinitionUnit dxElementDefinition);
-        void DropDataStructure(DXObjectDefinitionUnit dxElementDefinition);
+        void CreateDataStructure(DXObjectDefinitionUnit dxObjectDefinition);
+        void UpdateUniqueColumns(DXObjectDefinitionUnit dxObjectDefinition);
+        void UpdatedDataStructure(DXObjectDefinitionUnit dxObjectDefinition);
+        void DropDataStructure(DXObjectDefinitionUnit dxObjectDefinition);
         void CreateDataStructure(DXRelationDefinitionUnit dxRelationDefinition);
         void DropDataStructure(DXRelationDefinitionUnit dxRelationDefinition);
         void CreateDataStructure(DXUnitDefinitionUnit dxUnitDefinition, DXElementDefinitionUnit dxElementDefinition);

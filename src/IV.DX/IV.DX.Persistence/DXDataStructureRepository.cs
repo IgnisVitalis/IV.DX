@@ -9,11 +9,21 @@ namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
     {
-        public void CreateDataStructure(DXObjectDefinitionUnit dataDXElement)
+        public void CreateDataStructure(DXObjectDefinitionUnit dxObjectDefinition)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dataDXElement);
+            var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dxObjectDefinition);
 
             this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+        }
+
+        public void UpdateUniqueColumns(DXObjectDefinitionUnit dxObjectDefinition)
+        {
+            var sqlQuery = this._queryHelper.GetSQLQueryToSetUniqueColumns(dxObjectDefinition);
+
+            if (!string.IsNullOrEmpty(sqlQuery))
+            {
+                this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            }
         }
 
         public void CreateDataStructure(DXRelationDefinitionUnit dxUnit)

@@ -32,6 +32,7 @@ namespace IV.DX.Application.Handlers
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
+                dataStructureRepo.UpdateUniqueColumns(dxUnit);
 
                 return DXResult<DXEnumDefinitionUnit>.OkSkipProcess(dxUnit);
             }
@@ -42,6 +43,7 @@ namespace IV.DX.Application.Handlers
             else
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
+                dataStructureRepo.UpdateUniqueColumns(dxUnit);
 
                 return DXResult<DXEnumDefinitionUnit>.OkContinue(dxUnit);
             }

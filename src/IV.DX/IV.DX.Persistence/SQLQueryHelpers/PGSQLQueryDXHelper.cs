@@ -214,7 +214,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return clmDesc.EnumKey.HasValue && clmDesc.EnumType.HasValue;
         }
 
-        private string GetSQLColumnsUniqueToAddInTable(string tableName, DXUniqueColumnsElement clmDesc)
+        private string GetSQLColumnsUniqueToAlterTable(string tableName, DXUniqueColumnsElement clmDesc)
         {
             var columns = clmDesc.Columns.Split(',').Select(x => x.Trim());
 
@@ -222,7 +222,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             var uniqueKeyName = $"UC_{tableName}_{string.Join("_", columns)}";
 
-            string result = $"CONSTRAINT \"{uniqueKeyName}\" UNIQUE({string.Join(",", columnsWithBrackets)})";
+            string result = $"ADD CONSTRAINT \"{uniqueKeyName}\" UNIQUE({string.Join(",", columnsWithBrackets)})";
 
             return result;
         }
@@ -632,11 +632,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
             var result = GetSQLQueryToCreateRelationToMany(
+                    obj.DXRelationDefinitionMainElement.ObjectNameRight,
                     obj.DXRelationDefinitionMainElement.ObjectNameLeft,
                     obj.DXRelationDefinitionMainElement.RelationNameLeft,
                     obj.DXRelationDefinitionMainElement.RelationColumnNameLeft,
                     obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value,
-                    obj.DXRelationDefinitionMainElement.ObjectNameRight,
                     isNullable,
                     isUnique);
 
@@ -644,11 +644,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         private string GetSQLQueryToCreateRelationToMany(
+            string ObjectNameRight,
             string ObjectNameLeft,
             string RelationNameLeft,
             string RelationColumnNameLeft,
             DXColumnTypeEnum RelationColumnTypeLeft,
-            string ObjectNameRight,
             bool isNullable,
             bool isUnique)
         {
@@ -677,21 +677,56 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             StringBuilder sb = new StringBuilder();
 
+            // Create base table with column
             sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataDXElement.DXObjectDefinitionMainElement.Name}\"(");
 
-            var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced.Select(x => this.GetSQLColumnDefinitionToAddInTable(x));
-
-            var clmUniqueList = dataDXElement.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAddInTable(dataDXElement.DXObjectDefinitionMainElement.Name, x));
+            var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced
+                .Where(x => !IsDXColumnEnum(x))
+                .Select(x => this.GetSQLColumnDefinitionToAddInTable(x))
+                .ToList();
 
             sb.Append(string.Join(",", clmDefList));
+            sb.Append(");");
+
+            //// Alter Enum relations
+            //var clmDefEnumList = dataDXElement.DXColumnDefinitionElement.Announced
+            //   .Where(x => IsDXColumnEnum(x))             
+            //   .ToList();
+
+            //if (clmDefEnumList.Count() > 0)
+            //{
+            //    foreach (var clmDefEnum in clmDefEnumList)
+            //    {
+            //        var query = this.GetSQLQueryToCreateRelationToMany(
+            //            dataDXElement.DXObjectDefinitionMainElement.Name,
+            //            clmDefEnum.);
+                    
+            //        sb.Append(query);
+            //    }
+            //}
+
+            // Alter Unique constrains
+          
+
+
+            return sb.ToString();
+        }
+
+        public string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var clmUniqueList = dataDXElement.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAlterTable(dataDXElement.DXObjectDefinitionMainElement.Name, x));
 
             if (clmUniqueList.Count() > 0)
             {
-                sb.Append(",");
-                sb.Append(string.Join(",", clmUniqueList));
-            }
+                sb.Append($"ALTER TABLE \"{dataDXElement.DXObjectDefinitionMainElement.Name}\" ");
 
-            sb.Append(")");
+                //sb.Append(",");
+                sb.Append(string.Join(",", clmUniqueList));
+
+                sb.Append(";");
+            }
 
             return sb.ToString();
         }

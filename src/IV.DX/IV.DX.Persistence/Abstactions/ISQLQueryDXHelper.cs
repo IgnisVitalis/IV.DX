@@ -13,6 +13,7 @@ namespace IV.DX.Persistence.Abstractions
         void DropDataBase(string connectionString);
         DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataDXElement);
+        string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement);
         string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
         string GetSQLQueryToDropTable(string tableName);
         string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement);

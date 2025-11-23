@@ -180,6 +180,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             throw new NotImplementedException();
         }
+
+        public string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
