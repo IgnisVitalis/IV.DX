@@ -10,8 +10,9 @@ namespace IV.DX.Application.Handlers
         IDXUnitDataService dxUnitService,
         IDXStructureRepository dataStructureRepo,
         IDXUnitGenericRepository genericRepo,
+        IDXElementGenericRepository dxElementGenericRepo,
         IDXStructureCache dxStructureCache) :
-        DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
+        DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo, dxElementGenericRepo),
         IDXBeforeInsertHandler<DXElementDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXElementDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
         IDXBeforeDeleteHandler<DXElementDefinitionUnit>, IDXUniqueBeforeDeleteHandler,

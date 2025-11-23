@@ -11,8 +11,9 @@ namespace IV.DX.Application.Handlers
         IDXUnitDataService dxUnitService,
         IDXUnitGenericRepository genericRepo,
         IDXStructureRepository dataStructureRepo,
+        IDXElementGenericRepository dxElementGenericRepo,
         IDXStructureCache dxStructureCache) :
-        DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo),
+        DXObjectDefinitionUnitHandler(dxUnitService, dataStructureRepo, genericRepo, dxElementGenericRepo),
         IDXBeforeInsertHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeInsertHandler,
         IDXBeforeUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeUpdateHandler,
         IDXBeforeDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueBeforeDeleteHandler,
@@ -43,7 +44,7 @@ namespace IV.DX.Application.Handlers
             }
             else
             {
-                dataStructureRepo.CreateDataStructure(dxUnit);               
+                dataStructureRepo.CreateDataStructure(dxUnit);
 
                 await this.ProcessRelationsAsync(dxUnit, ct);
 

@@ -153,7 +153,7 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
-        public async Task InsertDXUnit_UsingEnumColumn_Ok()
+        public async Task InsertDXUnit_UsingEnumColumnsWithFullMode_Ok()
         {
             // Init
             var id = new Guid("b028075c-f460-42c0-a456-36e50ba645a8");
@@ -169,6 +169,17 @@ namespace IV.DX.Application.IntTests.Services
                 EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
             };
 
+            var relaionTypeEnum = new DXColumnDefinitionElement()
+            {
+                ID = Guid.NewGuid(),
+                DXUnitID = id,
+                ColumnType = DXColumnTypeEnum.Int,
+                AllowNull = true,
+                Name = "RelationType",
+                EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
+                EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd")
+            };
+
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
@@ -181,7 +192,7 @@ namespace IV.DX.Application.IntTests.Services
                 },
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
                 {
-                    Mode = MultiElementsMode.Target,
+                    Mode = MultiElementsMode.Full,
                     Announced = new HashSet<DXColumnDefinitionElement>()
                     {
                       objectKindEnum
@@ -222,6 +233,18 @@ namespace IV.DX.Application.IntTests.Services
             var instances = await this._service.GetItemsAsync<DXUnitWithEnum>();
 
             Assert.Empty(instances);
+
+            // Action
+            dxUnit.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+            {
+                Mode = MultiElementsMode.Full,
+                Announced = new HashSet<DXColumnDefinitionElement>()
+                {
+                    relaionTypeEnum
+                }
+            };
+
+            await this._service.InsertAsync(dxUnit);
         }
 
         [DXUnit("DXUnitWithEnum")]
@@ -229,6 +252,13 @@ namespace IV.DX.Application.IntTests.Services
         {
             [DXColumn("DXObjectKindEnum")]
             DXObjectKindEnum ObjectKind { get; set; }
+        }
+
+        [DXUnit("DXUnitWithEnum")]
+        public class DXUnitWithEnum2 : DXUnit
+        {
+            [DXColumn("DXObjectKindEnum")]
+            DXRelationTypeEnum RelationType { get; set; }
         }
 
         private const string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

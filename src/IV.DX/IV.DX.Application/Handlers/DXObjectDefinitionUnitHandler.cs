@@ -8,7 +8,11 @@ using System.Reflection.Metadata;
 
 namespace IV.DX.Application.Handlers
 {
-    internal class DXObjectDefinitionUnitHandler(IDXUnitDataService dxUnitService, IDXStructureRepository dataStructureRepo, IDXUnitGenericRepository genericRepo)
+    internal class DXObjectDefinitionUnitHandler(
+        IDXUnitDataService dxUnitService,
+        IDXStructureRepository dataStructureRepo,
+        IDXUnitGenericRepository genericRepo,
+        IDXElementGenericRepository dxElementGenericRepo)
     {
         protected readonly string[] systemObjectNames = new[] { "DXObjectDefinitionUnit", "DXElementInUnitTypeEnum", "DXUnitDefinitionUnit", "DXElementDefinitionUnit", "DXEnumDefinitionUnit", "DXObjectDefinitionUnit", "DXUnitInheritanceElement", "DXElementInUnitDefinitionElement", "DXObjectDefinitionMainElement", "DXColumnDefinitionElement", "DXUniqueColumnsElement", "DXObjectKindEnum", "DXColumnTypeEnum", "DXRelationDefinitionUnit", "DXRelationDefinitionMainElement", "DXMigrationScriptsUnit", "DXMigrationScriptsMainElement", "DXRelationTypeEnum" };
 
@@ -53,16 +57,63 @@ namespace IV.DX.Application.Handlers
             if (obj.DXColumnDefinitionElement == null)
                 return;
 
-            // TODO: [70fba884-2cef-4d5f-937d-3efc17365a25]     
+
             switch (obj.DXColumnDefinitionElement.Mode)
             {
                 case MultiElementsMode.Full:
+                    await ProcessEnumRelationsUsingFullModeAsync(obj, ct);
                     break;
                 case MultiElementsMode.Target:
                     await ProcessEnumRelationsUsingTargetModeAsync(obj, ct);
                     break;
                 default:
                     break;
+            }
+        }
+        private async Task ProcessEnumRelationsUsingFullModeAsync(DXObjectDefinitionUnit obj, CancellationToken ct)
+        {
+            var currentActualEnumColumns = obj.DXColumnDefinitionElement.Announced.Where(x => x.EnumType.HasValue).ToList();
+            var actualEnumColumns = dxElementGenericRepo.GetItems<DXColumnDefinitionElement>($"DXUnitID = '{obj.ID}'").Where(x => x.EnumType.HasValue).ToList();
+
+            var currentActualEnumColumnIDs = currentActualEnumColumns.Select(x => x.ID).ToList();
+            var actualEnumColumnIDs = actualEnumColumns.Select(x => x.ID).ToList();
+
+            var enumColumnIDsToAdd = currentActualEnumColumnIDs.Except(actualEnumColumnIDs);
+            var enumColumnIDsToUpdate = currentActualEnumColumnIDs.Intersect(actualEnumColumnIDs);
+            var enumColumnIDsToDelete = actualEnumColumnIDs.Except(currentActualEnumColumnIDs);
+
+            foreach (var enumColumnIDToAdd in enumColumnIDsToAdd)
+            {
+                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.ID == enumColumnIDToAdd);
+
+                var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType.Value);
+
+                var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+
+                await dxUnitService.InsertAsync(this.GetRelationObjectForEnum(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
+            }
+
+            foreach (var enumColumnIDToUpdate in enumColumnIDsToUpdate)
+            {
+                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.ID == enumColumnIDToUpdate);
+
+                var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType.Value);
+
+                var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+
+                await dxUnitService.UpdateAsync(this.GetRelationObjectForEnum(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
+            }
+
+
+            foreach (var enumColumnIDToDelete in enumColumnIDsToDelete)
+            {
+                var enumColumnToAdd = actualEnumColumns.Single(x => x.ID == enumColumnIDToDelete);
+
+                var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType.Value);
+
+                var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+
+                await dxUnitService.DeleteAsync(this.GetRelationObjectForEnum(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
             }
         }
 
