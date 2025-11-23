@@ -224,15 +224,23 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnum");
+
+            Assert.Null(createdRelation);
+
             var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
 
             Assert.NotNull(createdRelationInverted);
             Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
-            var instances = await this._service.GetItemsAsync<DXUnitWithEnum>();
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXRelationTypeEnum", "RelationType");
 
-            Assert.Empty(instances);
+            Assert.Null(createdRelationInverted);
+
+            var instancesWithObjectKind = await this._service.GetItemsAsync<DXUnitWithKindEnum>();
+
+            Assert.Empty(instancesWithObjectKind);
 
             // Action
             dxUnit.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
@@ -245,19 +253,54 @@ namespace IV.DX.Application.IntTests.Services
             };
 
             await this._service.InsertAsync(dxUnit);
+
+            // Assert
+            createdDXUnit = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
+
+            Assert.NotNull(createdDXUnit);
+
+            Assert.NotEmpty(createdDXUnit.DXColumnDefinitionElement.Announced);
+
+            createdEnums = createdDXUnit.DXColumnDefinitionElement.Announced.SingleOrDefault(x => relaionTypeEnum.ID == x.ID);
+            Assert.NotNull(createdEnums);
+
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnum");
+
+            Assert.NotNull(createdRelation);
+            Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnum");
+
+            Assert.Null(createdRelation);
+
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXRelationTypeEnum", "RelationType");
+
+            Assert.NotNull(createdRelationInverted);
+            Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
+
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
+
+            Assert.Null(createdRelationInverted);
+
+            
+            var instanceWithRelationType = await this._service.GetItemsAsync<DXUnitWithRelationTypeEnum>();
+
+            Assert.Empty(instanceWithRelationType);
         }
 
         [DXUnit("DXUnitWithEnum")]
-        public class DXUnitWithEnum : DXUnit
+        public class DXUnitWithKindEnum : DXUnit
         {
-            [DXColumn("DXObjectKindEnum")]
+            [DXColumn("ObjectKind")]
             DXObjectKindEnum ObjectKind { get; set; }
         }
 
         [DXUnit("DXUnitWithEnum")]
-        public class DXUnitWithEnum2 : DXUnit
+        public class DXUnitWithRelationTypeEnum : DXUnit
         {
-            [DXColumn("DXObjectKindEnum")]
+            [DXColumn("RelationType")]
             DXRelationTypeEnum RelationType { get; set; }
         }
 
