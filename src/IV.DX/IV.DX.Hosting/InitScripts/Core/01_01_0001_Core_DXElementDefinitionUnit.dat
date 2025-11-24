@@ -38,6 +38,21 @@
                     "Length": 500
                 }
             ]
+        },
+        "DXObjectEnumElement": {
+            "S_Type": "DXObjectEnumElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "3760c5fa-b554-4368-b608-617842c07e90",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
+                    "Name": "Kind",
+                    "EnumType": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+                    "EnumKey": "15d97f21-fd2d-4019-8e0b-bd480fdc8798"
+                }
+            ]
         }
     },
     {
@@ -147,6 +162,36 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 300
+                }
+            ]
+        }
+    },
+    {
+        "S_Type": "DXElementDefinitionUnit",
+        "ID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
+            "ID": "405c1a7c-5248-4432-acd6-37c9b1f7d3ba",
+            "TimeStamp": "2021-10-02T00:00:00",
+            "DXUnitID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
+            "Name": "DXObjectEnumElement",
+            "Kind": 1
+        },
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "b5c5faa6-2b4f-402c-9915-c1946576ed86",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
+                    "ColumnType": 3,
+                    "Name": "Name",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 100
                 }
             ]
         }

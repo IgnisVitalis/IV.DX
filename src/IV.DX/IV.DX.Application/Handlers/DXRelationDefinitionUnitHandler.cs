@@ -9,6 +9,7 @@ namespace IV.DX.Application.Handlers
     internal class DXRelationDefinitionUnitHandler(
         IDXUnitDataService dxUnitService,
         IDXUnitGenericRepository genericRepo,
+        IDXElementGenericRepository dxElementGenericRepo,
         IDXStructureRepository dataStructureRepo,
         IDXStructureCache dxStructureCache) :
         IDXBeforeInsertHandler<DXRelationDefinitionUnit>, IDXUniqueBeforeInsertHandler,
@@ -41,9 +42,15 @@ namespace IV.DX.Application.Handlers
             {
                 return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
             }
-            else
+            else if (ctx is DXUnitHandlerEnumProcessingContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
+
+                return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
+            }
+            else
+            {
+                dataStructureRepo.CreateDataStructure(dxUnit);               
 
                 return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
             }
@@ -61,7 +68,7 @@ namespace IV.DX.Application.Handlers
 
                 genericRepo.Insert(invertedRelation);
 
-                await dxStructureCache.RefreshAsync(ct);               
+                await dxStructureCache.RefreshAsync(ct);
 
                 return DXResult.OkContinue();
             }
@@ -74,11 +81,6 @@ namespace IV.DX.Application.Handlers
 
         public async Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
         {
-            //if (ctx is DXRelationDefinitionUnitInvertedItemContext)
-            //{
-            //    return Task.Run(() => DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit));
-            //}
-
             dataStructureRepo.DropDataStructure(dxUnit);
 
             var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);

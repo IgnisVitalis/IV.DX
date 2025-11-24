@@ -11,15 +11,15 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         public static DXElementDefinition ToDXElementDefinition(this DXElementDefinitionUnit dxElement, IEnumerable<DXRelationDefinitionUnit> relations, bool isRequired)
         {
             var props = dxElement.DXColumnDefinitionElement.Announced
-                           .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
-
+                        .Select(y => new DXPropertyDefinition(y.Name, new DXColumnAttribute(y.Name)));
+            
             var singleFragmentDefinition =
                 new DXElementDefinition(
                     dxElement.DXObjectDefinitionMainElement.Name,
                     dxElement.DXObjectDefinitionMainElement.Name,
                     isRequired);
 
-            singleFragmentDefinition.AddPropertyDefinitions(props);
+            singleFragmentDefinition.AddPropertyDefinitions(props);            
 
             var relationsAsProperties = GetRelationsAsProperties(dxElement.DXObjectDefinitionMainElement.Name, relations);
 

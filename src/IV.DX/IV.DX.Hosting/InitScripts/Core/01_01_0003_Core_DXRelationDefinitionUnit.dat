@@ -55,6 +55,24 @@
     },
     {
         "S_Type": "DXRelationDefinitionUnit",
+        "ID": "9d60d785-de95-481e-953f-6ea259ec4f78",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "DXRelationDefinitionMainElement": {
+            "S_Type": "DXRelationDefinitionMainElement",
+            "ID": "63446f71-0d9d-4530-9e21-8c907459e080",
+            "TimeStamp": "2021-10-02T00:00:00",
+            "DXUnitID": "9d60d785-de95-481e-953f-6ea259ec4f78",
+            "ObjectNameLeft": "DXObjectDefinitionUnit",
+            "RelationNameLeft": "DXObjectDefinitionUnitID",
+            "ObjectNameRight": "DXObjectEnumElement",
+            "RelationNameRight": "DXObjectEnumElement",
+            "RelationTable": null,
+            "RelationType": 5,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
         "ID": "78462c7e-4658-422d-9ae5-9e9c55b24276",
         "TimeStamp": "2021-10-02T00:00:00",
         "DXRelationDefinitionMainElement": {
@@ -172,12 +190,12 @@
             "ID": "572d875f-66cf-4850-8bc7-45805b93e093",
             "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
-            "ObjectNameLeft": "DXColumnDefinitionElement",
+            "ObjectNameLeft": "DXObjectEnumElement",
             "RelationNameLeft": "Enums",
             "ObjectNameRight": "DXColumnDefinitionElement",
             "RelationNameRight": "EnumKey",
             "RelationTable": null,
-            "RelationType": 6,
+            "RelationType": 4,
             "Kind": 1
         }
     },
@@ -190,12 +208,12 @@
             "ID": "5ccfd33e-f6b4-4374-bcbe-de3823b6ada4",
             "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "298099bc-d243-40a0-8807-769a8f307809",
-            "ObjectNameLeft": "DXColumnDefinitionElement",
+            "ObjectNameLeft": "DXObjectEnumElement",
             "RelationNameLeft": "Enums",
             "ObjectNameRight": "DXEnumDefinitionUnit",
             "RelationNameRight": "EnumType",
             "RelationTable": null,
-            "RelationType": 6,
+            "RelationType": 4,
             "Kind": 1
         }
     },

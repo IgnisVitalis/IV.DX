@@ -20,9 +20,5 @@ namespace IV.DX.Kernel.Models
         public bool AllowNull { get; set; }
         [DXColumn("DefaultValue")]
         public string DefaultValue { get; set; }
-        [DXColumn("EnumKey")]
-        public Guid? EnumKey { get; set; }
-        [DXColumn("EnumType")]
-        public Guid? EnumType { get; set; }
     }
 }

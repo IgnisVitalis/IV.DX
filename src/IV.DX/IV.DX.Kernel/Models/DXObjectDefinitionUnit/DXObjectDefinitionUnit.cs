@@ -12,6 +12,8 @@ namespace IV.DX.Kernel.Models
 
         public DXMultiElementsContainer<DXUniqueColumnsElement> DXUniqueColumnsElement { get; set; }
 
+        public DXMultiElementsContainer<DXObjectEnumElement> DXObjectEnumElement { get; set; }
+
         public DXObjectDefinitionUnit()
         {
             this.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>
@@ -22,6 +24,11 @@ namespace IV.DX.Kernel.Models
             this.DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>
             {
                 Announced = new HashSet<DXUniqueColumnsElement>()
+            };
+
+            this.DXObjectEnumElement = new DXMultiElementsContainer<DXObjectEnumElement>
+            {
+                Announced = new HashSet<DXObjectEnumElement>()
             };
         }
     }

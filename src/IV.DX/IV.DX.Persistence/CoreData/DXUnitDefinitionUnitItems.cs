@@ -43,6 +43,12 @@ namespace IV.DX.Persistence.CoreData
                                 RelationType = DXElementInUnitTypeEnum.MultiOptional,
                                 DXElementDefinitionUnit = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81")
                             },
+                            new DXElementInUnitDefinitionElement()
+                            {
+                                ID = new Guid("a0fadd7f-4e4c-4737-834e-591c2bf0558d"),
+                                RelationType = DXElementInUnitTypeEnum.MultiOptional,
+                                DXElementDefinitionUnit = new Guid("30b46356-a7e4-43bd-ace2-d4d9b4a87c51")
+                            }
                         }
                     }
                 },

@@ -26,12 +26,12 @@ namespace IV.DX.Application.IntTests.Services
             var dxFilter = "R(EnumType).DXObjectDefinitionMainElement.Name = 'DXColumnTypeEnum'";
 
             // Action
-            var dxElements = await _service.GetItemsAsync<DXColumnDefinitionElement>(dxFilter);
+            var dxElements = await _service.GetItemsAsync<DXObjectEnumElement>(dxFilter);
 
             // Assert
             Assert.NotNull(dxElements);
 
             //Assert.Equal(3, dxElements.Count());
-        }
+        }       
     }
 }

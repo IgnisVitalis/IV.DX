@@ -209,10 +209,10 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return sqlClmDef;
         }
 
-        private bool IsDXColumnEnum(DXColumnDefinitionElement clmDesc)
-        {
-            return clmDesc.EnumKey.HasValue && clmDesc.EnumType.HasValue;
-        }
+        //private bool IsDXColumnEnum(DXColumnDefinitionElement clmDesc)
+        //{
+        //    return clmDesc.EnumKey.HasValue && clmDesc.EnumType.HasValue;
+        //}
 
         private string GetSQLColumnsUniqueToAlterTable(string tableName, DXUniqueColumnsElement clmDesc)
         {
@@ -681,7 +681,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataDXElement.DXObjectDefinitionMainElement.Name}\"(");
 
             var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced
-                .Where(x => !IsDXColumnEnum(x))
+                //.Where(x => !IsDXColumnEnum(x))
                 .Select(x => this.GetSQLColumnDefinitionToAddInTable(x))
                 .ToList();
 

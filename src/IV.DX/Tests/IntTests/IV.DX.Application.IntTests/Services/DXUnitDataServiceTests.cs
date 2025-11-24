@@ -158,23 +158,23 @@ namespace IV.DX.Application.IntTests.Services
             // Init
             var id = new Guid("b028075c-f460-42c0-a456-36e50ba645a8");
 
-            var objectKindEnum = new DXColumnDefinitionElement()
+            var objectKindEnum = new DXObjectEnumElement()
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id,
-                ColumnType = DXColumnTypeEnum.Int,
-                AllowNull = true,
+                //ColumnType = DXColumnTypeEnum.Int,
+                //AllowNull = true,
                 Name = "ObjectKind",
                 EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
                 EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
             };
 
-            var relaionTypeEnum = new DXColumnDefinitionElement()
+            var relaionTypeEnum = new DXObjectEnumElement()
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id,
-                ColumnType = DXColumnTypeEnum.Int,
-                AllowNull = true,
+                //ColumnType = DXColumnTypeEnum.Int,
+                //AllowNull = true,
                 Name = "RelationType",
                 EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
                 EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd")
@@ -190,10 +190,10 @@ namespace IV.DX.Application.IntTests.Services
                     Name = "DXUnitWithEnum",
                     Kind = DXObjectKindEnum.Test
                 },
-                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+                DXObjectEnumElement = new DXMultiElementsContainer<DXObjectEnumElement>()
                 {
                     Mode = MultiElementsMode.Full,
-                    Announced = new HashSet<DXColumnDefinitionElement>()
+                    Announced = new HashSet<DXObjectEnumElement>()
                     {
                       objectKindEnum
                     }
@@ -213,9 +213,9 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(createdDXUnit);
 
-            Assert.NotEmpty(createdDXUnit.DXColumnDefinitionElement.Announced);
+            Assert.NotEmpty(createdDXUnit.DXObjectEnumElement.Announced);
 
-            var createdEnums = createdDXUnit.DXColumnDefinitionElement.Announced.SingleOrDefault(x => objectKindEnum.ID == x.ID);
+            var createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => objectKindEnum.ID == x.ID);
             Assert.NotNull(createdEnums);
 
             var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnum");
@@ -243,10 +243,10 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Empty(instancesWithObjectKind);
 
             // Action
-            dxUnit.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+            dxUnit.DXObjectEnumElement = new DXMultiElementsContainer<DXObjectEnumElement>()
             {
                 Mode = MultiElementsMode.Full,
-                Announced = new HashSet<DXColumnDefinitionElement>()
+                Announced = new HashSet<DXObjectEnumElement>()
                 {
                     relaionTypeEnum
                 }
@@ -259,9 +259,9 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(createdDXUnit);
 
-            Assert.NotEmpty(createdDXUnit.DXColumnDefinitionElement.Announced);
+            Assert.NotEmpty(createdDXUnit.DXObjectEnumElement.Announced);
 
-            createdEnums = createdDXUnit.DXColumnDefinitionElement.Announced.SingleOrDefault(x => relaionTypeEnum.ID == x.ID);
+            createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => relaionTypeEnum.ID == x.ID);
             Assert.NotNull(createdEnums);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnum");

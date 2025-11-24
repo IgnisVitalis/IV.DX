@@ -384,6 +384,46 @@ namespace IV.DX.Persistence
             };
             #endregion
 
+            #region DXObjectEnumElement
+            var DXObjectEnumElement = new DXElementDefinitionUnit()
+            {
+                ID = new Guid("30b46356-a7e4-43bd-ace2-d4d9b4a87c51"),
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
+                {
+                    ID = new Guid("405c1a7c-5248-4432-acd6-37c9b1f7d3ba"),
+                    Name = "DXObjectEnumElement",
+                    Kind = DXObjectKindEnum.Core
+                },
+                DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>()
+                {
+                    Mode = MultiElementsMode.Full,
+                    Announced = new HashSet<DXColumnDefinitionElement>()
+                    {
+                        new DXColumnDefinitionElement()
+                        {
+                            Name = "ID",
+                            ColumnType = DXColumnTypeEnum.GUID,
+                            AllowNull = false
+                        },
+                        new DXColumnDefinitionElement()
+                        {
+                            Name = "DXUnitID",
+                            ColumnType = DXColumnTypeEnum.GUID,
+                            AllowNull = false
+                        },
+                        new DXColumnDefinitionElement()
+                        {
+                            ID = new Guid("836b5fdc-c995-46d6-9151-fd562bfada19"),
+                            ColumnType = DXColumnTypeEnum.String,
+                            Name = "Name",
+                            AllowNull = false,
+                            Length = 100
+                        }
+                    }
+                }
+            };
+            #endregion
+
             #region DXUnitInheritanceElement
             var DXUnitInheritanceElement = new DXElementDefinitionUnit()
             {
@@ -705,6 +745,7 @@ namespace IV.DX.Persistence
                 DXObjectDefinitionMainElement,
                 DXColumnDefinitionElement,
                 DXUniqueColumnsElement,
+                DXObjectEnumElement,
                 DXUnitInheritanceElement,
                 DXElementInUnitDefinitionElement,
                 DXRelationDefinitionMainElement,
@@ -746,6 +787,12 @@ namespace IV.DX.Persistence
                             ID = new Guid("29e7062c-1669-40e6-af24-adf132742a98"),
                             RelationType = DXElementInUnitTypeEnum.MultiOptional,
                             DXElementDefinitionUnit = new Guid("575f9a04-6b51-4c0c-84e3-b4c624ee1f81")
+                        },
+                        new DXElementInUnitDefinitionElement()
+                        {
+                            ID = new Guid("a0fadd7f-4e4c-4737-834e-591c2bf0558d"),
+                            RelationType = DXElementInUnitTypeEnum.MultiOptional,
+                            DXElementDefinitionUnit = new Guid("30b46356-a7e4-43bd-ace2-d4d9b4a87c51")
                         }
                     }
                 }
