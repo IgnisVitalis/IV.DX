@@ -21,7 +21,7 @@ namespace IV.DX.Persistence.IntTests
         }
 
         [Theory]
-        [InlineData("DXObjectDefinitionUnit", 3)]
+        [InlineData("DXObjectDefinitionUnit", 4)]
         public void GetDXRelations_UsingName_Ok(string enumTypeName, int expectedAmount)
         {
             // Action
