@@ -62,6 +62,23 @@ namespace IV.DX.Persistence.CoreData
                     }
                 },
                 #endregion
+                #region 9d60d785-de95-481e-953f-6ea259ec4f78
+                new DXRelationDefinitionUnit()
+                {
+                    ID = new Guid("9d60d785-de95-481e-953f-6ea259ec4f78"),
+                    DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
+                    {
+                        ID = new Guid("63446f71-0d9d-4530-9e21-8c907459e080"),
+                        ObjectNameLeft = "DXObjectDefinitionUnit",
+                        RelationNameLeft = "DXObjectDefinitionUnitID",
+                        ObjectNameRight = "DXObjectEnumElement",
+                        RelationNameRight = "DXObjectEnumElement",
+                        RelationTable = null,
+                        RelationType = DXRelationTypeEnum.ZeroOneToMany,
+                        Kind = DXObjectKindEnum.Core
+                    }
+                },
+                #endregion
                 #region 78462c7e-4658-422d-9ae5-9e9c55b24276
                 new DXRelationDefinitionUnit()
                 {
