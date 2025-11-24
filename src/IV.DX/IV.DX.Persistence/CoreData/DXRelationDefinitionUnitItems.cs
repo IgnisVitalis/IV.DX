@@ -138,7 +138,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("d38cf673-89c7-47d7-9f48-5a3a49396ed2"),
                         ObjectNameLeft = "DXObjectDefinitionMainElement",
-                        RelationNameLeft = "DXObjectDefinitionMainElement",
+                        RelationNameLeft = "DXObjectDefinitionMainElementKind",
                         ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
@@ -157,7 +157,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("7b843027-7c06-40ac-9872-8572cadc66f2"),
                         ObjectNameLeft = "DXColumnDefinitionElement",
-                        RelationNameLeft = "DXColumnDefinitionElement",
+                        RelationNameLeft = "DXColumnDefinitionElementColumnType",
                         ObjectNameRight = "DXColumnTypeEnum",
                         RelationNameRight = "ColumnType",
                         RelationTable = null,
@@ -210,7 +210,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("4aafad60-92df-41ee-b9be-a57125740b12"),
                         ObjectNameLeft = "DXElementInUnitDefinitionElement",
-                        RelationNameLeft = "DXElementInUnitDefinitionElement",
+                        RelationNameLeft = "DXElementInUnitDefinitionElementRelationType",
                         ObjectNameRight = "DXElementInUnitTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,
@@ -263,7 +263,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("ebde3bed-352c-40e7-ac75-c05066f8ca05"),
                         ObjectNameLeft = "DXRelationDefinitionMainElement",
-                        RelationNameLeft = "DXRelationDefinitionMainElement",
+                        RelationNameLeft = "DXRelationDefinitionMainElementKind",
                         ObjectNameRight = "DXObjectKindEnum",
                         RelationNameRight = "Kind",
                         RelationTable = null,
@@ -282,7 +282,7 @@ namespace IV.DX.Persistence.CoreData
                     {
                         ID = new Guid("c5bc5c06-1d3c-4767-b13c-887623ecb2ae"),
                         ObjectNameLeft = "DXRelationDefinitionMainElement",
-                        RelationNameLeft = "DXRelationDefinitionMainElement",
+                        RelationNameLeft = "DXRelationDefinitionMainElementRelationType",
                         ObjectNameRight = "DXRelationTypeEnum",
                         RelationNameRight = "RelationType",
                         RelationTable = null,

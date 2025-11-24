@@ -178,7 +178,7 @@ namespace IV.DX.Application.Handlers
                     ID = Guid.NewGuid(),
                     DXUnitID = objID,
                     ObjectNameLeft = obj.DXObjectDefinitionMainElement.Name,
-                    RelationNameLeft = obj.DXObjectDefinitionMainElement.Name,
+                    RelationNameLeft = obj.DXObjectDefinitionMainElement.Name + columnWithEnumValue.Name,
                     ObjectNameRight = enumObj.DXObjectDefinitionMainElement.Name,
                     RelationNameRight = columnWithEnumValue.Name,
                     RelationType = DXRelationTypeEnum.ManyToOne,

@@ -218,23 +218,23 @@ namespace IV.DX.Application.IntTests.Services
             var createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => objectKindEnum.ID == x.ID);
             Assert.NotNull(createdEnums);
 
-            var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnum");
+            var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
 
             Assert.NotNull(createdRelation);
             Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
-            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnum");
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
 
             Assert.Null(createdRelation);
 
-            var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
+            var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");
 
             Assert.NotNull(createdRelationInverted);
             Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
-            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXRelationTypeEnum", "RelationType");
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
 
             Assert.Null(createdRelationInverted);
 
@@ -264,23 +264,23 @@ namespace IV.DX.Application.IntTests.Services
             createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => relaionTypeEnum.ID == x.ID);
             Assert.NotNull(createdEnums);
 
-            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnum");
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
 
             Assert.NotNull(createdRelation);
             Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
-            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnum");
+            createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
 
             Assert.Null(createdRelation);
 
-            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXRelationTypeEnum", "RelationType");
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
 
             Assert.NotNull(createdRelationInverted);
             Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
-            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnum", "DXObjectKindEnum", "ObjectKind");
+            createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");
 
             Assert.Null(createdRelationInverted);
             
