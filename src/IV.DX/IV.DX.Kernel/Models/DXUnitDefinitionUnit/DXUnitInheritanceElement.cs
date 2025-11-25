@@ -14,5 +14,16 @@ namespace IV.DX.Kernel.Models
         public DXRelationTypeEnum RelationType { get; set; }
         [DXColumn("TargetUnit")]
         public Guid TargetUnit { get; set; }
+
+        public DXUnitRelationElement GetReverted()
+        {
+            return new DXUnitRelationElement()
+            {
+                OwnRelationName = this.TargetRelationName,
+                TargetRelationName = this.OwnRelationName,
+                TargetUnit = this.DXUnitID,
+                RelationType = DXRelationTypeEnumHelper.GetInvertedRelationType(this.RelationType)
+            };
+        }
     }
 }

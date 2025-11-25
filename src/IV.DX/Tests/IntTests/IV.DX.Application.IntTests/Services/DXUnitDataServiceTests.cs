@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,6 +112,65 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task InsertDXUnitItemAsync_UsingDXUnitWithRelatedDXUnits_Ok()
+        {
+            // Init           
+            var id1 = new Guid("acc683cf-33e1-473e-b218-565697a0378e");
+            var id2 = new Guid("69a8eb15-125e-400e-8f0c-0996fca7d076");
+
+            var dxUnit1 = new DXUnitDefinitionUnit()
+            {
+                ID = id1,
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
+                {
+                    ID = Guid.NewGuid(),
+                    DXUnitID = id1,
+                    Name = "dxUnit1",
+                    Kind = DXObjectKindEnum.Test
+                }
+            };
+
+            var dxUnit2 = new DXUnitDefinitionUnit()
+            {
+                ID = id2,
+                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
+                {
+                    ID = Guid.NewGuid(),
+                    DXUnitID = id2,
+                    Name = "dxUnit2",
+                    Kind = DXObjectKindEnum.Test
+                },
+                DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>()
+                {
+                    Announced = new HashSet<DXUnitRelationElement>()
+                    {
+                        new DXUnitRelationElement()
+                        {
+                            ID = Guid.NewGuid(),
+                            DXUnitID = id2,
+                            OwnRelationName = "dxUnit2RelationName",
+                            RelationType = DXRelationTypeEnum.OneToMany,
+                            TargetRelationName = "dxUnit1RelationName",
+                            TargetUnit = id1
+                        }
+                    }
+                }
+            };
+
+            // Action
+            var item1 = await this._service.InsertAsync(dxUnit1);
+            var item2 = await this._service.InsertAsync(dxUnit2);
+
+            // Assert
+            var existingItem1 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id1);
+            var existingItem2 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id2);
+
+            Assert.Single(existingItem1.DXUnitRelationElement.Announced);
+
+            Assert.Single(existingItem2.DXUnitRelationElement.Announced);
+        }
+
+        [Fact]
         public async Task GetItemAsync_UsingIDForExistingItems_Ok1()
         {
 
@@ -176,8 +234,7 @@ namespace IV.DX.Application.IntTests.Services
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id,
-                //ColumnType = DXColumnTypeEnum.Int,
-                //AllowNull = true,
+                AllowNull = true,
                 Name = "ObjectKind",
                 EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
                 EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
@@ -187,8 +244,7 @@ namespace IV.DX.Application.IntTests.Services
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id,
-                //ColumnType = DXColumnTypeEnum.Int,
-                //AllowNull = true,
+                AllowNull = true,
                 Name = "RelationType",
                 EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
                 EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd")

@@ -62,6 +62,9 @@ namespace IV.DX.Application.Handlers
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
             await this.ProcessRelationsAsync(dxUnit, ct);
+
+            dataStructureRepo.UpdateUniqueColumns(dxUnit);
+
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
         }
 
@@ -131,15 +134,15 @@ namespace IV.DX.Application.Handlers
 
             if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                this.ProcessDXnitRelationElementsUsingTragetMode(dxUnit);
+                this.ProcessDXUnitRelationElementsUsingTargetMode(dxUnit);
             }
             else
             {
-                this.ProcessDXnitRelationElementsUsingFullMode(dxUnit, objectInfoFromDB);
+                this.ProcessDXUnitRelationElementsUsingFullMode(dxUnit, objectInfoFromDB);
             }
         }
 
-        private void ProcessDXnitRelationElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
+        private void ProcessDXUnitRelationElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {
             var newAnnouncedIds = dxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetUnit);
             var existingAnnouncedIds = existingdxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetUnit);
@@ -156,6 +159,7 @@ namespace IV.DX.Application.Handlers
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
                 this.AssignDXUnit(dxUnit, dxUnitRelation, dxUnitToAssign);
+                this.CreateRevertedDXUnitRelationElement(dxUnitRelation);
             }
 
             foreach (var deletedId in deletedIds)
@@ -165,10 +169,11 @@ namespace IV.DX.Application.Handlers
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
                 this.UnassingDXUnit(dxUnit, dxUnitRelation, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
             }
         }
 
-        private void ProcessDXnitRelationElementsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXUnitRelationElementsUsingTargetMode(DXUnitDefinitionUnit dxUnit)
         {
             foreach (var announced in dxUnit.DXUnitRelationElement.Announced)
             {
@@ -177,6 +182,7 @@ namespace IV.DX.Application.Handlers
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
                 this.AssignDXUnit(dxUnit, announced, dxUnitToAssign);
+                this.CreateRevertedDXUnitRelationElement(announced);
             }
 
             foreach (var deleted in dxUnit.DXUnitRelationElement.Deleted)
@@ -186,7 +192,26 @@ namespace IV.DX.Application.Handlers
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
                 this.UnassingDXUnit(dxUnit, deleted, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitRelationElement(deleted, dxUnitToUnassign);
             }
+        }
+
+        private void CreateRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement)
+        {
+            var revertedDXUnitRelationElement = dxUnitRelationElement.GetReverted();
+
+            revertedDXUnitRelationElement.ID = Guid.NewGuid();
+            revertedDXUnitRelationElement.DXUnitID = dxUnitRelationElement.TargetUnit;
+
+            dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitRelationElement);
+        }
+
+        private void DeleteRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit relatedDXUnit)
+        {
+            var revertedDXElementToDelete = 
+                relatedDXUnit.DXUnitRelationElement.Announced.SingleOrDefault(x => x.TargetUnit == dxUnitRelationElement.DXUnitID);
+
+            dxElementGenericRepo.Delete(revertedDXElementToDelete);
         }
 
         private void AssignDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
