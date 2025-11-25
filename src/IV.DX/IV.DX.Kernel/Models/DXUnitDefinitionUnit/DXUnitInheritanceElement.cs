@@ -1,12 +1,18 @@
 using IV.DX.Kernel.Attributes;
-using System;
+using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [DXElement("DXUnitInheritanceElement")]
-    public class DXUnitInheritanceElement : DXElement
+    [DXElement("DXUnitRelationElement")]
+    public class DXUnitRelationElement : DXElement
     {
-        [DXColumn("BaseDXUnit")]
-        public Guid BaseDXUnit { get; set; }
+        [DXColumn("OwnRelationName")]
+        public string OwnRelationName { get; set; }
+        [DXColumn("TargetRelationName")]
+        public string TargetRelationName { get; set; }
+        [DXColumn("RelationType")]
+        public DXRelationTypeEnum RelationType { get; set; }
+        [DXColumn("TargetUnit")]
+        public Guid TargetUnit { get; set; }
     }
 }

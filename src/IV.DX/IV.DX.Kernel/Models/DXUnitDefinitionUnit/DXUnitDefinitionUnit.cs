@@ -7,5 +7,19 @@ namespace IV.DX.Kernel.Models
     {
         public DXUnitInheritanceElement DXUnitInheritanceElement { get; set; }
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
+        public DXMultiElementsContainer<DXUnitRelationElement> DXUnitRelationElement { get; set; }
+
+        public DXUnitDefinitionUnit()
+        {
+            this.DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>
+            {
+                Announced = new HashSet<DXElementInUnitDefinitionElement>()
+            };
+
+            this.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>
+            {
+                Announced = new HashSet<DXUnitRelationElement>()
+            };
+        }
     }
 }

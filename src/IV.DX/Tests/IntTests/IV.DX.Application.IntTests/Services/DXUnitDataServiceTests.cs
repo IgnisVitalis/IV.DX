@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,7 +85,7 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
-        public async Task GetItemAsync_UsingIDForExistingItems_Ok()
+        public async Task GetItemAsync_UsingDXElementDefinitionUnitAndIDForExistingItem_Ok()
         {
             // Init
             string typeName = "DXElementDefinitionUnit";
@@ -97,6 +98,19 @@ namespace IV.DX.Application.IntTests.Services
             Assert.NotNull(item);
         }
 
+        [Fact]
+        public async Task GetItemAsync_UsingDXUnitDefinitionUnitTypeAndIDForExistingItem_Ok()
+        {
+            // Init
+            string typeName = "DXUnitDefinitionUnit";
+            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+
+            // Action
+            var item = await this._service.GetItemAsync(typeName, id);
+
+            // Assert
+            Assert.NotNull(item);
+        }
 
         [Fact]
         public async Task GetItemAsync_UsingIDForExistingItems_Ok1()

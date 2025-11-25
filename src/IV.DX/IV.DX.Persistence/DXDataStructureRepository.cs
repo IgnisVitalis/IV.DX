@@ -305,6 +305,30 @@ namespace IV.DX.Persistence
             return existingRelation;
         }
 
+        public DXUnitDefinitionUnit GetDXUnitDefinition(Guid id)
+        {
+            var existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == id);
+
+            if (existingDXUnit == null)
+            {
+                this.RefreshCache();
+
+                existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == id);
+            }
+
+            return existingDXUnit;
+        }
+
+        public IEnumerable<DXUnitDefinitionUnit> GetDXUnitDefinitions(IEnumerable<Guid> ids)
+        {
+            if (ids == null)
+                return null;
+
+            var result = ids.Select(x => this.GetDXUnitDefinition(x)).Where(x => x != null).ToList();
+
+            return result;
+        }
+
         public IEnumerable<DXElementDefinitionUnit> GetDXElementDefinitions(IEnumerable<Guid> ids)
         {
             if (ids == null)

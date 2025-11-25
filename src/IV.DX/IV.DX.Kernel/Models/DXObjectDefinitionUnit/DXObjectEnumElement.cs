@@ -11,5 +11,7 @@ namespace IV.DX.Kernel.Models
         public Guid EnumType { get; set; }
         [DXColumn("Name")]
         public string Name { get; set; }
+        [DXColumn("AllowNull")]
+        public bool AllowNull { get; set; }
     }
 }

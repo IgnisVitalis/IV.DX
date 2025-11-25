@@ -143,6 +143,23 @@
     },
     {
         "S_Type": "DXRelationDefinitionUnit",
+        "ID": "495d3dc8-bd8e-4c3a-a5cd-c2905ea0b8e7",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "DXRelationDefinitionMainElement": {
+            "S_Type": "DXRelationDefinitionMainElement",
+            "ID": "68a3df50-6e38-4744-8375-3e0dfdef817f",
+            "TimeStamp": "2021-10-02T00:00:00",
+            "DXUnitID": "495d3dc8-bd8e-4c3a-a5cd-c2905ea0b8e7",
+            "ObjectNameLeft": "DXUnitDefinitionUnit",
+            "RelationNameLeft": "DXUnitDefinitionUnitID",
+            "ObjectNameRight": "DXUnitRelationElement",
+            "RelationNameRight": "DXUnitRelationElement",
+            "RelationType": 5,
+            "Kind": 1
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
         "ID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
         "TimeStamp": "2021-10-02T00:00:00",
         "DXRelationDefinitionMainElement": {
@@ -351,6 +368,44 @@
             "Kind": 1,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "9ccea4b0-4d6f-4f7f-ace5-976fbb0b2396",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "DXRelationDefinitionMainElement": {
+            "S_Type": "DXRelationDefinitionMainElement",
+            "ID": "d38ff37f-51ce-4763-929d-d8668d280f93",
+            "TimeStamp": "2021-10-02T00:00:00",
+            "DXUnitID": "9ccea4b0-4d6f-4f7f-ace5-976fbb0b2396",
+            "ObjectNameLeft": "DXUnitRelationElement",
+            "RelationNameLeft": "DXUnitRelationElementRelationType",
+            "ObjectNameRight": "DXRelationTypeEnum",
+            "RelationNameRight": "RelationType",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1,
+            "RelationColumnNameRight": "Key",
+            "RelationColumnTypeRight": 8
+        }
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "DXRelationDefinitionMainElement": {
+            "S_Type": "DXRelationDefinitionMainElement",
+            "ID": "ebde3bed-352c-40e7-ac75-c05066f8ca05",
+            "TimeStamp": "2021-10-02T00:00:00",
+            "DXUnitID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
+            "ObjectNameLeft": "DXUnitRelationElement",
+            "RelationNameLeft": "RelatedUnits",
+            "ObjectNameRight": "DXUnitDefinitionUnit",
+            "RelationNameRight": "TargetUnit",
+            "RelationTable": null,
+            "RelationType": 4,
+            "Kind": 1
         }
     }
 ]

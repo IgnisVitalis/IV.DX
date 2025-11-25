@@ -88,6 +88,14 @@
                     "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7"
+                },
+                {
+                    "S_Type": "DXElementInUnitDefinitionElement",
+                    "ID": "4bad3482-fa7e-4fea-83bb-7c026fe4b8a1",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+                    "RelationType": 4,
+                    "DXElementDefinitionUnit": "00b29615-f32e-457e-81c6-606a0b4fd4f7"
                 }
             ]
         }

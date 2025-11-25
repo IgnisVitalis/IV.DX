@@ -1,11 +1,6 @@
-﻿using IV.DX.Application;
-using IV.DX.Application.Handlers;
-using IV.DX.Hosting;
-using IV.DX.Persistence.Contracts.Abstractions;
-using Microsoft.Extensions.Configuration;
+﻿using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;

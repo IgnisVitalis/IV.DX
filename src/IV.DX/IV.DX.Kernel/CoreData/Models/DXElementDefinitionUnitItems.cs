@@ -1,6 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using System.Reflection;
