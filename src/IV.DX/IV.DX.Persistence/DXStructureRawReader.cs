@@ -1,9 +1,9 @@
 ﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.CoreData.Models;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
-using IV.DX.Persistence.CoreData;
 
 namespace IV.DX.Persistence
 {

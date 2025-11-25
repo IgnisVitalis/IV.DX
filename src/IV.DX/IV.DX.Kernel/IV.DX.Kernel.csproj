@@ -8,6 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="CoreData\Data\01_01_0000_Core_DXEnumDefinitionUnit.dat" />
+      <EmbeddedResource Include="CoreData\Data\01_01_0001_Core_DXElementDefinitionUnit.dat" />
+      <EmbeddedResource Include="CoreData\Data\01_01_0002_Core_DXUnitDefinitionUnit.dat" />
+      <EmbeddedResource Include="CoreData\Data\01_01_0003_Core_DXRelationDefinitionUnit.dat" />
+      <EmbeddedResource Include="CoreData\Data\01_01_0004_Core_DXInheritanceInitCore.dat" />
+      <EmbeddedResource Include="CoreData\Data\01_01_0005_Core_DXEnumDefinitionUnit.dat" />
+      <EmbeddedResource Include="CoreData\CorePostInit.json" />
+      <EmbeddedResource Include="CoreData\CorePreInit.json" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
 

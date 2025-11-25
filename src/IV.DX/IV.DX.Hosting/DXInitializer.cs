@@ -1,4 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Persistence;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Reflection;
@@ -26,9 +27,9 @@ namespace IV.DX.Hosting
             _coreRepo.CreateDataBase();
             DXMaintenanceToken.StartMaintenanceCore();
             await _migration.LoadCoreStructureAsync(
-                Assembly.GetAssembly(typeof(DXInitializer)), 
-                "InitScripts/CorePreInit.json", 
-                "InitScripts/CorePostInit.json", ct);
+                Assembly.GetAssembly(typeof(DXUnitAttribute)), 
+                "CoreData/CorePreInit.json",
+                "CoreData/CorePostInit.json", ct);
             DXMaintenanceToken.StopMaintenanceCore();
         }
 

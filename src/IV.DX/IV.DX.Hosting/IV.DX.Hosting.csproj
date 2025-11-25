@@ -25,36 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" />
-      <None Remove="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat" />
-      <None Remove="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat" />
-      <None Remove="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat" />
-      <None Remove="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="InitScripts\CorePostInit.json">
-        </EmbeddedResource>
-        <EmbeddedResource Include="InitScripts\CorePreInit.json">
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat">
-      </EmbeddedResource>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0001_Core_DXElementDefinitionUnit.dat">
-      </EmbeddedResource>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0002_Core_DXUnitDefinitionUnit.dat">
-      </EmbeddedResource>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0003_Core_DXRelationDefinitionUnit.dat">
-      </EmbeddedResource>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0004_Core_DXInheritanceInitCore.dat">
-      </EmbeddedResource>
-      <EmbeddedResource Include="InitScripts\Core\01_01_0005_Core_DXEnumDefinitionUnit.dat">
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
