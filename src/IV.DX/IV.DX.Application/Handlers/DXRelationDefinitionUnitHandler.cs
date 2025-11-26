@@ -23,7 +23,7 @@ namespace IV.DX.Application.Handlers
 
         public int AfterOrder => 1;
 
-        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
@@ -56,7 +56,7 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public async Task<DXResult> AfterInsertAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterInsertAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
@@ -74,12 +74,12 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeUpdateAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             throw new Exception("The update method for DXRelationDefinitionUnit isn't implemented yet");
         }
 
-        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXRelationDefinitionUnit>> BeforeDeleteAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             dataStructureRepo.DropDataStructure(dxUnit);
 
@@ -103,14 +103,14 @@ namespace IV.DX.Application.Handlers
             return modelDefinition.SingleOrDefault();
         }
 
-        public async Task<DXResult> AfterDeleteAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterDeleteAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             await dxStructureCache.RefreshAsync(ct);
 
             return DXResult.Ok();
         }
 
-        public async Task<DXResult> AfterUpdateAsync(DXRelationDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterUpdateAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             await dxStructureCache.RefreshAsync(ct);
 

@@ -20,13 +20,12 @@ namespace IV.DX.Application.Handlers
         IDXAfterInsertHandler<DXUnitDefinitionUnit>, IDXUniqueAfterInsertHandler,
         IDXAfterUpdateHandler<DXUnitDefinitionUnit>, IDXUniqueAfterUpdateHandler,
         IDXAfterDeleteHandler<DXUnitDefinitionUnit>, IDXUniqueAfterDeleteHandler
-
     {
         public int BeforeOrder => 1;
 
         public int AfterOrder => 1;
 
-        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -46,29 +45,27 @@ namespace IV.DX.Application.Handlers
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
 
-                await this.ProcessRelationsAsync(dxUnit, ct);
-
-                dataStructureRepo.UpdateUniqueColumns(dxUnit);
-
                 return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
             }
         }
 
-        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
-            await this.ProcessRelationsAsync(dxUnit, ct);
+            var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
+
+            await this.ProcessRelationsAsync(dxUnit, objectInfoFromDB, ct);
 
             dataStructureRepo.UpdateUniqueColumns(dxUnit);
 
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
             base.Process(dxUnit);
@@ -80,28 +77,47 @@ namespace IV.DX.Application.Handlers
             return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
         }
 
-        public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             await dxStructureCache.RefreshAsync(ct);
 
             return DXResult.Ok();
         }
 
-        public async Task<DXResult> AfterInsertAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult> AfterInsertAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            if (ctx is DXUnitHandlerPreInitCoreContext)
+            {
+
+            }
+            else if (ctx is DXUnitHandlerPostInitCoreContext)
+            {
+
+            }
+            else
+            {
+                // It is necessary to process relations after insert because dxUnit should already existing in db to set relations between dxUnits.
+                // It is urgent to use original income dxUnit.
+                var originalIncomeDXUnit = ctx.OriginalItem as DXUnitDefinitionUnit;
+                await this.ProcessRelationsAsync(originalIncomeDXUnit, null, ct);
+
+                // it is urgent to update unique columns at the end because relation column can be part of unique columns.
+                dataStructureRepo.UpdateUniqueColumns(dxUnit);
+            }
+
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult> AfterDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             await dxStructureCache.RefreshAsync(ct);
 
             return DXResult.Ok();
         }
 
-        public async Task<DXResult> AfterDeleteAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
-        {
-            await dxStructureCache.RefreshAsync(ct);
-
-            return DXResult.Ok();
-        }
-
-        private async Task DeleteRelationsAsync(DXUnitDefinitionUnit dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        private async Task DeleteRelationsAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             var existingDXUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
 
@@ -118,27 +134,25 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        private async Task ProcessRelationsAsync(DXUnitDefinitionUnit dxUnit, CancellationToken ct)
+        private async Task ProcessRelationsAsync(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting, CancellationToken ct)
         {
-            this.ProcessDXElementsInDXUnitElements(dxUnit);
-            this.ProcessDXnitRelationElements(dxUnit);
-            await this.ProcessEnumRelationsAsync(dxUnit, ct);
+            this.ProcessDXElementsInDXUnitElements(dxUnit, dxUnitExisting);
+            this.ProcessDXUnitRelationElements(dxUnit, dxUnitExisting);
+            await this.ProcessEnumRelationsAsync(dxUnit, dxUnitExisting, ct);
         }
 
-        private void ProcessDXnitRelationElements(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXUnitRelationElements(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting)
         {
             if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return;
 
-            var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
-
-            if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionElement.Mode == MultiElementsMode.Target)
+            if (dxUnitExisting == null || dxUnit.DXUnitRelationElement.Mode == MultiElementsMode.Target)
             {
                 this.ProcessDXUnitRelationElementsUsingTargetMode(dxUnit);
             }
             else
             {
-                this.ProcessDXUnitRelationElementsUsingFullMode(dxUnit, objectInfoFromDB);
+                this.ProcessDXUnitRelationElementsUsingFullMode(dxUnit, dxUnitExisting);
             }
         }
 
@@ -208,7 +222,7 @@ namespace IV.DX.Application.Handlers
 
         private void DeleteRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit relatedDXUnit)
         {
-            var revertedDXElementToDelete = 
+            var revertedDXElementToDelete =
                 relatedDXUnit.DXUnitRelationElement.Announced.SingleOrDefault(x => x.TargetUnit == dxUnitRelationElement.DXUnitID);
 
             dxElementGenericRepo.Delete(revertedDXElementToDelete);
@@ -235,20 +249,18 @@ namespace IV.DX.Application.Handlers
             dxUnitService.DeleteAsync(dxRelation).Wait();
         }
 
-        private void ProcessDXElementsInDXUnitElements(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXElementsInDXUnitElements(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting)
         {
             if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return;
 
-            var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
-
-            if (objectInfoFromDB == null || dxUnit.DXElementInUnitDefinitionElement.Mode == MultiElementsMode.Target)
+            if (dxUnitExisting == null || dxUnit.DXElementInUnitDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                this.ProcessDXElementsInDXUnitElementsUsingTragetMode(dxUnit);
+                this.ProcessDXElementsInDXUnitElementsUsingTargetMode(dxUnit);
             }
             else
             {
-                this.ProcessDXElementsInDXUnitElementsUsingFullMode(dxUnit, objectInfoFromDB);
+                this.ProcessDXElementsInDXUnitElementsUsingFullMode(dxUnit, dxUnitExisting);
             }
         }
 
@@ -275,7 +287,7 @@ namespace IV.DX.Application.Handlers
             this.UnassingDXElements(dxUnit, dxElementsToUnassign);
         }
 
-        private void ProcessDXElementsInDXUnitElementsUsingTragetMode(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXElementsInDXUnitElementsUsingTargetMode(DXUnitDefinitionUnit dxUnit)
         {
             var announcedIds = dxUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit);
             var dxElementsToAssign = dataStructureRepo.GetDXElementDefinitions(announcedIds);

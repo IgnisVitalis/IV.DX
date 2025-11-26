@@ -10,7 +10,7 @@ namespace IV.DX.Application.Handlers
     {
         public int BeforeOrder => 1;
 
-        public async Task<DXResult<DXInheritanceInitCore>> BeforeInsertAsync(DXInheritanceInitCore dxUnit, IDXHandlerContext ctx, CancellationToken ct)
+        public async Task<DXResult<DXInheritanceInitCore>> BeforeInsertAsync(DXInheritanceInitCore dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             dataStructureRepo.SetDXUnitInheritance(dxUnit.ChildDXUnit, dxUnit.BaseDXUnit);
 

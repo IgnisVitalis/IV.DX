@@ -5,6 +5,6 @@ namespace IV.DX.Application.Contracts.Handlers
 {
     public interface IDXAfterDeleteHandler<T> : IDXAfterOrdered where T : DXUnit
     {
-        Task<DXResult> AfterDeleteAsync(T dxUnit, IDXHandlerContext ctx, CancellationToken ct);
+        Task<DXResult> AfterDeleteAsync(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct);
     }
 }

@@ -12,8 +12,13 @@ namespace IV.DX.Application.Services
 {
     internal class DXUnitDataService(IDXUnitCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
     {
-        public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
 
             if (result.IsSuccess)
@@ -31,8 +36,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get dxUnit by ID ({id}): {result.Error}");
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync<T>(context, ct);
 
             if (result.IsSuccess)
@@ -50,8 +60,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get all dxUnit: {result.Error}");
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(IEnumerable<Guid> ids, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(IEnumerable<Guid> ids, DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync<T>(ids, context, ct);
 
             if (result.IsSuccess)
@@ -69,8 +84,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get dxUnit by ids: {result.Error}");
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, IDXHandlerContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync<T>(dxFilter, context, ct);
 
             if (result.IsSuccess)
@@ -88,8 +108,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get dxUnit by query ({dxFilter}): {result.Error}");
         }
 
-        public async Task<T> InsertAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.InsertAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -102,8 +127,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<T> InsertOrUpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> InsertOrUpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
 
             var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
@@ -118,8 +148,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<T> UpdateAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<T> UpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -132,8 +167,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<bool> IsItemExistingAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<bool> IsItemExistingAsync(string typeName, Guid id, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.IsUnitExistingAsync(typeName, id, context, ct);
 
             if (result.IsSuccess)
@@ -147,8 +187,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to check dxModel existing by type ({typeName}) and id ({id}): {result.Error}");
         }
 
-        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, context, ct);
 
             if (result.IsSuccess)
@@ -166,8 +211,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get all dxModel by type ({typeName}): {result.Error}");
         }
 
-        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IEnumerable<Guid> ids, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IEnumerable<Guid> ids, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, ids, context, ct);
 
             if (result.IsSuccess)
@@ -185,8 +235,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {result.Error}");
         }
 
-        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxFilter, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxFilter, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxFilter, context, ct);
 
             if (result.IsSuccess)
@@ -204,8 +259,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxFilter}): {result.Error}");
         }
 
-        public async Task<JObject> GetItemAsync(string typeName, Guid id, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<JObject> GetItemAsync(string typeName, Guid id, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
 
             if (result.IsSuccess)
@@ -223,8 +283,13 @@ namespace IV.DX.Application.Services
             throw new Exception($"There are an error to get dxModel by ID ({id}): {result.Error}");
         }
 
-        public async Task<bool> DeleteAsync<T>(T dxUnit, IDXHandlerContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<bool> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
             if (result.IsSuccess)
@@ -237,8 +302,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> InsertAsync(JObject jObject, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<JObject> InsertAsync(JObject jObject, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -251,8 +321,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> UpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
+        public async Task<JObject> UpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -265,8 +340,13 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<bool> DeleteAsync(JObject jObject, IDXHandlerContext? context = default, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(JObject jObject, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
             if (result.IsSuccess)
@@ -279,13 +359,18 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> InsertOrUpdateAsync(JObject jObject, IDXHandlerContext? context = null, CancellationToken ct = default)
+        public async Task<JObject> InsertOrUpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
             var dxModel = DXModelConverter.ToDXModel(jObject);
 
             var objId = dxModel.DXMainElement.Item.ID;
 
-            if ( await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId, context, ct))
+            if (await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId, context, ct))
             {
                 return await UpdateAsync(jObject, context, ct);
             }

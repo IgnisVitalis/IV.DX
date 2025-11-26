@@ -5,6 +5,6 @@ namespace IV.DX.Application.Contracts.Handlers
 {
     public interface IDXIsItemExistingHandler<T> : IDXBeforeOrdered where T : DXUnit
     {
-        Task<DXResult<bool>> IsItemExistingAsync(Guid id, IDXHandlerContext ctx, CancellationToken ct);
+        Task<DXResult<bool>> IsItemExistingAsync(Guid id, DXHandlerBaseContext ctx, CancellationToken ct);
     }
 }

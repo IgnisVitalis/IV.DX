@@ -5,6 +5,6 @@ namespace IV.DX.Application.Contracts.Handlers
 {
     public interface IDXBeforeUpdateHandler<T> : IDXBeforeOrdered where T : DXUnit
     {
-        Task<DXResult<T>> BeforeUpdateAsync(T dxUnit, IDXHandlerContext ctx, CancellationToken ct);
+        Task<DXResult<T>> BeforeUpdateAsync(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct);
     }
 }

@@ -74,27 +74,25 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        protected async Task ProcessEnumRelationsAsync(DXObjectDefinitionUnit obj, CancellationToken ct)
+        protected async Task ProcessEnumRelationsAsync(DXObjectDefinitionUnit obj, DXObjectDefinitionUnit? dxUnitExisting, CancellationToken ct)
         {
             if (obj.DXColumnDefinitionElement == null)
                 return;
 
-            switch (obj.DXColumnDefinitionElement.Mode)
+            if (dxUnitExisting == null || obj.DXObjectEnumElement.Mode == MultiElementsMode.Target)
             {
-                case MultiElementsMode.Full:
-                    await ProcessEnumRelationsUsingFullModeAsync(obj, ct);
-                    break;
-                case MultiElementsMode.Target:
-                    await ProcessEnumRelationsUsingTargetModeAsync(obj, ct);
-                    break;
-                default:
-                    break;
+                await ProcessEnumRelationsUsingTargetModeAsync(obj, ct);
+            }
+            else
+            {
+                await ProcessEnumRelationsUsingFullModeAsync(obj, dxUnitExisting, ct);
             }
         }
-        private async Task ProcessEnumRelationsUsingFullModeAsync(DXObjectDefinitionUnit obj, CancellationToken ct)
+
+        private async Task ProcessEnumRelationsUsingFullModeAsync(DXObjectDefinitionUnit obj, DXObjectDefinitionUnit dxUnitExisting, CancellationToken ct)
         {
             var currentActualEnumColumns = obj.DXObjectEnumElement.Announced;
-            var actualEnumColumns = dxElementGenericRepo.GetItems<DXObjectEnumElement>($"DXUnitID = '{obj.ID}'").ToList();
+            var actualEnumColumns = dxUnitExisting.DXObjectEnumElement.Announced;
 
             var currentActualEnumColumnIDs = currentActualEnumColumns.Select(x => x.ID).ToList();
             var actualEnumColumnIDs = actualEnumColumns.Select(x => x.ID).ToList();
