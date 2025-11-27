@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -183,6 +184,13 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
+            this._finalizationAction = () =>
+            {
+                this._service.DeleteAsync(dxUnit1).Wait();
+                this._service.DeleteAsync(dxUnit2).Wait();
+                this._service.DeleteAsync(dxUnit3).Wait();
+            };
+
             // Action
             var item1 = await this._service.InsertAsync(dxUnit1);
             var item2 = await this._service.InsertAsync(dxUnit2);
@@ -273,6 +281,11 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(relationDefinition2);
             Assert.Equal(dxUnitRelation3Existing.RelationType, relationDefinition3.DXRelationDefinitionMainElement.RelationType);
+
+            // Finalization
+            await this._service.DeleteAsync(dxUnit1);
+            await this._service.DeleteAsync(dxUnit2);
+            await this._service.DeleteAsync(dxUnit3);
         }
 
         [Fact]

@@ -124,13 +124,32 @@ namespace IV.DX.Application.Handlers
             if (existingDXUnit == null)
                 return;
 
+            await DeleteDXElementInUnitDefinitionElements(existingDXUnit, ctx, ct);
+            await DeleteDXUnitRelationElements(existingDXUnit, ctx, ct);
+        }
+
+        private async Task DeleteDXElementInUnitDefinitionElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
             var relatedDXElementIds = existingDXUnit.DXElementInUnitDefinitionElement.Announced.Select(x => x.DXElementDefinitionUnit).ToList();
 
             var relatedDXElements = dataStructureRepo.GetDXElementDefinitions(relatedDXElementIds);
 
             foreach (var relatedDXElement in relatedDXElements)
             {
-                await dxUnitService.DeleteAsync(this.GetExistingDXElementInDXUnitRelationObject(dxUnit, relatedDXElement), ctx, ct);
+                var dxRelationDefinition = this.GetExistingDXElementInDXUnitRelationObject(existingDXUnit, relatedDXElement);
+
+                await dxUnitService.DeleteAsync(dxRelationDefinition, ctx, ct);
+            }
+        }
+
+        private async Task DeleteDXUnitRelationElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            foreach (var dxUnitRelation in existingDXUnit.DXUnitRelationElement.Announced)
+            {
+                var dxUnitToUnassign = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnitRelation.TargetUnit);
+
+                this.UnassingDXUnit(existingDXUnit, dxUnitRelation, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
             }
         }
 
@@ -381,7 +400,7 @@ namespace IV.DX.Application.Handlers
             DXUnitRelationElement dxUnitRelationElement,
             DXUnitDefinitionUnit dxUnitRelated)
         {
-            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnitRelated.DXObjectDefinitionMainElement.Name}' " +
+            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.DXObjectDefinitionMainElement.Name}' " +
                $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxUnitRelated.DXObjectDefinitionMainElement.Name}' " +
                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnitRelationElement.OwnRelationName}' " +
                $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxUnitRelationElement.TargetRelationName}'";
