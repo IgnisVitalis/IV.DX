@@ -146,7 +146,7 @@ namespace IV.DX.Application.Handlers
         {
             foreach (var dxUnitRelation in existingDXUnit.DXUnitRelationElement.Announced)
             {
-                var dxUnitToUnassign = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnitRelation.TargetUnit);
+                var dxUnitToUnassign = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnitRelation.TargetDXUnit);
 
                 this.UnassingDXUnit(existingDXUnit, dxUnitRelation, dxUnitToUnassign);
                 this.DeleteRevertedDXUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
@@ -177,8 +177,8 @@ namespace IV.DX.Application.Handlers
 
         private void ProcessDXUnitRelationElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {
-            var newAnnouncedIds = dxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetUnit);
-            var existingAnnouncedIds = existingdxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetUnit);
+            var newAnnouncedIds = dxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
+            var existingAnnouncedIds = existingdxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
 
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
@@ -187,7 +187,7 @@ namespace IV.DX.Application.Handlers
 
             foreach (var announcedId in announcedIds)
             {
-                var dxUnitRelation = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetUnit == announcedId);
+                var dxUnitRelation = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == announcedId);
 
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
@@ -197,7 +197,7 @@ namespace IV.DX.Application.Handlers
 
             foreach (var deletedId in deletedIds)
             {
-                var dxUnitRelation = existingdxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetUnit == deletedId);
+                var dxUnitRelation = existingdxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == deletedId);
 
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
@@ -210,7 +210,7 @@ namespace IV.DX.Application.Handlers
         {
             foreach (var announced in dxUnit.DXUnitRelationElement.Announced)
             {
-                var announcedId = announced.TargetUnit;
+                var announcedId = announced.TargetDXUnit;
 
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
@@ -220,7 +220,7 @@ namespace IV.DX.Application.Handlers
 
             foreach (var deleted in dxUnit.DXUnitRelationElement.Deleted)
             {
-                var deletedId = deleted.TargetUnit;
+                var deletedId = deleted.TargetDXUnit;
 
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
@@ -234,7 +234,7 @@ namespace IV.DX.Application.Handlers
             var revertedDXUnitRelationElement = dxUnitRelationElement.GetReverted();
 
             revertedDXUnitRelationElement.ID = Guid.NewGuid();
-            revertedDXUnitRelationElement.DXUnitID = dxUnitRelationElement.TargetUnit;
+            revertedDXUnitRelationElement.DXUnitID = dxUnitRelationElement.TargetDXUnit;
 
             dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitRelationElement);
         }
@@ -242,14 +242,14 @@ namespace IV.DX.Application.Handlers
         private void DeleteRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit relatedDXUnit)
         {
             var revertedDXElementToDelete =
-                relatedDXUnit.DXUnitRelationElement.Announced.SingleOrDefault(x => x.TargetUnit == dxUnitRelationElement.DXUnitID);
+                relatedDXUnit.DXUnitRelationElement.Announced.SingleOrDefault(x => x.TargetDXUnit == dxUnitRelationElement.DXUnitID);
 
             dxElementGenericRepo.Delete(revertedDXElementToDelete);
         }
 
         private void AssignDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
         {
-            var relationType = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetUnit == dxUnitToAssign.ID).RelationType;
+            var relationType = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == dxUnitToAssign.ID).RelationType;
 
             var dxRelation = this.GetDXUnitRelationObject(dxUnit, dxUnitRelationElement, dxUnitToAssign, relationType);
 

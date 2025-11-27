@@ -163,7 +163,7 @@ namespace IV.DX.Application.IntTests.Services
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.OneToMany,
                 TargetRelationName = "dxUnit1RelationName",
-                TargetUnit = id1
+                TargetDXUnit = id1
             };
 
             var dxUnitRelation2 = new DXUnitRelationElement()
@@ -173,7 +173,7 @@ namespace IV.DX.Application.IntTests.Services
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.ManyToMany,
                 TargetRelationName = "dxUnit3RelationName",
-                TargetUnit = id3
+                TargetDXUnit = id3
             };
 
             dxUnit2.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>()
@@ -207,8 +207,8 @@ namespace IV.DX.Application.IntTests.Services
             var dxUnitRelation1Existing = existingItem1.DXUnitRelationElement.Announced.Single();
             var dxUnitRelation2Existing = existingItem2.DXUnitRelationElement.Announced.Single();
 
-            Assert.Equal(dxUnitRelation1Existing.TargetUnit, dxUnitRelation2Existing.DXUnitID);
-            Assert.Equal(dxUnitRelation1Existing.DXUnitID, dxUnitRelation2Existing.TargetUnit);
+            Assert.Equal(dxUnitRelation1Existing.TargetDXUnit, dxUnitRelation2Existing.DXUnitID);
+            Assert.Equal(dxUnitRelation1Existing.DXUnitID, dxUnitRelation2Existing.TargetDXUnit);
             Assert.Equal(dxUnitRelation1Existing.OwnRelationName, dxUnitRelation2Existing.TargetRelationName);
             Assert.Equal(dxUnitRelation1Existing.TargetRelationName, dxUnitRelation2Existing.OwnRelationName);
             Assert.Equal(dxUnitRelation1Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation2Existing.RelationType));
@@ -258,8 +258,8 @@ namespace IV.DX.Application.IntTests.Services
             dxUnitRelation2Existing = existingItem2.DXUnitRelationElement.Announced.Single();
             var dxUnitRelation3Existing = existingItem3.DXUnitRelationElement.Announced.Single();
 
-            Assert.Equal(dxUnitRelation2Existing.TargetUnit, dxUnitRelation3Existing.DXUnitID);
-            Assert.Equal(dxUnitRelation2Existing.DXUnitID, dxUnitRelation3Existing.TargetUnit);
+            Assert.Equal(dxUnitRelation2Existing.TargetDXUnit, dxUnitRelation3Existing.DXUnitID);
+            Assert.Equal(dxUnitRelation2Existing.DXUnitID, dxUnitRelation3Existing.TargetDXUnit);
             Assert.Equal(dxUnitRelation2Existing.OwnRelationName, dxUnitRelation3Existing.TargetRelationName);
             Assert.Equal(dxUnitRelation2Existing.TargetRelationName, dxUnitRelation3Existing.OwnRelationName);
             Assert.Equal(dxUnitRelation2Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation3Existing.RelationType));
