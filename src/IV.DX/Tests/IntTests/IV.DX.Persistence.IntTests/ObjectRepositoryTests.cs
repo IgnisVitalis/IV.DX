@@ -30,7 +30,7 @@ namespace IV.DX.Persistence.IntTests
             // Init
             string json = File.ReadAllText("Assets/JSON/DXUnitDefinitionUnit/DXObjectDefinitionUnit0000.json");
 
-            DXObjectDefinitionUnit objDesc = DXUnitConverter.ToDXUnit<DXUnitDefinitionUnit>(json);
+            var objDesc = DXUnitConverter.ToDXUnit<DXUnitDefinitionUnit>(json);
 
             base._finalizationAction = new Action(() =>
             {

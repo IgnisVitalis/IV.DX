@@ -109,7 +109,9 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
 
-                await dxUnitService.InsertAsync(this.GetDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
+                var relationObject = this.CreateDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
+
+                await dxUnitService.InsertAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
             }
 
             foreach (var enumColumnIDToUpdate in enumColumnIDsToUpdate)
@@ -120,9 +122,10 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
 
-                await dxUnitService.UpdateAsync(this.GetDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
-            }
+                var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
 
+                await dxUnitService.UpdateAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
+            }
 
             foreach (var enumColumnIDToDelete in enumColumnIDsToDelete)
             {
@@ -132,7 +135,9 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = enumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
 
-                await dxUnitService.DeleteAsync(this.GetDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd), new DXUnitHandlerEnumProcessingContext(), ct);
+                var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
+
+                await dxUnitService.DeleteAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
             }
         }
 
@@ -152,7 +157,9 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
-                await dxUnitService.InsertAsync(this.GetDXObjectEnumElementRelationObject(obj, announcedEnumInfo, enumColumn, columnWithEnumValue), new DXUnitHandlerEnumProcessingContext(), ct);
+                var relationObject = this.CreateDXObjectEnumElementRelationObject(obj, announcedEnumInfo, enumColumn, columnWithEnumValue);
+
+                await dxUnitService.InsertAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
             }
 
             foreach (var deletedEnumInfo in deletedEnumInfos)
@@ -161,13 +168,17 @@ namespace IV.DX.Application.Handlers
 
                 var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
 
-                var relationObject = this.GetDXObjectEnumElementRelationObject(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
+                var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
                 await dxUnitService.DeleteAsync(relationObject, new DXUnitHandlerEnumProcessingContext(), ct);
             }
         }
 
-        private DXRelationDefinitionUnit GetDXObjectEnumElementRelationObject(DXObjectDefinitionUnit obj, DXEnumDefinitionUnit enumObj, DXColumnDefinitionElement enumColumn, DXObjectEnumElement columnWithEnumValue)
+        private DXRelationDefinitionUnit CreateDXObjectEnumElementRelationObject(
+            DXObjectDefinitionUnit obj,
+            DXEnumDefinitionUnit enumObj,
+            DXColumnDefinitionElement enumColumn,
+            DXObjectEnumElement columnWithEnumValue)
         {
             var objID = Guid.NewGuid();
 
@@ -188,6 +199,23 @@ namespace IV.DX.Application.Handlers
                     Kind = obj.DXObjectDefinitionMainElement.Kind
                 }
             };
+        }
+
+        private DXRelationDefinitionUnit GetExistingDXObjectEnumElementRelationObject(
+           DXObjectDefinitionUnit obj,
+           DXEnumDefinitionUnit enumObj,
+           DXColumnDefinitionElement enumColumn,
+           DXObjectEnumElement columnWithEnumValue)
+        {
+            string dxFilter =
+                $"DXRelationDefinitionMainElement.ObjectNameLeft = '{obj.DXObjectDefinitionMainElement.Name}' " +
+                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{obj.DXObjectDefinitionMainElement.Name + columnWithEnumValue.Name}' " +
+                $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{enumObj.DXObjectDefinitionMainElement.Name}' " +
+                $"AND DXRelationDefinitionMainElement.RelationColumnNameRight = '{enumColumn.Name}'";
+
+            var existingRelations = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(dxFilter);
+
+            return existingRelations.Single();
         }
 
         private void SetColumn(DXObjectDefinitionUnit objectInfoIncome, DXObjectDefinitionUnit objectInfoFromDB, ImportantColumn column)

@@ -264,7 +264,12 @@ namespace IV.DX.Application.Pipeline
 
         public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
-            var dxUnitToProcess = dxUnit;
+            var existingDXUnit = await this.GetAsync<T>(dxUnit.ID, ctx, ct);
+
+            if (!existingDXUnit.IsSuccess || !existingDXUnit.HasValue)
+                return DXResult<T>.NotFound();
+
+            var dxUnitToProcess = existingDXUnit.Value;
             ctx.OriginalItem = dxUnit;
 
             var flow = DXFlow.Continue;

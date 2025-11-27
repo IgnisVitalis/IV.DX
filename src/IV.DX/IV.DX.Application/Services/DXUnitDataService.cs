@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -288,7 +289,7 @@ namespace IV.DX.Application.Services
             if (context == null)
             {
                 context = new DXHandlerContext();
-            }
+            }          
 
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
@@ -346,7 +347,7 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
-
+                
             var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
             if (result.IsSuccess)
