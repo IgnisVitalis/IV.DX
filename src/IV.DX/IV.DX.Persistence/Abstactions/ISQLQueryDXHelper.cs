@@ -1,8 +1,6 @@
 ﻿using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Models;
-using Npgsql;
-using System.Data;
 using System.Data.Common;
 
 namespace IV.DX.Persistence.Abstractions

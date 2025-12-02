@@ -6,5 +6,5 @@ namespace IV.DX.Kernel.Enums
         SingleOptional = 2,
         MultiMandatory = 3,
         MultiOptional = 4
-    }
+    }   
 }

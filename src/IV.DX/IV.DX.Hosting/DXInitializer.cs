@@ -31,16 +31,15 @@ namespace IV.DX.Hosting
                 "CoreData/CorePreInit.json",
                 "CoreData/CorePostInit.json", ct);
             DXMaintenanceToken.StopMaintenanceCore();
+
+            await _dXStructureCache.RefreshAsync(ct);
         }
 
         public async Task InitCustomDataAsync(string configPath, CancellationToken ct = default)
         {
             await _migration.LoadStructureAsync(configPath, ct);
-        }
 
-        public async Task InitCacheAsync(CancellationToken ct = default)
-        {
-            await this._dXStructureCache.WarmUpAsync(ct);
+            await _dXStructureCache.RefreshAsync(ct);
         }
     }
 }

@@ -611,24 +611,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             }
         }
 
-        public NpgsqlDataAdapter PopulateTableToDataSet(
-            NpgsqlConnection conn,
-            DataSet dataSet,
-            string tableName,
-            IEnumerable<string> columnNames = null,
-            string whereClause = null,
-            IDictionary<string, string> orderBy = null,
-            int? limit = null)
-        {
-            var query = this.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit);
-
-            var adapter = new NpgsqlDataAdapter(query, conn);
-
-            adapter.Fill(dataSet, tableName);
-
-            return adapter;
-        }
-
         public string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
             var result = GetSQLQueryToCreateRelationToMany(

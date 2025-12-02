@@ -47,7 +47,6 @@ namespace IV.DX.Shared.IntTests
             coreRepo.DropDataBase();
             init.InitCoreDataAsync().Wait();
             init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
-            init.InitCacheAsync().Wait();
         }
 
         public static string ReplaceDatabase(string connectionString, string newDatabase)

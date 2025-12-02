@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
+using IV.DX.Kernel.Models.New;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
@@ -15,16 +16,14 @@ namespace IV.DX.Persistence
         public DXStructureCache(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
         public IReadOnlyList<DXElementDefinitionUnit> DXElements => _snapshot.DXElements;
-        public IReadOnlyList<DXUnitDefinitionUnit> DXUnits => _snapshot.Entities;
-        public IReadOnlyList<DXEnumDefinitionUnit> DXEnums => _snapshot.Enums;
-        public IReadOnlyList<DXRelationDefinitionUnit> DXRelations => _snapshot.Relations;
-        public int Version => _snapshot.Version;
+        public IReadOnlyList<DXUnitDefinitionUnit> DXUnits => _snapshot.DXUnits;
+        public IReadOnlyList<DXEnumDefinitionUnit> DXEnums => _snapshot.DXEnums;
+        public IReadOnlyList<DXRelationDefinitionUnit> DXRelations => _snapshot.DXRelations;
 
-        public async Task WarmUpAsync(CancellationToken ct = default)
-        {
-            if (_snapshot.Version != 0) return;
-            await RefreshAsync(ct);
-        }
+        DXNodeTree DXNodeTree = new DXNodeTree();
+
+
+        public int Version => _snapshot.Version;
 
         public Task RefreshAsync(CancellationToken ct = default)
         {
@@ -34,15 +33,17 @@ namespace IV.DX.Persistence
                 var repo = scope.ServiceProvider.GetRequiredService<IDXStructureRawReader>();
             
                 var dxElements = repo.LoadDXElementInfosRaw();
-                var entities = repo.LoadDXUnitInfosRaw();
-                var enums = repo.LoadDXEnumInfosRaw();
-                var relations = repo.LoadDXRelationInfosRaw();
+                var dxUnits = repo.LoadDXUnitInfosRaw();
+                var dxEnums = repo.LoadDXEnumInfosRaw();
+                var dxRelations = repo.LoadDXRelationInfosRaw();
+
+                //DXNodeTree.Load(dxRelations, dxUnits, dxElements, dxEnums);
 
                 var snap = new Snapshot(
                     dxElements.ToImmutableArray(),
-                    entities.ToImmutableArray(),
-                    enums.ToImmutableArray(),
-                    relations.ToImmutableArray(),
+                    dxUnits.ToImmutableArray(),
+                    dxEnums.ToImmutableArray(),
+                    dxRelations.ToImmutableArray(),
                     _snapshot.Version + 1);
 
                 Volatile.Write(ref _snapshot, snap);
@@ -80,11 +81,16 @@ namespace IV.DX.Persistence
             return this.DXRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft.Equals(name)).ToList();
         }
 
+        public DXNodeTree GetDXNodeTree()
+        {
+            return DXNodeTree;
+        }
+
         private sealed record Snapshot(
             ImmutableArray<DXElementDefinitionUnit> DXElements,
-            ImmutableArray<DXUnitDefinitionUnit> Entities,
-            ImmutableArray<DXEnumDefinitionUnit> Enums,
-            ImmutableArray<DXRelationDefinitionUnit> Relations,
+            ImmutableArray<DXUnitDefinitionUnit> DXUnits,
+            ImmutableArray<DXEnumDefinitionUnit> DXEnums,
+            ImmutableArray<DXRelationDefinitionUnit> DXRelations,
             int Version)
         {
             public static readonly Snapshot Empty = new(

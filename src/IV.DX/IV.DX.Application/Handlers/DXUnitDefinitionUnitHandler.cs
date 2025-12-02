@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Converters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -343,7 +344,7 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetDXElementInDXUnitRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement, DXElementInUnitTypeEnum dxElementInUnitRelationType)
         {
-            var relationType = this.ConvertDXElementIndxUnitRelationTypeToCommonRelationType(dxElementInUnitRelationType);
+            var relationType = dxElementInUnitRelationType.ToDXRelationTypeEnum();
             var result = this.GetDXElementsInDXUnitElementsRelationObject(dxUnit, dxElement, relationType);
 
             return result;
@@ -420,23 +421,6 @@ namespace IV.DX.Application.Handlers
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 
             return items.SingleOrDefault();
-        }
-
-        private DXRelationTypeEnum ConvertDXElementIndxUnitRelationTypeToCommonRelationType(DXElementInUnitTypeEnum relationType)
-        {
-            switch (relationType)
-            {
-                case DXElementInUnitTypeEnum.SingleMandatory:
-                    return DXRelationTypeEnum.ZeroOneToZeroOne;
-                case DXElementInUnitTypeEnum.SingleOptional:
-                    return DXRelationTypeEnum.ZeroOneToZeroOne;
-                case DXElementInUnitTypeEnum.MultiMandatory:
-                    return DXRelationTypeEnum.ZeroOneToMany;
-                case DXElementInUnitTypeEnum.MultiOptional:
-                    return DXRelationTypeEnum.ZeroOneToMany;
-                default:
-                    throw new Exception($"DXElementInUnitTypeEnum doesn't contain '{relationType}' value");
-            }
-        }
+        }       
     }
 }

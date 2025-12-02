@@ -27,12 +27,14 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
         ISQLQueryDXHelper _sqlQueryHelper;
         IDXUnitGenericRepository _genericRepo;
+        IDXStructureCache _dxStructureCache;
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._sqlQueryHelper = this.ServiceProvider.GetRequiredService<ISQLQueryDXHelper>();
             this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
+            this._dxStructureCache = this.ServiceProvider.GetRequiredService<IDXStructureCache>();
 
             InitData();
         }
@@ -717,6 +719,16 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
                 Assert.NotNull(passportsExisting);
             }
+        }
+
+        [Fact]
+        public void F()
+        {
+            string dxFilter = "R(Users).TUserMainElement.Name = 'Svitlana' AND R(Users).TUserMainElement.Surname = 'Suvorova'";
+
+            var dxNodeTree = this._dxStructureCache.GetDXNodeTree();
+
+            var sqlWhereExpression = dxNodeTree.BuildSQLWhereExpression("TBookUnit", dxFilter);
         }
     }
 }

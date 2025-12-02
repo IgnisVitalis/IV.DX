@@ -21,8 +21,6 @@ namespace IV.DX.Shared.IntTests
         {
             this.Output = output;
             _scope = fx.Root.CreateScope();
-
-            _scope.ServiceProvider.GetRequiredService<IDXStructureCache>().WarmUpAsync().Wait();
         }
 
         public void Dispose()
@@ -31,9 +29,6 @@ namespace IV.DX.Shared.IntTests
             {
                 this._finalizationAction.Invoke();
             }
-
-            
-            //_scope.Dispose();
         }
 
         protected void RunActionSafety(Action action)

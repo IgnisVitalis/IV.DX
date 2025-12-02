@@ -56,7 +56,7 @@
         <None Update="MigrationScripts\Test\01_01_0008_Test_TPositionUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0009_Test_TUserUnit.dat">
+        <None Update="MigrationScripts\Test\01_01_0012_Test_TUserUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="MigrationScripts\Test\01_01_0010_Test_TDeviceUnit.dat">
@@ -65,10 +65,7 @@
         <None Update="MigrationScripts\Test\01_01_0011_Test_TBookUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="MigrationScripts\Test\01_01_0012_Test_TDocumentUnit.dat">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="MigrationScripts\Test\01_01_0019_Test_TUserUnit.dat">
+        <None Update="MigrationScripts\Test\01_01_0009_Test_TDocumentUnit.dat">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="MigrationScripts\Test\01_01_0020_Test_TUserUnit.dat">
