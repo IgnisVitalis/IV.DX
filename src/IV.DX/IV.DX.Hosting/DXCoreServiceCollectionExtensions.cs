@@ -25,7 +25,7 @@ namespace IV.DX.Hosting
             {
                 var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-                var typeLowerCase = o.Type.ToLower().Trim();            
+                var typeLowerCase = o.Type.ToLower().Trim();
 
                 switch (typeLowerCase)
                 {
@@ -44,23 +44,25 @@ namespace IV.DX.Hosting
             {
                 var cache = sp.GetRequiredService<IDXStructureCache>();
                 var helper = sp.GetRequiredService<ISQLQueryDXHelper>();
+                var sqlQueryBuilder = sp.GetRequiredService<ISQLQueryBuilder>();
 
                 var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, helper);
+                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, helper, sqlQueryBuilder);
             };
-           
+
             services.AddScoped<IDXUnitCoreRepository, DXCoreRepository>(func);
-            services.AddScoped<IDXElementCoreRepository, DXCoreRepository>(func);            
+            services.AddScoped<IDXElementCoreRepository, DXCoreRepository>(func);
             services.AddScoped<IDXStructureRawReader, DXCoreRepository>(func);
             services.AddScoped<IDXStructureRepository, DXCoreRepository>(func);
             services.AddScoped<IDXEnumCoreRepository, DXCoreRepository>(func);
-
             services.AddScoped<IDXUnitGenericRepository, DXUnitGenericRepository>();
             services.AddScoped<IDXElementGenericRepository, DXElementGenericRepository>();
+            services.AddScoped<ISQLQueryBuilder, SQLQueryBuilder>();
+
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXEnumDataService, DXEnumDataService>();
-            services.AddScoped<IDXElementDataService, DXElementDataService>();            
+            services.AddScoped<IDXElementDataService, DXElementDataService>();
             services.AddScoped<IDXMigrationService, MigrationService>();
             services.AddScoped<IDXStructureService, DXStructureService>();
 

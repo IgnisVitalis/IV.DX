@@ -16,15 +16,18 @@ namespace IV.DX.Persistence
         protected string _connectionStr;
         protected ISQLQueryDXHelper _queryHelper;
         IDXStructureCache _dxStructureCache;
+        ISQLQueryBuilder _sqlQueryBuilder;
 
         public DXCoreRepository(
             DXDatabaseOptions options,
             IDXStructureCache dxStructureCache,
-            ISQLQueryDXHelper queryHelper)
+            ISQLQueryDXHelper queryHelper,
+            ISQLQueryBuilder _sqlQueryBuilder)
         {
             _connectionStr = options.ConnectionString;
             _queryHelper = queryHelper;
             _dxStructureCache = dxStructureCache;
+            this._sqlQueryBuilder = _sqlQueryBuilder;
         }
 
         public bool Delete(string typeName, Guid id)
@@ -216,7 +219,10 @@ namespace IV.DX.Persistence
         // TODO: need to check what kind of data is loaded. Because this method should load only IDs
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
         {
-            string sqlQuery = this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
+            string sqlQuery =
+                  this._sqlQueryBuilder.BuildSQLExpression(typeName, dxFilter);
+
+                    //this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -307,7 +313,7 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxFilter, DXLoadingType typeOfLoading)
         {
-            string typeName = container.MainElement.Type;         
+            string typeName = container.MainElement.Type;
 
             var ids = this.GetItemIDs(typeName, dxFilter);
 
@@ -1122,7 +1128,7 @@ namespace IV.DX.Persistence
                 default:
                     throw new NotImplementedException($"Relation type '{relationInfo.RelationType}' is not supported.");
             }
-        }    
+        }
 
         // TODO: can be refactored using stored procedure
         private DXRelationDefinitionMainElement GetRelationInfo(string obj1Name, string relationToObj2Name)

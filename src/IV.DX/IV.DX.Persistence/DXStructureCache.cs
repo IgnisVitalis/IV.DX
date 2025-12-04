@@ -1,6 +1,5 @@
 ﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
-using IV.DX.Kernel.Models.New;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
@@ -20,9 +19,6 @@ namespace IV.DX.Persistence
         public IReadOnlyList<DXEnumDefinitionUnit> DXEnums => _snapshot.DXEnums;
         public IReadOnlyList<DXRelationDefinitionUnit> DXRelations => _snapshot.DXRelations;
 
-        DXNodeTree DXNodeTree = new DXNodeTree();
-
-
         public int Version => _snapshot.Version;
 
         public Task RefreshAsync(CancellationToken ct = default)
@@ -35,9 +31,7 @@ namespace IV.DX.Persistence
                 var dxElements = repo.LoadDXElementInfosRaw();
                 var dxUnits = repo.LoadDXUnitInfosRaw();
                 var dxEnums = repo.LoadDXEnumInfosRaw();
-                var dxRelations = repo.LoadDXRelationInfosRaw();
-
-                //DXNodeTree.Load(dxRelations, dxUnits, dxElements, dxEnums);
+                var dxRelations = repo.LoadDXRelationInfosRaw();             
 
                 var snap = new Snapshot(
                     dxElements.ToImmutableArray(),
@@ -79,11 +73,6 @@ namespace IV.DX.Persistence
         public IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name)
         {
             return this.DXRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft.Equals(name)).ToList();
-        }
-
-        public DXNodeTree GetDXNodeTree()
-        {
-            return DXNodeTree;
         }
 
         private sealed record Snapshot(

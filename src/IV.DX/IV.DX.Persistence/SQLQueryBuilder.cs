@@ -1,38 +1,67 @@
 ﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Contracts.Abstractions;
 using System.Text;
 
-namespace IV.DX.Kernel.Models.New
+namespace IV.DX.Persistence
 {
-    public class DXNodeTree
+    internal class SQLQueryBuilder(IDXStructureCache dxStructureCache) : ISQLQueryBuilder
     {
-        HashSet<DXNode> DXNodes { get; }
+        static HashSet<DXNode> DXNodes { get; set; }
+        static int version = 0;
 
-        public DXNodeTree()
+        public string BuildSQLExpression(string typeName, string? dxFilter = default)
         {
-            DXNodes = new HashSet<DXNode>();
+            this.BuildDXNodeTree();
+
+            List<KeyValuePair<Guid, Guid>> idPairs = new List<KeyValuePair<Guid, Guid>>();
+
+            string whereExpression= string.Empty;
+
+            if (!string.IsNullOrEmpty(dxFilter))
+            {
+                whereExpression = this.ProcessDXFilter(typeName, dxFilter, idPairs);
+            }
+
+            this.LoadChainForDXColumns(typeName, dxFilter, idPairs);
+
+            var fromExpression = GetFromExpression(typeName, idPairs);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"SELECT \"{typeName}\".\"ID\"\n");
+            sb.Append($"FROM {fromExpression}");
+
+            if (!string.IsNullOrEmpty(dxFilter))
+            {
+                sb.Append($"WHERE {whereExpression}");
+            }
+
+            return sb.ToString();
         }
 
-        public void Load(
+        private void BuildDXNodeTree()
+        {
+            if (dxStructureCache.Version > version)
+            {
+                this.Load(dxStructureCache.DXRelations, dxStructureCache.DXUnits, dxStructureCache.DXElements, dxStructureCache.DXEnums);
+            }
+        }
+
+        private void Load(
             IEnumerable<DXRelationDefinitionUnit> dxRelations,
             IEnumerable<DXUnitDefinitionUnit> dxUnits,
             IEnumerable<DXElementDefinitionUnit> dxElements,
             IEnumerable<DXEnumDefinitionUnit> dxEnums)
         {
+            DXNodes = new HashSet<DXNode>();
+
             foreach (var dxUnit in dxUnits)
             {
                 var dxUnitNode = new DXNode(dxUnit.DXObjectDefinitionMainElement.Name);
 
                 DXNodes.Add(dxUnitNode);
-
-                foreach (var dxColumn in dxUnit.DXColumnDefinitionElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(dxColumn.Name);
-
-                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-
-                    dxUnitNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
+              
             }
 
             foreach (var dxElement in dxElements)
@@ -40,15 +69,6 @@ namespace IV.DX.Kernel.Models.New
                 var dxElementNode = new DXNode(dxElement.DXObjectDefinitionMainElement.Name);
 
                 DXNodes.Add(dxElementNode);
-
-                foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(dxColumn.Name);
-
-                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-
-                    dxElementNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
             }
 
             foreach (var dxUnit in dxUnits)
@@ -89,9 +109,12 @@ namespace IV.DX.Kernel.Models.New
 
                     var dxNodeRelated = this.Get(dxUnitNameRelated);
 
-                    var dxRelation = dxRelations.Single(x =>
+                    var dxRelation = dxRelations.SingleOrDefault(x =>
                         x.DXRelationDefinitionMainElement.ObjectNameLeft == dxUnitName
                         && x.DXRelationDefinitionMainElement.ObjectNameRight == dxUnitNameRelated);
+
+                    if (dxRelation == null)
+                        continue;
 
                     var dxNodeRelation = new DXNodeRelation(
                         dxUnitNameRelated,
@@ -116,7 +139,12 @@ namespace IV.DX.Kernel.Models.New
 
                     foreach (var item in dxNodeForBaseDXUnit.DXNodes)
                     {
-                        dxNode.AttachDXNode(item.Key, item.Value);
+                        var relation = new DXNodeRelation(
+                            item.Key.TargetObjectName, 
+                            item.Key.RelationName, 
+                            item.Key.Join.Replace(dxNodeForBaseDXUnit.Name, dxNode.Name));
+
+                        dxNode.AttachDXNode(relation, item.Value);
 
                         var dxNodeRelationToDXUnit = new DXNodeRelation(
                             dxUnitName,
@@ -142,23 +170,73 @@ namespace IV.DX.Kernel.Models.New
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
             }
+
+            foreach (var dxElement in dxElements)
+            {
+                var dxElementName = dxElement.DXObjectDefinitionMainElement.Name;
+                var dxNode = this.Get(dxElementName);
+
+                foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(dxColumn.Name);
+
+                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
+
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+            }
+
+            version = dxStructureCache.Version;
         }
-        public string BuildSQLWhereExpression(string typeName, string dxFilter)
+
+        private string GetJoinForDXUnitRelation(DXRelationDefinitionUnit dxRelation)
         {
-            List<KeyValuePair<Guid, Guid>> idPairs = new List<KeyValuePair<Guid, Guid>>();
+            var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
 
-            var whereExpression = this.ProcessDXFilter(typeName, dxFilter, idPairs);
-            this.LoadChainForDXColumns(typeName, dxFilter, idPairs);
+            var query1 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"ID\" = \"{dxRelationData.ObjectNameLeft}\".\"{dxRelationData.RelationNameRight}\"";
+            var query2 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxRelationData.ObjectNameLeft}\".\"ID\"";
 
-            var fromExpression = GetFromExpression(typeName, idPairs);
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"SELECT \"{typeName}\".\"ID\"\n");
-            sb.Append($"FROM {fromExpression}");
-            sb.Append($"WHERE {whereExpression}");
-
-            return sb.ToString();
+            switch (dxRelationData.RelationType)
+            {
+                case DXRelationTypeEnum.ManyToMany:
+                    return $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxRelationData.ObjectNameLeft}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"";
+                case DXRelationTypeEnum.ManyToOne:
+                case DXRelationTypeEnum.ManyToZeroOne:
+                case DXRelationTypeEnum.ZeroOneToOne:                
+                    return query1;
+                case DXRelationTypeEnum.OneToMany:
+                case DXRelationTypeEnum.ZeroOneToMany:
+                case DXRelationTypeEnum.OneToZeroOne:
+                    return query2;
+                case DXRelationTypeEnum.ZeroOneToZeroOne:
+                    return dxRelationData.RelationColumnNameRight == "ID" ? query1 : query2;
+                default: throw new Exception($"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}");
+            }
         }
+
+
+        private DXNode Get(string name)
+        {
+            return DXNodes.Single(x => x.Name.Equals(name));
+        }
+
+        private DXNode Get(Guid id)
+        {
+            return DXNodes.Single(x => x.ID == id);
+        }
+
+        private KeyValuePair<DXNodeRelation, DXNode> Get(DXNode dxNode, string relationName)
+        {
+            var result = dxNode.DXNodes.SingleOrDefault(x => x.Key.RelationName.Equals(relationName));
+
+            return result;
+        }
+
+        private DXNodeRelation GetRelation(DXNode baseDXNode, DXNode relatedDXNode)
+        {
+            return baseDXNode.DXNodes.Single(x => x.Value.ID == relatedDXNode.ID).Key;
+        }
+
 
         private void LoadChainForDXColumns(string typeName, string dxFilter, IList<KeyValuePair<Guid, Guid>> idPairs)
         {
@@ -185,7 +263,7 @@ namespace IV.DX.Kernel.Models.New
                 {
                     var relationValue = route[i];
 
-                    var relatedNode = Get(baseDXNode, relationValue).Value;
+                    var relatedNode = this.Get(baseDXNode, relationValue).Value;
 
                     KeyValuePair<Guid, Guid> idPair = new KeyValuePair<Guid, Guid>(baseDXNode.ID, relatedNode.ID);
 
@@ -235,84 +313,41 @@ namespace IV.DX.Kernel.Models.New
             return fromExpression.ToString();
         }
 
-        private string GetJoinForDXUnitRelation(DXRelationDefinitionUnit dxRelation)
+        private class DXNode
         {
-            var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
+            public Guid ID { get; }
+            public string Name { get; }
+            public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } = new Dictionary<DXNodeRelation, DXNode>();
 
-            switch (dxRelationData.RelationType)
+            public DXNode(string name)
             {
-                case DXRelationTypeEnum.ManyToMany:
-                    return $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxRelationData.ObjectNameLeft}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"";
-                case DXRelationTypeEnum.ManyToOne:
-                case DXRelationTypeEnum.ManyToZeroOne:
-                case DXRelationTypeEnum.OneToZeroOne:
-                    return $"\"{dxRelationData.ObjectNameLeft}\" AS \"{dxRelationData.ObjectNameLeft}\" ON \"{dxRelationData.ObjectNameLeft}\".\"ID\" = \"{dxRelationData.ObjectNameRight}\".\"{dxRelationData.RelationNameLeft}\"";
-                case DXRelationTypeEnum.OneToMany:
-                case DXRelationTypeEnum.ZeroOneToMany:
-                case DXRelationTypeEnum.ZeroOneToOne:
-                case DXRelationTypeEnum.ZeroOneToZeroOne:
-                    return $"\"{dxRelationData.ObjectNameLeft}\" AS \"{dxRelationData.ObjectNameLeft}\" ON \"{dxRelationData.ObjectNameLeft}\".\"{dxRelationData.RelationNameRight}\" = \"{dxRelationData.ObjectNameRight}\".\"ID\"";
-                default: throw new Exception($"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}");
+                this.ID = Guid.NewGuid();
+                this.Name = name;
+            }
+
+            public void AttachDXNode(DXNodeRelation dxRelation, DXNode dxNode)
+            {
+                DXNodes[dxRelation] = dxNode;
+            }
+
+            public override string ToString()
+            {
+                return $"{Name}";
             }
         }
 
-        private DXNode Get(string name)
+        private struct DXNodeRelation
         {
-            return DXNodes.Single(x => x.Name.Equals(name));
-        }
+            public string TargetObjectName { get; }
+            public string RelationName { get; }
+            public string Join { get; }
 
-        private DXNode Get(Guid id)
-        {
-            return DXNodes.Single(x => x.ID == id);
-        }
-
-        private KeyValuePair<DXNodeRelation, DXNode> Get(DXNode dxNode, string relationName)
-        {
-            var result = dxNode.DXNodes.SingleOrDefault(x => x.Key.RelationName.Equals(relationName));
-
-            return result;
-        }
-
-        private DXNodeRelation GetRelation(DXNode baseDXNode, DXNode relatedDXNode)
-        {
-            return baseDXNode.DXNodes.Single(x => x.Value.ID == relatedDXNode.ID).Key;
-        }
-    }
-
-    public class DXNode
-    {
-        public Guid ID { get; }
-        public string Name { get; }
-        public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } = new Dictionary<DXNodeRelation, DXNode>();
-
-        public DXNode(string name)
-        {
-            this.ID = Guid.NewGuid();
-            this.Name = name;
-        }
-
-        public void AttachDXNode(DXNodeRelation dxRelation, DXNode dxNode)
-        {
-            DXNodes[dxRelation] = dxNode;
-        }
-
-        public override string ToString()
-        {
-            return $"{Name}";
-        }
-    }
-
-    public struct DXNodeRelation
-    {
-        public string TargetObjectName { get; }
-        public string RelationName { get; }
-        public string Join { get; }
-
-        public DXNodeRelation(string targetObjectName, string relationName, string join)
-        {
-            this.TargetObjectName = targetObjectName;
-            this.RelationName = relationName;
-            this.Join = join;
+            public DXNodeRelation(string targetObjectName, string relationName, string join)
+            {
+                this.TargetObjectName = targetObjectName;
+                this.RelationName = relationName;
+                this.Join = join;
+            }
         }
     }
 }
