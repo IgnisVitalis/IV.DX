@@ -728,7 +728,21 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             string dxFilter = "R(Users).TUserMainElement.Name = 'Svitlana' AND R(Users).TUserMainElement.Surname = 'Suvorova'";
 
-            var sqlWhereExpression = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", dxFilter);
+            Dictionary<string, string> columns = new Dictionary<string, string>();
+
+            columns.Add("BookName", "TBookMainElement.Name");
+            columns.Add("Name", "R(Users).TUserMainElement.Name");
+            columns.Add("Surname", "R(Users).TUserMainElement.Surname");
+
+            base.EstimatePerformanceAsync(async () =>
+            {
+                for (int i = 0; i < 100000; i++)
+                {
+                    var sqlWhereExpression = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", columns, dxFilter);
+                }
+            }, "").Wait();
+
+          
         }
     }
 }

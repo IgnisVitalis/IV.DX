@@ -2,6 +2,7 @@
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
+using System.Data;
 using System.Text;
 
 namespace IV.DX.Persistence
@@ -11,30 +12,30 @@ namespace IV.DX.Persistence
         static HashSet<DXNode> DXNodes { get; set; }
         static int version = 0;
 
-        public string BuildSQLExpression(string typeName, string? dxFilter = default)
+        public string BuildSQLExpression(string typeName, IDictionary<string, string>? columns = default, string? dxFilter = default)
         {
             this.BuildDXNodeTree();
 
-            List<KeyValuePair<Guid, Guid>> idPairs = new List<KeyValuePair<Guid, Guid>>();
+            List<KeyValuePair<int, int>> idPairs = new List<KeyValuePair<int, int>>();
 
-            string whereExpression= string.Empty;
+            string whereExpression = string.Empty;
 
             if (!string.IsNullOrEmpty(dxFilter))
             {
                 whereExpression = this.ProcessDXFilter(typeName, dxFilter, idPairs);
             }
 
-            this.LoadChainForDXColumns(typeName, dxFilter, idPairs);
+            var columnExpression = this.ProcessDXColumns(typeName, columns, idPairs);
 
             var fromExpression = GetFromExpression(typeName, idPairs);
 
             StringBuilder sb = new StringBuilder();
-            sb.Append($"SELECT \"{typeName}\".\"ID\"\n");
-            sb.Append($"FROM {fromExpression}");
+            sb.Append($"SELECT\n{columnExpression}\n");
+            sb.Append($"FROM\n{fromExpression}");
 
             if (!string.IsNullOrEmpty(dxFilter))
             {
-                sb.Append($"WHERE {whereExpression}");
+                sb.Append($"WHERE\n{whereExpression}");
             }
 
             return sb.ToString();
@@ -56,19 +57,28 @@ namespace IV.DX.Persistence
         {
             DXNodes = new HashSet<DXNode>();
 
+            int counter = 0;
+
             foreach (var dxUnit in dxUnits)
             {
-                var dxUnitNode = new DXNode(dxUnit.DXObjectDefinitionMainElement.Name);
+                var dxUnitNode = new DXNode(counter++, dxUnit.DXObjectDefinitionMainElement.Name);
 
                 DXNodes.Add(dxUnitNode);
-              
+
             }
 
             foreach (var dxElement in dxElements)
             {
-                var dxElementNode = new DXNode(dxElement.DXObjectDefinitionMainElement.Name);
+                var dxElementNode = new DXNode(counter++, dxElement.DXObjectDefinitionMainElement.Name);
 
                 DXNodes.Add(dxElementNode);
+            }
+
+            foreach (var dxEnum in dxEnums)
+            {
+                var dxEnumNode = new DXNode(counter++, dxEnum.DXObjectDefinitionMainElement.Name);
+
+                DXNodes.Add(dxEnumNode);
             }
 
             foreach (var dxUnit in dxUnits)
@@ -88,7 +98,7 @@ namespace IV.DX.Persistence
                         new DXNodeRelation(
                             dxElementName,
                             dxElementName,
-                            $"\"{dxElementName}\" AS \"{dxElementName}\" ON \"{dxElementName}\".\"DXUnitID\" = \"{dxUnitName}\".\"ID\"");
+                            $"\"{dxElementName}\" AS \"{dxNodeRelated.TableAlias}\" ON \"{dxNodeRelated.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
 
                     dxNode.AttachDXNode(dxNodeRelationToDXElement, dxNodeRelated);
 
@@ -96,7 +106,7 @@ namespace IV.DX.Persistence
                         new DXNodeRelation(
                             dxUnitName,
                             $"U({dxUnitName})",
-                            $"\"{dxUnitName}\" AS \"{dxUnitName}\" ON \"{dxUnitName}\".\"ID\" = {dxElementName}.\"DXUnitID\"");
+                            $"\"{dxUnitName}\" AS \"{dxNode.TableAlias}\" ON \"{dxNode.TableAlias}\".\"ID\" = {dxNodeRelated.TableAlias}.\"DXUnitID\"");
 
                     dxNodeRelated.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
@@ -140,16 +150,16 @@ namespace IV.DX.Persistence
                     foreach (var item in dxNodeForBaseDXUnit.DXNodes)
                     {
                         var relation = new DXNodeRelation(
-                            item.Key.TargetObjectName, 
-                            item.Key.RelationName, 
-                            item.Key.Join.Replace(dxNodeForBaseDXUnit.Name, dxNode.Name));
+                            item.Key.TargetObjectName,
+                            item.Key.RelationName,
+                            item.Key.Join.Replace(dxNodeForBaseDXUnit.TableAlias, dxNode.TableAlias));
 
                         dxNode.AttachDXNode(relation, item.Value);
 
                         var dxNodeRelationToDXUnit = new DXNodeRelation(
                             dxUnitName,
                             $"U({dxUnitName})",
-                            $"\"{item.Value.Name}\" AS \"{item.Value.Name}\" ON \"{item.Value.Name}\".\"DXUnitID\" = \"{dxUnitName}\".\"ID\"");
+                            $"\"{item.Value.Name}\" AS \"{item.Value.TableAlias}\" ON \"{item.Value.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
 
                         item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                     }
@@ -163,7 +173,9 @@ namespace IV.DX.Persistence
 
                 foreach (var dxColumn in dxUnit.DXColumnDefinitionElement.Announced)
                 {
-                    var dxNodeRelated = new DXNode(dxColumn.Name);
+                    var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
+
+                    DXNodes.Add(dxNodeRelated);
 
                     var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
 
@@ -178,7 +190,9 @@ namespace IV.DX.Persistence
 
                 foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
                 {
-                    var dxNodeRelated = new DXNode(dxColumn.Name);
+                    var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
+
+                    DXNodes.Add(dxNodeRelated);
 
                     var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
 
@@ -193,16 +207,19 @@ namespace IV.DX.Persistence
         {
             var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
 
-            var query1 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"ID\" = \"{dxRelationData.ObjectNameLeft}\".\"{dxRelationData.RelationNameRight}\"";
-            var query2 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxRelationData.ObjectNameLeft}\".\"ID\"";
+            var dxNode1 = this.Get(dxRelationData.ObjectNameRight);
+            var dxNode2 = this.Get(dxRelationData.ObjectNameLeft);
+
+            var query1 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
+            var query2 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"";
 
             switch (dxRelationData.RelationType)
             {
                 case DXRelationTypeEnum.ManyToMany:
-                    return $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxRelationData.ObjectNameLeft}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxRelationData.ObjectNameRight}\" ON \"{dxRelationData.ObjectNameRight}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"";
+                    return $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"";
                 case DXRelationTypeEnum.ManyToOne:
                 case DXRelationTypeEnum.ManyToZeroOne:
-                case DXRelationTypeEnum.ZeroOneToOne:                
+                case DXRelationTypeEnum.ZeroOneToOne:
                     return query1;
                 case DXRelationTypeEnum.OneToMany:
                 case DXRelationTypeEnum.ZeroOneToMany:
@@ -220,7 +237,7 @@ namespace IV.DX.Persistence
             return DXNodes.Single(x => x.Name.Equals(name));
         }
 
-        private DXNode Get(Guid id)
+        private DXNode Get(int id)
         {
             return DXNodes.Single(x => x.ID == id);
         }
@@ -238,12 +255,51 @@ namespace IV.DX.Persistence
         }
 
 
-        private void LoadChainForDXColumns(string typeName, string dxFilter, IList<KeyValuePair<Guid, Guid>> idPairs)
+        private string ProcessDXColumns(string typeName, IDictionary<string, string>? columns, IList<KeyValuePair<int, int>> idPairs)
         {
+            var coreDXNode = this.Get(typeName);
 
+            List<string> columnsExpressionItems = new List<string>();
+
+            columnsExpressionItems.Add($"\"{coreDXNode.TableAlias}\".\"ID\" AS \"ID\"");
+
+            if (columns != null && columns != default)
+            {
+                foreach (var column in columns)
+                {
+                    var alias = column.Key;
+                    var expression = column.Value;
+
+                    var route = expression.Split(".");
+
+                    var baseDXNode = coreDXNode;
+
+                    for (int i = 0; i < route.Length - 1; i++)
+                    {
+                        var relationValue = route[i];
+
+                        var relatedNode = this.Get(baseDXNode, relationValue).Value;
+
+                        KeyValuePair<int, int> idPair = new KeyValuePair<int, int>(baseDXNode.ID, relatedNode.ID);
+
+                        if (!idPairs.Contains(idPair))
+                        {
+                            idPairs.Add(idPair);
+                        }
+
+                        baseDXNode = relatedNode;
+                    }
+
+                    columnsExpressionItems.Add($"\"{baseDXNode.TableAlias}\".\"{route.Last()}\" AS \"{alias}\"");
+                }
+            }
+
+            var columnsExpression = String.Join(",\n", columnsExpressionItems).Trim();
+
+            return columnsExpression;
         }
 
-        private string ProcessDXFilter(string typeName, string dxFilter, IList<KeyValuePair<Guid, Guid>> idPairs)
+        private string ProcessDXFilter(string typeName, string dxFilter, IList<KeyValuePair<int, int>> idPairs)
         {
             var coreDXNode = this.Get(typeName);
 
@@ -265,7 +321,7 @@ namespace IV.DX.Persistence
 
                     var relatedNode = this.Get(baseDXNode, relationValue).Value;
 
-                    KeyValuePair<Guid, Guid> idPair = new KeyValuePair<Guid, Guid>(baseDXNode.ID, relatedNode.ID);
+                    KeyValuePair<int, int> idPair = new KeyValuePair<int, int>(baseDXNode.ID, relatedNode.ID);
 
                     if (!idPairs.Contains(idPair))
                     {
@@ -280,7 +336,7 @@ namespace IV.DX.Persistence
                 var propertyName = whereExpressionItem.Substring(0, whereExpressionItem.IndexOf(" "));
                 var propertyValue = whereExpressionItem.Substring(propertyName.Length, whereExpressionItem.Length - propertyName.Length);
 
-                whereExpressionItems.Add(new KeyValuePair<string, string>($"\"{baseDXNode.Name}\".\"{propertyName}\"{propertyValue}", expression.Value));
+                whereExpressionItems.Add(new KeyValuePair<string, string>($"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}", expression.Value));
             }
 
             var whereExpression = String.Join(" ", whereExpressionItems.Select(x => $"{x.Value} {x.Key}")).Trim();
@@ -288,11 +344,13 @@ namespace IV.DX.Persistence
             return whereExpression;
         }
 
-        private string GetFromExpression(string typeName, IList<KeyValuePair<Guid, Guid>> idPairs)
+        private string GetFromExpression(string typeName, IList<KeyValuePair<int, int>> idPairs)
         {
             var fromExpression = new StringBuilder();
 
-            fromExpression.Append($"\"{typeName}\" AS \"{typeName}\"\n");
+            var dxNode = this.Get(typeName);
+
+            fromExpression.Append($"\"{typeName}\" AS \"{dxNode.TableAlias}\"\n");
 
             foreach (var idPair in idPairs)
             {
@@ -315,14 +373,16 @@ namespace IV.DX.Persistence
 
         private class DXNode
         {
-            public Guid ID { get; }
+            public int ID { get; }
+            public string TableAlias { get; }
             public string Name { get; }
             public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } = new Dictionary<DXNodeRelation, DXNode>();
 
-            public DXNode(string name)
+            public DXNode(int id, string name)
             {
-                this.ID = Guid.NewGuid();
+                this.ID = id;
                 this.Name = name;
+                this.TableAlias = $"T_{id}";
             }
 
             public void AttachDXNode(DXNodeRelation dxRelation, DXNode dxNode)

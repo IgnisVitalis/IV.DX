@@ -220,7 +220,7 @@ namespace IV.DX.Persistence
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
         {
             string sqlQuery =
-                  this._sqlQueryBuilder.BuildSQLExpression(typeName, dxFilter);
+                  this._sqlQueryBuilder.BuildSQLExpression(typeName, null, dxFilter);
 
                     //this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
 

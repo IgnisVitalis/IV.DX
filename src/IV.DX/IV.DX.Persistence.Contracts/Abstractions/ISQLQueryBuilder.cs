@@ -2,6 +2,6 @@
 {
     internal interface ISQLQueryBuilder
     {
-        string BuildSQLExpression(string typeName, string? dxFilter = default);
+        string BuildSQLExpression(string typeName, IDictionary<string, string>? columns = default, string? dxFilter = default);
     }
 }

@@ -812,11 +812,11 @@
     </mxGraphModel>
   </diagram>
   <diagram id="Oi3SUi4BWjxgdkSYb8Rv" name="Test">
-    <mxGraphModel dx="1900" dy="717" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1892" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="HsKzNDhFx0omgGjhHf-1-0" />
         <mxCell id="HsKzNDhFx0omgGjhHf-1-1" parent="HsKzNDhFx0omgGjhHf-1-0" />
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-2" value="TUserObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-2" value="TUserUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="200" y="190" width="290" height="292" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -851,7 +851,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-12" value="Documents" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-11" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-13" value="TUserGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-2" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-13" value="TUserMainElement (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-2" vertex="1">
           <mxGeometry y="176" width="290" height="116" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -874,7 +874,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-19" value="Birth" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-18" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-20" value="TDeviceObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-20" value="TDeviceUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="570" y="190" width="290" height="142" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -885,7 +885,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-22" value="User" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-21" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-23" value="TDeviceGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-20" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-23" value="TDeviceMainElement (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-20" vertex="1">
           <mxGeometry y="56" width="290" height="86" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -910,7 +910,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-30" value="TPassportObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-30" value="TPassportUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="-170" y="190" width="290" height="112" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -921,7 +921,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-32" value="User" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-31" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-33" value="TPassportGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-30" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-33" value="TPassportMainElement (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-30" vertex="1">
           <mxGeometry y="56" width="290" height="56" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -938,7 +938,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-37" value="0/1 to 1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="130" y="230" width="60" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-38" value="TBookObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-38" value="TBookUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="570" y="370" width="290" height="198" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -949,7 +949,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-40" value="Users" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-39" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-41" value="TBookGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-38" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-41" value="TBookMainElement(1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-38" vertex="1">
           <mxGeometry y="56" width="290" height="142" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -960,7 +960,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-43" value="Name" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-42" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-44" value="TBookChapterBlock (0/N)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-41" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-44" value="TBookChapterElement (0/N)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-41" vertex="1">
           <mxGeometry y="56" width="290" height="86" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -985,7 +985,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-51" value="TPositionObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-51" value="TPositionUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="-170" y="420" width="290" height="112" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -996,7 +996,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-53" value="User" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-52" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-54" value="TPositionGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-51" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-54" value="TPositionMainElement (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-51" vertex="1">
           <mxGeometry y="56" width="290" height="56" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -1015,7 +1015,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-59" value="TDocumentObject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-59" value="TDocumentUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#0050ef;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#001DBC;fontFamily=Consolas;labelBackgroundColor=none;labelBorderColor=none;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-1" vertex="1">
           <mxGeometry x="570" y="590" width="290" height="112" as="geometry">
             <mxRectangle x="1240" y="40" width="70" height="26" as="alternateBounds" />
           </mxGeometry>
@@ -1026,7 +1026,7 @@
         <mxCell id="HsKzNDhFx0omgGjhHf-1-61" value="User" style="shape=partialRectangle;fontStyle=0;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;fontFamily=Consolas;" parent="HsKzNDhFx0omgGjhHf-1-60" vertex="1" connectable="0">
           <mxGeometry width="150" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HsKzNDhFx0omgGjhHf-1-62" value="TDocumentGenBlock (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-59" vertex="1">
+        <mxCell id="HsKzNDhFx0omgGjhHf-1-62" value="TDocumentMainElement (1)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#1ba1e2;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;strokeColor=#006EAF;fontFamily=Consolas;fontColor=#ffffff;" parent="HsKzNDhFx0omgGjhHf-1-59" vertex="1">
           <mxGeometry y="56" width="290" height="56" as="geometry">
             <mxRectangle y="26" width="290" height="26" as="alternateBounds" />
           </mxGeometry>
