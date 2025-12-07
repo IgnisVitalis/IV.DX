@@ -9,33 +9,45 @@ namespace IV.DX.Persistence
 {
     internal class SQLQueryBuilder(IDXStructureCache dxStructureCache) : ISQLQueryBuilder
     {
-        static HashSet<DXNode> DXNodes { get; set; }
-        static int version = 0;
+        private static IReadOnlyDictionary<string, DXNode> _nodesByName =
+            new Dictionary<string, DXNode>(StringComparer.Ordinal);
 
-        public string BuildSQLExpression(string typeName, IDictionary<string, string>? columns = default, string? dxFilter = default)
+        private static IReadOnlyDictionary<int, DXNode> _nodesById =
+            new Dictionary<int, DXNode>();
+
+        private static int _version = 0;
+
+        public string BuildSQLExpression(
+            string typeName,
+            IDictionary<string, string>? columns = default,
+            string? dxFilter = default)
         {
-            this.BuildDXNodeTree();
+            BuildDXNodeTree();
 
-            List<KeyValuePair<int, int>> idPairs = new List<KeyValuePair<int, int>>();
+            var joinPairs = new List<KeyValuePair<int, int>>();
+            var joinPairSet = new HashSet<(int BaseId, int RelatedId)>();
 
             string whereExpression = string.Empty;
+            bool hasFilter = !string.IsNullOrEmpty(dxFilter);
 
-            if (!string.IsNullOrEmpty(dxFilter))
+            if (hasFilter)
             {
-                whereExpression = this.ProcessDXFilter(typeName, dxFilter, idPairs);
+                whereExpression = ProcessDXFilter(typeName, dxFilter!, joinPairs, joinPairSet);
             }
 
-            var columnExpression = this.ProcessDXColumns(typeName, columns, idPairs);
+            var columnExpression = ProcessDXColumns(typeName, columns, joinPairs, joinPairSet);
+            var fromExpression = GetFromExpression(typeName, joinPairs);
 
-            var fromExpression = GetFromExpression(typeName, idPairs);
+            var sb = new StringBuilder();
+            sb.Append("SELECT\n")
+              .Append(columnExpression)
+              .Append("\nFROM\n")
+              .Append(fromExpression);
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"SELECT\n{columnExpression}\n");
-            sb.Append($"FROM\n{fromExpression}");
-
-            if (!string.IsNullOrEmpty(dxFilter))
+            if (hasFilter)
             {
-                sb.Append($"WHERE\n{whereExpression}");
+                sb.Append("WHERE\n")
+                  .Append(whereExpression);
             }
 
             return sb.ToString();
@@ -43,9 +55,13 @@ namespace IV.DX.Persistence
 
         private void BuildDXNodeTree()
         {
-            if (dxStructureCache.Version > version)
+            if (dxStructureCache.Version > _version)
             {
-                this.Load(dxStructureCache.DXRelations, dxStructureCache.DXUnits, dxStructureCache.DXElements, dxStructureCache.DXEnums);
+                Load(
+                    dxStructureCache.DXRelations,
+                    dxStructureCache.DXUnits,
+                    dxStructureCache.DXElements,
+                    dxStructureCache.DXEnums);
             }
         }
 
@@ -55,44 +71,73 @@ namespace IV.DX.Persistence
             IEnumerable<DXElementDefinitionUnit> dxElements,
             IEnumerable<DXEnumDefinitionUnit> dxEnums)
         {
-            DXNodes = new HashSet<DXNode>();
+            var unitsList = dxUnits as IList<DXUnitDefinitionUnit> ?? dxUnits.ToList();
+            var elementsList = dxElements as IList<DXElementDefinitionUnit> ?? dxElements.ToList();
+            var enumsList = dxEnums as IList<DXEnumDefinitionUnit> ?? dxEnums.ToList();
+            var relationsList = dxRelations as IList<DXRelationDefinitionUnit> ?? dxRelations.ToList();
+
+            var unitsById = unitsList.ToDictionary(x => x.ID);
+            var elementsById = elementsList.ToDictionary(x => x.ID);
+            var enumsById = enumsList.ToDictionary(x => x.ID);
+                       
+            var relationsByLeft = relationsList
+                .ToLookup(r => r.DXRelationDefinitionMainElement.ObjectNameLeft);
+
+            var nodesById = new Dictionary<int, DXNode>(
+                capacity: unitsList.Count + elementsList.Count + enumsList.Count);
+
+            var nodesByName = new Dictionary<string, DXNode>(StringComparer.Ordinal);
+
+            static void RegisterNode(
+                DXNode node,
+                IDictionary<int, DXNode> byId,
+                IDictionary<string, DXNode> byName,
+                bool registerByName)
+            {
+                byId[node.ID] = node;
+                if (registerByName)
+                {
+                    byName[node.Name] = node;
+                }
+            }
 
             int counter = 0;
 
-            foreach (var dxUnit in dxUnits)
+            // 1. Units
+            foreach (var dxUnit in unitsList)
             {
-                var dxUnitNode = new DXNode(counter++, dxUnit.DXObjectDefinitionMainElement.Name);
-
-                DXNodes.Add(dxUnitNode);
-
+                var node = new DXNode(counter++, dxUnit.DXObjectDefinitionMainElement.Name);
+                RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
-            foreach (var dxElement in dxElements)
+            // 2. Elements
+            foreach (var dxElement in elementsList)
             {
-                var dxElementNode = new DXNode(counter++, dxElement.DXObjectDefinitionMainElement.Name);
-
-                DXNodes.Add(dxElementNode);
+                var node = new DXNode(counter++, dxElement.DXObjectDefinitionMainElement.Name);
+                RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
-            foreach (var dxEnum in dxEnums)
+            // 3. Enums
+            foreach (var dxEnum in enumsList)
             {
-                var dxEnumNode = new DXNode(counter++, dxEnum.DXObjectDefinitionMainElement.Name);
-
-                DXNodes.Add(dxEnumNode);
+                var node = new DXNode(counter++, dxEnum.DXObjectDefinitionMainElement.Name);
+                RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
-            foreach (var dxUnit in dxUnits)
+            DXNode GetNodeByName(string name) => nodesByName[name];
+
+            // 4. Unit ↔ Element и Unit ↔ Unit (Relation)
+            foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
-                var dxNode = this.Get(dxUnitName);
+                var dxNode = GetNodeByName(dxUnitName);
 
+                // Unit → Element
                 foreach (var dxElementInUnit in dxUnit.DXElementInUnitDefinitionElement.Announced)
                 {
-                    var dxElement = dxElements.Single(x => x.ID == dxElementInUnit.DXElementDefinitionUnit);
-
+                    var dxElement = elementsById[dxElementInUnit.DXElementDefinitionUnit];
                     var dxElementName = dxElement.DXObjectDefinitionMainElement.Name;
-
-                    var dxNodeRelated = this.Get(dxElementName);
+                    var dxNodeRelated = GetNodeByName(dxElementName);
 
                     var dxNodeRelationToDXElement =
                         new DXNodeRelation(
@@ -111,303 +156,355 @@ namespace IV.DX.Persistence
                     dxNodeRelated.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
 
+                // Unit → Unit (DXRelation)
                 foreach (var dxUnitRelationElement in dxUnit.DXUnitRelationElement.Announced)
                 {
-                    var dxUnitRelated = dxUnits.Single(x => x.ID == dxUnitRelationElement.TargetDXUnit);
-
+                    var dxUnitRelated = unitsById[dxUnitRelationElement.TargetDXUnit];
                     var dxUnitNameRelated = dxUnitRelated.DXObjectDefinitionMainElement.Name;
+                    var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
 
-                    var dxNodeRelated = this.Get(dxUnitNameRelated);
+                    var candidates = relationsByLeft[dxUnitName]
+                        .Where(r => r.DXRelationDefinitionMainElement.ObjectNameRight == dxUnitNameRelated)
+                        .ToList();
 
-                    var dxRelation = dxRelations.SingleOrDefault(x =>
-                        x.DXRelationDefinitionMainElement.ObjectNameLeft == dxUnitName
-                        && x.DXRelationDefinitionMainElement.ObjectNameRight == dxUnitNameRelated);
-
-                    if (dxRelation == null)
+                    if (candidates.Count == 0)
+                    {
                         continue;
+                    }
+
+                    if (candidates.Count > 1)
+                    {
+                        throw new InvalidOperationException(
+                            $"Sequence contains more than one matching element for pair ({dxUnitName}, {dxUnitNameRelated}).");
+                    }
+
+                    var dxRelation = candidates[0];
+                    var dxRelMain = dxRelation.DXRelationDefinitionMainElement;
 
                     var dxNodeRelation = new DXNodeRelation(
                         dxUnitNameRelated,
-                        $"R({dxRelation.DXRelationDefinitionMainElement.RelationNameRight})",
-                        this.GetJoinForDXUnitRelation(dxRelation));
+                        $"R({dxRelMain.RelationNameRight})",
+                        GetJoinForDXUnitRelationInternal(dxRelation, GetNodeByName));
 
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
             }
 
-            foreach (var dxUnit in dxUnits)
+            // 5. Inheritance Units
+            foreach (var dxUnit in unitsList)
             {
-                if (dxUnit.DXUnitInheritanceElement != null)
+                if (dxUnit.DXUnitInheritanceElement is null)
                 {
-                    var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
+                    continue;
+                }
 
-                    var dxNode = this.Get(dxUnitName);
+                var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
+                var dxNode = GetNodeByName(dxUnitName);
 
-                    var baseDXUnit = dxUnits.Single(x => x.ID == dxUnit.DXUnitInheritanceElement.BaseDXUnit);
+                var baseDXUnit = unitsById[dxUnit.DXUnitInheritanceElement.BaseDXUnit];
+                var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.DXObjectDefinitionMainElement.Name);
 
-                    var dxNodeForBaseDXUnit = this.Get(baseDXUnit.DXObjectDefinitionMainElement.Name);
+                foreach (var item in dxNodeForBaseDXUnit.DXNodes)
+                {
+                    var relation = new DXNodeRelation(
+                        item.Key.TargetObjectName,
+                        item.Key.RelationName,
+                        item.Key.Join?.Replace(dxNodeForBaseDXUnit.TableAlias, dxNode.TableAlias));
 
-                    foreach (var item in dxNodeForBaseDXUnit.DXNodes)
-                    {
-                        var relation = new DXNodeRelation(
-                            item.Key.TargetObjectName,
-                            item.Key.RelationName,
-                            item.Key.Join.Replace(dxNodeForBaseDXUnit.TableAlias, dxNode.TableAlias));
+                    dxNode.AttachDXNode(relation, item.Value);
 
-                        dxNode.AttachDXNode(relation, item.Value);
+                    var dxNodeRelationToDXUnit = new DXNodeRelation(
+                        dxUnitName,
+                        $"U({dxUnitName})",
+                        $"\"{item.Value.Name}\" AS \"{item.Value.TableAlias}\" ON \"{item.Value.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
 
-                        var dxNodeRelationToDXUnit = new DXNodeRelation(
-                            dxUnitName,
-                            $"U({dxUnitName})",
-                            $"\"{item.Value.Name}\" AS \"{item.Value.TableAlias}\" ON \"{item.Value.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
-
-                        item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
-                    }
+                    item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
             }
 
-            foreach (var dxUnit in dxUnits)
+            foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
-                var dxNode = this.Get(dxUnitName);
+                var dxNode = GetNodeByName(dxUnitName);
 
                 foreach (var dxColumn in dxUnit.DXColumnDefinitionElement.Announced)
                 {
                     var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
-
-                    DXNodes.Add(dxNodeRelated);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
 
                     var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
             }
 
-            foreach (var dxElement in dxElements)
+            foreach (var dxElement in elementsList)
             {
                 var dxElementName = dxElement.DXObjectDefinitionMainElement.Name;
-                var dxNode = this.Get(dxElementName);
+                var dxNode = GetNodeByName(dxElementName);
 
                 foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
                 {
                     var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
-
-                    DXNodes.Add(dxNodeRelated);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
 
                     var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
             }
 
-            version = dxStructureCache.Version;
-        }
+            _nodesById = nodesById;
+            _nodesByName = nodesByName;
+            _version = dxStructureCache.Version;
 
-        private string GetJoinForDXUnitRelation(DXRelationDefinitionUnit dxRelation)
-        {
-            var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
-
-            var dxNode1 = this.Get(dxRelationData.ObjectNameRight);
-            var dxNode2 = this.Get(dxRelationData.ObjectNameLeft);
-
-            var query1 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
-            var query2 = $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"";
-
-            switch (dxRelationData.RelationType)
+            static string GetJoinForDXUnitRelationInternal(
+                DXRelationDefinitionUnit dxRelation,
+                Func<string, DXNode> getNodeByName)
             {
-                case DXRelationTypeEnum.ManyToMany:
-                    return $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"";
-                case DXRelationTypeEnum.ManyToOne:
-                case DXRelationTypeEnum.ManyToZeroOne:
-                case DXRelationTypeEnum.ZeroOneToOne:
-                    return query1;
-                case DXRelationTypeEnum.OneToMany:
-                case DXRelationTypeEnum.ZeroOneToMany:
-                case DXRelationTypeEnum.OneToZeroOne:
-                    return query2;
-                case DXRelationTypeEnum.ZeroOneToZeroOne:
-                    return dxRelationData.RelationColumnNameRight == "ID" ? query1 : query2;
-                default: throw new Exception($"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}");
+                var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
+
+                var dxNode1 = getNodeByName(dxRelationData.ObjectNameRight);
+                var dxNode2 = getNodeByName(dxRelationData.ObjectNameLeft);
+
+                var query1 =
+                    $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
+
+                var query2 =
+                    $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"";
+
+                return dxRelationData.RelationType switch
+                {
+                    DXRelationTypeEnum.ManyToMany =>
+                        $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"",
+
+                    DXRelationTypeEnum.ManyToOne
+                        or DXRelationTypeEnum.ManyToZeroOne
+                        or DXRelationTypeEnum.ZeroOneToOne
+                        => query1,
+
+                    DXRelationTypeEnum.OneToMany
+                        or DXRelationTypeEnum.ZeroOneToMany
+                        or DXRelationTypeEnum.OneToZeroOne
+                        => query2,
+
+                    DXRelationTypeEnum.ZeroOneToZeroOne =>
+                        dxRelationData.RelationColumnNameRight == "ID" ? query1 : query2,
+
+                    _ => throw new Exception(
+                        $"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}")
+                };
             }
         }
 
+        private static DXNode Get(string name)
+            => _nodesByName[name];
 
-        private DXNode Get(string name)
-        {
-            return DXNodes.Single(x => x.Name.Equals(name));
-        }
-
-        private DXNode Get(int id)
-        {
-            return DXNodes.Single(x => x.ID == id);
-        }
+        private static DXNode Get(int id)
+            => _nodesById[id];
 
         private KeyValuePair<DXNodeRelation, DXNode> Get(DXNode dxNode, string relationName)
         {
-            var result = dxNode.DXNodes.SingleOrDefault(x => x.Key.RelationName.Equals(relationName));
-
-            return result;
+            return dxNode.TryGetRelation(relationName, out var pair)
+                ? pair
+                : default;
         }
 
         private DXNodeRelation GetRelation(DXNode baseDXNode, DXNode relatedDXNode)
         {
-            return baseDXNode.DXNodes.Single(x => x.Value.ID == relatedDXNode.ID).Key;
+            return baseDXNode.GetRelationTo(relatedDXNode.ID);
         }
 
-
-        private string ProcessDXColumns(string typeName, IDictionary<string, string>? columns, IList<KeyValuePair<int, int>> idPairs)
+        private static void RegisterIdPair(
+            DXNode baseDXNode,
+            DXNode relatedDXNode,
+            IList<KeyValuePair<int, int>> idPairs,
+            ISet<(int BaseId, int RelatedId)> idPairSet)
         {
-            var coreDXNode = this.Get(typeName);
+            var pair = (BaseId: baseDXNode.ID, RelatedId: relatedDXNode.ID);
+            if (idPairSet.Add(pair))
+            {
+                idPairs.Add(new KeyValuePair<int, int>(pair.BaseId, pair.RelatedId));
+            }
+        }
 
-            List<string> columnsExpressionItems = new List<string>();
+        private string ProcessDXColumns(
+            string typeName,
+            IDictionary<string, string>? columns,
+            IList<KeyValuePair<int, int>> idPairs,
+            ISet<(int BaseId, int RelatedId)> idPairSet)
+        {
+            var coreDXNode = Get(typeName);
 
-            columnsExpressionItems.Add($"\"{coreDXNode.TableAlias}\".\"ID\" AS \"ID\"");
+            var columnsExpressionItems = new List<string>
+            {
+                $"\"{coreDXNode.TableAlias}\".\"ID\" AS \"ID\""
+            };
 
-            if (columns != null && columns != default)
+            if (columns is not null)
             {
                 foreach (var column in columns)
                 {
                     var alias = column.Key;
                     var expression = column.Value;
 
-                    var route = expression.Split(".");
-
+                    var route = expression.Split('.');
                     var baseDXNode = coreDXNode;
 
                     for (int i = 0; i < route.Length - 1; i++)
                     {
                         var relationValue = route[i];
 
-                        var relatedNode = this.Get(baseDXNode, relationValue).Value;
+                        var relatedPair = Get(baseDXNode, relationValue);
+                        var relatedNode = relatedPair.Value;
 
-                        KeyValuePair<int, int> idPair = new KeyValuePair<int, int>(baseDXNode.ID, relatedNode.ID);
-
-                        if (!idPairs.Contains(idPair))
-                        {
-                            idPairs.Add(idPair);
-                        }
+                        RegisterIdPair(baseDXNode, relatedNode, idPairs, idPairSet);
 
                         baseDXNode = relatedNode;
                     }
 
-                    columnsExpressionItems.Add($"\"{baseDXNode.TableAlias}\".\"{route.Last()}\" AS \"{alias}\"");
+                    columnsExpressionItems.Add(
+                        $"\"{baseDXNode.TableAlias}\".\"{route[^1]}\" AS \"{alias}\"");
                 }
             }
 
-            var columnsExpression = String.Join(",\n", columnsExpressionItems).Trim();
-
-            return columnsExpression;
+            return string.Join(",\n", columnsExpressionItems).Trim();
         }
 
-        private string ProcessDXFilter(string typeName, string dxFilter, IList<KeyValuePair<int, int>> idPairs)
+        private string ProcessDXFilter(
+            string typeName,
+            string dxFilter,
+            IList<KeyValuePair<int, int>> idPairs,
+            ISet<(int BaseId, int RelatedId)> idPairSet)
         {
-            var coreDXNode = this.Get(typeName);
+            var coreDXNode = Get(typeName);
 
-            var expressions =
-                dxFilter?.Trim()
-                .SplitAndKeep(new string[] { " and ", " or ", " AND ", " OR ", " And ", " Or " }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
+            var expressions = dxFilter.Trim()
+                .SplitAndKeep(
+                    new[] { " and ", " or ", " AND ", " OR ", " And ", " Or " },
+                    StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
 
-            List<KeyValuePair<string, string>> whereExpressionItems = new List<KeyValuePair<string, string>>();
+            var whereExpressionItems = new List<KeyValuePair<string, string>>();
 
             foreach (var expression in expressions)
             {
-                var route = expression.Key.Split(".");
-
+                var route = expression.Key.Split('.');
                 var baseDXNode = coreDXNode;
 
                 for (int i = 0; i < route.Length - 1; i++)
                 {
                     var relationValue = route[i];
 
-                    var relatedNode = this.Get(baseDXNode, relationValue).Value;
+                    var relatedPair = Get(baseDXNode, relationValue);
+                    var relatedNode = relatedPair.Value;
 
-                    KeyValuePair<int, int> idPair = new KeyValuePair<int, int>(baseDXNode.ID, relatedNode.ID);
-
-                    if (!idPairs.Contains(idPair))
-                    {
-                        idPairs.Add(idPair);
-                    }
+                    RegisterIdPair(baseDXNode, relatedNode, idPairs, idPairSet);
 
                     baseDXNode = relatedNode;
                 }
 
-                var whereExpressionItem = route.Last();
+                var whereExpressionItem = route[^1];
 
-                var propertyName = whereExpressionItem.Substring(0, whereExpressionItem.IndexOf(" "));
-                var propertyValue = whereExpressionItem.Substring(propertyName.Length, whereExpressionItem.Length - propertyName.Length);
+                var spaceIndex = whereExpressionItem.IndexOf(' ');
+                var propertyName = whereExpressionItem.Substring(0, spaceIndex);
+                var propertyValue = whereExpressionItem.Substring(spaceIndex);
 
-                whereExpressionItems.Add(new KeyValuePair<string, string>($"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}", expression.Value));
+                var condition = $"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+
+                whereExpressionItems.Add(
+                    new KeyValuePair<string, string>(condition, expression.Value));
             }
 
-            var whereExpression = String.Join(" ", whereExpressionItems.Select(x => $"{x.Value} {x.Key}")).Trim();
+            var whereExpression = string.Join(
+                " ",
+                whereExpressionItems.Select(x => $"{x.Value} {x.Key}")).Trim();
 
             return whereExpression;
         }
 
-        private string GetFromExpression(string typeName, IList<KeyValuePair<int, int>> idPairs)
+        private string GetFromExpression(
+            string typeName,
+            IList<KeyValuePair<int, int>> idPairs)
         {
             var fromExpression = new StringBuilder();
 
-            var dxNode = this.Get(typeName);
+            var dxNode = Get(typeName);
 
             fromExpression.Append($"\"{typeName}\" AS \"{dxNode.TableAlias}\"\n");
 
             foreach (var idPair in idPairs)
             {
-                var baseDXNodeID = idPair.Key;
-                var relatedDXNodeID = idPair.Value;
+                var baseDXNode = Get(idPair.Key);
+                var relatedDXNode = Get(idPair.Value);
 
-                var baseDXNode = this.Get(baseDXNodeID);
-                var relatedDXNode = this.Get(relatedDXNodeID);
+                var relation = GetRelation(baseDXNode, relatedDXNode);
 
-                var relation = this.GetRelation(baseDXNode, relatedDXNode);
-
-                fromExpression.Append("LEFT JOIN ");
-
-                fromExpression.Append(relation.Join);
-                fromExpression.Append("\n");
+                fromExpression.Append("LEFT JOIN ")
+                              .Append(relation.Join)
+                              .Append('\n');
             }
 
             return fromExpression.ToString();
         }
 
-        private class DXNode
+        private sealed class DXNode
         {
             public int ID { get; }
             public string TableAlias { get; }
             public string Name { get; }
-            public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } = new Dictionary<DXNodeRelation, DXNode>();
+
+            public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } =
+                new Dictionary<DXNodeRelation, DXNode>();
+
+            private readonly Dictionary<string, KeyValuePair<DXNodeRelation, DXNode>> _relationsByName =
+                new(StringComparer.Ordinal);
+
+            private readonly Dictionary<int, DXNodeRelation> _relationsByTargetId =
+                new();
 
             public DXNode(int id, string name)
             {
-                this.ID = id;
-                this.Name = name;
-                this.TableAlias = $"T_{id}";
+                ID = id;
+                Name = name;
+                TableAlias = $"T_{id}";
             }
 
             public void AttachDXNode(DXNodeRelation dxRelation, DXNode dxNode)
             {
                 DXNodes[dxRelation] = dxNode;
+                _relationsByName[dxRelation.RelationName] =
+                    new KeyValuePair<DXNodeRelation, DXNode>(dxRelation, dxNode);
+                _relationsByTargetId[dxNode.ID] = dxRelation;
             }
 
-            public override string ToString()
+            public bool TryGetRelation(
+                string relationName,
+                out KeyValuePair<DXNodeRelation, DXNode> relation)
             {
-                return $"{Name}";
+                return _relationsByName.TryGetValue(relationName, out relation);
             }
+
+            public DXNodeRelation GetRelationTo(int targetId)
+            {
+                return _relationsByTargetId[targetId];
+            }
+
+            public override string ToString() => Name;
         }
 
         private struct DXNodeRelation
         {
             public string TargetObjectName { get; }
             public string RelationName { get; }
-            public string Join { get; }
+            public string? Join { get; }
 
-            public DXNodeRelation(string targetObjectName, string relationName, string join)
+            public DXNodeRelation(string targetObjectName, string relationName, string? join)
             {
-                this.TargetObjectName = targetObjectName;
-                this.RelationName = relationName;
-                this.Join = join;
+                TargetObjectName = targetObjectName;
+                RelationName = relationName;
+                Join = join;
             }
         }
     }
+
+
 }

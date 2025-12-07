@@ -515,7 +515,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="DnA-W9aAA6Ljkw8N8BkX-181" value="DXEnumDefinitionUnit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#004C99;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;fontColor=#FFFFFF;" parent="DnA-W9aAA6Ljkw8N8BkX-1" vertex="1">
-          <mxGeometry x="880" y="754" width="250" height="86" as="geometry">
+          <mxGeometry x="880" y="896" width="250" height="86" as="geometry">
             <mxRectangle x="280" y="210" width="120" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -677,7 +677,7 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="775" y="301" />
-              <mxPoint x="775" y="795" />
+              <mxPoint x="775" y="937" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -695,7 +695,12 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="0T43Omwl4DoF0-GcHquw-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="DnA-W9aAA6Ljkw8N8BkX-1" source="DnA-W9aAA6Ljkw8N8BkX-89" target="tK-EVFte0Fg1fB9RucqV-18" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="825" />
+              <mxPoint x="720" y="967" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="0T43Omwl4DoF0-GcHquw-3" value="N to 1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="0T43Omwl4DoF0-GcHquw-2" vertex="1" connectable="0">
           <mxGeometry x="-0.0344" y="2" relative="1" as="geometry">
