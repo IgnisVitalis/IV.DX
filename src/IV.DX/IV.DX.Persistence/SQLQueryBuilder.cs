@@ -1,9 +1,11 @@
-﻿using IV.DX.Kernel.Enums;
+﻿using IV.DX.Contracts.Persistence.ExpressionTree;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Text;
+using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -19,7 +21,7 @@ namespace IV.DX.Persistence
 
         public string BuildSQLExpression(
             string typeName,
-            IDictionary<string, string>? columns = default,
+            IDictionary<string, string> columns,
             string? dxFilter = default)
         {
             BuildDXNodeTree();
@@ -79,7 +81,7 @@ namespace IV.DX.Persistence
             var unitsById = unitsList.ToDictionary(x => x.ID);
             var elementsById = elementsList.ToDictionary(x => x.ID);
             var enumsById = enumsList.ToDictionary(x => x.ID);
-                       
+
             var relationsByLeft = relationsList
                 .ToLookup(r => r.DXRelationDefinitionMainElement.ObjectNameLeft);
 
@@ -252,6 +254,12 @@ namespace IV.DX.Persistence
                 }
             }
 
+            foreach (var item in dxRelations.Where(x => x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToMany))
+            {
+                var dxNode = new DXNode(counter++, item.DXRelationDefinitionMainElement.RelationTable);
+                RegisterNode(dxNode, nodesById, nodesByName, registerByName: true);
+            }
+
             _nodesById = nodesById;
             _nodesByName = nodesByName;
             _version = dxStructureCache.Version;
@@ -328,16 +336,16 @@ namespace IV.DX.Persistence
 
         private string ProcessDXColumns(
             string typeName,
-            IDictionary<string, string>? columns,
+            IDictionary<string, string> columns,
             IList<KeyValuePair<int, int>> idPairs,
             ISet<(int BaseId, int RelatedId)> idPairSet)
         {
             var coreDXNode = Get(typeName);
 
-            var columnsExpressionItems = new List<string>
-            {
-                $"\"{coreDXNode.TableAlias}\".\"ID\" AS \"ID\""
-            };
+            var columnsExpressionItems = new List<string>();
+
+            if (columns.Count() == 0)
+                return $"\"{coreDXNode.TableAlias}\".*";
 
             if (columns is not null)
             {

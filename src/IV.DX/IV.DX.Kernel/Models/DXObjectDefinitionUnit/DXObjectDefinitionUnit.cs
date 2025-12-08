@@ -31,5 +31,13 @@ namespace IV.DX.Kernel.Models
                 Announced = new HashSet<DXObjectEnumElement>()
             };
         }
+
+        public IDictionary<string, string> GetColumns()
+        {
+            if (DXColumnDefinitionElement == null || DXColumnDefinitionElement.Announced == null || DXColumnDefinitionElement.Announced.Count() == 0)
+                return new Dictionary<string, string>();
+
+            return this.DXColumnDefinitionElement.Announced.ToDictionary(x => x.Name, x => x.Name);
+        }
     }
 }

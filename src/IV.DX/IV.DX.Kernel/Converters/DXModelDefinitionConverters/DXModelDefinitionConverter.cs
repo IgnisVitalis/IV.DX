@@ -22,54 +22,10 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                 new DXPropertyDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
 
             var singleItemDefinitions =
-                dxModel.DXSingleElements.Select(x =>
-                {
-                    var item = new DXElementDefinition(x.Attribute.Type, x.Name, x.IsRequired);
-
-                    var propertyNames = x.Item.Content.Select(y => y.Key).ToList();
-
-                    if (!propertyNames.Contains(Constants.ID))
-                    {
-                        propertyNames.Add(Constants.ID);
-                    }
-
-                    if (!propertyNames.Contains(Constants.DXUnitID))
-                    {
-                        propertyNames.Add(Constants.DXUnitID);
-                    }
-
-                    item.AddPropertyDefinitions(propertyNames.Select(y => new DXPropertyDefinition(y, new DXColumnAttribute(y))).ToList());
-
-                    return item;
-                }).ToList();
+                dxModel.DXSingleElements.Select(x => x.ToDXElementDefinition()).ToList();
 
             var multiItemDefinitions =
-                  dxModel.DXMultiElements.Select(x =>
-                  {
-                      var item = new DXElementDefinition(x.Attribute.Type, x.Name, x.IsRequired);
-
-                      var existingElement = x.Announced.Count() > 0 ? x.Announced.First() : x.Deleted.Count() > 0 ? x.Deleted.First() : null;
-
-                      if (existingElement == null)
-                          return null;
-
-                      var propertyNames = existingElement.Content.Select(y => y.Key).ToList();
-
-                      if (!propertyNames.Contains(Constants.ID))
-                      {
-                          propertyNames.Add(Constants.ID);
-                      }
-
-                      if (!propertyNames.Contains(Constants.DXUnitID))
-                      {
-                          propertyNames.Add(Constants.DXUnitID);
-                      }
-
-                      item.AddPropertyDefinitions(propertyNames.Select(y => new DXPropertyDefinition(y, new DXColumnAttribute(y))).ToList());
-
-                      return item;
-                  }).Where(x => x != null).ToList();
-
+                  dxModel.DXMultiElements.Select(x => x.ToDXElementDefinition()).Where(x => x != null).ToList();
 
             var result = new DXModelDefinition(mainItemDefinition);
             result.AddToSingleItemDefinitions(singleItemDefinitions);

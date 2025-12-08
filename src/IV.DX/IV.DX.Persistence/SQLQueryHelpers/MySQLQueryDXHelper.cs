@@ -73,11 +73,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             throw new NotImplementedException();
         }
 
-        public string GetSQLQuery(string tableName, IEnumerable<string> columnNames = null, string whereClause = null, IDictionary<string, string> orderBy = null, int? limit = null)
-        {
-            throw new NotImplementedException();
-        }
-
         public string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataDXElementNew, DXObjectDefinitionUnit dataDXElementExisting)
         {
             throw new NotImplementedException();

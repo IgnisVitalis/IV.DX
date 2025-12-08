@@ -57,8 +57,8 @@ namespace IV.DX.Persistence
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, whereClause:
-                    this._queryHelper.GetWhereExpressionForID(id));
+                var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, this.BaseColumns, dxFilter:
+                    this.GetWhereExpressionForID(id));
 
                 var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -105,15 +105,15 @@ namespace IV.DX.Persistence
             if (ids.Count() == 0)
                 return Enumerable.Empty<DXSingleElement>();
 
-            var sqlWhereClause = this._queryHelper.GetWhereExpressionForID(ids);
+            var sqlWhereClause = this.GetWhereExpressionForID(ids);
 
             var result = this.RunRequest((conn) =>
             {
                 DataSet dataSet = new DataSet(container.Type);
 
                 this.PopulateTableToDataSet(conn, dataSet, container.Type,
-                    columnNames: container.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: sqlWhereClause, fillSchema: false);
+                    columns: container.GetColumns(),
+                    dxFilter: sqlWhereClause, fillSchema: false);
 
                 var dataTable = dataSet.Tables[container.Type];
 

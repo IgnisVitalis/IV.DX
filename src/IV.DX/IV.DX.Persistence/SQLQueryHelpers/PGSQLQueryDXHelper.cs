@@ -299,36 +299,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             return mySQLQueryToChangeColumn;
         }
 
-        public string GetSQLQuery(string tableName, IEnumerable<string> columnNames = null, string whereClause = null, IDictionary<string, string> orderBy = null, int? limit = null)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            string columnNamesString = columnNames == null ? "*" : string.Join(",", columnNames.Select(x => $"\"{x}\""));
-
-            sb.Append($"SELECT {columnNamesString} FROM \"{tableName}\"");
-
-            if (!string.IsNullOrEmpty(whereClause))
-            {
-                sb.Append($" WHERE {whereClause}");
-            }
-
-            if (orderBy != null && orderBy.Count() > 0)
-            {
-                string orderByString = string.Join(",", orderBy.Select(x => $"\"{x.Key}\" {x.Value}"));
-
-                sb.Append($" ORDER BY {orderByString}");
-            }
-
-            if (limit.HasValue)
-            {
-                sb.Append($" LIMIT {limit.Value}");
-            }
-
-            sb.Append(";");
-
-            return sb.ToString();
-        }
-
         public string GetSQLQueryToAlterTable(DXObjectDefinitionUnit dataDXElementNew, DXObjectDefinitionUnit dataDXElementExisting)
         {
             StringBuilder sb = new StringBuilder();

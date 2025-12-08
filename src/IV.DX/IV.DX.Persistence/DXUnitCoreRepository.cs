@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Helpers.DXModelDefinitionHelpers;
@@ -18,16 +19,24 @@ namespace IV.DX.Persistence
         IDXStructureCache _dxStructureCache;
         ISQLQueryBuilder _sqlQueryBuilder;
 
+        IDictionary<string, string> BaseColumns = new Dictionary<string, string>()
+        {
+            { "ID", "ID" },
+            { "TimeStamp", "TimeStamp"}
+        };
+
+        IDictionary<string, string> AllColumns = new Dictionary<string, string>();
+
         public DXCoreRepository(
             DXDatabaseOptions options,
             IDXStructureCache dxStructureCache,
             ISQLQueryDXHelper queryHelper,
-            ISQLQueryBuilder _sqlQueryBuilder)
+            ISQLQueryBuilder sqlQueryBuilder)
         {
-            _connectionStr = options.ConnectionString;
-            _queryHelper = queryHelper;
-            _dxStructureCache = dxStructureCache;
-            this._sqlQueryBuilder = _sqlQueryBuilder;
+            this._connectionStr = options.ConnectionString;
+            this._queryHelper = queryHelper;
+            this._dxStructureCache = dxStructureCache;
+            this._sqlQueryBuilder = sqlQueryBuilder;
         }
 
         public bool Delete(string typeName, Guid id)
@@ -220,9 +229,7 @@ namespace IV.DX.Persistence
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
         {
             string sqlQuery =
-                  this._sqlQueryBuilder.BuildSQLExpression(typeName, null, dxFilter);
-
-                    //this._queryHelper.GetQuery(typeName, dxFilter, this._dxStructureCache.DXRelations);
+                  this._sqlQueryBuilder.BuildSQLExpression(typeName, this.BaseColumns, dxFilter);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -325,22 +332,23 @@ namespace IV.DX.Persistence
             DataSet dataSet = new DataSet(container.MainElement.Type);
 
             this.PopulateTableToDataSet(conn, dataSet, container.MainElement.Type,
-                whereClause: this._queryHelper.GetWhereExpressionForID(id), fillSchema: false);
+                columns: container.MainElement.GetColumns(),
+                dxFilter: this.GetWhereExpressionForID(id), fillSchema: false);
 
-            var whereClauseForDXUnitID = this._queryHelper.GetWhereExpressionForDXUnitID(id);
+            var whereClauseForDXUnitID = this.GetWhereExpressionForDXUnitID(id);
 
             foreach (var singleItem in container.SingleFragmentDefinitions)
             {
                 this.PopulateTableToDataSet(conn, dataSet, singleItem.Type,
-                    columnNames: singleItem.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: whereClauseForDXUnitID, fillSchema: false);
+                    columns: singleItem.GetColumns(),
+                    dxFilter: whereClauseForDXUnitID, fillSchema: false);
             }
 
             foreach (var multiItem in container.MultiFragmentDefinitions)
             {
                 this.PopulateTableToDataSet(conn, dataSet, multiItem.Type,
-                    multiItem.Select(x => x.ColumnDefinition.DXExpression),
-                    whereClause: whereClauseForDXUnitID, fillSchema: false);
+                    columns: multiItem.GetColumns(),
+                    dxFilter: whereClauseForDXUnitID, fillSchema: false);
             }
 
             return dataSet;
@@ -352,18 +360,36 @@ namespace IV.DX.Persistence
 
             if (ids != null && ids.Count() > 0)
             {
-                this.PopulateTableToDataSet(conn, dataSet, container.MainElement.Type, whereClause: this._queryHelper.GetWhereExpressionForID(ids), fillSchema: false);
+                this.PopulateTableToDataSet(
+                    conn,
+                    dataSet,
+                    container.MainElement.Type,
+                    columns: container.MainElement.GetColumns(),
+                    dxFilter: this.GetWhereExpressionForID(ids),
+                    fillSchema: false);
 
-                var whereClauseForDXUnitIDs = this._queryHelper.GetWhereExpressionForDXUnitID(ids);
+                var whereClauseForDXUnitIDs = this.GetWhereExpressionForDXUnitID(ids);
 
                 foreach (var singleItem in container.SingleFragmentDefinitions)
                 {
-                    this.PopulateTableToDataSet(conn, dataSet, singleItem.Type, whereClause: whereClauseForDXUnitIDs, fillSchema: false);
+                    this.PopulateTableToDataSet(
+                        conn,
+                        dataSet,
+                        singleItem.Type,
+                        columns: singleItem.GetColumns(),
+                        dxFilter: whereClauseForDXUnitIDs,
+                        fillSchema: false);
                 }
 
                 foreach (var multiItem in container.MultiFragmentDefinitions)
                 {
-                    this.PopulateTableToDataSet(conn, dataSet, multiItem.Type, whereClause: whereClauseForDXUnitIDs, fillSchema: false);
+                    this.PopulateTableToDataSet(
+                        conn,
+                        dataSet,
+                        multiItem.Type,
+                        columns: multiItem.GetColumns(),
+                        dxFilter: whereClauseForDXUnitIDs,
+                        fillSchema: false);
                 }
             }
 
@@ -432,6 +458,7 @@ namespace IV.DX.Persistence
         {
             return this.InsertOrUpdate(dxModel, ProcessingType.Update);
         }
+
         private Guid InsertOrUpdate(DXModel dxModel, ProcessingType processingType)
         {
             ArgumentNullException.ThrowIfNull(dxModel);
@@ -481,8 +508,16 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(enumInfo.DXObjectDefinitionMainElement.Name);
                 var enumTable = enumInfo.DXObjectDefinitionMainElement.Name;
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, enumTable,
-                    whereClause: _queryHelper.GetWhereExpressionForID(dxModel.DXMainElement.Item.ID));
+                var dxModelDefinition = dxModel.ToDXModelDefinition();
+
+                var adapter = this.PopulateTableToDataSet(
+                    conn,
+                    dataSet,
+                    enumTable,
+                    dxFilter:
+                    this.GetWhereExpressionForID(dxModel.DXMainElement.Item.ID),
+                    columns: dxModelDefinition.MainElement.GetColumns());
+
                 UpsertOwnRow(dxModel, dataSet.Tables[enumTable], enumTable, processingType);
 
                 SaveTable(adapter, conn, dataSet, dataSet.Tables[enumTable], false);
@@ -500,9 +535,20 @@ namespace IV.DX.Persistence
             {
                 var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnitInfo);
 
+                var dxUnitDefinition = dxModel.ToDXModelDefinition();
+
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    var dataSet = new DataSet(dxUnitInfo.DXObjectDefinitionMainElement.Name);
+                    var dxUnitName = dxUnitInfo.DXObjectDefinitionMainElement.Name;
+
+                    // System provides columns for each base table from db because there are no information in dxModel and it is not possible to separate.
+                    // As well during init of db the columns will be empty.
+                    // For empty dict sql helper will provide * instead of list of columns.
+                    // Need to find better solution later.
+                    // var dxUnitColumns = dxUnitInfo.GetColumns();
+                    var dxUnitColumns = this.AllColumns;
+
+                    var dataSet = new DataSet(dxUnitName);
 
                     var multiTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     var relatedMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
@@ -512,27 +558,30 @@ namespace IV.DX.Persistence
                     var objectId = dxModel.DXMainElement.Item.ID;
 
                     // 1) OWN
-                    var adapter = PopulateTableToDataSet(conn, dataSet, unitTable, whereClause: _queryHelper.GetWhereExpressionForID(objectId));
+                    var adapter = PopulateTableToDataSet(
+                        conn,
+                        dataSet,
+                        unitTable,
+                        dxUnitColumns,
+                        dxFilter: this.GetWhereExpressionForID(objectId));
 
                     UpsertOwnRow(dxModel, dataSet.Tables[unitTable], unitTable, processingType);
 
                     SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable], false);
 
-
                     // 2) SINGLE
                     var relatedSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
                     var relatedSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
                     if (relatedSM != null) foreach (var el in relatedSM)
-                            UpsertSingle(dxModel, el, unitTable, objectId, dataSet, conn, processingType);
+                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
                     if (relatedSO != null) foreach (var el in relatedSO)
-                            UpsertSingle(dxModel, el, unitTable, objectId, dataSet, conn, processingType);
+                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
 
                     // 3) MULTI
                     if (relatedMM != null) foreach (var el in relatedMM)
-                            UpsertMulti(dxModel, dxUnitInfo, el, dataSet, conn, processingType);
+                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
                     if (relatedMO != null) foreach (var el in relatedMO)
-                            UpsertMulti(dxModel, dxUnitInfo, el, dataSet, conn, processingType);
-
+                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
 
                     dataSet.AcceptChanges();
                 }
@@ -547,7 +596,7 @@ namespace IV.DX.Persistence
         {
             if (table == null || table.Rows.Count == 0) return;
 
-            // bulk только для multi-таблиц
+            // bulk for multi-таблиц
             if (isMultiTable && _queryHelper is IDXBulkInsertCapable bulk && table.Rows.Count >= bulkThreshold)
             {
                 bulk.BulkUpsert(conn, table, table.TableName);
@@ -576,15 +625,26 @@ namespace IV.DX.Persistence
             }
         }
 
-        private void UpsertSingle(DXModel dxModel, DXElementDefinitionUnit singleDef, string dxUnitType, Guid objectID,
-                          DataSet dataSet, DbConnection conn, ProcessingType processingType)
+        private void UpsertSingle(
+            DXModel dxModel, 
+            DXModelDefinition dxModelDefinition, 
+            string dxUnitType, 
+            string dxElementName,
+            DataSet dataSet, 
+            DbConnection conn, 
+            ProcessingType processingType)
         {
-            var dxElementName = singleDef.DXObjectDefinitionMainElement.Name.Trim();
             var dxElement = dxModel.DXSingleElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+
             if (dxElement == null) return;
 
+            var dxElementDefinition = dxModelDefinition.SingleFragmentDefinitions.SingleOrDefault(x => x.Type == dxElementName);
+
+            if (dxElementDefinition == null) return;
+
             var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
-                whereClause: _queryHelper.GetWhereExpressionForID(dxElement.Item.ID));
+                dxElementDefinition.GetColumns(),
+                dxFilter: this.GetWhereExpressionForID(dxElement.Item.ID));
 
             var table = dataSet.Tables[dxElementName];
             var id = dxElement.Item.ID;
@@ -606,28 +666,40 @@ namespace IV.DX.Persistence
 
         private void UpsertMulti(
             DXModel dxModel,
-            DXUnitDefinitionUnit dxUnitInfo,
-            DXElementDefinitionUnit multiDef,
+            DXModelDefinition dxModelDefinition,
+            string dxUnitType,
+            string dxElementName,
             DataSet dataSet,
             DbConnection conn,
             ProcessingType processingType)
         {
-            var tableName = multiDef.DXObjectDefinitionMainElement.Name.Trim();
+            var dxElement = dxModel.DXMultiElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
+
+            if (dxElement == null)
+                return;
+
             var parentId = dxModel.DXMainElement.Item.ID;
-            var unitType = dxUnitInfo.DXObjectDefinitionMainElement.Name;
 
+            var dxElementDefinition = dxModelDefinition.MultiFragmentDefinitions.SingleOrDefault(x => x.Type == dxElementName);
 
-            var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName, whereClause: _queryHelper.GetWhereExpressionForDXUnitID(parentId));
+            // Because empty announced list is usefull to delete for full mode than need to load base structure to process elements.
+            // If there are at least one element in Announced or Deleted list structure will be existing.
+            var columns = dxElementDefinition == null ? this.BaseColumns : dxElementDefinition.GetColumns();
 
-            var table = dataSet.Tables[tableName];
+            var adapter = this.PopulateTableToDataSet(
+                conn,
+                dataSet,
+                dxElementName,
+                columns,
+                dxFilter: this.GetWhereExpressionForDXUnitID(parentId));
+
+            var table = dataSet.Tables[dxElementName];
+
             if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
             {
                 if (table.Columns.Contains("ID"))
                     table.PrimaryKey = new[] { table.Columns["ID"] };
             }
-
-            var dxElement = dxModel.DXMultiElements.SingleOrDefault(x => x.Name.Trim() == tableName);
-            if (dxElement == null) return;
 
             foreach (var item in dxElement.Announced)
             {
@@ -637,12 +709,12 @@ namespace IV.DX.Persistence
                 if (row == null)
                 {
                     row = table.NewRow();
-                    MapdxItemToRow(item, row, unitType);
+                    MapdxItemToRow(item, row, dxUnitType);
                     table.Rows.Add(row);
                 }
                 else
                 {
-                    MapdxItemToRow(item, row, unitType);
+                    MapdxItemToRow(item, row, dxUnitType);
                 }
             }
 
@@ -706,7 +778,8 @@ namespace IV.DX.Persistence
         private void DeleteDXUnitFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
-                whereClause: this._queryHelper.GetWhereExpressionForID(id));
+                this.BaseColumns,
+                dxFilter: this.GetWhereExpressionForID(id));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -724,8 +797,12 @@ namespace IV.DX.Persistence
 
         private void DeleteDXElementsFromDataSet(string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName, whereClause:
-                this._queryHelper.GetWhereExpressionForDXUnitID(objectID));
+            var dxModelAdapter = this.PopulateTableToDataSet(
+                conn,
+                dataSet,
+                dxElementName,
+                this.BaseColumns,
+                dxFilter: this.GetWhereExpressionForDXUnitID(objectID));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -753,8 +830,11 @@ namespace IV.DX.Persistence
 
             var dxElementName = dxElement.Attribute.Type;
 
+            var dxElementDefinition = dxElement.ToDXElementDefinition();
+
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName,
-                whereClause: this._queryHelper.GetWhereExpressionForID(dxElement.Item.ID));
+                dxElementDefinition.GetColumns(),
+                dxFilter: this.GetWhereExpressionForID(dxElement.Item.ID));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
 
@@ -1137,9 +1217,9 @@ namespace IV.DX.Persistence
             {
                 var dataSet = new DataSet("DXRelationDefinitionUnit");
 
-                this.PopulateTableToDataSet(conn, dataSet, "DXRelationDefinitionMainElement"
-                    , whereClause:
-                     this._queryHelper.GetWhereExpressionWithAnd(
+                this.PopulateTableToDataSet(conn, dataSet, "DXRelationDefinitionMainElement",
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { "ObjectNameLeft", obj1Name },
@@ -1180,9 +1260,12 @@ namespace IV.DX.Persistence
             {
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable
-                    , whereClause:
-                    this._queryHelper.GetWhereExpressionWithAnd(
+                var adapter = this.PopulateTableToDataSet(
+                    conn, 
+                    dataSet, 
+                    relationInfo.RelationTable,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { relationInfo.RelationNameLeft, obj1Id },
@@ -1231,8 +1314,9 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause: this._queryHelper.GetWhereExpressionForID(obj1Id));
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionForID(obj1Id));
 
                 var table = dataSet.Tables[tableName];
                 var rows = table.Rows;
@@ -1266,8 +1350,9 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause: this._queryHelper.GetWhereExpressionForID(obj2Id));
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionForID(obj2Id));
 
                 var table = dataSet.Tables[tableName];
                 var rows = table.Rows;
@@ -1313,9 +1398,10 @@ namespace IV.DX.Persistence
             {
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable
-                    , whereClause:
-                    this._queryHelper.GetWhereExpressionWithAnd(
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable,
+                    this.AllColumns,
+                    dxFilter:
+                    this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { relationInfo.RelationNameLeft, obj1Id },
@@ -1357,9 +1443,10 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause:
-                     this._queryHelper.GetWhereExpressionWithAnd(
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter:
+                     this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { "ID", obj1Id },
@@ -1413,8 +1500,9 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause: this._queryHelper.GetWhereExpressionWithAnd(
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { "ID", obj2Id },
@@ -1452,8 +1540,9 @@ namespace IV.DX.Persistence
             {
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
-                this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable
-                    , whereClause: this._queryHelper.GetWhereExpressionWithAnd(
+                this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { relationInfo.RelationNameLeft, obj1Id }
@@ -1480,8 +1569,9 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause: this._queryHelper.GetWhereExpressionForID(obj1Id), fillSchema: false);
+                this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionForID(obj1Id), fillSchema: false);
 
                 var table = dataSet.Tables[tableName];
                 var rows = table.Rows;
@@ -1502,8 +1592,9 @@ namespace IV.DX.Persistence
 
                 var dataSet = new DataSet(tableName);
 
-                this.PopulateTableToDataSet(conn, dataSet, tableName
-                    , whereClause: this._queryHelper.GetWhereExpressionWithAnd(
+                this.PopulateTableToDataSet(conn, dataSet, tableName,
+                    this.AllColumns,
+                    dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
                             { relationInfo.RelationNameLeft, obj1Id }
@@ -1529,13 +1620,11 @@ namespace IV.DX.Persistence
             DbConnection conn,
             DataSet dataSet,
             string tableName,
-            IEnumerable<string> columnNames = null,
-            string whereClause = null,
-            IDictionary<string, string> orderBy = null,
-            int? limit = null,
+            IDictionary<string, string> columns,
+            string dxFilter = null,
             bool fillSchema = true)
         {
-            var query = _queryHelper.GetSQLQuery(tableName, columnNames, whereClause, orderBy, limit);
+            var query = _sqlQueryBuilder.BuildSQLExpression(tableName, columns, dxFilter);
 
             var adapter = _queryHelper.GetDbDataAdapter(conn, query);
 
@@ -1630,6 +1719,38 @@ namespace IV.DX.Persistence
             Insert = 1,
             Update = 2,
             Delete = 3
+        }
+
+        private string GetWhereExpressionForID(Guid id)
+        {
+            return $"ID = '{id}'";
+        }
+
+        private string GetWhereExpressionForDXUnitID(Guid id)
+        {
+            return $"DXUnitID = '{id}'";
+        }
+
+        private string GetWhereExpressionForID(IEnumerable<Guid> ids)
+        {
+            string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
+
+            return $"ID IN ({idsString})";
+        }
+
+        private string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
+        {
+            string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
+
+            return $"DXUnitID IN ({idsString})";
+        }
+
+        private string GetWhereExpressionWithAnd(IDictionary<string, object> values)
+        {
+            if (values == null)
+                return null;
+
+            return string.Join(" AND ", values.Select(x => $"{x.Key} = '{x.Value}'"));
         }
     }
 }

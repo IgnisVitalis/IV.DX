@@ -27,17 +27,11 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement);
         DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter);
         DbDataAdapter GetDbDataAdapter(DbConnection dbconnection, string query);
-        DbConnection GetDBConnection(string connectionStr);
-        string GetSQLQuery(string tableName, IEnumerable<string> columnNames = null, string whereClause = null, IDictionary<string, string> orderBy = null, int? limit = null);
+        DbConnection GetDBConnection(string connectionStr);       
         void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
         string GetSelectQuery(DXCoreNode coreNode);
         string GetQuery(string typeName, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
-        string GetWhereExpressionForID(Guid id);
-        string GetWhereExpressionForDXUnitID(Guid id);
-        string GetWhereExpressionForID(IEnumerable<Guid> ids);
-        string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids);
-        string GetWhereExpressionWithAnd(IDictionary<string, object> values);     
     }
 }

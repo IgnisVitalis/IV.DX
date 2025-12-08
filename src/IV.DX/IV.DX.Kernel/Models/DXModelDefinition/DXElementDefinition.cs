@@ -98,5 +98,10 @@ namespace IV.DX.Kernel.Models
         {
             return _items.GetEnumerator();
         }
+
+        public IDictionary<string, string> GetColumns()
+        {
+            return this._items.ToDictionary(x => x.ColumnDefinition.Name, x => x.ColumnDefinition.DXExpression).ToDictionary();
+        }
     }
 }
