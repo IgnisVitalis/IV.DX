@@ -1,6 +1,5 @@
 ﻿using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
-using IV.DX.Persistence.Models;
 using System.Data.Common;
 
 namespace IV.DX.Persistence.Abstractions
@@ -9,7 +8,6 @@ namespace IV.DX.Persistence.Abstractions
     {
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
-        DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataDXElement);
         string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement);
         string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc);
@@ -31,7 +29,6 @@ namespace IV.DX.Persistence.Abstractions
         void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
         string GetSelectQuery(DXCoreNode coreNode);
-        string GetQuery(string typeName, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos);
         string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
     }
 }

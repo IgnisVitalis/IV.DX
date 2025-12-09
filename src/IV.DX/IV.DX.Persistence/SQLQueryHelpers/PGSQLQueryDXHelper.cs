@@ -3,7 +3,6 @@ using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
-using IV.DX.Persistence.Models;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
@@ -16,64 +15,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     internal class PGSQLQueryDXHelper : ISQLQueryDXHelper, IDXBulkInsertCapable
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
-
-        public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
-        {
-            DXOrientedTree expressionTree = DXOrientedTree.CreateInstance(dxUnitType);
-
-            expressionTree.Load(dxFilter);
-
-            expressionTree.LoadAdditionalInfosToNodes(relationInfos);
-
-            DXQueryContainer result = new DXQueryContainer
-            {
-                SelectExpression = this.GetSelectQuery(expressionTree.CoreNode)
-            };
-
-            IEnumerable<string> leftJoins = Enumerable.Empty<string>();
-
-            foreach (var item in expressionTree.AllNodesWithoutCoreAndLeaves)
-            {
-                var nodeAsDXUnitNode = item as DXUnitNode;
-                var nodeAsDXElementNode = item as DXElementNode;
-
-                if (nodeAsDXUnitNode != null)
-                {
-                    leftJoins = leftJoins.Concat(nodeAsDXUnitNode.QueryInfos.Select(x => this.GetLeftJoinQuery(x)));
-                }
-                else if (nodeAsDXElementNode != null)
-                {
-                    leftJoins = leftJoins.Append(this.GetLeftJoinQuery(nodeAsDXElementNode.QueryInfo));
-                }
-            }
-
-            result.LeftJoinsExpression = string.Join(" ", leftJoins);
-
-            result.WhereExpression = string.Join(" ", expressionTree.Leaves.OrderBy(x => x.ExpressionOrder).Select(x => this.GetWhereExpressionWithPropertyAndLogicOpeation(x)));
-
-            return result;
-        }
-
-        private string GetLeftJoinQuery(DXJoinedQueryInfo queryInfo)
-        {
-            return $"LEFT JOIN \"{queryInfo.JoinedTableName}\" AS \"{queryInfo.JoinedTableAlias}\" ON \"{queryInfo.JoinedTableAlias}\".\"{queryInfo.JoinedTableKey}\" = \"{queryInfo.MainTableAlias}\".\"{queryInfo.MainTableKey}\"";
-        }
-
-        public string GetWhereExpressionWithPropertyAndLogicOpeation(DXPropertyNode propertyNode)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            if (propertyNode.ExpressionOrder > 0)
-            {
-                sb.Append(propertyNode.LogicOperation);
-                sb.Append(" ");
-            }
-
-            sb.Append($"\"{propertyNode.Mother.TableNameAliasToJoin}\".\"{propertyNode.LeftValue}\" {propertyNode.Operator} {propertyNode.RightValue}");
-
-            return sb.ToString();
-        }
-
+        
         public void CreateDataBase(string connectionString)
         {
             var args = this.GetParametersToCreateOrDeleteBD(connectionString);
@@ -140,17 +82,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
 
             };
-        }
-
-        public string GetQuery(string typeName, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
-        {
-            if (dxFilter == default)
-                return GetSQLQueryToSelectIDFromTable(typeName);
-
-            var result = this.ConvertToQueryContainer(typeName, dxFilter, relationInfos);
-
-            return result.Query;
-        }
+        }        
 
         public string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit)
         {

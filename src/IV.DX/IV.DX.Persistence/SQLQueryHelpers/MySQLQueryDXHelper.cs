@@ -1,11 +1,7 @@
 ﻿using IV.DX.Contracts.Persistence.ExpressionTree;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
-using IV.DX.Persistence.Models;
 using Npgsql;
-
-
-//using MySql.Data.MySqlClient;
 using System.Data;
 using System.Data.Common;
 
@@ -19,11 +15,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         public void BulkUpsert(NpgsqlConnection conn, DataTable table, string tableName, string keyColumn = "ID")
-        {
-            throw new NotImplementedException();
-        }
-
-        public DXQueryContainer ConvertToQueryContainer(string dxUnitType, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             throw new NotImplementedException();
         }
@@ -174,11 +165,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         public string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DXQueryContainer ConvertToQueryContainer(DXElementDefinition dxElementDefinition, string dxFilter, IEnumerable<DXRelationDefinitionUnit> relationInfos)
         {
             throw new NotImplementedException();
         }
