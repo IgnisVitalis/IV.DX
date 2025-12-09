@@ -1,5 +1,4 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.SQLQueryHelpers;

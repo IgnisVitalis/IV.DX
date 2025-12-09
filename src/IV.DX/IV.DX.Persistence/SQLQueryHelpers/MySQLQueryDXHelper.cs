@@ -1,5 +1,4 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using Npgsql;
 using System.Data;
@@ -50,11 +49,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         }
 
         public string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSelectQuery(DXCoreNode coreNode)
         {
             throw new NotImplementedException();
         }

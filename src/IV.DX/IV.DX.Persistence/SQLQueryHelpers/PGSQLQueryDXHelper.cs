@@ -1,5 +1,4 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel.Enums;
+﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -96,11 +95,6 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             sb.Append($"ON UPDATE NO ACTION;");
 
             return sb.ToString();
-        }
-
-        public string GetSelectQuery(DXCoreNode coreNode)
-        {
-            return $"SELECT \"{coreNode.MainTableAlias}\".\"ID\" FROM \"{coreNode.Value}\" AS \"{coreNode.MainTableAlias}\"";
         }
 
         public string GetSQLColumnDefinitionToAddInTable(DXColumnDefinitionElement clmDesc)

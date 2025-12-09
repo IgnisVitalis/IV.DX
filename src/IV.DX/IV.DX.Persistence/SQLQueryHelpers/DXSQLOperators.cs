@@ -1,4 +1,4 @@
-﻿namespace IV.DX.Contracts.Persistence.ExpressionTree
+﻿namespace IV.DX.Persistence.SQLQueryHelpers
 {
     internal static class DXSQLOperators
     {

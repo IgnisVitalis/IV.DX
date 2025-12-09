@@ -1,5 +1,4 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel.Models;
+﻿using IV.DX.Kernel.Models;
 using System.Data.Common;
 
 namespace IV.DX.Persistence.Abstractions
@@ -28,7 +27,6 @@ namespace IV.DX.Persistence.Abstractions
         DbConnection GetDBConnection(string connectionStr);       
         void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
-        string GetSelectQuery(DXCoreNode coreNode);
         string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
     }
 }
