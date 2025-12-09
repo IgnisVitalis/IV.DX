@@ -57,7 +57,7 @@ namespace IV.DX.Persistence
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, this.BaseColumns, dxFilter:
+                var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, SQLQueryBuilder.BaseColumns, dxFilter:
                     this.GetWhereExpressionForID(id));
 
                 var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);

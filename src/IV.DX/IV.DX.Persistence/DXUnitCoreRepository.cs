@@ -17,15 +17,7 @@ namespace IV.DX.Persistence
         protected string _connectionStr;
         protected ISQLQueryDXHelper _queryHelper;
         IDXStructureCache _dxStructureCache;
-        ISQLQueryBuilder _sqlQueryBuilder;
-
-        IDictionary<string, string> BaseColumns = new Dictionary<string, string>()
-        {
-            { "ID", "ID" },
-            { "TimeStamp", "TimeStamp"}
-        };
-
-        IDictionary<string, string> AllColumns = new Dictionary<string, string>();
+        ISQLQueryBuilder _sqlQueryBuilder;   
 
         public DXCoreRepository(
             DXDatabaseOptions options,
@@ -229,7 +221,7 @@ namespace IV.DX.Persistence
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
         {
             string sqlQuery =
-                  this._sqlQueryBuilder.BuildSQLExpression(typeName, this.BaseColumns, dxFilter);
+                  this._sqlQueryBuilder.BuildSQLExpression(typeName, SQLQueryBuilder.BaseColumns, dxFilter);
 
             return this.RunRequestInTransaction((conn) =>
             {
@@ -546,7 +538,7 @@ namespace IV.DX.Persistence
                     // For empty dict sql helper will provide * instead of list of columns.
                     // Need to find better solution later.
                     // var dxUnitColumns = dxUnitInfo.GetColumns();
-                    var dxUnitColumns = this.AllColumns;
+                    var dxUnitColumns = SQLQueryBuilder.AllColumns;
 
                     var dataSet = new DataSet(dxUnitName);
 
@@ -684,7 +676,7 @@ namespace IV.DX.Persistence
 
             // Because empty announced list is usefull to delete for full mode than need to load base structure to process elements.
             // If there are at least one element in Announced or Deleted list structure will be existing.
-            var columns = dxElementDefinition == null ? this.BaseColumns : dxElementDefinition.GetColumns();
+            var columns = dxElementDefinition == null ? SQLQueryBuilder.BaseColumns : dxElementDefinition.GetColumns();
 
             var adapter = this.PopulateTableToDataSet(
                 conn,
@@ -778,7 +770,7 @@ namespace IV.DX.Persistence
         private void DeleteDXUnitFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
-                this.BaseColumns,
+                SQLQueryBuilder.BaseColumns,
                 dxFilter: this.GetWhereExpressionForID(id));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
@@ -801,7 +793,7 @@ namespace IV.DX.Persistence
                 conn,
                 dataSet,
                 dxElementName,
-                this.BaseColumns,
+                SQLQueryBuilder.BaseColumns,
                 dxFilter: this.GetWhereExpressionForDXUnitID(objectID));
 
             var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
@@ -1218,7 +1210,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet("DXRelationDefinitionUnit");
 
                 this.PopulateTableToDataSet(conn, dataSet, "DXRelationDefinitionMainElement",
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
@@ -1264,7 +1256,7 @@ namespace IV.DX.Persistence
                     conn, 
                     dataSet, 
                     relationInfo.RelationTable,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
@@ -1315,7 +1307,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionForID(obj1Id));
 
                 var table = dataSet.Tables[tableName];
@@ -1351,7 +1343,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionForID(obj2Id));
 
                 var table = dataSet.Tables[tableName];
@@ -1399,7 +1391,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter:
                     this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
@@ -1444,7 +1436,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter:
                      this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
@@ -1501,7 +1493,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
@@ -1541,7 +1533,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
                 this.PopulateTableToDataSet(conn, dataSet, relationInfo.RelationTable,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
@@ -1570,7 +1562,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionForID(obj1Id), fillSchema: false);
 
                 var table = dataSet.Tables[tableName];
@@ -1593,7 +1585,7 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(tableName);
 
                 this.PopulateTableToDataSet(conn, dataSet, tableName,
-                    this.AllColumns,
+                    SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {

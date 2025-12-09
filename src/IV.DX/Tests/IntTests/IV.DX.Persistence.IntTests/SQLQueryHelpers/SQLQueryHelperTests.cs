@@ -25,17 +25,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public IEnumerable<TDocumentUnit> documents;
         public IEnumerable<TBookUnit> books;
 
-        ISQLQueryDXHelper _sqlQueryHelper;
         IDXUnitGenericRepository _genericRepo;
-        IDXStructureCache _dxStructureCache;
         ISQLQueryBuilder _sqlQueryBuilder;
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._sqlQueryHelper = this.ServiceProvider.GetRequiredService<ISQLQueryDXHelper>();
             this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
-            this._dxStructureCache = this.ServiceProvider.GetRequiredService<IDXStructureCache>();
             this._sqlQueryBuilder = this.ServiceProvider.GetRequiredService<ISQLQueryBuilder>();
 
             InitData();
@@ -98,33 +94,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetUser_UsingPassportSerialNumber_CorrectUser()
         {
             // Init
-            var whereExpression = "R(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPassportUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPassportMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"SerialNumber\" = '6bcc2af44aa3';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPassportUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPassportMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.SerialNumber = '6bcc2af44aa3';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
-
+            var dxFilter = "R(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"TPassportUnit\" AS \"T_6\" ON \"T_6\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TPassportMainElement\" AS \"T_21\" ON \"T_21\".\"DXUnitID\" = \"T_6\".\"ID\"\nWHERE\n\"T_21\".\"SerialNumber\" = '6bcc2af44aa3'";
+            
             var expectedUser = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -138,33 +121,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetPassport_UsingUserNameAndSurname_CorrectPassport()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
+            string expectedSQLQuery = "SELECT\n\"T_6\".\"ID\" AS \"ID\",\n\"T_6\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"T_6\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_6\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Svitlana'  AND  \"T_23\".\"Surname\" = 'Suvorova'";
 
             var expectedPassport = this.passports.Single(x => x.ID == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TPassportUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
+            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(dxFilter);
 
             // Checking result
             Assert.Single(passportsExisting);
@@ -178,33 +148,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetUser_UsingDeviceUUID_CorrectUser()
         {
             // Init
-            var whereExpression = "R(Devices).TDeviceMainElement.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TDeviceUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TDeviceMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TDeviceUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TDeviceMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Devices).TDeviceMainElement.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"TDeviceUnit\" AS \"T_9\" ON \"T_9\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TDeviceMainElement\" AS \"T_24\" ON \"T_24\".\"DXUnitID\" = \"T_9\".\"ID\"\nWHERE\n\"T_24\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
 
             var expectedUser = this.users.Single(x => x.ID == new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -218,34 +175,21 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetDevices_UsingUserNameAndSurname_CorrectDevices()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDeviceUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDeviceUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
+            string expectedSQLQuery = "SELECT\n\"T_9\".\"ID\" AS \"ID\",\n\"T_9\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"T_9\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_9\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Svitlana'  AND  \"T_23\".\"Surname\" = 'Suvorova'";
 
             var expectedDevice1 = this.devices.Single(x => x.ID == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
             var expectedDevice2 = this.devices.Single(x => x.ID == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TDeviceUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TDeviceUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var devicesExisting = this._genericRepo.GetDXUnits<TDeviceUnit>(whereExpression);
+            var devicesExisting = this._genericRepo.GetDXUnits<TDeviceUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, devicesExisting.Count());
@@ -263,32 +207,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetUser_UsingPositionWithEmptyUser_Empty()
         {
             // Init
-            var whereExpression = "R(Position).TPositionMainElement.Name = 'Middle'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Middle';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Middle';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Position).TPositionMainElement.Name = 'Middle'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"TPositionUnit\" AS \"T_7\" ON \"T_7\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"T_22\" ON \"T_22\".\"DXUnitID\" = \"T_7\".\"ID\"\nWHERE\n\"T_22\".\"Name\" = 'Middle'";
 
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Empty(usersExisting);
@@ -298,33 +229,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetUser_UsingPositionExistingUser_CorrectUser()
         {
             // Init
-            var whereExpression = "R(Position).TPositionMainElement.Name = 'Master'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"TPositionUnit\" AS \"t_1_0\" ON \"t_1_0\".\"User\" = \"t_0_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Master';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN TPositionUnit AS t_1_0 ON t_1_0.User = t_0_0.ID LEFT JOIN TPositionMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Master';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Position).TPositionMainElement.Name = 'Master'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"TPositionUnit\" AS \"T_7\" ON \"T_7\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"T_22\" ON \"T_22\".\"DXUnitID\" = \"T_7\".\"ID\"\nWHERE\n\"T_22\".\"Name\" = 'Master'";
 
             var expectedUser = this.users.Single(x => x.ID == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
@@ -338,32 +256,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetPosition_UsingUserWithEmptyPosition_Empty()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Victor' AND R(User).TUserMainElement.Surname = 'Suvorov'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Victor' AND \"t_2_0\".\"Surname\" = 'Suvorov';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Victor' AND t_2_0.Surname = 'Suvorov';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Victor' AND R(User).TUserMainElement.Surname = 'Suvorov'";
+            string expectedSQLQuery = "SELECT\n\"T_7\".\"ID\" AS \"ID\",\n\"T_7\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"T_7\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_7\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Victor'  AND  \"T_23\".\"Surname\" = 'Suvorov'";
 
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TPositionUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TPositionUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(dxFilter);
 
             // Checking result
             Assert.Empty(positionsExisting);
@@ -373,33 +278,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetPosition_UsingUserWithExistingPosition_CorrectPosition()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPositionUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPositionUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
+            string expectedSQLQuery = "SELECT\n\"T_7\".\"ID\" AS \"ID\",\n\"T_7\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"T_7\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_7\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Svitlana'  AND  \"T_23\".\"Surname\" = 'Suvorova'";
 
             var expectedPosition = this.positions.Single(x => x.ID == new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TPositionUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TPositionUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(dxFilter);
 
             // Checking result
             Assert.Single(positionsExisting);
@@ -413,32 +305,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetDocuments_UsingUserWithoutDocuments_Empty()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Pavel' AND R(User).TUserMainElement.Surname = 'Plamenev'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Pavel' AND R(User).TUserMainElement.Surname = 'Plamenev'";
+            string expectedSQLQuery = "SELECT\n\"T_8\".\"ID\" AS \"ID\",\n\"T_8\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"T_8\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_8\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Pavel'  AND  \"T_23\".\"Surname\" = 'Plamenev'";
 
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TDocumentUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TDocumentUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var documentsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(whereExpression);
+            var documentsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(dxFilter);
 
             // Checking result
             Assert.Empty(documentsExisting);
@@ -448,34 +327,21 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetDocuments_UsingUserWithExistingDocuments_CorrectDocuments()
         {
             // Init
-            var whereExpression = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TDocumentUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TDocumentUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).TUserMainElement.Name = 'Svitlana' AND R(User).TUserMainElement.Surname = 'Suvorova'";
+            string expectedSQLQuery = "SELECT\n\"T_8\".\"ID\" AS \"ID\",\n\"T_8\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"T_8\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_8\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Svitlana'  AND  \"T_23\".\"Surname\" = 'Suvorova'";
 
             var expectedDocument1 = this.documents.Single(x => x.ID == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
             var expectedDocument6 = this.documents.Single(x => x.ID == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TDocumentUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TDocumentUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var positionsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(whereExpression);
+            var positionsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, positionsExisting.Count());
@@ -493,32 +359,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetBooks_UsingUserWithoutBooks_Empty()
         {
             // Init
-            var whereExpression = "R(Users).TUserMainElement.Name = 'Pavel' AND R(Users).TUserMainElement.Surname = 'Plamenev'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Pavel' AND \"t_2_0\".\"Surname\" = 'Plamenev';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Pavel' AND t_2_0.Surname = 'Plamenev';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Users).TUserMainElement.Name = 'Pavel' AND R(Users).TUserMainElement.Surname = 'Plamenev'";
+            string expectedSQLQuery = "SELECT\n\"T_10\".\"ID\" AS \"ID\",\n\"T_10\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"T_10\"\nLEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"Relation_TUserUnit_TBookUnit_0\" ON \"Relation_TUserUnit_TBookUnit_0\".\"Books\" = \"T_10\".\"ID\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"Relation_TUserUnit_TBookUnit_0\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Pavel'  AND  \"T_23\".\"Surname\" = 'Plamenev'";
 
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TBookUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(whereExpression);
+            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(dxFilter);
 
             // Checking result
             Assert.Empty(booksExisting);
@@ -528,34 +381,21 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetBooks_UsingUserWithExistingBooks_CorrectBooks()
         {
             // Init
-            var whereExpression = "R(Users).TUserMainElement.Name = 'Svitlana' AND R(Users).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TBookUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Books\" = \"t_0_0\".\"ID\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Users\" LEFT JOIN \"TUserMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'Svitlana' AND \"t_2_0\".\"Surname\" = 'Suvorova';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TBookUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Books = t_0_0.ID LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Users LEFT JOIN TUserMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'Svitlana' AND t_2_0.Surname = 'Suvorova';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Users).TUserMainElement.Name = 'Svitlana' AND R(Users).TUserMainElement.Surname = 'Suvorova'";
+            string expectedSQLQuery = "SELECT\n\"T_10\".\"ID\" AS \"ID\",\n\"T_10\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"T_10\"\nLEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"Relation_TUserUnit_TBookUnit_0\" ON \"Relation_TUserUnit_TBookUnit_0\".\"Books\" = \"T_10\".\"ID\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"Relation_TUserUnit_TBookUnit_0\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"T_23\" ON \"T_23\".\"DXUnitID\" = \"T_11\".\"ID\"\nWHERE\n\"T_23\".\"Name\" = 'Svitlana'  AND  \"T_23\".\"Surname\" = 'Suvorova'";
 
             var expectedBook1 = this.books.Single(x => x.ID == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
             var expectedBook2 = this.books.Single(x => x.ID == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TBookUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(whereExpression);
+            var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, booksExisting.Count());
@@ -573,66 +413,40 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetUsers_UsingBookWithoutUsersByName_Empty()
         {
             // Init
-            var whereExpression = "R(Books).TBookMainElement.Name = 'book3'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book3';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'book3';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Books).TBookMainElement.Name = 'book3'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"Relation_TUserUnit_TBookUnit_0\" ON \"Relation_TUserUnit_TBookUnit_0\".\"Users\" = \"T_11\".\"ID\"\nLEFT JOIN \"TBookUnit\" AS \"T_10\" ON \"T_10\".\"ID\" = \"Relation_TUserUnit_TBookUnit_0\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"T_25\" ON \"T_25\".\"DXUnitID\" = \"T_10\".\"ID\"\nWHERE\n\"T_25\".\"Name\" = 'book3'";
 
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
         }
 
         [Fact]
         public void GetUsers_UsingBookWithExistingUsersByName_CorrectUsers()
         {
             // Init
-            var whereExpression = "R(Books).TBookMainElement.Name = 'book1'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TUserUnit\" AS \"t_0_0\" LEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"t_1_0_int\" ON \"t_1_0_int\".\"Users\" = \"t_0_0\".\"ID\" LEFT JOIN \"TBookUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_1_0_int\".\"Books\" LEFT JOIN \"TBookMainElement\" AS \"t_2_0\" ON \"t_2_0\".\"DXUnitID\" = \"t_1_0\".\"ID\" WHERE \"t_2_0\".\"Name\" = 'book1';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TUserUnit AS t_0_0 LEFT JOIN Relation_TUserUnit_TBookUnit_0 AS t_1_0_int ON t_1_0_int.Users = t_0_0.ID LEFT JOIN TBookUnit AS t_1_0 ON t_1_0.ID = t_1_0_int.Books LEFT JOIN TBookMainElement AS t_2_0 ON t_2_0.DXUnitID = t_1_0.ID WHERE t_2_0.Name = 'book1';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(Books).TBookMainElement.Name = 'book1'";
+            string expectedSQLQuery = "SELECT\n\"T_11\".\"ID\" AS \"ID\",\n\"T_11\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"T_11\"\nLEFT JOIN \"Relation_TUserUnit_TBookUnit_0\" AS \"Relation_TUserUnit_TBookUnit_0\" ON \"Relation_TUserUnit_TBookUnit_0\".\"Users\" = \"T_11\".\"ID\"\nLEFT JOIN \"TBookUnit\" AS \"T_10\" ON \"T_10\".\"ID\" = \"Relation_TUserUnit_TBookUnit_0\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"T_25\" ON \"T_25\".\"DXUnitID\" = \"T_10\".\"ID\"\nWHERE\n\"T_25\".\"Name\" = 'book1'";
 
             var expectedUser1 = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
             var expectedUser2 = this.users.Single(x => x.ID == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TUserUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(whereExpression);
+            var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, usersExisting.Count());
@@ -650,33 +464,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         public void GetPassport_UsingPositionWithUser_CorrectPassport()
         {
             // Init
-            var whereExpression = "R(User).R(Position).TPositionMainElement.Name = 'Master'";
-            string expectedSQLQuery = null;
-
-            if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"DXUnitID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" = 'Master';";
-            }
-            else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-            {
-                expectedSQLQuery = "SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.DXUnitID = t_2_0.ID WHERE t_3_0.Name = 'Master';";
-            }
-            else
-            {
-                throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-            }
+            var dxFilter = "R(User).R(Position).TPositionMainElement.Name = 'Master'";
+            string expectedSQLQuery = "SELECT\n\"T_6\".\"ID\" AS \"ID\",\n\"T_6\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"T_6\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_6\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"T_7\" ON \"T_7\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"T_22\" ON \"T_22\".\"DXUnitID\" = \"T_7\".\"ID\"\nWHERE\n\"T_22\".\"Name\" = 'Master'";
 
             var expectedPassport = this.passports.Single(x => x.ID == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
             var relations = this.GetAllRelations();
 
             // Action
-            var query = this._sqlQueryHelper.GetQuery("TPassportUnit", whereExpression, relations);
+            var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
             // Action            
-            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
+            var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(dxFilter);
 
             // Checking result
             Assert.Single(passportsExisting);
@@ -692,32 +493,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             foreach (var operation in DXSQLOperators.BaseOperators)
             {
                 // Init
-                var whereExpression = $"R(User).R(Position).TPositionMainElement.Name {operation} 'Master'";
-                string expectedSQLQuery = null;
-
-                if (this._sqlQueryHelper is PGSQLQueryDXHelper)
-                {
-                    expectedSQLQuery = $"SELECT \"t_0_0\".\"ID\" FROM \"TPassportUnit\" AS \"t_0_0\" LEFT JOIN \"TUserUnit\" AS \"t_1_0\" ON \"t_1_0\".\"ID\" = \"t_0_0\".\"User\" LEFT JOIN \"TPositionUnit\" AS \"t_2_0\" ON \"t_2_0\".\"User\" = \"t_1_0\".\"ID\" LEFT JOIN \"TPositionMainElement\" AS \"t_3_0\" ON \"t_3_0\".\"DXUnitID\" = \"t_2_0\".\"ID\" WHERE \"t_3_0\".\"Name\" {operation} 'Master';";
-                }
-                else if (this._sqlQueryHelper is MySQLQueryDXHelper)
-                {
-                    expectedSQLQuery = $"SELECT t_0_0.ID FROM TPassportUnit AS t_0_0 LEFT JOIN TUserUnit AS t_1_0 ON t_1_0.ID = t_0_0.User LEFT JOIN TPositionUnit AS t_2_0 ON t_2_0.User = t_1_0.ID LEFT JOIN TPositionMainElement AS t_3_0 ON t_3_0.DXUnitID = t_2_0.ID WHERE t_3_0.Name {operation} 'Master';";
-                }
-                else
-                {
-                    throw new Exception($"Please define sql query for {this._sqlQueryHelper.GetType()}");
-                }
+                var dxFilter = $"R(User).R(Position).TPositionMainElement.Name {operation} 'Master'";
+                string expectedSQLQuery = $"SELECT\n\"T_6\".\"ID\" AS \"ID\",\n\"T_6\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"T_6\"\nLEFT JOIN \"TUserUnit\" AS \"T_11\" ON \"T_11\".\"ID\" = \"T_6\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"T_7\" ON \"T_7\".\"User\" = \"T_11\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"T_22\" ON \"T_22\".\"DXUnitID\" = \"T_7\".\"ID\"\nWHERE\n\"T_22\".\"Name\" {operation} 'Master'";
 
                 var relations = this.GetAllRelations();
 
                 // Action
-                var query = this._sqlQueryHelper.GetQuery("TPassportUnit", whereExpression, relations);
+                var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
                 // Checking result
                 Assert.Equal(expectedSQLQuery, query);
 
                 // Action
-                var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(whereExpression);
+                var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(dxFilter);
 
                 Assert.NotNull(passportsExisting);
             }

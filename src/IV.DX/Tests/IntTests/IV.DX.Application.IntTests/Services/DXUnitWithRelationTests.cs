@@ -43,7 +43,7 @@ namespace IV.DX.Application.IntTests.Services
         private class DXUnitDefinitionUnit : DXUnit
         {
 
-            [DXColumn("DXUnitDefinitionUnitID", "DXUnitDefinitionUnit.ID")]
+            [DXColumn("DXUnitDefinitionUnitID", "R(DXUnitDefinitionUnit).ID")]
             public Guid DXUnitDefinitionUnitID { get; set; }
         }
     }

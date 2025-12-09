@@ -2,7 +2,6 @@
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;

@@ -1,16 +1,21 @@
-﻿using IV.DX.Contracts.Persistence.ExpressionTree;
-using IV.DX.Kernel.Enums;
+﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Text;
-using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
     internal class SQLQueryBuilder(IDXStructureCache dxStructureCache) : ISQLQueryBuilder
     {
+        public static IDictionary<string, string> AllColumns { get; } = new Dictionary<string, string>();
+        public static IDictionary<string, string> BaseColumns { get; } = new Dictionary<string, string>()
+        {
+            {"ID","ID" },
+            {"TimeStamp", "TimeStamp" }
+        };
+
         private static IReadOnlyDictionary<string, DXNode> _nodesByName =
             new Dictionary<string, DXNode>(StringComparer.Ordinal);
 
