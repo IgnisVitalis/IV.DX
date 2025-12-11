@@ -4,7 +4,7 @@ using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using System.Reflection;
 
-namespace IV.DX.Kernel.CoreData.Models
+namespace IV.DX.Kernel.Data.Models
 {
     internal static class DXElementDefinitionUnitItems
     {
@@ -13,8 +13,8 @@ namespace IV.DX.Kernel.CoreData.Models
         static DXElementDefinitionUnitItems()
         {
             var text = ResourceReader.ReadEmbeddedText(
-                Assembly.GetAssembly(typeof(DXUnitAttribute)), 
-                "CoreData/Data/01_01_0001_Core_DXElementDefinitionUnit.dat");
+                Assembly.GetAssembly(typeof(DXUnitAttribute)),
+                "Data/Core/01_01_0001_Core_DXElementDefinitionUnit.dat");
 
             Items = DXUnitConverter.ToDXUnits<DXElementDefinitionUnit>(text);
         }

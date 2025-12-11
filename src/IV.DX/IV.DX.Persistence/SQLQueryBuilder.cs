@@ -163,11 +163,12 @@ namespace IV.DX.Persistence
                     dxNodeRelated.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
 
-                // Unit → Unit (DXRelation)
-                foreach (var dxUnitRelationElement in dxUnit.DXUnitRelationElement.Announced)
+                // Unit → Other Unit (DXRelation)
+                foreach (var dxUnitRelationElement in dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitID))
                 {
                     var dxUnitRelated = unitsById[dxUnitRelationElement.TargetDXUnit];
                     var dxUnitNameRelated = dxUnitRelated.DXObjectDefinitionMainElement.Name;
+
                     var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
 
                     var candidates = relationsByLeft[dxUnitName]
@@ -194,6 +195,26 @@ namespace IV.DX.Persistence
                         GetJoinForDXUnitRelationInternal(dxRelation, GetNodeByName));
 
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+
+                // Unit → Same Unit (DXRelation)
+                var selfRelatedRelations = dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
+
+                if (selfRelatedRelations.Count() > 0)
+                {
+                    var dxRelationsByLeft = relationsByLeft[dxUnitName];
+
+                    foreach (var dxRelation in dxRelationsByLeft)
+                    {
+                        var dxRelMain = dxRelation.DXRelationDefinitionMainElement;
+
+                        var dxNodeRelation = new DXNodeRelation(
+                            dxUnitName,
+                            $"R({dxRelMain.RelationNameRight})",
+                            GetJoinForDXUnitRelationInternal(dxRelation, GetNodeByName));
+
+                        dxNode.AttachDXNode(dxNodeRelation, dxNode);
+                    }
                 }
             }
 

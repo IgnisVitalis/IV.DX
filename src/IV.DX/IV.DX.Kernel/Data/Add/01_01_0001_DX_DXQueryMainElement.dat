@@ -1,0 +1,49 @@
+[
+    {
+        "S_Type": "DXElementDefinitionUnit",
+        "ID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
+        "TimeStamp": "2025-12-01T11:09:56.6615Z",
+        "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
+            "ID": "2efa7b73-ba96-4596-aa6d-5f8d8ef2418a",
+            "TimeStamp": "2025-12-01T11:09:56.627774Z",
+            "Name": "DXQueryMainElement",
+            "DisplayValue": null,
+            "DXUnitID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
+            "Kind": 1
+        },
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "d574c12a-0c51-47f9-aa52-653181d44a96",
+                    "TimeStamp": "2025-12-01T11:09:56.64243Z",
+                    "Name": "Name",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
+                    "ColumnType": 3
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "6e4d61bf-d861-4c0f-9dd8-d6096868ae98",
+                    "TimeStamp": "2025-12-01T11:09:56.64247Z",
+                    "Name": "Description",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "DXUnitID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
+                    "ColumnType": 4
+                }
+            ],
+            "Deleted": []
+        }
+    }
+]

@@ -21,26 +21,11 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 
             singleFragmentDefinition.AddPropertyDefinitions(props);            
 
-            var relationsAsProperties = GetRelationsAsProperties(dxElement.DXObjectDefinitionMainElement.Name, relations);
+            var relationsAsProperties = relations.ToDXPropertyDefinitions(dxElement.DXObjectDefinitionMainElement.Name);
 
             singleFragmentDefinition.AddPropertyDefinitions(relationsAsProperties);
 
             return singleFragmentDefinition;
-        }
-
-        private static IEnumerable<DXPropertyDefinition> GetRelationsAsProperties(string elementName, IEnumerable<DXRelationDefinitionUnit> relations)
-        {
-            return relations
-                .Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == elementName)
-                .Where(x =>
-                    x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToZeroOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.OneToZeroOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
-                .Where(x => !x.DXRelationDefinitionMainElement.RelationNameRight.EndsWith(Constants.DXUnitIDSuffix))
-                .Select(x => new DXPropertyDefinition(x.DXRelationDefinitionMainElement.RelationNameRight, new DXColumnAttribute(x.DXRelationDefinitionMainElement.RelationNameRight)))
-                .ToList();
         }
 
         public static DXElementDefinition ToDXElementDefinition(string type, Type dxElementType, bool isRequired)

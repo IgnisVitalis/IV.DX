@@ -1,7 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel;
-using IV.DX.Kernel.CoreData.Models;
+using IV.DX.Kernel.Data.Models;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;

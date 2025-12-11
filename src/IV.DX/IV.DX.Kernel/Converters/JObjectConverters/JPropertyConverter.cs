@@ -14,67 +14,65 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
             };
 
             JArray announced = new JArray();
-            JArray Deleted = new JArray();
+            JArray deleted = new JArray();
 
             if (dxMultiElement.Announced != null)
             {
-                foreach (var item in dxMultiElement.Announced)
-                {
-                    announced.Add(item.ToJObject());
-                }
+                announced = dxMultiElement.Announced.ToJArray();
             }
 
             if (dxMultiElement.Deleted != null)
             {
-                foreach (var item in dxMultiElement.Deleted)
-                {
-                    Deleted.Add(item.ToJObject());
-                }
+                deleted = dxMultiElement.Deleted.ToJArray();
             }
 
             jObject[Constants.Announced] = announced;
-            jObject[Constants.Deleted] = Deleted;
+            jObject[Constants.Deleted] = deleted;
 
-            JProperty jProperty = new JProperty(dxMultiElement.Name, jObject);
+            var name = dxMultiElement.Name;
+
+            JProperty jProperty = new JProperty(name, jObject);
 
             return jProperty;
         }
 
-        public static JProperty ToJProperty(this DXMultiElement dxMultiElement, bool exlcudeSystemProperties = false)
-        {
-            JObject jObject = new JObject
-            {
-                [Constants.Mode] = (int)dxMultiElement.Mode
-            };
 
-            JArray announced = new JArray();
-            JArray Deleted = new JArray();
 
-            if (dxMultiElement.Announced != null)
-            {
-                foreach (var item in dxMultiElement.Announced)
-                {
-                    announced.Add(item.ToJObject(true));
-                }
-            }
+        //public static JProperty ToJProperty(this DXMultiElement dxMultiElement)
+        //{
+        //    JObject jObject = new JObject
+        //    {
+        //        [Constants.Mode] = (int)dxMultiElement.Mode
+        //    };
 
-            if (dxMultiElement.Deleted != null)
-            {
-                foreach (var item in dxMultiElement.Deleted)
-                {
-                    Deleted.Add(item.ToJObject(true));
-                }
-            }
+        //    JArray announced = new JArray();
+        //    JArray Deleted = new JArray();
 
-            jObject[Constants.Announced] = announced;
-            jObject[Constants.Deleted] = Deleted;
+        //    if (dxMultiElement.Announced != null)
+        //    {
+        //        foreach (var item in dxMultiElement.Announced)
+        //        {
+        //            announced.Add(item.ToJObject(true));
+        //        }
+        //    }
 
-            JProperty jProperty = new JProperty(dxMultiElement.Name, jObject);
+        //    if (dxMultiElement.Deleted != null)
+        //    {
+        //        foreach (var item in dxMultiElement.Deleted)
+        //        {
+        //            Deleted.Add(item.ToJObject(true));
+        //        }
+        //    }
 
-            return jProperty;
-        }
+        //    jObject[Constants.Announced] = announced;
+        //    jObject[Constants.Deleted] = Deleted;
 
-        public static JProperty ToJProperty(this DXMainElement mainElement, bool exlcudeSystemProperties = false)
+        //    JProperty jProperty = new JProperty(dxMultiElement.Name, jObject);
+
+        //    return jProperty;
+        //}
+
+        public static JProperty ToJProperty(this DXMainElement mainElement)
         {
             JObject jObject = new JObject(mainElement.Item.ToJObject(true));
 

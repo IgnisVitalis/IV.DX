@@ -169,7 +169,8 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var jObject = await this._dataService.GetItemAsync("TDeviceUnit", id);
 
             // Assert
-            Assert.Null(jObject["User"]);
+            Assert.NotNull(jObject["User"]);
+            Assert.Equal("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3", jObject["User"].ToString());
         }
 
         [Fact]

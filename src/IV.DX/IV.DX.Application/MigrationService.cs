@@ -28,7 +28,7 @@ namespace IV.DX.Application
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
         }
 
-        public async Task LoadStructureAsync(string path, CancellationToken ct = default)
+        public async Task MigrateCustomAsync(string path, CancellationToken ct = default)
         {
             await _lock.WaitAsync(ct);
             try
@@ -41,7 +41,27 @@ namespace IV.DX.Application
             }
         }
 
-        public async Task LoadCoreStructureAsync(Assembly assembly, string preInitListPath, string postInitListPath, CancellationToken ct = default)
+        public async Task MigrateCustomEmbeddedAsync(Assembly assembly, string path, CancellationToken ct = default)
+        {
+            await _lock.WaitAsync(ct);
+
+            try
+            {
+                var list = ResourceReader.ReadEmbeddedText(assembly, path);
+
+                await LoadAsync(assembly, path, ct);
+            }
+            finally
+            {
+                _lock.Release();
+            }
+        }
+
+        public async Task MigrateCoreAsync(
+            Assembly assembly,
+            string preInitListPath,
+            string postInitListPath,
+            CancellationToken ct = default)
         {
             await _lock.WaitAsync(ct);
 
@@ -100,11 +120,24 @@ namespace IV.DX.Application
 
         private async Task LoadAsync(string path, CancellationToken ct)
         {
-            var scriptsHistory = GetScriptsHistoryIfExisting();
-            var historySet = new HashSet<DXMigrationScriptsMainElement>(scriptsHistory ?? Enumerable.Empty<DXMigrationScriptsMainElement>());
-
             var listJson = await File.ReadAllTextAsync(GetFullPath(path), ct).ConfigureAwait(false);
             var scripts = GetMigrationScriptsFromFs(path, listJson);
+
+            await ProcessScripts(scripts, ct);
+        }
+
+        private async Task LoadAsync(Assembly assembly, string path, CancellationToken ct)
+        {
+            var listJson = ResourceReader.ReadEmbeddedText(assembly, path);
+            var scripts = GetMigrationScriptsFromEmbedded(assembly, path, listJson);
+
+            await ProcessScripts(scripts, ct);
+        }
+
+        private async Task ProcessScripts(IEnumerable<DXMigrationScriptsUnit> scripts, CancellationToken ct)
+        {
+            var scriptsHistory = GetScriptsHistoryIfExisting();
+            var historySet = new HashSet<DXMigrationScriptsMainElement>(scriptsHistory ?? Enumerable.Empty<DXMigrationScriptsMainElement>());
 
             foreach (var script in scripts)
             {

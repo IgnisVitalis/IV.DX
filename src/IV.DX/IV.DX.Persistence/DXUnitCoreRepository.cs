@@ -12,12 +12,12 @@ using System.Data.Common;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
         protected string _connectionStr;
         protected ISQLQueryDXHelper _queryHelper;
         IDXStructureCache _dxStructureCache;
-        ISQLQueryBuilder _sqlQueryBuilder;   
+        ISQLQueryBuilder _sqlQueryBuilder;
 
         public DXCoreRepository(
             DXDatabaseOptions options,
@@ -388,26 +388,24 @@ namespace IV.DX.Persistence
             return dataSet;
         }
 
-        private DXItem GetDXItem(DataRow row, DXElementDefinition structure)
+        private DXItem GetDXItem(string typeName, DataRow row, IDictionary<string, string> columns)
         {
             Dictionary<string, object> jObjectContainerCopy = new Dictionary<string, object>();
 
-            jObjectContainerCopy[Constants.SystemPropertyTypeName] = structure.Type;
+            jObjectContainerCopy[Constants.SystemPropertyTypeName] = typeName;
 
-            foreach (DataColumn column in row.Table.Columns)
+            foreach (DataColumn dataColumn in row.Table.Columns)
             {
-                var property = structure.SingleOrDefault(x => x.ColumnDefinition.Name == column.ColumnName);
-
-                if (property == null)
+                if (!columns.ContainsKey(dataColumn.ColumnName))
                     continue;
 
-                if (row[column] != DBNull.Value)
+                if (row[dataColumn.ColumnName] != DBNull.Value)
                 {
-                    jObjectContainerCopy[property.ColumnDefinition.Name] = GetValueFromRow(row, column);
+                    jObjectContainerCopy[dataColumn.ColumnName] = GetValueFromRow(row, dataColumn);
                 }
                 else
                 {
-                    jObjectContainerCopy[property.ColumnDefinition.Name] = null;
+                    jObjectContainerCopy[dataColumn.ColumnName] = null;
                 }
             }
 
@@ -418,12 +416,20 @@ namespace IV.DX.Persistence
             {
                 var dxUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
 
-                return new DXItem(structure.Type, id, dxUnitID, timeStamp, jObjectContainerCopy);
+                return new DXItem(typeName, id, dxUnitID, timeStamp, jObjectContainerCopy);
             }
             else
             {
-                return new DXItem(structure.Type, id, id, timeStamp, jObjectContainerCopy);
+                return new DXItem(typeName, id, id, timeStamp, jObjectContainerCopy);
             }
+        }
+
+        private DXItem GetDXItem(DataRow row, DXElementDefinition structure)
+        {
+            var typeName = structure.Type;
+            var columns = structure.ToDictionary(x => x.ColumnDefinition.Name, x => x.ColumnDefinition.DXExpression);
+
+            return this.GetDXItem(typeName, row, columns);
         }
 
         private object GetValueFromRow(DataRow dataRow, DataColumn dataColumn)
@@ -618,12 +624,12 @@ namespace IV.DX.Persistence
         }
 
         private void UpsertSingle(
-            DXModel dxModel, 
-            DXModelDefinition dxModelDefinition, 
-            string dxUnitType, 
+            DXModel dxModel,
+            DXModelDefinition dxModelDefinition,
+            string dxUnitType,
             string dxElementName,
-            DataSet dataSet, 
-            DbConnection conn, 
+            DataSet dataSet,
+            DbConnection conn,
             ProcessingType processingType)
         {
             var dxElement = dxModel.DXSingleElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
@@ -1253,8 +1259,8 @@ namespace IV.DX.Persistence
                 var dataSet = new DataSet(relationInfo.RelationTable);
 
                 var adapter = this.PopulateTableToDataSet(
-                    conn, 
-                    dataSet, 
+                    conn,
+                    dataSet,
                     relationInfo.RelationTable,
                     SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(

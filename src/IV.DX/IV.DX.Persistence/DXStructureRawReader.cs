@@ -1,13 +1,13 @@
 ﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Kernel.CoreData.Models;
+using IV.DX.Kernel.Data.Models;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
         public IEnumerable<DXElementDefinitionUnit> LoadDXElementInfosRaw()
         {

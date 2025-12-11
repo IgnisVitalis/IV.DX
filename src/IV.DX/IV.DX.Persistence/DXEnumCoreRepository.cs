@@ -5,7 +5,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
         IEnumerable<DXModel> IDXEnumCoreRepository.GetItems(string enumType)
         {
@@ -24,7 +24,7 @@ namespace IV.DX.Persistence
             if (mainDXUnit == null)
                 return null;
 
-            var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(mainDXUnit);
+            var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(mainDXUnit, _dxStructureCache.DXRelations);
 
             return modelDefinition;
         }

@@ -14,15 +14,14 @@ using Xunit.Abstractions;
 namespace IV.DX.Persistence.IntTests
 {
     [Collection("DX:one-time")]
-    public class DataDXElementRepositoryTests : IntTestController
+    public class DXElementRepositoryTests : IntTestController
     {
         private readonly TimeSpan difference = new TimeSpan(0, 0, 10);
 
         IDXUnitGenericRepository _genericRepo;
-
         IDXUnitDataService _dataService;
 
-        public DataDXElementRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
+        public DXElementRepositoryTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();

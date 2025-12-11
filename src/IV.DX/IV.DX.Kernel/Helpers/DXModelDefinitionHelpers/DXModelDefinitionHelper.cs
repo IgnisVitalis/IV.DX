@@ -1,19 +1,20 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Models;
+using System.Xml.Linq;
 
 namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 {
     internal static class DXModelDefinitionHelper
     {
-        public static DXModelDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit)
+        public static DXModelDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit, IEnumerable<DXRelationDefinitionUnit> relations)
         {
-            var dxModel = BuildBaseModelDefinition(mainDXUnit);
+            var dxModel = BuildBaseModelDefinition(mainDXUnit, relations);
 
             return dxModel;
         }
 
-        private static DXModelDefinition BuildBaseModelDefinition(DXObjectDefinitionUnit mainDXObject)
+        private static DXModelDefinition BuildBaseModelDefinition(DXObjectDefinitionUnit mainDXObject, IEnumerable<DXRelationDefinitionUnit> relations)
         {
             if (mainDXObject == null)
                 return null;
@@ -22,7 +23,10 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 
             var props = mainDXObject.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
+            var relationsAsProperties = relations.ToDXPropertyDefinitions(mainDXObject.DXObjectDefinitionMainElement.Name);
+
             ownDXElementDefinition.AddPropertyDefinitions(props);
+            ownDXElementDefinition.AddPropertyDefinitions(relationsAsProperties);
 
             var dxModel = new DXModelDefinition(ownDXElementDefinition);
 
@@ -37,7 +41,7 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements = null)
         {
-            var dxModel = BuildBaseModelDefinition(mainDXUnit);
+            var dxModel = BuildBaseModelDefinition(mainDXUnit, relations);
 
             if (dxModel == null)
                 return null;

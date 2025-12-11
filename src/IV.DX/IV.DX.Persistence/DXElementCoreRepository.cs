@@ -6,7 +6,7 @@ using System.Data;
 
 namespace IV.DX.Persistence
 {
-    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository
+    internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
         public Guid Insert(string dxModelType, DXSingleElement dxSingleDXElement)
         {

@@ -1,0 +1,53 @@
+[
+    {
+        "S_Type": "DXUnitDefinitionUnit",
+        "ID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
+        "TimeStamp": "2025-12-11T08:47:29.172436Z",
+        "DXObjectDefinitionMainElement": {
+            "S_Type": "DXObjectDefinitionMainElement",
+            "ID": "4ce0d60f-6e70-40bd-a166-6f951d757ffb",
+            "TimeStamp": "2025-12-11T08:47:29.16192Z",
+            "Name": "DXFilterUnit",
+            "DisplayValue": null,
+            "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
+            "Kind": 1
+        },
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "3e38174c-e64d-462b-b34d-3a67166472bd",
+                    "TimeStamp": "2025-12-11T08:46:48.384022Z",
+                    "Name": "Expression",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
+                    "ColumnType": 4
+                }
+            ],
+            "Deleted": []
+        },
+        "DXUnitRelationElement": {
+            "S_Type": "DXUnitRelationElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXUnitRelationElement",
+                    "ID": "b044aa5e-191f-48f3-9438-713e7c3ee6b1",
+                    "TimeStamp": "2025-12-11T08:47:29.177372Z",
+                    "OwnRelationName": "DXFilters",
+                    "TargetRelationName": "DXQuery",
+                    "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
+                    "RelationType": 4,
+                    "TargetDXUnit": "080b018b-8b38-45a7-a9db-0eb0d74c132a"
+                }
+            ],
+            "Deleted": []
+        }
+    }
+]

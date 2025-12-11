@@ -25,19 +25,27 @@ namespace IV.DX.Hosting
         public async Task InitCoreDataAsync(CancellationToken ct = default)
         {
             _coreRepo.CreateDataBase();
+
             DXMaintenanceToken.StartMaintenanceCore();
-            await _migration.LoadCoreStructureAsync(
+
+            await _dXStructureCache.RefreshAsync(ct);
+
+            await _migration.MigrateCoreAsync(
                 Assembly.GetAssembly(typeof(DXUnitAttribute)), 
-                "CoreData/CorePreInit.json",
-                "CoreData/CorePostInit.json", ct);
+                "Data/CorePreInit.json",
+                "Data/CorePostInit.json", ct);
             DXMaintenanceToken.StopMaintenanceCore();
+
+            await _dXStructureCache.RefreshAsync(ct);
+
+            await _migration.MigrateCustomEmbeddedAsync(Assembly.GetAssembly(typeof(DXUnitAttribute)), "Data/Add.json", ct);
 
             await _dXStructureCache.RefreshAsync(ct);
         }
 
         public async Task InitCustomDataAsync(string configPath, CancellationToken ct = default)
         {
-            await _migration.LoadStructureAsync(configPath, ct);
+            await _migration.MigrateCustomAsync(configPath, ct);
 
             await _dXStructureCache.RefreshAsync(ct);
         }

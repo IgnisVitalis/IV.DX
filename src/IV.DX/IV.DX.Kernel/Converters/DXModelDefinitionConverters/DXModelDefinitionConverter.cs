@@ -1,7 +1,6 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
-using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
