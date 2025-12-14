@@ -84,7 +84,7 @@ namespace IV.DX.Persistence
         {
             string result = "";
 
-            switch (obj.DXRelationDefinitionMainElement.RelationType)
+            switch (obj.RelationType)
             {
                 case DXRelationTypeEnum.ManyToMany: result = this._queryHelper.GetSQLQueryToCreateRelationManyToMany(obj, this._connectionStr); break;
                 case DXRelationTypeEnum.ManyToOne: result = this.GetSQLQueryToCreateRelationManyToOne(obj); break;
@@ -131,7 +131,7 @@ namespace IV.DX.Persistence
 
         private string GetSQLQueryToCreateRelationZeroOneToZeroOne(DXRelationDefinitionUnit obj)
         {
-            obj.DXRelationDefinitionMainElement.RelationTable = obj.DXRelationDefinitionMainElement.ObjectNameRight;
+            obj.RelationTable = obj.ObjectNameRight;
 
             return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, true);
         }
@@ -140,7 +140,7 @@ namespace IV.DX.Persistence
         {
             string result = "";
 
-            switch (obj.DXRelationDefinitionMainElement.RelationType)
+            switch (obj.RelationType)
             {
                 case DXRelationTypeEnum.ManyToMany: result = this.GetSQLQueryToDeleteRelationManyToMany(obj); break;
                 case DXRelationTypeEnum.ManyToOne: result = this._queryHelper.GetSQLQueryToDeleteRelationManyToOne(obj); break;
@@ -159,17 +159,17 @@ namespace IV.DX.Persistence
         {
             string relationTableName;
 
-            if (string.IsNullOrEmpty(dxUnit.DXRelationDefinitionMainElement.RelationTable))
+            if (string.IsNullOrEmpty(dxUnit.RelationTable))
             {
                 var existingModel = this.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
                 var existingDXUnit = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(existingModel);
 
-                relationTableName = existingDXUnit.DXRelationDefinitionMainElement.RelationTable;
+                relationTableName = existingDXUnit.RelationTable;
             }
             else
             {
-                relationTableName = dxUnit.DXRelationDefinitionMainElement.RelationTable;
+                relationTableName = dxUnit.RelationTable;
             }
 
             return this._queryHelper.GetSQLQueryToDropTable(relationTableName);
@@ -286,20 +286,20 @@ namespace IV.DX.Persistence
         public DXRelationDefinitionUnit GetDXRelationDefinition(string objectNameLeft, string relationNameLeft, string objectNameRight, string relationNameRight)
         {
             var existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
-                x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
-                && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
-                && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
-                && x.DXRelationDefinitionMainElement.RelationNameRight == relationNameRight);
+                x.ObjectNameLeft == objectNameLeft
+                && x.RelationNameLeft == relationNameLeft
+                && x.ObjectNameRight == objectNameRight
+                && x.RelationNameRight == relationNameRight);
 
             if (existingRelation == null)
             {
                 this.RefreshCache();
 
                 existingRelation = this._dxStructureCache.DXRelations.SingleOrDefault(x =>
-                x.DXRelationDefinitionMainElement.ObjectNameLeft == objectNameLeft
-                && x.DXRelationDefinitionMainElement.RelationNameLeft == relationNameLeft
-                && x.DXRelationDefinitionMainElement.ObjectNameRight == objectNameRight
-                && x.DXRelationDefinitionMainElement.RelationNameRight == relationNameRight);
+                x.ObjectNameLeft == objectNameLeft
+                && x.RelationNameLeft == relationNameLeft
+                && x.ObjectNameRight == objectNameRight
+                && x.RelationNameRight == relationNameRight);
             }
 
             return existingRelation;

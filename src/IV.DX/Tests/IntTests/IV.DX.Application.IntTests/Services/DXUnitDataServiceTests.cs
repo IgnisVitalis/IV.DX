@@ -249,7 +249,7 @@ namespace IV.DX.Application.IntTests.Services
                 dxUnitRelation1Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition1);
-            Assert.Equal(dxUnitRelation1Existing.RelationType, relationDefinition1.DXRelationDefinitionMainElement.RelationType);
+            Assert.Equal(dxUnitRelation1Existing.RelationType, relationDefinition1.RelationType);
 
             var relationDefinition2 = this._dataStructureRepo.GetDXRelationDefinition(
                 dxUnit2.Name,
@@ -258,7 +258,7 @@ namespace IV.DX.Application.IntTests.Services
                 dxUnitRelation2Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
-            Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.DXRelationDefinitionMainElement.RelationType);
+            Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.RelationType);
 
             // Action
             dxUnit2.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>()
@@ -300,7 +300,7 @@ namespace IV.DX.Application.IntTests.Services
                 dxUnitRelation2Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
-            Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.DXRelationDefinitionMainElement.RelationType);
+            Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.RelationType);
 
             var relationDefinition3 = this._dataStructureRepo.GetDXRelationDefinition(
                 dxUnit3.Name,
@@ -309,7 +309,7 @@ namespace IV.DX.Application.IntTests.Services
                 dxUnitRelation3Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
-            Assert.Equal(dxUnitRelation3Existing.RelationType, relationDefinition3.DXRelationDefinitionMainElement.RelationType);
+            Assert.Equal(dxUnitRelation3Existing.RelationType, relationDefinition3.RelationType);
 
             // Finalization
             await this._service.DeleteAsync(dxUnit1);
@@ -434,8 +434,8 @@ namespace IV.DX.Application.IntTests.Services
             var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
 
             Assert.NotNull(createdRelation);
-            Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Equal("ObjectKind", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("Key", createdRelation.RelationColumnNameLeft);
+            Assert.Equal("ObjectKind", createdRelation.RelationColumnNameRight);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
 
@@ -444,8 +444,8 @@ namespace IV.DX.Application.IntTests.Services
             var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");
 
             Assert.NotNull(createdRelationInverted);
-            Assert.Equal("ObjectKind", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("ObjectKind", createdRelationInverted.RelationColumnNameLeft);
+            Assert.Equal("Key", createdRelationInverted.RelationColumnNameRight);
 
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
 
@@ -480,8 +480,8 @@ namespace IV.DX.Application.IntTests.Services
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
 
             Assert.NotNull(createdRelation);
-            Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Equal("RelationType", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("Key", createdRelation.RelationColumnNameLeft);
+            Assert.Equal("RelationType", createdRelation.RelationColumnNameRight);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
 
@@ -490,8 +490,8 @@ namespace IV.DX.Application.IntTests.Services
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
 
             Assert.NotNull(createdRelationInverted);
-            Assert.Equal("RelationType", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("RelationType", createdRelationInverted.RelationColumnNameLeft);
+            Assert.Equal("Key", createdRelationInverted.RelationColumnNameRight);
 
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");
 

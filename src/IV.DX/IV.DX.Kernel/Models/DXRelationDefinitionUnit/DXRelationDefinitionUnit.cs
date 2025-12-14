@@ -6,40 +6,69 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXRelationDefinitionUnit")]
     public class DXRelationDefinitionUnit : DXUnit
     {
-        public DXRelationDefinitionMainElement DXRelationDefinitionMainElement { get; set; }
+        [DXColumn("RelationType")]
+        public DXRelationTypeEnum RelationType { get; set; }
+        [DXColumn("ObjectNameLeft")]
+        public string ObjectNameLeft { get; set; }
+        [DXColumn("RelationNameLeft")]
+        public string RelationNameLeft { get; set; }
+        [DXColumn("ObjectNameRight")]
+        public string ObjectNameRight { get; set; }
+        [DXColumn("RelationNameRight")]
+        public string RelationNameRight { get; set; }
+        [DXColumn("RelationTable")]
+        public string RelationTable { get; set; }
+        [DXColumn("Kind")]
+        public DXObjectKindEnum Kind { get; set; }
+        [DXColumn("RelationColumnNameLeft")]
+        public string RelationColumnNameLeft { get; set; }
+
+        [DXColumn("RelationColumnTypeLeft")]
+        public DXColumnTypeEnum? RelationColumnTypeLeft { get; set; }
+
+        [DXColumn("RelationColumnNameRight")]
+        public string RelationColumnNameRight { get; set; }
+
+        [DXColumn("RelationColumnTypeRight")]
+        public DXColumnTypeEnum? RelationColumnTypeRight { get; set; }
+
+        public DXRelationDefinitionUnit()
+        {
+            this.Kind = DXObjectKindEnum.Custom;
+        }
 
         public DXRelationDefinitionUnit CreateInvertedRelationObject()
         {
             var objectId = Guid.NewGuid();
 
+            this.Kind = DXObjectKindEnum.Custom;
+
             return new DXRelationDefinitionUnit()
             {
                 ID = objectId,
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = objectId,
-                    ObjectNameLeft = this.DXRelationDefinitionMainElement.ObjectNameRight,
-                    ObjectNameRight = this.DXRelationDefinitionMainElement.ObjectNameLeft,
-                    RelationNameLeft = this.DXRelationDefinitionMainElement.RelationNameRight,
-                    RelationNameRight = this.DXRelationDefinitionMainElement.RelationNameLeft,
-                    RelationTable = this.DXRelationDefinitionMainElement.RelationTable,
-                    RelationType = DXRelationTypeEnumHelper.GetInvertedRelationType(this.DXRelationDefinitionMainElement.RelationType),
-                    RelationColumnNameLeft = this.DXRelationDefinitionMainElement.RelationColumnNameRight,
-                    RelationColumnNameRight = this.DXRelationDefinitionMainElement.RelationColumnNameLeft,
-                    RelationColumnTypeLeft = this.DXRelationDefinitionMainElement.RelationColumnTypeRight,
-                    RelationColumnTypeRight = this.DXRelationDefinitionMainElement.RelationColumnTypeLeft,
-                    Kind = this.DXRelationDefinitionMainElement.Kind
-                }
+
+
+                ObjectNameLeft = this.ObjectNameRight,
+                ObjectNameRight = this.ObjectNameLeft,
+                RelationNameLeft = this.RelationNameRight,
+                RelationNameRight = this.RelationNameLeft,
+                RelationTable = this.RelationTable,
+                RelationType = DXRelationTypeEnumHelper.GetInvertedRelationType(this.RelationType),
+                RelationColumnNameLeft = this.RelationColumnNameRight,
+                RelationColumnNameRight = this.RelationColumnNameLeft,
+                RelationColumnTypeLeft = this.RelationColumnTypeRight,
+                RelationColumnTypeRight = this.RelationColumnTypeLeft,
+                Kind = this.Kind
+
             };
         }
 
         public string GetQueryForInvertedRelationObject()
         {
-            return $@"DXRelationDefinitionMainElement.ObjectNameRight = '{this.DXRelationDefinitionMainElement.ObjectNameLeft}' 
-                    AND DXRelationDefinitionMainElement.ObjectNameLeft = '{this.DXRelationDefinitionMainElement.ObjectNameRight}'
-                    AND DXRelationDefinitionMainElement.RelationNameRight = '{this.DXRelationDefinitionMainElement.RelationNameLeft}'
-                    AND DXRelationDefinitionMainElement.RelationNameLeft = '{this.DXRelationDefinitionMainElement.RelationNameRight}'";
-        }        
+            return $@"ObjectNameRight = '{this.ObjectNameLeft}' 
+                    AND ObjectNameLeft = '{this.ObjectNameRight}'
+                    AND RelationNameRight = '{this.RelationNameLeft}'
+                    AND RelationNameLeft = '{this.RelationNameRight}'";
+        }
     }
 }

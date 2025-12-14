@@ -161,18 +161,148 @@
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXRelationDefinitionUnit",
         "Kind": 1,
-
-        "DXElementInUnitDefinitionElement": {
-            "S_Type": "DXElementInUnitDefinitionElement",
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
             "Announced": [
                 {
-                    "S_Type": "DXElementInUnitDefinitionElement",
-                    "ID": "3567c5d3-c419-4507-a404-d71924e2cda6",
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "002d22b0-2154-424a-b813-611178ed5864",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
-                    "RelationType": 1,
-                    "DXElementDefinitionUnit": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed"
+                    "ColumnType": 3,
+                    "Name": "ObjectNameLeft",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "94556eda-f8f5-4d5a-a1fc-ae4e0ac15cb5",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "RelationNameLeft",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "eb9ac69d-9198-49fe-9b29-6899cabe6340",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "RelationColumnNameLeft",
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "428c0829-d296-4d94-9b9a-94a65745543d",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "ObjectNameRight",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "e00f6022-7d20-4a90-b698-be8dfbe18332",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "RelationNameRight",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "9dc7d697-5f56-457e-8040-ff96766f5d75",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "RelationColumnNameRight",
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "Length": 100
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "efce7a8d-892a-49d8-9f8f-0dec7cd96f19",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "ColumnType": 3,
+                    "Name": "RelationTable",
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "Length": 100
+                }
+            ]
+        },
+        "DXUniqueColumnsElement": {
+            "S_Type": "DXUniqueColumnsElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXUniqueColumnsElement",
+                    "ID": "a210fada-2da8-46f0-a7b1-35963e21cda0",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Columns": "ObjectNameLeft, RelationNameRight"
+                },
+                {
+                    "S_Type": "DXUniqueColumnsElement",
+                    "ID": "0338d236-4cce-4019-b9b7-e14657dd81a8",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Columns": "ObjectNameRight, RelationNameLeft"
+                }
+            ]
+        },
+        "DXObjectEnumElement": {
+            "S_Type": "DXObjectEnumElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "7e0c108b-4acc-4548-9319-7c1f7655d6bb",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Name": "Kind",
+                    "EnumType": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
+                    "EnumKey": "15d97f21-fd2d-4019-8e0b-bd480fdc8798"
+                },
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "c36e4395-5067-415f-bd10-8489b6f62b97",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Name": "RelationType",
+                    "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+                    "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd"
+                },
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "96f9cb00-2bb2-40d8-a9b8-c0d57a6ecd25",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Name": "RelationColumnTypeRight",
+                    "EnumType": "971d538a-1489-483a-bc84-86596ed0c51a",
+                    "EnumKey": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"
+                },
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "9961ec37-d604-45df-8ae8-d97130a669a4",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "Name": "RelationColumnTypeLeft",
+                    "EnumType": "971d538a-1489-483a-bc84-86596ed0c51a",
+                    "EnumKey": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"
                 }
             ]
         }

@@ -34,9 +34,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         string tableAlias_TDeviceUnit_0 = "T_11_0";//TDeviceUnit
         string tableAlias_TBookUnit_0 = "T_12_0";//TBookUnit     
         string tableAlias_TUserUnit_0 = "T_13_0";//TUserUnit
-        string tableAlias_TPositionMainElement_0 = "T_25_0";//TPositionMainElement
-        string tableAlias_TUserMainElement_0 = "T_26_0";//TUserMainElement
-        string tableAlias_TBookMainElement_0 = "T_28_0";//TBookMainElement
+        string tableAlias_TPassportMainElement_0 = "T_23_0";//TPassportMainElement
+        string tableAlias_TPositionMainElement_0 = "T_24_0";//TPositionMainElement
+        string tableAlias_TUserMainElement_0 = "T_25_0";//TUserMainElement
+        string tableAlias_TDeviceMainElement_0 = "T_26_0";//TDeviceMainElement
+        string tableAlias_TBookMainElement_0 = "T_27_0";//TBookMainElement
 
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
@@ -106,7 +108,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "R(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPassportMainElement\" AS \"T_24_0\" ON \"T_24_0\".\"DXUnitID\" = \"{tableAlias_TPassportUnit_0}\".\"ID\"\nWHERE\n\"T_24_0\".\"SerialNumber\" = '6bcc2af44aa3'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPassportMainElement\" AS \"{tableAlias_TPassportMainElement_0}\" ON \"{tableAlias_TPassportMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPassportUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPassportMainElement_0}\".\"SerialNumber\" = '6bcc2af44aa3'";
             
             var expectedUser = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
             var relations = this.GetAllRelations();
@@ -160,7 +162,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "R(Devices).TDeviceMainElement.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\" ON \"{tableAlias_TDeviceUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TDeviceMainElement\" AS \"T_27_0\" ON \"T_27_0\".\"DXUnitID\" = \"{tableAlias_TDeviceUnit_0}\".\"ID\"\nWHERE\n\"T_27_0\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\" ON \"{tableAlias_TDeviceUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TDeviceMainElement\" AS \"{tableAlias_TDeviceMainElement_0}\" ON \"{tableAlias_TDeviceMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TDeviceUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TDeviceMainElement_0}\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
 
             var expectedUser = this.users.Single(x => x.ID == new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
             var relations = this.GetAllRelations();

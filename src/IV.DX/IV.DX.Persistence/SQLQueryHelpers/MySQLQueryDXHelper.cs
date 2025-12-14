@@ -393,11 +393,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    {
     //        var sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}`;");
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"DROP COLUMN `{obj.DXRelationDefinitionMainElement.RelationNameRight}`, ");
-    //        sb.Append($"DROP INDEX `{obj.DXRelationDefinitionMainElement.RelationNameRight}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"DROP COLUMN `{obj.RelationNameRight}`, ");
+    //        sb.Append($"DROP INDEX `{obj.RelationNameRight}`;");
 
     //        return sb.ToString();
     //    }
@@ -406,11 +406,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    {
     //        var sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}`;");
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"DROP COLUMN `{obj.DXRelationDefinitionMainElement.RelationNameLeft}`, ");
-    //        sb.Append($"DROP INDEX `{obj.DXRelationDefinitionMainElement.RelationNameLeft}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"DROP COLUMN `{obj.RelationNameLeft}`, ");
+    //        sb.Append($"DROP INDEX `{obj.RelationNameLeft}`;");
 
     //        return sb.ToString();
     //    }
@@ -487,11 +487,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    {
     //        var sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}`;");
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"DROP COLUMN `{obj.DXRelationDefinitionMainElement.RelationNameRight}`, ");
-    //        sb.Append($"DROP INDEX `FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"DROP COLUMN `{obj.RelationNameRight}`, ");
+    //        sb.Append($"DROP INDEX `FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}`;");
 
     //        return sb.ToString();
     //    }
@@ -501,11 +501,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    {
     //        var sb = new StringBuilder();
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}`;");
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"DROP COLUMN `{obj.DXRelationDefinitionMainElement.RelationNameLeft}`, ");
-    //        sb.Append($"DROP INDEX `FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"DROP FOREIGN KEY `FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"DROP COLUMN `{obj.RelationNameLeft}`, ");
+    //        sb.Append($"DROP INDEX `FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}`;");
 
     //        return sb.ToString();
     //    }
@@ -517,16 +517,16 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        var nullValue = isNullable ? "NULL" : "NOT NULL";
     //        var uniqueValue = isUnique ? "UNIQUE" : "";
 
-    //        var rightColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameRight;
-    //        var rightColumnType = this.GetMySQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeRight.Value);
+    //        var rightColumnName = obj.RelationColumnNameRight;
+    //        var rightColumnType = this.GetMySQLDataType(obj.RelationColumnTypeRight.Value);
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"ADD COLUMN {obj.DXRelationDefinitionMainElement.RelationNameRight} {rightColumnType} {nullValue} {uniqueValue} AFTER `TimeStamp`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"ADD COLUMN {obj.RelationNameRight} {rightColumnType} {nullValue} {uniqueValue} AFTER `TimeStamp`;");
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameLeft} ");
-    //        sb.Append($"ADD CONSTRAINT `FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}` ");
-    //        sb.Append($"FOREIGN KEY(`{obj.DXRelationDefinitionMainElement.RelationNameRight}`) ");
-    //        sb.Append($"REFERENCES `{obj.DXRelationDefinitionMainElement.ObjectNameRight}` (`{rightColumnName}`) ");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameLeft} ");
+    //        sb.Append($"ADD CONSTRAINT `FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}` ");
+    //        sb.Append($"FOREIGN KEY(`{obj.RelationNameRight}`) ");
+    //        sb.Append($"REFERENCES `{obj.ObjectNameRight}` (`{rightColumnName}`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION; ");
 
@@ -540,16 +540,16 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        var nullValue = isNullable ? "NULL" : "NOT NULL";
     //        var uniqueValue = isUnique ? "UNIQUE" : "";
 
-    //        var leftColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-    //        var leftColumnType = this.GetMySQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value);
+    //        var leftColumnName = obj.RelationColumnNameLeft;
+    //        var leftColumnType = this.GetMySQLDataType(obj.RelationColumnTypeLeft.Value);
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"ADD COLUMN {obj.DXRelationDefinitionMainElement.RelationNameLeft} {leftColumnType} {nullValue} {uniqueValue} AFTER `TimeStamp`;");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"ADD COLUMN {obj.RelationNameLeft} {leftColumnType} {nullValue} {uniqueValue} AFTER `TimeStamp`;");
 
-    //        sb.Append($"ALTER TABLE {obj.DXRelationDefinitionMainElement.ObjectNameRight} ");
-    //        sb.Append($"ADD CONSTRAINT `FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}` ");
-    //        sb.Append($"FOREIGN KEY(`{obj.DXRelationDefinitionMainElement.RelationNameLeft}`) ");
-    //        sb.Append($"REFERENCES `{obj.DXRelationDefinitionMainElement.ObjectNameLeft}` (`{leftColumnName}`) ");
+    //        sb.Append($"ALTER TABLE {obj.ObjectNameRight} ");
+    //        sb.Append($"ADD CONSTRAINT `FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}` ");
+    //        sb.Append($"FOREIGN KEY(`{obj.RelationNameLeft}`) ");
+    //        sb.Append($"REFERENCES `{obj.ObjectNameLeft}` (`{leftColumnName}`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION; ");
 
@@ -562,41 +562,41 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //        var numberOfTable = this.GetNumberOfIntermediateTable(obj, connectionStr);
 
-    //        var intermediateTableName = $"Relation_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{numberOfTable}";
+    //        var intermediateTableName = $"Relation_{obj.ObjectNameLeft}_{obj.ObjectNameRight}_{numberOfTable}";
 
-    //        var leftColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-    //        var leftColumnType = this.GetMySQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value);
-    //        var rightColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameRight;
-    //        var rightColumnType = this.GetMySQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeRight.Value);
+    //        var leftColumnName = obj.RelationColumnNameLeft;
+    //        var leftColumnType = this.GetMySQLDataType(obj.RelationColumnTypeLeft.Value);
+    //        var rightColumnName = obj.RelationColumnNameRight;
+    //        var rightColumnType = this.GetMySQLDataType(obj.RelationColumnTypeRight.Value);
 
     //        sb.Append($"CREATE TABLE IF NOT EXISTS {intermediateTableName}(");
-    //        sb.Append($"{obj.DXRelationDefinitionMainElement.RelationNameLeft} {leftColumnType},");
-    //        sb.Append($"{obj.DXRelationDefinitionMainElement.RelationNameRight} {rightColumnType}, ");
-    //        sb.Append($"PRIMARY KEY({obj.DXRelationDefinitionMainElement.RelationNameLeft}, {obj.DXRelationDefinitionMainElement.RelationNameRight})");
+    //        sb.Append($"{obj.RelationNameLeft} {leftColumnType},");
+    //        sb.Append($"{obj.RelationNameRight} {rightColumnType}, ");
+    //        sb.Append($"PRIMARY KEY({obj.RelationNameLeft}, {obj.RelationNameRight})");
     //        sb.Append(")ENGINE=INNODB;");
 
     //        sb.Append($"ALTER TABLE {intermediateTableName} ");
-    //        sb.Append($"ADD CONSTRAINT `FK_{intermediateTableName}_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}` ");
-    //        sb.Append($"FOREIGN KEY (`{obj.DXRelationDefinitionMainElement.RelationNameLeft}`) ");
-    //        sb.Append($"REFERENCES `{obj.DXRelationDefinitionMainElement.ObjectNameLeft}` (`{leftColumnName}`) ");
+    //        sb.Append($"ADD CONSTRAINT `FK_{intermediateTableName}_{obj.ObjectNameLeft}` ");
+    //        sb.Append($"FOREIGN KEY (`{obj.RelationNameLeft}`) ");
+    //        sb.Append($"REFERENCES `{obj.ObjectNameLeft}` (`{leftColumnName}`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION;");
 
     //        sb.Append($"ALTER TABLE {intermediateTableName} ");
-    //        sb.Append($"ADD CONSTRAINT `FK_{intermediateTableName}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}` ");
-    //        sb.Append($"FOREIGN KEY (`{obj.DXRelationDefinitionMainElement.RelationNameRight}`) ");
-    //        sb.Append($"REFERENCES `{obj.DXRelationDefinitionMainElement.ObjectNameRight}` (`{rightColumnName}`) ");
+    //        sb.Append($"ADD CONSTRAINT `FK_{intermediateTableName}_{obj.ObjectNameRight}` ");
+    //        sb.Append($"FOREIGN KEY (`{obj.RelationNameRight}`) ");
+    //        sb.Append($"REFERENCES `{obj.ObjectNameRight}` (`{rightColumnName}`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION;");
 
-    //        obj.DXRelationDefinitionMainElement.RelationTable = intermediateTableName;
+    //        obj.RelationTable = intermediateTableName;
 
     //        return sb.ToString();
     //    }
 
     //    private int GetNumberOfIntermediateTable(DXRelationDefinitionUnit obj, string connectionStr)
     //    {
-    //        var intermediateTableBaseName = $"Relation_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}";
+    //        var intermediateTableBaseName = $"Relation_{obj.ObjectNameLeft}_{obj.ObjectNameRight}";
 
     //        DataSet dataSet = new DataSet();
 

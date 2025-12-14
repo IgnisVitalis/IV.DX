@@ -9,18 +9,18 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         public static IEnumerable<DXPropertyDefinition> ToDXPropertyDefinitions(this IEnumerable<DXRelationDefinitionUnit> relations, string typeName)
         {
             var selectedRelations = relations
-                .Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == typeName)
+                .Where(x => x.ObjectNameLeft == typeName)
                 .Where(x =>
-                    x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToZeroOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.OneToZeroOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToOne
-                    || x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
-                .Where(x => !(x.DXRelationDefinitionMainElement.RelationNameRight.EndsWith(Constants.DXUnitIDSuffix)
-                            || x.DXRelationDefinitionMainElement.RelationNameLeft.EndsWith(Constants.DXUnitIDSuffix)));
+                    x.RelationType == DXRelationTypeEnum.ManyToOne
+                    || x.RelationType == DXRelationTypeEnum.ManyToZeroOne
+                    || x.RelationType == DXRelationTypeEnum.OneToZeroOne
+                    || x.RelationType == DXRelationTypeEnum.ZeroOneToOne
+                    || x.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
+                .Where(x => !(x.RelationNameRight.EndsWith(Constants.DXUnitIDSuffix)
+                            || x.RelationNameLeft.EndsWith(Constants.DXUnitIDSuffix)));
 
             return selectedRelations
-                .Select(x => new DXPropertyDefinition(x.DXRelationDefinitionMainElement.RelationNameRight, new DXColumnAttribute(x.DXRelationDefinitionMainElement.RelationNameRight)))
+                .Select(x => new DXPropertyDefinition(x.RelationNameRight, new DXColumnAttribute(x.RelationNameRight)))
                 .ToList();
         }
     }

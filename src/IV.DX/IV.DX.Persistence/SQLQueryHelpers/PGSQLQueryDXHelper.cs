@@ -408,16 +408,16 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             var nullValue = isNullable ? "NULL" : "NOT NULL";
             var uniqueValue = isUnique ? "UNIQUE" : "";
 
-            var rightColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameRight;
-            var rightColumnType = this.GetPostgreSQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeRight.Value);
+            var rightColumnName = obj.RelationColumnNameRight;
+            var rightColumnType = this.GetPostgreSQLDataType(obj.RelationColumnTypeRight.Value);
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"ADD COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameRight}\" {rightColumnType} {nullValue} {uniqueValue};");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"ADD COLUMN \"{obj.RelationNameRight}\" {rightColumnType} {nullValue} {uniqueValue};");
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}\" ");
-            sb.Append($"FOREIGN KEY(\"{obj.DXRelationDefinitionMainElement.RelationNameRight}\") ");
-            sb.Append($"REFERENCES \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" (\"{rightColumnName}\") ");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"ADD CONSTRAINT \"FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}\" ");
+            sb.Append($"FOREIGN KEY(\"{obj.RelationNameRight}\") ");
+            sb.Append($"REFERENCES \"{obj.ObjectNameRight}\" (\"{rightColumnName}\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION; ");
 
@@ -430,34 +430,34 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             var numberOfTable = this.GetNumberOfIntermediateTable(obj, connectionStr);
 
-            var intermediateTableName = $"Relation_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{numberOfTable}";
+            var intermediateTableName = $"Relation_{obj.ObjectNameLeft}_{obj.ObjectNameRight}_{numberOfTable}";
 
-            var leftColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-            var leftColumnType = this.GetPostgreSQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value);
-            var rightColumnName = obj.DXRelationDefinitionMainElement.RelationColumnNameRight;
-            var rightColumnType = this.GetPostgreSQLDataType(obj.DXRelationDefinitionMainElement.RelationColumnTypeRight.Value);
+            var leftColumnName = obj.RelationColumnNameLeft;
+            var leftColumnType = this.GetPostgreSQLDataType(obj.RelationColumnTypeLeft.Value);
+            var rightColumnName = obj.RelationColumnNameRight;
+            var rightColumnType = this.GetPostgreSQLDataType(obj.RelationColumnTypeRight.Value);
 
             sb.Append($"CREATE TABLE IF NOT EXISTS \"{intermediateTableName}\"(");
-            sb.Append($"\"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\" {leftColumnType},");
-            sb.Append($"\"{obj.DXRelationDefinitionMainElement.RelationNameRight}\" {rightColumnType}, ");
-            sb.Append($"PRIMARY KEY(\"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\", \"{obj.DXRelationDefinitionMainElement.RelationNameRight}\")");
+            sb.Append($"\"{obj.RelationNameLeft}\" {leftColumnType},");
+            sb.Append($"\"{obj.RelationNameRight}\" {rightColumnType}, ");
+            sb.Append($"PRIMARY KEY(\"{obj.RelationNameLeft}\", \"{obj.RelationNameRight}\")");
             sb.Append(");");
 
             sb.Append($"ALTER TABLE \"{intermediateTableName}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{intermediateTableName}_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"FOREIGN KEY (\"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\") ");
-            sb.Append($"REFERENCES \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" (\"{leftColumnName}\") ");
+            sb.Append($"ADD CONSTRAINT \"FK_{intermediateTableName}_{obj.ObjectNameLeft}\" ");
+            sb.Append($"FOREIGN KEY (\"{obj.RelationNameLeft}\") ");
+            sb.Append($"REFERENCES \"{obj.ObjectNameLeft}\" (\"{leftColumnName}\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
             sb.Append($"ALTER TABLE \"{intermediateTableName}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{intermediateTableName}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"FOREIGN KEY (\"{obj.DXRelationDefinitionMainElement.RelationNameRight}\") ");
-            sb.Append($"REFERENCES \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" (\"{rightColumnName}\") ");
+            sb.Append($"ADD CONSTRAINT \"FK_{intermediateTableName}_{obj.ObjectNameRight}\" ");
+            sb.Append($"FOREIGN KEY (\"{obj.RelationNameRight}\") ");
+            sb.Append($"REFERENCES \"{obj.ObjectNameRight}\" (\"{rightColumnName}\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
-            obj.DXRelationDefinitionMainElement.RelationTable = intermediateTableName;
+            obj.RelationTable = intermediateTableName;
 
             return sb.ToString();
         }
@@ -476,7 +476,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             //AND rel.relname = 'testclassbase2'
 
-            var intermediateTableBaseName = $"Relation_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.ObjectNameRight}";
+            var intermediateTableBaseName = $"Relation_{obj.ObjectNameLeft}_{obj.ObjectNameRight}";
 
             DataSet dataSet = new DataSet();
 
@@ -510,11 +510,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToCreateRelationToMany(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
         {
             var result = GetSQLQueryToCreateRelationToMany(
-                    obj.DXRelationDefinitionMainElement.ObjectNameRight,
-                    obj.DXRelationDefinitionMainElement.ObjectNameLeft,
-                    obj.DXRelationDefinitionMainElement.RelationNameLeft,
-                    obj.DXRelationDefinitionMainElement.RelationColumnNameLeft,
-                    obj.DXRelationDefinitionMainElement.RelationColumnTypeLeft.Value,
+                    obj.ObjectNameRight,
+                    obj.ObjectNameLeft,
+                    obj.RelationNameLeft,
+                    obj.RelationColumnNameLeft,
+                    obj.RelationColumnTypeLeft.Value,
                     isNullable,
                     isUnique);
 
@@ -649,11 +649,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             var sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"DROP COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
-            //sb.Append($"DROP INDEX \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"DROP COLUMN \"{obj.RelationNameRight}\";");
+            //sb.Append($"DROP INDEX \"FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}\";");
 
             return sb.ToString();
         }
@@ -662,11 +662,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             var sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"DROP COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
-            //sb.Append($"DROP INDEX \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameRight}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameRight}\" ");
+            sb.Append($"DROP COLUMN \"{obj.RelationNameLeft}\";");
+            //sb.Append($"DROP INDEX \"FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}\";");
 
             return sb.ToString();
         }
@@ -675,11 +675,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             var sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameRight}_{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameRight}\" ");
-            sb.Append($"DROP COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
-            //sb.Append($"DROP INDEX \"{obj.DXRelationDefinitionMainElement.RelationNameLeft}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameRight}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{obj.ObjectNameRight}_{obj.RelationNameLeft}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameRight}\" ");
+            sb.Append($"DROP COLUMN \"{obj.RelationNameLeft}\";");
+            //sb.Append($"DROP INDEX \"{obj.RelationNameLeft}\";");
 
             return sb.ToString();
         }
@@ -688,11 +688,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             var sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{obj.DXRelationDefinitionMainElement.ObjectNameLeft}_{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
-            sb.Append($"ALTER TABLE \"{obj.DXRelationDefinitionMainElement.ObjectNameLeft}\" ");
-            sb.Append($"DROP COLUMN \"{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
-            //sb.Append($"DROP INDEX \"{obj.DXRelationDefinitionMainElement.RelationNameRight}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{obj.ObjectNameLeft}_{obj.RelationNameRight}\";");
+            sb.Append($"ALTER TABLE \"{obj.ObjectNameLeft}\" ");
+            sb.Append($"DROP COLUMN \"{obj.RelationNameRight}\";");
+            //sb.Append($"DROP INDEX \"{obj.RelationNameRight}\";");
 
             return sb.ToString();
         }

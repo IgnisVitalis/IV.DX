@@ -37,7 +37,7 @@ namespace IV.DX.Application.Handlers
             }
             else
             {
-                var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
+                var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.ObjectNameLeft, dxUnit.RelationNameLeft, dxUnit.ObjectNameRight, dxUnit.RelationNameRight);
 
                 if (existingRelation != null)
                 {
@@ -85,7 +85,7 @@ namespace IV.DX.Application.Handlers
         {
             dataStructureRepo.DropDataStructure(dxUnit);
 
-            var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
+            var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.ObjectNameLeft, dxUnit.RelationNameLeft, dxUnit.ObjectNameRight, dxUnit.RelationNameRight);
 
             if (existingRelation == null)
                 return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);

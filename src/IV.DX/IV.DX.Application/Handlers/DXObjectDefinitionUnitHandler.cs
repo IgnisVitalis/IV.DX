@@ -176,24 +176,19 @@ namespace IV.DX.Application.Handlers
         {
             var objID = Guid.NewGuid();
 
-            var result =  new DXRelationDefinitionUnit()
+            var result = new DXRelationDefinitionUnit()
             {
                 ID = objID,
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = objID,
-                    ObjectNameLeft = obj.Name,
-                    RelationNameLeft = obj.Name + columnWithEnumValue.Name,
-                    ObjectNameRight = enumObj.Name,
-                    RelationNameRight = columnWithEnumValue.Name,
-                    RelationType = columnWithEnumValue.AllowNull ? DXRelationTypeEnum.ManyToZeroOne : DXRelationTypeEnum.ManyToOne,
-                    RelationColumnNameRight = enumColumn.Name,
-                    RelationColumnTypeRight = enumColumn.ColumnType,
-                    Kind = obj.Kind,
-                    RelationColumnNameLeft= columnWithEnumValue.Name,
-                    RelationColumnTypeLeft = enumColumn.ColumnType
-                }
+                ObjectNameLeft = obj.Name,
+                RelationNameLeft = obj.Name + columnWithEnumValue.Name,
+                ObjectNameRight = enumObj.Name,
+                RelationNameRight = columnWithEnumValue.Name,
+                RelationType = columnWithEnumValue.AllowNull ? DXRelationTypeEnum.ManyToZeroOne : DXRelationTypeEnum.ManyToOne,
+                RelationColumnNameRight = enumColumn.Name,
+                RelationColumnTypeRight = enumColumn.ColumnType,
+                Kind = obj.Kind,
+                RelationColumnNameLeft = columnWithEnumValue.Name,
+                RelationColumnTypeLeft = enumColumn.ColumnType
             };
 
             return result;
@@ -206,10 +201,10 @@ namespace IV.DX.Application.Handlers
            DXObjectEnumElement columnWithEnumValue)
         {
             string dxFilter =
-                $"DXRelationDefinitionMainElement.ObjectNameLeft = '{obj.Name}' " +
-                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{obj.Name + columnWithEnumValue.Name}' " +
-                $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{enumObj.Name}' " +
-                $"AND DXRelationDefinitionMainElement.RelationColumnNameRight = '{enumColumn.Name}'";
+                $"ObjectNameLeft = '{obj.Name}' " +
+                $"AND RelationNameLeft = '{obj.Name + columnWithEnumValue.Name}' " +
+                $"AND ObjectNameRight = '{enumObj.Name}' " +
+                $"AND RelationColumnNameRight = '{enumColumn.Name}'";
 
             var existingRelations = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(dxFilter);
 

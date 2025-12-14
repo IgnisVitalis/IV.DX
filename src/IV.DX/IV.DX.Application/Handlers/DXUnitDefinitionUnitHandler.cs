@@ -358,21 +358,16 @@ namespace IV.DX.Application.Handlers
             return new DXRelationDefinitionUnit()
             {
                 ID = id,
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    ObjectNameLeft = dxUnit.Name,
-                    RelationNameLeft = $"{dxUnit.Name}ID",
-                    ObjectNameRight = dxElement.Name,
-                    RelationNameRight = dxElement.Name,
-                    RelationColumnNameLeft = "ID",
-                    RelationColumnNameRight = $"{dxUnit.Name}ID",
-                    RelationColumnTypeLeft = DXColumnTypeEnum.GUID,
-                    RelationColumnTypeRight = DXColumnTypeEnum.GUID,
-                    Kind = dxUnit.Kind,
-                    RelationType = relationType
-                }
+                ObjectNameLeft = dxUnit.Name,
+                RelationNameLeft = $"{dxUnit.Name}ID",
+                ObjectNameRight = dxElement.Name,
+                RelationNameRight = dxElement.Name,
+                RelationColumnNameLeft = "ID",
+                RelationColumnNameRight = $"{dxUnit.Name}ID",
+                RelationColumnTypeLeft = DXColumnTypeEnum.GUID,
+                RelationColumnTypeRight = DXColumnTypeEnum.GUID,
+                Kind = dxUnit.Kind,
+                RelationType = relationType
             };
         }
 
@@ -425,22 +420,17 @@ namespace IV.DX.Application.Handlers
             return new DXRelationDefinitionUnit()
             {
                 ID = id,
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    ObjectNameLeft = dxUnit.Name,
-                    RelationNameLeft = dxUnitRelationElement.OwnRelationName,
-                    ObjectNameRight = dxUnitRelated.Name,
-                    RelationNameRight = dxUnitRelationElement.TargetRelationName,
-                    Kind = dxUnit.Kind,
-                    RelationType = relationType,
-                    RelationColumnNameRight = relationColumnNameRight,
-                    RelationColumnTypeRight = relationColumnTypeRight,
-                    RelationColumnNameLeft = relationColumnNameLeft,
-                    RelationColumnTypeLeft = relationColumnTypeLeft,
-                    RelationTable = relationTable
-                }
+                ObjectNameLeft = dxUnit.Name,
+                RelationNameLeft = dxUnitRelationElement.OwnRelationName,
+                ObjectNameRight = dxUnitRelated.Name,
+                RelationNameRight = dxUnitRelationElement.TargetRelationName,
+                Kind = dxUnit.Kind,
+                RelationType = relationType,
+                RelationColumnNameRight = relationColumnNameRight,
+                RelationColumnTypeRight = relationColumnTypeRight,
+                RelationColumnNameLeft = relationColumnNameLeft,
+                RelationColumnTypeLeft = relationColumnTypeLeft,
+                RelationTable = relationTable
             };
         }
 
@@ -449,10 +439,10 @@ namespace IV.DX.Application.Handlers
             DXUnitRelationElement dxUnitRelationElement,
             DXUnitDefinitionUnit dxUnitRelated)
         {
-            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.Name}' " +
-               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxUnitRelated.Name}' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnitRelationElement.OwnRelationName}' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxUnitRelationElement.TargetRelationName}'";
+            var query = $"ObjectNameLeft = '{dxUnit.Name}' " +
+               $"AND ObjectNameRight = '{dxUnitRelated.Name}' " +
+               $"AND RelationNameLeft = '{dxUnitRelationElement.OwnRelationName}' " +
+               $"AND RelationNameRight = '{dxUnitRelationElement.TargetRelationName}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 
@@ -461,10 +451,10 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetExistingDXElementInDXUnitRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement)
         {
-            var query = $"DXRelationDefinitionMainElement.ObjectNameLeft = '{dxUnit.Name}' " +
-               $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{dxElement.Name}' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{dxUnit.Name}ID' " +
-               $"AND DXRelationDefinitionMainElement.RelationNameRight = '{dxElement.Name}'";
+            var query = $"ObjectNameLeft = '{dxUnit.Name}' " +
+               $"AND ObjectNameRight = '{dxElement.Name}' " +
+               $"AND RelationNameLeft = '{dxUnit.Name}ID' " +
+               $"AND RelationNameRight = '{dxElement.Name}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 

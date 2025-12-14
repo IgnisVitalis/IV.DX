@@ -1209,13 +1209,13 @@ namespace IV.DX.Persistence
         }
 
         // TODO: can be refactored using stored procedure
-        private DXRelationDefinitionMainElement GetRelationInfo(string obj1Name, string relationToObj2Name)
+        private DXRelationDefinitionUnit GetRelationInfo(string obj1Name, string relationToObj2Name)
         {
             return this.RunRequestInTransaction((conn) =>
             {
                 var dataSet = new DataSet("DXRelationDefinitionUnit");
 
-                this.PopulateTableToDataSet(conn, dataSet, "DXRelationDefinitionMainElement",
+                this.PopulateTableToDataSet(conn, dataSet, "DXRelationDefinitionUnit",
                     SQLQueryBuilder.AllColumns,
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
@@ -1225,7 +1225,7 @@ namespace IV.DX.Persistence
                         })
                      , fillSchema: false);
 
-                var table = dataSet.Tables["DXRelationDefinitionMainElement"];
+                var table = dataSet.Tables["DXRelationDefinitionUnit"];
 
                 if (table.Rows.Count == 0)
                 {
@@ -1234,12 +1234,11 @@ namespace IV.DX.Persistence
 
                 var row = table.Rows[0];
 
-                return new DXRelationDefinitionMainElement()
+                return new DXRelationDefinitionUnit()
                 {
                     RelationType = (DXRelationTypeEnum)ConvertHelper.ParseInt(row["RelationType"]),
                     RelationTable = ConvertHelper.ParseString(row["RelationTable"]),
                     ID = ConvertHelper.ParseGuid(row[Constants.ID]),
-                    DXUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]),
                     ObjectNameLeft = ConvertHelper.ParseString(row["ObjectNameLeft"]),
                     ObjectNameRight = ConvertHelper.ParseString(row["ObjectNameRight"]),
                     RelationNameLeft = ConvertHelper.ParseString(row["RelationNameLeft"]),
@@ -1252,7 +1251,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool AddRelationManyToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool AddRelationManyToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1304,7 +1303,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool AddRelationManyToOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool AddRelationManyToOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1340,7 +1339,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool AddRelationOneToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool AddRelationOneToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1376,7 +1375,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool AddRelationZeroOneToZeroOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool AddRelationZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             bool isRightTableContainsRelationID = relationInfo.RelationTable.Equals(relationInfo.ObjectNameRight);
 
@@ -1390,7 +1389,7 @@ namespace IV.DX.Persistence
             }
         }
 
-        private bool RemoveRelationManyToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool RemoveRelationManyToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1433,7 +1432,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool RemoveRelationManyToZeroOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool RemoveRelationManyToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1476,7 +1475,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private bool RemoveRelationZeroOneToZeroOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool RemoveRelationZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             bool isRightTableContainsRelationID = relationInfo.RelationTable.Equals(relationInfo.ObjectNameRight);
 
@@ -1490,7 +1489,7 @@ namespace IV.DX.Persistence
             }
         }
 
-        private bool RemoveRelationZeroOneToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id, Guid obj2Id)
+        private bool RemoveRelationZeroOneToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1532,7 +1531,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private IEnumerable<Guid> GetRelationsManyToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id)
+        private IEnumerable<Guid> GetRelationsManyToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1559,7 +1558,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private IEnumerable<Guid> GetRelationsManyToOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id)
+        private IEnumerable<Guid> GetRelationsManyToOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id)
         {
             IEnumerable<Guid> result = this.RunRequestInTransaction((conn) =>
             {
@@ -1582,7 +1581,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        private IEnumerable<Guid> GetRelationsOneToMany(DXRelationDefinitionMainElement relationInfo, Guid obj1Id)
+        private IEnumerable<Guid> GetRelationsOneToMany(DXRelationDefinitionUnit relationInfo, Guid obj1Id)
         {
             return this.RunRequestInTransaction((conn) =>
             {
@@ -1607,7 +1606,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private IEnumerable<Guid> GetRelationsZeroOneToZeroOne(DXRelationDefinitionMainElement relationInfo, Guid obj1Id)
+        private IEnumerable<Guid> GetRelationsZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id)
         {
             bool isRightTableContainsRelationID = relationInfo.RelationTable.Equals(relationInfo.ObjectNameRight);
 

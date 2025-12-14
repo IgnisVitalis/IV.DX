@@ -56,21 +56,16 @@ namespace IV.DX.Shared.IntTests.Factories
             DXRelationDefinitionUnit obj = new DXRelationDefinitionUnit()
             {
                 ID = id,
-                DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    RelationType = relationType,
-                    RelationNameLeft = relationNameLeft,
-                    RelationNameRight = relationNameRight,
-                    ObjectNameLeft = objectNameLeft.Name,
-                    ObjectNameRight = objectNameRight.Name,
-                    RelationTable = realationTable,
-                    RelationColumnNameLeft = relationColumnNameLeft,
-                    RelationColumnNameRight = relationColumnNameRight,
-                    RelationColumnTypeLeft = relationColumnTypeLeft,
-                    RelationColumnTypeRight = relationColumnTypeRight
-                }
+                RelationType = relationType,
+                RelationNameLeft = relationNameLeft,
+                RelationNameRight = relationNameRight,
+                ObjectNameLeft = objectNameLeft.Name,
+                ObjectNameRight = objectNameRight.Name,
+                RelationTable = realationTable,
+                RelationColumnNameLeft = relationColumnNameLeft,
+                RelationColumnNameRight = relationColumnNameRight,
+                RelationColumnTypeLeft = relationColumnTypeLeft,
+                RelationColumnTypeRight = relationColumnTypeRight
             };
 
             return obj;

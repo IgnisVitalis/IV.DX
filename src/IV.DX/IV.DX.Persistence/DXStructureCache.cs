@@ -55,12 +55,12 @@ namespace IV.DX.Persistence
         {
             foreach (var dxObject in dxObjects)
             {
-                var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxObject.Name).ToList();
+                var dxElementRelations = dxRelations.Where(x => x.ObjectNameLeft == dxObject.Name).ToList();
 
                 foreach (var dxElementRelation in dxElementRelations)
                 {
-                    var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-                    var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
+                    var columnName = dxElementRelation.RelationColumnNameLeft;
+                    var columnType = dxElementRelation.RelationColumnTypeLeft;
 
                     if (!dxObject.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
                     {
@@ -102,7 +102,7 @@ namespace IV.DX.Persistence
 
         public IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name)
         {
-            return this.DXRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft.Equals(name)).ToList();
+            return this.DXRelations.Where(x => x.ObjectNameLeft.Equals(name)).ToList();
         }
 
         private sealed record Snapshot(

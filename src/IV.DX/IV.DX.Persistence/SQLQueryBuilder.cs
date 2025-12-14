@@ -89,7 +89,7 @@ namespace IV.DX.Persistence
             var enumsById = enumsList.ToDictionary(x => x.ID);
 
             var relationsByLeft = relationsList
-                .ToLookup(r => r.DXRelationDefinitionMainElement.ObjectNameLeft);
+                .ToLookup(r => r.ObjectNameLeft);
 
             var nodesById = new Dictionary<DXNodeKey, DXNode>();
 
@@ -131,7 +131,7 @@ namespace IV.DX.Persistence
                 RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
-            // 7.1. Register DXUnits columns as DXNodes
+            // 4.1. Register DXUnits columns as DXNodes
             foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.Name;
@@ -157,7 +157,7 @@ namespace IV.DX.Persistence
                 //}
             }
 
-            // 7.2. Register DXElements columns as DXNodes
+            // 4.2. Register DXElements columns as DXNodes
             foreach (var dxElement in elementsList)
             {
                 var dxElementName = dxElement.Name;
@@ -183,7 +183,7 @@ namespace IV.DX.Persistence
                 //}
             }
 
-            // 7.2. Register DXEnums columns as DXNodes
+            // 4.3. Register DXEnums columns as DXNodes
             foreach (var dxEnum in enumsList)
             {
                 var dxElementName = dxEnum.Name;
@@ -209,7 +209,7 @@ namespace IV.DX.Persistence
                 //}
             }
 
-            // 7.3 Register custom properties that not defined (Relation between DX Elements for example.)
+            // 4.4. Register custom properties that not defined (Relation between DX Elements for example.)
             // There are only 2 case in core data structure.
             // Need to find solution
             var customProps = new Dictionary<string, string[]>()
@@ -235,7 +235,7 @@ namespace IV.DX.Persistence
 
             DXNode GetNodeByName(string name) => nodesByName[name];
 
-            // 4. Unit ↔ Element и Unit ↔ Unit (Relation)
+            // 5. Unit ↔ Element и Unit ↔ Unit (Relation)
             foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.Name;
@@ -274,7 +274,7 @@ namespace IV.DX.Persistence
                     var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
 
                     var candidates = relationsByLeft[dxUnitName]
-                        .Where(r => r.DXRelationDefinitionMainElement.ObjectNameRight == dxUnitNameRelated)
+                        .Where(r => r.ObjectNameRight == dxUnitNameRelated)
                         .ToList();
 
                     if (candidates.Count == 0)
@@ -289,10 +289,10 @@ namespace IV.DX.Persistence
                     }
 
                     var dxRelation = candidates[0];
-                    var dxRelMain = dxRelation.DXRelationDefinitionMainElement;
+                    var dxRelMain = dxRelation;
 
-                    var dxNodeFrom = GetNodeByName(dxRelation.DXRelationDefinitionMainElement.ObjectNameRight);
-                    var dxNodeTo = GetNodeByName(dxRelation.DXRelationDefinitionMainElement.ObjectNameLeft);
+                    var dxNodeFrom = GetNodeByName(dxRelation.ObjectNameRight);
+                    var dxNodeTo = GetNodeByName(dxRelation.ObjectNameLeft);
 
                     var dxNodeJoin = GetJoinForDXUnitRelationInternal(dxRelation, dxNodeFrom, dxNodeTo);
 
@@ -305,7 +305,7 @@ namespace IV.DX.Persistence
                 }
             }
 
-            // 5. Inheritance Units
+            // 6. Inheritance Units
             foreach (var dxUnit in unitsList)
             {
                 if (dxUnit.DXUnitInheritanceElement is null)
@@ -339,7 +339,7 @@ namespace IV.DX.Persistence
                 }
             }
 
-            // 6. Process self related DXUnits
+            // 7. Process self related DXUnits
             foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.Name;
@@ -361,9 +361,9 @@ namespace IV.DX.Persistence
             }
 
             // 8. Register nodes which started from Relation table in Many To Many relation.
-            foreach (var item in dxRelations.Where(x => x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToMany))
+            foreach (var item in dxRelations.Where(x => x.RelationType == DXRelationTypeEnum.ManyToMany))
             {
-                var dxNode = new DXNode(new DXNodeKey(counter++), item.DXRelationDefinitionMainElement.RelationTable, DXNodeKind.DXManyToManyTable);
+                var dxNode = new DXNode(new DXNodeKey(counter++), item.RelationTable, DXNodeKind.DXManyToManyTable);
                 RegisterNode(dxNode, nodesById, nodesByName, registerByName: true);
             }
 
@@ -532,7 +532,7 @@ namespace IV.DX.Persistence
                 DXNode dxNodeFrom,
                 DXNode dxNodeTo)
         {
-            var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
+            var dxRelationData = dxRelation;
 
             var dxNode1 = dxNodeTo;
             var dxNode2 = dxNodeFrom;
@@ -689,8 +689,8 @@ namespace IV.DX.Persistence
                     var dxJoin = GetJoinForDXUnitRelationInternal(dxRelation, clone, this);
 
                     var dxNodeRelation2 = new DXNodeRelation(
-                        dxRelation.DXRelationDefinitionMainElement.ObjectNameLeft,
-                        $"R({dxRelation.DXRelationDefinitionMainElement.RelationNameRight})",
+                        dxRelation.ObjectNameLeft,
+                        $"R({dxRelation.RelationNameRight})",
                         dxJoin);
 
                     this.AttachDXNode(dxNodeRelation2, clone);
