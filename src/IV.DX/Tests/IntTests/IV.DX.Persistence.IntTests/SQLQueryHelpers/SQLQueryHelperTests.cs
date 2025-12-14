@@ -34,11 +34,11 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         string tableAlias_TDeviceUnit_0 = "T_11_0";//TDeviceUnit
         string tableAlias_TBookUnit_0 = "T_12_0";//TBookUnit     
         string tableAlias_TUserUnit_0 = "T_13_0";//TUserUnit
-        string tableAlias_TPassportMainElement_0 = "T_23_0";//TPassportMainElement
-        string tableAlias_TPositionMainElement_0 = "T_24_0";//TPositionMainElement
-        string tableAlias_TUserMainElement_0 = "T_25_0";//TUserMainElement
-        string tableAlias_TDeviceMainElement_0 = "T_26_0";//TDeviceMainElement
-        string tableAlias_TBookMainElement_0 = "T_27_0";//TBookMainElement
+        string tableAlias_TPassportMainElement_0 = "T_22_0";//TPassportMainElement
+        string tableAlias_TPositionMainElement_0 = "T_23_0";//TPositionMainElement
+        string tableAlias_TUserMainElement_0 = "T_24_0";//TUserMainElement
+        string tableAlias_TDeviceMainElement_0 = "T_25_0";//TDeviceMainElement
+        string tableAlias_TBookMainElement_0 = "T_26_0";//TBookMainElement
 
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)

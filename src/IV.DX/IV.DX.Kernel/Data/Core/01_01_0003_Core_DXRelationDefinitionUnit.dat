@@ -49,24 +49,7 @@
         "RelationTable": null,
         "RelationType": 5,
         "Kind": 1
-    },   
-    {
-        "S_Type": "DXRelationDefinitionUnit",
-        "ID": "87f7a8f1-caea-4d67-b9d3-6c85aae00174",
-        "TimeStamp": "2021-10-02T00:00:00",
-
-        "ObjectNameLeft": "DXMigrationScriptsUnit",
-        "RelationNameLeft": "DXMigrationScriptsUnitID",
-        "ObjectNameRight": "DXMigrationScriptsMainElement",
-        "RelationNameRight": "DXMigrationScriptsMainElement",
-        "RelationColumnNameLeft": "ID",
-        "RelationColumnTypeLeft": 1,
-        "RelationColumnNameRight": "DXMigrationScriptsUnitID",
-        "RelationColumnTypeRight": 1,
-        "RelationTable": null,
-        "RelationType": 8,
-        "Kind": 1
-    },
+    }, 
     {
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "87964e3e-ed1b-42f5-a18e-9f7102ebb352",

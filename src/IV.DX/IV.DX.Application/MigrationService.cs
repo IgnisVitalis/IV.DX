@@ -67,7 +67,7 @@ namespace IV.DX.Application
 
             try
             {
-                IEnumerable<DXMigrationScriptsMainElement> scriptsHistory;
+                IEnumerable<DXMigrationScriptsUnit> scriptsHistory;
                 try
                 {
                     scriptsHistory = GetScriptsHistoryIfExisting();
@@ -137,7 +137,7 @@ namespace IV.DX.Application
         private async Task ProcessScripts(IEnumerable<DXMigrationScriptsUnit> scripts, CancellationToken ct)
         {
             var scriptsHistory = GetScriptsHistoryIfExisting();
-            var historySet = new HashSet<DXMigrationScriptsMainElement>(scriptsHistory ?? Enumerable.Empty<DXMigrationScriptsMainElement>());
+            var historySet = new HashSet<DXMigrationScriptsUnit>(scriptsHistory ?? Enumerable.Empty<DXMigrationScriptsUnit>());
 
             foreach (var script in scripts)
             {
@@ -145,7 +145,7 @@ namespace IV.DX.Application
 
                 try
                 {
-                    if (historySet.Contains(script.DXMigrationScriptsMainElement))
+                    if (historySet.Contains(script))
                         continue;
 
                     await ProcessByExtensionAsync(script, ct).ConfigureAwait(false);
@@ -160,7 +160,7 @@ namespace IV.DX.Application
 
         private async Task ProcessByExtensionAsync(DXMigrationScriptsUnit script, CancellationToken ct)
         {
-            var ext = script.DXMigrationScriptsMainElement.Extention?.ToLowerInvariant();
+            var ext = script.Extention?.ToLowerInvariant();
             switch (ext)
             {
                 case "ann":   // insert or update
@@ -176,9 +176,8 @@ namespace IV.DX.Application
             }
         }
 
-        private IEnumerable<DXMigrationScriptsMainElement> GetScriptsHistoryIfExisting()
-            => _genericRepo.GetDXUnits<DXMigrationScriptsUnit>()
-                           .Select(x => x.DXMigrationScriptsMainElement);
+        private IEnumerable<DXMigrationScriptsUnit> GetScriptsHistoryIfExisting()
+            => _genericRepo.GetDXUnits<DXMigrationScriptsUnit>();
 
         private static bool TryParseScriptMeta(
             string fileName,
@@ -224,19 +223,15 @@ namespace IV.DX.Application
                 return new DXMigrationScriptsUnit
                 {
                     ID = id,
-                    DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement
-                    {
-                        ID = Guid.NewGuid(),
-                        DXUnitID = id,
-                        FilePath = rawNorm,
-                        Name = meta.Name,
-                        Version = meta.Version,
-                        Build = meta.Build,
-                        Number = meta.Number,
-                        AppName = meta.App,
-                        Extention = meta.Extension,
-                        Content = content
-                    }
+
+                    FilePath = rawNorm,
+                    Name = meta.Name,
+                    Version = meta.Version,
+                    Build = meta.Build,
+                    Number = meta.Number,
+                    AppName = meta.App,
+                    Extention = meta.Extension,
+                    Content = content
                 };
             }).ToList();
         }
@@ -257,19 +252,15 @@ namespace IV.DX.Application
                            return new DXMigrationScriptsUnit
                            {
                                ID = id,
-                               DXMigrationScriptsMainElement = new DXMigrationScriptsMainElement
-                               {
-                                   ID = Guid.NewGuid(),
-                                   DXUnitID = id,
-                                   FilePath = fi.FullName,
-                                   Name = meta.Name,
-                                   Version = meta.Version,
-                                   Build = meta.Build,
-                                   Number = meta.Number,
-                                   AppName = meta.App,
-                                   Extention = meta.Extension,
-                                   Content = File.ReadAllText(fi.FullName)
-                               }
+
+                               FilePath = fi.FullName,
+                               Name = meta.Name,
+                               Version = meta.Version,
+                               Build = meta.Build,
+                               Number = meta.Number,
+                               AppName = meta.App,
+                               Extention = meta.Extension,
+                               Content = File.ReadAllText(fi.FullName)
                            };
                        })
                        .ToList();
@@ -277,28 +268,28 @@ namespace IV.DX.Application
 
         private async Task ProcessFileForPreInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
+            var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
                 await _dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file), ct).ConfigureAwait(false);
         }
 
         private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
+            var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
                 await _dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file), ct).ConfigureAwait(false);
         }
 
         private async Task ProcessFileToInsertAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
+            var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
                 await _dataService.InsertAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
         }
 
         private async Task ProcessFileToInsertOrUpdateAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.DXMigrationScriptsMainElement.Content);
+            var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
                 await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
         }
