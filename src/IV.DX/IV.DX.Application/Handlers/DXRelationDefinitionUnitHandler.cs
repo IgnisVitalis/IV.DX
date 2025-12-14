@@ -25,13 +25,6 @@ namespace IV.DX.Application.Handlers
 
         public async Task<DXResult<DXRelationDefinitionUnit>> BeforeInsertAsync(DXRelationDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
-            var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
-
-            if (existingRelation != null)
-            {
-                return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
-            }
-
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
                 dataStructureRepo.CreateDataStructure(dxUnit);
@@ -42,17 +35,26 @@ namespace IV.DX.Application.Handlers
             {
                 return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
             }
-            else if (ctx is DXUnitHandlerEnumProcessingContext)
-            {
-                dataStructureRepo.CreateDataStructure(dxUnit);
-
-                return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
-            }
             else
             {
-                dataStructureRepo.CreateDataStructure(dxUnit);               
+                var existingRelation = dataStructureRepo.GetDXRelationDefinition(dxUnit.DXRelationDefinitionMainElement.ObjectNameLeft, dxUnit.DXRelationDefinitionMainElement.RelationNameLeft, dxUnit.DXRelationDefinitionMainElement.ObjectNameRight, dxUnit.DXRelationDefinitionMainElement.RelationNameRight);
 
-                return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
+                if (existingRelation != null)
+                {
+                    return DXResult<DXRelationDefinitionUnit>.OkSkipProcess(dxUnit);
+                }
+                else if (ctx is DXUnitHandlerEnumProcessingContext)
+                {
+                    dataStructureRepo.CreateDataStructure(dxUnit);
+
+                    return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
+                }
+                else
+                {
+                    dataStructureRepo.CreateDataStructure(dxUnit);
+
+                    return DXResult<DXRelationDefinitionUnit>.OkContinue(dxUnit);
+                }
             }
         }
 

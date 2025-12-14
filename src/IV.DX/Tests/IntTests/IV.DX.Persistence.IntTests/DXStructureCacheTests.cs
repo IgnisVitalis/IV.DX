@@ -28,7 +28,7 @@ namespace IV.DX.Persistence.IntTests
             var enums = this._dxStructureCache.GetDXRelations(enumTypeName);
 
             // Assert
-            Assert.Equal(enums.Count(), expectedAmount);
+            Assert.Equal(expectedAmount, enums.Count());
         }
     }
 }

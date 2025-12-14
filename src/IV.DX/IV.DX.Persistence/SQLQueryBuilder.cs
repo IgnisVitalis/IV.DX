@@ -5,7 +5,6 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Text;
-using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -147,14 +146,15 @@ namespace IV.DX.Persistence
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
 
-                foreach (var dxEnumColumn in dxUnit.DXObjectEnumElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
-                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+                // DXColumnDefinitionElement already provide all columns of all kind of relations.
+                //foreach (var dxEnumColumn in dxUnit.DXObjectEnumElement.Announced)
+                //{
+                //    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                //    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
 
-                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
-                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
+                //    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                //    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                //}
             }
 
             // 7.2. Register DXElements columns as DXNodes
@@ -172,14 +172,15 @@ namespace IV.DX.Persistence
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
 
-                foreach (var dxEnumColumn in dxElement.DXObjectEnumElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
-                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+                // DXColumnDefinitionElement already provide all columns of all kind of relations.
+                //foreach (var dxEnumColumn in dxElement.DXObjectEnumElement.Announced)
+                //{
+                //    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                //    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
 
-                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
-                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
+                //    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                //    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                //}
             }
 
             // 7.2. Register DXEnums columns as DXNodes
@@ -197,14 +198,15 @@ namespace IV.DX.Persistence
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
                 }
 
-                foreach (var dxEnumColumn in dxEnum.DXObjectEnumElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
-                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+                // DXColumnDefinitionElement already provide all columns of all kind of relations.
+                //foreach (var dxEnumColumn in dxEnum.DXObjectEnumElement.Announced)
+                //{
+                //    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                //    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
 
-                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
-                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
+                //    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                //    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                //}
             }
 
             // 7.3 Register custom properties that not defined (Relation between DX Elements for example.)
@@ -300,8 +302,6 @@ namespace IV.DX.Persistence
                         dxNodeJoin);
 
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-
-
                 }
             }
 

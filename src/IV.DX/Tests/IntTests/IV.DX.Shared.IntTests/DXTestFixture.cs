@@ -1,4 +1,5 @@
 ﻿using IV.DX.Hosting;
+using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +47,11 @@ namespace IV.DX.Shared.IntTests
 
             coreRepo.DropDataBase();
             init.InitCoreDataAsync().Wait();
+
+            IDXUnitGenericRepository genericRepo = scope.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
+
+            var result = genericRepo.GetDXUnits<DXRelationDefinitionUnit>();
+
             init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
         }
 

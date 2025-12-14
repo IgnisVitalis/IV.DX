@@ -3,6 +3,7 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
+using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -30,55 +31,13 @@ namespace IV.DX.Persistence
 
 
                 var dxRelations = repo.LoadDXRelationInfosRaw();
-                var dxElements = repo.LoadDXElementInfosRaw();
-
-                foreach (var dxElement in dxElements)
-                {
-                    var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxElement.Name).ToList();
-
-                    foreach (var dxElementRelation in dxElementRelations)
-                    {
-                        var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-                        var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
-
-                        if (!dxElement.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
-                        {
-                            dxElement.DXColumnDefinitionElement.AddToAnnounced(
-                                 new DXColumnDefinitionElement()
-                                 {
-                                     Name = columnName,
-                                     ColumnType = columnType.Value
-                                 });
-                        }
-                    }
-                }
-
                 var dxUnits = repo.LoadDXUnitInfosRaw();
-
-                foreach (var dxUnit in dxUnits)
-                {
-                    var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxUnit.Name).ToList();
-
-                    foreach (var dxElementRelation in dxElementRelations)
-                    {
-                        var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
-                        var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
-
-                        if (!dxUnit.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
-                        {
-                            dxUnit.DXColumnDefinitionElement.AddToAnnounced(
-                                 new DXColumnDefinitionElement()
-                                 {
-                                     Name = columnName,
-                                     ColumnType = columnType.Value
-                                 });
-                        }
-                    }
-                }
-
-
+                var dxElements = repo.LoadDXElementInfosRaw();
                 var dxEnums = repo.LoadDXEnumInfosRaw();
 
+                this.SetColumnsFromRelations(dxRelations, dxUnits);
+                this.SetColumnsFromRelations(dxRelations, dxElements);
+                this.SetColumnsFromRelations(dxRelations, dxEnums);
 
                 var snap = new Snapshot(
                     dxElements.ToImmutableArray(),
@@ -89,6 +48,30 @@ namespace IV.DX.Persistence
 
                 Volatile.Write(ref _snapshot, snap);
                 return Task.CompletedTask;
+            }
+        }
+
+        private void SetColumnsFromRelations(IEnumerable<DXRelationDefinitionUnit> dxRelations, IEnumerable<DXObjectDefinitionUnit> dxObjects)
+        {
+            foreach (var dxObject in dxObjects)
+            {
+                var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxObject.Name).ToList();
+
+                foreach (var dxElementRelation in dxElementRelations)
+                {
+                    var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
+                    var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
+
+                    if (!dxObject.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
+                    {
+                        dxObject.DXColumnDefinitionElement.AddToAnnounced(
+                             new DXColumnDefinitionElement()
+                             {
+                                 Name = columnName,
+                                 ColumnType = columnType.Value
+                             });
+                    }
+                }
             }
         }
 

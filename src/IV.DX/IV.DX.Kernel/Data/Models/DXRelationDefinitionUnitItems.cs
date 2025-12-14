@@ -16,7 +16,10 @@ namespace IV.DX.Kernel.Data.Models
                 Assembly.GetAssembly(typeof(DXUnitAttribute)),
                 "Data/Core/01_01_0003_Core_DXRelationDefinitionUnit.dat");
 
-            Items = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(text);
+            var items = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(text);
+            var revertedItems = items.Select(x => x.CreateInvertedRelationObject()).ToList();
+            
+            Items = items.Concat(revertedItems).ToList();
         }
     }
 }

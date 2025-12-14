@@ -16,7 +16,7 @@ namespace IV.DX.Kernel.Data.Models
                 Assembly.GetAssembly(typeof(DXUnitAttribute)),
                 "Data/Core/01_01_0000_Core_DXEnumDefinitionUnit.dat");
 
-            Items = DXUnitConverter.ToDXUnits<DXEnumDefinitionUnit>(text);
+            Items = DXUnitConverter.ToDXUnits<DXEnumDefinitionUnit>(text).ToList();
         }
     }
 }

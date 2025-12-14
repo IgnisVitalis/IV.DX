@@ -48,7 +48,12 @@ namespace IV.DX.Persistence
         public IEnumerable<DXRelationDefinitionUnit> LoadDXRelationInfosRaw()
         {
             if (DXMaintenanceToken.IsCoreInitializing)
-                return Enumerable.Empty<DXRelationDefinitionUnit>();
+                //return Enumerable.Empty<DXRelationDefinitionUnit>();
+                return DXRelationDefinitionUnitItems.Items;
+            
+            
+            
+            // Enumerable.Empty<DXRelationDefinitionUnit>();
 
             var result = this.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(), DXLoadingType.Full);
 
