@@ -28,7 +28,8 @@ namespace IV.DX.Kernel.Models
                     RelationColumnNameLeft = this.DXRelationDefinitionMainElement.RelationColumnNameRight,
                     RelationColumnNameRight = this.DXRelationDefinitionMainElement.RelationColumnNameLeft,
                     RelationColumnTypeLeft = this.DXRelationDefinitionMainElement.RelationColumnTypeRight,
-                    RelationColumnTypeRight = this.DXRelationDefinitionMainElement.RelationColumnTypeLeft
+                    RelationColumnTypeRight = this.DXRelationDefinitionMainElement.RelationColumnTypeLeft,
+                    Kind = this.DXRelationDefinitionMainElement.Kind
                 }
             };
         }

@@ -57,7 +57,6 @@ namespace IV.DX.Application.IntTests
 
             var item = await _dataService.GetItemAsync<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             // Action
-
         }
     }
 

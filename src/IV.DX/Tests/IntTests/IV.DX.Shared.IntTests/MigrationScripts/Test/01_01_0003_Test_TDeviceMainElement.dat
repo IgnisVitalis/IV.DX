@@ -3,14 +3,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "bc4f2c48-dbff-4fea-965d-61557fe6013c",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
-            "Name": "TDeviceMainElement",
-            "Kind": 3
-        },
+        "Name": "TDeviceMainElement",
+        "Kind": 3,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,

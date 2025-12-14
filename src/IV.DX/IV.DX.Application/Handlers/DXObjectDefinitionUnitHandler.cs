@@ -31,9 +31,9 @@ namespace IV.DX.Application.Handlers
 
         private static string[] GetSystemObjectNames()
         {
-            var dxElementNames = DXElementDefinitionUnitItems.Items.Select(x => x.DXObjectDefinitionMainElement.Name).ToList();
-            var dxUnitNames = DXEnumDefinitionUnitItems.Items.Select(x => x.DXObjectDefinitionMainElement.Name).ToList();
-            var dxEnumNames = DXUnitDefinitionUnitItems.Items.Select(x => x.DXObjectDefinitionMainElement.Name).ToList();
+            var dxElementNames = DXElementDefinitionUnitItems.Items.Select(x => x.Name).ToList();
+            var dxUnitNames = DXEnumDefinitionUnitItems.Items.Select(x => x.Name).ToList();
+            var dxEnumNames = DXUnitDefinitionUnitItems.Items.Select(x => x.Name).ToList();
 
             return dxElementNames.Concat(dxUnitNames).Concat(dxEnumNames).ToArray();
         }
@@ -46,14 +46,8 @@ namespace IV.DX.Application.Handlers
             if (dataDXElement.ID == default(Guid))
                 throw new Exception("DXObjectDefinitionUnit.ID has Default value;");
 
-            if (dataDXElement.DXObjectDefinitionMainElement == null)
-                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement is NULL;");
-
-            if (dataDXElement.DXObjectDefinitionMainElement.ID == default(Guid))
-                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement.ID has Default value;");
-
-            if (string.IsNullOrEmpty(dataDXElement.DXObjectDefinitionMainElement.Name))
-                throw new Exception("DXObjectDefinitionUnit.DXObjectDefinitionMainElement.Name is NULL or Empty;");
+            if (string.IsNullOrEmpty(dataDXElement.Name))
+                throw new Exception("DXObjectDefinitionUnit.Name is NULL or Empty;");
         }
 
         protected void Process(DXObjectDefinitionUnit objectInfoIncome)
@@ -182,23 +176,27 @@ namespace IV.DX.Application.Handlers
         {
             var objID = Guid.NewGuid();
 
-            return new DXRelationDefinitionUnit()
+            var result =  new DXRelationDefinitionUnit()
             {
                 ID = objID,
                 DXRelationDefinitionMainElement = new DXRelationDefinitionMainElement()
                 {
                     ID = Guid.NewGuid(),
                     DXUnitID = objID,
-                    ObjectNameLeft = obj.DXObjectDefinitionMainElement.Name,
-                    RelationNameLeft = obj.DXObjectDefinitionMainElement.Name + columnWithEnumValue.Name,
-                    ObjectNameRight = enumObj.DXObjectDefinitionMainElement.Name,
+                    ObjectNameLeft = obj.Name,
+                    RelationNameLeft = obj.Name + columnWithEnumValue.Name,
+                    ObjectNameRight = enumObj.Name,
                     RelationNameRight = columnWithEnumValue.Name,
                     RelationType = columnWithEnumValue.AllowNull ? DXRelationTypeEnum.ManyToZeroOne : DXRelationTypeEnum.ManyToOne,
                     RelationColumnNameRight = enumColumn.Name,
                     RelationColumnTypeRight = enumColumn.ColumnType,
-                    Kind = obj.DXObjectDefinitionMainElement.Kind
+                    Kind = obj.Kind,
+                    RelationColumnNameLeft= columnWithEnumValue.Name,
+                    RelationColumnTypeLeft = enumColumn.ColumnType
                 }
             };
+
+            return result;
         }
 
         private DXRelationDefinitionUnit GetExistingDXObjectEnumElementRelationObject(
@@ -208,9 +206,9 @@ namespace IV.DX.Application.Handlers
            DXObjectEnumElement columnWithEnumValue)
         {
             string dxFilter =
-                $"DXRelationDefinitionMainElement.ObjectNameLeft = '{obj.DXObjectDefinitionMainElement.Name}' " +
-                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{obj.DXObjectDefinitionMainElement.Name + columnWithEnumValue.Name}' " +
-                $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{enumObj.DXObjectDefinitionMainElement.Name}' " +
+                $"DXRelationDefinitionMainElement.ObjectNameLeft = '{obj.Name}' " +
+                $"AND DXRelationDefinitionMainElement.RelationNameLeft = '{obj.Name + columnWithEnumValue.Name}' " +
+                $"AND DXRelationDefinitionMainElement.ObjectNameRight = '{enumObj.Name}' " +
                 $"AND DXRelationDefinitionMainElement.RelationColumnNameRight = '{enumColumn.Name}'";
 
             var existingRelations = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(dxFilter);
@@ -264,7 +262,7 @@ namespace IV.DX.Application.Handlers
 
         private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
         {
-            if (SystemObjectNames.Contains(objectInfoIncome.DXObjectDefinitionMainElement.Name, StringComparer.OrdinalIgnoreCase))
+            if (SystemObjectNames.Contains(objectInfoIncome.Name, StringComparer.OrdinalIgnoreCase))
                 return null;
 
             return genericRepo.GetDXUnit<DXObjectDefinitionUnit>(objectInfoIncome.ID);

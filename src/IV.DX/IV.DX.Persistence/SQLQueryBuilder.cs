@@ -1,9 +1,11 @@
-﻿using IV.DX.Kernel.Enums;
+﻿using IV.DX.Kernel;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Text;
+using System.Xml.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -19,8 +21,8 @@ namespace IV.DX.Persistence
         private static IReadOnlyDictionary<string, DXNode> _nodesByName =
             new Dictionary<string, DXNode>(StringComparer.Ordinal);
 
-        private static IReadOnlyDictionary<int, DXNode> _nodesById =
-            new Dictionary<int, DXNode>();
+        private static IReadOnlyDictionary<DXNodeKey, DXNode> _nodesById =
+            new Dictionary<DXNodeKey, DXNode>();
 
         private static int _version = 0;
 
@@ -31,8 +33,8 @@ namespace IV.DX.Persistence
         {
             BuildDXNodeTree();
 
-            var joinPairs = new List<KeyValuePair<int, int>>();
-            var joinPairSet = new HashSet<(int BaseId, int RelatedId)>();
+            var joinPairs = new List<KeyValuePair<DXNodeKey, DXNodeKey>>();
+            var joinPairSet = new HashSet<(DXNodeKey BaseId, DXNodeKey RelatedId)>();
 
             string whereExpression = string.Empty;
             bool hasFilter = !string.IsNullOrEmpty(dxFilter);
@@ -90,18 +92,17 @@ namespace IV.DX.Persistence
             var relationsByLeft = relationsList
                 .ToLookup(r => r.DXRelationDefinitionMainElement.ObjectNameLeft);
 
-            var nodesById = new Dictionary<int, DXNode>(
-                capacity: unitsList.Count + elementsList.Count + enumsList.Count);
+            var nodesById = new Dictionary<DXNodeKey, DXNode>();
 
             var nodesByName = new Dictionary<string, DXNode>(StringComparer.Ordinal);
 
             static void RegisterNode(
                 DXNode node,
-                IDictionary<int, DXNode> byId,
+                IDictionary<DXNodeKey, DXNode> byId,
                 IDictionary<string, DXNode> byName,
                 bool registerByName)
             {
-                byId[node.ID] = node;
+                byId[node.Key] = node;
                 if (registerByName)
                 {
                     byName[node.Name] = node;
@@ -113,22 +114,121 @@ namespace IV.DX.Persistence
             // 1. Units
             foreach (var dxUnit in unitsList)
             {
-                var node = new DXNode(counter++, dxUnit.DXObjectDefinitionMainElement.Name);
+                var node = new DXNode(new DXNodeKey(counter++), dxUnit.Name, DXNodeKind.DXUnit);
                 RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
             // 2. Elements
             foreach (var dxElement in elementsList)
             {
-                var node = new DXNode(counter++, dxElement.DXObjectDefinitionMainElement.Name);
+                var node = new DXNode(new DXNodeKey(counter++), dxElement.Name, DXNodeKind.DXElement);
                 RegisterNode(node, nodesById, nodesByName, registerByName: true);
             }
 
             // 3. Enums
             foreach (var dxEnum in enumsList)
             {
-                var node = new DXNode(counter++, dxEnum.DXObjectDefinitionMainElement.Name);
+                var node = new DXNode(new DXNodeKey(counter++), dxEnum.Name, DXNodeKind.DXElement);
                 RegisterNode(node, nodesById, nodesByName, registerByName: true);
+            }
+
+            // 7.1. Register DXUnits columns as DXNodes
+            foreach (var dxUnit in unitsList)
+            {
+                var dxUnitName = dxUnit.Name;
+                var dxNode = GetNodeByName(dxUnitName);
+
+                foreach (var dxColumn in dxUnit.DXColumnDefinitionElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+
+                foreach (var dxEnumColumn in dxUnit.DXObjectEnumElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+            }
+
+            // 7.2. Register DXElements columns as DXNodes
+            foreach (var dxElement in elementsList)
+            {
+                var dxElementName = dxElement.Name;
+                var dxNode = GetNodeByName(dxElementName);
+
+                foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+
+                foreach (var dxEnumColumn in dxElement.DXObjectEnumElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+            }
+
+            // 7.2. Register DXEnums columns as DXNodes
+            foreach (var dxEnum in enumsList)
+            {
+                var dxElementName = dxEnum.Name;
+                var dxNode = GetNodeByName(dxElementName);
+
+                foreach (var dxColumn in dxEnum.DXColumnDefinitionElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+
+                foreach (var dxEnumColumn in dxEnum.DXObjectEnumElement.Announced)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), dxEnumColumn.Name, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+
+                    var dxNodeRelation = new DXNodeRelation(dxEnumColumn.Name, dxEnumColumn.Name, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+            }
+
+            // 7.3 Register custom properties that not defined (Relation between DX Elements for example.)
+            // There are only 2 case in core data structure.
+            // Need to find solution
+            var customProps = new Dictionary<string, string[]>()
+            {
+                {"DXObjectEnumElement", new[]{  "EnumKey", "EnumType" } },
+                {"DXElementInUnitDefinitionElement", new[] { "DXElementDefinitionUnit" } },
+                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } },
+                {"DXUnitInheritanceElement", new[]{"BaseDXUnit"} }
+            };
+
+            foreach (var item in customProps)
+            {
+                var dxNode = GetNodeByName(item.Key);
+
+                foreach (var column in item.Value)
+                {
+                    var dxNodeRelated = new DXNode(new DXNodeKey(counter++), column, DXNodeKind.DXProperty);
+                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+                    var dxNodeRelation = new DXNodeRelation(column, column, null);
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
             }
 
             DXNode GetNodeByName(string name) => nodesByName[name];
@@ -136,14 +236,14 @@ namespace IV.DX.Persistence
             // 4. Unit ↔ Element и Unit ↔ Unit (Relation)
             foreach (var dxUnit in unitsList)
             {
-                var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
+                var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
                 // Unit → Element
                 foreach (var dxElementInUnit in dxUnit.DXElementInUnitDefinitionElement.Announced)
                 {
                     var dxElement = elementsById[dxElementInUnit.DXElementDefinitionUnit];
-                    var dxElementName = dxElement.DXObjectDefinitionMainElement.Name;
+                    var dxElementName = dxElement.Name;
                     var dxNodeRelated = GetNodeByName(dxElementName);
 
                     var dxNodeRelationToDXElement =
@@ -167,7 +267,7 @@ namespace IV.DX.Persistence
                 foreach (var dxUnitRelationElement in dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitID))
                 {
                     var dxUnitRelated = unitsById[dxUnitRelationElement.TargetDXUnit];
-                    var dxUnitNameRelated = dxUnitRelated.DXObjectDefinitionMainElement.Name;
+                    var dxUnitNameRelated = dxUnitRelated.Name;
 
                     var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
 
@@ -189,32 +289,19 @@ namespace IV.DX.Persistence
                     var dxRelation = candidates[0];
                     var dxRelMain = dxRelation.DXRelationDefinitionMainElement;
 
+                    var dxNodeFrom = GetNodeByName(dxRelation.DXRelationDefinitionMainElement.ObjectNameRight);
+                    var dxNodeTo = GetNodeByName(dxRelation.DXRelationDefinitionMainElement.ObjectNameLeft);
+
+                    var dxNodeJoin = GetJoinForDXUnitRelationInternal(dxRelation, dxNodeFrom, dxNodeTo);
+
                     var dxNodeRelation = new DXNodeRelation(
                         dxUnitNameRelated,
                         $"R({dxRelMain.RelationNameRight})",
-                        GetJoinForDXUnitRelationInternal(dxRelation, GetNodeByName));
+                        dxNodeJoin);
 
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
 
-                // Unit → Same Unit (DXRelation)
-                var selfRelatedRelations = dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
 
-                if (selfRelatedRelations.Count() > 0)
-                {
-                    var dxRelationsByLeft = relationsByLeft[dxUnitName];
-
-                    foreach (var dxRelation in dxRelationsByLeft)
-                    {
-                        var dxRelMain = dxRelation.DXRelationDefinitionMainElement;
-
-                        var dxNodeRelation = new DXNodeRelation(
-                            dxUnitName,
-                            $"R({dxRelMain.RelationNameRight})",
-                            GetJoinForDXUnitRelationInternal(dxRelation, GetNodeByName));
-
-                        dxNode.AttachDXNode(dxNodeRelation, dxNode);
-                    }
                 }
             }
 
@@ -226,13 +313,15 @@ namespace IV.DX.Persistence
                     continue;
                 }
 
-                var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
+                var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
                 var baseDXUnit = unitsById[dxUnit.DXUnitInheritanceElement.BaseDXUnit];
-                var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.DXObjectDefinitionMainElement.Name);
+                var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.Name);
 
-                foreach (var item in dxNodeForBaseDXUnit.DXNodes)
+                dxNode.SetBaseDXNode(dxNodeForBaseDXUnit);
+
+                foreach (var item in dxNodeForBaseDXUnit.DXNodes.Where(x => x.Value.Kind != DXNodeKind.DXProperty))
                 {
                     var relation = new DXNodeRelation(
                         item.Key.TargetObjectName,
@@ -250,89 +339,43 @@ namespace IV.DX.Persistence
                 }
             }
 
+            // 6. Process self related DXUnits
             foreach (var dxUnit in unitsList)
             {
-                var dxUnitName = dxUnit.DXObjectDefinitionMainElement.Name;
+                var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
-                foreach (var dxColumn in dxUnit.DXColumnDefinitionElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
-                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
+                var selfRelatedRelations = dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
 
-                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                if (selfRelatedRelations.Count() > 0)
+                {
+                    var dxRelationsByLeft = relationsByLeft[dxUnitName];
+
+                    var clones = dxNode.Clone(dxRelationsByLeft);
+
+                    foreach (var clone in clones)
+                    {
+                        RegisterNode(clone, nodesById, nodesByName, registerByName: false);
+                    }
                 }
             }
 
-            foreach (var dxElement in elementsList)
-            {
-                var dxElementName = dxElement.DXObjectDefinitionMainElement.Name;
-                var dxNode = GetNodeByName(dxElementName);
-
-                foreach (var dxColumn in dxElement.DXColumnDefinitionElement.Announced)
-                {
-                    var dxNodeRelated = new DXNode(counter++, dxColumn.Name);
-                    RegisterNode(dxNodeRelated, nodesById, nodesByName, registerByName: false);
-
-                    var dxNodeRelation = new DXNodeRelation(dxColumn.Name, dxColumn.Name, null);
-                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
-                }
-            }
-
+            // 8. Register nodes which started from Relation table in Many To Many relation.
             foreach (var item in dxRelations.Where(x => x.DXRelationDefinitionMainElement.RelationType == DXRelationTypeEnum.ManyToMany))
             {
-                var dxNode = new DXNode(counter++, item.DXRelationDefinitionMainElement.RelationTable);
+                var dxNode = new DXNode(new DXNodeKey(counter++), item.DXRelationDefinitionMainElement.RelationTable, DXNodeKind.DXManyToManyTable);
                 RegisterNode(dxNode, nodesById, nodesByName, registerByName: true);
             }
 
             _nodesById = nodesById;
             _nodesByName = nodesByName;
             _version = dxStructureCache.Version;
-
-            static string GetJoinForDXUnitRelationInternal(
-                DXRelationDefinitionUnit dxRelation,
-                Func<string, DXNode> getNodeByName)
-            {
-                var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
-
-                var dxNode1 = getNodeByName(dxRelationData.ObjectNameRight);
-                var dxNode2 = getNodeByName(dxRelationData.ObjectNameLeft);
-
-                var query1 =
-                    $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
-
-                var query2 =
-                    $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"";
-
-                return dxRelationData.RelationType switch
-                {
-                    DXRelationTypeEnum.ManyToMany =>
-                        $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode2.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode1.TableAlias}\" ON \"{dxNode1.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"",
-
-                    DXRelationTypeEnum.ManyToOne
-                        or DXRelationTypeEnum.ManyToZeroOne
-                        or DXRelationTypeEnum.ZeroOneToOne
-                        => query1,
-
-                    DXRelationTypeEnum.OneToMany
-                        or DXRelationTypeEnum.ZeroOneToMany
-                        or DXRelationTypeEnum.OneToZeroOne
-                        => query2,
-
-                    DXRelationTypeEnum.ZeroOneToZeroOne =>
-                        dxRelationData.RelationColumnNameRight == "ID" ? query1 : query2,
-
-                    _ => throw new Exception(
-                        $"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}")
-                };
-            }
         }
 
         private static DXNode Get(string name)
             => _nodesByName[name];
 
-        private static DXNode Get(int id)
+        private static DXNode Get(DXNodeKey id)
             => _nodesById[id];
 
         private KeyValuePair<DXNodeRelation, DXNode> Get(DXNode dxNode, string relationName)
@@ -344,27 +387,27 @@ namespace IV.DX.Persistence
 
         private DXNodeRelation GetRelation(DXNode baseDXNode, DXNode relatedDXNode)
         {
-            return baseDXNode.GetRelationTo(relatedDXNode.ID);
+            return baseDXNode.GetRelationTo(relatedDXNode.Key);
         }
 
         private static void RegisterIdPair(
             DXNode baseDXNode,
             DXNode relatedDXNode,
-            IList<KeyValuePair<int, int>> idPairs,
-            ISet<(int BaseId, int RelatedId)> idPairSet)
+            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs,
+            ISet<(DXNodeKey BaseId, DXNodeKey RelatedId)> idPairSet)
         {
-            var pair = (BaseId: baseDXNode.ID, RelatedId: relatedDXNode.ID);
+            var pair = (BaseId: baseDXNode.Key, RelatedId: relatedDXNode.Key);
             if (idPairSet.Add(pair))
             {
-                idPairs.Add(new KeyValuePair<int, int>(pair.BaseId, pair.RelatedId));
+                idPairs.Add(new KeyValuePair<DXNodeKey, DXNodeKey>(pair.BaseId, pair.RelatedId));
             }
         }
 
         private string ProcessDXColumns(
             string typeName,
             IDictionary<string, string> columns,
-            IList<KeyValuePair<int, int>> idPairs,
-            ISet<(int BaseId, int RelatedId)> idPairSet)
+            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs,
+            ISet<(DXNodeKey BaseId, DXNodeKey RelatedId)> idPairSet)
         {
             var coreDXNode = Get(typeName);
 
@@ -381,22 +424,38 @@ namespace IV.DX.Persistence
                     var expression = column.Value;
 
                     var route = expression.Split('.');
-                    var baseDXNode = coreDXNode;
+                    var startDXNode = coreDXNode;
 
                     for (int i = 0; i < route.Length - 1; i++)
                     {
                         var relationValue = route[i];
 
-                        var relatedPair = Get(baseDXNode, relationValue);
+                        var relatedPair = Get(startDXNode, relationValue);
                         var relatedNode = relatedPair.Value;
 
-                        RegisterIdPair(baseDXNode, relatedNode, idPairs, idPairSet);
+                        RegisterIdPair(startDXNode, relatedNode, idPairs, idPairSet);
 
-                        baseDXNode = relatedNode;
+                        startDXNode = relatedNode;
                     }
 
-                    columnsExpressionItems.Add(
-                        $"\"{baseDXNode.TableAlias}\".\"{route[^1]}\" AS \"{alias}\"");
+                    string columnExpressionItem;
+
+                    var columnName = route[^1];
+
+                    if (startDXNode.ContainsProperty(columnName))
+                    {
+                        columnExpressionItem = $"\"{startDXNode.TableAlias}\".\"{columnName}\" AS \"{alias}\"";
+                    }
+                    else
+                    {
+                        var baseDXNode = startDXNode.GetBaseDXNodeWithProperty(columnName);
+
+                        RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
+
+                        columnExpressionItem = $"\"{baseDXNode.TableAlias}\".\"{columnName}\" AS \"{alias}\"";
+                    }
+
+                    columnsExpressionItems.Add(columnExpressionItem);
                 }
             }
 
@@ -406,8 +465,8 @@ namespace IV.DX.Persistence
         private string ProcessDXFilter(
             string typeName,
             string dxFilter,
-            IList<KeyValuePair<int, int>> idPairs,
-            ISet<(int BaseId, int RelatedId)> idPairSet)
+            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs,
+            ISet<(DXNodeKey BaseId, DXNodeKey RelatedId)> idPairSet)
         {
             var coreDXNode = Get(typeName);
 
@@ -422,18 +481,18 @@ namespace IV.DX.Persistence
             foreach (var expression in expressions)
             {
                 var route = expression.Key.Split('.');
-                var baseDXNode = coreDXNode;
+                var startDXNode = coreDXNode;
 
                 for (int i = 0; i < route.Length - 1; i++)
                 {
                     var relationValue = route[i];
 
-                    var relatedPair = Get(baseDXNode, relationValue);
+                    var relatedPair = Get(startDXNode, relationValue);
                     var relatedNode = relatedPair.Value;
 
-                    RegisterIdPair(baseDXNode, relatedNode, idPairs, idPairSet);
+                    RegisterIdPair(startDXNode, relatedNode, idPairs, idPairSet);
 
-                    baseDXNode = relatedNode;
+                    startDXNode = relatedNode;
                 }
 
                 var whereExpressionItem = route[^1];
@@ -442,7 +501,20 @@ namespace IV.DX.Persistence
                 var propertyName = whereExpressionItem.Substring(0, spaceIndex);
                 var propertyValue = whereExpressionItem.Substring(spaceIndex);
 
-                var condition = $"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+                string condition;
+
+                if (startDXNode.ContainsProperty(propertyName))
+                {
+                    condition = $"\"{startDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+                }
+                else
+                {
+                    var baseDXNode = startDXNode.GetBaseDXNodeWithProperty(propertyName);
+
+                    RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
+
+                    condition = $"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+                }
 
                 whereExpressionItems.Add(
                     new KeyValuePair<string, string>(condition, expression.Value));
@@ -455,9 +527,49 @@ namespace IV.DX.Persistence
             return whereExpression;
         }
 
+        static string GetJoinForDXUnitRelationInternal(
+                DXRelationDefinitionUnit dxRelation,
+                DXNode dxNodeFrom,
+                DXNode dxNodeTo)
+        {
+            var dxRelationData = dxRelation.DXRelationDefinitionMainElement;
+
+            var dxNode1 = dxNodeTo;
+            var dxNode2 = dxNodeFrom;
+
+            var query1 =
+                $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"ID\" = \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
+
+            var query2 =
+                $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode1.TableAlias}\".\"ID\"";
+
+            return dxRelationData.RelationType switch
+            {
+                DXRelationTypeEnum.ManyToMany =>
+                    $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode1.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"",
+
+                DXRelationTypeEnum.ManyToOne
+                    or DXRelationTypeEnum.ManyToZeroOne
+                    or DXRelationTypeEnum.ZeroOneToOne
+                    => query1,
+
+                DXRelationTypeEnum.OneToMany
+                    or DXRelationTypeEnum.ZeroOneToMany
+                    or DXRelationTypeEnum.OneToZeroOne
+                    => query2,
+
+                DXRelationTypeEnum.ZeroOneToZeroOne =>
+                    dxRelationData.RelationColumnNameRight == "ID" ? query1 : query2,
+
+                _ => throw new Exception(
+                    $"DXNode processing. There are no DXRelation type {dxRelationData.RelationType}")
+            };
+        }
+
+
         private string GetFromExpression(
             string typeName,
-            IList<KeyValuePair<int, int>> idPairs)
+            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs)
         {
             var fromExpression = new StringBuilder();
 
@@ -482,9 +594,13 @@ namespace IV.DX.Persistence
 
         private sealed class DXNode
         {
-            public int ID { get; }
+            public DXNodeKey Key { get; }
             public string TableAlias { get; }
             public string Name { get; }
+            public DXNode OriginalNode { get; private set; }
+            public DXNodeKind Kind { get; }
+
+            public DXNode BaseDXNode { get; set; }
 
             public IDictionary<DXNodeRelation, DXNode> DXNodes { get; } =
                 new Dictionary<DXNodeRelation, DXNode>();
@@ -492,14 +608,16 @@ namespace IV.DX.Persistence
             private readonly Dictionary<string, KeyValuePair<DXNodeRelation, DXNode>> _relationsByName =
                 new(StringComparer.Ordinal);
 
-            private readonly Dictionary<int, DXNodeRelation> _relationsByTargetId =
+            private readonly Dictionary<DXNodeKey, DXNodeRelation> _relationsByTargetId =
                 new();
 
-            public DXNode(int id, string name)
+            public DXNode(DXNodeKey key, string name, DXNodeKind kind)
             {
-                ID = id;
-                Name = name;
-                TableAlias = $"T_{id}";
+                this.Key = key;
+                this.Name = name;
+                this.Kind = kind;
+                this.TableAlias = $"T_{Key.ID}_{Key.SubID}";
+                this.OriginalNode = null;
             }
 
             public void AttachDXNode(DXNodeRelation dxRelation, DXNode dxNode)
@@ -507,7 +625,7 @@ namespace IV.DX.Persistence
                 DXNodes[dxRelation] = dxNode;
                 _relationsByName[dxRelation.RelationName] =
                     new KeyValuePair<DXNodeRelation, DXNode>(dxRelation, dxNode);
-                _relationsByTargetId[dxNode.ID] = dxRelation;
+                _relationsByTargetId[dxNode.Key] = dxRelation;
             }
 
             public bool TryGetRelation(
@@ -517,12 +635,107 @@ namespace IV.DX.Persistence
                 return _relationsByName.TryGetValue(relationName, out relation);
             }
 
-            public DXNodeRelation GetRelationTo(int targetId)
+            public DXNodeRelation GetRelationTo(DXNodeKey targetId)
             {
                 return _relationsByTargetId[targetId];
             }
 
-            public override string ToString() => Name;
+            public void SetBaseDXNode(DXNode baseDXNode)
+            {
+                this.BaseDXNode = baseDXNode;
+
+                var dxNodeReltionToBaseDXUnit =
+                   new DXNodeRelation(
+                       this.Name,
+                       this.Name,
+                       $"\"{baseDXNode.Name}\" AS \"{baseDXNode.TableAlias}\" ON \"{baseDXNode.TableAlias}\".\"ID\" = \"{this.TableAlias}\".\"ID\"");
+
+                this.AttachDXNode(dxNodeReltionToBaseDXUnit, baseDXNode);
+
+                var dxNodeReltionToInheritedDXUnit =
+                    new DXNodeRelation(
+                        baseDXNode.Name,
+                        baseDXNode.Name,
+                        $"\"{this.Name}\" AS \"{this.TableAlias}\" ON \"{this.TableAlias}\".\"ID\" = \"{baseDXNode.TableAlias}\".\"ID\"");
+
+                baseDXNode.AttachDXNode(dxNodeReltionToInheritedDXUnit, this);
+            }
+
+            public IEnumerable<DXNode> Clone(IEnumerable<DXRelationDefinitionUnit> dxRelations)
+            {
+                int counter = 1;
+
+                List<DXNode> clones = new List<DXNode>();
+
+                foreach (var dxRelation in dxRelations)
+                {
+                    var clone = new DXNode(new DXNodeKey(this.Key.ID, counter++), this.Name, this.Kind);
+
+                    clone.OriginalNode = this;
+                    clone.BaseDXNode = this.BaseDXNode;
+
+                    foreach (var item in DXNodes)
+                    {
+                        var dxNodeRelation = new DXNodeRelation(
+                            item.Key.TargetObjectName,
+                            item.Key.RelationName,
+                            item.Key.Join?.Replace($"{this.TableAlias}", $"{clone.TableAlias}"));
+
+                        clone.AttachDXNode(dxNodeRelation, item.Value);
+                    }
+
+                    clones.Add(clone);
+
+                    var dxJoin = GetJoinForDXUnitRelationInternal(dxRelation, clone, this);
+
+                    var dxNodeRelation2 = new DXNodeRelation(
+                        dxRelation.DXRelationDefinitionMainElement.ObjectNameLeft,
+                        $"R({dxRelation.DXRelationDefinitionMainElement.RelationNameRight})",
+                        dxJoin);
+
+                    this.AttachDXNode(dxNodeRelation2, clone);
+                }
+
+                return clones;
+            }
+
+            public override string ToString()
+            {
+                return $"{this.Kind} {this.Name}";
+            }
+
+            public bool ContainsProperty(string propertyName)
+            {
+                if (propertyName == Constants.ID || propertyName == Constants.TimeStamp)
+                    return true;
+
+                if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitID)
+                    return true;
+
+                // Need to define columns for table for N to M relation
+                if (this.Kind == DXNodeKind.DXManyToManyTable)
+                    return true;
+
+                return this.DXNodes.Any(x =>
+                x.Key.RelationName == propertyName
+                && x.Key.TargetObjectName == propertyName
+                && x.Value.Kind == DXNodeKind.DXProperty);
+            }
+
+            public DXNode? GetBaseDXNodeWithProperty(string propertyName)
+            {
+                if (this.BaseDXNode == null)
+                    return null;
+
+                if (this.BaseDXNode.ContainsProperty(propertyName))
+                {
+                    return this.BaseDXNode;
+                }
+                else
+                {
+                    return this.BaseDXNode.GetBaseDXNodeWithProperty(propertyName);
+                }
+            }
         }
 
         private struct DXNodeRelation
@@ -538,7 +751,33 @@ namespace IV.DX.Persistence
                 Join = join;
             }
         }
+
+        private struct DXNodeKey
+        {
+            public int ID { get; }
+            public int SubID { get; }
+
+            public DXNodeKey(int id)
+            {
+                this.ID = id;
+                this.SubID = 0;
+            }
+
+            public DXNodeKey(int id, int subID)
+            {
+                this.ID = id;
+                this.SubID = subID;
+            }
+        }
+
+        private enum DXNodeKind
+        {
+            DXProperty,
+            DXEnum,
+            DXElement,
+            DXUnit,
+            DXBaseUnit,
+            DXManyToManyTable
+        }
     }
-
-
 }

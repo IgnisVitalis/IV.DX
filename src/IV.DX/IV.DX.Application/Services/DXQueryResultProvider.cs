@@ -1,15 +1,17 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Models;
 using IV.DX.Application.Helpers;
 using IV.DX.Application.PrivateModels.DXQueryUnit;
 using IV.DX.Kernel;
 using IV.DX.Kernel.Converters.JObjectConverters;
+using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Services
 {
-    internal class DXQueryResultProvider(IDXUnitDataService dataService, IDXRawReader dxRawReader) : IDXQueryResultProvider
+    internal class DXQueryResultProvider(IDXUnitDataService dataService, IDXRawReader dxRawReader, IDXStructureCache dxStructureCache) : IDXQueryResultProvider
     {
         public async Task<JObject> GetAsync(Guid dxQueryID, CancellationToken ct = default)
         {
@@ -78,6 +80,48 @@ namespace IV.DX.Application.Services
             var jArray = result.Announced.ToJArray(true);
 
             return new JProperty("Content", jArray);
+        }
+
+        public async Task<IEnumerable<DXDisplayValue>> GetDisplayValuesAsync(string typeName, CancellationToken ct = default)
+        {
+            DXObjectDefinitionUnit dxObjectInfo;
+
+            dxObjectInfo = dxStructureCache.GetDXUnit(typeName);
+
+            if (dxObjectInfo == null)
+            {
+                dxObjectInfo = dxStructureCache.GetDXElement(typeName);
+
+                if (dxObjectInfo == null)
+                {
+                    dxObjectInfo = dxStructureCache.GetDXEnum(typeName);
+
+                    throw new Exception($"There are no type '{typeName}' to provide display values");
+                }
+            }
+
+            var displayValueExpression =
+                string.IsNullOrEmpty(dxObjectInfo.DisplayValue) ?
+                "ID" :
+                dxObjectInfo.DisplayValue;
+
+            var columns = new Dictionary<string, string>()
+            {
+                {Constants.ID, Constants.ID },
+                {Constants.TimeStamp, Constants.TimeStamp },
+                {"DisplayValue",  displayValueExpression }
+            };
+
+            var result = dxRawReader.Get(typeName, columns);
+
+            var displayValues = result.Announced.Select(x => new DXDisplayValue()
+            {
+                ID = x.ID,
+                Type = typeName,
+                DisplayValue = x.Content["DisplayValue"].ToString()
+            }).ToList();
+
+            return displayValues;
         }
     }
 }

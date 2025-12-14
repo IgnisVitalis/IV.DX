@@ -257,35 +257,35 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToDropMySQLCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAddMySQLCommand != null && columnsToAddMySQLCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAddMySQLCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetTypeCommand != null && columnsToAlterColumnSetTypeCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetTypeCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetAllowNullCommand != null && columnsToAlterColumnSetAllowNullCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetAllowNullCommand)}");
                 sb.Append(";");
             }
 
             if (columnsToAlterColumnSetDefaultValueCommand != null && columnsToAlterColumnSetDefaultValueCommand.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                 sb.Append($"{string.Join(",", columnsToAlterColumnSetDefaultValueCommand)}");
                 sb.Append(";");
             }
@@ -294,16 +294,16 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
                 foreach (var item in columnsToChangeNamesCommand)
                 {
-                    sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
+                    sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
                     sb.Append(item);
                     sb.Append(";");
                 }
             }
 
-            if (!dataDXElementExisting.DXObjectDefinitionMainElement.Name.Equals(dataDXElementNew.DXObjectDefinitionMainElement.Name))
+            if (!dataDXElementExisting.Name.Equals(dataDXElementNew.Name))
             {
-                sb.Append($"ALTER TABLE \"{dataDXElementExisting.DXObjectDefinitionMainElement.Name}\" ");
-                sb.Append($"RENAME TO \"{dataDXElementNew.DXObjectDefinitionMainElement.Name}\";");
+                sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
+                sb.Append($"RENAME TO \"{dataDXElementNew.Name}\";");
             }
 
             return sb.ToString();
@@ -556,7 +556,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             StringBuilder sb = new StringBuilder();
 
             // Create base table with column
-            sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataDXElement.DXObjectDefinitionMainElement.Name}\"(");
+            sb.Append($"CREATE TABLE IF NOT EXISTS \"{dataDXElement.Name}\"(");
 
             var clmDefList = dataDXElement.DXColumnDefinitionElement.Announced
                 //.Where(x => !IsDXColumnEnum(x))
@@ -576,7 +576,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             //    foreach (var clmDefEnum in clmDefEnumList)
             //    {
             //        var query = this.GetSQLQueryToCreateRelationToMany(
-            //            dataDXElement.DXObjectDefinitionMainElement.Name,
+            //            dataDXElement.Name,
             //            clmDefEnum.);
                     
             //        sb.Append(query);
@@ -594,11 +594,11 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             StringBuilder sb = new StringBuilder();
 
-            var clmUniqueList = dataDXElement.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAlterTable(dataDXElement.DXObjectDefinitionMainElement.Name, x));
+            var clmUniqueList = dataDXElement.DXUniqueColumnsElement.Announced.Select(x => this.GetSQLColumnsUniqueToAlterTable(dataDXElement.Name, x));
 
             if (clmUniqueList.Count() > 0)
             {
-                sb.Append($"ALTER TABLE \"{dataDXElement.DXObjectDefinitionMainElement.Name}\" ");
+                sb.Append($"ALTER TABLE \"{dataDXElement.Name}\" ");
 
                 //sb.Append(",");
                 sb.Append(string.Join(",", clmUniqueList));
@@ -621,23 +621,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"ADD COLUMN \"{obj.DXObjectDefinitionMainElement.Name}ID\" uuid; ");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"ADD COLUMN \"{obj.Name}ID\" uuid; ");
 
             if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
             || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
             )
             {
-                sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-                sb.Append($"ADD CONSTRAINT \"{obj.DXObjectDefinitionMainElement.Name}ID_unique\" UNIQUE(\"{obj.DXObjectDefinitionMainElement.Name}ID\"); ");
+                sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+                sb.Append($"ADD CONSTRAINT \"{obj.Name}ID_unique\" UNIQUE(\"{obj.Name}ID\"); ");
             }
 
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"ADD INDEX \"FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000_idx\" (\"{obj.DXObjectDefinitionMainElement.Name}ID\" ASC) VISIBLE; ");
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"ADD CONSTRAINT \"FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000\" ");
-            sb.Append($"FOREIGN KEY (\"{obj.DXObjectDefinitionMainElement.Name}ID\") ");
-            sb.Append($"REFERENCES \"{obj.DXObjectDefinitionMainElement.Name}\" (\"ID\") ");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"ADD INDEX \"FK_{dxElement.Name}_{obj.Name}_0000_idx\" (\"{obj.Name}ID\" ASC) VISIBLE; ");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"ADD CONSTRAINT \"FK_{dxElement.Name}_{obj.Name}_0000\" ");
+            sb.Append($"FOREIGN KEY (\"{obj.Name}ID\") ");
+            sb.Append($"REFERENCES \"{obj.Name}\" (\"ID\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
@@ -700,7 +700,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
         {
             // TODO: need to find solution how to drop table by DXUnitID
-            return GetSQLQueryToDropTable(dataDXElement.DXObjectDefinitionMainElement.Name);
+            return GetSQLQueryToDropTable(dataDXElement.Name);
         }
 
         public string GetSQLQueryToDropTable(string tableName)
@@ -713,12 +713,12 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000\"; ");
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"DROP INDEX \"FK_{dxElement.DXObjectDefinitionMainElement.Name}_{obj.DXObjectDefinitionMainElement.Name}_0000_idx\";");
-            sb.Append($"ALTER TABLE \"{dxElement.DXObjectDefinitionMainElement.Name}\" ");
-            sb.Append($"DROP COLUMN \"{obj.DXObjectDefinitionMainElement.Name}ID;\" ");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"DROP CONSTRAINT \"FK_{dxElement.Name}_{obj.Name}_0000\"; ");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"DROP INDEX \"FK_{dxElement.Name}_{obj.Name}_0000_idx\";");
+            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+            sb.Append($"DROP COLUMN \"{obj.Name}ID;\" ");
 
             return sb.ToString();
         }

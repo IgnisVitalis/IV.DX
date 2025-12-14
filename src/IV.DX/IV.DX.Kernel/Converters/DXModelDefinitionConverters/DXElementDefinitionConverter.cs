@@ -15,15 +15,15 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             
             var singleFragmentDefinition =
                 new DXElementDefinition(
-                    dxElement.DXObjectDefinitionMainElement.Name,
-                    dxElement.DXObjectDefinitionMainElement.Name,
+                    dxElement.Name,
+                    dxElement.Name,
                     isRequired);
 
             singleFragmentDefinition.AddPropertyDefinitions(props);            
 
-            var relationsAsProperties = relations.ToDXPropertyDefinitions(dxElement.DXObjectDefinitionMainElement.Name);
+            //var relationsAsProperties = relations.ToDXPropertyDefinitions(dxElement.Name);
 
-            singleFragmentDefinition.AddPropertyDefinitions(relationsAsProperties);
+            //singleFragmentDefinition.AddPropertyDefinitions(relationsAsProperties);
 
             return singleFragmentDefinition;
         }
@@ -50,7 +50,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 
         public static DXElementDefinition ToDXElementDefinition(this DXEnumDefinitionUnit enumDesc, bool isRequired)
         {
-            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.DXObjectDefinitionMainElement.Name, enumDesc.DXObjectDefinitionMainElement.Name, isRequired);
+            DXElementDefinition dxElementDefinition = new DXElementDefinition(enumDesc.Name, enumDesc.Name, isRequired);
 
             JObject jObject = new JObject();
 

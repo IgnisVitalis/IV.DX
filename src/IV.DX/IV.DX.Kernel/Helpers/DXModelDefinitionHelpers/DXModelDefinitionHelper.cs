@@ -1,7 +1,6 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Models;
-using System.Xml.Linq;
 
 namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 {
@@ -19,14 +18,14 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             if (mainDXObject == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.DXObjectDefinitionMainElement.Name, mainDXObject.DXObjectDefinitionMainElement.Name, true);
+            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.Name, mainDXObject.Name, true);
 
             var props = mainDXObject.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
-            var relationsAsProperties = relations.ToDXPropertyDefinitions(mainDXObject.DXObjectDefinitionMainElement.Name);
+            //var relationsAsProperties = relations.ToDXPropertyDefinitions(mainDXObject.Name);
 
             ownDXElementDefinition.AddPropertyDefinitions(props);
-            ownDXElementDefinition.AddPropertyDefinitions(relationsAsProperties);
+            //ownDXElementDefinition.AddPropertyDefinitions(relationsAsProperties);
 
             var dxModel = new DXModelDefinition(ownDXElementDefinition);
 

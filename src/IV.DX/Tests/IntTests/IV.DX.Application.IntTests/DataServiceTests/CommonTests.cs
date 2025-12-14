@@ -117,7 +117,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Checking result
             Assert.NotEmpty(dxElements);
 
-            Assert.Equal(dxElements.Count(), dxElements.Where(x => x.DXObjectDefinitionMainElement != null).Count());
+            Assert.Equal(dxElements.Count(), dxElements.Where(x => x != null).Count());
         }
 
         [Fact]
@@ -126,16 +126,12 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Init
 
             // Action           
-            var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2"));
+            var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("ce754889-4efb-4281-ad1f-14d710b30007"));
 
             var dxElement = DXModelConverter.ToDXModel(dxElementJObject);
 
             // Checking result
             Assert.NotNull(dxElement);
-
-            var genDXElement = dxElement.DXSingleElements.SingleOrDefault(x => x.Name == "DXObjectDefinitionMainElement");
-
-            Assert.NotNull(genDXElement);
         }
 
         [Fact]
@@ -152,7 +148,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             var obj = objs.Single();
 
-            Assert.Equal("DXUnitDefinitionUnit", obj.DXObjectDefinitionMainElement.Name);
+            Assert.Equal("DXUnitDefinitionUnit", obj.Name);
         }
 
         [Fact]

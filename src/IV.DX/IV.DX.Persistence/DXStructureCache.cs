@@ -27,11 +27,58 @@ namespace IV.DX.Persistence
             {
                 using var scope = _scopeFactory.CreateScope();
                 var repo = scope.ServiceProvider.GetRequiredService<IDXStructureRawReader>();
-            
+
+
+                var dxRelations = repo.LoadDXRelationInfosRaw();
                 var dxElements = repo.LoadDXElementInfosRaw();
+
+                foreach (var dxElement in dxElements)
+                {
+                    var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxElement.Name).ToList();
+
+                    foreach (var dxElementRelation in dxElementRelations)
+                    {
+                        var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
+                        var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
+
+                        if (!dxElement.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
+                        {
+                            dxElement.DXColumnDefinitionElement.AddToAnnounced(
+                                 new DXColumnDefinitionElement()
+                                 {
+                                     Name = columnName,
+                                     ColumnType = columnType.Value
+                                 });
+                        }
+                    }
+                }
+
                 var dxUnits = repo.LoadDXUnitInfosRaw();
+
+                foreach (var dxUnit in dxUnits)
+                {
+                    var dxElementRelations = dxRelations.Where(x => x.DXRelationDefinitionMainElement.ObjectNameLeft == dxUnit.Name).ToList();
+
+                    foreach (var dxElementRelation in dxElementRelations)
+                    {
+                        var columnName = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft;
+                        var columnType = dxElementRelation.DXRelationDefinitionMainElement.RelationColumnTypeLeft;
+
+                        if (!dxUnit.DXColumnDefinitionElement.Announced.Any(x => x.Name == columnName))
+                        {
+                            dxUnit.DXColumnDefinitionElement.AddToAnnounced(
+                                 new DXColumnDefinitionElement()
+                                 {
+                                     Name = columnName,
+                                     ColumnType = columnType.Value
+                                 });
+                        }
+                    }
+                }
+
+
                 var dxEnums = repo.LoadDXEnumInfosRaw();
-                var dxRelations = repo.LoadDXRelationInfosRaw();             
+
 
                 var snap = new Snapshot(
                     dxElements.ToImmutableArray(),
@@ -47,17 +94,17 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetDXEnum(string name)
         {
-            return this.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.DXEnums.SingleOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public DXUnitDefinitionUnit GetDXUnit(string name)
         {
-            return this.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.DXUnits.SingleOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public DXElementDefinitionUnit GetDXElement(string name)
         {
-            return this.DXElements.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.DXElements.SingleOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public DXElementInUnitTypeEnum GetElementInUnitRelationType(string dxUnitTypeName, string dxElementTypeName)

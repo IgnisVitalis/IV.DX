@@ -55,12 +55,12 @@ namespace IV.DX.Persistence
                         // Delete related dxElements
                         foreach (var relatedDXElement in relatedDXElements)
                         {
-                            this.DeleteDXElementsFromDataSet(relatedDXElement.DXObjectDefinitionMainElement.Name, id, dataSet, conn);
+                            this.DeleteDXElementsFromDataSet(relatedDXElement.Name, id, dataSet, conn);
                         }
                     }
 
                     // Delete dxUnit
-                    this.DeleteDXUnitFromDataSet(dxUnitInfo.DXObjectDefinitionMainElement.Name, id, dataSet, conn);
+                    this.DeleteDXUnitFromDataSet(dxUnitInfo.Name, id, dataSet, conn);
                 }
 
                 dataSet.AcceptChanges();
@@ -503,8 +503,8 @@ namespace IV.DX.Persistence
         {
             this.RunRequestInTransaction(conn =>
             {
-                var dataSet = new DataSet(enumInfo.DXObjectDefinitionMainElement.Name);
-                var enumTable = enumInfo.DXObjectDefinitionMainElement.Name;
+                var dataSet = new DataSet(enumInfo.Name);
+                var enumTable = enumInfo.Name;
 
                 var dxModelDefinition = dxModel.ToDXModelDefinition();
 
@@ -537,7 +537,7 @@ namespace IV.DX.Persistence
 
                 foreach (var dxUnitInfo in dxUnitHierarchy)
                 {
-                    var dxUnitName = dxUnitInfo.DXObjectDefinitionMainElement.Name;
+                    var dxUnitName = dxUnitInfo.Name;
 
                     // System provides columns for each base table from db because there are no information in dxModel and it is not possible to separate.
                     // As well during init of db the columns will be empty.
@@ -552,7 +552,7 @@ namespace IV.DX.Persistence
                     var relatedMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
                     var relatedMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
-                    var unitTable = dxUnitInfo.DXObjectDefinitionMainElement.Name;
+                    var unitTable = dxUnitInfo.Name;
                     var objectId = dxModel.DXMainElement.Item.ID;
 
                     // 1) OWN
@@ -571,15 +571,15 @@ namespace IV.DX.Persistence
                     var relatedSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
                     var relatedSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
                     if (relatedSM != null) foreach (var el in relatedSM)
-                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
                     if (relatedSO != null) foreach (var el in relatedSO)
-                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
 
                     // 3) MULTI
                     if (relatedMM != null) foreach (var el in relatedMM)
-                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
                     if (relatedMO != null) foreach (var el in relatedMO)
-                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.DXObjectDefinitionMainElement.Name, dataSet, conn, processingType);
+                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
 
                     dataSet.AcceptChanges();
                 }

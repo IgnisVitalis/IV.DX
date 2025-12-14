@@ -6,7 +6,7 @@ namespace IV.DX.Application.PrivateModels.DXQueryUnit
     [DXUnit("DXQueryUnit")]
     internal class DXQueryUnit : DXUnit
     {
-        [DXColumn("DXUnitName", "R(DXUnitDefinition).DXObjectDefinitionMainElement.Name")]
+        [DXColumn("DXUnitName", "R(DXUnitDefinition).Name")]
         public string DXUnitName { get; set; }
         [DXRequired]
         public DXQueryMainElement DXQueryMainElement { get; set; }

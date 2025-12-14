@@ -2,15 +2,10 @@
     "S_Type": "DXElementDefinitionUnit",
     "ID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
     "TimeStamp": "2021-10-02T00:00:00",
-    "DXObjectDefinitionMainElement": {
-        "Name": "Vic",
-        "DisplayValue": null,
-        "Kind": 2,
-        "ID": "9232a030-352b-4935-9936-9329c8758778",
-        "DXUnitID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
-        "TimeStamp": "0001-01-01T00:00:00",
-        "S_Type": "DXObjectDefinitionMainElement"
-    },
+    "Name": "Vic",
+    "DisplayValue": null,
+    "Kind": 2,
+
     "DXColumnDefinitionElement": {
         "S_Type": "DXColumnDefinitionElement",
         "Mode": 2,

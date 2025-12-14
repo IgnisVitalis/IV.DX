@@ -22,7 +22,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetItemsAsync_UsingDXFilterWithRelation_Ok()
         {
             // Init
-            var dxFilter = "R(EnumType).DXObjectDefinitionMainElement.Name = 'DXColumnTypeEnum'";
+            var dxFilter = "R(EnumType).Name = 'DXColumnTypeEnum'";
 
             // Action
             var dxElements = await _service.GetItemsAsync<DXObjectEnumElement>(dxFilter);

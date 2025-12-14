@@ -3,14 +3,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "e8a16147-6885-4588-a467-7f30f9c8603b",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
-            "Name": "TUserMainElement",
-            "Kind": 3
-        },
+        "Name": "TUserMainElement",
+        "Kind": 3,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,

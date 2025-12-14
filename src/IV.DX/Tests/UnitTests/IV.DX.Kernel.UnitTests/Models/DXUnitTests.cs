@@ -17,15 +17,9 @@ namespace IV.DX.Kernel.UnitTests.Models
             {
                 ID = id,
                 TimeStamp = timeStamp,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id, 
-                    TimeStamp = timeStamp,
-                    Kind = DXObjectKindEnum.Core,
-                    DisplayValue = "DisplayValueStr",
-                    Name = "NameStr"
-                }
+                Kind = DXObjectKindEnum.Core,
+                DisplayValue = "Name",
+                Name = "NameStr"
             };
 
             // Action

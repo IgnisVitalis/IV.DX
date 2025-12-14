@@ -3,19 +3,14 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
         "TimeStamp": "2025-12-01T10:41:22.915737Z",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "d23d0f98-416d-45b6-97da-6138e149ca05",
-            "TimeStamp": "2025-12-01T10:41:22.904201Z",
-            "Name": "DXQueryColumnElement",
-            "DisplayValue": null,
-            "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
-            "Kind": 1
-        },
+        "Name": "DXQueryColumnElement",
+        "DisplayValue": null,
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
-            "Announced": [              
+            "Announced": [
                 {
                     "S_Type": "DXColumnDefinitionElement",
                     "ID": "0973ae90-417c-45f5-ad47-95ce9cd9c4ef",

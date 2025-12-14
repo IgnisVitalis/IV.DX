@@ -20,111 +20,17 @@ namespace IV.DX.Kernel.Models
         public string RelationTable { get; set; }
         [DXColumn("Kind")]
         public DXObjectKindEnum Kind { get; set; }
-        private string _relationColumnNameLeft;
         [DXColumn("RelationColumnNameLeft")]
-        public string RelationColumnNameLeft
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this._relationColumnNameLeft))
-                {
-                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
-                        || this.RelationType == DXRelationTypeEnum.OneToMany
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToMany
-                        || this.RelationType == DXRelationTypeEnum.OneToZeroOne
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
-                    {
-                        this._relationColumnNameLeft = "ID";
-                    }
-                }
+        public string RelationColumnNameLeft { get; set; }
 
-
-                return this._relationColumnNameLeft;
-            }
-            set
-            {
-                this._relationColumnNameLeft = value;
-            }
-        }
-
-        private DXColumnTypeEnum? _relationColumnTypeLeft;
         [DXColumn("RelationColumnTypeLeft")]
-        public DXColumnTypeEnum? RelationColumnTypeLeft
-        {
-            get
-            {
-                if (!this._relationColumnTypeLeft.HasValue)
-                {
-                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
-                        || this.RelationType == DXRelationTypeEnum.OneToMany
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToMany
-                        || this.RelationType == DXRelationTypeEnum.OneToZeroOne
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToZeroOne)
-                    {
-                        this._relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                    }
-                }
+        public DXColumnTypeEnum? RelationColumnTypeLeft { get; set; }
 
-
-                return this._relationColumnTypeLeft;
-            }
-            set
-            {
-                this._relationColumnTypeLeft = value;
-            }
-        }
-
-        private string _relationColumnNameRight;
         [DXColumn("RelationColumnNameRight")]
-        public string RelationColumnNameRight
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this._relationColumnNameRight))
-                {
-                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
-                        || this.RelationType == DXRelationTypeEnum.ManyToOne
-                        || this.RelationType == DXRelationTypeEnum.ManyToZeroOne
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToOne)
-                    {
-                        this._relationColumnNameRight = "ID";
-                    }
-                }
+        public string RelationColumnNameRight { get; set; }
 
-
-                return this._relationColumnNameRight;
-            }
-            set
-            {
-                this._relationColumnNameRight = value;
-            }
-        }
-
-        private DXColumnTypeEnum? _relationColumnTypeRight;
         [DXColumn("RelationColumnTypeRight")]
-        public DXColumnTypeEnum? RelationColumnTypeRight
-        {
-            get
-            {
-                if (!this._relationColumnTypeRight.HasValue)
-                {
-                    if (this.RelationType == DXRelationTypeEnum.ManyToMany
-                        || this.RelationType == DXRelationTypeEnum.ManyToOne
-                        || this.RelationType == DXRelationTypeEnum.ManyToZeroOne
-                        || this.RelationType == DXRelationTypeEnum.ZeroOneToOne)
-                    {
-                        this._relationColumnTypeRight = DXColumnTypeEnum.GUID;
-                    }
-                }
-
-
-                return this._relationColumnTypeRight;
-            }
-            set
-            {
-                this._relationColumnTypeRight = value;
-            }
-        }
+        public DXColumnTypeEnum? RelationColumnTypeRight { get; set; }
 
         public DXRelationDefinitionMainElement()
         {

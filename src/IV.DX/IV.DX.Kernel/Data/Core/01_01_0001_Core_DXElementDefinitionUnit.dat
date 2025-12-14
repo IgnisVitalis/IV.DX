@@ -1,72 +1,11 @@
 [
     {
         "S_Type": "DXElementDefinitionUnit",
-        "ID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "3a911afb-9c07-4cf8-99b5-0ba02c4eb3f0",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
-            "Name": "DXObjectDefinitionMainElement",
-            "Kind": 1
-        },
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
-                    "ID": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
-                    "ColumnType": 3,
-                    "Name": "Name",
-                    "AllowNull": false,
-                    "DefaultValue": null,
-                    "Length": 100
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
-                    "ID": "d6f1c72a-42c3-42a1-ac44-b5d5ada561a4",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
-                    "ColumnType": 3,
-                    "Name": "DisplayValue",
-                    "AllowNull": true,
-                    "DefaultValue": null,
-                    "Length": 500
-                }
-            ]
-        },
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
-                    "ID": "3760c5fa-b554-4368-b608-617842c07e90",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "c5cf5513-9766-4cc6-84a0-b9a4717e36c2",
-                    "Name": "Kind",
-                    "EnumType": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
-                    "EnumKey": "15d97f21-fd2d-4019-8e0b-bd480fdc8798"
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
         "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "7725e3cb-e831-4ddc-86d8-c71bea59f9d7",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
-            "Name": "DXColumnDefinitionElement",
-            "Kind": 1
-        },
+        "Name": "DXColumnDefinitionElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -153,14 +92,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "38402309-6239-4e54-8640-ac70772b76bd",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
-            "Name": "DXUniqueColumnsElement",
-            "Kind": 1
-        },
+        "Name": "DXUniqueColumnsElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -183,14 +117,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "405c1a7c-5248-4432-acd6-37c9b1f7d3ba",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
-            "Name": "DXObjectEnumElement",
-            "Kind": 1
-        },
+        "Name": "DXObjectEnumElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -222,14 +151,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "abd3be0e-3d54-4cde-a909-fccf7293c661",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
-            "Name": "DXElementInUnitDefinitionElement",
-            "Kind": 1
-        },
+        "Name": "DXElementInUnitDefinitionElement",
+        "Kind": 1,
+
         "DXObjectEnumElement": {
             "S_Type": "DXObjectEnumElement",
             "Mode": 1,
@@ -250,27 +174,16 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "eeb499d0-4e20-41aa-8a24-9981c3cbf511",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "5b452ce3-cb10-4e7d-91e9-16c0fb569350",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "eeb499d0-4e20-41aa-8a24-9981c3cbf511",
-            "Name": "DXUnitInheritanceElement",
-            "Kind": 1
-        }
+        "Name": "DXUnitInheritanceElement",
+        "Kind": 1
     },
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "5786ba46-1374-475a-baef-446954feea3f",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "35cb012f-9ef5-43b8-b1e1-84f1f6b8cfed",
-            "Name": "DXRelationDefinitionMainElement",
-            "Kind": 1
-        },
+        "Name": "DXRelationDefinitionMainElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -421,14 +334,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "4502e21d-4d38-475d-88eb-3159d3b7c514",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "923c3122-0cc6-4c8a-9679-0017f3b7f59d",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "4502e21d-4d38-475d-88eb-3159d3b7c514",
-            "Name": "DXMigrationScriptsMainElement",
-            "Kind": 1
-        },
+        "Name": "DXMigrationScriptsMainElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -540,14 +448,9 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "c00aff94-4c3b-41f4-8555-bdaa5d9cf5ae",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
-            "Name": "DXUnitRelationElement",
-            "Kind": 1
-        },
+        "Name": "DXUnitRelationElement",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -573,6 +476,21 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 50
+                }
+            ]
+        },
+        "DXObjectEnumElement": {
+            "S_Type": "DXObjectEnumElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "37bf9fca-8112-48ea-b358-da1608664c4c",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
+                    "Name": "RelationType",
+                    "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c",
+                    "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd"
                 }
             ]
         }

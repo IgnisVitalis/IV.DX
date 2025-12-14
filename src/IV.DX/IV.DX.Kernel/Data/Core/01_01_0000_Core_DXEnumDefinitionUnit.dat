@@ -3,14 +3,9 @@
         "S_Type": "DXEnumDefinitionUnit",
         "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "59b115c5-cc8b-4c88-b1e0-d94af8745e99",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
-            "Name": "DXElementInUnitTypeEnum",
-            "Kind": 1
-        },
+        "Name": "DXElementInUnitTypeEnum",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -56,14 +51,9 @@
         "S_Type": "DXEnumDefinitionUnit",
         "ID": "971d538a-1489-483a-bc84-86596ed0c51a",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "261cfd33-65cb-4f36-8712-be15e6621cc0",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "971d538a-1489-483a-bc84-86596ed0c51a",
-            "Name": "DXColumnTypeEnum",
-            "Kind": 1
-        },
+        "Name": "DXColumnTypeEnum",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -109,14 +99,9 @@
         "S_Type": "DXEnumDefinitionUnit",
         "ID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "179f9be7-dc54-4ac7-a9c5-ea50c7524752",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
-            "Name": "DXObjectKindEnum",
-            "Kind": 1
-        },
+        "Name": "DXObjectKindEnum",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -162,14 +147,9 @@
         "S_Type": "DXEnumDefinitionUnit",
         "ID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "dbb5012a-958a-4272-8633-cdf04049fff4",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
-            "Name": "DXRelationTypeEnum",
-            "Kind": 1
-        },
+        "Name": "DXRelationTypeEnum",
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,

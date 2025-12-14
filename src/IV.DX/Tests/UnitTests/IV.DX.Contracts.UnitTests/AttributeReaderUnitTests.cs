@@ -29,32 +29,17 @@ namespace IV.DX.Contracts.UnitTests
         }
 
         [Fact]
-        public void GetDXElementDefinitionAttribute_FromDXObjectDefinitionMainElement_AttributeWithCorrectValues()
-        {
-            // Init
-
-            // Action
-            var attr = AttributeReader
-                .GetAttribute<DXElementAttribute>
-                (typeof(DXObjectDefinitionMainElement));
-
-            // Checking results
-            Assert.NotNull(attr);
-            Assert.True(attr.Type == "DXObjectDefinitionMainElement");
-        }
-
-        [Fact]
-        public void GetDXColumnDefinitionAttributes_FromDXObjectDefinitionMainElement_AttributesWithCorrectValues()
+        public void GetDXColumnDefinitionAttributes_FromDXObjectDefinitionUnit_AttributesWithCorrectValues()
         {
             // Init
 
             // Action
             var attributes = AttributeReader
                     .GetAttributesOnProperties<DXColumnAttribute>
-                    (typeof(DXObjectDefinitionMainElement));
+                    (typeof(DXObjectDefinitionUnit));
 
             // Checking result
-            Assert.True(attributes.Count() == 6);
+            Assert.True(attributes.Count() == 5);
 
             var displayValueAttr = attributes.SingleOrDefault(x => x.Name == "DisplayValue");
             Assert.NotNull(displayValueAttr);
@@ -64,9 +49,6 @@ namespace IV.DX.Contracts.UnitTests
 
             var idPropertyAttr = attributes.SingleOrDefault(x => x.Name == "ID");
             Assert.NotNull(idPropertyAttr);
-
-            var objectIdPropertyAttr = attributes.SingleOrDefault(x => x.Name == "DXUnitID");
-            Assert.NotNull(objectIdPropertyAttr);
 
             var kindPropertyAttr = attributes.SingleOrDefault(x => x.Name == "Kind");
             Assert.NotNull(kindPropertyAttr);

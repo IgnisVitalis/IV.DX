@@ -1,24 +1,6 @@
 [
     {
         "S_Type": "DXRelationDefinitionUnit",
-        "ID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "DXRelationDefinitionMainElement": {
-            "S_Type": "DXRelationDefinitionMainElement",
-            "ID": "a0e9308c-7e20-4eff-add8-9ce21e1de13b",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "9020e4fa-3ce9-4b32-8849-cdabe0b6f707",
-            "ObjectNameLeft": "DXObjectDefinitionUnit",
-            "RelationNameLeft": "DXObjectDefinitionUnitID",
-            "ObjectNameRight": "DXObjectDefinitionMainElement",
-            "RelationNameRight": "DXObjectDefinitionMainElement",
-            "RelationTable": null,
-            "RelationType": 8,
-            "Kind": 1
-        }
-    },
-    {
-        "S_Type": "DXRelationDefinitionUnit",
         "ID": "f802e73c-e512-4655-8067-94e80aea143c",
         "TimeStamp": "2021-10-02T00:00:00",
         "DXRelationDefinitionMainElement": {
@@ -30,6 +12,10 @@
             "RelationNameLeft": "DXObjectDefinitionUnitID",
             "ObjectNameRight": "DXColumnDefinitionElement",
             "RelationNameRight": "DXColumnDefinitionElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXObjectDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 5,
             "Kind": 1
@@ -48,6 +34,10 @@
             "RelationNameLeft": "DXObjectDefinitionUnitID",
             "ObjectNameRight": "DXUniqueColumnsElement",
             "RelationNameRight": "DXUniqueColumnsElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXObjectDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 5,
             "Kind": 1
@@ -66,6 +56,10 @@
             "RelationNameLeft": "DXObjectDefinitionUnitID",
             "ObjectNameRight": "DXObjectEnumElement",
             "RelationNameRight": "DXObjectEnumElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXObjectDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 5,
             "Kind": 1
@@ -84,6 +78,10 @@
             "RelationNameLeft": "DXRelationDefinitionUnitID",
             "ObjectNameRight": "DXRelationDefinitionMainElement",
             "RelationNameRight": "DXRelationDefinitionMainElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXRelationDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 8,
             "Kind": 1
@@ -102,6 +100,10 @@
             "RelationNameLeft": "DXMigrationScriptsUnitID",
             "ObjectNameRight": "DXMigrationScriptsMainElement",
             "RelationNameRight": "DXMigrationScriptsMainElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXMigrationScriptsUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 8,
             "Kind": 1
@@ -120,6 +122,10 @@
             "RelationNameLeft": "DXUnitDefinitionUnitID",
             "ObjectNameRight": "DXUnitInheritanceElement",
             "RelationNameRight": "DXUnitInheritanceElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXUnitDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationType": 8,
             "Kind": 1
         }
@@ -137,6 +143,10 @@
             "RelationNameLeft": "DXUnitDefinitionUnitID",
             "ObjectNameRight": "DXElementInUnitDefinitionElement",
             "RelationNameRight": "DXElementInUnitDefinitionElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXUnitDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationType": 5,
             "Kind": 1
         }
@@ -154,6 +164,10 @@
             "RelationNameLeft": "DXUnitDefinitionUnitID",
             "ObjectNameRight": "DXUnitRelationElement",
             "RelationNameRight": "DXUnitRelationElement",
+            "RelationColumnNameLeft": "ID",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "DXUnitDefinitionUnitID",
+            "RelationColumnTypeRight": 1,
             "RelationType": 5,
             "Kind": 1
         }
@@ -167,13 +181,15 @@
             "ID": "d38cf673-89c7-47d7-9f48-5a3a49396ed2",
             "TimeStamp": "2021-10-02T00:00:00",
             "DXUnitID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
-            "ObjectNameLeft": "DXObjectDefinitionMainElement",
-            "RelationNameLeft": "DXObjectDefinitionMainElementKind",
+            "ObjectNameLeft": "DXObjectDefinitionUnit",
+            "RelationNameLeft": "DXObjectDefinitionUnit",
             "ObjectNameRight": "DXObjectKindEnum",
             "RelationNameRight": "Kind",
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "Kind",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -194,6 +210,8 @@
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "ColumnType",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -211,6 +229,10 @@
             "RelationNameLeft": "Enums",
             "ObjectNameRight": "DXColumnDefinitionElement",
             "RelationNameRight": "EnumKey",
+            "RelationColumnNameLeft": "EnumKey",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "ID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1
@@ -229,6 +251,10 @@
             "RelationNameLeft": "Enums",
             "ObjectNameRight": "DXEnumDefinitionUnit",
             "RelationNameRight": "EnumType",
+            "RelationColumnNameLeft": "EnumType",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "ID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1
@@ -250,6 +276,8 @@
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "RelationType",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -267,6 +295,10 @@
             "RelationNameLeft": "DXUnitDefinitionUnit",
             "ObjectNameRight": "DXElementDefinitionUnit",
             "RelationNameRight": "DXElementDefinitionUnit",
+            "RelationColumnNameLeft": "DXElementDefinitionUnit",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "ID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1
@@ -285,6 +317,10 @@
             "RelationNameLeft": "DerivedDXUnits",
             "ObjectNameRight": "DXUnitDefinitionUnit",
             "RelationNameRight": "BaseDXUnit",
+            "RelationColumnNameLeft": "BaseDXUnit",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "ID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1
@@ -306,6 +342,8 @@
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "Kind",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -326,6 +364,8 @@
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "RelationType",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -346,6 +386,8 @@
             "RelationTable": null,
             "RelationType": 6,
             "Kind": 1,
+            "RelationColumnNameLeft": "RelationColumnTypeRight",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -366,6 +408,8 @@
             "RelationTable": null,
             "RelationType": 6,
             "Kind": 1,
+            "RelationColumnNameLeft": "RelationColumnTypeLeft",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -386,6 +430,8 @@
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1,
+            "RelationColumnNameLeft": "RelationType",
+            "RelationColumnTypeLeft": 8,
             "RelationColumnNameRight": "Key",
             "RelationColumnTypeRight": 8
         }
@@ -403,6 +449,10 @@
             "RelationNameLeft": "RelatedDXUnits",
             "ObjectNameRight": "DXUnitDefinitionUnit",
             "RelationNameRight": "TargetDXUnit",
+            "RelationColumnNameLeft": "TargetDXUnit",
+            "RelationColumnTypeLeft": 1,
+            "RelationColumnNameRight": "ID",
+            "RelationColumnTypeRight": 1,
             "RelationTable": null,
             "RelationType": 4,
             "Kind": 1

@@ -11,13 +11,9 @@ namespace IV.DX.Shared.IntTests.Factories
             DXUnitDefinitionUnit item = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    Name = objectName,
-                    Kind = DXObjectKindEnum.Custom,
-                }
+                Name = objectName,
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Custom,
             };
 
             return item;

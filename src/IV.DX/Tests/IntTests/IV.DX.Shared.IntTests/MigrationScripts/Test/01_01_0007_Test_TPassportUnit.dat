@@ -3,14 +3,9 @@
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "80fe228e-6c3e-41da-b900-6d09f27c5309",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "681bda3f-3d91-4493-b0fd-eb3db6e44165",
-            "Name": "TPassportUnit",
-            "Kind": 3
-        },
+        "Name": "TPassportUnit",
+        "Kind": 3,
+
         "DXElementInUnitDefinitionElement": {
             "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,

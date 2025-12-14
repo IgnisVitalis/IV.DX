@@ -211,13 +211,13 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetDXUnitDefinition(string dxUnitType)
         {
-            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(dxUnitType));
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.Name.Equals(dxUnitType));
 
             if (result == null)
             {
                 this.RefreshCache();
 
-                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(dxUnitType));
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.Name.Equals(dxUnitType));
             }
 
             return result;
@@ -379,13 +379,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit GetDXEnumDefinition(string enumName)
         {
-            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(enumName));
+            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.Name.Equals(enumName));
 
             if (existingEnum == null)
             {
                 this.RefreshCache();
 
-                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.DXObjectDefinitionMainElement.Name.Equals(enumName));
+                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.Name.Equals(enumName));
             }
 
             return existingEnum;

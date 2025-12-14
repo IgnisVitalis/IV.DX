@@ -25,13 +25,55 @@ namespace IV.DX.Application.IntTests.Services
     {
         IDXUnitDataService _service;
         IDXUnitGenericRepository _genericRepo;
+        IDXRawReader _dxRawReader;
         IDXStructureRepository _dataStructureRepo;
+        ISQLQueryBuilder _sqlBuilder;
 
         public DXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
             this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._dataStructureRepo = base.ServiceProvider.GetRequiredService<IDXStructureRepository>();
+            this._dxRawReader = base.ServiceProvider.GetRequiredService<IDXRawReader>();
+            this._sqlBuilder = base.ServiceProvider.GetRequiredService<ISQLQueryBuilder>();
+        }
+
+        [Fact]
+        public async Task Insert_UsingDXUnitWithSelfRelation_Ok()
+        {
+            // Init            
+            var dxUnitDefinition = "{\n  \"S_Type\": \"DXUnitDefinitionUnit\",\n  \"ID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n  \"TimeStamp\": \"2025-12-11T10:20:09.399068Z\",\n  \"Name\": \"DXNavigationItemUnit\",\n  \"DisplayValue\": null,\n  \"Kind\": 1,\n  \"DXUnitRelationElement\": {\n    \"S_Type\": \"DXUnitRelationElement\",\n    \"Mode\": 2,\n    \"Announced\": [\n      {\n        \"OwnRelationName\": \"Parent\",\n        \"TargetRelationName\": \"Children\",\n        \"RelationType\": 5,\n        \"TargetDXUnit\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"S_Type\": \"DXUnitRelationElement\",\n        \"ID\": \"1676cad5-c5d6-4584-8d13-e0155fbd8b1b\",\n        \"DXUnitID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"TimeStamp\": \"2025-12-11T10:20:16.0861678Z\"\n      }\n    ],\n    \"Deleted\": []\n  }\n}";
+
+            // Action
+            var createdItem = await this._service.InsertAsync(JObject.Parse(dxUnitDefinition));
+
+            // Assert
+            var id = Guid.Parse(createdItem["ID"].ToString());
+
+            var existingItem = await this._service.GetItemAsync("DXNavigationItemUnit", id);
+
+            Assert.Null(existingItem);
+
+            var columns = new Dictionary<string, string>()
+            {
+                {"ID","ID" },
+                {"TimeStamp", "TimeStamp"},
+                {"ChildrenID", "R(Children).ID"},
+                {"ParentID", "R(Parent).ID"}
+            };
+
+            var dxFilter = "R(Children).ID = '075980bc-9728-47cf-aab9-077f391ded48' AND R(Parent).ID = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
+
+            var result = this._dxRawReader.Get("DXNavigationItemUnit", columns, dxFilter);
+
+            Assert.NotNull(result);
+            Assert.Empty(result.Announced);
+
+            var sql = this._sqlBuilder.BuildSQLExpression("DXNavigationItemUnit", columns, dxFilter);
+
+            var expectedSqlQuery = "SELECT\n\"T_14_0\".\"ID\" AS \"ID\",\n\"T_14_0\".\"TimeStamp\" AS \"TimeStamp\",\n\"T_14_1\".\"ID\" AS \"ChildrenID\",\n\"T_14_2\".\"ID\" AS \"ParentID\"\nFROM\n\"DXNavigationItemUnit\" AS \"T_14_0\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_14_1\" ON \"T_14_1\".\"Parent\" = \"T_14_0\".\"ID\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_14_2\" ON \"T_14_2\".\"ID\" = \"T_14_0\".\"Parent\"\nWHERE\n\"T_14_1\".\"ID\" = '075980bc-9728-47cf-aab9-077f391ded48'  AND  \"T_14_2\".\"ID\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
+
+            Assert.Equal(expectedSqlQuery, sql);
         }
 
         [Fact]
@@ -58,7 +100,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             // Init
             string typeName = "DXElementDefinitionUnit";
-            string filter = "DXObjectDefinitionMainElement.Kind = 999888777";
+            string filter = "Kind = 999888777";
 
             // Action
             var items = await this._service.GetItemsAsync(typeName, filter);
@@ -73,7 +115,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             // Init
             string typeName = "DXElementDefinitionUnit";
-            string filter = "DXObjectDefinitionMainElement.Kind = 1";
+            string filter = "Kind = 1";
 
             // Action
             var items = await this._service.GetItemsAsync(typeName, filter);
@@ -88,7 +130,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             // Init
             string typeName = "DXElementDefinitionUnit";
-            var id = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2");
+            var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
 
             // Action
             var item = await this._service.GetItemAsync(typeName, id);
@@ -122,37 +164,25 @@ namespace IV.DX.Application.IntTests.Services
             var dxUnit1 = new DXUnitDefinitionUnit()
             {
                 ID = id1,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id1,
-                    Name = "dxUnit1",
-                    Kind = DXObjectKindEnum.Test
-                }
+                Name = "dxUnit1",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test
             };
 
             var dxUnit2 = new DXUnitDefinitionUnit()
             {
                 ID = id2,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id2,
-                    Name = "dxUnit2",
-                    Kind = DXObjectKindEnum.Test
-                }
+                Name = "dxUnit2",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test
             };
 
             var dxUnit3 = new DXUnitDefinitionUnit()
             {
                 ID = id3,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id3,
-                    Name = "dxUnit3",
-                    Kind = DXObjectKindEnum.Test
-                }
+                Name = "dxUnit3",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test
             };
 
             var dxUnitRelation1 = new DXUnitRelationElement()
@@ -213,18 +243,18 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Equal(dxUnitRelation1Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation2Existing.RelationType));
 
             var relationDefinition1 = this._dataStructureRepo.GetDXRelationDefinition(
-                dxUnit1.DXObjectDefinitionMainElement.Name,
+                dxUnit1.Name,
                 dxUnitRelation1Existing.OwnRelationName,
-                dxUnit2.DXObjectDefinitionMainElement.Name,
+                dxUnit2.Name,
                 dxUnitRelation1Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition1);
             Assert.Equal(dxUnitRelation1Existing.RelationType, relationDefinition1.DXRelationDefinitionMainElement.RelationType);
 
             var relationDefinition2 = this._dataStructureRepo.GetDXRelationDefinition(
-                dxUnit2.DXObjectDefinitionMainElement.Name,
+                dxUnit2.Name,
                 dxUnitRelation2Existing.OwnRelationName,
-                dxUnit1.DXObjectDefinitionMainElement.Name,
+                dxUnit1.Name,
                 dxUnitRelation2Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
@@ -264,18 +294,18 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Equal(dxUnitRelation2Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation3Existing.RelationType));
 
             relationDefinition2 = this._dataStructureRepo.GetDXRelationDefinition(
-                dxUnit2.DXObjectDefinitionMainElement.Name,
+                dxUnit2.Name,
                 dxUnitRelation2Existing.OwnRelationName,
-                dxUnit3.DXObjectDefinitionMainElement.Name,
+                dxUnit3.Name,
                 dxUnitRelation2Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
             Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.DXRelationDefinitionMainElement.RelationType);
 
             var relationDefinition3 = this._dataStructureRepo.GetDXRelationDefinition(
-                dxUnit3.DXObjectDefinitionMainElement.Name,
+                dxUnit3.Name,
                 dxUnitRelation3Existing.OwnRelationName,
-                dxUnit2.DXObjectDefinitionMainElement.Name,
+                dxUnit2.Name,
                 dxUnitRelation3Existing.TargetRelationName);
 
             Assert.NotNull(relationDefinition2);
@@ -290,14 +320,13 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task GetItemAsync_UsingIDForExistingItems_Ok()
         {
-
             IDXStructureCache cache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
 
             await cache.RefreshAsync();
 
             // Init
             string typeName = "DXElementDefinitionUnit";
-            var id = new Guid("c5cf5513-9766-4cc6-84a0-b9a4717e36c2");
+            var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
 
             // Action
             var item = await this._service.GetItemAsync(typeName, id);
@@ -370,13 +399,10 @@ namespace IV.DX.Application.IntTests.Services
             var dxUnit = new DXUnitDefinitionUnit()
             {
                 ID = id,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    Name = "DXUnitWithEnum",
-                    Kind = DXObjectKindEnum.Test
-                },
+                Name = "DXUnitWithEnum",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test,
+
                 DXObjectEnumElement = new DXMultiElementsContainer<DXObjectEnumElement>()
                 {
                     Mode = MultiElementsMode.Full,
@@ -409,7 +435,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(createdRelation);
             Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("ObjectKind", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
 
@@ -418,7 +444,7 @@ namespace IV.DX.Application.IntTests.Services
             var createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");
 
             Assert.NotNull(createdRelationInverted);
-            Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Equal("ObjectKind", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
@@ -455,7 +481,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotNull(createdRelation);
             Assert.Equal("Key", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameLeft);
-            Assert.Null(createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
+            Assert.Equal("RelationType", createdRelation.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
 
@@ -464,7 +490,7 @@ namespace IV.DX.Application.IntTests.Services
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumRelationType", "DXRelationTypeEnum", "RelationType");
 
             Assert.NotNull(createdRelationInverted);
-            Assert.Null(createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
+            Assert.Equal("RelationType", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameLeft);
             Assert.Equal("Key", createdRelationInverted.DXRelationDefinitionMainElement.RelationColumnNameRight);
 
             createdRelationInverted = this._dataStructureRepo.GetDXRelationDefinition("DXUnitWithEnum", "DXUnitWithEnumObjectKind", "DXObjectKindEnum", "ObjectKind");

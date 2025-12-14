@@ -3,14 +3,9 @@
         "S_Type": "DXUnitDefinitionUnit",
         "ID": "05fdf970-e682-436d-8a09-94fc60d6b650",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "6ce56652-3ecb-4a52-9ec7-a309e5dc297d",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "05fdf970-e682-436d-8a09-94fc60d6b650",
-            "Name": "TBookUnit",
-            "Kind": 3
-        },
+        "Name": "TBookUnit",
+        "Kind": 3,
+
         "DXElementInUnitDefinitionElement": {
             "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,

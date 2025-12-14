@@ -16,14 +16,12 @@ namespace IV.DX.Application.IntTests.Services
     public class DXUnitDefinitionUnitDXUnitDataServiceTests : IntTestController
     {
         IDXUnitDataService _service;
-        IDXUnitGenericRepository _genericRepo;
         IDXUnitCoreRepository _coreRepo;
         IDXStructureCache _dxStructureCache;
 
         public DXUnitDefinitionUnitDXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
-            this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._coreRepo = base.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
             this._dxStructureCache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
         }
@@ -40,14 +38,9 @@ namespace IV.DX.Application.IntTests.Services
             {
                 ID = id,
                 TimeStamp = timeStamp,
-                DXObjectDefinitionMainElement = new DXObjectDefinitionMainElement()
-                {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
-                    TimeStamp = timeStamp,
-                    Kind = DXObjectKindEnum.Custom,
-                    Name = dxUnitName
-                }
+                Kind = DXObjectKindEnum.Custom,
+                Name = dxUnitName,
+                DisplayValue = "Name"
             };
 
             // Action

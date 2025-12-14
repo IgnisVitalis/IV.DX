@@ -296,7 +296,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(1).First();
                 var itemRight = relTablesRight.Skip(2).First();
 
-                this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
             };
 
             for (int i = 0; i < entriesCount; i++)
@@ -308,7 +308,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                        this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
                     }
                     catch (Exception exc)
                     {
@@ -326,7 +326,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj2.DXObjectDefinitionMainElement.Name, itemRight.ID, "RelTableLeftRelation", obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID);
+                        this._coreRepo.AddRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
                     }
                     catch (Exception exc)
                     {
@@ -344,7 +344,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
                     }
                     catch (Exception exc)
                     {
@@ -362,7 +362,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj2.DXObjectDefinitionMainElement.Name, itemRight.ID, "RelTableLeftRelation", obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID);
+                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
                     }
                     catch (Exception exc)
                     {
@@ -446,7 +446,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(1).First();
                 var itemRight = relTablesRight.Skip(2).First();
 
-                this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
             };
 
             for (int i = 0; i < entriesCount; i++)
@@ -458,7 +458,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                        this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
                     }
                     catch (Exception exc)
                     {
@@ -476,7 +476,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj2.DXObjectDefinitionMainElement.Name, itemRight.ID, "RelTableLeftRelation", obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID);
+                        this._coreRepo.AddRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
                     }
                     catch (Exception exc)
                     {
@@ -494,7 +494,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, itemRight.ID);
+                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
                     }
                     catch (Exception exc)
                     {
@@ -512,7 +512,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj2.DXObjectDefinitionMainElement.Name, itemRight.ID, "RelTableLeftRelation", obj1.DXObjectDefinitionMainElement.Name, itemLeft.ID);
+                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
                     }
                     catch (Exception exc)
                     {
@@ -598,13 +598,13 @@ namespace IV.DX.Persistence.IntTests
             // Additional checking
             foreach (var item in relTablesLeft)
             {
-                this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, item.ID, "RelTableRightRelation", obj2.Name, relTableFirstRight.ID);
             }
 
             foreach (var item in relTablesLeft)
             {
-                var relationRightID = this._coreRepo.GetRelation(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation");
-                var relationRightIDs = this._coreRepo.GetRelations(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation");
+                var relationRightID = this._coreRepo.GetRelation(obj1.Name, item.ID, "RelTableRightRelation");
+                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.ID, "RelTableRightRelation");
 
                 Assert.Equal(relTableFirstRight.ID, relationRightID);
                 Assert.Single(relationRightIDs);
@@ -618,7 +618,7 @@ namespace IV.DX.Persistence.IntTests
                 Assert.Equal(relTableFirstRight.ID, item.RelTableRightRelation);
             }
 
-            var relationLeftIDs = this._coreRepo.GetRelations(obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
 
             Assert.Equal(5, entriesCount);
             Assert.Equal(5, relationLeftIDs.Intersect(relTablesLeft.Select(x => x.ID)).Count());
@@ -628,7 +628,7 @@ namespace IV.DX.Persistence.IntTests
             {
                 try
                 {
-                    var relationLeftID = this._coreRepo.GetRelation(obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                    var relationLeftID = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
                 }
                 catch (Exception exc)
                 {
@@ -713,13 +713,13 @@ namespace IV.DX.Persistence.IntTests
             // Additional checking
             foreach (var item in relTablesRight)
             {
-                this._coreRepo.AddRelation(obj2.DXObjectDefinitionMainElement.Name, item.ID, "RelTableLeftRelation", obj1.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID);
+                this._coreRepo.AddRelation(obj2.Name, item.ID, "RelTableLeftRelation", obj1.Name, relTableFirstLeft.ID);
             }
 
             foreach (var item in relTablesRight)
             {
-                var relationLeftID = this._coreRepo.GetRelation(obj2.DXObjectDefinitionMainElement.Name, item.ID, "RelTableLeftRelation");
-                var relationLeftIDs = this._coreRepo.GetRelations(obj2.DXObjectDefinitionMainElement.Name, item.ID, "RelTableLeftRelation");
+                var relationLeftID = this._coreRepo.GetRelation(obj2.Name, item.ID, "RelTableLeftRelation");
+                var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, item.ID, "RelTableLeftRelation");
 
                 Assert.Equal(relTableFirstLeft.ID, relationLeftID);
                 Assert.Single(relationLeftIDs);
@@ -733,7 +733,7 @@ namespace IV.DX.Persistence.IntTests
                 Assert.Equal(relTableFirstLeft.ID, item.RelTableLeftRelation);
             }
 
-            var relationRightIDs = this._coreRepo.GetRelations(obj1.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+            var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, relTableFirstLeft.ID, "RelTableRightRelation");
 
             Assert.Equal(5, entriesCount);
             Assert.Equal(5, relationRightIDs.Intersect(relTablesRight.Select(x => x.ID)).Count());
@@ -743,7 +743,7 @@ namespace IV.DX.Persistence.IntTests
             {
                 try
                 {
-                    var relationRightID = this._coreRepo.GetRelation(obj1.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableLeftRelation");
+                    var relationRightID = this._coreRepo.GetRelation(obj1.Name, relTableFirstLeft.ID, "RelTableLeftRelation");
                 }
                 catch (Exception exc)
                 {
@@ -830,10 +830,10 @@ namespace IV.DX.Persistence.IntTests
 
             foreach (var item in relTablesLeft)
             {
-                this._coreRepo.AddRelation(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation", obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, item.ID, "RelTableRightRelation", obj2.Name, relTableFirstRight.ID);
 
-                var relationRightID = this._coreRepo.GetRelation(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation");
-                var relationRightIDs = this._coreRepo.GetRelations(obj1.DXObjectDefinitionMainElement.Name, item.ID, "RelTableRightRelation");
+                var relationRightID = this._coreRepo.GetRelation(obj1.Name, item.ID, "RelTableRightRelation");
+                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.ID, "RelTableRightRelation");
 
                 Assert.Equal(relTableFirstRight.ID, relationRightID);
                 Assert.Single(relationRightIDs);
@@ -842,8 +842,8 @@ namespace IV.DX.Persistence.IntTests
                 lastItemLeft = item;
             }
 
-            var relationLeftID = this._coreRepo.GetRelation(obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-            var relationLeftIDs = this._coreRepo.GetRelations(obj2.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+            var relationLeftID = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
 
             Assert.Equal(lastItemLeft.ID, relationLeftID);
             Assert.Single(relationLeftIDs);
@@ -975,21 +975,21 @@ namespace IV.DX.Persistence.IntTests
             var actionsForAdding = new List<Action>() {
                 new Action(() =>
                 {
-                    this._coreRepo.AddRelation(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID);
+                    this._coreRepo.AddRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.Name, relTableFirstRight.ID);
                 }),
                 new Action(() =>
                 {
-                    this._coreRepo.AddRelation(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID);
+                    this._coreRepo.AddRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.ID);
                 }),
             };
             var actionsForRemoving = new List<Action>() {
                 new Action(() =>
                 {
-                    this._coreRepo.RemoveRelation(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID);
+                    this._coreRepo.RemoveRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.Name, relTableFirstRight.ID);
                 }),
                 new Action(() =>
                 {
-                    this._coreRepo.RemoveRelation(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID);
+                    this._coreRepo.RemoveRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.ID);
                 }),
             };
 
@@ -1001,15 +1001,15 @@ namespace IV.DX.Persistence.IntTests
                     actionForAdding.Invoke();
 
                     // Checking
-                    var relationIdRight = this._coreRepo.GetRelation(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                    var relationIdsRight = this._coreRepo.GetRelations(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+                    var relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+                    var relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
 
                     Assert.Equal(relTableFirstRight.ID, relationIdRight);
                     Assert.Single(relationIdsRight);
                     Assert.Equal(relTableFirstRight.ID, relationIdsRight.Single());
 
-                    var relationIdLeft = this._coreRepo.GetRelation(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-                    var relationIdsLeft = this._coreRepo.GetRelations(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                    var relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                    var relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
 
                     Assert.Equal(relTableFirstLeft.ID, relationIdLeft);
                     Assert.Single(relationIdsLeft);
@@ -1023,10 +1023,10 @@ namespace IV.DX.Persistence.IntTests
                         // Action
                         actionForRemoving.Invoke();
 
-                        relationIdRight = this._coreRepo.GetRelation(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                        relationIdsRight = this._coreRepo.GetRelations(objLeft.DXObjectDefinitionMainElement.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                        relationIdLeft = this._coreRepo.GetRelation(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-                        relationIdsLeft = this._coreRepo.GetRelations(objRight.DXObjectDefinitionMainElement.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                        relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+                        relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+                        relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                        relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
 
                         Assert.Null(relationIdRight);
                         Assert.Null(relationIdLeft);

@@ -2,13 +2,7 @@
     "S_Type": "DXUnitDefinitionUnit",
     "ID": "0C632EA2-D6E0-424B-8E4E-CF2B52847D54",
     "TimeStamp": "2021-10-02T00:00:00",
-    "DXObjectDefinitionMainElement": {
-        "S_Type": "DXObjectDefinitionMainElement",
-        "DXUnitID": "0C632EA2-D6E0-424B-8E4E-CF2B52847D54",
-        "ID": "19EAEF84-8E84-4B1B-BC5E-90A277BB67E5",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "UpdatedObject",
-        "Type": 2,
-        "Kind": 2
-    }
+    "Name": "UpdatedObject",
+    "Type": 2,
+    "Kind": 2
 }

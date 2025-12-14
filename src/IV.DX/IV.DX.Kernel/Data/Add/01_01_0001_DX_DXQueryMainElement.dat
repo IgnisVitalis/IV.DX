@@ -3,15 +3,10 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
         "TimeStamp": "2025-12-01T11:09:56.6615Z",
-        "DXObjectDefinitionMainElement": {
-            "S_Type": "DXObjectDefinitionMainElement",
-            "ID": "2efa7b73-ba96-4596-aa6d-5f8d8ef2418a",
-            "TimeStamp": "2025-12-01T11:09:56.627774Z",
-            "Name": "DXQueryMainElement",
-            "DisplayValue": null,
-            "DXUnitID": "dcbcc190-16e7-4b03-b236-2386f770b4cb",
-            "Kind": 1
-        },
+        "Name": "DXQueryMainElement",
+        "DisplayValue": null,
+        "Kind": 1,
+
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
