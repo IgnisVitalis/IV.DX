@@ -4,6 +4,7 @@
         "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXElementInUnitTypeEnum",
+        "DisplayValue": "Value",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -52,6 +53,7 @@
         "ID": "971d538a-1489-483a-bc84-86596ed0c51a",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXColumnTypeEnum",
+        "DisplayValue": "Value",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -100,6 +102,7 @@
         "ID": "3c9d2fa6-99e3-472b-b493-3e4790597f98",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXObjectKindEnum",
+        "DisplayValue": "Value",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -148,6 +151,7 @@
         "ID": "3fdb5f35-33f6-4356-8f65-f92da429191c",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXRelationTypeEnum",
+        "DisplayValue": "Value",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {

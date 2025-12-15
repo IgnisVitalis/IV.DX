@@ -4,6 +4,7 @@
         "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXColumnDefinitionElement",
+        "DisplayValue": "Name",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -93,6 +94,7 @@
         "ID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXUniqueColumnsElement",
+        "DisplayValue": "Columns",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -118,6 +120,7 @@
         "ID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXObjectEnumElement",
+        "DisplayValue": "Name",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {
@@ -152,6 +155,7 @@
         "ID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXElementInUnitDefinitionElement",
+        "DisplayValue": "RelationType",
         "Kind": 1,
 
         "DXObjectEnumElement": {
@@ -169,12 +173,13 @@
                 }
             ]
         }
-    },  
+    },
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXUnitRelationElement",
+        "DisplayValue": "OwnRelationName",
         "Kind": 1,
 
         "DXColumnDefinitionElement": {

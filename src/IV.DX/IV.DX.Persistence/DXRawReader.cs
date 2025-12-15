@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel.Attributes;
+﻿using IV.DX.Kernel;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
@@ -11,7 +12,10 @@ namespace IV.DX.Persistence
         {
             if (typeName == null || columns == null)
                 return null;
-         
+
+            columns[Constants.ID] = Constants.ID;
+            columns[Constants.TimeStamp] = Constants.TimeStamp;
+
             return this.RunRequest((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);

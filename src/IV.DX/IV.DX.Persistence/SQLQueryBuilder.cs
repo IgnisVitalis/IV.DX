@@ -216,7 +216,7 @@ namespace IV.DX.Persistence
             {
                 {"DXObjectEnumElement", new[]{  "EnumKey", "EnumType" } },
                 {"DXElementInUnitDefinitionElement", new[] { "DXElementDefinitionUnit" } },
-                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } }               
+                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } }
             };
 
             foreach (var item in customProps)
