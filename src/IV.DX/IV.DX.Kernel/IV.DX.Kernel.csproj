@@ -9,15 +9,12 @@
 
     <ItemGroup>
       <None Remove="Data\Add\01_01_0000_DX_DXQueryColumnElement.dat" />
-      <None Remove="Data\Add\01_01_0001_DX_DXQueryMainElement.dat" />
-      <None Remove="Data\Add\01_01_0002_DX_DXQueryUnit.dat" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Data\Add\01_01_0000_DX_DXQueryColumnElement.dat" />
-      <EmbeddedResource Include="Data\Add\01_01_0001_DX_DXQueryMainElement.dat" />
-      <EmbeddedResource Include="Data\Add\01_01_0003_DX_DXFilterUnit.dat" />
-      <EmbeddedResource Include="Data\Add\01_01_0002_DX_DXQueryUnit.dat" />
+      <EmbeddedResource Include="Data\Add\01_01_0002_DX_DXFilterUnit.dat" />
+      <EmbeddedResource Include="Data\Add\01_01_0001_DX_DXQueryUnit.dat" />
       <EmbeddedResource Include="Data\Add.json" />
       <EmbeddedResource Include="Data\Core\01_01_0000_Core_DXEnumDefinitionUnit.dat" />
       <EmbeddedResource Include="Data\Core\01_01_0001_Core_DXElementDefinitionUnit.dat" />

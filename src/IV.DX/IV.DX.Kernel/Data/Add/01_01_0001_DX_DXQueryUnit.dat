@@ -4,8 +4,42 @@
         "ID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
         "TimeStamp": "2025-12-01T10:41:45.778822Z",
         "Name": "DXQueryUnit",
-        "DisplayValue": null,
+        "DisplayValue": "Name",
         "Kind": 1,
+
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "d574c12a-0c51-47f9-aa52-653181d44a96",
+                    "TimeStamp": "2025-12-01T11:09:56.64243Z",
+                    "Name": "Name",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
+                    "ColumnType": 3
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "6e4d61bf-d861-4c0f-9dd8-d6096868ae98",
+                    "TimeStamp": "2025-12-01T11:09:56.64247Z",
+                    "Name": "Description",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
+                    "ColumnType": 4
+                }
+            ],
+            "Deleted": []
+        },
 
         "DXElementInUnitDefinitionElement": {
             "S_Type": "DXElementInUnitDefinitionElement",
@@ -18,14 +52,6 @@
                     "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
                     "RelationType": 3,
                     "DXElementDefinitionUnit": "1954b32e-d486-418f-84e3-5e6ce515d2ff"
-                },
-                {
-                    "S_Type": "DXElementInUnitDefinitionElement",
-                    "ID": "6d5cb4d7-9f99-437d-9498-8d91a9fec28f",
-                    "TimeStamp": "2025-12-01T11:10:08.22401Z",
-                    "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
-                    "RelationType": 1,
-                    "DXElementDefinitionUnit": "dcbcc190-16e7-4b03-b236-2386f770b4cb"
                 }
             ],
             "Deleted": []
