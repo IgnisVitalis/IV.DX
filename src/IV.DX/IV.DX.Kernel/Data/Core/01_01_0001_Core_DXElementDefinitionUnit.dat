@@ -169,14 +169,7 @@
                 }
             ]
         }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "eeb499d0-4e20-41aa-8a24-9981c3cbf511",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXUnitInheritanceElement",
-        "Kind": 1
-    },      
+    },  
     {
         "S_Type": "DXElementDefinitionUnit",
         "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",

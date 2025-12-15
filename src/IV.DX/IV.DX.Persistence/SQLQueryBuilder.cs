@@ -216,8 +216,7 @@ namespace IV.DX.Persistence
             {
                 {"DXObjectEnumElement", new[]{  "EnumKey", "EnumType" } },
                 {"DXElementInUnitDefinitionElement", new[] { "DXElementDefinitionUnit" } },
-                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } },
-                {"DXUnitInheritanceElement", new[]{"BaseDXUnit"} }
+                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } }               
             };
 
             foreach (var item in customProps)
@@ -308,7 +307,7 @@ namespace IV.DX.Persistence
             // 6. Inheritance Units
             foreach (var dxUnit in unitsList)
             {
-                if (dxUnit.DXUnitInheritanceElement is null)
+                if (!dxUnit.BaseDXUnit.HasValue)
                 {
                     continue;
                 }
@@ -316,7 +315,7 @@ namespace IV.DX.Persistence
                 var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
-                var baseDXUnit = unitsById[dxUnit.DXUnitInheritanceElement.BaseDXUnit];
+                var baseDXUnit = unitsById[dxUnit.BaseDXUnit.Value];
                 var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.Name);
 
                 dxNode.SetBaseDXNode(dxNodeForBaseDXUnit);

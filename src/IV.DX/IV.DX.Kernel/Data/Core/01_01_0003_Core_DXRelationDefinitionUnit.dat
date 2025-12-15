@@ -52,22 +52,6 @@
     }, 
     {
         "S_Type": "DXRelationDefinitionUnit",
-        "ID": "87964e3e-ed1b-42f5-a18e-9f7102ebb352",
-        "TimeStamp": "2021-10-02T00:00:00",
-
-        "ObjectNameLeft": "DXUnitDefinitionUnit",
-        "RelationNameLeft": "DXUnitDefinitionUnitID",
-        "ObjectNameRight": "DXUnitInheritanceElement",
-        "RelationNameRight": "DXUnitInheritanceElement",
-        "RelationColumnNameLeft": "ID",
-        "RelationColumnTypeLeft": 1,
-        "RelationColumnNameRight": "DXUnitDefinitionUnitID",
-        "RelationColumnTypeRight": 1,
-        "RelationType": 8,
-        "Kind": 1
-    },
-    {
-        "S_Type": "DXRelationDefinitionUnit",
         "ID": "d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc",
         "TimeStamp": "2021-10-02T00:00:00",
 
@@ -205,7 +189,7 @@
         "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
         "TimeStamp": "2021-10-02T00:00:00",
 
-        "ObjectNameLeft": "DXUnitInheritanceElement",
+        "ObjectNameLeft": "DXUnitDefinitionUnit",
         "RelationNameLeft": "DerivedDXUnits",
         "ObjectNameRight": "DXUnitDefinitionUnit",
         "RelationNameRight": "BaseDXUnit",
@@ -214,7 +198,7 @@
         "RelationColumnNameRight": "ID",
         "RelationColumnTypeRight": 1,
         "RelationTable": null,
-        "RelationType": 4,
+        "RelationType": 6,
         "Kind": 1
     },
     {

@@ -194,16 +194,16 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
         {
-            if (derivedDXUnit == null || derivedDXUnit.DXUnitInheritanceElement?.BaseDXUnit == null)
+            if (derivedDXUnit == null || !derivedDXUnit.BaseDXUnit.HasValue)
                 return null;
 
-            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.DXUnitInheritanceElement.BaseDXUnit);
+            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
 
             if (result == null)
             {
                 this.RefreshCache();
 
-                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.DXUnitInheritanceElement.BaseDXUnit);
+                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
             }
 
             return result;

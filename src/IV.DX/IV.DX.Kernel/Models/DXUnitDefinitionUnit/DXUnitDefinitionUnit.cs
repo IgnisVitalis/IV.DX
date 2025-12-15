@@ -5,7 +5,8 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXUnitDefinitionUnit")]
     public class DXUnitDefinitionUnit : DXObjectDefinitionUnit
     {
-        public DXUnitInheritanceElement DXUnitInheritanceElement { get; set; }
+        [DXColumn("BaseDXUnit")]
+        public Guid? BaseDXUnit { get; set; }
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
         public DXMultiElementsContainer<DXUnitRelationElement> DXUnitRelationElement { get; set; }
 

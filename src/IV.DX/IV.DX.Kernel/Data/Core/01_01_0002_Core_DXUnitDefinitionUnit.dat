@@ -86,26 +86,12 @@
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXUnitDefinitionUnit",
         "Kind": 1,
-
-        "DXUnitInheritanceElement": {
-            "S_Type": "DXUnitInheritanceElement",
-            "ID": "710b1d0b-9343-4739-8126-ab4baefe5763",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
-            "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
-        },
+        "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+               
         "DXElementInUnitDefinitionElement": {
             "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
             "Announced": [
-                {
-                    "S_Type": "DXElementInUnitDefinitionElement",
-                    "ID": "15399025-98be-4cf1-9761-413b5fde515c",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
-                    "RelationType": 2,
-                    "DXElementDefinitionUnit": "eeb499d0-4e20-41aa-8a24-9981c3cbf511"
-                },
                 {
                     "S_Type": "DXElementInUnitDefinitionElement",
                     "ID": "5c9c45e1-6793-418a-a139-fffa3dd386d9",
@@ -131,14 +117,7 @@
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXElementDefinitionUnit",
         "Kind": 1,
-
-        "DXUnitInheritanceElement": {
-            "S_Type": "DXUnitInheritanceElement",
-            "ID": "61b4c43f-cc9b-460e-80f9-9f2a7f4f7ca9",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
-            "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
-        }
+        "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"        
     },
     {
         "S_Type": "DXUnitDefinitionUnit",
@@ -146,14 +125,7 @@
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXEnumDefinitionUnit",
         "Kind": 1,
-
-        "DXUnitInheritanceElement": {
-            "S_Type": "DXUnitInheritanceElement",
-            "ID": "408785e8-7e42-4e7f-b60a-d5c686911612",
-            "TimeStamp": "2021-10-02T00:00:00",
-            "DXUnitID": "baa62331-fa09-47c6-8d33-f2b25ec29bf1",
-            "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
-        }
+        "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
     },
     {
         "S_Type": "DXUnitDefinitionUnit",

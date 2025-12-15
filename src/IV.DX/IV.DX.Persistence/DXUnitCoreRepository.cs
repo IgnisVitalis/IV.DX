@@ -744,7 +744,7 @@ namespace IV.DX.Persistence
         {
             var result = new List<DXUnitDefinitionUnit>() { derivedDXUnit };
 
-            if (derivedDXUnit.DXUnitInheritanceElement?.BaseDXUnit == null)
+            if (!derivedDXUnit.BaseDXUnit.HasValue)
                 return result;
 
             var derivedDXUnitInfo = derivedDXUnit;
@@ -755,7 +755,7 @@ namespace IV.DX.Persistence
 
                 result.Add(baseClass);
 
-                if (baseClass.DXUnitInheritanceElement != null)
+                if (baseClass.BaseDXUnit.HasValue)
                 {
                     derivedDXUnitInfo = baseClass;
                 }
