@@ -192,7 +192,7 @@ namespace IV.DX.Persistence
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
         }
 
-        public DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
+        public DXUnitDefinitionUnit? GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
         {
             if (derivedDXUnit == null || !derivedDXUnit.BaseDXUnit.HasValue)
                 return null;
@@ -209,7 +209,7 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        public DXUnitDefinitionUnit GetDXUnitDefinition(string dxUnitType)
+        public DXUnitDefinitionUnit? GetDXUnitDefinition(string dxUnitType)
         {
             var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.Name.Equals(dxUnitType));
 

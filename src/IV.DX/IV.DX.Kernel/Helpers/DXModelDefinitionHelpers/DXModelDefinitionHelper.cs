@@ -8,19 +8,34 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
     {
         public static DXModelDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit, IEnumerable<DXRelationDefinitionUnit> relations)
         {
-            var dxModel = BuildBaseModelDefinition(mainDXUnit, relations);
+            var dxModel = BuildBaseModelDefinition(mainDXUnit, Enumerable.Empty<DXObjectDefinitionUnit>(), relations);
 
             return dxModel;
         }
 
-        private static DXModelDefinition BuildBaseModelDefinition(DXObjectDefinitionUnit mainDXObject, IEnumerable<DXRelationDefinitionUnit> relations)
+        private static DXModelDefinition BuildBaseModelDefinition(
+            DXObjectDefinitionUnit dxUnit,
+            IEnumerable<DXObjectDefinitionUnit> baseDXUnits,
+            IEnumerable<DXRelationDefinitionUnit> relations)
         {
-            if (mainDXObject == null)
+            if (dxUnit == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(mainDXObject.Name, mainDXObject.Name, true);
+            var ownDXElementDefinition = new DXElementDefinition(dxUnit.Name, dxUnit.Name, true);
 
-            var props = mainDXObject.DXColumnDefinitionElement.Announced?.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+            List<DXPropertyDefinition> props = new List<DXPropertyDefinition>();
+
+
+            var dxUnitProps = dxUnit.DXColumnDefinitionElement.Announced.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+
+            props.AddRange(dxUnitProps);
+
+            foreach (var baseDXUnit in baseDXUnits)
+            {
+                var baseDXUnitProps = baseDXUnit.DXColumnDefinitionElement.Announced.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+
+                props.AddRange(baseDXUnitProps);
+            }         
 
             //var relationsAsProperties = relations.ToDXPropertyDefinitions(mainDXObject.Name);
 
@@ -33,14 +48,15 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
         }
 
         public static DXModelDefinition BuildModelDefinition(
-            DXUnitDefinitionUnit mainDXUnit,
+            DXUnitDefinitionUnit dxUnit,
+            IEnumerable<DXUnitDefinitionUnit> baseDXUnits,
             IEnumerable<DXRelationDefinitionUnit> relations,
             IEnumerable<DXElementDefinitionUnit> relatedSingleMandatoryDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedSingleOptionalDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements = null)
         {
-            var dxModel = BuildBaseModelDefinition(mainDXUnit, relations);
+            var dxModel = BuildBaseModelDefinition(dxUnit, baseDXUnits, relations);
 
             if (dxModel == null)
                 return null;

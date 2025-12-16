@@ -215,7 +215,7 @@ namespace IV.DX.Kernel.Helpers
             }
             else if (value is string)
             {
-                return ParseSByte(System.Convert.ToString(value));
+                return ParseSByte(Convert.ToString(value));
             }
             else
             {
@@ -280,7 +280,7 @@ namespace IV.DX.Kernel.Helpers
             }
             else if (value is string)
             {
-                return ParseDouble(System.Convert.ToString(value));
+                return ParseDouble(Convert.ToString(value));
             }
             else
             {
@@ -337,13 +337,13 @@ namespace IV.DX.Kernel.Helpers
             }
             else
             {
-                return System.Convert.ToBoolean(value);
+                return Convert.ToBoolean(value);
             }
         }
 
         public static bool ParseBool(string value)
         {
-            return System.Convert.ToBoolean(value);
+            return Convert.ToBoolean(value);
         }
 
         public static bool ParseBool(string value, bool defaultValue)

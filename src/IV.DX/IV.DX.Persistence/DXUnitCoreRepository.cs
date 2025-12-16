@@ -9,6 +9,7 @@ using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 
 namespace IV.DX.Persistence
 {
@@ -254,16 +255,16 @@ namespace IV.DX.Persistence
             var mainDXUnit = this.GetDXUnitDefinition(type);
 
             if (mainDXUnit == null)
-                return null;
+                throw new Exception($"There are no DXUnit with name '{mainDXUnit}'");
 
-            var entities = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnit);
+            var dxUnits = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnit);
 
             List<DXElementDefinitionUnit> singleMandatoryDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> singleOptionalDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> multiMandatoryDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> multiOptionalDXElements = new List<DXElementDefinitionUnit>();
-
-            foreach (var dxUnit in entities)
+                 
+            foreach (var dxUnit in dxUnits)
             {
                 var singleMandatoryDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
 
@@ -296,6 +297,7 @@ namespace IV.DX.Persistence
 
             var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(
                 mainDXUnit,
+                dxUnits.Where(x=>x!= mainDXUnit),
                 _dxStructureCache.DXRelations,
                 singleMandatoryDXElements,
                 singleOptionalDXElements,

@@ -14,8 +14,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         void CreateDataStructure(DXUnitDefinitionUnit dxUnitDefinition, DXElementDefinitionUnit dxElementDefinition);
         void DropDataStructure(DXUnitDefinitionUnit dxUnitDefinition, DXElementDefinitionUnit dxElementDefinition);
         void SetDXUnitInheritance(string childDXUnit, string baseDXUnit);
-        DXUnitDefinitionUnit GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit);
-        DXUnitDefinitionUnit GetDXUnitDefinition(string name);
+        DXUnitDefinitionUnit? GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit);
+        DXUnitDefinitionUnit? GetDXUnitDefinition(string name);
         DXUnitDefinitionUnit GetDXUnitDefinition(Guid id);
         IEnumerable<DXUnitDefinitionUnit> GetDXUnitDefinitions(IEnumerable<Guid> ids);
         DXEnumDefinitionUnit GetDXEnumDefinition(string enumName);

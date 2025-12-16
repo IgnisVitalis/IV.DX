@@ -1,6 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
@@ -137,6 +138,9 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             Assert.NotNull(item);
+            Assert.Equal(id, ConvertHelper.ParseGuid(item["ID"]));
+            Assert.Equal("DXColumnDefinitionElement", ConvertHelper.ParseString(item["Name"]));
+            Assert.Equal("Name", ConvertHelper.ParseString(item["DisplayValue"]));
         }
 
         [Fact]
