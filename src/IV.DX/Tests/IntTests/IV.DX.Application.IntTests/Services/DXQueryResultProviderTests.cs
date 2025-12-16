@@ -27,7 +27,7 @@ namespace IV.DX.Application.IntTests.Services
             var dxQueryID = new Guid("664a996a-bf83-46f9-aebb-c55f89deb6eb");
 
             // Action
-            var result = await _dxQueryResultProvider.GetAsync(dxQueryID);
+            var result = await _dxQueryResultProvider.GetAsync(dxQueryID, null);
 
             // Assert
         }

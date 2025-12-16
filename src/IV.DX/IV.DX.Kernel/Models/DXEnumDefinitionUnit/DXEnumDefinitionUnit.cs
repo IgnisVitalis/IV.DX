@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {

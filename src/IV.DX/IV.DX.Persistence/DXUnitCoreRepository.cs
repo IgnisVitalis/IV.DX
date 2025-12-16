@@ -439,14 +439,16 @@ namespace IV.DX.Persistence
             if (dataColumn.DataType == typeof(DateTime))
             {
                 var dateTime = ConvertHelper.ParseDateTime(dataRow[dataColumn]);
-                dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+                return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+            }
 
-                return dateTime;
-            }
-            else
+            if (dataColumn.DataType == typeof(byte[]))
             {
-                return dataRow[dataColumn];
+                var bytes = (byte[])dataRow[dataColumn];
+                return bytes.Length == 0 ? string.Empty : Convert.ToBase64String(bytes);
             }
+
+            return dataRow[dataColumn];
         }
 
         public Guid Insert(DXModel dxModel)
@@ -1014,7 +1016,7 @@ namespace IV.DX.Persistence
             else
             if (dataColumn.DataType == typeof(byte[]))
             {
-                dataRow[dataColumn] = (byte[])obj;
+                dataRow[dataColumn] = ConvertToBytes(obj);
             }
             else if (dataColumn.DataType == typeof(TimeSpan))
             {
@@ -1025,6 +1027,30 @@ namespace IV.DX.Persistence
             {
                 dataRow[dataColumn] = ConvertHelper.ParseString(obj);
             }
+        }
+
+        private static byte[] ConvertToBytes(object obj)
+        {
+            if (obj is null) return Array.Empty<byte>();
+
+            if (obj is byte[] b) return b;
+
+            // Newtonsoft
+            if (obj is Newtonsoft.Json.Linq.JValue jv) obj = jv.Value!;
+            if (obj is Newtonsoft.Json.Linq.JToken jt && jt.Type == Newtonsoft.Json.Linq.JTokenType.String) obj = jt.ToString();
+
+            if (obj is string s)
+            {
+                if (string.IsNullOrWhiteSpace(s)) return Array.Empty<byte>();
+
+                var comma = s.IndexOf(',');
+                if (s.StartsWith("data:", StringComparison.OrdinalIgnoreCase) && comma >= 0)
+                    s = s[(comma + 1)..];
+
+                return Convert.FromBase64String(s);
+            }
+
+            throw new InvalidOperationException($"Unsupported blob value type: {obj.GetType().FullName}");
         }
 
         private void SetNotNullValueToRowCell(DataRow dataRow, DataColumn dataColumn)

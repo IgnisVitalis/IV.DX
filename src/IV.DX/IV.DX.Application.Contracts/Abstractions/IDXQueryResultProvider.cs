@@ -5,7 +5,7 @@ namespace IV.DX.Application.Contracts.Abstractions
 {
     public interface IDXQueryResultProvider
     {
-        Task<JObject> GetAsync(Guid dxQueryID, CancellationToken ct = default);
+        Task<JObject> GetAsync(Guid dxQueryID, Guid? dxFilterID, CancellationToken ct = default);
 
         Task<IEnumerable<DXDisplayValue>> GetDisplayValuesAsync(string typeName, CancellationToken ct = default);
     }

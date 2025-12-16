@@ -13,7 +13,7 @@ namespace IV.DX.Application.Services
 {
     internal class DXQueryResultProvider(IDXUnitDataService dataService, IDXRawReader dxRawReader, IDXStructureCache dxStructureCache) : IDXQueryResultProvider
     {
-        public async Task<JObject> GetAsync(Guid dxQueryID, CancellationToken ct = default)
+        public async Task<JObject> GetAsync(Guid dxQueryID, Guid? dxFilterID, CancellationToken ct = default)
         {
             var dxQuery = await dataService.GetItemAsync<DXQueryUnit>(dxQueryID);
 

@@ -40,6 +40,12 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task Insert_UsingDXUnitWithBlob_Ok()
+        {
+
+        }
+
+        [Fact]
         public async Task Insert_UsingDXUnitWithSelfRelation_Ok()
         {
             // Init            
