@@ -45,11 +45,21 @@ namespace IV.DX.Hosting
 
         public async Task InitDXQueryDataAsync(CancellationToken ct = default)
         {
+            if (!this._isCoreInitialized)
+            {
+                throw new Exception("Please call InitDXCoreDataAsync method before");
+            }
+
             await MigrateCustomEmbeddedAsync("Data/DXQuery.json", ct);
         }
 
         public async Task InitDXSecurityDataAsync(CancellationToken ct = default)
         {
+            if (!this._isCoreInitialized)
+            {
+                throw new Exception("Please call InitDXCoreDataAsync method before");
+            }
+
             await MigrateCustomEmbeddedAsync("Data/DXSecurity.json", ct);
         }
 
@@ -57,7 +67,7 @@ namespace IV.DX.Hosting
         {
             if (!this._isCoreInitialized)
             {
-                throw new Exception("Please call InitCoreDataAsync method before");
+                throw new Exception("Please call InitDXCoreDataAsync method before");
             }
 
             await _migration.MigrateCustomAsync(configPath, ct);
