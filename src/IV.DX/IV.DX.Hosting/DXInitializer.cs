@@ -12,9 +12,11 @@ namespace IV.DX.Hosting
         private readonly IDXMigrationService _migration;
         private readonly IDXStructureCache _dXStructureCache;
 
+        private bool _isCoreInitialized;
+
         public DXInitializer(
             IDXUnitCoreRepository coreRepo,
-            IDXMigrationService migration, 
+            IDXMigrationService migration,
             IDXStructureCache dXStructureCache)
         {
             _coreRepo = coreRepo;
@@ -22,7 +24,7 @@ namespace IV.DX.Hosting
             _dXStructureCache = dXStructureCache;
         }
 
-        public async Task InitCoreDataAsync(CancellationToken ct = default)
+        public async Task InitDXCoreDataAsync(CancellationToken ct = default)
         {
             _coreRepo.CreateDataBase();
 
@@ -37,15 +39,35 @@ namespace IV.DX.Hosting
             DXMaintenanceToken.StopMaintenanceCore();
 
             await _dXStructureCache.RefreshAsync(ct);
+            
+            this._isCoreInitialized = true;
+        }
 
-            await _migration.MigrateCustomEmbeddedAsync(Assembly.GetAssembly(typeof(DXUnitAttribute)), "Data/DXQuery.json", ct);
+        public async Task InitDXQueryDataAsync(CancellationToken ct = default)
+        {
+            await MigrateCustomEmbeddedAsync("Data/DXQuery.json", ct);
+        }
 
-            await _dXStructureCache.RefreshAsync(ct);
+        public async Task InitDXSecurityDataAsync(CancellationToken ct = default)
+        {
+            await MigrateCustomEmbeddedAsync("Data/DXSecurity.json", ct);
         }
 
         public async Task InitCustomDataAsync(string configPath, CancellationToken ct = default)
         {
+            if (!this._isCoreInitialized)
+            {
+                throw new Exception("Please call InitCoreDataAsync method before");
+            }
+
             await _migration.MigrateCustomAsync(configPath, ct);
+
+            await _dXStructureCache.RefreshAsync(ct);
+        }
+
+        private async Task MigrateCustomEmbeddedAsync(string path, CancellationToken ct = default)
+        {
+            await _migration.MigrateCustomEmbeddedAsync(Assembly.GetAssembly(typeof(DXUnitAttribute)), path , ct);
 
             await _dXStructureCache.RefreshAsync(ct);
         }

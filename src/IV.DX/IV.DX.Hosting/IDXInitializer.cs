@@ -2,7 +2,9 @@
 {
     public interface IDXInitializer
     {
-        Task InitCoreDataAsync(CancellationToken ct = default);
+        Task InitDXCoreDataAsync(CancellationToken ct = default);
+        Task InitDXQueryDataAsync(CancellationToken ct = default);
+        Task InitDXSecurityDataAsync(CancellationToken ct = default);
         Task InitCustomDataAsync(string configPath, CancellationToken ct = default);
     }
 }
