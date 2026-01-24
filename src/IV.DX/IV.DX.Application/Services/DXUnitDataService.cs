@@ -1,7 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel;
 using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;

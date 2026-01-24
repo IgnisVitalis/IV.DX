@@ -1,0 +1,60 @@
+[
+    {
+        "S_Type": "DXEnumDefinitionUnit",
+        "ID": "67bcf145-1512-4660-8447-03142c4f94aa",
+        "TimeStamp": "2025-12-19T13:29:20.599652Z",
+        "Name": "DXIdentityProviderTypeEnum",
+        "DisplayValue": "Value",
+        "Kind": 1,
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "01b3288e-bbfa-4c1c-a3ba-46b11b870a53",
+                    "TimeStamp": "2025-12-19T13:29:04.030962Z",
+                    "Name": "Value",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "67bcf145-1512-4660-8447-03142c4f94aa",
+                    "DXObjectDefinitionUnitID": null,
+                    "ColumnType": 3
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "378091d5-63b5-4b6a-891d-464aa5dbeb2f",
+                    "TimeStamp": "2025-12-19T13:29:04.03105Z",
+                    "Name": "Key",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "67bcf145-1512-4660-8447-03142c4f94aa",
+                    "DXObjectDefinitionUnitID": null,
+                    "ColumnType": 8
+                }
+            ],
+            "Deleted": []
+        },
+        "DXUniqueColumnsElement": {
+            "S_Type": "DXUniqueColumnsElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXUniqueColumnsElement",
+                    "ID": "e15421bc-efdc-4902-9598-5a0c3374e953",
+                    "TimeStamp": "2025-12-19T13:29:20.594707Z",
+                    "Columns": "Key",
+                    "DXUnitID": "67bcf145-1512-4660-8447-03142c4f94aa",
+                    "DXObjectDefinitionUnitID": null
+                }
+            ],
+            "Deleted": []
+        }
+    }
+]

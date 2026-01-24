@@ -1,0 +1,30 @@
+[
+    {
+        "S_Type": "DXIdentityProviderTypeEnum",
+        "ID": "ffec15db-7a29-451b-8729-f270f2ea72d0",
+        "TimeStamp": "2025-12-19T13:29:20.599652Z",
+        "Key": 1,
+        "Value": "Local"
+    },
+    {
+        "S_Type": "DXIdentityProviderTypeEnum",
+        "ID": "5e3de7c4-e82b-4d4a-b433-1077c0d1e2b9",
+        "TimeStamp": "2025-12-19T13:29:20.599652Z",
+        "Key": 2,
+        "Value": "Telegram"
+    },
+    {
+        "S_Type": "DXIdentityProviderTypeEnum",
+        "ID": "5e3de7c4-e82b-4d4a-b433-1077c0d1e2b9",
+        "TimeStamp": "2025-12-19T13:29:20.599652Z",
+        "Key": 3,
+        "Value": "Microsoft"
+    },
+    {
+        "S_Type": "DXIdentityProviderTypeEnum",
+        "ID": "fe2dcb65-bcd5-4252-84c9-c1f96d6a78be",
+        "TimeStamp": "2025-12-19T13:29:20.599652Z",
+        "Key": 4,
+        "Value": "Facebook"
+    }
+]

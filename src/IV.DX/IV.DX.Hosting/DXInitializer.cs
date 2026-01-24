@@ -31,14 +31,14 @@ namespace IV.DX.Hosting
             await _dXStructureCache.RefreshAsync(ct);
 
             await _migration.MigrateCoreAsync(
-                Assembly.GetAssembly(typeof(DXUnitAttribute)), 
-                "Data/CorePreInit.json",
-                "Data/CorePostInit.json", ct);
+                Assembly.GetAssembly(typeof(DXUnitAttribute)),
+                "Data/DXCorePreInit.json",
+                "Data/DXCorePostInit.json", ct);
             DXMaintenanceToken.StopMaintenanceCore();
 
             await _dXStructureCache.RefreshAsync(ct);
 
-            await _migration.MigrateCustomEmbeddedAsync(Assembly.GetAssembly(typeof(DXUnitAttribute)), "Data/Add.json", ct);
+            await _migration.MigrateCustomEmbeddedAsync(Assembly.GetAssembly(typeof(DXUnitAttribute)), "Data/DXQuery.json", ct);
 
             await _dXStructureCache.RefreshAsync(ct);
         }

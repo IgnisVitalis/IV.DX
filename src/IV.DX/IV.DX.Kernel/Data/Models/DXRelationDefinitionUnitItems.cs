@@ -14,7 +14,7 @@ namespace IV.DX.Kernel.Data.Models
         {
             var text = ResourceReader.ReadEmbeddedText(
                 Assembly.GetAssembly(typeof(DXUnitAttribute)),
-                "Data/Core/01_01_0003_Core_DXRelationDefinitionUnit.dat");
+                "Data/DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.dat");
 
             var items = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(text);
             var revertedItems = items.Select(x => x.CreateInvertedRelationObject()).ToList();

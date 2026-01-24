@@ -14,7 +14,7 @@ namespace IV.DX.Kernel.Data.Models
         {
             var text = ResourceReader.ReadEmbeddedText(
                 Assembly.GetAssembly(typeof(DXUnitAttribute)),
-                "Data/Core/01_01_0001_Core_DXElementDefinitionUnit.dat");
+                "Data/DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.dat");
 
             Items = DXUnitConverter.ToDXUnits<DXElementDefinitionUnit>(text).ToList();
         }
