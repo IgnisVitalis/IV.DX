@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="be50bb39-8e68-4470-b5bf-f02c82f41485" name="victo@DESKTOP-3ICCFBT 2026-01-24 19:21:06" runUser="DESKTOP-3ICCFBT\victo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-24T19:21:06.7500162+02:00" queuing="2026-01-24T19:21:06.7500169+02:00" start="2026-01-24T19:21:05.8306789+02:00" finish="2026-01-24T19:21:06.7544952+02:00" />
+  <TestSettings name="default" id="b60d3261-8fd5-414c-9932-e3e27531ae3f">
+    <Deployment runDeploymentRoot="victo_DESKTOP-3ICCFBT_2026-01-24_19_21_06" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="fc8fe3d5-fecc-409f-887e-4b0347f83ccf" testId="a9324c11-3f3c-6d30-0974-f290eb18f560" testName="IV.DX.Contracts.UnitTests.StringHelperUnitTests.SplitAndKeep_UsingSeveralCharDelimeters_CorrectResult" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0029618" startTime="2026-01-24T19:21:06.6498263+02:00" endTime="2026-01-24T19:21:06.6498264+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc8fe3d5-fecc-409f-887e-4b0347f83ccf" />
+    <UnitTestResult executionId="208f3711-05a4-4f2b-8d0c-483d0985e413" testId="f4d5274c-6c42-b2ac-6819-0c766b25e31f" testName="IV.DX.Contracts.UnitTests.StringHelperUnitTests.SplitAndKeep_UsingSeveralStringDelimeters_CorrectResult" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0073773" startTime="2026-01-24T19:21:06.6495208+02:00" endTime="2026-01-24T19:21:06.6495209+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="208f3711-05a4-4f2b-8d0c-483d0985e413" />
+    <UnitTestResult executionId="2323f498-7a23-473d-be8b-726fc7aed360" testId="01461530-261e-4105-5b51-26e70af050f3" testName="IV.DX.Contracts.UnitTests.dxUnitectTests.ConvertToDXModel_UsingDerivedDXUnit_CorrectDXModel" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0090476" startTime="2026-01-24T19:21:06.6497830+02:00" endTime="2026-01-24T19:21:06.6497830+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2323f498-7a23-473d-be8b-726fc7aed360" />
+    <UnitTestResult executionId="b769c9b6-efaf-495d-9a29-55938f74b3ee" testId="61253e43-6d51-9290-aacc-ba5fe873fe75" testName="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests.GetdxUnitectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0047902" startTime="2026-01-24T19:21:06.6460261+02:00" endTime="2026-01-24T19:21:06.6460571+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b769c9b6-efaf-495d-9a29-55938f74b3ee" />
+    <UnitTestResult executionId="1da73720-82a2-4696-82a8-9d1e7d3b00fd" testId="2ed13afe-469b-78fc-92cc-8b87d39e4bdd" testName="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests.GetDXColumnDefinitionAttributes_FromDXObjectDefinitionUnit_AttributesWithCorrectValues" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0022655" startTime="2026-01-24T19:21:06.6497983+02:00" endTime="2026-01-24T19:21:06.6497984+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1da73720-82a2-4696-82a8-9d1e7d3b00fd" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests.GetDXColumnDefinitionAttributes_FromDXObjectDefinitionUnit_AttributesWithCorrectValues" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.contracts.unittests\bin\debug\net9.0\iv.dx.contracts.unittests.dll" id="2ed13afe-469b-78fc-92cc-8b87d39e4bdd">
+      <Execution id="1da73720-82a2-4696-82a8-9d1e7d3b00fd" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Contracts.UnitTests\bin\Debug\net9.0\IV.DX.Contracts.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests" name="GetDXColumnDefinitionAttributes_FromDXObjectDefinitionUnit_AttributesWithCorrectValues" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.dxUnitectTests.ConvertToDXModel_UsingDerivedDXUnit_CorrectDXModel" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.contracts.unittests\bin\debug\net9.0\iv.dx.contracts.unittests.dll" id="01461530-261e-4105-5b51-26e70af050f3">
+      <Execution id="2323f498-7a23-473d-be8b-726fc7aed360" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Contracts.UnitTests\bin\Debug\net9.0\IV.DX.Contracts.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.dxUnitectTests" name="ConvertToDXModel_UsingDerivedDXUnit_CorrectDXModel" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests.GetdxUnitectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.contracts.unittests\bin\debug\net9.0\iv.dx.contracts.unittests.dll" id="61253e43-6d51-9290-aacc-ba5fe873fe75">
+      <Execution id="b769c9b6-efaf-495d-9a29-55938f74b3ee" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Contracts.UnitTests\bin\Debug\net9.0\IV.DX.Contracts.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.AttributeReaderUnitTests" name="GetdxUnitectDefinitionAttribute_FromDXObjectDefinitionUnit_AttributeWithCorrectValues" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.StringHelperUnitTests.SplitAndKeep_UsingSeveralCharDelimeters_CorrectResult" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.contracts.unittests\bin\debug\net9.0\iv.dx.contracts.unittests.dll" id="a9324c11-3f3c-6d30-0974-f290eb18f560">
+      <Execution id="fc8fe3d5-fecc-409f-887e-4b0347f83ccf" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Contracts.UnitTests\bin\Debug\net9.0\IV.DX.Contracts.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.StringHelperUnitTests" name="SplitAndKeep_UsingSeveralCharDelimeters_CorrectResult" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.StringHelperUnitTests.SplitAndKeep_UsingSeveralStringDelimeters_CorrectResult" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.contracts.unittests\bin\debug\net9.0\iv.dx.contracts.unittests.dll" id="f4d5274c-6c42-b2ac-6819-0c766b25e31f">
+      <Execution id="208f3711-05a4-4f2b-8d0c-483d0985e413" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Contracts.UnitTests\bin\Debug\net9.0\IV.DX.Contracts.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.StringHelperUnitTests" name="SplitAndKeep_UsingSeveralStringDelimeters_CorrectResult" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a9324c11-3f3c-6d30-0974-f290eb18f560" executionId="fc8fe3d5-fecc-409f-887e-4b0347f83ccf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f4d5274c-6c42-b2ac-6819-0c766b25e31f" executionId="208f3711-05a4-4f2b-8d0c-483d0985e413" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="01461530-261e-4105-5b51-26e70af050f3" executionId="2323f498-7a23-473d-be8b-726fc7aed360" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61253e43-6d51-9290-aacc-ba5fe873fe75" executionId="b769c9b6-efaf-495d-9a29-55938f74b3ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ed13afe-469b-78fc-92cc-8b87d39e4bdd" executionId="1da73720-82a2-4696-82a8-9d1e7d3b00fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.3+1b45f5407b (64-bit .NET 9.0.10)&#xD;
+[xUnit.net 00:00:00.37]   Discovering: IV.DX.Contracts.UnitTests&#xD;
+[xUnit.net 00:00:00.40]   Discovered:  IV.DX.Contracts.UnitTests&#xD;
+[xUnit.net 00:00:00.40]   Starting:    IV.DX.Contracts.UnitTests&#xD;
+[xUnit.net 00:00:00.45]   Finished:    IV.DX.Contracts.UnitTests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

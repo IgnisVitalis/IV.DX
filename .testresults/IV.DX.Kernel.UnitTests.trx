@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5e3bf1db-25f4-450c-8dcb-6ac551994ba5" name="victo@DESKTOP-3ICCFBT 2026-01-24 19:21:08" runUser="DESKTOP-3ICCFBT\victo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-24T19:21:08.5779673+02:00" queuing="2026-01-24T19:21:08.5779677+02:00" start="2026-01-24T19:21:07.6753337+02:00" finish="2026-01-24T19:21:08.5824915+02:00" />
+  <TestSettings name="default" id="924da2c0-53d3-49a3-ad87-931cdda404d1">
+    <Deployment runDeploymentRoot="victo_DESKTOP-3ICCFBT_2026-01-24_19_21_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0207adbd-eea0-4aeb-9962-63c4f978b64d" testId="0d47ecb7-9bea-5ed8-cef5-36cf2c13e8fe" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXUnitParse_UsingJObject_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0011758" startTime="2026-01-24T19:21:08.4768602+02:00" endTime="2026-01-24T19:21:08.4768607+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0207adbd-eea0-4aeb-9962-63c4f978b64d" />
+    <UnitTestResult executionId="275124f7-62e1-4675-91ad-615d3bf2e085" testId="7367cba6-148b-5af2-ba39-1a60089dfc34" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXUnitParse_UsingDXModel_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0224144" startTime="2026-01-24T19:21:08.4655097+02:00" endTime="2026-01-24T19:21:08.4655106+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="275124f7-62e1-4675-91ad-615d3bf2e085" />
+    <UnitTestResult executionId="db28088b-31cd-42d1-bb73-7c616fbfdd9b" testId="be78463e-a3c8-5f7c-789c-40d949300e80" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToJObject_UsingDXUnit_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0050174" startTime="2026-01-24T19:21:08.4819627+02:00" endTime="2026-01-24T19:21:08.4819635+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db28088b-31cd-42d1-bb73-7c616fbfdd9b" />
+    <UnitTestResult executionId="eebf78a1-f23b-440b-8c93-2e9c02de1fdd" testId="4cb19e15-3698-bc62-d271-1e2c02e47bda" testName="IV.DX.Kernel.UnitTests.Models.DXUnitTests.ToDXModel_UsingDXUnit_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0084726" startTime="2026-01-24T19:21:08.4560748+02:00" endTime="2026-01-24T19:21:08.4560957+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eebf78a1-f23b-440b-8c93-2e9c02de1fdd" />
+    <UnitTestResult executionId="85f67d4a-32ae-4506-867d-eac455adf985" testId="afb51990-9883-dd53-edfd-0af817a0aa39" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToJObject_UsingDXModel_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0004486" startTime="2026-01-24T19:21:08.4830477+02:00" endTime="2026-01-24T19:21:08.4830478+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85f67d4a-32ae-4506-867d-eac455adf985" />
+    <UnitTestResult executionId="80a1b3ab-838a-45f8-a0ac-cb8202e8b2a6" testId="be6539c0-7891-c46e-03ef-97dfa951275f" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXModelParse_UsingJObject_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0100550" startTime="2026-01-24T19:21:08.4755912+02:00" endTime="2026-01-24T19:21:08.4755916+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80a1b3ab-838a-45f8-a0ac-cb8202e8b2a6" />
+    <UnitTestResult executionId="bcf11d56-eb76-4c63-a3ff-90fbebbac13a" testId="dd284910-ed4e-905c-2cc5-883d74ca4a8d" testName="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToDXModel_UsingDXUnit_Ok" computerName="DESKTOP-3ICCFBT" duration="00:00:00.0005425" startTime="2026-01-24T19:21:08.4825605+02:00" endTime="2026-01-24T19:21:08.4825606+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bcf11d56-eb76-4c63-a3ff-90fbebbac13a" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXUnitParse_UsingDXModel_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="7367cba6-148b-5af2-ba39-1a60089dfc34">
+      <Execution id="275124f7-62e1-4675-91ad-615d3bf2e085" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="DXUnitParse_UsingDXModel_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXModelParse_UsingJObject_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="be6539c0-7891-c46e-03ef-97dfa951275f">
+      <Execution id="80a1b3ab-838a-45f8-a0ac-cb8202e8b2a6" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="DXModelParse_UsingJObject_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToJObject_UsingDXUnit_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="be78463e-a3c8-5f7c-789c-40d949300e80">
+      <Execution id="db28088b-31cd-42d1-bb73-7c616fbfdd9b" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="ConvertToJObject_UsingDXUnit_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Kernel.UnitTests.Models.DXUnitTests.ToDXModel_UsingDXUnit_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="4cb19e15-3698-bc62-d271-1e2c02e47bda">
+      <Execution id="eebf78a1-f23b-440b-8c93-2e9c02de1fdd" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Kernel.UnitTests.Models.DXUnitTests" name="ToDXModel_UsingDXUnit_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.DXUnitParse_UsingJObject_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="0d47ecb7-9bea-5ed8-cef5-36cf2c13e8fe">
+      <Execution id="0207adbd-eea0-4aeb-9962-63c4f978b64d" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="DXUnitParse_UsingJObject_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToJObject_UsingDXModel_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="afb51990-9883-dd53-edfd-0af817a0aa39">
+      <Execution id="85f67d4a-32ae-4506-867d-eac455adf985" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="ConvertToJObject_UsingDXModel_Ok" />
+    </UnitTest>
+    <UnitTest name="IV.DX.Contracts.UnitTests.DXUnitHelperTests.ConvertToDXModel_UsingDXUnit_Ok" storage="c:\iv\git\iv.dx\src\iv.dx\tests\unittests\iv.dx.kernel.unittests\bin\debug\net9.0\iv.dx.kernel.unittests.dll" id="dd284910-ed4e-905c-2cc5-883d74ca4a8d">
+      <Execution id="bcf11d56-eb76-4c63-a3ff-90fbebbac13a" />
+      <TestMethod codeBase="C:\IV\Git\IV.DX\src\IV.DX\Tests\UnitTests\IV.DX.Kernel.UnitTests\bin\Debug\net9.0\IV.DX.Kernel.UnitTests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="IV.DX.Contracts.UnitTests.DXUnitHelperTests" name="ConvertToDXModel_UsingDXUnit_Ok" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="0d47ecb7-9bea-5ed8-cef5-36cf2c13e8fe" executionId="0207adbd-eea0-4aeb-9962-63c4f978b64d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7367cba6-148b-5af2-ba39-1a60089dfc34" executionId="275124f7-62e1-4675-91ad-615d3bf2e085" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be78463e-a3c8-5f7c-789c-40d949300e80" executionId="db28088b-31cd-42d1-bb73-7c616fbfdd9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4cb19e15-3698-bc62-d271-1e2c02e47bda" executionId="eebf78a1-f23b-440b-8c93-2e9c02de1fdd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="afb51990-9883-dd53-edfd-0af817a0aa39" executionId="85f67d4a-32ae-4506-867d-eac455adf985" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be6539c0-7891-c46e-03ef-97dfa951275f" executionId="80a1b3ab-838a-45f8-a0ac-cb8202e8b2a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dd284910-ed4e-905c-2cc5-883d74ca4a8d" executionId="bcf11d56-eb76-4c63-a3ff-90fbebbac13a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.3+1b45f5407b (64-bit .NET 9.0.10)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: IV.DX.Kernel.UnitTests&#xD;
+[xUnit.net 00:00:00.36]   Discovered:  IV.DX.Kernel.UnitTests&#xD;
+[xUnit.net 00:00:00.36]   Starting:    IV.DX.Kernel.UnitTests&#xD;
+[xUnit.net 00:00:00.43]   Finished:    IV.DX.Kernel.UnitTests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
