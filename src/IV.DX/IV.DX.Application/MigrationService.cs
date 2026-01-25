@@ -270,28 +270,53 @@ namespace IV.DX.Application
         {
             var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
-                await _dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file), ct).ConfigureAwait(false);
+            {
+                try
+                {
+                    await _dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file), ct).ConfigureAwait(false);
+                }
+                catch (Exception exc)
+                {
+                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
+                }
+            }
         }
 
         private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
             var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
-                await _dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file), ct).ConfigureAwait(false);
-        }
-
-        private async Task ProcessFileToInsertAsync(DXMigrationScriptsUnit file, CancellationToken ct)
-        {
-            var jarray = JArray.Parse(file.Content);
-            foreach (JObject item in jarray)
-                await _dataService.InsertAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
+            {
+                try
+                {
+                    await _dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file), ct).ConfigureAwait(false);
+                }
+                catch (Exception exc)
+                {
+                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
+                }
+            }
         }
 
         private async Task ProcessFileToInsertOrUpdateAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
             var jarray = JArray.Parse(file.Content);
             foreach (JObject item in jarray)
-                await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
+            {
+                try
+                {
+                    await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
+                }
+                catch (Exception exc)
+                {
+                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
+                }
+            }
+        }
+
+        private string GetMigrationErrorMessage(DXMigrationScriptsUnit file, JObject item)
+        {
+            return $"{file.ToString()}\nDXUnit with ID '{item["ID"]}' migration error";
         }
 
         private static string NormalizeDirectory(string? dir)

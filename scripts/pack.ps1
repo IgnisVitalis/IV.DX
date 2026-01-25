@@ -102,3 +102,6 @@ dotnet pack `
     --no-restore `
     -o $OutputPath `
     -p:Version=$Version
+
+
+Write-Host $pkg
