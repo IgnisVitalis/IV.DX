@@ -73,8 +73,8 @@
 
         "ObjectNameLeft": "DXUnitDefinitionUnit",
         "RelationNameLeft": "DXUnitDefinitionUnitID",
-        "ObjectNameRight": "DXUnitRelationElement",
-        "RelationNameRight": "DXUnitRelationElement",
+        "ObjectNameRight": "DXUnitToUnitRelationElement",
+        "RelationNameRight": "DXUnitToUnitRelationElement",
         "RelationColumnNameLeft": "ID",
         "RelationColumnTypeLeft": 1,
         "RelationColumnNameRight": "DXUnitDefinitionUnitID",
@@ -274,8 +274,8 @@
         "ID": "9ccea4b0-4d6f-4f7f-ace5-976fbb0b2396",
         "TimeStamp": "2021-10-02T00:00:00",
 
-        "ObjectNameLeft": "DXUnitRelationElement",
-        "RelationNameLeft": "DXUnitRelationElementRelationType",
+        "ObjectNameLeft": "DXUnitToUnitRelationElement",
+        "RelationNameLeft": "DXUnitToUnitRelationElementRelationType",
         "ObjectNameRight": "DXRelationTypeEnum",
         "RelationNameRight": "RelationType",
         "RelationTable": null,
@@ -291,7 +291,7 @@
         "ID": "6b70a108-d09c-4fcb-ba7b-fb9cc9205e14",
         "TimeStamp": "2021-10-02T00:00:00",
 
-        "ObjectNameLeft": "DXUnitRelationElement",
+        "ObjectNameLeft": "DXUnitToUnitRelationElement",
         "RelationNameLeft": "RelatedDXUnits",
         "ObjectNameRight": "DXUnitDefinitionUnit",
         "RelationNameRight": "TargetDXUnit",

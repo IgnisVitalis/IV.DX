@@ -56,12 +56,12 @@
             ],
             "Deleted": []
         },
-        "DXUnitRelationElement": {
-            "S_Type": "DXUnitRelationElement",
+        "DXUnitToUnitRelationElement": {
+            "S_Type": "DXUnitToUnitRelationElement",
             "Mode": 1,
             "Announced": [
                 {
-                    "S_Type": "DXUnitRelationElement",
+                    "S_Type": "DXUnitToUnitRelationElement",
                     "ID": "cc870b14-9699-42d1-8565-6e57406c1f5b",
                     "TimeStamp": "2025-12-01T10:38:37.560297Z",
                     "OwnRelationName": "DXQueries",

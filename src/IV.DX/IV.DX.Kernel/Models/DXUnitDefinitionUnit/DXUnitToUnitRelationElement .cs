@@ -3,8 +3,8 @@ using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {
-    [DXElement("DXUnitRelationElement")]
-    public class DXUnitRelationElement : DXElement
+    [DXElement("DXUnitToUnitRelationElement")]
+    public class DXUnitToUnitRelationElement : DXElement
     {
         [DXColumn("OwnRelationName")]
         public string OwnRelationName { get; set; }
@@ -15,9 +15,9 @@ namespace IV.DX.Kernel.Models
         [DXColumn("TargetDXUnit")]
         public Guid TargetDXUnit { get; set; }
 
-        public DXUnitRelationElement GetReverted()
+        public DXUnitToUnitRelationElement GetReverted()
         {
-            return new DXUnitRelationElement()
+            return new DXUnitToUnitRelationElement()
             {
                 OwnRelationName = this.TargetRelationName,
                 TargetRelationName = this.OwnRelationName,

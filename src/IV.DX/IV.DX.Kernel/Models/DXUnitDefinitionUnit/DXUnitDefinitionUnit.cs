@@ -8,7 +8,7 @@ namespace IV.DX.Kernel.Models
         [DXColumn("BaseDXUnit")]
         public Guid? BaseDXUnit { get; set; }
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
-        public DXMultiElementsContainer<DXUnitRelationElement> DXUnitRelationElement { get; set; }
+        public DXMultiElementsContainer<DXUnitToUnitRelationElement> DXUnitToUnitRelationElement { get; set; }
 
         public DXUnitDefinitionUnit()
         {
@@ -17,9 +17,9 @@ namespace IV.DX.Kernel.Models
                 Announced = new HashSet<DXElementInUnitDefinitionElement>()
             };
 
-            this.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>
+            this.DXUnitToUnitRelationElement = new DXMultiElementsContainer<DXUnitToUnitRelationElement>
             {
-                Announced = new HashSet<DXUnitRelationElement>()
+                Announced = new HashSet<DXUnitToUnitRelationElement>()
             };
         }
     }

@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="2">
   <diagram name="Core" id="Z5DaGjlu2ClKpX3cMcTB">
-    <mxGraphModel dx="2916" dy="1201" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1892" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="DnA-W9aAA6Ljkw8N8BkX-0" />
         <mxCell id="DnA-W9aAA6Ljkw8N8BkX-1" parent="DnA-W9aAA6Ljkw8N8BkX-0" />
@@ -608,7 +608,7 @@
         <mxCell id="G3MKKjSH9KXoMkdoyMOV-4" value="DXElementDefinitionUnit" style="shape=partialRectangle;fontStyle=1;top=0;left=0;bottom=0;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;part=1;fontSize=12;" parent="G3MKKjSH9KXoMkdoyMOV-3" vertex="1" connectable="0">
           <mxGeometry width="100" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="wqbI4OtpEIMqQq3jb0j2-0" value="DXUnitRelationElement 0/N" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#66B2FF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;fontColor=#FFFFFF;" parent="G3MKKjSH9KXoMkdoyMOV-0" vertex="1">
+        <mxCell id="wqbI4OtpEIMqQq3jb0j2-0" value="DXUnitToUnitRelationElement  0/N" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#66B2FF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;fontSize=14;fontColor=#FFFFFF;" parent="G3MKKjSH9KXoMkdoyMOV-0" vertex="1">
           <mxGeometry y="86" width="250" height="146" as="geometry">
             <mxRectangle y="26" width="200" height="26" as="alternateBounds" />
           </mxGeometry>

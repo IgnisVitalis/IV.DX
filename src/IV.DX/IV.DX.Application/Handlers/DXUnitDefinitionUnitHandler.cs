@@ -127,7 +127,7 @@ namespace IV.DX.Application.Handlers
                 return;
 
             await DeleteDXElementInUnitDefinitionElements(existingDXUnit, ctx, ct);
-            await DeleteDXUnitRelationElements(existingDXUnit, ctx, ct);
+            await DeleteDXUnitToUnitRelationElements(existingDXUnit, ctx, ct);
         }
 
         private async Task DeleteDXElementInUnitDefinitionElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
@@ -144,43 +144,43 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        private async Task DeleteDXUnitRelationElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        private async Task DeleteDXUnitToUnitRelationElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
-            foreach (var dxUnitRelation in existingDXUnit.DXUnitRelationElement.Announced)
+            foreach (var dxUnitRelation in existingDXUnit.DXUnitToUnitRelationElement.Announced)
             {
                 var dxUnitToUnassign = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnitRelation.TargetDXUnit);
 
                 this.UnassingDXUnit(existingDXUnit, dxUnitRelation, dxUnitToUnassign);
-                this.DeleteRevertedDXUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitToUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
             }
         }
 
         private async Task ProcessRelationsAsync(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting, CancellationToken ct)
         {
             this.ProcessDXElementsInDXUnitElements(dxUnit, dxUnitExisting);
-            this.ProcessDXUnitRelationElements(dxUnit, dxUnitExisting);
+            this.ProcessDXUnitToUnitRelationElements(dxUnit, dxUnitExisting);
             await this.ProcessEnumRelationsAsync(dxUnit, dxUnitExisting, ct);
         }
 
-        private void ProcessDXUnitRelationElements(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting)
+        private void ProcessDXUnitToUnitRelationElements(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit? dxUnitExisting)
         {
             if (dxUnit.DXElementInUnitDefinitionElement == null)
                 return;
 
-            if (dxUnitExisting == null || dxUnit.DXUnitRelationElement.Mode == MultiElementsMode.Target)
+            if (dxUnitExisting == null || dxUnit.DXUnitToUnitRelationElement.Mode == MultiElementsMode.Target)
             {
-                this.ProcessDXUnitRelationElementsUsingTargetMode(dxUnit);
+                this.ProcessDXUnitToUnitRelationElementsUsingTargetMode(dxUnit);
             }
             else
             {
-                this.ProcessDXUnitRelationElementsUsingFullMode(dxUnit, dxUnitExisting);
+                this.ProcessDXUnitToUnitRelationElementsUsingFullMode(dxUnit, dxUnitExisting);
             }
         }
 
-        private void ProcessDXUnitRelationElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
+        private void ProcessDXUnitToUnitRelationElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {
-            var newAnnouncedIds = dxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
-            var existingAnnouncedIds = existingdxUnit.DXUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
+            var newAnnouncedIds = dxUnit.DXUnitToUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
+            var existingAnnouncedIds = existingdxUnit.DXUnitToUnitRelationElement.Announced.Select(x => x.TargetDXUnit);
 
             var announcedIds = newAnnouncedIds.Except(existingAnnouncedIds);
             var deletedIds = existingAnnouncedIds.Except(newAnnouncedIds);
@@ -189,83 +189,83 @@ namespace IV.DX.Application.Handlers
 
             foreach (var announcedId in announcedIds)
             {
-                var dxUnitRelation = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == announcedId);
+                var dxUnitRelation = dxUnit.DXUnitToUnitRelationElement.Announced.Single(x => x.TargetDXUnit == announcedId);
 
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
                 this.AssignDXUnit(dxUnit, dxUnitRelation, dxUnitToAssign);
-                this.CreateRevertedDXUnitRelationElement(dxUnitRelation);
+                this.CreateRevertedDXUnitToUnitRelationElement(dxUnitRelation);
             }
 
             foreach (var deletedId in deletedIds)
             {
-                var dxUnitRelation = existingdxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == deletedId);
+                var dxUnitRelation = existingdxUnit.DXUnitToUnitRelationElement.Announced.Single(x => x.TargetDXUnit == deletedId);
 
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
                 this.UnassingDXUnit(dxUnit, dxUnitRelation, dxUnitToUnassign);
-                this.DeleteRevertedDXUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitToUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
             }
         }
 
-        private void ProcessDXUnitRelationElementsUsingTargetMode(DXUnitDefinitionUnit dxUnit)
+        private void ProcessDXUnitToUnitRelationElementsUsingTargetMode(DXUnitDefinitionUnit dxUnit)
         {
-            foreach (var announced in dxUnit.DXUnitRelationElement.Announced)
+            foreach (var announced in dxUnit.DXUnitToUnitRelationElement.Announced)
             {
                 var announcedId = announced.TargetDXUnit;
 
                 var dxUnitToAssign = dataStructureRepo.GetDXUnitDefinition(announcedId);
 
                 this.AssignDXUnit(dxUnit, announced, dxUnitToAssign);
-                this.CreateRevertedDXUnitRelationElement(announced);
+                this.CreateRevertedDXUnitToUnitRelationElement(announced);
             }
 
-            foreach (var deleted in dxUnit.DXUnitRelationElement.Deleted)
+            foreach (var deleted in dxUnit.DXUnitToUnitRelationElement.Deleted)
             {
                 var deletedId = deleted.TargetDXUnit;
 
                 var dxUnitToUnassign = dataStructureRepo.GetDXUnitDefinition(deletedId);
 
                 this.UnassingDXUnit(dxUnit, deleted, dxUnitToUnassign);
-                this.DeleteRevertedDXUnitRelationElement(deleted, dxUnitToUnassign);
+                this.DeleteRevertedDXUnitToUnitRelationElement(deleted, dxUnitToUnassign);
             }
         }
 
-        private void CreateRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement)
+        private void CreateRevertedDXUnitToUnitRelationElement(DXUnitToUnitRelationElement DXUnitToUnitRelationElement)
         {
-            var revertedDXUnitRelationElement = dxUnitRelationElement.GetReverted();
+            var revertedDXUnitToUnitRelationElement = DXUnitToUnitRelationElement.GetReverted();
 
-            revertedDXUnitRelationElement.ID = Guid.NewGuid();
-            revertedDXUnitRelationElement.DXUnitID = dxUnitRelationElement.TargetDXUnit;
+            revertedDXUnitToUnitRelationElement.ID = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.DXUnitID = DXUnitToUnitRelationElement.TargetDXUnit;
 
-            dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitRelationElement);
+            dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitToUnitRelationElement);
         }
 
-        private void DeleteRevertedDXUnitRelationElement(DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit relatedDXUnit)
+        private void DeleteRevertedDXUnitToUnitRelationElement(DXUnitToUnitRelationElement DXUnitToUnitRelationElement, DXUnitDefinitionUnit relatedDXUnit)
         {
             var revertedDXElementToDelete =
-                relatedDXUnit.DXUnitRelationElement.Announced.SingleOrDefault(x => x.TargetDXUnit == dxUnitRelationElement.DXUnitID);
+                relatedDXUnit.DXUnitToUnitRelationElement.Announced.SingleOrDefault(x => x.TargetDXUnit == DXUnitToUnitRelationElement.DXUnitID);
 
             dxElementGenericRepo.Delete(revertedDXElementToDelete);
         }
 
-        private void AssignDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
+        private void AssignDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitToUnitRelationElement DXUnitToUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
         {
-            var relationType = dxUnit.DXUnitRelationElement.Announced.Single(x => x.TargetDXUnit == dxUnitToAssign.ID).RelationType;
+            var relationType = dxUnit.DXUnitToUnitRelationElement.Announced.Single(x => x.TargetDXUnit == dxUnitToAssign.ID).RelationType;
 
-            var dxRelation = this.GetDXUnitRelationObject(dxUnit, dxUnitRelationElement, dxUnitToAssign, relationType);
+            var dxRelation = this.GetDXUnitRelationObject(dxUnit, DXUnitToUnitRelationElement, dxUnitToAssign, relationType);
 
             dxUnitService.InsertAsync(dxRelation).Wait();
         }
 
-        private void UnassingDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitRelationElement dxUnitRelationElement, DXUnitDefinitionUnit dxUnitToUnassign)
+        private void UnassingDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitToUnitRelationElement DXUnitToUnitRelationElement, DXUnitDefinitionUnit dxUnitToUnassign)
         {
-            var existingDXUnit = this.GetExistingDXUnitRelationObject(dxUnit, dxUnitRelationElement, dxUnitToUnassign);
+            var existingDXUnit = this.GetExistingDXUnitRelationObject(dxUnit, DXUnitToUnitRelationElement, dxUnitToUnassign);
 
             if (existingDXUnit == null)
                 return;
 
-            var dxRelation = this.GetExistingDXUnitRelationObject(dxUnit, dxUnitRelationElement, dxUnitToUnassign);
+            var dxRelation = this.GetExistingDXUnitRelationObject(dxUnit, DXUnitToUnitRelationElement, dxUnitToUnassign);
 
             dxUnitService.DeleteAsync(dxRelation).Wait();
         }
@@ -373,7 +373,7 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetDXUnitRelationObject(
             DXUnitDefinitionUnit dxUnit,
-            DXUnitRelationElement dxUnitRelationElement,
+            DXUnitToUnitRelationElement DXUnitToUnitRelationElement,
             DXUnitDefinitionUnit dxUnitRelated,
             DXRelationTypeEnum relationType)
         {
@@ -398,7 +398,7 @@ namespace IV.DX.Application.Handlers
                 case DXRelationTypeEnum.ManyToZeroOne:
                 case DXRelationTypeEnum.ZeroOneToOne:
                     {
-                        relationColumnNameLeft = dxUnitRelationElement.TargetRelationName;
+                        relationColumnNameLeft = DXUnitToUnitRelationElement.TargetRelationName;
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                         relationColumnNameRight = "ID";
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
@@ -411,7 +411,7 @@ namespace IV.DX.Application.Handlers
                     {
                         relationColumnNameLeft = "ID";
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                        relationColumnNameRight = dxUnitRelationElement.OwnRelationName;
+                        relationColumnNameRight = DXUnitToUnitRelationElement.OwnRelationName;
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }
                     break;
@@ -421,9 +421,9 @@ namespace IV.DX.Application.Handlers
             {
                 ID = id,
                 ObjectNameLeft = dxUnit.Name,
-                RelationNameLeft = dxUnitRelationElement.OwnRelationName,
+                RelationNameLeft = DXUnitToUnitRelationElement.OwnRelationName,
                 ObjectNameRight = dxUnitRelated.Name,
-                RelationNameRight = dxUnitRelationElement.TargetRelationName,
+                RelationNameRight = DXUnitToUnitRelationElement.TargetRelationName,
                 Kind = dxUnit.Kind,
                 RelationType = relationType,
                 RelationColumnNameRight = relationColumnNameRight,
@@ -436,13 +436,13 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetExistingDXUnitRelationObject(
             DXUnitDefinitionUnit dxUnit,
-            DXUnitRelationElement dxUnitRelationElement,
+            DXUnitToUnitRelationElement DXUnitToUnitRelationElement,
             DXUnitDefinitionUnit dxUnitRelated)
         {
             var query = $"ObjectNameLeft = '{dxUnit.Name}' " +
                $"AND ObjectNameRight = '{dxUnitRelated.Name}' " +
-               $"AND RelationNameLeft = '{dxUnitRelationElement.OwnRelationName}' " +
-               $"AND RelationNameRight = '{dxUnitRelationElement.TargetRelationName}'";
+               $"AND RelationNameLeft = '{DXUnitToUnitRelationElement.OwnRelationName}' " +
+               $"AND RelationNameRight = '{DXUnitToUnitRelationElement.TargetRelationName}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
 

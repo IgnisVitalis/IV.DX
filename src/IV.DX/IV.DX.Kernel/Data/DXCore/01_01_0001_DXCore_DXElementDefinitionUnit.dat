@@ -178,7 +178,7 @@
         "S_Type": "DXElementDefinitionUnit",
         "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
         "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXUnitRelationElement",
+        "Name": "DXUnitToUnitRelationElement",
         "DisplayValue": "OwnRelationName",
         "Kind": 1,
 

@@ -49,7 +49,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Insert_UsingDXUnitWithSelfRelation_Ok()
         {
             // Init            
-            var dxUnitDefinition = "{\n  \"S_Type\": \"DXUnitDefinitionUnit\",\n  \"ID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n  \"TimeStamp\": \"2025-12-11T10:20:09.399068Z\",\n  \"Name\": \"DXNavigationItemUnit\",\n  \"DisplayValue\": null,\n  \"Kind\": 1,\n  \"DXUnitRelationElement\": {\n    \"S_Type\": \"DXUnitRelationElement\",\n    \"Mode\": 2,\n    \"Announced\": [\n      {\n        \"OwnRelationName\": \"Parent\",\n        \"TargetRelationName\": \"Children\",\n        \"RelationType\": 5,\n        \"TargetDXUnit\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"S_Type\": \"DXUnitRelationElement\",\n        \"ID\": \"1676cad5-c5d6-4584-8d13-e0155fbd8b1b\",\n        \"DXUnitID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"TimeStamp\": \"2025-12-11T10:20:16.0861678Z\"\n      }\n    ],\n    \"Deleted\": []\n  }\n}";
+            var dxUnitDefinition = "{\n  \"S_Type\": \"DXUnitDefinitionUnit\",\n  \"ID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n  \"TimeStamp\": \"2025-12-11T10:20:09.399068Z\",\n  \"Name\": \"DXNavigationItemUnit\",\n  \"DisplayValue\": null,\n  \"Kind\": 1,\n  \"DXUnitToUnitRelationElement\": {\n    \"S_Type\": \"DXUnitToUnitRelationElement\",\n    \"Mode\": 2,\n    \"Announced\": [\n      {\n        \"OwnRelationName\": \"Parent\",\n        \"TargetRelationName\": \"Children\",\n        \"RelationType\": 5,\n        \"TargetDXUnit\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"S_Type\": \"DXUnitToUnitRelationElement\",\n        \"ID\": \"1676cad5-c5d6-4584-8d13-e0155fbd8b1b\",\n        \"DXUnitID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"TimeStamp\": \"2025-12-11T10:20:16.0861678Z\"\n      }\n    ],\n    \"Deleted\": []\n  }\n}";
 
             // Action
             var createdItem = await this._service.InsertAsync(JObject.Parse(dxUnitDefinition));
@@ -195,7 +195,7 @@ namespace IV.DX.Application.IntTests.Services
                 Kind = DXObjectKindEnum.Test
             };
 
-            var dxUnitRelation1 = new DXUnitRelationElement()
+            var dxUnitRelation1 = new DXUnitToUnitRelationElement()
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id2,
@@ -205,7 +205,7 @@ namespace IV.DX.Application.IntTests.Services
                 TargetDXUnit = id1
             };
 
-            var dxUnitRelation2 = new DXUnitRelationElement()
+            var dxUnitRelation2 = new DXUnitToUnitRelationElement()
             {
                 ID = Guid.NewGuid(),
                 DXUnitID = id2,
@@ -215,9 +215,9 @@ namespace IV.DX.Application.IntTests.Services
                 TargetDXUnit = id3
             };
 
-            dxUnit2.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>()
+            dxUnit2.DXUnitToUnitRelationElement = new DXMultiElementsContainer<DXUnitToUnitRelationElement>()
             {
-                Announced = new HashSet<DXUnitRelationElement>()
+                Announced = new HashSet<DXUnitToUnitRelationElement>()
                 {
                     dxUnitRelation1
                 }
@@ -239,12 +239,12 @@ namespace IV.DX.Application.IntTests.Services
             var existingItem1 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id1);
             var existingItem2 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id2);
 
-            Assert.Single(existingItem1.DXUnitRelationElement.Announced);
+            Assert.Single(existingItem1.DXUnitToUnitRelationElement.Announced);
 
-            Assert.Single(existingItem2.DXUnitRelationElement.Announced);
+            Assert.Single(existingItem2.DXUnitToUnitRelationElement.Announced);
 
-            var dxUnitRelation1Existing = existingItem1.DXUnitRelationElement.Announced.Single();
-            var dxUnitRelation2Existing = existingItem2.DXUnitRelationElement.Announced.Single();
+            var dxUnitRelation1Existing = existingItem1.DXUnitToUnitRelationElement.Announced.Single();
+            var dxUnitRelation2Existing = existingItem2.DXUnitToUnitRelationElement.Announced.Single();
 
             Assert.Equal(dxUnitRelation1Existing.TargetDXUnit, dxUnitRelation2Existing.DXUnitID);
             Assert.Equal(dxUnitRelation1Existing.DXUnitID, dxUnitRelation2Existing.TargetDXUnit);
@@ -271,14 +271,14 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.RelationType);
 
             // Action
-            dxUnit2.DXUnitRelationElement = new DXMultiElementsContainer<DXUnitRelationElement>()
+            dxUnit2.DXUnitToUnitRelationElement = new DXMultiElementsContainer<DXUnitToUnitRelationElement>()
             {
                 Mode = MultiElementsMode.Target,
-                Announced = new HashSet<DXUnitRelationElement>()
+                Announced = new HashSet<DXUnitToUnitRelationElement>()
                 {
                     dxUnitRelation2
                 },
-                Deleted = new HashSet<DXUnitRelationElement>()
+                Deleted = new HashSet<DXUnitToUnitRelationElement>()
                 {
                     dxUnitRelation1
                 }
@@ -290,12 +290,12 @@ namespace IV.DX.Application.IntTests.Services
             existingItem2 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id2);
             var existingItem3 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id3);
 
-            Assert.Single(existingItem2.DXUnitRelationElement.Announced);
+            Assert.Single(existingItem2.DXUnitToUnitRelationElement.Announced);
 
-            Assert.Single(existingItem3.DXUnitRelationElement.Announced);
+            Assert.Single(existingItem3.DXUnitToUnitRelationElement.Announced);
 
-            dxUnitRelation2Existing = existingItem2.DXUnitRelationElement.Announced.Single();
-            var dxUnitRelation3Existing = existingItem3.DXUnitRelationElement.Announced.Single();
+            dxUnitRelation2Existing = existingItem2.DXUnitToUnitRelationElement.Announced.Single();
+            var dxUnitRelation3Existing = existingItem3.DXUnitToUnitRelationElement.Announced.Single();
 
             Assert.Equal(dxUnitRelation2Existing.TargetDXUnit, dxUnitRelation3Existing.DXUnitID);
             Assert.Equal(dxUnitRelation2Existing.DXUnitID, dxUnitRelation3Existing.TargetDXUnit);

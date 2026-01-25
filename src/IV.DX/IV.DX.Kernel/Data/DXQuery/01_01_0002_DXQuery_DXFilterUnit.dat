@@ -40,12 +40,12 @@
             ],
             "Deleted": []
         },
-        "DXUnitRelationElement": {
-            "S_Type": "DXUnitRelationElement",
+        "DXUnitToUnitRelationElement": {
+            "S_Type": "DXUnitToUnitRelationElement",
             "Mode": 1,
             "Announced": [
                 {
-                    "S_Type": "DXUnitRelationElement",
+                    "S_Type": "DXUnitToUnitRelationElement",
                     "ID": "b044aa5e-191f-48f3-9438-713e7c3ee6b1",
                     "TimeStamp": "2025-12-11T08:47:29.177372Z",
                     "OwnRelationName": "DXFilters",

@@ -216,7 +216,7 @@ namespace IV.DX.Persistence
             {
                 {"DXObjectEnumElement", new[]{  "EnumKey", "EnumType" } },
                 {"DXElementInUnitDefinitionElement", new[] { "DXElementDefinitionUnit" } },
-                {"DXUnitRelationElement", new[]{ "TargetDXUnit" } }
+                {"DXUnitToUnitRelationElement", new[]{ "TargetDXUnit" } }
             };
 
             foreach (var item in customProps)
@@ -265,9 +265,9 @@ namespace IV.DX.Persistence
                 }
 
                 // Unit → Other Unit (DXRelation)
-                foreach (var dxUnitRelationElement in dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitID))
+                foreach (var DXUnitToUnitRelationElement in dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitID))
                 {
-                    var dxUnitRelated = unitsById[dxUnitRelationElement.TargetDXUnit];
+                    var dxUnitRelated = unitsById[DXUnitToUnitRelationElement.TargetDXUnit];
                     var dxUnitNameRelated = dxUnitRelated.Name;
 
                     var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
@@ -344,7 +344,7 @@ namespace IV.DX.Persistence
                 var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
-                var selfRelatedRelations = dxUnit.DXUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
+                var selfRelatedRelations = dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
 
                 if (selfRelatedRelations.Count() > 0)
                 {
