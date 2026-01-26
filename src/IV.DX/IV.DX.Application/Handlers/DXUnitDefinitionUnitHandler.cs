@@ -30,7 +30,7 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXUnitDefinitionUnit>> BeforeInsertAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
@@ -54,11 +54,11 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
-            var objectInfoFromDB = this.GetObjectInfoFromDB(dxUnit);
+            var objectInfoFromDB = this.GetObjectInfoFromDB<DXUnitDefinitionUnit>(dxUnit, ctx);
 
             await this.ProcessRelationsAsync(dxUnit, objectInfoFromDB, ct);
 
@@ -70,7 +70,7 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             await this.DeleteRelationsAsync(dxUnit, ctx, ct);
 
@@ -283,15 +283,7 @@ namespace IV.DX.Application.Handlers
             {
                 this.ProcessDXElementsInDXUnitElementsUsingFullMode(dxUnit, dxUnitExisting);
             }
-        }
-
-        private DXUnitDefinitionUnit GetObjectInfoFromDB(DXUnitDefinitionUnit objectInfoIncome)
-        {
-            if (SystemObjectNames.Contains(objectInfoIncome.Name, StringComparer.OrdinalIgnoreCase))
-                return null;
-
-            return genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectInfoIncome.ID);
-        }
+        }     
 
         private void ProcessDXElementsInDXUnitElementsUsingFullMode(DXUnitDefinitionUnit dxUnit, DXUnitDefinitionUnit existingdxUnit)
         {

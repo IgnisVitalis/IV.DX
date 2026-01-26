@@ -512,6 +512,20 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Empty(instanceWithRelationType);
         }
 
+        [Fact]
+        public async Task InsertOrUpdate_UsingExistingCoreDXUnitWithTargetModeForMultiElements_Ok()
+        {
+            // Init         
+            var dxUnitStr = "{\"S_Type\":\"DXElementDefinitionUnit\",\"ID\":\"00b29615-f32e-457e-81c6-606a0b4fd4f7\",\"TimeStamp\":\"2026-01-25T16:04:15.604149Z\",\"Name\":\"DXUnitToUnitRelationElement\",\"DisplayValue\":\"OwnRelationName\",\"Kind\":1,\"DXColumnDefinitionElement\":{\"S_Type\":\"DXColumnDefinitionElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]},\"DXUniqueColumnsElement\":{\"S_Type\":\"DXUniqueColumnsElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]},\"DXObjectEnumElement\":{\"S_Type\":\"DXObjectEnumElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]}}";
+            var dxUnitJObject = JObject.Parse(dxUnitStr);
+
+            // Action
+            var existingDXUnit = await this._service.InsertOrUpdateAsync(dxUnitJObject);
+
+            // Assert
+            Assert.NotNull(existingDXUnit);
+        }
+
         [DXUnit("DXUnitWithEnum")]
         public class DXUnitWithKindEnum : DXUnit
         {

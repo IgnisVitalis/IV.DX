@@ -27,7 +27,7 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXElementDefinitionUnit>> BeforeInsertAsync(DXElementDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             if (ctx is DXUnitHandlerPreInitCoreContext)
             {
@@ -55,7 +55,7 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXElementDefinitionUnit>> BeforeUpdateAsync(DXElementDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             dataStructureRepo.UpdatedDataStructure(dxUnit);
 
@@ -69,7 +69,7 @@ namespace IV.DX.Application.Handlers
         public async Task<DXResult<DXElementDefinitionUnit>> BeforeDeleteAsync(DXElementDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             base.Validate(dxUnit);
-            base.Process(dxUnit);
+            base.Process(dxUnit, ctx);
 
             dataStructureRepo.DropDataStructure(dxUnit);
 

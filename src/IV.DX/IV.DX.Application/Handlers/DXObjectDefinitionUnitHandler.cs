@@ -50,9 +50,9 @@ namespace IV.DX.Application.Handlers
                 throw new Exception("DXObjectDefinitionUnit.Name is NULL or Empty;");
         }
 
-        protected void Process(DXObjectDefinitionUnit objectInfoIncome)
+        protected void Process(DXObjectDefinitionUnit objectInfoIncome, DXHandlerBaseContext ctx)
         {
-            var objectInfoFromDB = this.GetObjectInfoFromDB(objectInfoIncome);
+            var objectInfoFromDB = GetObjectInfoFromDB<DXObjectDefinitionUnit>(objectInfoIncome, ctx);
 
             if (objectInfoFromDB == null || objectInfoIncome.DXColumnDefinitionElement.Mode == MultiElementsMode.Full)
             {
@@ -66,6 +66,16 @@ namespace IV.DX.Application.Handlers
 
                 this.OrderColumn(objectInfoIncome);
             }
+        }
+
+        protected T? GetObjectInfoFromDB<T>(DXObjectDefinitionUnit objectInfoIncome, DXHandlerBaseContext ctx) where T : DXObjectDefinitionUnit
+        {
+            if (ctx is DXUnitHandlerPreInitCoreContext || ctx is DXUnitHandlerPostInitCoreContext)
+            {
+                return null;
+            }
+
+            return genericRepo.GetDXUnit<T>(objectInfoIncome.ID);
         }
 
         protected async Task ProcessEnumRelationsAsync(DXObjectDefinitionUnit obj, DXObjectDefinitionUnit? dxUnitExisting, CancellationToken ct)
@@ -252,15 +262,6 @@ namespace IV.DX.Application.Handlers
 
                 this.SetImportantValues(objectIdColumnDescFromModel, column);
             }
-        }
-
-
-        private DXObjectDefinitionUnit GetObjectInfoFromDB(DXObjectDefinitionUnit objectInfoIncome)
-        {
-            if (SystemObjectNames.Contains(objectInfoIncome.Name, StringComparer.OrdinalIgnoreCase))
-                return null;
-
-            return genericRepo.GetDXUnit<DXObjectDefinitionUnit>(objectInfoIncome.ID);
         }
 
         private DXColumnDefinitionElement GetColumnDesc(DXObjectDefinitionUnit objectInfo, ImportantColumn column)
