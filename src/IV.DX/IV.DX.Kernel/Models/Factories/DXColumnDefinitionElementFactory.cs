@@ -1,5 +1,5 @@
-﻿using IV.DX.Kernel.Enums;
-using System;
+﻿using System;
+using IV.DX.Kernel.Enums;
 
 namespace IV.DX.Kernel.Models
 {

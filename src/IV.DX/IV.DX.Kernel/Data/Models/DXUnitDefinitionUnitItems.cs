@@ -1,8 +1,8 @@
-﻿using IV.DX.Kernel.Attributes;
+﻿using System.Reflection;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
-using System.Reflection;
 
 namespace IV.DX.Kernel.Data.Models
 {

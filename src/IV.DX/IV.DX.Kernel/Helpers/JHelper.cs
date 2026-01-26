@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Globalization;
+﻿using System.Globalization;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Helpers
 {

@@ -1,8 +1,8 @@
-﻿using IV.DX.Kernel.Attributes;
+﻿using System.Collections.Concurrent;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Enums;
 using Newtonsoft.Json.Linq;
-using System.Collections.Concurrent;
 
 namespace IV.DX.Kernel.Models
 {

@@ -3,7 +3,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "f802e73c-e512-4655-8067-94e80aea143c",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectDefinitionUnit",
         "RelationNameLeft": "DXObjectDefinitionUnitID",
         "ObjectNameRight": "DXColumnDefinitionElement",
@@ -20,7 +19,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "bedc1f2b-2b9b-404f-89e5-5179bd87f60f",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectDefinitionUnit",
         "RelationNameLeft": "DXObjectDefinitionUnitID",
         "ObjectNameRight": "DXUniqueColumnsElement",
@@ -37,7 +35,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "9d60d785-de95-481e-953f-6ea259ec4f78",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectDefinitionUnit",
         "RelationNameLeft": "DXObjectDefinitionUnitID",
         "ObjectNameRight": "DXObjectEnumElement",
@@ -49,12 +46,11 @@
         "RelationTable": null,
         "RelationType": 5,
         "Kind": 1
-    }, 
+    },
     {
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "d4901e1e-f9ff-431b-85cd-a48aa7dbf7fc",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXUnitDefinitionUnit",
         "RelationNameLeft": "DXUnitDefinitionUnitID",
         "ObjectNameRight": "DXElementInUnitDefinitionElement",
@@ -70,7 +66,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "495d3dc8-bd8e-4c3a-a5cd-c2905ea0b8e7",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXUnitDefinitionUnit",
         "RelationNameLeft": "DXUnitDefinitionUnitID",
         "ObjectNameRight": "DXUnitToUnitRelationElement",
@@ -86,7 +81,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "e352d11e-1fb1-4433-8fe6-fe240bae963a",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectDefinitionUnit",
         "RelationNameLeft": "DXObjectDefinitionUnit",
         "ObjectNameRight": "DXObjectKindEnum",
@@ -103,7 +97,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "fb14d9b9-49a3-4ff5-8101-ac14c7d0ca91",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXColumnDefinitionElement",
         "RelationNameLeft": "DXColumnDefinitionElementColumnType",
         "ObjectNameRight": "DXColumnTypeEnum",
@@ -120,7 +113,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "ecd64009-c91e-4630-aff4-2948f5d0a3df",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectEnumElement",
         "RelationNameLeft": "Enums",
         "ObjectNameRight": "DXColumnDefinitionElement",
@@ -137,7 +129,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "298099bc-d243-40a0-8807-769a8f307809",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXObjectEnumElement",
         "RelationNameLeft": "Enums",
         "ObjectNameRight": "DXEnumDefinitionUnit",
@@ -154,7 +145,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "f665b056-ee22-482e-8da2-f55aa26a384c",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXElementInUnitDefinitionElement",
         "RelationNameLeft": "DXElementInUnitDefinitionElementRelationType",
         "ObjectNameRight": "DXElementInUnitTypeEnum",
@@ -171,7 +161,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "4f58bcbb-8398-4481-8a8f-ee936c79431f",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXElementInUnitDefinitionElement",
         "RelationNameLeft": "DXUnitDefinitionUnit",
         "ObjectNameRight": "DXElementDefinitionUnit",
@@ -188,7 +177,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "1e1611cd-ff11-495c-82f6-5f0871cdc05c",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXUnitDefinitionUnit",
         "RelationNameLeft": "DerivedDXUnits",
         "ObjectNameRight": "DXUnitDefinitionUnit",
@@ -205,7 +193,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "2b64ee1d-6ed4-49c0-ba57-93b41f7fabff",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXRelationDefinitionUnit",
         "RelationNameLeft": "DXRelationDefinitionUnitKind",
         "ObjectNameRight": "DXObjectKindEnum",
@@ -222,7 +209,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "7328a3c1-0d27-474c-90be-c96c5967d54f",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXRelationDefinitionUnit",
         "RelationNameLeft": "DXRelationDefinitionUnitRelationType",
         "ObjectNameRight": "DXRelationTypeEnum",
@@ -239,7 +225,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "2954c91c-157d-4b08-a0be-795deb84e234",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXRelationDefinitionUnit",
         "RelationNameLeft": "DXRelationDefinitionUnitRelationColumnTypeRight",
         "ObjectNameRight": "DXColumnTypeEnum",
@@ -256,7 +241,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "5517b5f7-a90c-4ba8-bafa-9de292045052",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXRelationDefinitionUnit",
         "RelationNameLeft": "DXRelationDefinitionUnitRelationColumnTypeLeft",
         "ObjectNameRight": "DXColumnTypeEnum",
@@ -273,7 +257,6 @@
         "S_Type": "DXRelationDefinitionUnit",
         "ID": "9ccea4b0-4d6f-4f7f-ace5-976fbb0b2396",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXUnitToUnitRelationElement",
         "RelationNameLeft": "DXUnitToUnitRelationElementRelationType",
         "ObjectNameRight": "DXRelationTypeEnum",
@@ -288,11 +271,74 @@
     },
     {
         "S_Type": "DXRelationDefinitionUnit",
+        "ID": "f3068373-3144-45dd-9095-00e14db85572",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "ObjectNameLeft": "DXUnitToElementRelationElement",
+        "RelationNameLeft": "DXUnitToElementRelationElementRelationType",
+        "ObjectNameRight": "DXRelationTypeEnum",
+        "RelationNameRight": "RelationType",
+        "RelationTable": null,
+        "RelationType": 4,
+        "Kind": 1,
+        "RelationColumnNameLeft": "RelationType",
+        "RelationColumnTypeLeft": 8,
+        "RelationColumnNameRight": "Key",
+        "RelationColumnTypeRight": 8
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "321c274c-5afd-4caa-a601-5e754b25e836",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "ObjectNameLeft": "DXElementToUnitRelationElement",
+        "RelationNameLeft": "DXElementToUnitRelationElementRelationType",
+        "ObjectNameRight": "DXRelationTypeEnum",
+        "RelationNameRight": "RelationType",
+        "RelationTable": null,
+        "RelationType": 4,
+        "Kind": 1,
+        "RelationColumnNameLeft": "RelationType",
+        "RelationColumnTypeLeft": 8,
+        "RelationColumnNameRight": "Key",
+        "RelationColumnTypeRight": 8
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
         "ID": "6b70a108-d09c-4fcb-ba7b-fb9cc9205e14",
         "TimeStamp": "2021-10-02T00:00:00",
-
         "ObjectNameLeft": "DXUnitToUnitRelationElement",
         "RelationNameLeft": "RelatedDXUnits",
+        "ObjectNameRight": "DXUnitDefinitionUnit",
+        "RelationNameRight": "TargetDXUnit",
+        "RelationColumnNameLeft": "TargetDXUnit",
+        "RelationColumnTypeLeft": 1,
+        "RelationColumnNameRight": "ID",
+        "RelationColumnTypeRight": 1,
+        "RelationTable": null,
+        "RelationType": 4,
+        "Kind": 1
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "e8a339f7-268b-4ed6-b265-2c7359163102",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "ObjectNameLeft": "DXUnitToElementRelationElement",
+        "RelationNameLeft": "RelatedDXUnits",
+        "ObjectNameRight": "DXElementDefinitionUnit",
+        "RelationNameRight": "TargetDXElement",
+        "RelationColumnNameLeft": "TargetDXElement",
+        "RelationColumnTypeLeft": 1,
+        "RelationColumnNameRight": "ID",
+        "RelationColumnTypeRight": 1,
+        "RelationTable": null,
+        "RelationType": 4,
+        "Kind": 1
+    },
+    {
+        "S_Type": "DXRelationDefinitionUnit",
+        "ID": "454763cf-9257-42f3-b747-f9708f2c30f7",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "ObjectNameLeft": "DXElementToUnitRelationElement",
+        "RelationNameLeft": "RelatedDXElements",
         "ObjectNameRight": "DXUnitDefinitionUnit",
         "RelationNameRight": "TargetDXUnit",
         "RelationColumnNameLeft": "TargetDXUnit",

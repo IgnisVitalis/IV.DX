@@ -1,5 +1,5 @@
-﻿using IV.DX.Kernel.Attributes;
-using System.Collections;
+﻿using System.Collections;
+using IV.DX.Kernel.Attributes;
 
 namespace IV.DX.Kernel.Models
 {

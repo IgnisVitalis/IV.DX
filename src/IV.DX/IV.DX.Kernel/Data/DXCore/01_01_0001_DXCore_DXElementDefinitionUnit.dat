@@ -6,7 +6,6 @@
         "Name": "DXColumnDefinitionElement",
         "DisplayValue": "Name",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -96,7 +95,6 @@
         "Name": "DXUniqueColumnsElement",
         "DisplayValue": "Columns",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -122,7 +120,6 @@
         "Name": "DXObjectEnumElement",
         "DisplayValue": "Name",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -157,7 +154,6 @@
         "Name": "DXElementInUnitDefinitionElement",
         "DisplayValue": "RelationType",
         "Kind": 1,
-
         "DXObjectEnumElement": {
             "S_Type": "DXObjectEnumElement",
             "Mode": 1,
@@ -181,7 +177,6 @@
         "Name": "DXUnitToUnitRelationElement",
         "DisplayValue": "OwnRelationName",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -222,6 +217,122 @@
                     "Name": "RelationType",
                     "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c",
                     "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd"
+                }
+            ]
+        }
+    },
+    {
+        "S_Type": "DXElementDefinitionUnit",
+        "ID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+        "TimeStamp": "2026-01-26T11:53:41.649013Z",
+        "Name": "DXElementToUnitRelationElement",
+        "DisplayValue": "OwnRelationName",
+        "Kind": 1,
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "e3a33688-97b0-429f-8b4f-f8afc371efd3",
+                    "TimeStamp": "2026-01-26T11:52:33.752221Z",
+                    "Name": "OwnRelationName",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+                    "ColumnType": 3
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "dcac3b81-73a7-4b4d-94a3-745ca414a0b8",
+                    "TimeStamp": "2026-01-26T11:52:56.585535Z",
+                    "Name": "TargetRelationName",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+                    "ColumnType": 3
+                }
+            ],
+            "Deleted": []
+        },
+        "DXObjectEnumElement": {
+            "S_Type": "DXObjectEnumElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "a1a23781-496f-4845-b086-99e31f3f88db",
+                    "TimeStamp": "2026-01-26T11:53:41.644566Z",
+                    "Name": "RelationType",
+                    "AllowNull": false,
+                    "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+                    "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
+                    "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c"
+                }
+            ],
+            "Deleted": []
+        }
+    },
+    {
+        "S_Type": "DXElementDefinitionUnit",
+        "ID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+        "TimeStamp": "2026-01-26T11:53:31.982662Z",
+        "Name": "DXUnitToElementRelationElement",
+        "DisplayValue": "OwnRelationName",
+        "Kind": 1,
+        "DXColumnDefinitionElement": {
+            "S_Type": "DXColumnDefinitionElement",
+            "Mode": 1,
+            "Announced": [               
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "146a871a-e374-4d37-a23c-686ee752c0a5",
+                    "TimeStamp": "2026-01-26T11:52:23.040219Z",
+                    "Name": "OwnRelationName",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+                    "ColumnType": 3
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "db9d41ad-c08b-43fa-9729-df3249123b1a",
+                    "TimeStamp": "2026-01-26T11:52:48.059247Z",
+                    "Name": "TargetRelationName",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+                    "ColumnType": 3
+                }
+            ],
+            "Deleted": []
+        },
+        "DXObjectEnumElement": {
+            "S_Type": "DXObjectEnumElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXObjectEnumElement",
+                    "ID": "9f2e0e6a-5d73-4a8c-bf66-ac5a62a2801d",
+                    "TimeStamp": "2026-01-26T11:53:31.976507Z",
+                    "Name": "RelationType",
+                    "AllowNull": false,
+                    "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+                    "DXObjectDefinitionUnitID": null,
+                    "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
+                    "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c"
                 }
             ]
         }

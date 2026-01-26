@@ -6,7 +6,6 @@
         "Name": "DXObjectDefinitionUnit",
         "DisplayValue": "Name",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
@@ -89,7 +88,6 @@
         "DisplayValue": "Name",
         "Kind": 1,
         "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
-
         "DXElementInUnitDefinitionElement": {
             "S_Type": "DXElementInUnitDefinitionElement",
             "Mode": 1,
@@ -109,6 +107,14 @@
                     "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "00b29615-f32e-457e-81c6-606a0b4fd4f7"
+                },
+                {
+                    "S_Type": "DXElementInUnitDefinitionElement",
+                    "ID": "f76937ce-b17b-47c8-be27-a42e7fbf334c",
+                    "TimeStamp": "2026-01-26T11:54:44.348407Z",
+                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
+                    "RelationType": 4,
+                    "DXElementDefinitionUnit": "65bd9684-6709-409a-a46b-7c605dcb715b"
                 }
             ]
         }
@@ -120,7 +126,21 @@
         "Name": "DXElementDefinitionUnit",
         "DisplayValue": "Name",
         "Kind": 1,
-        "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c"
+        "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+        "DXElementInUnitDefinitionElement": {
+            "S_Type": "DXElementInUnitDefinitionElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXElementInUnitDefinitionElement",
+                    "ID": "8521f829-5cf7-4690-a2fd-bd4d54d53030",
+                    "TimeStamp": "2026-01-26T11:55:04.837745Z",
+                    "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
+                    "RelationType": 4,
+                    "DXElementDefinitionUnit": "cffcaa48-ebe0-4598-9bff-2bfefefb8513"
+                }
+            ]
+        }
     },
     {
         "S_Type": "DXUnitDefinitionUnit",
@@ -291,7 +311,6 @@
         "Name": "DXMigrationScriptsUnit",
         "DisplayValue": "Number",
         "Kind": 1,
-
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
