@@ -51,41 +51,6 @@ namespace IV.DX.Application.Handlers
             }
         }
 
-        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
-        {
-            base.Validate(dxUnit);
-            base.Process(dxUnit, ctx);
-
-            dataStructureRepo.UpdatedDataStructure(dxUnit);
-
-            var objectInfoFromDB = this.GetObjectInfoFromDB<DXUnitDefinitionUnit>(dxUnit, ctx);
-
-            await this.ProcessRelationsAsync(dxUnit, objectInfoFromDB, ct);
-
-            dataStructureRepo.UpdateUniqueColumns(dxUnit);
-
-            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
-        }
-
-        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
-        {
-            base.Validate(dxUnit);
-            base.Process(dxUnit, ctx);
-
-            await this.DeleteRelationsAsync(dxUnit, ctx, ct);
-
-            dataStructureRepo.DropDataStructure(dxUnit);
-
-            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
-        }
-
-        public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
-        {
-            await dxStructureCache.RefreshAsync(ct);
-
-            return DXResult.Ok();
-        }
-
         public async Task<DXResult> AfterInsertAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             if (ctx is DXUnitHandlerPreInitCoreContext)
@@ -112,6 +77,41 @@ namespace IV.DX.Application.Handlers
             return DXResult.Ok();
         }
 
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            base.Validate(dxUnit);
+            base.Process(dxUnit, ctx);
+
+            dataStructureRepo.UpdatedDataStructure(dxUnit);
+
+            var objectInfoFromDB = this.GetObjectInfoFromDB<DXUnitDefinitionUnit>(dxUnit, ctx);
+
+            await this.ProcessRelationsAsync(dxUnit, objectInfoFromDB, ct);
+
+            dataStructureRepo.UpdateUniqueColumns(dxUnit);
+
+            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
+        }
+
+        public async Task<DXResult> AfterUpdateAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            await dxStructureCache.RefreshAsync(ct);
+
+            return DXResult.Ok();
+        }
+
+        public async Task<DXResult<DXUnitDefinitionUnit>> BeforeDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            base.Validate(dxUnit);
+            base.Process(dxUnit, ctx);
+
+            await this.DeleteRelationsAsync(dxUnit, ctx, ct);
+
+            dataStructureRepo.DropDataStructure(dxUnit);
+
+            return DXResult<DXUnitDefinitionUnit>.OkContinue(dxUnit);
+        }
+
         public async Task<DXResult> AfterDeleteAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
             await dxStructureCache.RefreshAsync(ct);
@@ -128,6 +128,7 @@ namespace IV.DX.Application.Handlers
 
             await DeleteDXElementInUnitDefinitionElements(existingDXUnit, ctx, ct);
             await DeleteDXUnitToUnitRelationElements(existingDXUnit, ctx, ct);
+            await DeleteDXUnitToElementRelationElements(existingDXUnit, ctx, ct);
         }
 
         private async Task DeleteDXElementInUnitDefinitionElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
@@ -152,6 +153,17 @@ namespace IV.DX.Application.Handlers
 
                 this.UnassingDXUnit(existingDXUnit, dxUnitRelation, dxUnitToUnassign);
                 this.DeleteRevertedDXUnitToUnitRelationElement(dxUnitRelation, dxUnitToUnassign);
+            }
+        }
+
+        private async Task DeleteDXUnitToElementRelationElements(DXUnitDefinitionUnit existingDXUnit, DXHandlerBaseContext ctx, CancellationToken ct)
+        {
+            foreach (var dxUnitRelation in existingDXUnit.DXUnitToElementRelationElement.Announced)
+            {
+                var dxElementToUnassign = genericRepo.GetDXUnit<DXElementDefinitionUnit>(dxUnitRelation.TargetDXElement);
+
+                this.UnassingDXElement(existingDXUnit, dxUnitRelation, dxElementToUnassign);
+                this.DeleteRevertedDXUnitToElementRelationElement(dxUnitRelation, dxElementToUnassign);
             }
         }
 

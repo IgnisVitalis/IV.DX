@@ -289,7 +289,7 @@
         "DXColumnDefinitionElement": {
             "S_Type": "DXColumnDefinitionElement",
             "Mode": 1,
-            "Announced": [               
+            "Announced": [
                 {
                     "S_Type": "DXColumnDefinitionElement",
                     "ID": "146a871a-e374-4d37-a23c-686ee752c0a5",

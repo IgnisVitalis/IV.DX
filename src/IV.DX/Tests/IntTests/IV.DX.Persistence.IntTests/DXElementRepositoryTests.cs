@@ -603,6 +603,6 @@ namespace IV.DX.Persistence.IntTests
             Assert.Equal("BlobColumnUpdated", blobColumn.Name);
             Assert.Equal(DXColumnTypeEnum.Blob, blobColumn.ColumnType);
             Assert.False(blobColumn.AllowNull);
-        }
+        }       
     }
 }

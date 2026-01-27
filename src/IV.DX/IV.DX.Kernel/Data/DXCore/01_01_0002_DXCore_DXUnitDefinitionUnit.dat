@@ -140,6 +140,22 @@
                     "DXElementDefinitionUnit": "cffcaa48-ebe0-4598-9bff-2bfefefb8513"
                 }
             ]
+        },
+        "DXUnitToElementRelationElement": {
+            "S_Type": "DXUnitToElementRelationElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXUnitToElementRelationElement",
+                    "ID": "b49452d8-c985-4967-b82a-dbc4c2c2f587",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
+                    "RelationType": 3,
+                    "TargetDXElement": "65bd9684-6709-409a-a46b-7c605dcb715b",
+                    "OwnRelationName": "TargetDXElement",
+                    "TargetRelationName": "RelatedDXUnits"
+                }
+            ]
         }
     },
     {
@@ -300,6 +316,32 @@
                     "Name": "RelationColumnTypeLeft",
                     "EnumType": "971d538a-1489-483a-bc84-86596ed0c51a",
                     "EnumKey": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"
+                }
+            ]
+        },
+        "DXUnitToElementRelationElement": {
+            "S_Type": "DXUnitToElementRelationElement",
+            "Mode": 1,
+            "Announced": [
+                {
+                    "S_Type": "DXUnitToElementRelationElement",
+                    "ID": "b9e1a4b5-08b8-4385-9412-ce5849d38d29",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "RelationType": 3,
+                    "TargetDXElement": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
+                    "OwnRelationName": "TargetDXUnit",
+                    "TargetRelationName": "RelatedDXUnits"
+                },
+                {
+                    "S_Type": "DXUnitToElementRelationElement",
+                    "ID": "d19622f4-1acd-402c-8f27-cc1fd6def5c5",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
+                    "RelationType": 3,
+                    "TargetDXElement": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+                    "OwnRelationName": "TargetDXUnit",
+                    "TargetRelationName": "RelatedDXElements"
                 }
             ]
         }

@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -13,6 +14,7 @@ namespace IV.DX.Application
     {
         private readonly IDXUnitDataService _dataService;
         private readonly IDXUnitGenericRepository _genericRepo;
+        private readonly IDXElementCoreRepository _dxElementCoreRepo;
 
         private readonly SemaphoreSlim _lock = new(1, 1);
 
@@ -22,10 +24,12 @@ namespace IV.DX.Application
 
         public MigrationService(
             IDXUnitGenericRepository genericRepo,
-            IDXUnitDataService dataService)
+            IDXUnitDataService dataService,
+              IDXElementCoreRepository dxElementCoreRepo)
         {
-            _genericRepo = genericRepo ?? throw new ArgumentNullException(nameof(genericRepo));
-            _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
+            _genericRepo = genericRepo;
+            _dataService = dataService;
+            _dxElementCoreRepo = dxElementCoreRepo;
         }
 
         public async Task MigrateCustomAsync(string path, CancellationToken ct = default)
@@ -163,7 +167,6 @@ namespace IV.DX.Application
             var ext = script.Extention?.ToLowerInvariant();
             switch (ext)
             {
-                case "ann":   // insert or update
                 case "dat":   // insert or update
                     await ProcessFileToInsertOrUpdateAsync(script, ct).ConfigureAwait(false);
                     break;
@@ -282,18 +285,35 @@ namespace IV.DX.Application
             }
         }
 
-        private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
+        private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit script, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.Content);
+            var jarray = JArray.Parse(script.Content);
+
             foreach (JObject item in jarray)
             {
                 try
                 {
-                    await _dataService.InsertAsync(item, new DXUnitHandlerPostInitCoreContext(file), ct).ConfigureAwait(false);
+                    var ext = script.Extention?.ToLowerInvariant();
+                    switch (ext)
+                    {
+                        case "dat":   // insert or update using DXDataService
+                            await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                            break;
+                        case "el":
+                            {
+                                // var dxElement = DXSingleElementConverters.ToDXSingleElement()
+                                // _dxElementCoreRepo.InsertOrUpdate()
+
+                                break;
+                            }
+
+                        default:
+                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
+                    }
                 }
                 catch (Exception exc)
                 {
-                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
+                    throw new Exception(this.GetMigrationErrorMessage(script, item), exc);
                 }
             }
         }

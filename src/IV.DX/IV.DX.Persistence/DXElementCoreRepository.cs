@@ -20,7 +20,7 @@ namespace IV.DX.Persistence
 
         public Guid InsertOrUpdate(string dxModelType, DXSingleElement dxSingleDXElement)
         {
-            throw new NotImplementedException("InsertOrUpdateSingleDXElement is not implemted yet.");
+            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
         }
 
         private Guid InsertOrUpdateSingleDXElementPrivate(string dxModelType, DXSingleElement dxSingleDXElement, ProcessingType processingType)

@@ -820,7 +820,8 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
         }
 
-        private Guid InsertOrUpdatedxSingleItemToDataSet(
+        private Guid 
+        InsertOrUpdatedxSingleItemToDataSet(
             DXSingleElement dxElement,
             string dxUnitType,
             Guid objectID,
