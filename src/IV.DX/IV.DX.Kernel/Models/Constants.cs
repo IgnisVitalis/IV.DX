@@ -6,7 +6,12 @@
         public static string DXUnitIDSuffix { get; } = "UnitID";
         public static string SystemPropertyTypeName { get; } = $"{SystemPropertyPrefix}Type";
         public static string SystemPropertyIsRequired { get; } = $"{SystemPropertyPrefix}IsRequired";
+
+
+        public static string DXElementProperty {get;}= $"El_Type";
+
         public static string ID { get; } = "ID";
+        public static string DXCustomUnitID(string typeName) => $"{typeName}{ID}";
         public static string TimeStamp { get; } = "TimeStamp";
         public static string DXUnitID { get; } = $"DX{DXUnitIDSuffix}";
         public static string Announced { get; } = "Announced";

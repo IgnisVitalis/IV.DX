@@ -6,14 +6,14 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
 {
     internal static class DXModelDefinitionHelper
     {
-        public static DXModelDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit, IEnumerable<DXRelationDefinitionUnit> relations)
+        public static DXDataSetDefinition BuildModelDefinition(DXEnumDefinitionUnit mainDXUnit, IEnumerable<DXRelationDefinitionUnit> relations)
         {
-            var dxModel = BuildBaseModelDefinition(mainDXUnit, Enumerable.Empty<DXObjectDefinitionUnit>(), relations);
+            var dxModel = BuildBaseDataSetDefinition(mainDXUnit, Enumerable.Empty<DXObjectDefinitionUnit>(), relations);
 
             return dxModel;
         }
 
-        private static DXModelDefinition BuildBaseModelDefinition(
+        private static DXDataSetDefinition BuildBaseDataSetDefinition(
             DXObjectDefinitionUnit dxUnit,
             IEnumerable<DXObjectDefinitionUnit> baseDXUnits,
             IEnumerable<DXRelationDefinitionUnit> relations)
@@ -21,33 +21,33 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             if (dxUnit == null)
                 return null;
 
-            var ownDXElementDefinition = new DXElementDefinition(dxUnit.Name, dxUnit.Name, true);
+            var ownDXElementDefinition = new DXMainTableDefinition(dxUnit.Name, dxUnit.Name, true);
 
-            List<DXPropertyDefinition> props = new List<DXPropertyDefinition>();
+            List<DXColumnDefinition> props = new List<DXColumnDefinition>();
 
 
-            var dxUnitProps = dxUnit.DXColumnDefinitionElement.Announced.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+            var dxUnitProps = dxUnit.DXColumnDefinitionElement.Announced.Select(x => new DXColumnDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
             props.AddRange(dxUnitProps);
 
             foreach (var baseDXUnit in baseDXUnits)
             {
-                var baseDXUnitProps = baseDXUnit.DXColumnDefinitionElement.Announced.Select(x => new DXPropertyDefinition(x.Name, new DXColumnAttribute(x.Name)));
+                var baseDXUnitProps = baseDXUnit.DXColumnDefinitionElement.Announced.Select(x => new DXColumnDefinition(x.Name, new DXColumnAttribute(x.Name)));
 
                 props.AddRange(baseDXUnitProps);
-            }         
+            }
 
             //var relationsAsProperties = relations.ToDXPropertyDefinitions(mainDXObject.Name);
 
             ownDXElementDefinition.AddPropertyDefinitions(props);
             //ownDXElementDefinition.AddPropertyDefinitions(relationsAsProperties);
 
-            var dxModel = new DXModelDefinition(ownDXElementDefinition);
+            var dxModel = new DXDataSetDefinition(ownDXElementDefinition);
 
             return dxModel;
         }
 
-        public static DXModelDefinition BuildModelDefinition(
+        public static DXDataSetDefinition BuildModelDefinition(
             DXUnitDefinitionUnit dxUnit,
             IEnumerable<DXUnitDefinitionUnit> baseDXUnits,
             IEnumerable<DXRelationDefinitionUnit> relations,
@@ -56,38 +56,38 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             IEnumerable<DXElementDefinitionUnit> relatedMultiMandatoryDXElements = null,
             IEnumerable<DXElementDefinitionUnit> relatedMultiOptionalDXElements = null)
         {
-            var dxModel = BuildBaseModelDefinition(dxUnit, baseDXUnits, relations);
+            var dxModel = BuildBaseDataSetDefinition(dxUnit, baseDXUnits, relations);
 
             if (dxModel == null)
                 return null;
 
-            var singleDXElements = new List<DXElementDefinition>();
-            var multiDXElements = new List<DXElementDefinition>();
+            var singleDXElements = new List<DXTableDefinition>();
+            var multiDXElements = new List<DXTableDefinition>();
 
             if (relatedSingleMandatoryDXElements != null)
             {
-                var definitions = relatedSingleMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, true));
+                var definitions = relatedSingleMandatoryDXElements.Select(x => x.ToDXTableDefinition(dxUnit.Name, relations, true));
 
                 singleDXElements.AddRange(definitions);
             }
 
             if (relatedSingleOptionalDXElements != null)
             {
-                var definitions = relatedSingleOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, false));
+                var definitions = relatedSingleOptionalDXElements.Select(x => x.ToDXTableDefinition(dxUnit.Name, relations, false));
 
                 singleDXElements.AddRange(definitions);
             }
 
             if (relatedMultiMandatoryDXElements != null)
             {
-                var definitions = relatedMultiMandatoryDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, true));
+                var definitions = relatedMultiMandatoryDXElements.Select(x => x.ToDXTableDefinition(dxUnit.Name, relations, true));
 
                 multiDXElements.AddRange(definitions);
             }
 
             if (relatedMultiOptionalDXElements != null)
             {
-                var definitions = relatedMultiOptionalDXElements.Select(x => DXElementDefinitionConverter.ToDXElementDefinition(x, relations, false));
+                var definitions = relatedMultiOptionalDXElements.Select(x => x.ToDXTableDefinition(dxUnit.Name, relations, false));
 
                 multiDXElements.AddRange(definitions);
             }

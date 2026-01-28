@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
+using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Kernel.Converters.DXModelConverters
 {
@@ -18,6 +19,11 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             var item = new DXItem(attribute.Type, dxElement.ID, dxElement.DXUnitID, dxElement.TimeStamp, content);
 
             return new DXSingleElement(name, attribute, item, isRequired);
+        }
+
+        public static DXSingleElement ToDXSingleElement(this JObject jObject, bool isRequired, string propertyName = null)
+        {
+            var item = jObject.FromDXUnitToDXItem();
         }
     }
 }

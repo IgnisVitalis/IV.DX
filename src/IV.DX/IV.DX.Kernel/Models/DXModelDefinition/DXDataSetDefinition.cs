@@ -1,20 +1,20 @@
 ﻿namespace IV.DX.Kernel.Models
 {
-    internal class DXModelDefinition
+    internal class DXDataSetDefinition
     {
-        public DXElementDefinition MainElement { get; private set; }
-        public HashSet<DXElementDefinition> SingleFragmentDefinitions { get; private set; }
-        public HashSet<DXElementDefinition> MultiFragmentDefinitions { get; private set; }
+        public DXMainTableDefinition MainElement { get; private set; }
+        public HashSet<DXTableDefinition> SingleFragmentDefinitions { get; private set; }
+        public HashSet<DXTableDefinition> MultiFragmentDefinitions { get; private set; }
 
-        public DXModelDefinition(DXElementDefinition mainElement)
+        public DXDataSetDefinition(DXMainTableDefinition mainElement)
         {
             MainElement = mainElement;
-            SingleFragmentDefinitions = new HashSet<DXElementDefinition>();
-            MultiFragmentDefinitions = new HashSet<DXElementDefinition>();
+            SingleFragmentDefinitions = new HashSet<DXTableDefinition>();
+            MultiFragmentDefinitions = new HashSet<DXTableDefinition>();
         }
 
 
-        public void AddToSingleItemDefinitions(DXElementDefinition item)
+        public void AddToSingleItemDefinitions(DXTableDefinition item)
         {
             var existingFragmentDefinition = SingleFragmentDefinitions.SingleOrDefault(x => x.Type == item.Type);
 
@@ -26,7 +26,7 @@
             SingleFragmentDefinitions.Add(item);
         }
 
-        public void AddToSingleItemDefinitions(IEnumerable<DXElementDefinition> items)
+        public void AddToSingleItemDefinitions(IEnumerable<DXTableDefinition> items)
         {
             foreach (var item in items)
             {
@@ -44,7 +44,7 @@
             }
         }
 
-        public void AddToMultiItemDefinitions(DXElementDefinition item)
+        public void AddToMultiItemDefinitions(DXTableDefinition item)
         {
             var existingFragmentDefinition = MultiFragmentDefinitions.SingleOrDefault(x => x.Type == item.Type);
 
@@ -56,7 +56,7 @@
             MultiFragmentDefinitions.Add(item);
         }
 
-        public void AddToMultiItemDefinitions(IEnumerable<DXElementDefinition> items)
+        public void AddToMultiItemDefinitions(IEnumerable<DXTableDefinition> items)
         {
             foreach (var item in items)
             {
@@ -74,9 +74,9 @@
             }
         }
 
-        public DXModelDefinition DeepClone()
+        public DXDataSetDefinition DeepClone()
         {
-            var clone = new DXModelDefinition(MainElement);
+            var clone = new DXDataSetDefinition(MainElement);
 
             var singleFragmentDefinitionClones = SingleFragmentDefinitions.Select(x => x.DeepClone());
             var multiFragmentDefinitionClones = MultiFragmentDefinitions.Select(x => x.DeepClone());

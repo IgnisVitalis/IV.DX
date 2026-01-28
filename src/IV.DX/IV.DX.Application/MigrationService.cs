@@ -19,7 +19,7 @@ namespace IV.DX.Application
         private readonly SemaphoreSlim _lock = new(1, 1);
 
         private static readonly Regex ScriptNameRegex = new(
-            @"^(?<Version>\d+)_(?<Build>\d+)_(?<Number>\d+)_(?<Application>[A-Za-z0-9]+)_(?<Name>[A-Za-z0-9]+)\.(?<Extension>[A-Za-z0-9]+)$",
+            @"^(?<Version>\d+)_(?<Build>\d+)_(?<Number>\d+)_(?<Application>[A-Za-z0-9]+)_(?<Name>[A-Za-z0-9]+)\.(?<ExtensionType>[A-Za-z0-9]+)\.(?<ExtensionOperation>[A-Za-z0-9]+)$",
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public MigrationService(
@@ -184,7 +184,7 @@ namespace IV.DX.Application
 
         private static bool TryParseScriptMeta(
             string fileName,
-            out (string Version, string Build, string Number, string App, string Name, string Extension) meta)
+            out (string Version, string Build, string Number, string App, string Name, string ExtensionType, string ExtensionOperation) meta)
         {
             var m = ScriptNameRegex.Match(fileName);
             if (!m.Success) { meta = default; return false; }
@@ -195,7 +195,8 @@ namespace IV.DX.Application
                 m.Groups["Number"].Value,
                 m.Groups["Application"].Value,
                 m.Groups["Name"].Value,
-                m.Groups["Extension"].Value
+                m.Groups["ExtensionType"].Value,
+                m.Groups["ExtensionOperation"].Value
             );
             return true;
         }
@@ -223,6 +224,7 @@ namespace IV.DX.Application
                 var content = ResourceReader.ReadEmbeddedText(assembly, fullResourcePath);
 
                 var id = Guid.NewGuid();
+
                 return new DXMigrationScriptsUnit
                 {
                     ID = id,
@@ -233,7 +235,8 @@ namespace IV.DX.Application
                     Build = meta.Build,
                     Number = meta.Number,
                     AppName = meta.App,
-                    Extention = meta.Extension,
+                    ExtentionType = meta.ExtensionType,
+                    ExtentionOperation = meta.ExtensionOperation,
                     Content = content
                 };
             }).ToList();
@@ -262,7 +265,8 @@ namespace IV.DX.Application
                                Build = meta.Build,
                                Number = meta.Number,
                                AppName = meta.App,
-                               Extention = meta.Extension,
+                               ExtentionType = meta.ExtensionType,
+                               ExtentionOperation = meta.ExtensionOperation,
                                Content = File.ReadAllText(fi.FullName)
                            };
                        })
@@ -293,7 +297,42 @@ namespace IV.DX.Application
             {
                 try
                 {
-                    var ext = script.Extention?.ToLowerInvariant();
+                    var extType = script.ExtentionType;
+                    var extOperation = script.ExtentionOperation;
+
+                    if (extType == "unit")
+                    {
+                        if (extOperation == "apply")
+                        {
+                            await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                        }
+                        else if (extOperation == "del")
+                        {
+                            await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
+                        }
+                    }
+                    else if (extType == "element")
+                    {
+                        if (extOperation == "apply")
+                        {
+                            var dxModel = item.ToDXSin();
+
+                            _dxElementCoreRepo.InsertOrUpdate("", dxModel);
+                        }
+                        else if (extOperation == "del")
+                        {
+                            await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
+                        }
+                    }
+
                     switch (ext)
                     {
                         case "dat":   // insert or update using DXDataService

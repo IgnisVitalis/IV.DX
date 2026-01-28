@@ -5,9 +5,9 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXSingleElementDefinitionConverter
     {
-        public static DXElementDefinition ToDXElementDefinition(this DXSingleElement dxSingleElement)
+        public static DXTableDefinition ToDXElementDefinition(this DXSingleElement dxSingleElement, string dxUnitTypeName)
         {
-            var item = new DXElementDefinition(dxSingleElement.Attribute.Type, dxSingleElement.Name, dxSingleElement.IsRequired);
+            var item = new DXTableDefinition(dxUnitTypeName, dxSingleElement.Attribute.Type, dxSingleElement.Name, dxSingleElement.IsRequired);
 
             var propertyNames = dxSingleElement.Item.Content.Select(y => y.Key).ToList();
 
@@ -21,7 +21,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                 propertyNames.Add(Constants.DXUnitID);
             }
 
-            item.AddPropertyDefinitions(propertyNames.Select(y => new DXPropertyDefinition(y, new DXColumnAttribute(y))).ToList());
+            item.AddPropertyDefinitions(propertyNames.Select(y => new DXColumnDefinition(y, new DXColumnAttribute(y))).ToList());
 
             return item;
         }

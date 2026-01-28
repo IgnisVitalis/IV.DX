@@ -4,6 +4,12 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXEnumCoreRepository
     {
+        bool IsItemExisting(string typeName, Guid objectId);
         IEnumerable<DXModel> GetItems(string enumType);
+        DXModel? GetItem(string typeName, Guid objectId);
+        Guid Insert(DXModel dxModel);
+        Guid Update(DXModel dxModel);
+        Guid InsertOrUpdate(DXModel dxModel);
+        bool Delete(string typeName, Guid objectId);
     }
 }

@@ -49,7 +49,7 @@ namespace IV.DX.Persistence.IntTests
             this._dxElementGenericRepo.Insert("TBookUnit", page5);
 
             // Checking result
-            var createdDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>(page5.ID);
+            var createdDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>("TBookUnit", page5.ID);
 
             Assert.NotNull(createdDXElement);
             Assert.Equal(page5.ID, createdDXElement.ID);
@@ -63,7 +63,7 @@ namespace IV.DX.Persistence.IntTests
             this._dxElementGenericRepo.Update("TBookUnit", page5);
 
             // Checking result
-            var updatedDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>(page5.ID);
+            var updatedDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>("TBookUnit", page5.ID);
 
             Assert.NotNull(updatedDXElement);
             Assert.Equal(page5.ID, updatedDXElement.ID);
@@ -75,7 +75,7 @@ namespace IV.DX.Persistence.IntTests
             this._dxElementGenericRepo.Delete(page5);
 
             // Checking result
-            var deletedDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>(page5.ID);
+            var deletedDXElement = this._dxElementGenericRepo.GetItem<TBookChapterElement>("TBookUnit", page5.ID);
 
             Assert.Null(deletedDXElement);
 

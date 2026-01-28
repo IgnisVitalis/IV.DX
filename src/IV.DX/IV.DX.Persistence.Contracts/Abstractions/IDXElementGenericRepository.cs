@@ -4,10 +4,10 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface IDXElementGenericRepository
     {
-        Guid Insert(string dxModelType, DXElement dxElement);
-        Guid Update(string dxModelType, DXElement dxElement);
+        Guid Insert(string dxUnitTypeName, DXElement dxElement);
+        Guid Update(string dxUnitTypeName, DXElement dxElement);
         bool Delete(DXElement dxElement);
-        T GetItem<T>(Guid id) where T : DXElement;
-        IEnumerable<T> GetItems<T>(string dxFilter) where T : DXElement;
+        T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement;
+        IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement;
     }
 }

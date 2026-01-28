@@ -17,8 +17,10 @@ namespace IV.DX.Kernel.Models
         public string AppName { get; set; }
         [DXColumn("Name")]
         public string Name { get; set; }
-        [DXColumn("Extention")]
-        public string Extention { get; set; }
+        [DXColumn("ExtentionType")]
+        public string ExtentionType { get; set; }
+        [DXColumn("ExtentionOperation")]
+        public string ExtentionOperation { get; set; }
         [DXColumn("Content")]
         public string Content { get; set; }
 
@@ -40,7 +42,7 @@ namespace IV.DX.Kernel.Models
 
         public override string ToString()
         {
-            return $"{Version}_{Build}_{Number}_{AppName}_{Name}.{Extention}";
+            return $"{Version}_{Build}_{Number}_{AppName}_{Name}.{ExtentionType}.{ExtentionOperation}";
         }
     }
 }

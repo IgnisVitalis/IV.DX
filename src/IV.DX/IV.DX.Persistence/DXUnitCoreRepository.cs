@@ -7,6 +7,7 @@ using IV.DX.Kernel.Helpers.DXModelDefinitionHelpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -41,27 +42,22 @@ namespace IV.DX.Persistence
 
             var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
 
-            var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(mainDXUnitInfo);
+            var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnitInfo);
 
             return this.RunRequestInTransaction((conn) =>
             {
                 DataSet dataSet = new DataSet(typeName);
 
-                foreach (var dxUnitInfo in dxUnitHierarchy)
+                foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
                 {
-                    var relatedDXElements = this.GetRelatedDXElementDefinitions(dxUnitInfo);
-
-                    if (relatedDXElements != null)
+                    // Delete related dxElements
+                    foreach (var relatedDXElement in dxUnitHierarchyItem.AllDXElements)
                     {
-                        // Delete related dxElements
-                        foreach (var relatedDXElement in relatedDXElements)
-                        {
-                            this.DeleteDXElementsFromDataSet(relatedDXElement.Name, id, dataSet, conn);
-                        }
+                        this.DeleteDXElementsFromDataSet(relatedDXElement.Name, id, dataSet, conn);
                     }
 
                     // Delete dxUnit
-                    this.DeleteDXUnitFromDataSet(dxUnitInfo.Name, id, dataSet, conn);
+                    this.DeleteDXUnitFromDataSet(dxUnitHierarchyItem.DXUnit.Name, id, dataSet, conn);
                 }
 
                 dataSet.AcceptChanges();
@@ -70,7 +66,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXModel? GetItem(DXModelDefinition container, Guid id, DXLoadingType typeOfLoading)
+        public DXModel? GetItem(DXDataSetDefinition container, Guid id, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -97,7 +93,7 @@ namespace IV.DX.Persistence
         }
 
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -118,7 +114,7 @@ namespace IV.DX.Persistence
             return resultItems;
         }
 
-        public IEnumerable<DXModel> GetItems(DbConnection conn, DXModelDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DbConnection conn, DXDataSetDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
             if (container == null)
                 return null;
@@ -132,7 +128,7 @@ namespace IV.DX.Persistence
             IEnumerable<DXModel> resultItems = null;
 
             var dataSet = this.PopulateDataSetForTargetDXUnits(container, objIds, conn);
-            var dataTable = dataSet.Tables[container.MainElement.Type];
+            var dataTable = dataSet.Tables[container.MainElement.DXUnitType];
 
             var items = dataTable.Rows;
 
@@ -143,7 +139,7 @@ namespace IV.DX.Persistence
             return resultItems;
         }
 
-        private DXModel ConvertToDXModel(DataSet dataSet, DataRow x, DXModelDefinition container)
+        private DXModel ConvertToDXModel(DataSet dataSet, DataRow x, DXDataSetDefinition container)
         {
             var id = ConvertHelper.ParseGuid(x[Constants.ID]);
             var item = this.GetDXItem(x, container.MainElement);
@@ -250,44 +246,46 @@ namespace IV.DX.Persistence
             return this.GetItem(modelDefinition, id, DXLoadingType.Full);
         }
 
-        private DXModelDefinition GetModelDefinition(string type)
+        private DXDataSetDefinition GetModelDefinition(string type)
         {
             var mainDXUnit = this.GetDXUnitDefinition(type);
 
             if (mainDXUnit == null)
                 throw new Exception($"There are no DXUnit with name '{mainDXUnit}'");
 
-            var dxUnits = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnit);
+            var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnit);
 
             List<DXElementDefinitionUnit> singleMandatoryDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> singleOptionalDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> multiMandatoryDXElements = new List<DXElementDefinitionUnit>();
             List<DXElementDefinitionUnit> multiOptionalDXElements = new List<DXElementDefinitionUnit>();
-                 
-            foreach (var dxUnit in dxUnits)
+
+            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
             {
-                var singleMandatoryDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
+                var dxUnit = dxUnitHierarchyItem.DXUnit;
+
+                var singleMandatoryDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
 
                 if (singleMandatoryDXElementsTemp != null)
                 {
                     singleMandatoryDXElements.AddRange(singleMandatoryDXElementsTemp);
                 }
 
-                var singleOptionalDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
+                var singleOptionalDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
 
                 if (singleOptionalDXElementsTemp != null)
                 {
                     singleOptionalDXElements.AddRange(singleOptionalDXElementsTemp);
                 }
 
-                var multiMandatoryDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
+                var multiMandatoryDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
 
                 if (multiMandatoryDXElementsTemp != null)
                 {
                     multiMandatoryDXElements.AddRange(multiMandatoryDXElementsTemp);
                 }
 
-                var multiOptionalDXElementsTemp = this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
+                var multiOptionalDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
 
                 if (multiOptionalDXElementsTemp != null)
                 {
@@ -297,7 +295,7 @@ namespace IV.DX.Persistence
 
             var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(
                 mainDXUnit,
-                dxUnits.Where(x=>x!= mainDXUnit),
+                dxUnitHierarchy.Items.Select(x => x.DXUnit).Where(x => x != mainDXUnit),
                 _dxStructureCache.DXRelations,
                 singleMandatoryDXElements,
                 singleOptionalDXElements,
@@ -307,25 +305,25 @@ namespace IV.DX.Persistence
             return modelDefinition;
         }
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition container, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, DXLoadingType typeOfLoading)
         {
             return GetItems(container, string.Empty, typeOfLoading);
         }
 
-        public IEnumerable<DXModel> GetItems(DXModelDefinition container, string dxFilter, DXLoadingType typeOfLoading)
+        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, string dxFilter, DXLoadingType typeOfLoading)
         {
-            string typeName = container.MainElement.Type;
+            string typeName = container.MainElement.DXUnitType;
 
             var ids = this.GetItemIDs(typeName, dxFilter);
 
             return this.GetItems(container, ids, typeOfLoading);
         }
 
-        private DataSet PopulateDataSetForTargetDXUnit(DXModelDefinition container, Guid id, DbConnection conn)
+        private DataSet PopulateDataSetForTargetDXUnit(DXDataSetDefinition container, Guid id, DbConnection conn)
         {
-            DataSet dataSet = new DataSet(container.MainElement.Type);
+            DataSet dataSet = new DataSet(container.MainElement.DXUnitType);
 
-            this.PopulateTableToDataSet(conn, dataSet, container.MainElement.Type,
+            this.PopulateTableToDataSet(conn, dataSet, container.MainElement.DXUnitType,
                 columns: container.MainElement.GetColumns(),
                 dxFilter: this.GetWhereExpressionForID(id), fillSchema: false);
 
@@ -348,16 +346,16 @@ namespace IV.DX.Persistence
             return dataSet;
         }
 
-        private DataSet PopulateDataSetForTargetDXUnits(DXModelDefinition container, IEnumerable<Guid> ids, DbConnection conn)
+        private DataSet PopulateDataSetForTargetDXUnits(DXDataSetDefinition container, IEnumerable<Guid> ids, DbConnection conn)
         {
-            DataSet dataSet = new DataSet(container.MainElement.Type);
+            DataSet dataSet = new DataSet(container.MainElement.DXUnitType);
 
             if (ids != null && ids.Count() > 0)
             {
                 this.PopulateTableToDataSet(
                     conn,
                     dataSet,
-                    container.MainElement.Type,
+                    container.MainElement.DXUnitType,
                     columns: container.MainElement.GetColumns(),
                     dxFilter: this.GetWhereExpressionForID(ids),
                     fillSchema: false);
@@ -426,10 +424,18 @@ namespace IV.DX.Persistence
             }
         }
 
-        private DXItem GetDXItem(DataRow row, DXElementDefinition structure)
+        private DXItem GetDXItem(DataRow row, DXTableDefinition structure)
         {
             var typeName = structure.Type;
-            var columns = structure.ToDictionary(x => x.ColumnDefinition.Name, x => x.ColumnDefinition.DXExpression);
+            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
+
+            return this.GetDXItem(typeName, row, columns);
+        }
+
+        private DXItem GetDXItem(DataRow row, DXMainTableDefinition structure)
+        {
+            var typeName = structure.DXUnitType;
+            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
 
             return this.GetDXItem(typeName, row, columns);
         }
@@ -471,11 +477,7 @@ namespace IV.DX.Persistence
             if (mainDXUnitInfo != null)
                 return this.InsertOrUpdateDXUnit(mainDXUnitInfo, dxModel, processingType);
 
-            var enumInfo = this.GetDXEnumDefinition(typeName);
-            if (enumInfo != null)
-                return this.InsertOrUpdateDXEnum(enumInfo, dxModel, processingType);
-
-            throw new Exception($"Type '{dxModel.DXMainElement.Attribute.Type}' is not registered.");
+            throw new Exception($"Unit type '{dxModel.DXMainElement.Attribute.Type}' is not registered.");
         }
 
         public Guid InsertOrUpdate(DXModel dxModel)
@@ -496,51 +498,25 @@ namespace IV.DX.Persistence
 
         public bool IsItemExisting(string type, Guid objectId)
         {
-            DXModelDefinition dd = new DXModelDefinition(new DXElementDefinition(type, type, false));
+            DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(type, type, false));
 
             var item = this.GetItem(dd, objectId, DXLoadingType.Base);
 
             return item != null;
-        }
-
-        private Guid InsertOrUpdateDXEnum(DXEnumDefinitionUnit enumInfo, DXModel dxModel, ProcessingType processingType)
-        {
-            this.RunRequestInTransaction(conn =>
-            {
-                var dataSet = new DataSet(enumInfo.Name);
-                var enumTable = enumInfo.Name;
-
-                var dxModelDefinition = dxModel.ToDXModelDefinition();
-
-                var adapter = this.PopulateTableToDataSet(
-                    conn,
-                    dataSet,
-                    enumTable,
-                    dxFilter:
-                    this.GetWhereExpressionForID(dxModel.DXMainElement.Item.ID),
-                    columns: dxModelDefinition.MainElement.GetColumns());
-
-                UpsertOwnRow(dxModel, dataSet.Tables[enumTable], enumTable, processingType);
-
-                SaveTable(adapter, conn, dataSet, dataSet.Tables[enumTable], false);
-
-                dataSet.AcceptChanges();
-                return true;
-            });
-
-            return dxModel.DXMainElement.Item.ID;
-        }
+        }     
 
         private Guid InsertOrUpdateDXUnit(DXUnitDefinitionUnit mainDXUnitInfo, DXModel dxModel, ProcessingType processingType)
         {
             this.RunRequestInTransaction(conn =>
             {
-                var dxUnitHierarchy = this.GetHierarchyChainOfBaseEntitiesFromBaseToDerived(mainDXUnitInfo);
+                var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnitInfo);
 
-                var dxUnitDefinition = dxModel.ToDXModelDefinition();
+                var dxUnitDefinition = dxModel.ToDXModelDefinition(dxUnitHierarchy);
 
-                foreach (var dxUnitInfo in dxUnitHierarchy)
+                foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
                 {
+                    var dxUnitInfo = dxUnitHierarchyItem.DXUnit;
+
                     var dxUnitName = dxUnitInfo.Name;
 
                     // System provides columns for each base table from db because there are no information in dxModel and it is not possible to separate.
@@ -553,8 +529,8 @@ namespace IV.DX.Persistence
                     var dataSet = new DataSet(dxUnitName);
 
                     var multiTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                    var relatedMM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedMO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                    var relatedMM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                    var relatedMO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var unitTable = dxUnitInfo.Name;
                     var objectId = dxModel.DXMainElement.Item.ID;
@@ -572,18 +548,18 @@ namespace IV.DX.Persistence
                     SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable], false);
 
                     // 2) SINGLE
-                    var relatedSM = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedSO = this.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                    var relatedSM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                    var relatedSO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
                     if (relatedSM != null) foreach (var el in relatedSM)
-                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
                     if (relatedSO != null) foreach (var el in relatedSO)
-                            UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
 
                     // 3) MULTI
                     if (relatedMM != null) foreach (var el in relatedMM)
-                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
                     if (relatedMO != null) foreach (var el in relatedMO)
-                            UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
 
                     dataSet.AcceptChanges();
                 }
@@ -629,7 +605,7 @@ namespace IV.DX.Persistence
 
         private void UpsertSingle(
             DXModel dxModel,
-            DXModelDefinition dxModelDefinition,
+            DXDataSetDefinition dxModelDefinition,
             string dxUnitType,
             string dxElementName,
             DataSet dataSet,
@@ -668,7 +644,7 @@ namespace IV.DX.Persistence
 
         private void UpsertMulti(
             DXModel dxModel,
-            DXModelDefinition dxModelDefinition,
+            DXDataSetDefinition dxModelDefinition,
             string dxUnitType,
             string dxElementName,
             DataSet dataSet,
@@ -744,39 +720,6 @@ namespace IV.DX.Persistence
             this.SaveTable(adapter, conn, dataSet, table, true);
         }
 
-        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(DXUnitDefinitionUnit derivedDXUnit)
-        {
-            var result = new List<DXUnitDefinitionUnit>() { derivedDXUnit };
-
-            if (!derivedDXUnit.BaseDXUnit.HasValue)
-                return result;
-
-            var derivedDXUnitInfo = derivedDXUnit;
-
-            while (true)
-            {
-                var baseClass = this.GetBaseDXUnit(derivedDXUnitInfo);
-
-                result.Add(baseClass);
-
-                if (baseClass.BaseDXUnit.HasValue)
-                {
-                    derivedDXUnitInfo = baseClass;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result.ToList();
-        }
-
-        private IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromBaseToDerived(DXUnitDefinitionUnit derivedDXUnit)
-        {
-            return this.GetHierarchyChainOfBaseEntitiesFromDerivedToBase(derivedDXUnit).Reverse();
-        }
-
         private void DeleteDXUnitFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
@@ -820,7 +763,7 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
         }
 
-        private Guid 
+        private Guid
         InsertOrUpdatedxSingleItemToDataSet(
             DXSingleElement dxElement,
             string dxUnitType,
@@ -833,7 +776,7 @@ namespace IV.DX.Persistence
 
             var dxElementName = dxElement.Attribute.Type;
 
-            var dxElementDefinition = dxElement.ToDXElementDefinition();
+            var dxElementDefinition = dxElement.ToDXElementDefinition(dxUnitType);
 
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName,
                 dxElementDefinition.GetColumns(),
@@ -984,50 +927,50 @@ namespace IV.DX.Persistence
                 dataRow[dataColumn] = obj;
             }
             else
-            if (dataColumn.DataType == typeof(decimal))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseDecimal(obj);
-            }
-            else
-            if (dataColumn.DataType == typeof(double))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseDouble(obj);
-            }
-            else
-            if (dataColumn.DataType == typeof(sbyte))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseSByte(obj);
-            }
-            else
-            if (dataColumn.DataType == typeof(int))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseInt(obj);
-            }
-            else
-            if (dataColumn.DataType == typeof(DateTime))
-            {
-                var dt = ConvertHelper.ParseDateTime(obj);
-                dataRow[dataColumn] = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
-            }
-            else
-            if (dataColumn.DataType == typeof(bool))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseBool(obj);
-            }
-            else
-            if (dataColumn.DataType == typeof(byte[]))
-            {
-                dataRow[dataColumn] = ConvertToBytes(obj);
-            }
-            else if (dataColumn.DataType == typeof(TimeSpan))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseTimeSpan(obj);
-            }
-            else
-            //if (dataColumn.DataType == typeof(string))
-            {
-                dataRow[dataColumn] = ConvertHelper.ParseString(obj);
-            }
+                if (dataColumn.DataType == typeof(decimal))
+                {
+                    dataRow[dataColumn] = ConvertHelper.ParseDecimal(obj);
+                }
+                else
+                    if (dataColumn.DataType == typeof(double))
+                    {
+                        dataRow[dataColumn] = ConvertHelper.ParseDouble(obj);
+                    }
+                    else
+                        if (dataColumn.DataType == typeof(sbyte))
+                        {
+                            dataRow[dataColumn] = ConvertHelper.ParseSByte(obj);
+                        }
+                        else
+                            if (dataColumn.DataType == typeof(int))
+                            {
+                                dataRow[dataColumn] = ConvertHelper.ParseInt(obj);
+                            }
+                            else
+                                if (dataColumn.DataType == typeof(DateTime))
+                                {
+                                    var dt = ConvertHelper.ParseDateTime(obj);
+                                    dataRow[dataColumn] = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+                                }
+                                else
+                                    if (dataColumn.DataType == typeof(bool))
+                                    {
+                                        dataRow[dataColumn] = ConvertHelper.ParseBool(obj);
+                                    }
+                                    else
+                                        if (dataColumn.DataType == typeof(byte[]))
+                                        {
+                                            dataRow[dataColumn] = ConvertToBytes(obj);
+                                        }
+                                        else if (dataColumn.DataType == typeof(TimeSpan))
+                                        {
+                                            dataRow[dataColumn] = ConvertHelper.ParseTimeSpan(obj);
+                                        }
+                                        else
+                                        //if (dataColumn.DataType == typeof(string))
+                                        {
+                                            dataRow[dataColumn] = ConvertHelper.ParseString(obj);
+                                        }
         }
 
         private static byte[] ConvertToBytes(object obj)
@@ -1061,40 +1004,40 @@ namespace IV.DX.Persistence
                 dataRow[dataColumn] = new Guid();
             }
             else
-            if (dataColumn.DataType == typeof(decimal))
-            {
-                dataRow[dataColumn] = 0;
-            }
-            else
-            if (dataColumn.DataType == typeof(double))
-            {
-                dataRow[dataColumn] = 0;
-            }
-            else
-            if (dataColumn.DataType == typeof(int))
-            {
-                dataRow[dataColumn] = 0;
-            }
-            else
-            if (dataColumn.DataType == typeof(DateTime))
-            {
-                dataRow[dataColumn] = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            }
-            else
-            if (dataColumn.DataType == typeof(bool))
-            {
-                dataRow[dataColumn] = false;
-            }
-            else
-            if (dataColumn.DataType == typeof(byte[]))
-            {
-                dataRow[dataColumn] = new byte[0];
-            }
-            else
-            //if (dataColumn.DataType == typeof(string))
-            {
-                dataRow[dataColumn] = "";
-            }
+                if (dataColumn.DataType == typeof(decimal))
+                {
+                    dataRow[dataColumn] = 0;
+                }
+                else
+                    if (dataColumn.DataType == typeof(double))
+                    {
+                        dataRow[dataColumn] = 0;
+                    }
+                    else
+                        if (dataColumn.DataType == typeof(int))
+                        {
+                            dataRow[dataColumn] = 0;
+                        }
+                        else
+                            if (dataColumn.DataType == typeof(DateTime))
+                            {
+                                dataRow[dataColumn] = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                            }
+                            else
+                                if (dataColumn.DataType == typeof(bool))
+                                {
+                                    dataRow[dataColumn] = false;
+                                }
+                                else
+                                    if (dataColumn.DataType == typeof(byte[]))
+                                    {
+                                        dataRow[dataColumn] = new byte[0];
+                                    }
+                                    else
+                                    //if (dataColumn.DataType == typeof(string))
+                                    {
+                                        dataRow[dataColumn] = "";
+                                    }
         }
 
         public IEnumerable<Guid> GetRelations(string ObjectTypeNameLeft, Guid obj1Id, string relationToObj2Name)

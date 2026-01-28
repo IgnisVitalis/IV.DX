@@ -56,7 +56,7 @@ namespace IV.DX.Persistence
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var result = this.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
+            var result = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
             var existingDataDXElement = DXUnitConverter.ToDXUnits<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
@@ -161,7 +161,7 @@ namespace IV.DX.Persistence
 
             if (string.IsNullOrEmpty(dxUnit.RelationTable))
             {
-                var existingModel = this.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
+                var existingModel = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
 
                 var existingDXUnit = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(existingModel);
 
@@ -192,22 +192,7 @@ namespace IV.DX.Persistence
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
         }
 
-        public DXUnitDefinitionUnit? GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
-        {
-            if (derivedDXUnit == null || !derivedDXUnit.BaseDXUnit.HasValue)
-                return null;
-
-            var result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
-
-            if (result == null)
-            {
-                this.RefreshCache();
-
-                result = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
-            }
-
-            return result;
-        }
+    
 
         public DXUnitDefinitionUnit? GetDXUnitDefinition(string dxUnitType)
         {
@@ -221,38 +206,7 @@ namespace IV.DX.Persistence
             }
 
             return result;
-        }
-
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
-        {
-            if (dxUnit.DXElementInUnitDefinitionElement == null)
-                return null;
-
-            var relatedDXElementIds =
-              dxUnit.DXElementInUnitDefinitionElement
-              .Announced
-              .Where(x => x.RelationType == relationType)
-              .Select(x => x.DXElementDefinitionUnit).ToList();
-
-            var relatedDXElements = this._dxStructureCache.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToList();
-
-            return relatedDXElements;
-        }
-
-        public IEnumerable<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
-        {
-            if (dxUnit.DXElementInUnitDefinitionElement == null)
-                return null;
-
-            var relatedDXElementIds =
-                dxUnit.DXElementInUnitDefinitionElement
-                .Announced
-                .Select(x => x.DXElementDefinitionUnit).ToList();
-
-            var relatedDXElements = this._dxStructureCache.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToList();
-
-            return relatedDXElements;
-        }
+        }         
 
         private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
         {

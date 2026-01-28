@@ -27,28 +27,28 @@ namespace IV.DX.Persistence
 
         public T GetDXUnit<T>(Guid id) where T : DXUnit
         {
-            var result = this._coreRepo.GetItem(DXModelDefinitionConverter.ToDXModelDefinition(typeof(T)), id, DXLoadingType.Full);
+            var result = this._coreRepo.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(T)), id, DXLoadingType.Full);
 
             return DXUnitConverter.ToDXUnits<T>(result);
         }
 
         public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(string dxFilter) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXModelDefinitionConverter.ToDXModelDefinition<T>(), dxFilter, DXLoadingType.Full).ToList();
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), dxFilter, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
@@ -64,7 +64,7 @@ namespace IV.DX.Persistence
 
         public Guid InsertOrUpdate(DXUnit dxUnit)
         {
-            var definition = DXModelDefinitionConverter.ToDXModelDefinition(dxUnit.GetType());
+            var definition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxUnit.GetType());
 
             var existingDXUnit = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
 

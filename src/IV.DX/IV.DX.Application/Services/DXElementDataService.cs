@@ -6,9 +6,9 @@ namespace IV.DX.Application.Services
 {
     internal class DXElementDataService(IDXElementGenericRepository dxElementGenericRepo) : IDXElementDataService
     {
-        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, CancellationToken ct = default) where T : DXElement, new()
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxUnitTypeName, string dxFilter, CancellationToken ct = default) where T : DXElement, new()
         {
-            return dxElementGenericRepo.GetItems<T>(dxFilter);
+            return dxElementGenericRepo.GetItems<T>(dxUnitTypeName, dxFilter);
         }
     }
 }

@@ -48,24 +48,24 @@ namespace IV.DX.Persistence
             return dxElementCoreRepo.Delete(singleDXElement.Name, dxElement.ID);
         }
 
-        public T GetItem<T>(Guid id) where T : DXElement
+        public T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
             // TODO : need to rework using info about relation type
-            var dxElement = DXElementDefinitionConverter.ToDXElementDefinition(dxElementName, typeof(T), false);
+            var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, dxElementName, typeof(T), false);
 
             var result = dxElementCoreRepo.GetItem(dxElement, id);
 
             return DXElementConverter.ToDXElement<T>(result);
         }
 
-        public IEnumerable<T> GetItems<T>(string dxFilter) where T : DXElement
+        public IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
             // TODO : need to rework using info about relation type
-            var dxElement = DXElementDefinitionConverter.ToDXElementDefinition(dxElementName, typeof(T), false);
+            var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, dxElementName, typeof(T), false);
 
             var result = dxElementCoreRepo.GetItems(dxElement, dxFilter);
 

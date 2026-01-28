@@ -85,7 +85,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXSingleElement? GetItem(DXElementDefinition container, Guid id)
+        public DXSingleElement? GetItem(DXTableDefinition container, Guid id)
         {
             var dxFilter = $"ID = '{id}'";
 
@@ -94,7 +94,7 @@ namespace IV.DX.Persistence
             return result?.SingleOrDefault();
         }
 
-        public IEnumerable<DXSingleElement> GetItems(DXElementDefinition container, string dxFilter)
+        public IEnumerable<DXSingleElement> GetItems(DXTableDefinition container, string dxFilter)
         {
             if (container == null)
                 return null;

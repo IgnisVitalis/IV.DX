@@ -105,6 +105,100 @@ namespace IV.DX.Persistence
             return this.DXRelations.Where(x => x.ObjectNameLeft.Equals(name)).ToList();
         }
 
+        public DXUnitInheritance GetDXUnitInheritance(DXUnitDefinitionUnit dxUnit)
+        {
+            var dxUnitDefinitionUnitHierarchy = new DXUnitInheritance();
+            dxUnitDefinitionUnitHierarchy.Add(this.GetDXUnitDefinitionUnitHierarchyItem(dxUnit));
+
+            if (!dxUnit.BaseDXUnit.HasValue)
+                return dxUnitDefinitionUnitHierarchy;
+
+            var derivedDXUnitInfo = dxUnit;
+
+            while (true)
+            {
+                var baseClass = this.GetBaseDXUnit(derivedDXUnitInfo);
+
+                dxUnitDefinitionUnitHierarchy.Add(this.GetDXUnitDefinitionUnitHierarchyItem(baseClass));
+
+                if (baseClass.BaseDXUnit.HasValue)
+                {
+                    derivedDXUnitInfo = baseClass;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return dxUnitDefinitionUnitHierarchy;
+        }
+
+        private DXUnitInheritanceItem GetDXUnitDefinitionUnitHierarchyItem(DXUnitDefinitionUnit dxUnit)
+        {
+            return new DXUnitInheritanceItem(
+                dxUnit,
+                this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory),
+                this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional),
+                this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory),
+                this.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional));
+        }
+
+        public HashSet<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
+        {
+            if (dxUnit.DXElementInUnitDefinitionElement == null)
+                return null;
+
+            var relatedDXElementIds =
+              dxUnit.DXElementInUnitDefinitionElement
+              .Announced
+              .Where(x => x.RelationType == relationType)
+              .Select(x => x.DXElementDefinitionUnit).ToList();
+
+            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToHashSet();
+
+            return relatedDXElements;
+        }
+
+        public HashSet<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
+        {
+            if (dxUnit.DXElementInUnitDefinitionElement == null)
+                return null;
+
+            var relatedDXElementIds =
+                dxUnit.DXElementInUnitDefinitionElement
+                .Announced
+                .Select(x => x.DXElementDefinitionUnit).ToList();
+
+            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToHashSet();
+
+            return relatedDXElements;
+        }
+
+        public DXUnitInheritance GetDXUnitInheritance(string dxUnitTypeName)
+        {
+            var dxUnit = GetDXUnit(dxUnitTypeName);
+
+            return this.GetDXUnitInheritance(dxUnit);
+        }
+
+        public DXUnitDefinitionUnit? GetBaseDXUnit(DXUnitDefinitionUnit derivedDXUnit)
+        {
+            if (derivedDXUnit == null || !derivedDXUnit.BaseDXUnit.HasValue)
+                return null;
+
+            var result = this.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
+
+            if (result == null)
+            {
+                this.RefreshAsync().Wait();
+
+                result = this.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
+            }
+
+            return result;
+        }
+
         private sealed record Snapshot(
             ImmutableArray<DXElementDefinitionUnit> DXElements,
             ImmutableArray<DXUnitDefinitionUnit> DXUnits,

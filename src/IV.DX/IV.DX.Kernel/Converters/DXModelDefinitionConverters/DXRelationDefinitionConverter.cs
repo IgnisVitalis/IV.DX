@@ -6,7 +6,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXRelationDefinitionConverter
     {
-        public static IEnumerable<DXPropertyDefinition> ToDXPropertyDefinitions(this IEnumerable<DXRelationDefinitionUnit> relations, string typeName)
+        public static IEnumerable<DXColumnDefinition> ToDXPropertyDefinitions(this IEnumerable<DXRelationDefinitionUnit> relations, string typeName)
         {
             var selectedRelations = relations
                 .Where(x => x.ObjectNameLeft == typeName)
@@ -20,7 +20,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                             || x.RelationNameLeft.EndsWith(Constants.DXUnitIDSuffix)));
 
             return selectedRelations
-                .Select(x => new DXPropertyDefinition(x.RelationNameRight, new DXColumnAttribute(x.RelationNameRight)))
+                .Select(x => new DXColumnDefinition(x.RelationNameRight, new DXColumnAttribute(x.RelationNameRight)))
                 .ToList();
         }
     }

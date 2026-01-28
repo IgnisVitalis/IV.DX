@@ -15,6 +15,7 @@ using System.Reflection;
 namespace IV.DX.Application.Pipeline
 {
     internal class DXPipelineExecutor(
+        IDXStructureCache dxStructureCache,
         IDXUnitCoreRepository coreRepo,
         IDXUnitGenericRepository genericRepo,
         IDXUnitGetHandlerProvider getHandlerProvider,
@@ -161,9 +162,12 @@ namespace IV.DX.Application.Pipeline
             else
             {
                 var dxModel = DXModelConverter.ToDXModel(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
-
                 var id = coreRepo.Insert(dxModel);
+
+            
+                var dxUnitHierarchy = dxStructureCache.GetDXUnitInheritance(typeName);              
+                DXDataSetDefinition modelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxModel, dxUnitHierarchy);
+
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
 
                 if (saved is null) return DXResult<JObject>.Fail("Inserted DXModel not found.");
@@ -250,8 +254,10 @@ namespace IV.DX.Application.Pipeline
             }
             else
             {
+                var dxUnitHierarchy = dxStructureCache.GetDXUnitInheritance(typeName);
+
                 var dxModel = DXModelConverter.ToDXModel(jObject);
-                DXModelDefinition modelDefinition = DXModelDefinitionConverter.ToDXModelDefinition(dxModel);
+                DXDataSetDefinition modelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxModel, dxUnitHierarchy);
 
                 var id = coreRepo.Update(dxModel);
                 var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
@@ -520,7 +526,7 @@ namespace IV.DX.Application.Pipeline
           Func<DXPipelineExecutor, IEnumerable<Guid>, DXHandlerBaseContext, CancellationToken, Task<DXResult<IEnumerable<DXUnit>?>>>> _getItemsInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
-            Func<DXPipelineExecutor, Guid, DXHandlerBaseContext, CancellationToken, Task<DXResult<bool>>>> _isUnitExistingInvokers = new();        
+            Func<DXPipelineExecutor, Guid, DXHandlerBaseContext, CancellationToken, Task<DXResult<bool>>>> _isUnitExistingInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
             Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>> _insertInvokers = new();

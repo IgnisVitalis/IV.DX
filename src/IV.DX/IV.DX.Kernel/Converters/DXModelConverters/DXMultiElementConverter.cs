@@ -19,13 +19,13 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             if (jProperty[Constants.Announced] != null)
             {
                 announced = (jProperty[Constants.Announced] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => x.ToDXItem()).ToHashSet();
+                    .Select(x => x as JObject).Select(x => x.FromDXUnitToDXItem()).ToHashSet();
             }
 
             if (jProperty[Constants.Deleted] != null)
             {
                 deleted = (jProperty[Constants.Deleted] as JArray).Children()
-                    .Select(x => x as JObject).Select(x => x.ToDXItem()).ToHashSet();
+                    .Select(x => x as JObject).Select(x => x.FromDXUnitToDXItem()).ToHashSet();
             }
 
             var mode = (MultiElementsMode)jProperty[Constants.Mode].Value<int>();

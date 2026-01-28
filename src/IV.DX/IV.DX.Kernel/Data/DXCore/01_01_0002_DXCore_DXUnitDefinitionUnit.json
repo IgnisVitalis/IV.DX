@@ -410,7 +410,7 @@
                     "Name": "Name",
                     "AllowNull": false,
                     "DefaultValue": null,
-                    "Length": 30
+                    "Length": 50
                 },
                 {
                     "S_Type": "DXColumnDefinitionElement",
@@ -418,10 +418,21 @@
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
                     "ColumnType": 3,
-                    "Name": "Extention",
+                    "Name": "ExtentionType",
                     "AllowNull": false,
                     "DefaultValue": null,
-                    "Length": 5
+                    "Length": 10
+                },
+                {
+                    "S_Type": "DXColumnDefinitionElement",
+                    "ID": "9dbffc32-ddff-4cff-949c-ca2a06d2208c",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
+                    "ColumnType": 3,
+                    "Name": "ExtentionOperation",
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "Length": 10
                 },
                 {
                     "S_Type": "DXColumnDefinitionElement",
