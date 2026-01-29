@@ -1,5 +1,6 @@
 ﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -496,6 +497,50 @@ namespace IV.DX.Persistence
             }
         }
 
+        public Guid InsertOrUpdate(DXDataBlock<DXUnitRecord> block)
+        {
+            ArgumentNullException.ThrowIfNull(block);
+
+            var typeName = block.Meta?.Type;
+            if (string.IsNullOrWhiteSpace(typeName))
+                throw new InvalidOperationException("DXUnitRecord block Meta.Type is required.");
+
+            if (block.Data?.Upsert == null || block.Data.Upsert.Count == 0)
+                return Guid.Empty;
+
+            Guid lastId = Guid.Empty;
+
+            foreach (var record in block.Data.Upsert)
+            {
+                if (record == null) continue;
+
+                var dxModel = BuildDXModel(typeName, record);
+                lastId = this.InsertOrUpdate(dxModel);
+            }
+
+            return lastId;
+        }
+
+        private static DXModel BuildDXModel(string typeName, DXUnitRecord record)
+        {
+            var block = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Type = typeName,
+                    Kind = "DXUnit",
+                    Op = "Patch",
+                    IsMulti = true
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Upsert = new List<DXUnitRecord> { record }
+                }
+            };
+
+            return DXRecordModelConverter.ToDXModel(block, record);
+        }
+
         public bool IsItemExisting(string type, Guid objectId)
         {
             DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(type, type, false));
@@ -513,7 +558,7 @@ namespace IV.DX.Persistence
 
                 var dxUnitDefinition = dxModel.ToDXModelDefinition(dxUnitHierarchy);
 
-                foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
+                foreach (var dxUnitHierarchyItem in dxUnitHierarchy.ItemsReverted)
                 {
                     var dxUnitInfo = dxUnitHierarchyItem.DXUnit;
 

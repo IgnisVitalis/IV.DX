@@ -40,6 +40,7 @@ namespace IV.DX.Kernel.Models
             HashSet<DXElementDefinitionUnit> mm,
             HashSet<DXElementDefinitionUnit> mo)
         {
+            this.DXUnit = dxUnit;
             this.SingleMandatory = sm;
             this.SingleOptional = so;
             this.MultiMandatory = mm;

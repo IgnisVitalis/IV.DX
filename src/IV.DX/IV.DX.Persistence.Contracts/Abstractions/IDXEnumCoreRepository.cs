@@ -10,6 +10,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid Insert(DXModel dxModel);
         Guid Update(DXModel dxModel);
         Guid InsertOrUpdate(DXModel dxModel);
+        Guid InsertOrUpdate(DXDataBlock<DXEnumRecord> block);
         bool Delete(string typeName, Guid objectId);
     }
 }

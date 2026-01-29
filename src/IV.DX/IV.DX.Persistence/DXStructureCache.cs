@@ -1,4 +1,5 @@
 ﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,6 +104,14 @@ namespace IV.DX.Persistence
         public IEnumerable<DXRelationDefinitionUnit> GetDXRelations(string name)
         {
             return this.DXRelations.Where(x => x.ObjectNameLeft.Equals(name)).ToList();
+        }
+
+
+        public DXUnitInheritance GetDXUnitInheritance<T>() where T : DXUnit
+        {
+            var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(typeof(T));
+
+            return this.GetDXUnitInheritance(dxUnitTypeName);
         }
 
         public DXUnitInheritance GetDXUnitInheritance(DXUnitDefinitionUnit dxUnit)

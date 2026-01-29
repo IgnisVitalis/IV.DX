@@ -56,7 +56,9 @@ namespace IV.DX.Persistence
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var result = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit)), dataDXElement.ID, DXLoadingType.Full);
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXObjectDefinitionUnit>();
+
+            var result = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit), dxUnitInheritance), dataDXElement.ID, DXLoadingType.Full);
             var existingDataDXElement = DXUnitConverter.ToDXUnits<DXObjectDefinitionUnit>(result);
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
@@ -161,7 +163,9 @@ namespace IV.DX.Persistence
 
             if (string.IsNullOrEmpty(dxUnit.RelationTable))
             {
-                var existingModel = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit)), dxUnit.ID, DXLoadingType.Full);
+                var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXRelationDefinitionUnit>();
+
+                var existingModel = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit), dxUnitInheritance), dxUnit.ID, DXLoadingType.Full);
 
                 var existingDXUnit = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(existingModel);
 
@@ -192,7 +196,7 @@ namespace IV.DX.Persistence
             this._queryHelper.RunSQLQuery(this._connectionStr, query);
         }
 
-    
+
 
         public DXUnitDefinitionUnit? GetDXUnitDefinition(string dxUnitType)
         {
@@ -206,7 +210,7 @@ namespace IV.DX.Persistence
             }
 
             return result;
-        }         
+        }
 
         private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
         {

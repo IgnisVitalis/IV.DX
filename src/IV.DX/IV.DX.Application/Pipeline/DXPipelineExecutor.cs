@@ -455,17 +455,17 @@ namespace IV.DX.Application.Pipeline
                 }
                 else
                 {
-                    DXModel dxModel;
-                    try
+                    var single = new DXDataBlock<DXUnitRecord>
                     {
-                        dxModel = DXRecordModelConverter.ToDXModel(block, record);
-                    }
-                    catch (Exception e)
-                    {
-                        return DXResult<DXDataBlock<DXUnitRecord>>.Fail($"Failed to convert DXUnitRecord to DXModel: {e.Message}");
-                    }
+                        Meta = block.Meta,
+                        Data = new DXData<DXUnitRecord>
+                        {
+                            Upsert = new List<DXUnitRecord> { record }
+                        }
+                    };
 
-                    var id = isUpdate ? coreRepo.Update(dxModel) : coreRepo.Insert(dxModel);
+                    var id = coreRepo.InsertOrUpdate(single);
+
                     if (id == Guid.Empty)
                         return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnit insert/update failed.");
 

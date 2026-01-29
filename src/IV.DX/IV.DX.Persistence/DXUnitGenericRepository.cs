@@ -11,9 +11,12 @@ namespace IV.DX.Persistence
     {
         private readonly IDXUnitCoreRepository _coreRepo;
 
-        public DXUnitGenericRepository(IDXUnitCoreRepository coreRepo)
+        IDXStructureCache _dxStructureCache;
+
+        public DXUnitGenericRepository(IDXUnitCoreRepository coreRepo, IDXStructureCache dxStructureCache)
         {
             this._coreRepo = coreRepo;
+            this._dxStructureCache = dxStructureCache;
         }
 
         public bool Delete(DXUnit dxUnit)
@@ -27,28 +30,37 @@ namespace IV.DX.Persistence
 
         public T GetDXUnit<T>(Guid id) where T : DXUnit
         {
-            var result = this._coreRepo.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(T)), id, DXLoadingType.Full);
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<T>();
+
+            var dxModelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(T), dxUnitInheritance);
+            var result = this._coreRepo.GetItem(dxModelDefinition, id, DXLoadingType.Full);
 
             return DXUnitConverter.ToDXUnits<T>(result);
         }
 
         public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), DXLoadingType.Full).ToList();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<T>();
+
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), ids, DXLoadingType.Full).ToList();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<T>();
+
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), ids, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(string dxFilter) where T : DXUnit
         {
-            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(), dxFilter, DXLoadingType.Full).ToList();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<T>();
+
+            var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), dxFilter, DXLoadingType.Full).ToList();
 
             return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
         }
@@ -57,34 +69,24 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var dxModel = dxUnit.ToDXModel();
-
-            return this._coreRepo.Insert(dxModel);
+            var block = DXRecordWriter.ToBlock(dxUnit);
+            return this._coreRepo.InsertOrUpdate(block);
         }
 
         public Guid InsertOrUpdate(DXUnit dxUnit)
         {
-            var definition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxUnit.GetType());
+            ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var existingDXUnit = this._coreRepo.GetItem(definition, dxUnit.ID, DXLoadingType.Base);
-
-            if (existingDXUnit == null)
-            {
-                return this.Insert(dxUnit);
-            }
-            else
-            {
-                return this.Update(dxUnit);
-            }
+            var block = DXRecordWriter.ToBlock(dxUnit);
+            return this._coreRepo.InsertOrUpdate(block);
         }
 
         public Guid Update(DXUnit dxUnit)
         {
             ArgumentNullException.ThrowIfNull(dxUnit);
 
-            var dxModel = dxUnit.ToDXModel();
-
-            return this._coreRepo.Update(dxModel);
+            var block = DXRecordWriter.ToBlock(dxUnit);
+            return this._coreRepo.InsertOrUpdate(block);
         }
 
         public bool AddDXRelation(DXRelationItemUnit relationItem)
@@ -110,5 +112,6 @@ namespace IV.DX.Persistence
                 relationItem.ObjectTypeNameRight,
                 relationItem.DXUnitIDRight);
         }
+
     }
 }

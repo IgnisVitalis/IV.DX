@@ -16,6 +16,8 @@ namespace IV.DX.Application
         private readonly IDXUnitDataService _dataService;
         private readonly IDXUnitGenericRepository _genericRepo;
         private readonly IDXElementCoreRepository _dxElementCoreRepo;
+        private readonly IDXEnumDataService _enumDataService;
+        private readonly IDXElementDataService _elementDataService;
 
         private readonly SemaphoreSlim _lock = new(1, 1);
 
@@ -26,11 +28,15 @@ namespace IV.DX.Application
         public MigrationService(
             IDXUnitGenericRepository genericRepo,
             IDXUnitDataService dataService,
-              IDXElementCoreRepository dxElementCoreRepo)
+              IDXElementCoreRepository dxElementCoreRepo,
+              IDXEnumDataService enumDataService,
+              IDXElementDataService elementDataService)
         {
             _genericRepo = genericRepo;
             _dataService = dataService;
             _dxElementCoreRepo = dxElementCoreRepo;
+            _enumDataService = enumDataService;
+            _elementDataService = elementDataService;
         }
 
         public async Task MigrateCustomAsync(string path, CancellationToken ct = default)
@@ -102,9 +108,27 @@ namespace IV.DX.Application
                                         break;
                                     }
                                 case "element":
-                                    break;
+                                    {
+                                        var blocks = ParseElementBlocks(script.Content);
+                                        await ProcessElementBlocksAsync(
+                                            script,
+                                            blocks,
+                                            block => _elementDataService.InsertOrUpdateAsync(block, ct),
+                                            ct).ConfigureAwait(false);
+
+                                        break;
+                                    }
                                 case "enum":
-                                    break;
+                                    {
+                                        var blocks = ParseEnumBlocks(script.Content);
+                                        await ProcessEnumBlocksAsync(
+                                            script,
+                                            blocks,
+                                            block => _enumDataService.InsertOrUpdateAsync(block, ct),
+                                            ct).ConfigureAwait(false);
+
+                                        break;
+                                    }
                                 default:
                                     throw new Exception($"File extension '{script.Extension}' is not supported.");
                             }
@@ -304,68 +328,42 @@ namespace IV.DX.Application
 
         private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit script, CancellationToken ct)
         {
-            var jarray = JArray.Parse(script.Content);
-
-            foreach (JObject item in jarray)
+            var ext = script.Extension?.ToLowerInvariant();
+            switch (ext)
             {
-                try
-                {
-                    var extType = script.Extension;
-
-                    // if (extType == "unit")
-                    // {
-                    //     if (extOperation == "apply")
-                    //     {
-                    //         await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                    //     }
-                    //     else if (extOperation == "del")
-                    //     {
-                    //         await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                    //     }
-                    //     else
-                    //     {
-                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
-                    //     }
-                    // }
-                    // else if (extType == "element")
-                    // {
-                    //     if (extOperation == "apply")
-                    //     {
-                    //         var dxModel = item.ToDXSin();
-
-                    //         _dxElementCoreRepo.InsertOrUpdate("", dxModel);
-                    //     }
-                    //     else if (extOperation == "del")
-                    //     {
-                    //         await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                    //     }
-                    //     else
-                    //     {
-                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
-                    //     }
-                    // }
-
-                    // switch (ext)
-                    // {
-                    //     case "dat":   // insert or update using DXDataService
-                    //         await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                    //         break;
-                    //     case "el":
-                    //         {
-                    //             // var dxElement = DXSingleElementConverters.ToDXSingleElement()
-                    //             // _dxElementCoreRepo.InsertOrUpdate()
-
-                    //             break;
-                    //         }
-
-                    //     default:
-                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
-                    // }
-                }
-                catch (Exception exc)
-                {
-                    throw new Exception(this.GetMigrationErrorMessage(script, item), exc);
-                }
+                case "unit":
+                    {
+                        var blocks = ParseUnitBlocks(script.Content);
+                        await ProcessUnitBlocksAsync(
+                            script,
+                            blocks,
+                            block => _dataService.InsertOrUpdateAsync(block, new DXUnitHandlerPostInitCoreContext(script), ct),
+                            deleteAction: null,
+                            ct).ConfigureAwait(false);
+                        break;
+                    }
+                case "element":
+                    {
+                        var blocks = ParseElementBlocks(script.Content);
+                        await ProcessElementBlocksAsync(
+                            script,
+                            blocks,
+                            block => _elementDataService.InsertOrUpdateAsync(block, ct),
+                            ct).ConfigureAwait(false);
+                        break;
+                    }
+                case "enum":
+                    {
+                        var blocks = ParseEnumBlocks(script.Content);
+                        await ProcessEnumBlocksAsync(
+                            script,
+                            blocks,
+                            block => _enumDataService.InsertOrUpdateAsync(block, ct),
+                            ct).ConfigureAwait(false);
+                        break;
+                    }
+                default:
+                    throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
             }
         }
 
@@ -394,6 +392,18 @@ namespace IV.DX.Application
         {
             return JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(content)
                 ?? new List<DXDataBlock<DXUnitRecord>>();
+        }
+
+        private static List<DXDataBlock<DXEnumRecord>> ParseEnumBlocks(string content)
+        {
+            return JsonConvert.DeserializeObject<List<DXDataBlock<DXEnumRecord>>>(content)
+                ?? new List<DXDataBlock<DXEnumRecord>>();
+        }
+
+        private static List<DXDataBlock<DXElementRecord>> ParseElementBlocks(string content)
+        {
+            return JsonConvert.DeserializeObject<List<DXDataBlock<DXElementRecord>>>(content)
+                ?? new List<DXDataBlock<DXElementRecord>>();
         }
 
         private async Task ProcessUnitBlocksAsync(
@@ -457,6 +467,88 @@ namespace IV.DX.Application
                         {
                             throw new Exception(this.GetMigrationErrorMessage(script, deleteRef.ID), exc);
                         }
+                    }
+                }
+            }
+        }
+
+        private async Task ProcessEnumBlocksAsync(
+            DXMigrationScriptsUnit script,
+            IEnumerable<DXDataBlock<DXEnumRecord>> blocks,
+            Func<DXDataBlock<DXEnumRecord>, Task> upsertAction,
+            CancellationToken ct)
+        {
+            foreach (var block in blocks)
+            {
+                if (block == null)
+                    continue;
+
+                ct.ThrowIfCancellationRequested();
+
+                if (block.Data?.Upsert == null)
+                    continue;
+
+                foreach (var record in block.Data.Upsert)
+                {
+                    if (record == null) continue;
+
+                    var single = new DXDataBlock<DXEnumRecord>
+                    {
+                        Meta = block.Meta,
+                        Data = new DXData<DXEnumRecord>
+                        {
+                            Upsert = new List<DXEnumRecord> { record }
+                        }
+                    };
+
+                    try
+                    {
+                        await upsertAction(single).ConfigureAwait(false);
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
+                    }
+                }
+            }
+        }
+
+        private async Task ProcessElementBlocksAsync(
+            DXMigrationScriptsUnit script,
+            IEnumerable<DXDataBlock<DXElementRecord>> blocks,
+            Func<DXDataBlock<DXElementRecord>, Task> upsertAction,
+            CancellationToken ct)
+        {
+            foreach (var block in blocks)
+            {
+                if (block == null)
+                    continue;
+
+                ct.ThrowIfCancellationRequested();
+
+                if (block.Data?.Upsert == null)
+                    continue;
+
+                foreach (var record in block.Data.Upsert)
+                {
+                    if (record == null) continue;
+
+                    var single = new DXDataBlock<DXElementRecord>
+                    {
+                        Meta = block.Meta,
+                        Data = new DXData<DXElementRecord>
+                        {
+                            Upsert = new List<DXElementRecord> { record }
+                        }
+                    };
+
+                    try
+                    {
+                        await upsertAction(single).ConfigureAwait(false);
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
                     }
                 }
             }

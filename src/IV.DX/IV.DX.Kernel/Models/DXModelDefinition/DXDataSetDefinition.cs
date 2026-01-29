@@ -20,7 +20,7 @@
 
             if (existingFragmentDefinition != null)
             {
-                throw new Exception($"ASQLFragmentDefinition with type {item.Type} is existing already in ASQLModelDefinition in singlefragments list.");
+                throw new Exception($"DXElementDefinition with type {item.Type} is existing already in ASQLModelDefinition in singlefragments list.");
             }
 
             SingleFragmentDefinitions.Add(item);
@@ -34,7 +34,7 @@
 
                 if (existingFragmentDefinition != null)
                 {
-                    throw new Exception($"ASQLFragmentDefinition with type {item.Type} is existing already in ASQLModelDefinition in singlefragments list.");
+                    throw new Exception($"DXElementDefinition with type {item.Type} is existing already in ASQLModelDefinition in singlefragments list.");
                 }
             }
 
@@ -50,7 +50,7 @@
 
             if (existingFragmentDefinition != null)
             {
-                throw new Exception($"ASQLFragmentDefinition with type {item.Type} is existing already in ASQLModelDefinition in multifragments list.");
+                throw new Exception($"DXElementDefinition with type {item.Type} is existing already in ASQLModelDefinition in multifragments list.");
             }
 
             MultiFragmentDefinitions.Add(item);
@@ -64,7 +64,7 @@
 
                 if (existingFragmentDefinition != null)
                 {
-                    throw new Exception($"ASQLFragmentDefinition with type {item.Type} is existing already in ASQLModelDefinition in multifragments list.");
+                    throw new Exception($"DXElementDefinition with type {item.Type} is existing already in ASQLModelDefinition in multifragments list.");
                 }
             }
 

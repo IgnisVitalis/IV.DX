@@ -7,11 +7,11 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXDataSetDefinitionConverter
     {
-        public static DXDataSetDefinition ToDXModelDefinition<T>() where T : DXUnit
+        public static DXDataSetDefinition ToDXModelDefinition<T>(DXUnitInheritance dxUnitHierarchy) where T : DXUnit
         {
             Type type = typeof(T);
 
-            return ToDXModelDefinition(type);
+            return ToDXModelDefinition(type, dxUnitHierarchy);
         }
 
         public static DXDataSetDefinition ToDXModelDefinition(this DXModel dxModel, DXUnitInheritance dxUnitHierarchy)
@@ -36,14 +36,19 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                         result.AddToSingleItemDefinitions(dxSingleElement.ToDXElementDefinition(typeName));
                     }
                 }
-                
+
                 foreach (var dxMultiElement in dxModel.DXMultiElements)
                 {
                     if (dxUnitHierarchyItem.ContainsMultiMandatory(dxMultiElement.Name) || dxUnitHierarchyItem.ContainsMultiOptional(dxMultiElement.Name))
                     {
-                        result.AddToMultiItemDefinitions(dxMultiElement.ToDXElementDefinition(typeName));
+                        var mutliItemDefinition = dxMultiElement.ToDXElementDefinition(typeName);
+
+                        if (mutliItemDefinition != null)
+                        {
+                            result.AddToMultiItemDefinitions(mutliItemDefinition);
+                        }
                     }
-                }            
+                }
             }
 
             return result;
@@ -71,7 +76,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             return result;
         }
 
-        public static DXDataSetDefinition ToDXModelDefinition(this Type type)
+        public static DXDataSetDefinition ToDXModelDefinition(this Type type, DXUnitInheritance dxUnitHierarchy)
         {
             var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(type);
 
@@ -82,25 +87,92 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
             var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
 
-            var singleItemDefinitions = singleItemInfos.Select(x =>
+            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
             {
-                var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+                dxUnitTypeName = dxUnitHierarchyItem.DXUnit.Name;
 
-                return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType, isReqruired != null);
-            }).ToList();
+                foreach (var dxSingleElement in singleItemInfos)
+                {
+                    if (dxUnitHierarchyItem.ContainsSingleMandatory(dxSingleElement.Name) || dxUnitHierarchyItem.ContainsSingleOptional(dxSingleElement.Name))
+                    {
+                        var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(dxSingleElement);
 
-            var mutliItemDefinitions = multiItemInfos.Select(x =>
-            {
-                var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+                        var singleItemDefinition =
+                            DXTableDefinitionConverter.ToDXTableDefinition(dxSingleElement.Name, dxUnitTypeName, dxSingleElement.PropertyType, isReqruired != null);
 
-                return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
-            }).ToList();
+                        result.AddToSingleItemDefinitions(singleItemDefinition);
+                    }
+                }
+
+                foreach (var dxMultiElement in multiItemInfos)
+                {
+                    if (dxUnitHierarchyItem.ContainsMultiMandatory(dxMultiElement.Name) || dxUnitHierarchyItem.ContainsMultiOptional(dxMultiElement.Name))
+                    {
+                        var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(dxMultiElement);
+
+                        var mutliItemDefinition = DXTableDefinitionConverter.ToDXTableDefinition(dxMultiElement.Name, dxUnitTypeName, dxMultiElement.PropertyType.GenericTypeArguments[0], isReqruired != null);
+
+                        // var mutliItemDefinition = dxMultiElement.ToDXElementDefinition(typeName);
+
+                        if (mutliItemDefinition != null)
+                        {
+                            result.AddToMultiItemDefinitions(mutliItemDefinition);
+                        }
+                    }
+                }
+            }
+
+            // var singleItemDefinitions = singleItemInfos.Select(x =>
+            // {
+            //     var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+            //     return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType, isReqruired != null);
+            // }).ToList();
+
+            // var mutliItemDefinitions = multiItemInfos.Select(x =>
+            // {
+            //     var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+            //     return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
+            // }).ToList();
 
 
-            result.AddToSingleItemDefinitions(singleItemDefinitions);
-            result.AddToMultiItemDefinitions(mutliItemDefinitions);
+            // result.AddToSingleItemDefinitions(singleItemDefinitions);
+            // result.AddToMultiItemDefinitions(mutliItemDefinitions);
 
             return result;
         }
+
+        // public static DXDataSetDefinition ToDXModelDefinition(this Type type)
+        // {
+        //     var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(type);
+
+        //     var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, type, true);
+
+        //     DXDataSetDefinition result = new DXDataSetDefinition(ownItem);
+
+        //     var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
+        //     var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
+
+        //     var singleItemDefinitions = singleItemInfos.Select(x =>
+        //     {
+        //         var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+        //         return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType, isReqruired != null);
+        //     }).ToList();
+
+        //     var mutliItemDefinitions = multiItemInfos.Select(x =>
+        //     {
+        //         var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
+
+        //         return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
+        //     }).ToList();
+
+
+        //     result.AddToSingleItemDefinitions(singleItemDefinitions);
+        //     result.AddToMultiItemDefinitions(mutliItemDefinitions);
+
+        //     return result;
+        // }
     }
 }

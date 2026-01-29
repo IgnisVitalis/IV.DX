@@ -17,6 +17,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
 
         DXElementInUnitTypeEnum GetElementInUnitRelationType(string dxUnitTypeName, string dxElementTypeName);
 
+        DXUnitInheritance GetDXUnitInheritance<T>() where T : DXUnit;
         DXUnitInheritance GetDXUnitInheritance(string dxUnitTypeName);
         // IEnumerable<DXUnitDefinitionUnit> GetHierarchyChainOfBaseEntitiesFromDerivedToBase(string derivedDXUnitTypeName);
         DXUnitInheritance GetDXUnitInheritance(DXUnitDefinitionUnit dxUnitType);

@@ -20,6 +20,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid Insert(DXModel dxModel);
         Guid Update(DXModel dxModel);
         Guid InsertOrUpdate(DXModel dxModel);
+        Guid InsertOrUpdate(DXDataBlock<DXUnitRecord> block);
         bool Delete(string typeName, Guid objectId);
         IEnumerable<Guid> GetRelations(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);
         Guid? GetRelation(string leftObjectTypeName, Guid leftObjectId, string rightRelationName);

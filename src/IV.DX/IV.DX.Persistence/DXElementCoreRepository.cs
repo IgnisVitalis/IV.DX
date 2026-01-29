@@ -1,7 +1,10 @@
 ﻿using IV.DX.Kernel.Attributes;
+using System;
+using System.Collections.Generic;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
+using Newtonsoft.Json.Linq;
 using System.Data;
 
 namespace IV.DX.Persistence
@@ -21,6 +24,33 @@ namespace IV.DX.Persistence
         public Guid InsertOrUpdate(string dxModelType, DXSingleElement dxSingleDXElement)
         {
             return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
+        }
+
+        public Guid InsertOrUpdate(DXDataBlock<DXElementRecord> block)
+        {
+            ArgumentNullException.ThrowIfNull(block);
+
+            var dxUnitTypeName = block.Meta?.DXUnitContext;
+            var elementTypeName = block.Meta?.Type;
+
+            if (string.IsNullOrWhiteSpace(dxUnitTypeName))
+                throw new InvalidOperationException("DXElement block Meta.DXUnitContext is required.");
+            if (string.IsNullOrWhiteSpace(elementTypeName))
+                throw new InvalidOperationException("DXElement block Meta.Type is required.");
+
+            if (block.Data?.Upsert == null || block.Data.Upsert.Count == 0)
+                return Guid.Empty;
+
+            Guid lastId = Guid.Empty;
+            foreach (var record in block.Data.Upsert)
+            {
+                if (record == null) continue;
+
+                var element = BuildSingleElement(elementTypeName, record, block.Meta?.IsRequired ?? false);
+                lastId = this.InsertOrUpdate(dxUnitTypeName, element);
+            }
+
+            return lastId;
         }
 
         private Guid InsertOrUpdateSingleDXElementPrivate(string dxModelType, DXSingleElement dxSingleDXElement, ProcessingType processingType)
@@ -127,6 +157,43 @@ namespace IV.DX.Persistence
             });
 
             return result;
+        }
+
+        private static DXSingleElement BuildSingleElement(string elementTypeName, DXElementRecord record, bool isRequired)
+        {
+            if (string.IsNullOrWhiteSpace(elementTypeName))
+                throw new ArgumentException("Element type name is required.", nameof(elementTypeName));
+
+            var dxUnitId = record.DXUnitID;
+            if (dxUnitId == Guid.Empty)
+                throw new ArgumentException("DXUnitID is required for DXElementRecord.", nameof(record));
+
+            var content = ConvertFields(record.Fields);
+            var item = new DXItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
+
+            return new DXSingleElement(elementTypeName, new DXElementAttribute(elementTypeName), item, isRequired);
+        }
+
+        private static Dictionary<string, object> ConvertFields(IDictionary<string, JToken>? fields)
+        {
+            var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            if (fields == null || fields.Count == 0)
+                return result;
+
+            foreach (var kvp in fields)
+            {
+                result[kvp.Key] = ConvertTokenToObject(kvp.Value);
+            }
+
+            return result;
+        }
+
+        private static object? ConvertTokenToObject(JToken? token)
+        {
+            if (token == null || token.Type == JTokenType.Null)
+                return null;
+
+            return token.ToObject<object>();
         }
     }
 }
