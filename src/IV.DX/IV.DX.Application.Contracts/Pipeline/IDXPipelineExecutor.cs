@@ -88,5 +88,20 @@ namespace IV.DX.Application.Contracts.Pipeline
             JObject dxModel,
             DXHandlerBaseContext ctx,
             CancellationToken ct);
+
+        Task<DXResult<DXDataBlock<DXUnitRecord>>> InsertAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct);
+
+        Task<DXResult<DXDataBlock<DXUnitRecord>>> UpdateAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct);
+
+        Task<DXResult<DXDataBlock<DXUnitRecord>>> DeleteAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct);
     }
 }

@@ -7,8 +7,11 @@ namespace IV.DX.Kernel.Models
     {
         [DXColumn("BaseDXUnit")]
         public Guid? BaseDXUnit { get; set; }
+ 
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
+
         public DXMultiElementsContainer<DXUnitToUnitRelationElement> DXUnitToUnitRelationElement { get; set; }
+
         public DXMultiElementsContainer<DXUnitToElementRelationElement> DXUnitToElementRelationElement { get; set; }
 
         public DXUnitDefinitionUnit()

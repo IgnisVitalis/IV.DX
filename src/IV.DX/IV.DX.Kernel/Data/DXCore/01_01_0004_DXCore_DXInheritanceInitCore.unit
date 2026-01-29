@@ -5,7 +5,7 @@
       "Type": "DXInheritanceInitCore",
       "Op": "Patch",
       "IsMulti": true,
-      "IsRequired": true
+      "IsRequired": false
     },
     "Data": {
       "Upsert": [

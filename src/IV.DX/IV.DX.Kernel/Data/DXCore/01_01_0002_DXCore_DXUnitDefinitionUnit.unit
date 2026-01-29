@@ -5,7 +5,7 @@
       "Type": "DXUnitDefinitionUnit",
       "Op": "Patch",
       "IsMulti": true,
-      "IsRequired": true
+      "IsRequired": false
     },
     "Data": {
       "Upsert": [
@@ -22,7 +22,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -55,7 +55,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -76,7 +76,7 @@
                 "Type": "DXElementInUnitDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -120,7 +120,7 @@
                 "Type": "DXElementInUnitDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -164,7 +164,7 @@
                 "Type": "DXElementInUnitDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -184,7 +184,7 @@
                 "Type": "DXUnitToElementRelationElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -223,7 +223,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -306,7 +306,7 @@
                 "Type": "DXUniqueColumnsElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -331,7 +331,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -376,7 +376,7 @@
                 "Type": "DXUnitToElementRelationElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -416,7 +416,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -508,7 +508,7 @@
                 "Type": "DXUniqueColumnsElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -516,7 +516,7 @@
                     "ID": "3b9dbbcb-2739-451e-b08f-19e68fc566f1",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "0f4a01ba-427d-41ca-9f98-5dddadbd25d6",
-                    "Columns": "Version, Build, Number, AppName, Name, Extention"
+                    "Columns": "Version, Build, Number, AppName, Name, Extension"
                   }
                 ]
               }

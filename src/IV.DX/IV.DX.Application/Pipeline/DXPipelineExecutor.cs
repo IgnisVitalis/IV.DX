@@ -352,6 +352,131 @@ namespace IV.DX.Application.Pipeline
             }
         }
 
+        public async Task<DXResult<DXDataBlock<DXUnitRecord>>> InsertAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct)
+        {
+            return await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: false);
+        }
+
+        public async Task<DXResult<DXDataBlock<DXUnitRecord>>> UpdateAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct)
+        {
+            return await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: true);
+        }
+
+        public async Task<DXResult<DXDataBlock<DXUnitRecord>>> DeleteAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct)
+        {
+            if (block == null)
+                return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnitRecord block is null.");
+
+            var typeName = block.Meta?.Type;
+            if (string.IsNullOrWhiteSpace(typeName))
+                return DXResult<DXDataBlock<DXUnitRecord>>.Fail("Type name not found in block Meta.");
+
+            if (block.Data?.Delete == null || block.Data.Delete.Count == 0)
+                return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(block);
+
+            foreach (var deleteRef in block.Data.Delete)
+            {
+                if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
+                {
+                    var dxUnit = (DXUnit)Activator.CreateInstance(modelType)!;
+                    dxUnit.ID = deleteRef.ID;
+
+                    var inv = GetDeleteInvoker(modelType);
+                    var baseRes = await inv(this, dxUnit, ctx, ct);
+                    if (!baseRes.IsSuccess) return DXResult<DXDataBlock<DXUnitRecord>>.Fail(baseRes.Error!);
+                }
+                else
+                {
+                    var result = coreRepo.Delete(typeName, deleteRef.ID);
+                    if (!result)
+                        return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnit delete failed.");
+                }
+            }
+
+            return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(block);
+        }
+
+        private async Task<DXResult<DXDataBlock<DXUnitRecord>>> ProcessRecordBlockAsync(
+            DXDataBlock<DXUnitRecord> block,
+            DXHandlerBaseContext ctx,
+            CancellationToken ct,
+            bool isUpdate)
+        {
+            if (block == null)
+                return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnitRecord block is null.");
+
+            var typeName = block.Meta?.Type;
+            if (string.IsNullOrWhiteSpace(typeName))
+                return DXResult<DXDataBlock<DXUnitRecord>>.Fail("Type name not found in block Meta.");
+
+            var resultBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = block.Meta,
+                Data = new DXData<DXUnitRecord>()
+            };
+
+            var records = block.Data?.Upsert;
+            if (records == null || records.Count == 0)
+                return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(resultBlock);
+
+            var output = new List<DXUnitRecord>();
+
+            foreach (var record in records)
+            {
+                if (record == null) continue;
+
+                if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
+                {
+                    DXUnit dxUnit;
+                    try
+                    {
+                        dxUnit = DXRecordConverter.ToDXUnit(record, modelType);
+                    }
+                    catch (Exception e)
+                    {
+                        return DXResult<DXDataBlock<DXUnitRecord>>.Fail($"Failed to deserialize DXUnit: {e.Message}");
+                    }
+
+                    var inv = isUpdate ? GetUpdateInvoker(modelType) : GetInsertInvoker(modelType);
+                    var baseRes = await inv(this, dxUnit, ctx, ct);
+                    if (!baseRes.IsSuccess) return DXResult<DXDataBlock<DXUnitRecord>>.Fail(baseRes.Error!);
+
+                    var outRecord = DXRecordWriter.ToRecord(baseRes.Value!);
+                    output.Add(outRecord);
+                }
+                else
+                {
+                    DXModel dxModel;
+                    try
+                    {
+                        dxModel = DXRecordModelConverter.ToDXModel(block, record);
+                    }
+                    catch (Exception e)
+                    {
+                        return DXResult<DXDataBlock<DXUnitRecord>>.Fail($"Failed to convert DXUnitRecord to DXModel: {e.Message}");
+                    }
+
+                    var id = isUpdate ? coreRepo.Update(dxModel) : coreRepo.Insert(dxModel);
+                    if (id == Guid.Empty)
+                        return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnit insert/update failed.");
+
+                    output.Add(record);
+                }
+            }
+
+            resultBlock.Data.Upsert = output.Count == 0 ? null : output;
+            return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(resultBlock);
+        }
+
         public async Task<DXResult<IEnumerable<T>?>> GetItemsAsync<T>(
             IEnumerable<Guid> ids,
             DXHandlerBaseContext ctx,

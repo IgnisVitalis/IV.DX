@@ -5,7 +5,7 @@
       "Type": "DXElementDefinitionUnit",
       "Op": "Patch",
       "IsMulti": true,
-      "IsRequired": true
+      "IsRequired": false
     },
     "Data": {
       "Upsert": [
@@ -22,7 +22,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -89,7 +89,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -119,7 +119,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -151,7 +151,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -191,7 +191,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -221,7 +221,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -254,7 +254,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -284,7 +284,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -321,7 +321,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -352,7 +352,7 @@
                 "Type": "DXColumnDefinitionElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [
@@ -389,7 +389,7 @@
                 "Type": "DXObjectEnumElement",
                 "Op": "Patch",
                 "IsMulti": true,
-                "IsRequired": true
+                "IsRequired": false
               },
               "Data": {
                 "Upsert": [

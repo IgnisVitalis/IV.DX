@@ -92,8 +92,13 @@ namespace IV.DX.Application
                             {
                                 case "unit":
                                     {
-                                        var units = JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(script.Content);
-                                        //   await ProcessFileForPreInitCoreAsync(script, ct).ConfigureAwait(false);
+                                        var blocks = ParseUnitBlocks(script.Content);
+                                        await ProcessUnitBlocksAsync(
+                                            script,
+                                            blocks,
+                                            block => _dataService.InsertAsync(block, new DXUnitHandlerPreInitCoreContext(script), ct),
+                                            deleteAction: null,
+                                            ct).ConfigureAwait(false);
                                         break;
                                     }
                                 case "element":
@@ -288,18 +293,13 @@ namespace IV.DX.Application
 
         private async Task ProcessFileForPreInitCoreAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.Content);
-            foreach (JObject item in jarray)
-            {
-                try
-                {
-                    await _dataService.InsertAsync(item, new DXUnitHandlerPreInitCoreContext(file), ct).ConfigureAwait(false);
-                }
-                catch (Exception exc)
-                {
-                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
-                }
-            }
+            var blocks = ParseUnitBlocks(file.Content);
+            await ProcessUnitBlocksAsync(
+                file,
+                blocks,
+                block => _dataService.InsertAsync(block, new DXUnitHandlerPreInitCoreContext(file), ct),
+                deleteAction: null,
+                ct).ConfigureAwait(false);
         }
 
         private async Task ProcessFileForPostInitCoreAsync(DXMigrationScriptsUnit script, CancellationToken ct)
@@ -371,23 +371,95 @@ namespace IV.DX.Application
 
         private async Task ProcessFileToInsertOrUpdateAsync(DXMigrationScriptsUnit file, CancellationToken ct)
         {
-            var jarray = JArray.Parse(file.Content);
-            foreach (JObject item in jarray)
-            {
-                try
-                {
-                    await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerMigrationServiceContext(file), ct).ConfigureAwait(false);
-                }
-                catch (Exception exc)
-                {
-                    throw new Exception(this.GetMigrationErrorMessage(file, item), exc);
-                }
-            }
+            var blocks = ParseUnitBlocks(file.Content);
+            await ProcessUnitBlocksAsync(
+                file,
+                blocks,
+                block => _dataService.InsertOrUpdateAsync(block, new DXUnitHandlerMigrationServiceContext(file), ct),
+                block => _dataService.DeleteAsync(block, new DXUnitHandlerMigrationServiceContext(file), ct),
+                ct).ConfigureAwait(false);
         }
 
         private string GetMigrationErrorMessage(DXMigrationScriptsUnit file, JObject item)
         {
             return $"{file.ToString()}\nDXUnit with ID '{item["ID"]}' migration error";
+        }
+
+        private string GetMigrationErrorMessage(DXMigrationScriptsUnit file, Guid id)
+        {
+            return $"{file.ToString()}\nDXUnit with ID '{id}' migration error";
+        }
+
+        private static List<DXDataBlock<DXUnitRecord>> ParseUnitBlocks(string content)
+        {
+            return JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(content)
+                ?? new List<DXDataBlock<DXUnitRecord>>();
+        }
+
+        private async Task ProcessUnitBlocksAsync(
+            DXMigrationScriptsUnit script,
+            IEnumerable<DXDataBlock<DXUnitRecord>> blocks,
+            Func<DXDataBlock<DXUnitRecord>, Task> upsertAction,
+            Func<DXDataBlock<DXUnitRecord>, Task>? deleteAction,
+            CancellationToken ct)
+        {
+            foreach (var block in blocks)
+            {
+                if (block == null)
+                    continue;
+
+                ct.ThrowIfCancellationRequested();
+
+                if (block.Data?.Upsert != null)
+                {
+                    foreach (var record in block.Data.Upsert)
+                    {
+                        if (record == null) continue;
+
+                        var single = new DXDataBlock<DXUnitRecord>
+                        {
+                            Meta = block.Meta,
+                            Data = new DXData<DXUnitRecord>
+                            {
+                                Upsert = new List<DXUnitRecord> { record }
+                            }
+                        };
+
+                        try
+                        {
+                            await upsertAction(single).ConfigureAwait(false);
+                        }
+                        catch (Exception exc)
+                        {
+                            throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
+                        }
+                    }
+                }
+
+                if (deleteAction != null && block.Data?.Delete != null)
+                {
+                    foreach (var deleteRef in block.Data.Delete)
+                    {
+                        var single = new DXDataBlock<DXUnitRecord>
+                        {
+                            Meta = block.Meta,
+                            Data = new DXData<DXUnitRecord>
+                            {
+                                Delete = new List<DXDeleteRef> { deleteRef }
+                            }
+                        };
+
+                        try
+                        {
+                            await deleteAction(single).ConfigureAwait(false);
+                        }
+                        catch (Exception exc)
+                        {
+                            throw new Exception(this.GetMigrationErrorMessage(script, deleteRef.ID), exc);
+                        }
+                    }
+                }
+            }
         }
 
         private static string NormalizeDirectory(string? dir)

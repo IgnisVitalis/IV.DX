@@ -379,5 +379,126 @@ namespace IV.DX.Application.Services
                 return await InsertAsync(jObject, context, ct);
             }
         }
+
+        public async Task<DXDataBlock<DXUnitRecord>> InsertAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = default, CancellationToken ct = default)
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.InsertAsync(block, context, ct);
+
+            if (result.IsSuccess && result.Value != null)
+            {
+                return result.Value;
+            }
+            else
+            {
+                throw new Exception($"There are an error to insert dxUnit: {result.Error}");
+            }
+        }
+
+        public async Task<DXDataBlock<DXUnitRecord>> UpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.UpdateAsync(block, context, ct);
+
+            if (result.IsSuccess && result.Value != null)
+            {
+                return result.Value;
+            }
+            else
+            {
+                throw new Exception($"There are an error to update dxUnit: {result.Error}");
+            }
+        }
+
+        public async Task<bool> DeleteAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = default, CancellationToken ct = default)
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.DeleteAsync(block, context, ct);
+
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<DXDataBlock<DXUnitRecord>> InsertOrUpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            ArgumentNullException.ThrowIfNull(block);
+            var typeName = block.Meta?.Type;
+
+            var output = new List<DXUnitRecord>();
+
+            if (block.Data?.Upsert != null)
+            {
+                foreach (var record in block.Data.Upsert)
+                {
+                    if (record == null) continue;
+
+                    var itemIsExisting = !string.IsNullOrWhiteSpace(typeName)
+                        && coreRepo.IsItemExisting(typeName, record.ID);
+
+                    var singleBlock = new DXDataBlock<DXUnitRecord>
+                    {
+                        Meta = block.Meta,
+                        Data = new DXData<DXUnitRecord>
+                        {
+                            Upsert = new List<DXUnitRecord> { record }
+                        }
+                    };
+
+                    var processed = itemIsExisting
+                        ? await UpdateAsync(singleBlock, context, ct)
+                        : await InsertAsync(singleBlock, context, ct);
+
+                    if (processed.Data?.Upsert != null)
+                        output.AddRange(processed.Data.Upsert);
+                }
+            }
+
+            if (block.Data?.Delete != null && block.Data.Delete.Count > 0)
+            {
+                var deleteBlock = new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = block.Meta,
+                    Data = new DXData<DXUnitRecord>
+                    {
+                        Delete = block.Data.Delete
+                    }
+                };
+
+                await DeleteAsync(deleteBlock, context, ct);
+            }
+
+            return new DXDataBlock<DXUnitRecord>
+            {
+                Meta = block.Meta,
+                Data = new DXData<DXUnitRecord>
+                {
+                    Upsert = output.Count == 0 ? null : output,
+                    Delete = block.Data?.Delete
+                }
+            };
+        }
     }
 }
