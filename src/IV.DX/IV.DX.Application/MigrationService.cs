@@ -4,6 +4,7 @@ using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -19,7 +20,7 @@ namespace IV.DX.Application
         private readonly SemaphoreSlim _lock = new(1, 1);
 
         private static readonly Regex ScriptNameRegex = new(
-            @"^(?<Version>\d+)_(?<Build>\d+)_(?<Number>\d+)_(?<Application>[A-Za-z0-9]+)_(?<Name>[A-Za-z0-9]+)\.(?<ExtensionType>[A-Za-z0-9]+)\.(?<ExtensionOperation>[A-Za-z0-9]+)$",
+            @"^(?<Version>\d+)_(?<Build>\d+)_(?<Number>\d+)_(?<Application>[A-Za-z0-9]+)_(?<Name>[A-Za-z0-9]+)\.(?<Extension>[A-Za-z0-9]+)$",
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public MigrationService(
@@ -87,7 +88,22 @@ namespace IV.DX.Application
                     {
                         try
                         {
-                            await ProcessFileForPreInitCoreAsync(script, ct).ConfigureAwait(false);
+                            switch (script.Extension)
+                            {
+                                case "unit":
+                                    {
+                                        var units = JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(script.Content);
+                                        //   await ProcessFileForPreInitCoreAsync(script, ct).ConfigureAwait(false);
+                                        break;
+                                    }
+                                case "element":
+                                    break;
+                                case "enum":
+                                    break;
+                                default:
+                                    throw new Exception($"File extension '{script.Extension}' is not supported.");
+                            }
+
                         }
                         catch (Exception exc)
                         {
@@ -164,7 +180,7 @@ namespace IV.DX.Application
 
         private async Task ProcessByExtensionAsync(DXMigrationScriptsUnit script, CancellationToken ct)
         {
-            var ext = script.Extention?.ToLowerInvariant();
+            var ext = script.Extension?.ToLowerInvariant();
             switch (ext)
             {
                 case "dat":   // insert or update
@@ -184,7 +200,7 @@ namespace IV.DX.Application
 
         private static bool TryParseScriptMeta(
             string fileName,
-            out (string Version, string Build, string Number, string App, string Name, string ExtensionType, string ExtensionOperation) meta)
+            out (string Version, string Build, string Number, string App, string Name, string Extension) meta)
         {
             var m = ScriptNameRegex.Match(fileName);
             if (!m.Success) { meta = default; return false; }
@@ -195,8 +211,7 @@ namespace IV.DX.Application
                 m.Groups["Number"].Value,
                 m.Groups["Application"].Value,
                 m.Groups["Name"].Value,
-                m.Groups["ExtensionType"].Value,
-                m.Groups["ExtensionOperation"].Value
+                m.Groups["Extension"].Value
             );
             return true;
         }
@@ -235,8 +250,7 @@ namespace IV.DX.Application
                     Build = meta.Build,
                     Number = meta.Number,
                     AppName = meta.App,
-                    ExtentionType = meta.ExtensionType,
-                    ExtentionOperation = meta.ExtensionOperation,
+                    Extension = meta.Extension,
                     Content = content
                 };
             }).ToList();
@@ -252,7 +266,7 @@ namespace IV.DX.Application
                        {
                            if (!TryParseScriptMeta(fi.Name, out var meta))
                                throw new FormatException(
-                                   $"Script name '{fi.Name}' has wrong format. Expected '<Version>_<Build>_<Number>_<Application>_<Name>.<Extension>'.");
+                                   $"Script name '{fi.Name}' has wrong format. Expected '<Version>_<Build>_<Number>_<Application>_<Name>.<Extention>'.");
 
                            var id = Guid.NewGuid();
                            return new DXMigrationScriptsUnit
@@ -265,8 +279,7 @@ namespace IV.DX.Application
                                Build = meta.Build,
                                Number = meta.Number,
                                AppName = meta.App,
-                               ExtentionType = meta.ExtensionType,
-                               ExtentionOperation = meta.ExtensionOperation,
+                               Extension = meta.Extension,
                                Content = File.ReadAllText(fi.FullName)
                            };
                        })
@@ -297,58 +310,57 @@ namespace IV.DX.Application
             {
                 try
                 {
-                    var extType = script.ExtentionType;
-                    var extOperation = script.ExtentionOperation;
+                    var extType = script.Extension;
 
-                    if (extType == "unit")
-                    {
-                        if (extOperation == "apply")
-                        {
-                            await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                        }
-                        else if (extOperation == "del")
-                        {
-                            await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
-                        }
-                    }
-                    else if (extType == "element")
-                    {
-                        if (extOperation == "apply")
-                        {
-                            var dxModel = item.ToDXSin();
+                    // if (extType == "unit")
+                    // {
+                    //     if (extOperation == "apply")
+                    //     {
+                    //         await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                    //     }
+                    //     else if (extOperation == "del")
+                    //     {
+                    //         await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                    //     }
+                    //     else
+                    //     {
+                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
+                    //     }
+                    // }
+                    // else if (extType == "element")
+                    // {
+                    //     if (extOperation == "apply")
+                    //     {
+                    //         var dxModel = item.ToDXSin();
 
-                            _dxElementCoreRepo.InsertOrUpdate("", dxModel);
-                        }
-                        else if (extOperation == "del")
-                        {
-                            await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
-                        }
-                    }
+                    //         _dxElementCoreRepo.InsertOrUpdate("", dxModel);
+                    //     }
+                    //     else if (extOperation == "del")
+                    //     {
+                    //         await _dataService.DeleteAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                    //     }
+                    //     else
+                    //     {
+                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{extType}'.'{extOperation}'");
+                    //     }
+                    // }
 
-                    switch (ext)
-                    {
-                        case "dat":   // insert or update using DXDataService
-                            await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
-                            break;
-                        case "el":
-                            {
-                                // var dxElement = DXSingleElementConverters.ToDXSingleElement()
-                                // _dxElementCoreRepo.InsertOrUpdate()
+                    // switch (ext)
+                    // {
+                    //     case "dat":   // insert or update using DXDataService
+                    //         await _dataService.InsertOrUpdateAsync(item, new DXUnitHandlerPostInitCoreContext(script), ct).ConfigureAwait(false);
+                    //         break;
+                    //     case "el":
+                    //         {
+                    //             // var dxElement = DXSingleElementConverters.ToDXSingleElement()
+                    //             // _dxElementCoreRepo.InsertOrUpdate()
 
-                                break;
-                            }
+                    //             break;
+                    //         }
 
-                        default:
-                            throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
-                    }
+                    //     default:
+                    //         throw new NotSupportedException($"Migration script '{script}' has unsupported extension '{ext}'.");
+                    // }
                 }
                 catch (Exception exc)
                 {

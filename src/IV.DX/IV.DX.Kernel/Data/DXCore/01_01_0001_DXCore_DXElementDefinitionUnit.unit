@@ -1,17 +1,32 @@
 [
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXColumnDefinitionElement",
-        "DisplayValue": "Name",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": true
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "DXColumnDefinitionElement",
+          "DisplayValue": "Name",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "203f9137-b7e0-46a5-b12b-551dd4493c67",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
@@ -20,9 +35,8 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 100
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "3a594944-e944-4da3-9203-fef22db78e58",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
@@ -30,9 +44,8 @@
                     "Name": "Length",
                     "AllowNull": true,
                     "DefaultValue": null
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "b5b6091d-7b2a-47f2-b5b6-b44499f2caf7",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
@@ -40,9 +53,8 @@
                     "Name": "Precision",
                     "AllowNull": true,
                     "DefaultValue": null
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "119437a8-7f00-4411-83ce-9990f769bbcf",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
@@ -50,17 +62,15 @@
                     "Name": "Scale",
                     "AllowNull": true,
                     "DefaultValue": null
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "858fa49d-7638-4a83-84a2-eed8dde5b4fa",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
                     "ColumnType": 6,
                     "Name": "AllowNull"
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "006134f1-7929-49e6-b51f-9647ab0b12f2",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
@@ -69,38 +79,51 @@
                     "AllowNull": true,
                     "DefaultValue": null,
                     "Length": 100
-                }
-            ]
-        },
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
+                  }
+                ]
+              }
+            },
+            "DXObjectEnumElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXObjectEnumElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "544ef309-2fb1-4d63-9b40-bcc9d060f51b",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "ce754889-4efb-4281-ad1f-14d710b30007",
                     "Name": "ColumnType",
                     "EnumType": "971d538a-1489-483a-bc84-86596ed0c51a",
                     "EnumKey": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXUniqueColumnsElement",
-        "DisplayValue": "Columns",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "DXUniqueColumnsElement",
+          "DisplayValue": "Columns",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "836b5fdc-c995-46d6-9151-fd562bfada19",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "575f9a04-6b51-4c0c-84e3-b4c624ee1f81",
@@ -109,23 +132,30 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 300
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXObjectEnumElement",
-        "DisplayValue": "Name",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "DXObjectEnumElement",
+          "DisplayValue": "Name",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "b5c5faa6-2b4f-402c-9915-c1946576ed86",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
@@ -134,55 +164,68 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 50
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "962ecfbc-9d27-4910-bade-d7828efcf9c2",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "30b46356-a7e4-43bd-ace2-d4d9b4a87c51",
                     "ColumnType": 6,
                     "Name": "AllowNull",
                     "AllowNull": false
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXElementInUnitDefinitionElement",
-        "DisplayValue": "RelationType",
-        "Kind": 1,
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "DXElementInUnitDefinitionElement",
+          "DisplayValue": "RelationType",
+          "Kind": 1,
+          "DXElements": {
+            "DXObjectEnumElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXObjectEnumElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "4ba2d83b-e858-447a-ae2f-6e9b6ca45dd1",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "8b781efd-a6e5-4d24-9456-ea4a8d5fa5c7",
                     "Name": "RelationType",
                     "EnumType": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
                     "EnumKey": "d214fd3a-99a2-4446-ba90-dd1e863e56e1"
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXUnitToUnitRelationElement",
-        "DisplayValue": "OwnRelationName",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "DXUnitToUnitRelationElement",
+          "DisplayValue": "OwnRelationName",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "c320e3c7-4424-4353-ad0e-6617f45749e0",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
@@ -191,9 +234,8 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 50
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "abfa6ccf-b3af-4aaf-81ab-2b6acfec35b0",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
@@ -202,38 +244,51 @@
                     "AllowNull": false,
                     "DefaultValue": null,
                     "Length": 50
-                }
-            ]
-        },
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
+                  }
+                ]
+              }
+            },
+            "DXObjectEnumElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXObjectEnumElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "37bf9fca-8112-48ea-b358-da1608664c4c",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
                     "Name": "RelationType",
                     "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c",
                     "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd"
-                }
-            ]
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
-        "TimeStamp": "2026-01-26T11:53:41.649013Z",
-        "Name": "DXElementToUnitRelationElement",
-        "DisplayValue": "OwnRelationName",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+          "TimeStamp": "2026-01-26T11:53:41.649013Z",
+          "Name": "DXElementToUnitRelationElement",
+          "DisplayValue": "OwnRelationName",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "e3a33688-97b0-429f-8b4f-f8afc371efd3",
                     "TimeStamp": "2026-01-26T11:52:33.752221Z",
                     "Name": "OwnRelationName",
@@ -244,9 +299,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
                     "ColumnType": 3
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "dcac3b81-73a7-4b4d-94a3-745ca414a0b8",
                     "TimeStamp": "2026-01-26T11:52:56.585535Z",
                     "Name": "TargetRelationName",
@@ -257,16 +311,21 @@
                     "DefaultValue": null,
                     "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
                     "ColumnType": 3
-                }
-            ],
-            "Deleted": []
-        },
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
+                  }
+                ]
+              }
+            },
+            "DXObjectEnumElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXObjectEnumElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "a1a23781-496f-4845-b086-99e31f3f88db",
                     "TimeStamp": "2026-01-26T11:53:41.644566Z",
                     "Name": "RelationType",
@@ -274,24 +333,30 @@
                     "DXUnitID": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
                     "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
                     "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c"
-                }
-            ],
-            "Deleted": []
-        }
-    },
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "65bd9684-6709-409a-a46b-7c605dcb715b",
-        "TimeStamp": "2026-01-26T11:53:31.982662Z",
-        "Name": "DXUnitToElementRelationElement",
-        "DisplayValue": "OwnRelationName",
-        "Kind": 1,
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+          "TimeStamp": "2026-01-26T11:53:31.982662Z",
+          "Name": "DXUnitToElementRelationElement",
+          "DisplayValue": "OwnRelationName",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "146a871a-e374-4d37-a23c-686ee752c0a5",
                     "TimeStamp": "2026-01-26T11:52:23.040219Z",
                     "Name": "OwnRelationName",
@@ -302,9 +367,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
                     "ColumnType": 3
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "db9d41ad-c08b-43fa-9729-df3249123b1a",
                     "TimeStamp": "2026-01-26T11:52:48.059247Z",
                     "Name": "TargetRelationName",
@@ -315,16 +379,21 @@
                     "DefaultValue": null,
                     "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
                     "ColumnType": 3
-                }
-            ],
-            "Deleted": []
-        },
-        "DXObjectEnumElement": {
-            "S_Type": "DXObjectEnumElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXObjectEnumElement",
+                  }
+                ]
+              }
+            },
+            "DXObjectEnumElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXObjectEnumElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": true
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "9f2e0e6a-5d73-4a8c-bf66-ac5a62a2801d",
                     "TimeStamp": "2026-01-26T11:53:31.976507Z",
                     "Name": "RelationType",
@@ -333,8 +402,13 @@
                     "DXObjectDefinitionUnitID": null,
                     "EnumKey": "0ce6d41d-1906-4d24-adc3-31f0922fd7cd",
                     "EnumType": "3fdb5f35-33f6-4356-8f65-f92da429191c"
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

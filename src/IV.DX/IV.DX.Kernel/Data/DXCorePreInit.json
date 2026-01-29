@@ -1,8 +1,8 @@
 [
-    "DXCore/01_01_0000_DXCore_DXEnumDefinitionUnit.json",
-    "DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.json",
-    "DXCore/01_01_0002_DXCore_DXUnitDefinitionUnit.json",
-    "DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.json",
-    "DXCore/01_01_0004_DXCore_DXInheritanceInitCore.json",
-    "DXCore/01_01_0005_DXCore_DXEnumDefinitionUnit.json"
+    "DXCore/01_01_0000_DXCore_DXEnumDefinitionUnit.unit",
+    "DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.unit",
+    "DXCore/01_01_0002_DXCore_DXUnitDefinitionUnit.unit",
+    "DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.unit",
+    "DXCore/01_01_0004_DXCore_DXInheritanceInitCore.unit",
+    "DXCore/01_01_0005_DXCore_DXEnumDefinitionUnit.enum"
 ]

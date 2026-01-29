@@ -19,12 +19,12 @@
       <EmbeddedResource Include="Data\DXSecurity\01_01_0000_DXSecurity_DXEnumDefinitionUnit.dat" />
       <EmbeddedResource Include="Data\DXQuery\01_01_0002_DXQuery_DXFilterUnit.dat" />
       <EmbeddedResource Include="Data\DXQuery\01_01_0001_DXQuery_DXQueryUnit.dat" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0000_DXCore_DXEnumDefinitionUnit.json" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0001_DXCore_DXElementDefinitionUnit.json" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0002_DXCore_DXUnitDefinitionUnit.json" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0003_DXCore_DXRelationDefinitionUnit.json" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0004_DXCore_DXInheritanceInitCore.json" />
-      <EmbeddedResource Include="Data\DXCore\01_01_0005_DXCore_DXEnumDefinitionUnit.json" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0000_DXCore_DXEnumDefinitionUnit.unit" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0001_DXCore_DXElementDefinitionUnit.unit" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0002_DXCore_DXUnitDefinitionUnit.unit" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0003_DXCore_DXRelationDefinitionUnit.unit" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0004_DXCore_DXInheritanceInitCore.unit" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0005_DXCore_DXEnumDefinitionUnit.enum" />
     </ItemGroup>
 
     <ItemGroup>

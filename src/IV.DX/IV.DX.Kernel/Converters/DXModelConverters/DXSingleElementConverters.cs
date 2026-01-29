@@ -21,9 +21,9 @@ namespace IV.DX.Kernel.Converters.DXModelConverters
             return new DXSingleElement(name, attribute, item, isRequired);
         }
 
-        public static DXSingleElement ToDXSingleElement(this JObject jObject, bool isRequired, string propertyName = null)
-        {
-            var item = jObject.FromDXUnitToDXItem();
-        }
+        // public static DXSingleElement ToDXSingleElement(this JObject jObject, bool isRequired, string propertyName = null)
+        // {
+        //     var item = jObject.FromDXUnitToDXItem();
+        // }
     }
 }
