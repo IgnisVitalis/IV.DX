@@ -1,24 +1,43 @@
 [
-    {
-        "S_Type": "DXUnitDefinitionUnit",
-        "ID": "e9622428-0578-402e-9d96-f57e670499c4",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "TPositionUnit",
-        "Kind": 3,
-
-        "DXElementInUnitDefinitionElement": {
-            "S_Type": "DXElementInUnitDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXElementInUnitDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "e9622428-0578-402e-9d96-f57e670499c4",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TPositionUnit",
+          "Kind": 3,
+          "DXElements": {
+            "DXElementInUnitDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXElementInUnitDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "1c41d48d-8561-44ca-903c-2ceb45d7fc79",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "e9622428-0578-402e-9d96-f57e670499c4",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "d8b2ddce-8c18-436e-8e54-c360c781123f"
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

@@ -1,17 +1,31 @@
 [
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "f7f2185a-a933-41af-9b84-e37c98b33ef7",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "TPassportMainElement",
-        "Kind": 3,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "f7f2185a-a933-41af-9b84-e37c98b33ef7",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TPassportMainElement",
+          "Kind": 3,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "66b58401-16e1-4f1d-8dfc-beab4557ffbc",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "f7f2185a-a933-41af-9b84-e37c98b33ef7",
@@ -20,8 +34,13 @@
                     "Length": 50,
                     "AllowNull": true,
                     "DefaultValue": null
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

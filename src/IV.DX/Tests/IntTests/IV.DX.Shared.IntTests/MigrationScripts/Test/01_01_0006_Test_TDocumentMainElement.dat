@@ -1,17 +1,31 @@
 [
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "TDocumentMainElement",
-        "Kind": 3,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TDocumentMainElement",
+          "Kind": 3,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "3e273e56-2e26-4b66-b3df-e7f55525a10f",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
@@ -20,8 +34,13 @@
                     "Length": 50,
                     "AllowNull": true,
                     "DefaultValue": null
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

@@ -1,35 +1,42 @@
 [
-    {
-        "S_Type": "DXRelationItemUnit",
-        "ID": "48d6cc51-7564-406d-b76b-7b8fd2c97ab6",
-        "TimeStamp": "2021-10-02T00:00:00",
-
-        "ObjectTypeNameLeft": "TUserUnit",
-        "DXUnitIDLeft": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
-        "RelationNameRight": "Books",
-        "ObjectTypeNameRight": "TBookUnit",
-        "DXUnitIDRight": "1b51edff-1d99-4043-9a69-209996729b69"
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXRelationItemUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
     },
-    {
-        "S_Type": "DXRelationItemUnit",
-        "ID": "a29781eb-eb30-4b4a-a4a5-e71a60920e21",
-        "TimeStamp": "2021-10-02T00:00:00",
-
-        "ObjectTypeNameLeft": "TUserUnit",
-        "DXUnitIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
-        "RelationNameRight": "Books",
-        "ObjectTypeNameRight": "TBookUnit",
-        "DXUnitIDRight": "1b51edff-1d99-4043-9a69-209996729b69"
-    },
-    {
-        "S_Type": "DXRelationItemUnit",
-        "ID": "1a6dcde2-4c40-40a9-8742-d9663367f92c",
-        "TimeStamp": "2021-10-02T00:00:00",
-
-        "ObjectTypeNameLeft": "TUserUnit",
-        "DXUnitIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
-        "RelationNameRight": "Books",
-        "ObjectTypeNameRight": "TBookUnit",
-        "DXUnitIDRight": "4782b530-6343-4d11-846a-65127cf71f3b"
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "48d6cc51-7564-406d-b76b-7b8fd2c97ab6",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "ObjectTypeNameLeft": "TUserUnit",
+          "DXUnitIDLeft": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
+          "RelationNameRight": "Books",
+          "ObjectTypeNameRight": "TBookUnit",
+          "DXUnitIDRight": "1b51edff-1d99-4043-9a69-209996729b69"
+        },
+        {
+          "ID": "a29781eb-eb30-4b4a-a4a5-e71a60920e21",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "ObjectTypeNameLeft": "TUserUnit",
+          "DXUnitIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+          "RelationNameRight": "Books",
+          "ObjectTypeNameRight": "TBookUnit",
+          "DXUnitIDRight": "1b51edff-1d99-4043-9a69-209996729b69"
+        },
+        {
+          "ID": "1a6dcde2-4c40-40a9-8742-d9663367f92c",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "ObjectTypeNameLeft": "TUserUnit",
+          "DXUnitIDLeft": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+          "RelationNameRight": "Books",
+          "ObjectTypeNameRight": "TBookUnit",
+          "DXUnitIDRight": "4782b530-6343-4d11-846a-65127cf71f3b"
+        }
+      ]
     }
+  }
 ]

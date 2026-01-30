@@ -1,17 +1,31 @@
 [
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "TDeviceMainElement",
-        "Kind": 3,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TDeviceMainElement",
+          "Kind": 3,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "68e37e0b-3f5c-41ad-bb31-69b09859fd57",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
@@ -20,9 +34,8 @@
                     "Length": 50,
                     "AllowNull": true,
                     "DefaultValue": null
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "81f95b0d-fb05-43c4-9d56-91173ca3e585",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
@@ -30,8 +43,13 @@
                     "Name": "UUID",
                     "AllowNull": true,
                     "DefaultValue": null
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

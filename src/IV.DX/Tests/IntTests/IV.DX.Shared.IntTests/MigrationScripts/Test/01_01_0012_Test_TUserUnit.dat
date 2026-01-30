@@ -1,31 +1,51 @@
 [
-    {
-        "S_Type": "DXUnitDefinitionUnit",
-        "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "TUserUnit",
-        "Kind": 3,
-
-        "DXElementInUnitDefinitionElement": {
-            "S_Type": "DXElementInUnitDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXElementInUnitDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TUserUnit",
+          "Kind": 3,
+          "DXElements": {
+            "DXElementInUnitDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXElementInUnitDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "38746c7d-6c26-4285-aa38-c179d1868dc6",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "f57b61b7-3e76-4ccf-826e-c1b46c44b397"
-                }
-            ]
-        },
-        "DXUnitToUnitRelationElement": {
-            "S_Type": "DXUnitToUnitRelationElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  }
+                ]
+              }
+            },
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "cffde4b2-1b25-45c5-b216-8819d94c461b",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
@@ -33,9 +53,8 @@
                     "TargetRelationName": "Passport",
                     "RelationType": 1,
                     "TargetDXUnit": "681bda3f-3d91-4493-b0fd-eb3db6e44165"
-                },
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  },
+                  {
                     "ID": "35e5892c-daf7-4bbb-8647-682a9fbbaadc",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
@@ -43,9 +62,8 @@
                     "TargetRelationName": "Position",
                     "RelationType": 8,
                     "TargetDXUnit": "e9622428-0578-402e-9d96-f57e670499c4"
-                },
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  },
+                  {
                     "ID": "dbf54f2d-64f7-4a06-980c-2a970d29a5bb",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
@@ -53,9 +71,8 @@
                     "TargetRelationName": "Devices",
                     "RelationType": 3,
                     "TargetDXUnit": "7f8501fd-7f16-42f8-8a7d-297619126e13"
-                },
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  },
+                  {
                     "ID": "e8036922-3135-4f8f-85a9-8dce89f90803",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
@@ -63,9 +80,8 @@
                     "TargetRelationName": "Books",
                     "RelationType": 7,
                     "TargetDXUnit": "05fdf970-e682-436d-8a09-94fc60d6b650"
-                },
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  },
+                  {
                     "ID": "89368de1-6492-4594-b45f-d54c7a2f1b3d",
                     "TimeStamp": "2021-10-02T00:00:00",
                     "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
@@ -73,8 +89,13 @@
                     "TargetRelationName": "Documents",
                     "RelationType": 5,
                     "TargetDXUnit": "1d99fab1-cfb6-4fc8-ab47-f71279fe16eb"
-                }
-            ]
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]
