@@ -1,13 +1,13 @@
-# DX Data Format (Metadata & Data)
+# DX Data Format (DX*Record)
 
-This document describes the unified DX JSON envelope format used for **both metadata and runtime data**.
-It is designed to transport, synchronize, patch, and initialize **DXUnit**, **DXElement**, and **DXEnum** objects consistently.
+This document describes the unified DX JSON envelope used for both metadata and runtime data.
+The format transports DXUnit, DXElement, and DXEnum records using a single block model.
 
 ---
 
 ## 1) High-level shape
 
-A file is a JSON array of **independent blocks**.
+A file is a JSON array of independent blocks.
 
 ```json
 [
@@ -17,117 +17,263 @@ A file is a JSON array of **independent blocks**.
 ```
 
 - **Meta**: execution semantics (how to interpret/process)
-- **Data**: payload (actual object fields)
+- **Data**: payload (actual records)
 
-No batching requirements: blocks may appear in any order unless your engine explicitly requires ordering.
-
----
-
-## 2) Kinds
-
-### DXUnit
-A unit object (definition or runtime record depending on `Type`).
-
-### DXElement
-A unit-owned object (definition or runtime record). When processed standalone, it requires a **DXUnitContext**.
-
-### DXEnum
-Enum values (`Key`/`Value`) and/or enum-related records.
+Blocks may appear in any order unless your engine explicitly requires ordering.
 
 ---
 
-## 3) Meta
+## 2) Record shapes (C#)
 
-### 3.1 Meta schema
+```csharp
+public sealed class DXDataBlock<TRecord>
+{
+    public DXMeta Meta { get; set; } = new DXMeta();
+    public DXData<TRecord> Data { get; set; } = new DXData<TRecord>();
+}
 
-```json
-"Meta": {
-  "Kind": "DXUnit | DXElement | DXEnum",
-  "Type": "ConcreteTypeName",
-  "Op": "Sync | Patch",
-  "IsMulti": true,
-  "IsRequired": false,
-  "DXFilter": "dxsql expression",
-  "DXUnitContext": "DXUnitTypeName"
+public sealed class DXMeta
+{
+    public string Kind { get; set; } = null!;  // "DXUnit" | "DXElement" | "DXEnum"
+    public string? Type { get; set; }          // concrete type name (optional for DXEnum rows)
+
+    public string? Op { get; set; }            // "Sync" | "Patch"
+    public bool? IsMulti { get; set; }         // cardinality hint
+    public bool? IsRequired { get; set; }      // cardinality hint
+
+    public string? DXFilter { get; set; }      // selection filter (dxsql)
+    public string? DXUnitContext { get; set; } // for standalone DXElements only
+}
+
+public sealed class DXData<TRecord>
+{
+    // JSON accepts a single object or an array for Upsert/Delete.
+    public List<TRecord>? Upsert { get; set; }
+    public List<DXDeleteRef>? Delete { get; set; }
+}
+
+public abstract class DXObjectRecord
+{
+    public Guid ID { get; set; }
+    public DateTime TimeStamp { get; set; }
+
+    // All other properties (Name, Kind, etc.) are captured here.
+    [JsonExtensionData]
+    public IDictionary<string, JToken>? Fields { get; set; }
+}
+
+public sealed class DXUnitRecord : DXObjectRecord
+{
+    // Key = element type name, Value = element block
+    public Dictionary<string, DXDataBlock<DXElementRecord>>? DXElements { get; set; }
+}
+
+public sealed class DXElementRecord : DXObjectRecord
+{
+    public Guid DXUnitID { get; set; }
+}
+
+public sealed class DXEnumRecord : DXObjectRecord
+{
+    public string? Type { get; set; } // used when Meta.Type is null
+    public JToken? Key { get; set; }
+    public JToken? Value { get; set; }
+}
+
+public sealed class DXDeleteRef
+{
+    public Guid ID { get; set; }
+
+    // Optional extra fields (for disambiguation on delete).
+    [JsonExtensionData]
+    public IDictionary<string, JToken>? Fields { get; set; }
 }
 ```
 
-### 3.2 Meta fields
+---
 
-| Field | Required | Applies to | Meaning |
-|------|----------|------------|---------|
-| `Kind` | ✔ | all | Object category (`DXUnit`, `DXElement`, `DXEnum`) |
-| `Type` | ✔ | all | Concrete type name used by handlers |
-| `Op` | ⭕ | all | `Sync` (full set semantics) or `Patch` (targeted changes) |
-| `IsMulti` | ⭕ | all | If `true` the payload shape is array-based; if `false` single-object |
-| `IsRequired` | ⭕ | all | If `true`, the payload must be present and non-empty (see rules) |
-| `DXFilter` | ⭕ | typically DXUnit | Selection filter for `Sync` operations (dxsql) |
-| `DXUnitContext` | ⭕ | DXElement | Execution context for standalone DXElements |
+## 3) Meta fields
 
-> Note: `IsMulti` + `IsRequired` replaces the old `Cardinality` string.
+| Field          | Required                 | Applies to        | Meaning                                                               |
+|----------------|--------------------------|-------------------|-----------------------------------------------------------------------|
+| `Kind`         | Yes                      | all               | Object category (`DXUnit`, `DXElement`, `DXEnum`)                     |
+| `Type`         | Usually                  | DXUnit/DXElement  | Concrete type name used by handlers                                   |
+| `Type`         | Optional                 | DXEnum            | Can be omitted when each enum record has its own `Type`               |
+| `Op`           | Optional                 | all               | `Sync` (full set semantics) or `Patch` (targeted changes)             |
+| `IsMulti`      | Optional                 | all               | Cardinality hint for validation                                       |
+| `IsRequired`   | Optional                 | all               | Cardinality hint for validation                                       |
+| `DXFilter`     | Optional                 | usually DXUnit    | Selection filter for `Sync` operations                                |
+| `DXUnitContext`| Required for standalone  | DXElement         | Execution context when a DXElement block is not nested inside a unit  |
+
+> NOTE: `IsMulti` and `IsRequired` are hints for validation and defaults. JSON parsing accepts a single object or array for `Upsert` and `Delete`.
 
 ---
 
-## 4) Cardinality via `IsMulti` / `IsRequired`
+## 4) Cardinality mapping (IsMulti / IsRequired)
 
-These two flags fully describe the expected “cardinality”:
+| IsMulti | IsRequired | Meaning                              |
+|---------|------------|--------------------------------------|
+| `false` | `true`     | Exactly one (`SingleMandatory`)      |
+| `false` | `false`    | Zero or one (`SingleOptional`)       |
+| `true`  | `true`     | One or more (`MultiMandatory`)       |
+| `true`  | `false`    | Zero or more (`MultiOptional`)       |
 
-| IsMulti | IsRequired | Meaning |
-|--------|------------|---------|
-| `false` | `true` | Exactly one (`One`) |
-| `false` | `false` | Zero or one (`ZeroOrOne`) |
-| `true` | `true` | One or more (`OneOrMore`) |
-| `true` | `false` | Zero or more (`Many`) |
-
-### Validation guideline
-- If `IsMulti = false`, `Data.Upsert` may be an object (single) **or** an array of size 1 (choose one convention and keep it consistent).
-- If `IsMulti = true`, `Data.Upsert` is an array.
-- If `IsRequired = true`:
-  - single: `Upsert` must exist
-  - multi: `Upsert` must exist and have at least one item
+This matches `DXElementInUnitTypeEnum` values in DXCore:
+- `1` = SingleMandatory
+- `2` = SingleOptional
+- `3` = MultiMandatory
+- `4` = MultiOptional
 
 ---
 
-## 5) Op (processing modes)
+## 5) Op (processing mode)
 
 ### Patch
-Targeted operation:
 - apply `Upsert` items
 - apply `Delete` items
-- **do not** remove anything else implicitly
+- do **not** remove anything else implicitly
 
 ### Sync
-Full-set operation:
-- `Upsert` represents the desired final set within the selection scope
+- `Upsert` represents the desired final set **within the scope**
 - objects missing from that set may be removed **within the scope**
-
-> Scope may be:
-> - explicit list only (common)
-> - selection by `DXFilter` (optional, typically for DXUnit sync-many)
+- scope may be defined by `DXFilter` (typically for DXUnit sync-many)
 
 ---
 
-## 6) Data
+## 6) DXUnitRecord specifics
 
-`Data` contains **only payload**. No execution instructions.
+- A DXUnit record carries its columns as dynamic fields (e.g., `Name`, `DisplayValue`, `Kind`).
+- Nested elements live in `DXElements` as a dictionary:
+  - key = element type name
+  - value = `DXDataBlock<DXElementRecord>`
+- Nested element blocks usually **omit** `DXUnitContext` (context is the parent unit).
+- Each nested `DXElementRecord` still includes `DXUnitID` (must match the parent unit ID).
 
-### 6.1 Common pattern
+---
+
+## 7) DXElementRecord specifics
+
+- `DXUnitID` is required.
+- If the element is **standalone** (top-level block with `Kind = DXElement`), you must provide `Meta.DXUnitContext`.
+- `Delete` references may include extra fields (e.g., `DXUnitID`) in `DXDeleteRef.Fields`.
+
+---
+
+## 8) DXEnumRecord specifics
+
+- `Key` and `Value` are the primary fields.
+- If `Meta.Type` is omitted, each enum record **must** set its own `Type`.
+- If `Meta.Type` is present, record-level `Type` is optional and may override.
+- Other enum columns (if any) are captured in `Fields`.
+
+---
+
+## 9) Validation checklist
+
+- `Meta.Kind` is present and is one of `DXUnit`, `DXElement`, `DXEnum`.
+- `Meta.Type` is present for DXUnit/DXElement blocks; for DXEnum it can be omitted only if every record has `Type`.
+- For standalone DXElement blocks, `Meta.DXUnitContext` is present.
+- `Upsert`/`Delete` accept single object or array. If `IsMulti = true`, prefer array; if `IsMulti = false`, allow single object.
+- If `IsRequired = true`, `Upsert` must exist (and must not be empty for multi).
+- DXUnit records:
+  - `DXElements` keys are element type names.
+  - Nested blocks must have `Meta.Kind = DXElement`.
+  - Each nested element record has `DXUnitID` equal to the parent unit ID.
+- DXElement records:
+  - `DXUnitID` is required.
+- DXEnum records:
+  - `Key` and `Value` are required.
+  - `Type` resolves from `Meta.Type` or record `Type` when Meta is missing.
+- Delete refs:
+  - `ID` is required.
+  - Extra fields are allowed in `DXDeleteRef.Fields` for disambiguation.
+
+---
+
+## 10) Examples (from DXCore migration scripts)
+
+### 10.1 DXUnit with nested DXElements (01_01_0002_DXCore_DXUnitDefinitionUnit.unit)
 
 ```json
-"Data": {
-  "Upsert": [ ... ],
-  "Delete": [ ... ]
+{
+  "Meta": {
+    "Kind": "DXUnit",
+    "Type": "DXUnitDefinitionUnit",
+    "Op": "Patch",
+    "IsMulti": true,
+    "IsRequired": false
+  },
+  "Data": {
+    "Upsert": [
+      {
+        "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "Name": "DXObjectDefinitionUnit",
+        "DisplayValue": "Name",
+        "Kind": 1,
+        "DXElements": {
+          "DXColumnDefinitionElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXColumnDefinitionElement",
+              "Op": "Patch",
+              "IsMulti": true,
+              "IsRequired": false
+            },
+            "Data": {
+              "Upsert": [
+                {
+                  "ID": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
+                  "TimeStamp": "2021-10-02T00:00:00",
+                  "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+                  "ColumnType": 3,
+                  "Name": "Name",
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "Length": 100
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
 }
 ```
 
-- `Upsert`: objects to create or update
-- `Delete`: references to remove (shape depends on your engine; usually `{ "ID": "..." }` or a dedicated `...DeleteRef`)
+### 10.2 DXEnum values with per-record Type (01_01_0005_DXCore_DXEnumDefinitionUnit.enum)
 
----
+```json
+{
+  "Meta": {
+    "Kind": "DXEnum",
+    "Op": "Patch",
+    "IsMulti": true,
+    "IsRequired": false
+  },
+  "Data": {
+    "Upsert": [
+      {
+        "Type": "DXElementInUnitTypeEnum",
+        "ID": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "Key": 1,
+        "Value": "SingleMandatory"
+      },
+      {
+        "Type": "DXElementInUnitTypeEnum",
+        "ID": "08e793f0-07c9-4fc5-818f-515d74731b65",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "Key": 2,
+        "Value": "SingleOptional"
+      }
+    ]
+  }
+}
+```
 
-## 7) Examples
-
-### 7.1 DXElement — Patch, Many, not required
+### 10.3 Standalone DXElement block (01_01_0006_DXCore_DXElementToUnitElement.element)
 
 ```json
 {
@@ -150,86 +296,12 @@ Full-set operation:
         "RelationType": 4,
         "TargetDXUnit": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577"
       }
-    ],
-    "Delete": [
-      { "ID": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" }
     ]
   }
 }
 ```
 
-### 7.2 DXUnit — Sync, Many, required (full set)
-
-```json
-{
-  "Meta": {
-    "Kind": "DXUnit",
-    "Type": "DXUnitDefinitionUnit",
-    "Op": "Sync",
-    "IsMulti": true,
-    "IsRequired": true
-  },
-  "Data": {
-    "Upsert": [
-      {
-        "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Name": "DXObjectDefinitionUnit",
-        "DisplayValue": "Name",
-        "Kind": 1
-      }
-    ]
-  }
-}
-```
-
-### 7.3 DXUnit — Sync, Many with DXFilter (scoped sync)
-
-```json
-{
-  "Meta": {
-    "Kind": "DXUnit",
-    "Type": "DXUnitDefinitionUnit",
-    "Op": "Sync",
-    "IsMulti": true,
-    "IsRequired": true,
-    "DXFilter": "Kind = 1 AND Name LIKE 'DX%DefinitionUnit'"
-  },
-  "Data": {
-    "Upsert": [
-      { "ID": "...", "TimeStamp": "...", "Name": "DXUnitDefinitionUnit", "Kind": 1 }
-    ]
-  }
-}
-```
-
-### 7.4 DXEnum — Patch, Many, required
-
-```json
-{
-  "Meta": {
-    "Kind": "DXEnum",
-    "Type": "DXColumnTypeEnum",
-    "Op": "Patch",
-    "IsMulti": true,
-    "IsRequired": true
-  },
-  "Data": {
-    "Upsert": [
-      {
-        "ID": "b1477a09-7d88-4e77-9b57-98a8e31eab27",
-        "TimeStamp": "2021-10-02T00:00:00",
-        "Key": 3,
-        "Value": "String"
-      }
-    ]
-  }
-}
-```
-
-### 7.5 Single object forms
-
-#### Exactly one (single required)
+### 10.4 DXUnit inheritance init (01_01_0004_DXCore_DXInheritanceInitCore.unit)
 
 ```json
 {
@@ -237,63 +309,19 @@ Full-set operation:
     "Kind": "DXUnit",
     "Type": "DXInheritanceInitCore",
     "Op": "Patch",
-    "IsMulti": false,
-    "IsRequired": true
-  },
-  "Data": {
-    "Upsert": {
-      "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
-      "TimeStamp": "2021-10-02T00:00:00",
-      "BaseDXUnit": "DXObjectDefinitionUnit",
-      "ChildDXUnit": "DXUnitDefinitionUnit"
-    }
-  }
-}
-```
-
-#### Optional single (zero-or-one)
-
-```json
-{
-  "Meta": {
-    "Kind": "DXElement",
-    "Type": "DXUniqueColumnsElement",
-    "DXUnitContext": "DXRelationDefinitionUnit",
-    "Op": "Patch",
-    "IsMulti": false,
+    "IsMulti": true,
     "IsRequired": false
   },
   "Data": {
-    "Upsert": null
+    "Upsert": [
+      {
+        "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "BaseDXUnit": "DXObjectDefinitionUnit",
+        "ChildDXUnit": "DXUnitDefinitionUnit"
+      }
+    ]
   }
-}
-```
-
----
-
-## 8) Rules & invariants
-
-- `DXUnitContext` is **required** when `Kind = DXElement` and the element is processed standalone.
-- `Meta` must not contain business fields.
-- `Data` must not contain execution semantics.
-- Object payloads should include `ID` and `TimeStamp` (and `DXUnitID` for DXElements) according to your domain rules.
-
----
-
-## 9) Minimal C# Meta model
-
-```csharp
-public sealed class DXMeta
-{
-    public string Kind { get; set; } = null!;          // "DXUnit" | "DXElement" | "DXEnum"
-    public string Type { get; set; } = null!;          // concrete type name
-
-    public string? Op { get; set; }                    // "Sync" | "Patch"
-    public bool? IsMulti { get; set; }                 // replaces Cardinality
-    public bool? IsRequired { get; set; }              // replaces Cardinality
-
-    public string? DXFilter { get; set; }              // selection filter (dxsql)
-    public string? DXUnitContext { get; set; }         // for standalone DXElement
 }
 ```
 
