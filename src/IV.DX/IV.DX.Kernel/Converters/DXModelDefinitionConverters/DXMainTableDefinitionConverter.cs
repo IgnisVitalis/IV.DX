@@ -28,13 +28,13 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         }
         
         
-        public static DXMainTableDefinition ToDXTableDefinition(string dxUnitTypeName, HashSet<DXColumnDefinitionElement> columns)
+        public static DXMainTableDefinition ToDXTableDefinition(string dxUnitTypeName, HashSet<string> columnNames)
         {
             DXMainTableDefinition dxElementDefinition = new DXMainTableDefinition(dxUnitTypeName, dxUnitTypeName);
          
-            foreach (var column in columns)
+            foreach (var columnName in columnNames)
             {
-                DXColumnDefinition item = new DXColumnDefinition(column.Name, new DXColumnAttribute(column.Name));
+                DXColumnDefinition item = new DXColumnDefinition(columnName, new DXColumnAttribute(columnName));
 
                 dxElementDefinition.AddPropertyDefinition(item);
             }

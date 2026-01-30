@@ -129,10 +129,11 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var topLevelItem = dxUnitHierarchy.Items.First();
 
-            var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, topLevelItem.DXUnit.DXColumnDefinitionElement.Announced);
+            var dxUnitColumnNames = dxUnitHierarchy.Items.SelectMany(x => x.DXUnit.DXColumnDefinitionElement.Announced.Select(y => y.Name)).Distinct().ToHashSet();
+
+            var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, dxUnitColumnNames);
 
             DXDataSetDefinition result = new DXDataSetDefinition(ownItem);
-
 
             foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
             {
@@ -146,49 +147,49 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                           DXTableDefinitionConverter.ToDXTableDefinition(
                               item.Name,
                               dxUnitTypeNameLocal,
-                              item.DXColumnDefinitionElement.Announced,
+                              item.DXColumnDefinitionElement.Announced.Select(x => x.Name).ToHashSet(),
                               true);
 
                     result.AddToSingleItemDefinitions(singleItemDefinition);
                 }
-                
+
                 foreach (var item in dxUnitHierarchyItem.SingleOptional)
                 {
                     var singleItemDefinition =
                           DXTableDefinitionConverter.ToDXTableDefinition(
                               item.Name,
                               dxUnitTypeNameLocal,
-                              item.DXColumnDefinitionElement.Announced,
+                              item.DXColumnDefinitionElement.Announced.Select(x => x.Name).ToHashSet(),
                               false);
 
                     result.AddToSingleItemDefinitions(singleItemDefinition);
                 }
-                
+
                 foreach (var item in dxUnitHierarchyItem.MultiMandatory)
                 {
                     var singleItemDefinition =
                           DXTableDefinitionConverter.ToDXTableDefinition(
                               item.Name,
                               dxUnitTypeNameLocal,
-                              item.DXColumnDefinitionElement.Announced,
+                              item.DXColumnDefinitionElement.Announced.Select(x => x.Name).ToHashSet(),
                               true);
 
                     result.AddToMultiItemDefinitions(singleItemDefinition);
                 }
 
-                  
+
                 foreach (var item in dxUnitHierarchyItem.MultiOptional)
                 {
                     var singleItemDefinition =
                           DXTableDefinitionConverter.ToDXTableDefinition(
                               item.Name,
                               dxUnitTypeNameLocal,
-                              item.DXColumnDefinitionElement.Announced,
+                              item.DXColumnDefinitionElement.Announced.Select(x => x.Name).ToHashSet(),
                               false);
 
                     result.AddToMultiItemDefinitions(singleItemDefinition);
                 }
-               
+
             }
 
             return result;

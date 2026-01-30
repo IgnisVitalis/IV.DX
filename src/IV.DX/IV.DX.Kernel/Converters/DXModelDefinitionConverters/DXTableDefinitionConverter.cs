@@ -54,14 +54,14 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         public static DXTableDefinition ToDXTableDefinition(
             string dxElementTypeName, 
             string dxUnitTypeName, 
-            HashSet<DXColumnDefinitionElement> columns, 
+            HashSet<string> columnNames, 
             bool isRequired)
         {
             DXTableDefinition dxElementDefinition = new DXTableDefinition(dxUnitTypeName, dxElementTypeName, dxElementTypeName, isRequired);
 
-            foreach (var column in columns)
+            foreach (var columnName in columnNames)
             {          
-                DXColumnDefinition item = new DXColumnDefinition(column.Name, new DXColumnAttribute(column.Name));
+                DXColumnDefinition item = new DXColumnDefinition(columnName, new DXColumnAttribute(columnName));
 
                 dxElementDefinition.AddPropertyDefinition(item);
             }
