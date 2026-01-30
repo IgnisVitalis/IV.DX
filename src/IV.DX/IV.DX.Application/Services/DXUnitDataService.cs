@@ -456,7 +456,7 @@ namespace IV.DX.Application.Services
                     if (record == null) continue;
 
                     var itemIsExisting = !string.IsNullOrWhiteSpace(typeName)
-                        && coreRepo.IsItemExisting(typeName, record.ID);
+                        && await this.IsItemExistingAsync(typeName, record.ID);
 
                     var singleBlock = new DXDataBlock<DXUnitRecord>
                     {
