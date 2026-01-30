@@ -1,18 +1,32 @@
 [
-    {
-        "S_Type": "DXElementDefinitionUnit",
-        "ID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
-        "TimeStamp": "2025-12-01T10:41:22.915737Z",
-        "Name": "DXQueryColumnElement",
-        "DisplayValue": null,
-        "Kind": 1,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
+          "TimeStamp": "2025-12-01T10:41:22.915737Z",
+          "Name": "DXQueryColumnElement",
+          "DisplayValue": null,
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "0973ae90-417c-45f5-ad47-95ce9cd9c4ef",
                     "TimeStamp": "2025-12-01T10:41:22.90784Z",
                     "Name": "Name",
@@ -23,9 +37,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
                     "ColumnType": 3
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "af47fb88-e7df-46a5-9ba1-f91a470dc89f",
                     "TimeStamp": "2025-12-01T10:41:22.908031Z",
                     "Name": "Expression",
@@ -36,9 +49,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
                     "ColumnType": 4
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "f73a45ec-2e52-4eeb-a7fc-ced3c73cc06c",
                     "TimeStamp": "2025-12-01T10:41:22.908044Z",
                     "Name": "Order",
@@ -49,9 +61,13 @@
                     "DefaultValue": null,
                     "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
                     "ColumnType": 8
-                }
-            ],
-            "Deleted": []
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

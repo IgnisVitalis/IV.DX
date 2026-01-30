@@ -1,18 +1,32 @@
 [
-    {
-        "S_Type": "DXUnitDefinitionUnit",
-        "ID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
-        "TimeStamp": "2025-12-01T10:41:45.778822Z",
-        "Name": "DXQueryUnit",
-        "DisplayValue": "Name",
-        "Kind": 1,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
+          "TimeStamp": "2025-12-01T10:41:45.778822Z",
+          "Name": "DXQueryUnit",
+          "DisplayValue": "Name",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "d574c12a-0c51-47f9-aa52-653181d44a96",
                     "TimeStamp": "2025-12-01T11:09:56.64243Z",
                     "Name": "Name",
@@ -23,9 +37,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
                     "ColumnType": 3
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "6e4d61bf-d861-4c0f-9dd8-d6096868ae98",
                     "TimeStamp": "2025-12-01T11:09:56.64247Z",
                     "Name": "Description",
@@ -36,32 +49,41 @@
                     "DefaultValue": null,
                     "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
                     "ColumnType": 4
-                }
-            ],
-            "Deleted": []
-        },
-
-        "DXElementInUnitDefinitionElement": {
-            "S_Type": "DXElementInUnitDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXElementInUnitDefinitionElement",
+                  }
+                ]
+              }
+            },
+            "DXElementInUnitDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXElementInUnitDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "3c511ea9-3b2a-4d69-ac15-3763276960f2",
                     "TimeStamp": "2025-12-01T10:41:45.781487Z",
                     "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
                     "RelationType": 3,
                     "DXElementDefinitionUnit": "1954b32e-d486-418f-84e3-5e6ce515d2ff"
-                }
-            ],
-            "Deleted": []
-        },
-        "DXUnitToUnitRelationElement": {
-            "S_Type": "DXUnitToUnitRelationElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  }
+                ]
+              }
+            },
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "cc870b14-9699-42d1-8565-6e57406c1f5b",
                     "TimeStamp": "2025-12-01T10:38:37.560297Z",
                     "OwnRelationName": "DXQueries",
@@ -69,9 +91,13 @@
                     "DXUnitID": "080b018b-8b38-45a7-a9db-0eb0d74c132a",
                     "RelationType": 4,
                     "TargetDXUnit": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"
-                }
-            ],
-            "Deleted": []
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

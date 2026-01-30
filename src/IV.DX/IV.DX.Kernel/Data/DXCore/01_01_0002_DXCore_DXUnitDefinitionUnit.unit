@@ -134,7 +134,7 @@
                   {
                     "ID": "4bad3482-fa7e-4fea-83bb-7c026fe4b8a1",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "00b29615-f32e-457e-81c6-606a0b4fd4f7"
                   },
@@ -144,6 +144,37 @@
                     "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
                     "RelationType": 4,
                     "DXElementDefinitionUnit": "65bd9684-6709-409a-a46b-7c605dcb715b"
+                  }
+                ]
+              }
+            },
+            "DXUnitToElementRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToElementRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
+                    "ID": "b9e1a4b5-08b8-4385-9412-ce5849d38d29",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
+                    "RelationType": 3,
+                    "TargetDXElement": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
+                    "OwnRelationName": "TargetDXUnit",
+                    "TargetRelationName": "RelatedDXUnits"
+                  },
+                  {
+                    "ID": "d19622f4-1acd-402c-8f27-cc1fd6def5c5",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
+                    "RelationType": 3,
+                    "TargetDXElement": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
+                    "OwnRelationName": "TargetDXUnit",
+                    "TargetRelationName": "RelatedDXElements"
                   }
                 ]
               }
@@ -366,37 +397,6 @@
                     "Name": "RelationColumnTypeLeft",
                     "EnumType": "971d538a-1489-483a-bc84-86596ed0c51a",
                     "EnumKey": "884bb1f2-9eaf-4fa1-8bc1-9057edf5b5d2"
-                  }
-                ]
-              }
-            },
-            "DXUnitToElementRelationElement": {
-              "Meta": {
-                "Kind": "DXElement",
-                "Type": "DXUnitToElementRelationElement",
-                "Op": "Patch",
-                "IsMulti": true,
-                "IsRequired": false
-              },
-              "Data": {
-                "Upsert": [
-                  {
-                    "ID": "b9e1a4b5-08b8-4385-9412-ce5849d38d29",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
-                    "RelationType": 3,
-                    "TargetDXElement": "00b29615-f32e-457e-81c6-606a0b4fd4f7",
-                    "OwnRelationName": "TargetDXUnit",
-                    "TargetRelationName": "RelatedDXUnits"
-                  },
-                  {
-                    "ID": "d19622f4-1acd-402c-8f27-cc1fd6def5c5",
-                    "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "9fec9aab-c0d9-4453-90e7-06b023aa6faf",
-                    "RelationType": 3,
-                    "TargetDXElement": "cffcaa48-ebe0-4598-9bff-2bfefefb8513",
-                    "OwnRelationName": "TargetDXUnit",
-                    "TargetRelationName": "RelatedDXElements"
                   }
                 ]
               }

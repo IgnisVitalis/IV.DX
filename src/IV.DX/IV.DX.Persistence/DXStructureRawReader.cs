@@ -14,7 +14,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXElementDefinitionUnitItems.Items;
 
-            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXElementDefinitionUnit>();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXElementDefinitionUnit");
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXElementDefinitionUnit>(dxUnitInheritance);
 
@@ -30,7 +30,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXUnitDefinitionUnitItems.Items;
 
-            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXUnitDefinitionUnit>();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXUnitDefinitionUnit");
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXUnitDefinitionUnit>(dxUnitInheritance);
 
@@ -46,7 +46,7 @@ namespace IV.DX.Persistence
             if (DXMaintenanceToken.IsCoreInitializing)
                 return DXEnumDefinitionUnitItems.Items;
 
-            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXEnumDefinitionUnit>();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXEnumDefinitionUnit");
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXEnumDefinitionUnit>(dxUnitInheritance);
 
@@ -67,7 +67,7 @@ namespace IV.DX.Persistence
 
             // Enumerable.Empty<DXRelationDefinitionUnit>();
 
-            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXRelationDefinitionUnit>();
+            var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXRelationDefinitionUnit");
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(dxUnitInheritance);
 
             var result = this.GetItems(dxModeDefinition, DXLoadingType.Full);

@@ -2,5 +2,6 @@
     "DXCore/01_01_0000_DXCore_DXEnumDefinitionUnit.unit",
     "DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.unit",
     "DXCore/01_01_0002_DXCore_DXUnitDefinitionUnit.unit",
-    "DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.unit"
+    "DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.unit",
+    "DXCore/01_01_0006_DXCore_DXElementToUnitElement.element"
 ]

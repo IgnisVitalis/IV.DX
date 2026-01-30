@@ -1,18 +1,32 @@
 [
-    {
-        "S_Type": "DXUnitDefinitionUnit",
-        "ID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
-        "TimeStamp": "2025-12-11T08:47:29.172436Z",
-        "Name": "DXFilterUnit",
-        "DisplayValue": "Name",
-        "Kind": 1,
-
-        "DXColumnDefinitionElement": {
-            "S_Type": "DXColumnDefinitionElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "ID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
+          "TimeStamp": "2025-12-11T08:47:29.172436Z",
+          "Name": "DXFilterUnit",
+          "DisplayValue": "Name",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "3e38174c-e64d-462b-b34d-3a67166472bd",
                     "TimeStamp": "2025-12-11T08:46:48.384022Z",
                     "Name": "Name",
@@ -23,9 +37,8 @@
                     "DefaultValue": null,
                     "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
                     "ColumnType": 3
-                },
-                {
-                    "S_Type": "DXColumnDefinitionElement",
+                  },
+                  {
                     "ID": "cbc4cb07-f50b-40b6-af9e-80cb1bdb1246",
                     "TimeStamp": "2025-12-11T08:46:48.384022Z",
                     "Name": "Expression",
@@ -36,16 +49,21 @@
                     "DefaultValue": null,
                     "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
                     "ColumnType": 4
-                }
-            ],
-            "Deleted": []
-        },
-        "DXUnitToUnitRelationElement": {
-            "S_Type": "DXUnitToUnitRelationElement",
-            "Mode": 1,
-            "Announced": [
-                {
-                    "S_Type": "DXUnitToUnitRelationElement",
+                  }
+                ]
+              }
+            },
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Upsert": [
+                  {
                     "ID": "b044aa5e-191f-48f3-9438-713e7c3ee6b1",
                     "TimeStamp": "2025-12-11T08:47:29.177372Z",
                     "OwnRelationName": "DXFilters",
@@ -53,9 +71,13 @@
                     "DXUnitID": "bc1b495f-ace9-4b83-a08f-46247badfd08",
                     "RelationType": 4,
                     "TargetDXUnit": "080b018b-8b38-45a7-a9db-0eb0d74c132a"
-                }
-            ],
-            "Deleted": []
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     }
+  }
 ]

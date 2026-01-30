@@ -25,6 +25,7 @@
       <EmbeddedResource Include="Data\DXCore\01_01_0003_DXCore_DXRelationDefinitionUnit.unit" />
       <EmbeddedResource Include="Data\DXCore\01_01_0004_DXCore_DXInheritanceInitCore.unit" />
       <EmbeddedResource Include="Data\DXCore\01_01_0005_DXCore_DXEnumDefinitionUnit.enum" />
+      <EmbeddedResource Include="Data\DXCore\01_01_0006_DXCore_DXElementToUnitElement.element" />
     </ItemGroup>
 
     <ItemGroup>
