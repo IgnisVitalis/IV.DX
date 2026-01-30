@@ -18,7 +18,7 @@
                 "Kind": "DXElement",
                 "Type": "TBookMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -43,7 +43,7 @@
                 "Kind": "DXElement",
                 "Type": "TBookMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -68,7 +68,7 @@
                 "Kind": "DXElement",
                 "Type": "TBookMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {

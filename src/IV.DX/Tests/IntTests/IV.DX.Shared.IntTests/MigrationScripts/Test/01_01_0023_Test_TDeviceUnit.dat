@@ -19,7 +19,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -46,7 +46,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -73,7 +73,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -100,7 +100,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -127,7 +127,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -154,7 +154,7 @@
                 "Kind": "DXElement",
                 "Type": "TDeviceMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {

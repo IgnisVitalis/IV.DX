@@ -19,7 +19,7 @@
                 "Kind": "DXElement",
                 "Type": "TPassportMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -37,7 +37,6 @@
         },
         {
           "ID": "459276b0-69db-43da-bf9d-c2683c4b4d39",
-          "TimeStamp": "2021-10-02T00:00:00",
           "User": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
           "DXElements": {
             "TPassportMainElement": {
@@ -45,7 +44,7 @@
                 "Kind": "DXElement",
                 "Type": "TPassportMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -63,7 +62,6 @@
         },
         {
           "ID": "bd56ffdd-0d30-4d9f-b879-7875162fc7b6",
-          "TimeStamp": "2021-10-02T00:00:00",
           "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
           "DXElements": {
             "TPassportMainElement": {
@@ -71,7 +69,7 @@
                 "Kind": "DXElement",
                 "Type": "TPassportMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {

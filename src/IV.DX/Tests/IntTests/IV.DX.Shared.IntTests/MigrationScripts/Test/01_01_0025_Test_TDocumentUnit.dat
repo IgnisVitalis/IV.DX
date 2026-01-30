@@ -19,7 +19,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -45,7 +45,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -71,7 +71,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -96,7 +96,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -121,7 +121,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
@@ -147,7 +147,7 @@
                 "Kind": "DXElement",
                 "Type": "TDocumentMainElement",
                 "Op": "Patch",
-                "IsMulti": true,
+                "IsMulti": false,
                 "IsRequired": false
               },
               "Data": {
