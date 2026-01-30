@@ -8,11 +8,10 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
 {
     internal static class DXMainTableDefinitionConverter
     {
-        public static DXMainTableDefinition ToDXTableDefinition(string dxUnitTypeName, Type dxElementType, bool isRequired)
+        public static DXMainTableDefinition ToDXTableDefinition(string dxUnitTypeName, Type dxElementType)
         {
-            DXMainTableDefinition dxElementDefinition = new DXMainTableDefinition(dxUnitTypeName, dxUnitTypeName, isRequired);
-            JObject jObject = new JObject();
-
+            DXMainTableDefinition dxElementDefinition = new DXMainTableDefinition(dxUnitTypeName, dxUnitTypeName);
+        
             var properties = dxElementType.GetProperties()
                 .Where(x => AttributeReader.GetAttribute<DXColumnAttribute>(x) != null);
 
@@ -21,6 +20,21 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                 var attribute = AttributeReader.GetAttribute<DXColumnAttribute>(property);
 
                 DXColumnDefinition item = new DXColumnDefinition(property.Name, attribute);
+
+                dxElementDefinition.AddPropertyDefinition(item);
+            }
+
+            return dxElementDefinition;
+        }
+        
+        
+        public static DXMainTableDefinition ToDXTableDefinition(string dxUnitTypeName, HashSet<DXColumnDefinitionElement> columns)
+        {
+            DXMainTableDefinition dxElementDefinition = new DXMainTableDefinition(dxUnitTypeName, dxUnitTypeName);
+         
+            foreach (var column in columns)
+            {
+                DXColumnDefinition item = new DXColumnDefinition(column.Name, new DXColumnAttribute(column.Name));
 
                 dxElementDefinition.AddPropertyDefinition(item);
             }

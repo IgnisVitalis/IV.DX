@@ -4,6 +4,7 @@ namespace IV.DX.Kernel.Models
     {
         public IList<DXUnitInheritanceItem> Items { get; } = new List<DXUnitInheritanceItem>();
         public IList<DXUnitInheritanceItem> ItemsReverted { get { return this.Items.Reverse().ToList(); } }
+
         public void Add(DXUnitInheritanceItem item)
         {
             this.Items.Add(item);

@@ -256,54 +256,9 @@ namespace IV.DX.Persistence
 
             var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnit);
 
-            List<DXElementDefinitionUnit> singleMandatoryDXElements = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> singleOptionalDXElements = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> multiMandatoryDXElements = new List<DXElementDefinitionUnit>();
-            List<DXElementDefinitionUnit> multiOptionalDXElements = new List<DXElementDefinitionUnit>();
+            var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(type, dxUnitHierarchy);
 
-            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
-            {
-                var dxUnit = dxUnitHierarchyItem.DXUnit;
-
-                var singleMandatoryDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleMandatory);
-
-                if (singleMandatoryDXElementsTemp != null)
-                {
-                    singleMandatoryDXElements.AddRange(singleMandatoryDXElementsTemp);
-                }
-
-                var singleOptionalDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.SingleOptional);
-
-                if (singleOptionalDXElementsTemp != null)
-                {
-                    singleOptionalDXElements.AddRange(singleOptionalDXElementsTemp);
-                }
-
-                var multiMandatoryDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiMandatory);
-
-                if (multiMandatoryDXElementsTemp != null)
-                {
-                    multiMandatoryDXElements.AddRange(multiMandatoryDXElementsTemp);
-                }
-
-                var multiOptionalDXElementsTemp = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnit, DXElementInUnitTypeEnum.MultiOptional);
-
-                if (multiOptionalDXElementsTemp != null)
-                {
-                    multiOptionalDXElements.AddRange(multiOptionalDXElementsTemp);
-                }
-            }
-
-            var modelDefinition = DXModelDefinitionHelper.BuildModelDefinition(
-                mainDXUnit,
-                dxUnitHierarchy.Items.Select(x => x.DXUnit).Where(x => x != mainDXUnit),
-                _dxStructureCache.DXRelations,
-                singleMandatoryDXElements,
-                singleOptionalDXElements,
-                multiMandatoryDXElements,
-                multiOptionalDXElements);
-
-            return modelDefinition;
+            return dxUnitDefinition;
         }
 
         public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, DXLoadingType typeOfLoading)
@@ -543,7 +498,7 @@ namespace IV.DX.Persistence
 
         public bool IsItemExisting(string type, Guid objectId)
         {
-            DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(type, type, false));
+            DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(type, type));
 
             var item = this.GetItem(dd, objectId, DXLoadingType.Base);
 

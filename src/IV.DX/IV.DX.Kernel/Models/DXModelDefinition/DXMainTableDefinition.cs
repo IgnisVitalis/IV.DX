@@ -8,12 +8,10 @@ namespace IV.DX.Kernel.Models
         private readonly List<DXColumnDefinition> _items;
         public string Name { get; }
         public string DXUnitType { get; }
-        public bool IsRequired { get; }
 
-        public DXMainTableDefinition(string dxUnitType, string name, bool isRequired)
+        public DXMainTableDefinition(string dxUnitType, string name)
         {
             this.Name = name;
-            this.IsRequired = isRequired;
             this.DXUnitType = dxUnitType;
 
             _items = new List<DXColumnDefinition>()
@@ -57,7 +55,7 @@ namespace IV.DX.Kernel.Models
 
         public DXMainTableDefinition DeepClone()
         {
-            var clone = new DXMainTableDefinition(this.DXUnitType, this.Name, this.IsRequired);
+            var clone = new DXMainTableDefinition(this.DXUnitType, this.Name);
             clone.AddPropertyDefinitions(_items);
 
             return clone;

@@ -53,7 +53,7 @@ namespace IV.DX.Persistence
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
             // TODO : need to rework using info about relation type
-            var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, dxElementName, typeof(T), false);
+            var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxElementName, dxUnitTypeName, typeof(T), false);
 
             var result = dxElementCoreRepo.GetItem(dxElement, id);
 

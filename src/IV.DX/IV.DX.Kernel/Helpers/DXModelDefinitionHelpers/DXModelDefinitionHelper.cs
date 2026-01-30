@@ -21,7 +21,7 @@ namespace IV.DX.Kernel.Helpers.DXModelDefinitionHelpers
             if (dxUnit == null)
                 return null;
 
-            var ownDXElementDefinition = new DXMainTableDefinition(dxUnit.Name, dxUnit.Name, true);
+            var ownDXElementDefinition = new DXMainTableDefinition(dxUnit.Name, dxUnit.Name);
 
             List<DXColumnDefinition> props = new List<DXColumnDefinition>();
 

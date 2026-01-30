@@ -24,7 +24,7 @@ namespace IV.DX.Persistence
 
         bool IDXEnumCoreRepository.IsItemExisting(string typeName, Guid objectId)
         {
-            DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(typeName, typeName, false));
+            DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(typeName, typeName));
 
             var item = this.GetItem(dd, objectId, DXLoadingType.Base);
 

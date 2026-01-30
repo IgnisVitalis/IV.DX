@@ -18,7 +18,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var typeName = dxModel.DXMainElement.Attribute.Type;
 
-            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName, true);
+            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName);
 
             mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
                 new DXColumnDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
@@ -58,7 +58,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var typeName = dxModel.DXMainElement.Attribute.Type;
 
-            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName, true);
+            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName);
 
             mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
                 new DXColumnDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
@@ -80,7 +80,7 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
         {
             var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(type);
 
-            var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, type, true);
+            var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, type);
 
             DXDataSetDefinition result = new DXDataSetDefinition(ownItem);
 
@@ -122,57 +122,76 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
                 }
             }
 
-            // var singleItemDefinitions = singleItemInfos.Select(x =>
-            // {
-            //     var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
-
-            //     return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType, isReqruired != null);
-            // }).ToList();
-
-            // var mutliItemDefinitions = multiItemInfos.Select(x =>
-            // {
-            //     var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
-
-            //     return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
-            // }).ToList();
-
-
-            // result.AddToSingleItemDefinitions(singleItemDefinitions);
-            // result.AddToMultiItemDefinitions(mutliItemDefinitions);
-
             return result;
         }
 
-        // public static DXDataSetDefinition ToDXModelDefinition(this Type type)
-        // {
-        //     var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(type);
+        public static DXDataSetDefinition ToDXModelDefinition(this string dxUnitTypeName, DXUnitInheritance dxUnitHierarchy)
+        {
+            var topLevelItem = dxUnitHierarchy.Items.First();
 
-        //     var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, type, true);
+            var ownItem = DXMainTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, topLevelItem.DXUnit.DXColumnDefinitionElement.Announced);
 
-        //     DXDataSetDefinition result = new DXDataSetDefinition(ownItem);
-
-        //     var singleItemInfos = AttributeReader.GetSingleItemInfos(type);
-        //     var multiItemInfos = AttributeReader.GetMultiItemInfos(type);
-
-        //     var singleItemDefinitions = singleItemInfos.Select(x =>
-        //     {
-        //         var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
-
-        //         return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType, isReqruired != null);
-        //     }).ToList();
-
-        //     var mutliItemDefinitions = multiItemInfos.Select(x =>
-        //     {
-        //         var isReqruired = AttributeReader.GetAttribute<DXRequiredAttribute>(x);
-
-        //         return DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, x.Name, x.PropertyType.GenericTypeArguments[0], isReqruired != null);
-        //     }).ToList();
+            DXDataSetDefinition result = new DXDataSetDefinition(ownItem);
 
 
-        //     result.AddToSingleItemDefinitions(singleItemDefinitions);
-        //     result.AddToMultiItemDefinitions(mutliItemDefinitions);
+            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
+            {
+                var dxUnitTypeNameLocal = dxUnitHierarchyItem.DXUnit.Name;
 
-        //     return result;
-        // }
+                var dxUnit = dxUnitHierarchyItem.DXUnit;
+
+                foreach (var item in dxUnitHierarchyItem.SingleMandatory)
+                {
+                    var singleItemDefinition =
+                          DXTableDefinitionConverter.ToDXTableDefinition(
+                              item.Name,
+                              dxUnitTypeNameLocal,
+                              item.DXColumnDefinitionElement.Announced,
+                              true);
+
+                    result.AddToSingleItemDefinitions(singleItemDefinition);
+                }
+                
+                foreach (var item in dxUnitHierarchyItem.SingleOptional)
+                {
+                    var singleItemDefinition =
+                          DXTableDefinitionConverter.ToDXTableDefinition(
+                              item.Name,
+                              dxUnitTypeNameLocal,
+                              item.DXColumnDefinitionElement.Announced,
+                              false);
+
+                    result.AddToSingleItemDefinitions(singleItemDefinition);
+                }
+                
+                foreach (var item in dxUnitHierarchyItem.MultiMandatory)
+                {
+                    var singleItemDefinition =
+                          DXTableDefinitionConverter.ToDXTableDefinition(
+                              item.Name,
+                              dxUnitTypeNameLocal,
+                              item.DXColumnDefinitionElement.Announced,
+                              true);
+
+                    result.AddToMultiItemDefinitions(singleItemDefinition);
+                }
+
+                  
+                foreach (var item in dxUnitHierarchyItem.MultiOptional)
+                {
+                    var singleItemDefinition =
+                          DXTableDefinitionConverter.ToDXTableDefinition(
+                              item.Name,
+                              dxUnitTypeNameLocal,
+                              item.DXColumnDefinitionElement.Announced,
+                              false);
+
+                    result.AddToMultiItemDefinitions(singleItemDefinition);
+                }
+               
+            }
+
+            return result;
+        }
     }
 }
