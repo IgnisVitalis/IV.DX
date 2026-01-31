@@ -1,7 +1,6 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -366,18 +365,12 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            var dxModel = DXModelConverter.ToDXModel(jObject);
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            if (block == null)
+                throw new Exception("Invalid DXDataBlock payload.");
 
-            var objId = dxModel.DXMainElement.Item.ID;
-
-            if (await IsItemExistingAsync(dxModel.DXMainElement.Attribute.Type, objId, context, ct))
-            {
-                return await UpdateAsync(jObject, context, ct);
-            }
-            else
-            {
-                return await InsertAsync(jObject, context, ct);
-            }
+            var processed = await InsertOrUpdateAsync(block, context, ct);
+            return JObject.FromObject(processed);
         }
 
         public async Task<DXDataBlock<DXUnitRecord>> InsertAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = default, CancellationToken ct = default)
