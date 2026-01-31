@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.Data.Models
         {
             var text = ResourceReader.ReadEmbeddedText(
                 Assembly.GetAssembly(typeof(DXUnitAttribute)),
-                "Data/DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.unit");
+                "Data/DXCore/01_01_0001_DXCore_DXElementDefinitionUnit.dx");
 
             var blocks = JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(text)
                          ?? new List<DXDataBlock<DXUnitRecord>>();
