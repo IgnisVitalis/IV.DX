@@ -95,11 +95,42 @@ namespace IV.DX.Persistence
 
         public DXDataBlock<DXUnitRecord>? GetItemRecord(DXDataSetDefinition container, Guid id, DXLoadingType typeOfLoading)
         {
-            var model = GetItem(container, id, typeOfLoading);
-            if (model == null)
+            if (container == null)
                 return null;
 
-            return DXModelRecordConverter.ToBlock(model);
+            return this.RunRequest((conn) =>
+            {
+                var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
+                var dataTable = dataSet.Tables[container.MainElement.Name];
+
+                if (dataTable == null)
+                    throw new Exception($"Table '{container.MainElement.Name}' wouldn't load");
+
+                if (dataTable.Rows.Count == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    var dataRow = dataTable.Rows[0];
+                    var record = this.ConvertToDXUnitRecord(dataSet, dataRow, container);
+
+                    return new DXDataBlock<DXUnitRecord>
+                    {
+                        Meta = new DXMeta
+                        {
+                            Kind = "DXUnit",
+                            Type = container.MainElement.DXUnitType,
+                            Op = "Sync",
+                            IsMulti = true
+                        },
+                        Data = new DXData<DXUnitRecord>
+                        {
+                            Upsert = new List<DXUnitRecord> { record }
+                        }
+                    };
+                }
+            });
         }
 
 
@@ -258,11 +289,12 @@ namespace IV.DX.Persistence
 
         public DXDataBlock<DXUnitRecord>? GetItemRecord(string typeName, Guid objectId)
         {
-            var model = GetItem(typeName, objectId);
-            if (model == null)
+            var modelDefinition = this.GetModelDefinition(typeName);
+
+            if (modelDefinition == null)
                 return null;
 
-            return DXModelRecordConverter.ToBlock(model);
+            return this.GetItemRecord(modelDefinition, objectId, DXLoadingType.Full);
         }
 
         private DXDataSetDefinition GetModelDefinition(string type)
@@ -295,38 +327,207 @@ namespace IV.DX.Persistence
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName)
         {
-            var models = GetItems(typeName);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+            var modelDefinition = this.GetModelDefinition(typeName);
+
+            if (modelDefinition == null)
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                };
+
+            return GetItemsRecord(modelDefinition, DXLoadingType.Full);
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName, IEnumerable<Guid> objectIds)
         {
-            var models = GetItems(typeName, objectIds);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+            var modelDefinition = this.GetModelDefinition(typeName);
+
+            if (modelDefinition == null)
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                };
+
+            return GetItemsRecord(modelDefinition, objectIds, DXLoadingType.Full);
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName, string dxFilter)
         {
-            var models = GetItems(typeName, dxFilter);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+            var modelDefinition = this.GetModelDefinition(typeName);
+
+            if (modelDefinition == null)
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                };
+
+            return GetItemsRecord(modelDefinition, dxFilter, DXLoadingType.Full);
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, DXLoadingType typeOfLoading)
         {
-            var models = GetItems(container, typeOfLoading);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
+            return GetItemsRecord(container, string.Empty, typeOfLoading);
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading)
         {
-            var models = GetItems(container, objectIds, typeOfLoading);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
+            if (container == null || objectIds == null)
+            {
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = container?.MainElement?.DXUnitType, Op = "Sync", IsMulti = true },
+                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                };
+            }
+
+            if (!objectIds.Any())
+            {
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = container.MainElement.DXUnitType, Op = "Sync", IsMulti = true },
+                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                };
+            }
+
+            return this.RunRequest((conn) =>
+            {
+                var dataSet = this.PopulateDataSetForTargetDXUnits(container, objectIds, conn);
+                var dataTable = dataSet.Tables[container.MainElement.DXUnitType];
+
+                var items = dataTable.Rows.Cast<DataRow>()
+                    .Select(x => this.ConvertToDXUnitRecord(dataSet, x, container))
+                    .ToList();
+
+                dataSet.AcceptChanges();
+
+                return new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta
+                    {
+                        Kind = "DXUnit",
+                        Type = container.MainElement.DXUnitType,
+                        Op = "Sync",
+                        IsMulti = true
+                    },
+                    Data = new DXData<DXUnitRecord>
+                    {
+                        Upsert = items
+                    }
+                };
+            });
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, string dxFilter, DXLoadingType typeOfLoading)
         {
-            var models = GetItems(container, dxFilter, typeOfLoading);
-            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
+            string typeName = container.MainElement.DXUnitType;
+
+            var ids = this.GetItemIDs(typeName, dxFilter);
+
+            return this.GetItemsRecord(container, ids, typeOfLoading);
+        }
+
+        private DXUnitRecord ConvertToDXUnitRecord(DataSet dataSet, DataRow row, DXDataSetDefinition container)
+        {
+            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var mainItem = this.GetDXItem(row, container.MainElement);
+
+            var record = new DXUnitRecord
+            {
+                ID = id,
+                TimeStamp = mainItem.TimeStamp,
+                Fields = ConvertItemToFields(mainItem),
+                DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
+            };
+
+            foreach (var singleItem in container.SingleFragmentDefinitions)
+            {
+                var dataTable = dataSet.Tables[singleItem.Type];
+                var dataRow = dataTable.Rows.Cast<DataRow>()
+                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id);
+
+                if (dataRow == null)
+                    continue;
+
+                var dxItem = this.GetDXItem(dataRow, singleItem);
+                var elementRecord = new DXElementRecord
+                {
+                    ID = dxItem.ID,
+                    TimeStamp = dxItem.TimeStamp,
+                    DXUnitID = dxItem.DXUnitID,
+                    Fields = ConvertItemToFields(dxItem)
+                };
+
+                record.DXElements[singleItem.Name] = new DXDataBlock<DXElementRecord>
+                {
+                    Meta = new DXMeta
+                    {
+                        Kind = "DXElement",
+                        Type = singleItem.Name,
+                        Op = "Patch",
+                        IsMulti = false,
+                        IsRequired = singleItem.IsRequired
+                    },
+                    Data = new DXData<DXElementRecord>
+                    {
+                        Upsert = new List<DXElementRecord> { elementRecord }
+                    }
+                };
+            }
+
+            foreach (var multiItem in container.MultiFragmentDefinitions)
+            {
+                var dataTable = dataSet.Tables[multiItem.Name];
+                var announced = dataTable.Rows.Cast<DataRow>()
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
+                    .Select(x => this.GetDXItem(x, multiItem))
+                    .Select(x => new DXElementRecord
+                    {
+                        ID = x.ID,
+                        TimeStamp = x.TimeStamp,
+                        DXUnitID = x.DXUnitID,
+                        Fields = ConvertItemToFields(x)
+                    })
+                    .ToList();
+
+                record.DXElements[multiItem.Name] = new DXDataBlock<DXElementRecord>
+                {
+                    Meta = new DXMeta
+                    {
+                        Kind = "DXElement",
+                        Type = multiItem.Name,
+                        Op = "Sync",
+                        IsMulti = true,
+                        IsRequired = multiItem.IsRequired
+                    },
+                    Data = new DXData<DXElementRecord>
+                    {
+                        Upsert = announced.Count == 0 ? null : announced
+                    }
+                };
+            }
+
+            return record;
+        }
+
+        private static Dictionary<string, JToken>? ConvertItemToFields(DXItem item)
+        {
+            if (item?.Content == null || item.Content.Count == 0)
+                return null;
+
+            var result = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var kvp in item.Content)
+            {
+                if (Constants.SystemProperties.Any(p => string.Equals(p, kvp.Key, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                result[kvp.Key] = kvp.Value == null ? JValue.CreateNull() : JToken.FromObject(kvp.Value);
+            }
+
+            return result.Count == 0 ? null : result;
         }
 
         private DataSet PopulateDataSetForTargetDXUnit(DXDataSetDefinition container, Guid id, DbConnection conn)
