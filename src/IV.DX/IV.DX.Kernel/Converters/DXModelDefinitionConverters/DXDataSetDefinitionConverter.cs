@@ -14,68 +14,6 @@ namespace IV.DX.Kernel.Converters.DXModelDefinitionConverters
             return ToDXModelDefinition(type, dxUnitHierarchy);
         }
 
-        public static DXDataSetDefinition ToDXModelDefinition(this DXModel dxModel, DXUnitInheritance dxUnitHierarchy)
-        {
-            var typeName = dxModel.DXMainElement.Attribute.Type;
-
-            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName);
-
-            mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
-                new DXColumnDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
-
-            var result = new DXDataSetDefinition(mainItemDefinition);
-
-            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.Items)
-            {
-                typeName = dxUnitHierarchyItem.DXUnit.Name;
-
-                foreach (var dxSingleElement in dxModel.DXSingleElements)
-                {
-                    if (dxUnitHierarchyItem.ContainsSingleMandatory(dxSingleElement.Name) || dxUnitHierarchyItem.ContainsSingleOptional(dxSingleElement.Name))
-                    {
-                        result.AddToSingleItemDefinitions(dxSingleElement.ToDXElementDefinition(typeName));
-                    }
-                }
-
-                foreach (var dxMultiElement in dxModel.DXMultiElements)
-                {
-                    if (dxUnitHierarchyItem.ContainsMultiMandatory(dxMultiElement.Name) || dxUnitHierarchyItem.ContainsMultiOptional(dxMultiElement.Name))
-                    {
-                        var mutliItemDefinition = dxMultiElement.ToDXElementDefinition(typeName);
-
-                        if (mutliItemDefinition != null)
-                        {
-                            result.AddToMultiItemDefinitions(mutliItemDefinition);
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public static DXDataSetDefinition ToDXModelDefinition(this DXModel dxModel, DXEnumDefinitionUnit dxEnum)
-        {
-            var typeName = dxModel.DXMainElement.Attribute.Type;
-
-            var mainItemDefinition = new DXMainTableDefinition(typeName, typeName);
-
-            mainItemDefinition.AddPropertyDefinitions(dxModel.DXMainElement.Item.Content.Select(x =>
-                new DXColumnDefinition(x.Key, new DXColumnAttribute(x.Key))).ToList());
-
-            var singleItemDefinitions =
-                dxModel.DXSingleElements.Select(x => x.ToDXElementDefinition(typeName)).ToList();
-
-            var multiItemDefinitions =
-                  dxModel.DXMultiElements.Select(x => x.ToDXElementDefinition(typeName)).Where(x => x != null).ToList();
-
-            var result = new DXDataSetDefinition(mainItemDefinition);
-            result.AddToSingleItemDefinitions(singleItemDefinitions);
-            result.AddToMultiItemDefinitions(multiItemDefinitions);
-
-            return result;
-        }
-
         public static DXDataSetDefinition ToDXModelDefinition(this Type type, DXUnitInheritance dxUnitHierarchy)
         {
             var dxUnitTypeName = AttributeReader.GetDXUnitTypeName(type);

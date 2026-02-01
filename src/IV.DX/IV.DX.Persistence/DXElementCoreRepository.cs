@@ -1,31 +1,18 @@
-﻿using IV.DX.Kernel.Attributes;
-using System;
+﻿using System;
+using System.Data;
 using System.Collections.Generic;
+using System.Linq;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
-using System.Data;
+using IV.DX.Kernel;
 
 namespace IV.DX.Persistence
 {
     internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
-        public Guid Insert(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Insert);
-        }
-
-        public Guid Update(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
-        }
-
-        public Guid InsertOrUpdate(string dxModelType, DXSingleElement dxSingleDXElement)
-        {
-            return this.InsertOrUpdateSingleDXElementPrivate(dxModelType, dxSingleDXElement, ProcessingType.Update);
-        }
-
         public Guid InsertOrUpdate(DXDataBlock<DXElementRecord> block)
         {
             ArgumentNullException.ThrowIfNull(block);
@@ -46,34 +33,11 @@ namespace IV.DX.Persistence
             {
                 if (record == null) continue;
 
-                var element = BuildSingleElement(elementTypeName, record, block.Meta?.IsRequired ?? false);
-                lastId = this.InsertOrUpdate(dxUnitTypeName, element);
+                var normalizedRecord = EnsureDxUnitId(record, dxUnitTypeName);
+                lastId = InsertOrUpdateElementRecord(dxUnitTypeName, elementTypeName, normalizedRecord, block.Meta?.IsRequired ?? false);
             }
 
             return lastId;
-        }
-
-        private Guid InsertOrUpdateSingleDXElementPrivate(string dxModelType, DXSingleElement dxSingleDXElement, ProcessingType processingType)
-        {
-            ArgumentNullException.ThrowIfNullOrEmpty(dxModelType);
-            ArgumentNullException.ThrowIfNull(dxSingleDXElement);
-
-            return this.RunRequestInTransaction((conn) =>
-            {
-                var dataSet = new DataSet(dxSingleDXElement.Name);
-
-                var id = this.InsertOrUpdatedxSingleItemToDataSet(
-                    dxSingleDXElement,
-                    dxModelType,
-                    dxSingleDXElement.Item.DXUnitID,
-                    dataSet,
-                    conn,
-                    processingType);
-
-                dataSet.AcceptChanges();
-
-                return id;
-            });
         }
 
         bool IDXElementCoreRepository.Delete(string typeName, Guid id)
@@ -115,25 +79,25 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXSingleElement? GetItem(DXTableDefinition container, Guid id)
+        public DXElementRecord? GetItemRecord(DXTableDefinition container, Guid id)
         {
             var dxFilter = $"ID = '{id}'";
 
-            var result = GetItems(container, dxFilter);
+            var result = GetItemsRecord(container, dxFilter);
 
             return result?.SingleOrDefault();
         }
 
-        public IEnumerable<DXSingleElement> GetItems(DXTableDefinition container, string dxFilter)
+        public IEnumerable<DXElementRecord> GetItemsRecord(DXTableDefinition container, string dxFilter)
         {
             if (container == null)
-                return null;
+                return Enumerable.Empty<DXElementRecord>();
 
             string typeName = container.Type;
             var ids = this.GetItemIDs(typeName, dxFilter);
 
             if (ids.Count() == 0)
-                return Enumerable.Empty<DXSingleElement>();
+                return Enumerable.Empty<DXElementRecord>();
 
             var sqlWhereClause = this.GetWhereExpressionForID(ids);
 
@@ -141,59 +105,156 @@ namespace IV.DX.Persistence
             {
                 DataSet dataSet = new DataSet(container.Type);
 
+                var columns = EnsureDxUnitIdColumn(container.GetColumns());
                 this.PopulateTableToDataSet(conn, dataSet, container.Type,
-                    columns: container.GetColumns(),
+                    columns: columns,
                     dxFilter: sqlWhereClause, fillSchema: false);
 
                 var dataTable = dataSet.Tables[container.Type];
 
-                var result = dataSet.Tables[container.Type].Rows.Cast<DataRow>().Select(dataRow => new DXSingleElement(
-                            container.Type,
-                            new DXElementAttribute(container.Type),
-                            this.GetDXItem(dataRow, container),
-                            container.IsRequired)).ToList();
+                var records = dataSet.Tables[container.Type].Rows.Cast<DataRow>()
+                    .Select(dataRow => BuildElementRecordFromRow(dataRow, columns, container.DXUnitType))
+                    .ToList();
 
-                return result;
+                return records;
             });
 
             return result;
         }
 
-        private static DXSingleElement BuildSingleElement(string elementTypeName, DXElementRecord record, bool isRequired)
+        private Guid InsertOrUpdateElementRecord(
+            string dxUnitTypeName,
+            string elementTypeName,
+            DXElementRecord record,
+            bool isRequired)
         {
             if (string.IsNullOrWhiteSpace(elementTypeName))
                 throw new ArgumentException("Element type name is required.", nameof(elementTypeName));
-
-            var dxUnitId = record.DXUnitID;
-            if (dxUnitId == Guid.Empty)
+            if (record.DXUnitID == Guid.Empty)
                 throw new ArgumentException("DXUnitID is required for DXElementRecord.", nameof(record));
 
-            var content = ConvertFields(record.Fields);
-            var item = new DXItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
+            return this.RunRequestInTransaction(conn =>
+            {
+                var dataSet = new DataSet(elementTypeName);
+                var elementDef = _dxStructureCache.GetDXElement(elementTypeName);
+                if (elementDef == null)
+                    throw new Exception($"There are no DXElement with name '{elementTypeName}'");
 
-            return new DXSingleElement(elementTypeName, new DXElementAttribute(elementTypeName), item, isRequired);
+                var tableDef = elementDef.ToDXTableDefinition(dxUnitTypeName, _dxStructureCache.DXRelations, isRequired);
+                var columns = EnsureDxUnitIdColumn(tableDef.GetColumns());
+                var adapter = this.PopulateTableToDataSet(conn, dataSet, elementTypeName,
+                    columns: columns,
+                    dxFilter: this.GetWhereExpressionForID(record.ID));
+
+                var table = dataSet.Tables[elementTypeName];
+                if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
+                {
+                    if (table.Columns.Contains("ID"))
+                        table.PrimaryKey = new[] { table.Columns["ID"] };
+                }
+
+                var item = BuildRowItemFromElementRecord(record, elementTypeName, record.DXUnitID);
+                var row = table.Rows.Find(item.ID);
+
+                if (row == null)
+                {
+                    row = table.NewRow();
+                    MapRowItemToRow(item, row, dxUnitTypeName);
+                    table.Rows.Add(row);
+                }
+                else
+                {
+                    MapRowItemToRow(item, row, dxUnitTypeName);
+                }
+
+                SaveTable(adapter, conn, dataSet, table, false);
+                dataSet.AcceptChanges();
+
+                return item.ID;
+            });
         }
 
-        private static Dictionary<string, object> ConvertFields(IDictionary<string, JToken>? fields)
+        private DXElementRecord BuildElementRecordFromRow(DataRow row, IDictionary<string, string> columns, string dxUnitType)
         {
-            var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            if (fields == null || fields.Count == 0)
-                return result;
+            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
+            var dxUnitId = ResolveDxUnitId(row, dxUnitType, id);
 
-            foreach (var kvp in fields)
+            var fields = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
+            foreach (var column in row.Table.Columns.OfType<DataColumn>())
             {
-                result[kvp.Key] = ConvertTokenToObject(kvp.Value);
+                if (!columns.ContainsKey(column.ColumnName))
+                    continue;
+
+                if (Constants.SystemProperties.Any(p => string.Equals(p, column.ColumnName, StringComparison.OrdinalIgnoreCase))
+                    || string.Equals(column.ColumnName, $"{dxUnitType}ID", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var value = row[column] == DBNull.Value ? null : GetValueFromRow(row, column);
+                fields[column.ColumnName] = value == null ? JValue.CreateNull() : JToken.FromObject(value);
             }
 
-            return result;
+            return new DXElementRecord
+            {
+                ID = id,
+                TimeStamp = timeStamp,
+                DXUnitID = dxUnitId,
+                Fields = fields.Count == 0 ? null : fields
+            };
         }
 
-        private static object? ConvertTokenToObject(JToken? token)
+
+        private static DXElementRecord EnsureDxUnitId(DXElementRecord record, string dxUnitTypeName)
         {
-            if (token == null || token.Type == JTokenType.Null)
-                return null;
+            if (record.DXUnitID != Guid.Empty)
+                return record;
 
-            return token.ToObject<object>();
+            if (record.Fields != null)
+            {
+                if (TryReadGuid(record.Fields, Constants.DXUnitID, out var value))
+                {
+                    record.DXUnitID = value;
+                    return record;
+                }
+
+                var customKey = $"{dxUnitTypeName}ID";
+                if (TryReadGuid(record.Fields, customKey, out value))
+                {
+                    record.DXUnitID = value;
+                    return record;
+                }
+            }
+
+            return record;
         }
+
+        private static bool TryReadGuid(IDictionary<string, JToken> fields, string key, out Guid value)
+        {
+            value = Guid.Empty;
+            if (!fields.TryGetValue(key, out var token))
+            {
+                foreach (var kvp in fields)
+                {
+                    if (string.Equals(kvp.Key, key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        token = kvp.Value;
+                        break;
+                    }
+                }
+            }
+
+            if (token == null || token.Type == JTokenType.Null)
+                return false;
+
+            if (token.Type == JTokenType.Guid)
+            {
+                value = token.ToObject<Guid>();
+                return value != Guid.Empty;
+            }
+
+            var str = token.ToString();
+            return Guid.TryParse(str, out value) && value != Guid.Empty;
+        }
+
     }
 }

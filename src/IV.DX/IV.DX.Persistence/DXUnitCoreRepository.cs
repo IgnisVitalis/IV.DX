@@ -1,10 +1,8 @@
 ﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
-using IV.DX.Kernel.Helpers.DXModelDefinitionHelpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -262,13 +260,13 @@ namespace IV.DX.Persistence
         private DXUnitRecord ConvertToDXUnitRecord(DataSet dataSet, DataRow row, DXDataSetDefinition container)
         {
             var id = ConvertHelper.ParseGuid(row[Constants.ID]);
-            var mainItem = this.GetDXItem(row, container.MainElement);
+            var mainItem = BuildRowItemFromRow(row, container.MainElement);
 
             var record = new DXUnitRecord
             {
                 ID = id,
                 TimeStamp = mainItem.TimeStamp,
-                Fields = ConvertItemToFields(mainItem),
+                Fields = ConvertContentToFields(mainItem.Content),
                 DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
             };
 
@@ -281,13 +279,13 @@ namespace IV.DX.Persistence
                 if (dataRow == null)
                     continue;
 
-                var dxItem = this.GetDXItem(dataRow, singleItem);
+                var dxItem = BuildRowItemFromRow(dataRow, singleItem);
                 var elementRecord = new DXElementRecord
                 {
                     ID = dxItem.ID,
                     TimeStamp = dxItem.TimeStamp,
                     DXUnitID = dxItem.DXUnitID,
-                    Fields = ConvertItemToFields(dxItem)
+                    Fields = ConvertContentToFields(dxItem.Content)
                 };
 
                 record.DXElements[singleItem.Name] = new DXDataBlock<DXElementRecord>
@@ -312,13 +310,13 @@ namespace IV.DX.Persistence
                 var dataTable = dataSet.Tables[multiItem.Name];
                 var announced = dataTable.Rows.Cast<DataRow>()
                     .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
-                    .Select(x => this.GetDXItem(x, multiItem))
+                    .Select(x => BuildRowItemFromRow(x, multiItem))
                     .Select(x => new DXElementRecord
                     {
                         ID = x.ID,
                         TimeStamp = x.TimeStamp,
                         DXUnitID = x.DXUnitID,
-                        Fields = ConvertItemToFields(x)
+                        Fields = ConvertContentToFields(x.Content)
                     })
                     .ToList();
 
@@ -342,14 +340,14 @@ namespace IV.DX.Persistence
             return record;
         }
 
-        private static Dictionary<string, JToken>? ConvertItemToFields(DXItem item)
+        private static Dictionary<string, JToken>? ConvertContentToFields(IDictionary<string, object> content)
         {
-            if (item?.Content == null || item.Content.Count == 0)
+            if (content == null || content.Count == 0)
                 return null;
 
             var result = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var kvp in item.Content)
+            foreach (var kvp in content)
             {
                 if (Constants.SystemProperties.Any(p => string.Equals(p, kvp.Key, StringComparison.OrdinalIgnoreCase)))
                     continue;
@@ -429,11 +427,25 @@ namespace IV.DX.Persistence
             return dataSet;
         }
 
-        private DXItem GetDXItem(string typeName, DataRow row, IDictionary<string, string> columns)
+        private RowItem BuildRowItemFromRow(DataRow row, DXTableDefinition structure)
         {
-            Dictionary<string, object> jObjectContainerCopy = new Dictionary<string, object>();
+            var typeName = structure.Type;
+            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
 
-            jObjectContainerCopy[Constants.SystemPropertyTypeName] = typeName;
+            return BuildRowItemFromRow(typeName, row, columns, structure.DXUnitType);
+        }
+
+        private RowItem BuildRowItemFromRow(DataRow row, DXMainTableDefinition structure)
+        {
+            var typeName = structure.DXUnitType;
+            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
+
+            return BuildRowItemFromRow(typeName, row, columns, structure.DXUnitType);
+        }
+
+        private RowItem BuildRowItemFromRow(string typeName, DataRow row, IDictionary<string, string> columns, string dxUnitType)
+        {
+            var content = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
             foreach (DataColumn dataColumn in row.Table.Columns)
             {
@@ -442,43 +454,19 @@ namespace IV.DX.Persistence
 
                 if (row[dataColumn.ColumnName] != DBNull.Value)
                 {
-                    jObjectContainerCopy[dataColumn.ColumnName] = GetValueFromRow(row, dataColumn);
+                    content[dataColumn.ColumnName] = GetValueFromRow(row, dataColumn);
                 }
                 else
                 {
-                    jObjectContainerCopy[dataColumn.ColumnName] = null;
+                    content[dataColumn.ColumnName] = null;
                 }
             }
 
             var id = ConvertHelper.ParseGuid(row[Constants.ID]);
             var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
+            var dxUnitId = ResolveDxUnitId(row, dxUnitType, id);
 
-            if (row.Table.Columns.Contains(Constants.DXUnitID))
-            {
-                var dxUnitID = ConvertHelper.ParseGuid(row[Constants.DXUnitID]);
-
-                return new DXItem(typeName, id, dxUnitID, timeStamp, jObjectContainerCopy);
-            }
-            else
-            {
-                return new DXItem(typeName, id, id, timeStamp, jObjectContainerCopy);
-            }
-        }
-
-        private DXItem GetDXItem(DataRow row, DXTableDefinition structure)
-        {
-            var typeName = structure.Type;
-            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
-
-            return this.GetDXItem(typeName, row, columns);
-        }
-
-        private DXItem GetDXItem(DataRow row, DXMainTableDefinition structure)
-        {
-            var typeName = structure.DXUnitType;
-            var columns = structure.ToDictionary(x => x.ColumnAttribute.Name, x => x.ColumnAttribute.DXExpression);
-
-            return this.GetDXItem(typeName, row, columns);
+            return new RowItem(typeName, id, dxUnitId, timeStamp, content);
         }
 
         private object GetValueFromRow(DataRow dataRow, DataColumn dataColumn)
@@ -618,17 +606,17 @@ namespace IV.DX.Persistence
             var id = record.ID;
 
             var row = table.Rows.Find(id);
-            var item = BuildDXItemFromUnitRecord(record, dxUnitType);
+            var item = BuildRowItemFromUnitRecord(record, dxUnitType);
 
             if (row == null)
             {
                 row = table.NewRow();
-                MapdxItemToRow(item, row, dxUnitType);
+                MapRowItemToRow(item, row, dxUnitType);
                 table.Rows.Add(row);
             }
             else
             {
-                MapdxItemToRow(item, row, dxUnitType);
+                MapRowItemToRow(item, row, dxUnitType);
             }
         }
 
@@ -665,17 +653,17 @@ namespace IV.DX.Persistence
             var table = dataSet.Tables[dxElementName];
             var id = elementRecord.ID;
             var row = id != Guid.Empty ? table.Rows.Find(id) : null;
-            var item = BuildDXItemFromElementRecord(elementRecord, dxElementName, record.ID);
+            var item = BuildRowItemFromElementRecord(elementRecord, dxElementName, record.ID);
 
             if (row == null)
             {
                 row = table.NewRow();
-                MapdxItemToRow(item, row, dxUnitType);
+                MapRowItemToRow(item, row, dxUnitType);
                 table.Rows.Add(row);
             }
             else
             {
-                MapdxItemToRow(item, row, dxUnitType);
+                MapRowItemToRow(item, row, dxUnitType);
             }
 
             SaveTable(adapter, conn, dataSet, table, false);
@@ -724,17 +712,17 @@ namespace IV.DX.Persistence
             {
                 var id = itemRecord.ID;
                 DataRow row = id != Guid.Empty ? table.Rows.Find(id) : null;
-                var item = BuildDXItemFromElementRecord(itemRecord, dxElementName, parentId);
+                var item = BuildRowItemFromElementRecord(itemRecord, dxElementName, parentId);
 
                 if (row == null)
                 {
                     row = table.NewRow();
-                    MapdxItemToRow(item, row, dxUnitType);
+                    MapRowItemToRow(item, row, dxUnitType);
                     table.Rows.Add(row);
                 }
                 else
                 {
-                    MapdxItemToRow(item, row, dxUnitType);
+                    MapRowItemToRow(item, row, dxUnitType);
                 }
             }
 
@@ -796,17 +784,17 @@ namespace IV.DX.Persistence
             return MultiElementsMode.Full;
         }
 
-        private static DXItem BuildDXItemFromUnitRecord(DXUnitRecord record, string typeName)
+        private static RowItem BuildRowItemFromUnitRecord(DXUnitRecord record, string typeName)
         {
             var content = ConvertFieldsToObjectDict(record.Fields);
-            return new DXItem(typeName, record.ID, record.ID, record.TimeStamp, content);
+            return new RowItem(typeName, record.ID, record.ID, record.TimeStamp, content);
         }
 
-        private static DXItem BuildDXItemFromElementRecord(DXElementRecord record, string elementTypeName, Guid parentId)
+        private static RowItem BuildRowItemFromElementRecord(DXElementRecord record, string elementTypeName, Guid parentId)
         {
             var dxUnitId = record.DXUnitID == Guid.Empty ? parentId : record.DXUnitID;
             var content = ConvertFieldsToObjectDict(record.Fields);
-            return new DXItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
+            return new RowItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
         }
 
         private static Dictionary<string, object> ConvertFieldsToObjectDict(IDictionary<string, JToken>? fields)
@@ -902,70 +890,21 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
         }
 
-        private Guid
-        InsertOrUpdatedxSingleItemToDataSet(
-            DXSingleElement dxElement,
-            string dxUnitType,
-            Guid objectID,
-            DataSet dataSet,
-            DbConnection conn,
-            ProcessingType processingType)
+
+        private void MapRowItemToRow(RowItem item, DataRow row, string dxModelType)
         {
-            ArgumentNullException.ThrowIfNull(dxElement);
-
-            var dxElementName = dxElement.Attribute.Type;
-
-            var dxElementDefinition = dxElement.ToDXElementDefinition(dxUnitType);
-
-            var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxElementName,
-                dxElementDefinition.GetColumns(),
-                dxFilter: this.GetWhereExpressionForID(dxElement.Item.ID));
-
-            var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
-
-            switch (processingType)
-            {
-                case ProcessingType.Insert:
-                    dxModelBuilder.GetInsertCommand();
-                    break;
-                case ProcessingType.Update:
-                    dxModelBuilder.GetUpdateCommand();
-                    break;
-            }
-
-            DataTable dataTable = dataSet.Tables[dxElementName];
-
-            if (dataTable.Rows.Count == 0)
-            {
-                var row = dataTable.NewRow();
-                MapdxItemToRow(dxElement.Item, row, dxUnitType);
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var row = dataTable.Rows[0];
-                MapdxItemToRow(dxElement.Item, row, dxUnitType);
-            }
-
-            dxModelAdapter.Update(dataSet, dxElementName);
-
-            return dxElement.Item.ID;
-        }
-
-        private void MapdxItemToRow(DXItem dxItem, DataRow row, string dxModelType)
-        {
-            row[Constants.ID] = dxItem.ID;
+            row[Constants.ID] = item.ID;
 
             var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitID);
             if (dxUnitIdColumn != null)
             {
-                row[dxUnitIdColumn] = dxItem.DXUnitID;
+                row[dxUnitIdColumn] = item.DXUnitID;
             }
 
             var modelUnitIdColumn = FindColumn(row.Table, $"{dxModelType}ID");
             if (modelUnitIdColumn != null)
             {
-                row[modelUnitIdColumn] = dxItem.DXUnitID;
+                row[modelUnitIdColumn] = item.DXUnitID;
             }
 
             var timeStampColumn = FindColumn(row.Table, Constants.TimeStamp);
@@ -974,7 +913,7 @@ namespace IV.DX.Persistence
                 row[timeStampColumn] = DateTime.UtcNow;
             }
 
-            if (dxItem.Content == null)
+            if (item.Content == null)
                 return;
 
             foreach (var column in row.Table.Columns.OfType<DataColumn>())
@@ -988,13 +927,13 @@ namespace IV.DX.Persistence
                     continue;
                 }
 
-                var jProperty = dxItem.GetValue(column.ColumnName);
+                var value = GetContentValue(item.Content, column.ColumnName);
 
                 if (!column.ReadOnly)
                 {
-                    if (jProperty != null)
+                    if (value != null)
                     {
-                        if (this.IsNullOrEmpty(jProperty))
+                        if (this.IsNullOrEmpty(value))
                         {
                             if (column.AllowDBNull)
                             {
@@ -1007,7 +946,7 @@ namespace IV.DX.Persistence
                         }
                         else
                         {
-                            this.SetJPropertyValueToRowCell(row, column, jProperty);
+                            this.SetJPropertyValueToRowCell(row, column, value);
                         }
                     }
                     else if (
@@ -1089,6 +1028,51 @@ namespace IV.DX.Persistence
                                         {
                                             dataRow[dataColumn] = ConvertHelper.ParseString(obj);
                                         }
+        }
+
+        private static Guid ResolveDxUnitId(DataRow row, string dxUnitType, Guid fallbackId)
+        {
+            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitID);
+            if (dxUnitIdColumn != null && row[dxUnitIdColumn] != DBNull.Value)
+                return ConvertHelper.ParseGuid(row[dxUnitIdColumn]);
+
+            var modelUnitIdColumn = FindColumn(row.Table, $"{dxUnitType}ID");
+            if (modelUnitIdColumn != null && row[modelUnitIdColumn] != DBNull.Value)
+                return ConvertHelper.ParseGuid(row[modelUnitIdColumn]);
+
+            return fallbackId;
+        }
+
+        private static object? GetContentValue(IDictionary<string, object> content, string columnName)
+        {
+            if (content.TryGetValue(columnName, out var value))
+                return value;
+
+            foreach (var kvp in content)
+            {
+                if (string.Equals(kvp.Key, columnName, StringComparison.OrdinalIgnoreCase))
+                    return kvp.Value;
+            }
+
+            return null;
+        }
+
+        private sealed class RowItem
+        {
+            public RowItem(string type, Guid id, Guid dxUnitId, DateTime timeStamp, IDictionary<string, object> content)
+            {
+                Type = type;
+                ID = id;
+                DXUnitID = dxUnitId;
+                TimeStamp = timeStamp;
+                Content = content ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            }
+
+            public string Type { get; }
+            public Guid ID { get; }
+            public Guid DXUnitID { get; }
+            public DateTime TimeStamp { get; }
+            public IDictionary<string, object> Content { get; }
         }
 
         private static byte[] ConvertToBytes(object obj)

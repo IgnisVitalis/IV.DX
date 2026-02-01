@@ -135,7 +135,7 @@ namespace IV.DX.Application.IntTests.Services
             var result = this._dxRawReader.Get("DXNavigationItemUnit", columns, dxFilter);
 
             Assert.NotNull(result);
-            Assert.Empty(result.Announced);
+            Assert.Empty(result.Data?.Upsert ?? new List<DXUnitRecord>());
 
             var sql = this._sqlBuilder.BuildSQLExpression("DXNavigationItemUnit", columns, dxFilter);
 

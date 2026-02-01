@@ -73,67 +73,9 @@ namespace IV.DX.Application.Services
             }
 
 
-            var result = dxRawReader.Get(dxQuery.DXUnitName, columns);
-
-            var block = BuildContentBlock(dxQuery.DXUnitName, result.Announced);
+            var block = dxRawReader.Get(dxQuery.DXUnitName, columns);
 
             return new JProperty("Content", JObject.FromObject(block));
-        }
-
-        private static DXDataBlock<DXUnitRecord> BuildContentBlock(string typeName, IEnumerable<DXItem> items)
-        {
-            var records = items.Select(ToRecord).ToList();
-
-            return new DXDataBlock<DXUnitRecord>
-            {
-                Meta = new IV.DX.Kernel.Models.DXMeta
-                {
-                    Kind = "DXUnit",
-                    Type = typeName,
-                    Op = "Sync",
-                    IsMulti = true
-                },
-                Data = new DXData<DXUnitRecord>
-                {
-                    Upsert = records
-                }
-            };
-        }
-
-        private static DXUnitRecord ToRecord(DXItem item)
-        {
-            return new DXUnitRecord
-            {
-                ID = item.ID,
-                TimeStamp = item.TimeStamp,
-                Fields = ConvertFields(item.Content)
-            };
-        }
-
-        private static Dictionary<string, JToken>? ConvertFields(IDictionary<string, object> content)
-        {
-            if (content == null || content.Count == 0)
-                return null;
-
-            var result = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var kvp in content)
-            {
-                if (IsSystemField(kvp.Key))
-                    continue;
-
-                result[kvp.Key] = kvp.Value == null
-                    ? JValue.CreateNull()
-                    : JToken.FromObject(kvp.Value);
-            }
-
-            return result.Count == 0 ? null : result;
-        }
-
-        private static bool IsSystemField(string fieldName)
-        {
-            return Constants.SystemProperties.Any(p =>
-                string.Equals(p, fieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<IEnumerable<DXDisplayValue>> GetDisplayValuesAsync(string typeName, CancellationToken ct = default)
@@ -167,12 +109,15 @@ namespace IV.DX.Application.Services
             };
 
             var result = dxRawReader.Get(typeName, columns);
+            var records = result.Data?.Upsert ?? new List<DXUnitRecord>();
 
-            var displayValues = result.Announced.Select(x => new DXDisplayValue()
+            var displayValues = records.Select(x => new DXDisplayValue()
             {
                 ID = x.ID,
                 Type = typeName,
-                DisplayValue = x.Content["DisplayValue"].ToString()
+                DisplayValue = x.Fields != null && x.Fields.TryGetValue("DisplayValue", out var v)
+                    ? v?.ToString()
+                    : string.Empty
             }).ToList();
 
             return displayValues;

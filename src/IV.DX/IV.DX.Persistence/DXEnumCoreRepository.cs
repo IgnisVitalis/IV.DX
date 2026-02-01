@@ -144,12 +144,12 @@ namespace IV.DX.Persistence
                 if (row == null)
                 {
                     row = table.NewRow();
-                    MapdxItemToRow(item, row, enumInfo.Name);
+                    MapRowItemToRow(item, row, enumInfo.Name);
                     table.Rows.Add(row);
                 }
                 else
                 {
-                    MapdxItemToRow(item, row, enumInfo.Name);
+                    MapRowItemToRow(item, row, enumInfo.Name);
                 }
 
                 SaveTable(adapter, conn, dataSet, table, false);
@@ -159,7 +159,7 @@ namespace IV.DX.Persistence
             });
         }
 
-        private static DXItem BuildEnumItem(string enumTypeName, DXEnumRecord record)
+        private static RowItem BuildEnumItem(string enumTypeName, DXEnumRecord record)
         {
             var content = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
@@ -176,7 +176,7 @@ namespace IV.DX.Persistence
             if (record.Value != null)
                 content["Value"] = ConvertEnumTokenToObject(record.Value);
 
-            return new DXItem(enumTypeName, record.ID, record.ID, record.TimeStamp, content);
+            return new RowItem(enumTypeName, record.ID, record.ID, record.TimeStamp, content);
         }
 
         private static DXDataBlock<DXEnumRecord> MapUnitBlockToEnumBlock(string enumTypeName, DXDataBlock<DXUnitRecord> unitBlock)

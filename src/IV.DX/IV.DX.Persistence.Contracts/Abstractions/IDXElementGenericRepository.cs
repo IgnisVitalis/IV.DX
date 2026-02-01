@@ -7,7 +7,7 @@ namespace IV.DX.Persistence.Contracts.Abstractions
         Guid Insert(string dxUnitTypeName, DXElement dxElement);
         Guid Update(string dxUnitTypeName, DXElement dxElement);
         bool Delete(DXElement dxElement);
-        T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement;
-        IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement;
+        T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement, new();
+        IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement, new();
     }
 }

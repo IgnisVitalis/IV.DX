@@ -59,6 +59,19 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
             return unit;
         }
 
+        public static T ToDXElement<T>(DXElementRecord record) where T : DXElement, new()
+        {
+            var element = new T
+            {
+                ID = record.ID,
+                TimeStamp = record.TimeStamp,
+                DXUnitID = record.DXUnitID
+            };
+
+            ApplyFields(element, record.Fields);
+            return element;
+        }
+
         public static IEnumerable<DXEnumItem> ToDXEnums(string json)
         {
             if (string.IsNullOrWhiteSpace(json))

@@ -30,30 +30,5 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
             return jObject;
         }
 
-        public static JObject ToJObject(this DXItem dxItem, bool exlcudeSystemProperties = false)
-        {
-            JObject jObject = new JObject();
-
-            foreach (var item in dxItem.Content)
-            {
-                jObject.Add(new JProperty(item.Key, item.Value));
-            }
-
-            if (exlcudeSystemProperties)
-            {
-                var systemProperties = jObject.Properties().Where(x =>
-                       x.Name.Length >= Constants.SystemPropertyPrefix.Length
-                       && x.Name.Substring(0, Constants.SystemPropertyPrefix.Length) == Constants.SystemPropertyPrefix
-                   ).ToList();
-
-                foreach (var systemProperty in systemProperties)
-                {
-                    jObject.Remove(systemProperty.Name);
-                }
-            }
-
-            return jObject;
-        }
-
     }
 }

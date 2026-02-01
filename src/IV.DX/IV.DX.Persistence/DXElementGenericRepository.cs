@@ -1,5 +1,4 @@
-﻿using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -19,9 +18,13 @@ namespace IV.DX.Persistence
             var relationType = dxStructureCache.GetElementInUnitRelationType(dxModelType, dxElementTypeName);
             var isRequired = relationType == DXElementInUnitTypeEnum.SingleMandatory || relationType == DXElementInUnitTypeEnum.MultiMandatory;
 
-            var singleDXElement = dxElement.ToDXSingleElement(isRequired);
+            var block = DXRecordWriter.ToBlock(dxElement, new DXRecordWriteOptions
+            {
+                DXUnitContext = dxModelType,
+                IsRequired = isRequired
+            });
 
-            return dxElementCoreRepo.Insert(dxModelType, singleDXElement);
+            return dxElementCoreRepo.InsertOrUpdate(block);
         }
 
         public Guid Update(string dxModelType, DXElement dxElement)
@@ -33,43 +36,46 @@ namespace IV.DX.Persistence
             var relationType = dxStructureCache.GetElementInUnitRelationType(dxModelType, dxElementTypeName);
             var isRequired = relationType == DXElementInUnitTypeEnum.SingleMandatory || relationType == DXElementInUnitTypeEnum.MultiMandatory;
 
-            var singleDXElement = dxElement.ToDXSingleElement(isRequired);
+            var block = DXRecordWriter.ToBlock(dxElement, new DXRecordWriteOptions
+            {
+                DXUnitContext = dxModelType,
+                IsRequired = isRequired
+            });
 
-            return dxElementCoreRepo.Update(dxModelType, singleDXElement);
+            return dxElementCoreRepo.InsertOrUpdate(block);
         }
 
         public bool Delete(DXElement dxElement)
         {
             ArgumentNullException.ThrowIfNull(dxElement);
 
-            // TODO : need to rework using info about relation type
-            var singleDXElement = dxElement.ToDXSingleElement(false);
-
-            return dxElementCoreRepo.Delete(singleDXElement.Name, dxElement.ID);
+            var elementTypeName = AttributeReader.GetDXElementTypeName(dxElement.GetType());
+            return dxElementCoreRepo.Delete(elementTypeName, dxElement.ID);
         }
 
-        public T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement
+        public T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement, new()
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
             // TODO : need to rework using info about relation type
             var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxElementName, dxUnitTypeName, typeof(T), false);
 
-            var result = dxElementCoreRepo.GetItem(dxElement, id);
+            var result = dxElementCoreRepo.GetItemRecord(dxElement, id);
+            if (result == null) return default!;
 
-            return DXElementConverter.ToDXElement<T>(result);
+            return DXRecordConverter.ToDXElement<T>(result);
         }
 
-        public IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement
+        public IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement, new()
         {
             var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
 
             // TODO : need to rework using info about relation type
             var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxUnitTypeName, dxElementName, typeof(T), false);
 
-            var result = dxElementCoreRepo.GetItems(dxElement, dxFilter);
+            var result = dxElementCoreRepo.GetItemsRecord(dxElement, dxFilter);
 
-            return result.Select(x => DXElementConverter.ToDXElement<T>(x)).ToList();
+            return result.Select(DXRecordConverter.ToDXElement<T>).ToList();
         }
     }
 }
