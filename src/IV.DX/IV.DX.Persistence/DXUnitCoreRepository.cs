@@ -87,8 +87,9 @@ namespace IV.DX.Persistence
                 else
                 {
                     var dataRow = dataTable.Rows[0];
+                    var record = this.ConvertToDXUnitRecord(dataSet, dataRow, container);
 
-                    return this.ConvertToDXModel(dataSet, dataRow, container);
+                    return BuildDXModel(container.MainElement.DXUnitType, record);
                 }
             });
         }
@@ -173,56 +174,14 @@ namespace IV.DX.Persistence
 
             var items = dataTable.Rows;
 
-            resultItems = items.Cast<DataRow>().Select(x => this.ConvertToDXModel(dataSet, x, container)).ToList();
+            resultItems = items.Cast<DataRow>()
+                .Select(x => this.ConvertToDXUnitRecord(dataSet, x, container))
+                .Select(x => BuildDXModel(container.MainElement.DXUnitType, x))
+                .ToList();
 
             dataSet.AcceptChanges();
 
             return resultItems;
-        }
-
-        private DXModel ConvertToDXModel(DataSet dataSet, DataRow x, DXDataSetDefinition container)
-        {
-            var id = ConvertHelper.ParseGuid(x[Constants.ID]);
-            var item = this.GetDXItem(x, container.MainElement);
-
-            var dxMainElement = new DXMainElement(new DXUnitAttribute(container.MainElement.Name), item);
-
-            // Process DX single items
-            var dxSingleElements = container.SingleFragmentDefinitions.Select(item =>
-            {
-                var dataTable = dataSet.Tables[item.Type];
-
-                var dataRow = dataTable.Rows.Cast<DataRow>().SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id);
-
-                if (dataRow == null)
-                    return null;// new DXSingleElement(item.Name, new DXElementAttribute(item.Name));
-                else
-                    return new DXSingleElement(
-                        item.Name,
-                        new DXElementAttribute(item.Name),
-                        this.GetDXItem(dataRow, item),
-                        item.IsRequired);
-
-            }).Where(x => x != null).ToHashSet();
-
-            // Process DX multi items          
-            var dxMultiElements = container.MultiFragmentDefinitions.Select(item =>
-            {
-                var dataTable = dataSet.Tables[item.Name];
-
-                var announced =
-                    dataTable.Rows.Cast<DataRow>()
-                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
-                    .Select(x => this.GetDXItem(x, item)).ToHashSet();
-
-                DXMultiElement multiItem = DXMultiElement.CreateForFullMode(item.Name, new DXElementAttribute(item.Name), announced);
-
-                return multiItem;
-            }).Where(x => x != null).ToHashSet();
-
-            DXModel result = new DXModel(dxMainElement, dxSingleElements, dxMultiElements);
-
-            return result;
         }
 
         public IEnumerable<DXModel> GetItems(string typeName)
