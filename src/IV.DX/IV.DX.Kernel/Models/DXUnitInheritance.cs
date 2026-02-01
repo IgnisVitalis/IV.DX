@@ -1,6 +1,6 @@
 namespace IV.DX.Kernel.Models
 {
-    public class DXUnitInheritance
+    internal class DXUnitInheritance
     {
         public IList<DXUnitInheritanceItem> Items { get; } = new List<DXUnitInheritanceItem>();
         public IList<DXUnitInheritanceItem> ItemsReverted { get { return this.Items.Reverse().ToList(); } }
@@ -11,7 +11,7 @@ namespace IV.DX.Kernel.Models
         }
     }
 
-    public class DXUnitInheritanceItem
+    internal class DXUnitInheritanceItem
     {
         public DXUnitDefinitionUnit DXUnit { get; }
 

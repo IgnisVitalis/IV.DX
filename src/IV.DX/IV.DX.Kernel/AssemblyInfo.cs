@@ -3,6 +3,7 @@
 [assembly: InternalsVisibleTo("IV.DX.Application")]
 [assembly: InternalsVisibleTo("IV.DX.Persistence")]
 [assembly: InternalsVisibleTo("IV.DX.Persistence.Contracts")]
+[assembly: InternalsVisibleTo("IV.DX.Application.Contracts")]
 
 [assembly: InternalsVisibleTo("IV.DX.Persistence.IntTests")]
 [assembly: InternalsVisibleTo("IV.DX.Application.IntTests")]

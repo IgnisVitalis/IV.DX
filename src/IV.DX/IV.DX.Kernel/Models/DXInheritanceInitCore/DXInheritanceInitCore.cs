@@ -3,7 +3,7 @@
 namespace IV.DX.Kernel.Models
 {
     [DXUnit("DXInheritanceInitCore")]
-    public class DXInheritanceInitCore : DXUnit
+    internal class DXInheritanceInitCore : DXUnit
     {
         [DXColumn("BaseDXUnit")]
         public string BaseDXUnit { get; set; }
