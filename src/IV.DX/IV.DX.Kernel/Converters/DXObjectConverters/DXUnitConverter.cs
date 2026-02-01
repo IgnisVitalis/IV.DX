@@ -1,6 +1,3 @@
-﻿using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Converters.JObjectConverters;
-using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
@@ -9,77 +6,81 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
     internal static class DXUnitConverter
     {
         #region Create instance
-        public static T ToDXUnit<T>(this string json) where T : DXUnit =>
-            ToDXUnits<T>(json.ToDXModel());
-
-        public static IEnumerable<T> ToDXUnits<T>(this string json) where T : DXUnit =>
-            ToDXUnits<T>(JArray.Parse(json));
-
-        public static IEnumerable<T> ToDXUnits<T>(this JArray jArray) where T : DXUnit
+        public static T ToDXUnit<T>(this string json) where T : DXUnit
         {
-            foreach (JObject jObject in jArray)
-                yield return ToDXUnits<T>(jObject);
+            return ToDXUnits<T>(json).FirstOrDefault()!;
         }
 
+        public static IEnumerable<T> ToDXUnits<T>(this string json) where T : DXUnit =>
+            ToDXUnits<T>(ParseBlocks(json));
+
+        public static IEnumerable<T> ToDXUnits<T>(this JArray jArray) where T : DXUnit =>
+            ToDXUnits<T>(ParseBlocks(jArray));
+
         public static T? ToDXUnits<T>(this JObject jObject) where T : DXUnit =>
-            ToDXUnits<T>(DXModelConverter.ToDXModel(jObject));
+            ToDXUnits<T>(ParseBlocks(jObject)).FirstOrDefault();
 
         public static DXUnit? ToDXUnits(this string json, Type type) =>
-            ToDXUnits(json.ToDXModel(), type);
+            ToDXUnits(ParseBlocks(json), type).FirstOrDefault();
 
         public static DXUnit? ToDXUnits(this JObject jObject, Type type) =>
-            ToDXUnits(DXModelConverter.ToDXModel(jObject), type);
+            ToDXUnits(ParseBlocks(jObject), type).FirstOrDefault();
 
-        public static T? ToDXUnits<T>(this DXModel dxModel) where T : DXUnit =>
-            (T?)ToDXUnitPrivate(dxModel, typeof(T));
-
-        public static DXUnit? ToDXUnits(this DXModel dxModel, Type type) =>
-            ToDXUnitPrivate(dxModel, type);
-
-        private static DXUnit? ToDXUnitPrivate(DXModel? dxModel, Type? type)
+        private static IEnumerable<T> ToDXUnits<T>(IEnumerable<DXDataBlock<DXUnitRecord>> blocks) where T : DXUnit
         {
-            if (dxModel is null || type is null)
-                return null;
+            return DXRecordConverter.ToDXUnits<T>(blocks);
+        }
 
-            var own = dxModel.DXMainElement.ToJProperty();
-            var obj = (own?.Value?.ToObject(type)) ?? Activator.CreateInstance(type)!;
-
-            var idProp = type.GetProperty(Constants.ID);
-            idProp?.SetValue(obj, dxModel.DXMainElement.Item.ID);
-
-            var singleProps = AttributeReader.GetSingleItemInfos(type);
-            if (dxModel.DXSingleElements != null)
+        private static IEnumerable<DXUnit> ToDXUnits(IEnumerable<DXDataBlock<DXUnitRecord>> blocks, Type type)
+        {
+            foreach (var block in blocks)
             {
-                foreach (var sp in singleProps)
+                var items = block?.Data?.Upsert;
+                if (items == null) continue;
+
+                foreach (var record in items)
                 {
-                    var modelItem = dxModel.DXSingleElements.SingleOrDefault(x => x.Name == sp.Name);
-                    if (modelItem is null) continue;
-
-                    var jProp = modelItem.ConvertToJPropertyWithoutSystemProperties();
-                    if (jProp?.Value == null) continue;
-
-                    var instance = jProp.Value.ToObject(sp.PropertyType);
-                    sp.SetValue(obj, instance);
+                    yield return DXRecordConverter.ToDXUnit(record, type);
                 }
             }
+        }
 
-            var multiProps = AttributeReader.GetMultiItemInfos(type);
-            if (dxModel.DXMultiElements != null)
+        private static IEnumerable<DXDataBlock<DXUnitRecord>> ParseBlocks(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return Array.Empty<DXDataBlock<DXUnitRecord>>();
+
+            var token = JToken.Parse(json);
+            return ParseBlocks(token);
+        }
+
+        private static IEnumerable<DXDataBlock<DXUnitRecord>> ParseBlocks(JToken token)
+        {
+            if (token is JArray jArray)
             {
-                foreach (var mp in multiProps)
-                {
-                    var modelItem = dxModel.DXMultiElements.SingleOrDefault(x => x.Name == mp.Name);
-                    if (modelItem is null) continue;
-
-                    var jProp = modelItem.ToJProperty();
-                    if (jProp?.Value == null) continue;
-
-                    var instance = jProp.Value.ToObject(mp.PropertyType);
-                    mp.SetValue(obj, instance);
-                }
+                return ParseBlocks(jArray);
             }
 
-            return (DXUnit)obj;
+            if (token is JObject jObject)
+            {
+                var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+                return block == null ? Array.Empty<DXDataBlock<DXUnitRecord>>() : new[] { block };
+            }
+
+            return Array.Empty<DXDataBlock<DXUnitRecord>>();
+        }
+
+        private static IEnumerable<DXDataBlock<DXUnitRecord>> ParseBlocks(JArray jArray)
+        {
+            var blocks = new List<DXDataBlock<DXUnitRecord>>();
+            foreach (var item in jArray)
+            {
+                var block = item.ToObject<DXDataBlock<DXUnitRecord>>();
+                if (block != null)
+                    blocks.Add(block);
+            }
+
+            return blocks;
         }
         #endregion      
     }

@@ -18,9 +18,9 @@ namespace IV.DX.Persistence
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXElementDefinitionUnit>(dxUnitInheritance);
 
-            var dxElementModelsFromDB = this.GetItems(dxModeDefinition, DXLoadingType.Full);
+            var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            var dxElementInfos = dxElementModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXElementDefinitionUnit>(x)).ToList();
+            var dxElementInfos = DXRecordConverter.ToDXUnits<DXElementDefinitionUnit>(new[] { block }).ToList();
 
             return dxElementInfos;
         }
@@ -34,9 +34,9 @@ namespace IV.DX.Persistence
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXUnitDefinitionUnit>(dxUnitInheritance);
 
-            var dxUnitModelsFromDB = this.GetItems(dxModeDefinition, DXLoadingType.Full);
+            var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            var dxUnitInfos = dxUnitModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXUnitDefinitionUnit>(x)).ToList();
+            var dxUnitInfos = DXRecordConverter.ToDXUnits<DXUnitDefinitionUnit>(new[] { block }).ToList();
 
             return dxUnitInfos;
         }
@@ -50,9 +50,9 @@ namespace IV.DX.Persistence
 
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXEnumDefinitionUnit>(dxUnitInheritance);
 
-            var enumsModelsFromDB = this.GetItems(dxModeDefinition, DXLoadingType.Full);
+            var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            var enumInfos = enumsModelsFromDB.Select(x => DXUnitConverter.ToDXUnits<DXEnumDefinitionUnit>(x)).ToList();
+            var enumInfos = DXRecordConverter.ToDXUnits<DXEnumDefinitionUnit>(new[] { block }).ToList();
 
             return enumInfos;
         }
@@ -70,9 +70,9 @@ namespace IV.DX.Persistence
             var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXRelationDefinitionUnit");
             var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(dxUnitInheritance);
 
-            var result = this.GetItems(dxModeDefinition, DXLoadingType.Full);
+            var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            return result.Select(x => DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(x)).ToList().ToList();
+            return DXRecordConverter.ToDXUnits<DXRelationDefinitionUnit>(new[] { block }).ToList();
         }
     }
 }

@@ -109,11 +109,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 var element = prop.GetValue(unit) as DXElement;
                 if (element == null) continue;
 
-                var elementTypeName = AttributeReader.GetDXElementTypeName(element.GetType());
-                if (string.IsNullOrWhiteSpace(elementTypeName))
-                    elementTypeName = prop.Name;
-
-                record.DXElements[elementTypeName] = BuildSingleElementBlock(element, options, prop);
+                record.DXElements[prop.Name] = BuildSingleElementBlock(element, options, prop);
             }
         }
 
@@ -130,7 +126,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                     elementTypeName = prop.Name;
 
                 var block = BuildMultiElementBlock(container, elementType, unit.ID, options, prop, elementTypeName);
-                record.DXElements[elementTypeName] = block;
+                record.DXElements[prop.Name] = block;
             }
         }
 
@@ -206,13 +202,19 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
             if (options?.IncludeDeleteFields == true)
             {
                 var fields = ReadScalarFields(element);
-                if (fields != null)
-                    delete.Fields = fields;
-                else if (element.DXUnitID != Guid.Empty || unitId != Guid.Empty)
-                    delete.Fields = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        { Constants.DXUnitID, JToken.FromObject(element.DXUnitID == Guid.Empty ? unitId : element.DXUnitID) }
-                    };
+                delete.Fields = fields ?? new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
+
+                if (!delete.Fields.ContainsKey(Constants.DXUnitID)
+                    && (element.DXUnitID != Guid.Empty || unitId != Guid.Empty))
+                {
+                    delete.Fields[Constants.DXUnitID] =
+                        JToken.FromObject(element.DXUnitID == Guid.Empty ? unitId : element.DXUnitID);
+                }
+
+                if (!delete.Fields.ContainsKey(Constants.TimeStamp) && element.TimeStamp != default)
+                {
+                    delete.Fields[Constants.TimeStamp] = JToken.FromObject(element.TimeStamp);
+                }
             }
 
             return delete;

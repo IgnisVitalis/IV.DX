@@ -16,11 +16,6 @@ namespace IV.DX.Kernel.Models
             this.DXSingleElements = dxSingleElements;
             this.DXMultiElements = dxMultiElements;
         }
-        
-        public JObject ToJObject()
-        {
-            return JObjectConverter.ToJObject(this);
-        }
 
         public static DXModel From(JObject jObject)
         {

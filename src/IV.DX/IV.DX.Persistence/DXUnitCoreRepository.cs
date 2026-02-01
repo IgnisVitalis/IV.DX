@@ -67,33 +67,6 @@ namespace IV.DX.Persistence
             });
         }
 
-        public DXModel? GetItem(DXDataSetDefinition container, Guid id, DXLoadingType typeOfLoading)
-        {
-            if (container == null)
-                return null;
-
-            return this.RunRequest((conn) =>
-            {
-                var dataSet = this.PopulateDataSetForTargetDXUnit(container, id, conn);
-                var dataTable = dataSet.Tables[container.MainElement.Name];
-
-                if (dataTable == null)
-                    throw new Exception($"Table '{container.MainElement.Name}' wouldn't load");
-
-                if (dataTable.Rows.Count == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    var dataRow = dataTable.Rows[0];
-                    var record = this.ConvertToDXUnitRecord(dataSet, dataRow, container);
-
-                    return BuildDXModel(container.MainElement.DXUnitType, record);
-                }
-            });
-        }
-
         public DXDataBlock<DXUnitRecord>? GetItemRecord(DXDataSetDefinition container, Guid id, DXLoadingType typeOfLoading)
         {
             if (container == null)
@@ -135,84 +108,6 @@ namespace IV.DX.Persistence
         }
 
 
-        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
-        {
-            if (container == null)
-                return null;
-
-            if (objIds == null)
-                return null;
-
-            if (objIds.Count() == 0)
-                return new List<DXModel>();
-
-            IEnumerable<DXModel> resultItems = null;
-
-            this.RunRequest((conn) =>
-            {
-                resultItems = this.GetItems(conn, container, objIds, typeOfLoading);
-            });
-
-            return resultItems;
-        }
-
-        public IEnumerable<DXModel> GetItems(DbConnection conn, DXDataSetDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
-        {
-            if (container == null)
-                return null;
-
-            if (objIds == null)
-                return null;
-
-            if (objIds.Count() == 0)
-                return new List<DXModel>();
-
-            IEnumerable<DXModel> resultItems = null;
-
-            var dataSet = this.PopulateDataSetForTargetDXUnits(container, objIds, conn);
-            var dataTable = dataSet.Tables[container.MainElement.DXUnitType];
-
-            var items = dataTable.Rows;
-
-            resultItems = items.Cast<DataRow>()
-                .Select(x => this.ConvertToDXUnitRecord(dataSet, x, container))
-                .Select(x => BuildDXModel(container.MainElement.DXUnitType, x))
-                .ToList();
-
-            dataSet.AcceptChanges();
-
-            return resultItems;
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName)
-        {
-            var modelDefinition = this.GetModelDefinition(typeName);
-
-            if (modelDefinition == null)
-                return null;
-
-            return this.GetItems(modelDefinition, DXLoadingType.Full);
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName, IEnumerable<Guid> ids)
-        {
-            var modelDefinition = this.GetModelDefinition(typeName);
-
-            if (modelDefinition == null)
-                return null;
-
-            return this.GetItems(modelDefinition, ids, DXLoadingType.Full);
-        }
-
-        public IEnumerable<DXModel> GetItems(string typeName, string dxFilter)
-        {
-            var modelDefinition = this.GetModelDefinition(typeName);
-
-            if (modelDefinition == null)
-                return null;
-
-            return this.GetItems(modelDefinition, dxFilter, DXLoadingType.Full);
-        }
 
         // TODO: need to check what kind of data is loaded. Because this method should load only IDs
         public IEnumerable<Guid> GetItemIDs(string typeName, string? dxFilter = default)
@@ -234,16 +129,6 @@ namespace IV.DX.Persistence
 
                 return ids;
             });
-        }
-
-        public DXModel GetItem(string typeName, Guid id)
-        {
-            var modelDefinition = this.GetModelDefinition(typeName);
-
-            if (modelDefinition == null)
-                return null;
-
-            return this.GetItem(modelDefinition, id, DXLoadingType.Full);
         }
 
         public DXDataBlock<DXUnitRecord>? GetItemRecord(string typeName, Guid objectId)
@@ -268,20 +153,6 @@ namespace IV.DX.Persistence
             var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(type, dxUnitHierarchy);
 
             return dxUnitDefinition;
-        }
-
-        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, DXLoadingType typeOfLoading)
-        {
-            return GetItems(container, string.Empty, typeOfLoading);
-        }
-
-        public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, string dxFilter, DXLoadingType typeOfLoading)
-        {
-            string typeName = container.MainElement.DXUnitType;
-
-            var ids = this.GetItemIDs(typeName, dxFilter);
-
-            return this.GetItems(container, ids, typeOfLoading);
         }
 
         public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName)
@@ -627,48 +498,6 @@ namespace IV.DX.Persistence
             return dataRow[dataColumn];
         }
 
-        public Guid Insert(DXModel dxModel)
-        {
-            return this.InsertOrUpdate(dxModel, ProcessingType.Insert);
-        }
-
-        public Guid Update(DXModel dxModel)
-        {
-            return this.InsertOrUpdate(dxModel, ProcessingType.Update);
-        }
-
-        private Guid InsertOrUpdate(DXModel dxModel, ProcessingType processingType)
-        {
-            ArgumentNullException.ThrowIfNull(dxModel);
-
-            var typeName = dxModel.DXMainElement.Attribute.Type;
-
-            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
-            if (mainDXUnitInfo != null)
-            {
-                var record = DXModelRecordConverter.ToRecord(dxModel);
-                return this.InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
-            }
-
-            throw new Exception($"Unit type '{dxModel.DXMainElement.Attribute.Type}' is not registered.");
-        }
-
-        public Guid InsertOrUpdate(DXModel dxModel)
-        {
-            var objId = dxModel.DXMainElement.Item.ID;
-            var type = dxModel.DXMainElement.Attribute.Type;
-
-            if (!string.IsNullOrEmpty(type)
-                && this.IsItemExisting(type, objId))
-            {
-                return this.Update(dxModel);
-            }
-            else
-            {
-                return this.Insert(dxModel);
-            }
-        }
-
         public Guid InsertOrUpdate(DXDataBlock<DXUnitRecord> block)
         {
             ArgumentNullException.ThrowIfNull(block);
@@ -700,41 +529,15 @@ namespace IV.DX.Persistence
             return lastId;
         }
 
-        private static DXModel BuildDXModel(string typeName, DXUnitRecord record)
-        {
-            var block = new DXDataBlock<DXUnitRecord>
-            {
-                Meta = new DXMeta
-                {
-                    Type = typeName,
-                    Kind = "DXUnit",
-                    Op = "Patch",
-                    IsMulti = true
-                },
-                Data = new DXData<DXUnitRecord>
-                {
-                    Upsert = new List<DXUnitRecord> { record }
-                }
-            };
-
-            return DXRecordModelConverter.ToDXModel(block, record);
-        }
-
         public bool IsItemExisting(string type, Guid objectId)
         {
             DXDataSetDefinition dd = new DXDataSetDefinition(new DXMainTableDefinition(type, type));
 
-            var item = this.GetItem(dd, objectId, DXLoadingType.Base);
+            var item = this.GetItemRecord(dd, objectId, DXLoadingType.Base);
 
-            return item != null;
+            return item != null && item.Data?.Upsert?.Count > 0;
         }     
 
-        private Guid InsertOrUpdateDXUnit(DXUnitDefinitionUnit mainDXUnitInfo, DXModel dxModel, ProcessingType processingType)
-        {
-            var typeName = dxModel.DXMainElement.Attribute.Type;
-            var record = DXModelRecordConverter.ToRecord(dxModel);
-            return InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
-        }
 
         private Guid InsertOrUpdateDXUnitFromRecord(
             DXUnitDefinitionUnit mainDXUnitInfo,
@@ -810,24 +613,6 @@ namespace IV.DX.Persistence
             adapter.Update(table);
         }
 
-        private void UpsertOwnRow(DXModel dxModel, DataTable table, string dxUnitType, ProcessingType processingType)
-        {
-            var id = dxModel.DXMainElement.Item.ID;
-
-            var row = table.Rows.Find(id);
-
-            if (row == null)
-            {
-                row = table.NewRow();
-                MapdxItemToRow(dxModel.DXMainElement.Item, row, dxUnitType);
-                table.Rows.Add(row);
-            }
-            else
-            {
-                MapdxItemToRow(dxModel.DXMainElement.Item, row, dxUnitType);
-            }
-        }
-
         private void UpsertOwnRowFromRecord(DXUnitRecord record, DataTable table, string dxUnitType)
         {
             var id = record.ID;
@@ -845,45 +630,6 @@ namespace IV.DX.Persistence
             {
                 MapdxItemToRow(item, row, dxUnitType);
             }
-        }
-
-        private void UpsertSingle(
-            DXModel dxModel,
-            DXDataSetDefinition dxModelDefinition,
-            string dxUnitType,
-            string dxElementName,
-            DataSet dataSet,
-            DbConnection conn,
-            ProcessingType processingType)
-        {
-            var dxElement = dxModel.DXSingleElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
-
-            if (dxElement == null) return;
-
-            var dxElementDefinition = dxModelDefinition.SingleFragmentDefinitions.SingleOrDefault(x => x.Type == dxElementName);
-
-            if (dxElementDefinition == null) return;
-
-            var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
-                dxElementDefinition.GetColumns(),
-                dxFilter: this.GetWhereExpressionForID(dxElement.Item.ID));
-
-            var table = dataSet.Tables[dxElementName];
-            var id = dxElement.Item.ID;
-            var row = id != Guid.Empty ? table.Rows.Find(id) : null;
-
-            if (row == null)
-            {
-                row = table.NewRow();
-                MapdxItemToRow(dxElement.Item, row, dxUnitType);
-                table.Rows.Add(row);
-            }
-            else
-            {
-                MapdxItemToRow(dxElement.Item, row, dxUnitType);
-            }
-
-            SaveTable(adapter, conn, dataSet, table, false);
         }
 
         private void UpsertSingleFromRecord(
@@ -933,84 +679,6 @@ namespace IV.DX.Persistence
             }
 
             SaveTable(adapter, conn, dataSet, table, false);
-        }
-
-        private void UpsertMulti(
-            DXModel dxModel,
-            DXDataSetDefinition dxModelDefinition,
-            string dxUnitType,
-            string dxElementName,
-            DataSet dataSet,
-            DbConnection conn,
-            ProcessingType processingType)
-        {
-            var dxElement = dxModel.DXMultiElements.SingleOrDefault(x => x.Name.Trim() == dxElementName);
-
-            if (dxElement == null)
-                return;
-
-            var parentId = dxModel.DXMainElement.Item.ID;
-
-            var dxElementDefinition = dxModelDefinition.MultiFragmentDefinitions.SingleOrDefault(x => x.Type == dxElementName);
-
-            // Because empty announced list is usefull to delete for full mode than need to load base structure to process elements.
-            // If there are at least one element in Announced or Deleted list structure will be existing.
-            var columns = dxElementDefinition == null ? SQLQueryBuilder.BaseColumns : dxElementDefinition.GetColumns();
-
-            var adapter = this.PopulateTableToDataSet(
-                conn,
-                dataSet,
-                dxElementName,
-                columns,
-                dxFilter: this.GetWhereExpressionForDXUnitID(parentId));
-
-            var table = dataSet.Tables[dxElementName];
-
-            if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
-            {
-                if (table.Columns.Contains("ID"))
-                    table.PrimaryKey = new[] { table.Columns["ID"] };
-            }
-
-            foreach (var item in dxElement.Announced)
-            {
-                var id = item.ID;
-                DataRow row = id != Guid.Empty ? table.Rows.Find(id) : null;
-
-                if (row == null)
-                {
-                    row = table.NewRow();
-                    MapdxItemToRow(item, row, dxUnitType);
-                    table.Rows.Add(row);
-                }
-                else
-                {
-                    MapdxItemToRow(item, row, dxUnitType);
-                }
-            }
-
-            // Full
-            if (dxElement.Mode == MultiElementsMode.Full)
-            {
-                var announcedIds = new HashSet<Guid>(
-                    dxElement.Announced.Select(a => a.ID));
-
-                var toDelete = new List<DataRow>();
-                foreach (DataRow r in table.Rows)
-                {
-                    var rid = r.Table.Columns.Contains("ID") ? ConvertHelper.ParseGuid(r["ID"]) : (Guid?)null;
-                    if (!rid.HasValue || !announcedIds.Contains(rid.Value))
-                        toDelete.Add(r);
-                }
-                foreach (var r in toDelete) r.Delete();
-            }
-            else if (dxElement.Mode == MultiElementsMode.Target)
-            {
-                ProcessAnnouncedItems(dxElement, table, dataSet.DataSetName);
-                ProcessDeletedItems(dxElement, table);
-            }
-
-            this.SaveTable(adapter, conn, dataSet, table, true);
         }
 
         private void UpsertMultiFromRecord(
@@ -1282,37 +950,6 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxElementName);
 
             return dxElement.Item.ID;
-        }
-
-        private void ProcessAnnouncedItems(DXMultiElement dxMultiItem, DataTable dataTable, string dxModelType)
-        {
-            foreach (var announcedItem in dxMultiItem.Announced)
-            {
-                var row = dataTable.Rows.Cast<DataRow>().SingleOrDefault(x => Guid.Parse(x[Constants.ID].ToString()) == announcedItem.ID);
-
-                if (row == null)
-                {
-                    row = dataTable.NewRow();
-                    MapdxItemToRow(announcedItem, row, dxModelType);
-                    dataTable.Rows.Add(row);
-                }
-                else
-                {
-                    MapdxItemToRow(announcedItem, row, dxModelType);
-                }
-            }
-        }
-
-        private void ProcessDeletedItems(DXMultiElement dxMultiItem, DataTable dataTable)
-        {
-            var rowIDsToDelete = dxMultiItem.Deleted.Select(x => x.ID).ToList();
-
-            var rowsToDelete = dataTable.Rows.Cast<DataRow>().Where(x => rowIDsToDelete.Contains(Guid.Parse(x[Constants.ID].ToString()))).ToList();
-
-            foreach (var rowToDelete in rowsToDelete)
-            {
-                rowToDelete.Delete();
-            }
         }
 
         private void MapdxItemToRow(DXItem dxItem, DataRow row, string dxModelType)

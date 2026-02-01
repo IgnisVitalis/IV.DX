@@ -48,9 +48,9 @@ namespace IV.DX.Application.IntTests.Services
             var dxUnitCreated = await this._service.InsertAsync(dxUnit);
 
             // Assert
-            var items = this._coreRepo.GetItems(dxUnitName);
+            var block = this._coreRepo.GetItemsRecord(dxUnitName);
 
-            Assert.True(items == null || !items.Any());
+            Assert.True(block.Data == null || block.Data.Upsert == null || block.Data.Upsert.Count == 0);
 
             await this._dxStructureCache.RefreshAsync();
             var existigDXUnitStructure = this._dxStructureCache.GetDXUnit(dxUnitName);

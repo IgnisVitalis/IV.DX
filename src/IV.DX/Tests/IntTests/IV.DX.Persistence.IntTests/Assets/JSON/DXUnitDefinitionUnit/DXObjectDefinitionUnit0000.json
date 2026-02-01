@@ -1,8 +1,20 @@
 {
-    "S_Type": "DXUnitDefinitionUnit",
-    "ID": "0C632EA2-D6E0-424B-8E4E-CF2B52847D54",
-    "TimeStamp": "2021-10-02T00:00:00",
-    "Name": "NewObject",
-    "Type": 2,
-    "Kind": 2
+    "Meta": {
+        "Kind": "DXUnit",
+        "Type": "DXUnitDefinitionUnit",
+        "Op": "Patch",
+        "IsMulti": false,
+        "IsRequired": false
+    },
+    "Data": {
+        "Upsert": [
+            {
+                "ID": "0C632EA2-D6E0-424B-8E4E-CF2B52847D54",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "Name": "NewObject",
+                "Type": 2,
+                "Kind": 2
+            }
+        ]
+    }
 }

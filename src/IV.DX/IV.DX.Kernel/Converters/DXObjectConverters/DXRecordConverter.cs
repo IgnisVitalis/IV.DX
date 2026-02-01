@@ -178,10 +178,10 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
             string propertyName,
             out DXDataBlock<DXElementRecord>? block)
         {
-            if (elementMap.TryGetValue(elementTypeName, out block))
+            if (elementMap.TryGetValue(propertyName, out block))
                 return true;
 
-            if (elementMap.TryGetValue(propertyName, out block))
+            if (elementMap.TryGetValue(elementTypeName, out block))
                 return true;
 
             block = null;

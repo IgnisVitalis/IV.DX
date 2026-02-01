@@ -26,10 +26,11 @@ namespace IV.DX.Persistence.IntTests
         public void GetItems_UsingDifferentTypes_Ok(string enumTypeName, int expectedAmount)
         {
             // Action
-            var enums = this._dxEnumGenericRepo.GetItems(enumTypeName);
+            var block = this._dxEnumGenericRepo.GetItemsRecord(enumTypeName);
 
             // Assert
-            Assert.Equal(enums.Count(), expectedAmount);
+            var count = block.Data?.Upsert?.Count ?? 0;
+            Assert.Equal(expectedAmount, count);
         }
     }
 }

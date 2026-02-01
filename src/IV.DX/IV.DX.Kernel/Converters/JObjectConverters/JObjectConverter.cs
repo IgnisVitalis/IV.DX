@@ -1,5 +1,5 @@
 ﻿using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
 
@@ -8,7 +8,7 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
     internal static class JObjectConverter
     {
         public static JObject ToJObject(this DXUnit dxUnit) =>
-           DXModelConverter.ToDXModel(dxUnit).ToJObject();
+           JObject.FromObject(DXRecordWriter.ToBlock(dxUnit));
 
 
         public static JObject ToJObject(this DXElement? dxElement)
@@ -55,27 +55,5 @@ namespace IV.DX.Kernel.Converters.JObjectConverters
             return jObject;
         }
 
-        public static JObject ToJObject(this DXModel dxModel)
-        {
-            JObject result = ToJObject(dxModel.DXMainElement.Item);
-
-            if (dxModel.DXSingleElements != null)
-            {
-                foreach (var item in dxModel.DXSingleElements)
-                {
-                    result.Add(item.ConvertToJProperty());
-                }
-            }
-
-            if (dxModel.DXMultiElements != null)
-            {
-                foreach (var item in dxModel.DXMultiElements)
-                {
-                    result.Add(item.ToJProperty());
-                }
-            }
-
-            return result;
-        }
     }
 }

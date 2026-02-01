@@ -58,8 +58,14 @@ namespace IV.DX.Persistence
         {
             var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXObjectDefinitionUnit>();
 
-            var result = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit), dxUnitInheritance), dataDXElement.ID, DXLoadingType.Full);
-            var existingDataDXElement = DXUnitConverter.ToDXUnits<DXObjectDefinitionUnit>(result);
+            var block = this.GetItemRecord(
+                DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit), dxUnitInheritance),
+                dataDXElement.ID,
+                DXLoadingType.Full);
+            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var existingDataDXElement = record == null
+                ? null
+                : (DXObjectDefinitionUnit)DXRecordConverter.ToDXUnit(record, typeof(DXObjectDefinitionUnit));
 
             var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
@@ -165,9 +171,14 @@ namespace IV.DX.Persistence
             {
                 var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance<DXRelationDefinitionUnit>();
 
-                var existingModel = this.GetItem(DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit), dxUnitInheritance), dxUnit.ID, DXLoadingType.Full);
-
-                var existingDXUnit = DXUnitConverter.ToDXUnits<DXRelationDefinitionUnit>(existingModel);
+                var block = this.GetItemRecord(
+                    DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit), dxUnitInheritance),
+                    dxUnit.ID,
+                    DXLoadingType.Full);
+                var record = block?.Data?.Upsert?.SingleOrDefault();
+                var existingDXUnit = record == null
+                    ? null
+                    : (DXRelationDefinitionUnit)DXRecordConverter.ToDXUnit(record, typeof(DXRelationDefinitionUnit));
 
                 relationTableName = existingDXUnit.RelationTable;
             }

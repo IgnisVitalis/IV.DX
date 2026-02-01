@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.UnitTests.Models
     public class DXUnitTests
     {
         [Fact]
-        public void ToDXModel_UsingDXUnit_Ok()
+        public void ToDXRecord_UsingDXUnit_Ok()
         {
             // Init
             var id = Guid.NewGuid();
@@ -23,9 +23,12 @@ namespace IV.DX.Kernel.UnitTests.Models
             };
 
             // Action
-            var dxModel = dxUnit.ToDXModel();
+            var block = IV.DX.Kernel.Converters.DXObjectConverters.DXRecordWriter.ToBlock(dxUnit);
 
             // Assert
+            Assert.NotNull(block);
+            Assert.NotNull(block.Data);
+            Assert.NotNull(block.Data.Upsert);
         }
     }
 }

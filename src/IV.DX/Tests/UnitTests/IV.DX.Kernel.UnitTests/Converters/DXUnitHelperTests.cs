@@ -1,8 +1,6 @@
 ﻿using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using Newtonsoft.Json.Linq;
@@ -13,7 +11,6 @@ namespace IV.DX.Contracts.UnitTests
     public class DXUnitHelperTests
     {
         private readonly MyObject dxUnit;
-        private readonly DXModel dxModel;
 
         public DXUnitHelperTests()
         {
@@ -71,137 +68,26 @@ namespace IV.DX.Contracts.UnitTests
                 }
             };
 
-            var ownDXItem = new DXItem(
-                            "MyObjectDefinition",
-                            objectId,
-                            objectId,
-                            new DateTime(2020, 12, 1),
-                            new Dictionary<string, object>()
-                            {
-                                { Constants.SystemPropertyTypeName, "MyObjectDefinition" },
-                                { Constants.ID, objectId },
-                                { Constants.TimeStamp, new DateTime(2020, 12, 1)}
-                            });
-
-            var ownItem = new DXMainElement(new DXUnitAttribute("MyObjectDefinition"), ownDXItem);
-
-            var dxSingleElement1 = new DXSingleElement(
-                 "MyDXElementSingleItem",
-                  new DXElementAttribute("MyDXElementDefinition"),
-                  new DXItem("MyDXElementDefinition", new Guid("B2669009-536A-4252-A920-CCEF4456A08A"), objectId, new DateTime(2020, 12, 1), new Dictionary<string, object>()
-                            {
-                      { Constants.SystemPropertyTypeName, "MyDXElementDefinition"},
-                            {Constants.ID, new Guid("B2669009-536A-4252-A920-CCEF4456A08A") },
-                            {Constants.DXUnitID, objectId},
-                            {Constants.TimeStamp, new DateTime(2020, 12, 1)},
-                            { "Name", "Name1"},
-                            { "Value", 1},
-                            { "Date", new DateTime(2020, 12, 1)}
-                  }), true);
-
-            var dxXSingleElements = new HashSet<DXSingleElement>()
-            {
-                dxSingleElement1
-            };
-
-            var dxMultiElement = DXMultiElement.CreateForTargetMode(
-                "MyDXElementMultiItems",
-                new DXElementAttribute("MyDXElementDefinition"), new HashSet<DXItem>()
-                    {
-                        new DXItem(
-                            "MyDXElementDefinition",
-                            new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
-                            objectId,
-                            new DateTime(2020, 12, 2),
-                            new Dictionary<string, object>()
-                            {
-                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
-                                {Constants.ID, new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A") },
-                                {Constants.DXUnitID,  objectId },
-                                {Constants.TimeStamp, new DateTime(2020, 12, 2) },
-                                {"Name", "Name2" },
-                                {"Value", 2 },
-                                {"Date", new DateTime(2020, 12, 2) }
-                            }),
-                        new DXItem(
-                            "MyDXElementDefinition",
-                            new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
-                            objectId,
-                            new DateTime(2020, 12, 3),
-                            new Dictionary<string, object>()
-                            {
-                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
-                                {Constants.ID, new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2") },
-                                {Constants.DXUnitID, objectId },
-                                {Constants.TimeStamp, new DateTime(2020, 12, 3) },
-                                {"Name", "Name3" },
-                                {"Value", 3 },
-                                {"Date", new DateTime(2020, 12, 3) }
-                            })
-                    },
-                    new HashSet<DXItem>()
-                    {
-                        new DXItem(
-                            "MyDXElementDefinition",
-                            new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
-                            objectId,
-                            new DateTime(2020, 12, 4),
-                            new Dictionary<string, object>()
-                            {
-                                {Constants.SystemPropertyTypeName, "MyDXElementDefinition" },
-                                {Constants.ID, new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6") },
-                                {Constants.DXUnitID, objectId },
-                                {Constants.TimeStamp, new DateTime(2020, 12, 4) },
-                                {"Name", "Name4" },
-                                {"Value", 4 },
-                                {"Date", new DateTime(2020, 12, 4) }
-                            })
-                    });
-
-            var dxMultiElements = new HashSet<DXMultiElement>()
-            {
-                dxMultiElement
-            };
-
-            dxModel = new DXModel(ownItem, dxXSingleElements, dxMultiElements);
         }
 
         [Fact]
-        public void DXModelParse_UsingJObject_Ok()
+        public void ConvertToRecord_UsingDXUnit_Ok()
         {
-            // Init
-            var json = File.ReadAllText("Converters/Assets/MyObjectDefinition.json");
-            var jObject = JObject.Parse(json);
+            var block = DXRecordWriter.ToBlock(this.dxUnit);
+            var record = block.Data?.Upsert?.SingleOrDefault();
 
-            // Action
-            var result = DXModelConverter.ToDXModel(jObject);
-
-            // Assert
-            Assert.True(DXModel.DeepEquals(this.dxModel, result));
-        }
-
-
-        [Fact]
-        public void ConvertToJObject_UsingDXModel_Ok()
-        {
-            // Init
-            var json = File.ReadAllText("Converters/Assets/MyObjectDefinition.json");
-            var jObject = JObject.Parse(json);
-
-            // Action
-            var result = this.dxModel.ToJObject();
-
-            // Assert
-            Assert.True(JHelper.DeepEquals(jObject, result));
+            Assert.NotNull(record);
+            Assert.Equal(this.dxUnit.ID, record!.ID);
+            Assert.Equal(this.dxUnit.TimeStamp, record.TimeStamp);
+            Assert.NotNull(record.DXElements);
         }
 
         [Fact]
-        public void DXUnitParse_UsingDXModel_Ok()
+        public void DXUnitParse_UsingRecord_Ok()
         {
-            // Init                     
-
-            // Action            
-            var result = DXUnit.Parse<MyObject>(this.dxModel);
+            var block = DXRecordWriter.ToBlock(this.dxUnit, new DXRecordWriteOptions { IncludeDeleteFields = true });
+            var record = block.Data?.Upsert?.Single();
+            var result = (MyObject)DXRecordConverter.ToDXUnit(record!, typeof(MyObject));
 
             // Assert
             this.Compare(this.dxUnit, result);
@@ -210,41 +96,14 @@ namespace IV.DX.Contracts.UnitTests
         [Fact]
         public void DXUnitParse_UsingJObject_Ok()
         {
-            // Init
-            var json = File.ReadAllText("Converters/Assets/MyObjectDefinition.json");
-            var jObject = JObject.Parse(json);
-
-            // Action
-            var result = DXUnit.Parse<MyObject>(jObject);
+            var block = DXRecordWriter.ToBlock(this.dxUnit, new DXRecordWriteOptions { IncludeDeleteFields = true });
+            var jObject = JObject.FromObject(block);
+            var parsed = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            var record = parsed?.Data?.Upsert?.Single();
+            var result = (MyObject)DXRecordConverter.ToDXUnit(record!, typeof(MyObject));
 
             // Assert
             this.Compare(this.dxUnit, result);
-        }
-
-        [Fact]
-        public void ConvertToDXModel_UsingDXUnit_Ok()
-        {
-            // Init                     
-
-            // Action            
-            var result = DXModelConverter.ToDXModel(this.dxUnit);
-
-            // Assert
-            Assert.True(DXModel.DeepEquals(this.dxModel, result));
-        }
-
-        [Fact]
-        public void ConvertToJObject_UsingDXUnit_Ok()
-        {
-            // Init
-            var json = File.ReadAllText("Converters/Assets/MyObjectDefinition.json");
-            var jObject = JObject.Parse(json);
-
-            // Action            
-            var result = JObjectConverter.ToJObject(dxUnit);
-
-            // Assert
-            Assert.True(JHelper.DeepEquals(jObject, result));
         }
 
         private void Compare(MyObject dxUnit, MyObject result)

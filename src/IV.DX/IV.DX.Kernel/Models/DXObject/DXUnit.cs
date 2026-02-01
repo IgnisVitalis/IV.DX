@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using IV.DX.Kernel.Attributes;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Enums;
@@ -38,23 +37,11 @@ namespace IV.DX.Kernel.Models
             return JObjectConverter.ToJObject(this);
         }
 
-        public DXModel ToDXModel()
-        {
-            return DXModelConverter.ToDXModel(this);
-        }
-
         public static T Parse<T>(JObject jObject) where T : DXUnit
         {
             ArgumentNullException.ThrowIfNull(jObject);
 
             return DXUnitConverter.ToDXUnits<T>(jObject);
-        }
-
-        public static T Parse<T>(DXModel dxModel) where T : DXUnit
-        {
-            ArgumentNullException.ThrowIfNull(dxModel);
-
-            return DXUnitConverter.ToDXUnits<T>(dxModel);
         }
 
         public static T Parse<T>(string jObjectStr) where T : DXUnit

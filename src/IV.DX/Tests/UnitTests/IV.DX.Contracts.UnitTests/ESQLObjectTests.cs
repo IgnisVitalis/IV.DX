@@ -6,16 +6,16 @@ namespace IV.DX.Contracts.UnitTests
     public class dxUnitectTests
     {
         [Fact]
-        public void ConvertToDXModel_UsingDerivedDXUnit_CorrectDXModel()
+        public void ConvertToDXRecord_UsingDerivedDXUnit_CorrectDXRecord()
         {
             // Init
             DerivedUnit1 dxUnit = new DerivedUnit1();
 
             // Action
-            var dxModel = dxUnit.ToDXModel();
+            var block = IV.DX.Kernel.Converters.DXObjectConverters.DXRecordWriter.ToBlock(dxUnit);
 
             // Checking result
-            Assert.Equal(1, 1);
+            Assert.NotNull(block);
         }
     }
 }

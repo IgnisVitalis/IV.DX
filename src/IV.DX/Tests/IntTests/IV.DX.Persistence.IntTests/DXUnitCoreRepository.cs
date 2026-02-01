@@ -19,13 +19,13 @@ namespace IV.DX.Persistence.IntTests
         }
 
         [Fact]
-        public void GetItem_UsingTypeNameAndID_WholeDXModel()
+        public void GetItem_UsingTypeNameAndID_WholeDXRecord()
         {
             // Init
             var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
 
             // Action
-            var dxUnitDefinition = this._dxUnitCoreRepo.GetItem("DXUnitDefinitionUnit", id);
+            var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("DXUnitDefinitionUnit", id);
 
             // Assert
             Assert.NotNull(dxUnitDefinition);

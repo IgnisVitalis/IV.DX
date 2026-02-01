@@ -1,144 +1,151 @@
 {
-    "S_Type": "DXElementDefinitionUnit",
-    "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-    "TimeStamp": "2021-10-02T00:00:00",
-    "Name": "NewDataDXElement",
-    "Type": 1,
-    "Kind": 2,
-
-    "DXColumnDefinitionElement": {
-        "S_Type": "DXColumnDefinitionElement",
-        "Mode": 1,
-        "Announced": [
+    "Meta": {
+        "Kind": "DXUnit",
+        "Type": "DXElementDefinitionUnit",
+        "Op": "Patch",
+        "IsMulti": false,
+        "IsRequired": false
+    },
+    "Data": {
+        "Upsert": [
             {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+                "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
                 "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 1,
-                "Name": "GuidColumn"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 2,
-                "Name": "TimeStampColumn",
-                "DefaultValue": "CURRENT_TIMESTAMP"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "966EF3FD-B092-4465-9B7C-EBECA6E47CE6",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 3,
-                "Name": "StringColumn",
-                "Length": 100,
-                "AllowNull": true,
-                "DefaultValue": "'StringValue'"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "68EBA29A-BFA8-48C4-9FE6-122DE13DA225",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 4,
-                "Name": "TextColumn",
-                "AllowNull": true
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 5,
-                "Name": "DateTimeColumn",
-                "AllowNull": true,
-                "DefaultValue": "CURRENT_TIMESTAMP"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "BC13DDCE-1241-4515-BA44-A68320B611A1",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 6,
-                "Name": "BoolColumn",
-                "AllowNull": true,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "0C8B0D31-6972-4A93-9355-27E2C873DBAA",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 7,
-                "Name": "ShortColumn",
-                "AllowNull": true,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "F505FCAF-7021-46C6-B8AD-8E54C12325B4",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 8,
-                "Name": "IntColumn",
-                "AllowNull": true,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "5482886C-3062-4F37-B550-41353835C744",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 9,
-                "Name": "LongColumn",
-                "AllowNull": true,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 10,
-                "Name": "DecimalColumn",
-                "AllowNull": true,
-                "Precision": 13,
-                "Scale": 4,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "7C8954BF-EEF0-4C18-B240-4FD42D53E27C",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 11,
-                "Name": "FloatColumn",
-                "AllowNull": true,
-                "Precision": 8,
-                "Scale": 5,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 12,
-                "Name": "CurrencyColumn",
-                "AllowNull": true,
-                "DefaultValue": "0"
-            },
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "ColumnType": 13,
-                "Name": "BlobColumn",
-                "AllowNull": true
+                "Name": "NewDataDXElement",
+                "Type": 1,
+                "Kind": 2,
+                "DXElements": {
+                    "DXColumnDefinitionElement": {
+                        "Meta": {
+                            "Kind": "DXElement",
+                            "Type": "DXColumnDefinitionElement",
+                            "Op": "Sync",
+                            "IsMulti": true,
+                            "IsRequired": false
+                        },
+                        "Data": {
+                            "Upsert": [
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 1,
+                                    "Name": "GuidColumn"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 2,
+                                    "Name": "TimeStampColumn",
+                                    "DefaultValue": "CURRENT_TIMESTAMP"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "966EF3FD-B092-4465-9B7C-EBECA6E47CE6",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 3,
+                                    "Name": "StringColumn",
+                                    "Length": 100,
+                                    "AllowNull": true,
+                                    "DefaultValue": "'StringValue'"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "68EBA29A-BFA8-48C4-9FE6-122DE13DA225",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 4,
+                                    "Name": "TextColumn",
+                                    "AllowNull": true
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 5,
+                                    "Name": "DateTimeColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "CURRENT_TIMESTAMP"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "BC13DDCE-1241-4515-BA44-A68320B611A1",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 6,
+                                    "Name": "BoolColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "0C8B0D31-6972-4A93-9355-27E2C873DBAA",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 7,
+                                    "Name": "ShortColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "F505FCAF-7021-46C6-B8AD-8E54C12325B4",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 8,
+                                    "Name": "IntColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "5482886C-3062-4F37-B550-41353835C744",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 9,
+                                    "Name": "LongColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 10,
+                                    "Name": "DecimalColumn",
+                                    "AllowNull": true,
+                                    "Precision": 13,
+                                    "Scale": 4,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "7C8954BF-EEF0-4C18-B240-4FD42D53E27C",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 11,
+                                    "Name": "FloatColumn",
+                                    "AllowNull": true,
+                                    "Precision": 8,
+                                    "Scale": 5,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 12,
+                                    "Name": "CurrencyColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 13,
+                                    "Name": "BlobColumn",
+                                    "AllowNull": true
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         ]
     }
