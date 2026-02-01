@@ -1,5 +1,4 @@
 ﻿using IV.DX.Application.Contracts.Abstractions;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
 using System;

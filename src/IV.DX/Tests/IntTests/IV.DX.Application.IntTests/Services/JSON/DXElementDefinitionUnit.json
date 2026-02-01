@@ -1,31 +1,57 @@
 {
-    "S_Type": "DXElementDefinitionUnit",
-    "ID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
-    "TimeStamp": "2021-10-02T00:00:00",
-    "Name": "Vic",
-    "DisplayValue": null,
-    "Kind": 2,
-
-    "DXColumnDefinitionElement": {
-        "S_Type": "DXColumnDefinitionElement",
-        "Mode": 2,
-        "Announced": [
-            {
-                "S_Type": "DXColumnDefinitionElement",
-                "ID": "ff0dc19a-77e0-49a4-872a-3bef4222656b",
-                "TimeStamp": "2021-10-02T00:00:00",
-                "DXUnitID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
-                "Name": "str",
-                "ColumnType": 3,
-                "Length": 123
+  "Meta": {
+    "Kind": "DXUnit",
+    "Type": "DXElementDefinitionUnit",
+    "Op": "Patch",
+    "IsMulti": true,
+    "IsRequired": false
+  },
+  "Data": {
+    "Upsert": [
+      {
+        "ID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
+        "TimeStamp": "2021-10-02T00:00:00",
+        "Name": "Vic",
+        "DisplayValue": null,
+        "Kind": 2,
+        "DXElements": {
+          "DXColumnDefinitionElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXColumnDefinitionElement",
+              "Op": "Patch",
+              "IsMulti": true,
+              "IsRequired": false
+            },
+            "Data": {
+              "Upsert": [
+                {
+                  "ID": "ff0dc19a-77e0-49a4-872a-3bef4222656b",
+                  "TimeStamp": "2021-10-02T00:00:00",
+                  "DXUnitID": "d0466dff-d7f3-4f24-91e5-446cc2f989e7",
+                  "Name": "str",
+                  "ColumnType": 3,
+                  "Length": 123
+                }
+              ],
+              "Delete": []
             }
-        ],
-        "Deleted": []
-    },
-    "DXUniqueColumnsElement": {
-        "S_Type": "DXUniqueColumnsElement",
-        "Mode": 1,
-        "Announced": [],
-        "Deleted": []
-    }
+          },
+          "DXUniqueColumnsElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXUniqueColumnsElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false
+            },
+            "Data": {
+              "Upsert": [],
+              "Delete": []
+            }
+          }
+        }
+      }
+    ]
+  }
 }

@@ -144,6 +144,9 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.InsertOrUpdateAsync(dxElementDescObject).Wait();
 
             // Assert
+            var cache = this.ServiceProvider.GetRequiredService<IDXStructureCache>();
+            cache.RefreshAsync().Wait();
+
             var existingModifiedItems = this._genericRepo.GetDXUnits<TestDXUnitModified>();
 
             Assert.Single(existingItems);
@@ -163,8 +166,12 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var jObject = await this._dataService.GetItemAsync("TDeviceUnit", id);
 
             // Assert
-            Assert.NotNull(jObject["User"]);
-            Assert.Equal("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3", jObject["User"].ToString());
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var user = record?.Fields?["User"]?.ToObject<string>();
+
+            Assert.NotNull(user);
+            Assert.Equal("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3", user);
         }
 
         [Fact]

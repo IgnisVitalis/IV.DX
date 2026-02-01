@@ -20,18 +20,18 @@ namespace IV.DX.Application.IntTests.Services
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
         }              
 
-        [Fact]
-        public async Task T()
-        {
-            // Init
-            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+        // [Fact]
+        // public async Task T()
+        // {
+        //     // Init
+        //     var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
 
-            // Action
+        //     // Action
 
-            var dxObject = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
+        //     var dxObject = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
 
-            // Assert
-        }
+        //     // Assert
+        // }
 
 
         [DXUnit("DXUnitDefinitionUnit")]

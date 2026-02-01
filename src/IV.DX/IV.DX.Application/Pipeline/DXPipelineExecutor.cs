@@ -1,9 +1,7 @@
 ﻿using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Converters.DXModelConverters;
-using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
-using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Helpers.DXObjectHelpers;
 using IV.DX.Kernel.Models;
@@ -70,18 +68,19 @@ namespace IV.DX.Application.Pipeline
                 if (!baseRes.IsSuccess)
                     return DXResult<JObject?>.Fail(baseRes.Error!);
 
-                var dxModel = baseRes.Value is null
+                var block = baseRes.Value is null
                     ? null
-                    : JObjectConverter.ToJObject(baseRes.Value);
+                    : JObject.FromObject(DXRecordWriter.ToBlock(baseRes.Value));
 
-                return DXResult<JObject?>.Ok(dxModel, baseRes.Flow);
+                return DXResult<JObject?>.Ok(block, baseRes.Flow);
             }
 
-            var dxModelRaw = coreRepo.GetItem(typeName, id)?.ToJObject();
+            var dxModel = coreRepo.GetItem(typeName, id);
 
-            if (dxModelRaw is null) return DXResult<JObject?>.NotFound();
+            if (dxModel is null) return DXResult<JObject?>.NotFound();
 
-            return DXResult<JObject?>.OkContinue(dxModelRaw);
+            var recordBlock = DXModelRecordConverter.ToBlock(dxModel);
+            return DXResult<JObject?>.OkContinue(JObject.FromObject(recordBlock));
         }
 
         public async Task<DXResult<T>> InsertAsync<T>(
@@ -132,48 +131,14 @@ namespace IV.DX.Application.Pipeline
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
-            var typeName = DXUnitHelper.GetTypeName(jObject);
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            if (block == null)
+                return DXResult<JObject>.Fail("Invalid DXDataBlock payload.");
 
-            if (string.IsNullOrWhiteSpace(typeName))
-                return DXResult<JObject>.Fail("Type name not found in payload.");
+            var baseRes = await InsertAsync(block, ctx, ct);
+            if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-            if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
-            {
-                DXUnit? dxUnit;
-                try
-                {
-                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
-                }
-                catch (Exception e)
-                {
-                    return DXResult<JObject>.Fail($"Failed to deserialize DXUnit: {e.Message}");
-                }
-
-                if (dxUnit is null)
-                    return DXResult<JObject>.Fail("Failed to deserialize DXUnit.");
-
-                var inv = GetInsertInvoker(modelType);
-                var baseRes = await inv(this, dxUnit, ctx, ct);
-                if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
-
-                var dxModelResult = JObjectConverter.ToJObject(baseRes.Value!);
-                return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
-            }
-            else
-            {
-                var dxModel = DXModelConverter.ToDXModel(jObject);
-                var id = coreRepo.Insert(dxModel);
-
-            
-                var dxUnitHierarchy = dxStructureCache.GetDXUnitInheritance(typeName);              
-                DXDataSetDefinition modelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxModel, dxUnitHierarchy);
-
-                var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
-
-                if (saved is null) return DXResult<JObject>.Fail("Inserted DXModel not found.");
-
-                return DXResult<JObject>.OkContinue(saved.ToJObject());
-            }
+            return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
         }
 
         public async Task<DXResult<T>> UpdateAsync<T>(
@@ -224,48 +189,14 @@ namespace IV.DX.Application.Pipeline
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
-            var typeName = DXUnitHelper.GetTypeName(jObject);
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            if (block == null)
+                return DXResult<JObject>.Fail("Invalid DXDataBlock payload.");
 
-            if (string.IsNullOrWhiteSpace(typeName))
-                return DXResult<JObject>.Fail("Type name not found in payload.");
+            var baseRes = await UpdateAsync(block, ctx, ct);
+            if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-            if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
-            {
-                DXUnit? dxUnit;
-
-                try
-                {
-                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
-                }
-                catch (Exception e)
-                {
-                    return DXResult<JObject>.Fail($"Failed to deserialize DXUnit: {e.Message}");
-                }
-
-                if (dxUnit is null)
-                    return DXResult<JObject>.Fail("Failed to deserialize DXUnit.");
-
-                var inv = GetUpdateInvoker(modelType);
-                var baseRes = await inv(this, dxUnit, ctx, ct);
-                if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
-
-                var dxModelResult = JObjectConverter.ToJObject(baseRes.Value!);
-                return DXResult<JObject>.Ok(dxModelResult, baseRes.Flow);
-            }
-            else
-            {
-                var dxUnitHierarchy = dxStructureCache.GetDXUnitInheritance(typeName);
-
-                var dxModel = DXModelConverter.ToDXModel(jObject);
-                DXDataSetDefinition modelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(dxModel, dxUnitHierarchy);
-
-                var id = coreRepo.Update(dxModel);
-                var saved = coreRepo.GetItem(modelDefinition, id, Kernel.Enums.DXLoadingType.Full);
-
-                if (saved is null) return DXResult<JObject>.Fail("Updated DXModel not found.");
-
-                return DXResult<JObject>.OkContinue(saved.ToJObject());
-            }
+            return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
         }
 
         public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
@@ -313,43 +244,14 @@ namespace IV.DX.Application.Pipeline
 
         public async Task<DXResult<JObject>> DeleteAsync(JObject jObject, DXHandlerBaseContext ctx, CancellationToken ct)
         {
-            var typeName = DXUnitHelper.GetTypeName(jObject);
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
+            if (block == null)
+                return DXResult<JObject>.Fail("Invalid DXDataBlock payload.");
 
-            if (string.IsNullOrWhiteSpace(typeName))
-                return DXResult<JObject>.Fail("Type name not found in payload.");
+            var baseRes = await DeleteAsync(block, ctx, ct);
+            if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
 
-            if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
-            {
-                DXUnit? dxUnit;
-
-                try
-                {
-                    dxUnit = DXUnitConverter.ToDXUnits(jObject, modelType);
-                }
-                catch (Exception e)
-                {
-                    return DXResult<JObject>.Fail($"Failed to deserialize DXUnit: {e.Message}");
-                }
-
-                if (dxUnit is null)
-                    return DXResult<JObject>.Fail("Failed to deserialize DXUnit.");
-
-                var inv = GetDeleteInvoker(modelType);
-                var baseRes = await inv(this, dxUnit, ctx, ct);
-                if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
-
-                var dxModelResult = DXModelConverter.ToDXModel(baseRes.Value!);
-
-                return DXResult<JObject>.Ok(dxModelResult.ToJObject(), baseRes.Flow);
-            }
-            else
-            {
-                var result = coreRepo.Delete(typeName, DXUnitHelper.GetID(jObject));
-
-                if (!result) return DXResult<JObject>.Fail("DXModel isnot deleted.");
-
-                return DXResult<JObject>.OkContinue(jObject);
-            }
+            return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
         }
 
         public async Task<DXResult<DXDataBlock<DXUnitRecord>>> InsertAsync(
@@ -555,21 +457,28 @@ namespace IV.DX.Application.Pipeline
                 if (!baseRes.IsSuccess)
                     return DXResult<IEnumerable<JObject>?>.Fail(baseRes.Error!);
 
-                var dxModels = baseRes.Value is null
-                    ? null
-                    : baseRes.Value.Select(x => JObjectConverter.ToJObject(x)).ToList();
+                if (baseRes.Value == null)
+                    return DXResult<IEnumerable<JObject>?>.Ok(null, baseRes.Flow);
 
-                return DXResult<IEnumerable<JObject>?>.Ok(dxModels, baseRes.Flow);
+                var records = baseRes.Value.Select(x => DXRecordWriter.ToRecord(x)).ToList();
+                var block = new DXDataBlock<DXUnitRecord>
+                {
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName },
+                    Data = new DXData<DXUnitRecord> { Upsert = records }
+                };
+
+                return DXResult<IEnumerable<JObject>?>.Ok(new List<JObject> { JObject.FromObject(block) }, baseRes.Flow);
             }
 
             var result = coreRepo.GetItems(typeName, ids);
 
-            var dxModelsRaw = result.Select(x => x.ToJObject()).ToList();
-
-            if (dxModelsRaw is null || dxModelsRaw.Count() == 0)
+            var models = result.ToList();
+            if (models.Count == 0)
                 return DXResult<IEnumerable<JObject>?>.NotFound();
 
-            return DXResult<IEnumerable<JObject>?>.OkContinue(dxModelsRaw);
+            var blockRaw = DXModelRecordConverter.ToBlock(models, typeName);
+
+            return DXResult<IEnumerable<JObject>?>.OkContinue(new List<JObject> { JObject.FromObject(blockRaw) });
         }
 
         public async Task<DXResult<IEnumerable<JObject>?>> GetItemsAsync(

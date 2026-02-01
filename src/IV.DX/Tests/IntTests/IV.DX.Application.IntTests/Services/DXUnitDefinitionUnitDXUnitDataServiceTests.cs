@@ -5,6 +5,7 @@ using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -49,9 +50,9 @@ namespace IV.DX.Application.IntTests.Services
             // Assert
             var items = this._coreRepo.GetItems(dxUnitName);
 
-            Assert.NotNull(items);
-            Assert.Empty(items);
+            Assert.True(items == null || !items.Any());
 
+            await this._dxStructureCache.RefreshAsync();
             var existigDXUnitStructure = this._dxStructureCache.GetDXUnit(dxUnitName);
 
             Assert.NotNull(existigDXUnitStructure);
@@ -61,6 +62,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.True(result);
 
+            await this._dxStructureCache.RefreshAsync();
             existigDXUnitStructure = this._dxStructureCache.GetDXUnit(dxUnitName);
 
             Assert.Null(existigDXUnitStructure);

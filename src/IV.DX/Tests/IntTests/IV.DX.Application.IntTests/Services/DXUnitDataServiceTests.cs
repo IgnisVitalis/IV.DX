@@ -49,13 +49,74 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Insert_UsingDXUnitWithSelfRelation_Ok()
         {
             // Init            
-            var dxUnitDefinition = "{\n  \"S_Type\": \"DXUnitDefinitionUnit\",\n  \"ID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n  \"TimeStamp\": \"2025-12-11T10:20:09.399068Z\",\n  \"Name\": \"DXNavigationItemUnit\",\n  \"DisplayValue\": null,\n  \"Kind\": 1,\n  \"DXUnitToUnitRelationElement\": {\n    \"S_Type\": \"DXUnitToUnitRelationElement\",\n    \"Mode\": 2,\n    \"Announced\": [\n      {\n        \"OwnRelationName\": \"Parent\",\n        \"TargetRelationName\": \"Children\",\n        \"RelationType\": 5,\n        \"TargetDXUnit\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"S_Type\": \"DXUnitToUnitRelationElement\",\n        \"ID\": \"1676cad5-c5d6-4584-8d13-e0155fbd8b1b\",\n        \"DXUnitID\": \"cc2a1275-5a0f-468a-be92-b4715b94ab19\",\n        \"TimeStamp\": \"2025-12-11T10:20:16.0861678Z\"\n      }\n    ],\n    \"Deleted\": []\n  }\n}";
+            var definitionId = new Guid("cc2a1275-5a0f-468a-be92-b4715b94ab19");
+            var relationId = new Guid("1676cad5-c5d6-4584-8d13-e0155fbd8b1b");
+            var definitionTime = DateTime.Parse("2025-12-11T10:20:09.399068Z");
+            var relationTime = DateTime.Parse("2025-12-11T10:20:16.0861678Z");
+
+            var dxUnitDefinition = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = "DXUnitDefinitionUnit"
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Upsert = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = definitionId,
+                            TimeStamp = definitionTime,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Name", JToken.FromObject("DXNavigationItemUnit") },
+                                { "DisplayValue", JValue.CreateNull() },
+                                { "Kind", JToken.FromObject(1) }
+                            },
+                            DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                ["DXUnitToUnitRelationElement"] = new DXDataBlock<DXElementRecord>
+                                {
+                                    Meta = new DXMeta
+                                    {
+                                        Kind = "DXElement",
+                                        Type = "DXUnitToUnitRelationElement",
+                                        Op = "Patch",
+                                        IsMulti = true
+                                    },
+                                    Data = new DXData<DXElementRecord>
+                                    {
+                                        Upsert = new List<DXElementRecord>
+                                        {
+                                            new DXElementRecord
+                                            {
+                                                ID = relationId,
+                                                DXUnitID = definitionId,
+                                                TimeStamp = relationTime,
+                                                Fields = new Dictionary<string, JToken>
+                                                {
+                                                    { "OwnRelationName", JToken.FromObject("Parent") },
+                                                    { "TargetRelationName", JToken.FromObject("Children") },
+                                                    { "RelationType", JToken.FromObject(5) },
+                                                    { "TargetDXUnit", JToken.FromObject(definitionId) }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
 
             // Action
-            var createdItem = await this._service.InsertAsync(JObject.Parse(dxUnitDefinition));
+            var createdItem = await this._service.InsertAsync(JObject.FromObject(dxUnitDefinition));
 
             // Assert
-            var id = Guid.Parse(createdItem["ID"].ToString());
+            var id = definitionId;
 
             var existingItem = await this._service.GetItemAsync("DXNavigationItemUnit", id);
 
@@ -143,10 +204,13 @@ namespace IV.DX.Application.IntTests.Services
             var item = await this._service.GetItemAsync(typeName, id);
 
             // Assert
-            Assert.NotNull(item);
-            Assert.Equal(id, ConvertHelper.ParseGuid(item["ID"]));
-            Assert.Equal("DXColumnDefinitionElement", ConvertHelper.ParseString(item["Name"]));
-            Assert.Equal("Name", ConvertHelper.ParseString(item["DisplayValue"]));
+            var block = item.ToObject<DXDataBlock<DXUnitRecord>>();
+            var record = block?.Data?.Upsert?.SingleOrDefault();
+
+            Assert.NotNull(record);
+            Assert.Equal(id, record!.ID);
+            Assert.Equal("DXColumnDefinitionElement", record.Fields?["Name"]?.ToObject<string>());
+            Assert.Equal("Name", record.Fields?["DisplayValue"]?.ToObject<string>());
         }
 
         [Fact]
@@ -516,14 +580,65 @@ namespace IV.DX.Application.IntTests.Services
         public async Task InsertOrUpdate_UsingExistingCoreDXUnitWithTargetModeForMultiElements_Ok()
         {
             // Init         
-            var dxUnitStr = "{\"S_Type\":\"DXElementDefinitionUnit\",\"ID\":\"00b29615-f32e-457e-81c6-606a0b4fd4f7\",\"TimeStamp\":\"2026-01-25T16:04:15.604149Z\",\"Name\":\"DXUnitToUnitRelationElement\",\"DisplayValue\":\"OwnRelationName\",\"Kind\":1,\"DXColumnDefinitionElement\":{\"S_Type\":\"DXColumnDefinitionElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]},\"DXUniqueColumnsElement\":{\"S_Type\":\"DXUniqueColumnsElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]},\"DXObjectEnumElement\":{\"S_Type\":\"DXObjectEnumElement\",\"Mode\":2,\"Announced\":[],\"Deleted\":[]}}";
-            var dxUnitJObject = JObject.Parse(dxUnitStr);
+            var unitId = new Guid("00b29615-f32e-457e-81c6-606a0b4fd4f7");
+            var unitTime = DateTime.Parse("2026-01-25T16:04:15.604149Z");
+
+            var dxUnitBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = "DXElementDefinitionUnit"
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Upsert = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = unitId,
+                            TimeStamp = unitTime,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Name", JToken.FromObject("DXUnitToUnitRelationElement") },
+                                { "DisplayValue", JToken.FromObject("OwnRelationName") },
+                                { "Kind", JToken.FromObject(1) }
+                            },
+                            DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                ["DXColumnDefinitionElement"] = BuildEmptyMultiElementBlock("DXColumnDefinitionElement"),
+                                ["DXUniqueColumnsElement"] = BuildEmptyMultiElementBlock("DXUniqueColumnsElement"),
+                                ["DXObjectEnumElement"] = BuildEmptyMultiElementBlock("DXObjectEnumElement")
+                            }
+                        }
+                    }
+                }
+            };
 
             // Action
-            var existingDXUnit = await this._service.InsertOrUpdateAsync(dxUnitJObject);
+            var existingDXUnit = await this._service.InsertOrUpdateAsync(JObject.FromObject(dxUnitBlock));
 
             // Assert
             Assert.NotNull(existingDXUnit);
+        }
+
+        private static DXDataBlock<DXElementRecord> BuildEmptyMultiElementBlock(string elementType)
+        {
+            return new DXDataBlock<DXElementRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXElement",
+                    Type = elementType,
+                    Op = "Patch",
+                    IsMulti = true
+                },
+                Data = new DXData<DXElementRecord>
+                {
+                    Upsert = new List<DXElementRecord>(),
+                    Delete = new List<DXDeleteRef>()
+                }
+            };
         }
 
         [DXUnit("DXUnitWithEnum")]

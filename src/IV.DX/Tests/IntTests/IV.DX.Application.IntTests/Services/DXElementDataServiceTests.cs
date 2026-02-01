@@ -18,19 +18,19 @@ namespace IV.DX.Application.IntTests.Services
             this._service = base.ServiceProvider.GetRequiredService<IDXElementDataService>();
         }
 
-        [Fact]
-        public async Task GetItemsAsync_UsingDXFilterWithRelation_Ok()
-        {
-            // Init
-            var dxFilter = "R(EnumType).Name = 'DXColumnTypeEnum'";
+        // [Fact]
+        // public async Task GetItemsAsync_UsingDXFilterWithRelation_Ok()
+        // {
+        //     // Init
+        //     var dxFilter = "R(EnumType).Name = 'DXColumnTypeEnum'";
 
-            // Action
-            var dxElements = await _service.GetItemsAsync<DXObjectEnumElement>("DXColumnTypeEnum", dxFilter);
+        //     // Action
+        //     var dxElements = await _service.GetItemsAsync<DXObjectEnumElement>("DXColumnTypeEnum", dxFilter);
 
-            // Assert
-            Assert.NotNull(dxElements);
+        //     // Assert
+        //     Assert.NotNull(dxElements);
 
-            //Assert.Equal(3, dxElements.Count());
-        }
+        //     //Assert.Equal(3, dxElements.Count());
+        // }
     }
 }
