@@ -3,11 +3,12 @@ using IV.DX.Application.Contracts.Models;
 using IV.DX.Application.Helpers;
 using IV.DX.Application.PrivateModels.DXQueryUnit;
 using IV.DX.Kernel;
-using IV.DX.Kernel.Converters.JObjectConverters;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IV.DX.Application.Services
 {
@@ -19,9 +20,6 @@ namespace IV.DX.Application.Services
 
             if (dxQuery == null)
                 return null;
-
-            var dxUnits = await dataService.GetItemsAsync(dxQuery.DXUnitName);
-
 
             JObject jObject = new JObject();
 
@@ -77,9 +75,65 @@ namespace IV.DX.Application.Services
 
             var result = dxRawReader.Get(dxQuery.DXUnitName, columns);
 
-            var jArray = result.Announced.ToJArray(true);
+            var block = BuildContentBlock(dxQuery.DXUnitName, result.Announced);
 
-            return new JProperty("Content", jArray);
+            return new JProperty("Content", JObject.FromObject(block));
+        }
+
+        private static DXDataBlock<DXUnitRecord> BuildContentBlock(string typeName, IEnumerable<DXItem> items)
+        {
+            var records = items.Select(ToRecord).ToList();
+
+            return new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new IV.DX.Kernel.Models.DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = typeName,
+                    Op = "Sync",
+                    IsMulti = true
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Upsert = records
+                }
+            };
+        }
+
+        private static DXUnitRecord ToRecord(DXItem item)
+        {
+            return new DXUnitRecord
+            {
+                ID = item.ID,
+                TimeStamp = item.TimeStamp,
+                Fields = ConvertFields(item.Content)
+            };
+        }
+
+        private static Dictionary<string, JToken>? ConvertFields(IDictionary<string, object> content)
+        {
+            if (content == null || content.Count == 0)
+                return null;
+
+            var result = new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var kvp in content)
+            {
+                if (IsSystemField(kvp.Key))
+                    continue;
+
+                result[kvp.Key] = kvp.Value == null
+                    ? JValue.CreateNull()
+                    : JToken.FromObject(kvp.Value);
+            }
+
+            return result.Count == 0 ? null : result;
+        }
+
+        private static bool IsSystemField(string fieldName)
+        {
+            return Constants.SystemProperties.Any(p =>
+                string.Equals(p, fieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<IEnumerable<DXDisplayValue>> GetDisplayValuesAsync(string typeName, CancellationToken ct = default)
