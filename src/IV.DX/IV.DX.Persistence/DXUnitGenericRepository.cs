@@ -1,4 +1,5 @@
-﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+using IV.DX.Kernel.Converters.DXModelConverters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -35,7 +36,15 @@ namespace IV.DX.Persistence
             var dxModelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(T), dxUnitInheritance);
             var result = this._coreRepo.GetItem(dxModelDefinition, id, DXLoadingType.Full);
 
-            return DXUnitConverter.ToDXUnits<T>(result);
+            if (result == null)
+                return default!;
+
+            var block = DXModelRecordConverter.ToBlock(result);
+            var record = block.Data?.Upsert?.FirstOrDefault();
+
+            return record == null
+                ? default!
+                : (T)DXRecordConverter.ToDXUnit(record, typeof(T));
         }
 
         public IEnumerable<T> GetDXUnits<T>() where T : DXUnit
@@ -44,7 +53,11 @@ namespace IV.DX.Persistence
 
             var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
+            return result
+                .Select(x => DXModelRecordConverter.ToBlock(x).Data?.Upsert?.FirstOrDefault())
+                .Where(x => x != null)
+                .Select(x => (T)DXRecordConverter.ToDXUnit(x!, typeof(T)))
+                .ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(IEnumerable<Guid> ids) where T : DXUnit
@@ -53,7 +66,11 @@ namespace IV.DX.Persistence
 
             var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), ids, DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
+            return result
+                .Select(x => DXModelRecordConverter.ToBlock(x).Data?.Upsert?.FirstOrDefault())
+                .Where(x => x != null)
+                .Select(x => (T)DXRecordConverter.ToDXUnit(x!, typeof(T)))
+                .ToList();
         }
 
         public IEnumerable<T> GetDXUnits<T>(string dxFilter) where T : DXUnit
@@ -62,7 +79,11 @@ namespace IV.DX.Persistence
 
             var result = this._coreRepo.GetItems(DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance), dxFilter, DXLoadingType.Full).ToList();
 
-            return result.Select(x => DXUnitConverter.ToDXUnits<T>(x)).ToList();
+            return result
+                .Select(x => DXModelRecordConverter.ToBlock(x).Data?.Upsert?.FirstOrDefault())
+                .Where(x => x != null)
+                .Select(x => (T)DXRecordConverter.ToDXUnit(x!, typeof(T)))
+                .ToList();
         }
 
         public Guid Insert(DXUnit dxUnit)
