@@ -645,7 +645,10 @@ namespace IV.DX.Persistence
 
             var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
             if (mainDXUnitInfo != null)
-                return this.InsertOrUpdateDXUnit(mainDXUnitInfo, dxModel, processingType);
+            {
+                var record = DXModelRecordConverter.ToRecord(dxModel);
+                return this.InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
+            }
 
             throw new Exception($"Unit type '{dxModel.DXMainElement.Attribute.Type}' is not registered.");
         }
@@ -683,8 +686,15 @@ namespace IV.DX.Persistence
             {
                 if (record == null) continue;
 
-                var dxModel = BuildDXModel(typeName, record);
-                lastId = this.InsertOrUpdate(dxModel);
+                var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
+                if (mainDXUnitInfo == null)
+                    throw new Exception($"Unit type '{typeName}' is not registered.");
+
+                var processingType = this.IsItemExisting(typeName, record.ID)
+                    ? ProcessingType.Update
+                    : ProcessingType.Insert;
+
+                lastId = this.InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
             }
 
             return lastId;
@@ -721,33 +731,35 @@ namespace IV.DX.Persistence
 
         private Guid InsertOrUpdateDXUnit(DXUnitDefinitionUnit mainDXUnitInfo, DXModel dxModel, ProcessingType processingType)
         {
+            var typeName = dxModel.DXMainElement.Attribute.Type;
+            var record = DXModelRecordConverter.ToRecord(dxModel);
+            return InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
+        }
+
+        private Guid InsertOrUpdateDXUnitFromRecord(
+            DXUnitDefinitionUnit mainDXUnitInfo,
+            string typeName,
+            DXUnitRecord record,
+            ProcessingType processingType)
+        {
             this.RunRequestInTransaction(conn =>
             {
                 var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnitInfo);
-
-                var dxUnitDefinition = dxModel.ToDXModelDefinition(dxUnitHierarchy);
+                var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeName, dxUnitHierarchy);
 
                 foreach (var dxUnitHierarchyItem in dxUnitHierarchy.ItemsReverted)
                 {
                     var dxUnitInfo = dxUnitHierarchyItem.DXUnit;
-
                     var dxUnitName = dxUnitInfo.Name;
 
-                    // System provides columns for each base table from db because there are no information in dxModel and it is not possible to separate.
-                    // As well during init of db the columns will be empty.
-                    // For empty dict sql helper will provide * instead of list of columns.
-                    // Need to find better solution later.
-                    // var dxUnitColumns = dxUnitInfo.GetColumns();
                     var dxUnitColumns = SQLQueryBuilder.AllColumns;
-
                     var dataSet = new DataSet(dxUnitName);
 
-                    var multiTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     var relatedMM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
                     var relatedMO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var unitTable = dxUnitInfo.Name;
-                    var objectId = dxModel.DXMainElement.Item.ID;
+                    var objectId = record.ID;
 
                     // 1) OWN
                     var adapter = PopulateTableToDataSet(
@@ -757,23 +769,22 @@ namespace IV.DX.Persistence
                         dxUnitColumns,
                         dxFilter: this.GetWhereExpressionForID(objectId));
 
-                    UpsertOwnRow(dxModel, dataSet.Tables[unitTable], unitTable, processingType);
-
+                    UpsertOwnRowFromRecord(record, dataSet.Tables[unitTable], unitTable);
                     SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable], false);
 
                     // 2) SINGLE
                     var relatedSM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
                     var relatedSO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
                     if (relatedSM != null) foreach (var el in relatedSM)
-                        UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
                     if (relatedSO != null) foreach (var el in relatedSO)
-                        UpsertSingle(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
 
                     // 3) MULTI
                     if (relatedMM != null) foreach (var el in relatedMM)
-                        UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
                     if (relatedMO != null) foreach (var el in relatedMO)
-                        UpsertMulti(dxModel, dxUnitDefinition, unitTable, el.Name, dataSet, conn, processingType);
+                        UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
 
                     dataSet.AcceptChanges();
                 }
@@ -781,7 +792,7 @@ namespace IV.DX.Persistence
                 return true;
             });
 
-            return dxModel.DXMainElement.Item.ID;
+            return record.ID;
         }
 
         private void SaveTable(DbDataAdapter adapter, DbConnection conn, DataSet dataSet, DataTable table, bool isMultiTable, int bulkThreshold = 500)
@@ -814,6 +825,25 @@ namespace IV.DX.Persistence
             else
             {
                 MapdxItemToRow(dxModel.DXMainElement.Item, row, dxUnitType);
+            }
+        }
+
+        private void UpsertOwnRowFromRecord(DXUnitRecord record, DataTable table, string dxUnitType)
+        {
+            var id = record.ID;
+
+            var row = table.Rows.Find(id);
+            var item = BuildDXItemFromUnitRecord(record, dxUnitType);
+
+            if (row == null)
+            {
+                row = table.NewRow();
+                MapdxItemToRow(item, row, dxUnitType);
+                table.Rows.Add(row);
+            }
+            else
+            {
+                MapdxItemToRow(item, row, dxUnitType);
             }
         }
 
@@ -851,6 +881,55 @@ namespace IV.DX.Persistence
             else
             {
                 MapdxItemToRow(dxElement.Item, row, dxUnitType);
+            }
+
+            SaveTable(adapter, conn, dataSet, table, false);
+        }
+
+        private void UpsertSingleFromRecord(
+            DXUnitRecord record,
+            DXDataSetDefinition dxModelDefinition,
+            string dxUnitType,
+            string dxElementName,
+            DataSet dataSet,
+            DbConnection conn)
+        {
+            if (record.DXElements == null)
+                return;
+
+            if (!TryGetElementBlock(record.DXElements, dxElementName, out var block))
+                return;
+
+            var elementRecord = block?.Data?.Upsert?.FirstOrDefault();
+            if (elementRecord == null)
+                return;
+
+            var dxElementDefinition = dxModelDefinition.SingleFragmentDefinitions
+                .SingleOrDefault(x => x.Type == dxElementName);
+
+            if (dxElementDefinition == null)
+                return;
+
+            var columns = EnsureDxUnitIdColumn(dxElementDefinition.GetColumns());
+
+            var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
+                columns,
+                dxFilter: this.GetWhereExpressionForID(elementRecord.ID));
+
+            var table = dataSet.Tables[dxElementName];
+            var id = elementRecord.ID;
+            var row = id != Guid.Empty ? table.Rows.Find(id) : null;
+            var item = BuildDXItemFromElementRecord(elementRecord, dxElementName, record.ID);
+
+            if (row == null)
+            {
+                row = table.NewRow();
+                MapdxItemToRow(item, row, dxUnitType);
+                table.Rows.Add(row);
+            }
+            else
+            {
+                MapdxItemToRow(item, row, dxUnitType);
             }
 
             SaveTable(adapter, conn, dataSet, table, false);
@@ -932,6 +1011,184 @@ namespace IV.DX.Persistence
             }
 
             this.SaveTable(adapter, conn, dataSet, table, true);
+        }
+
+        private void UpsertMultiFromRecord(
+            DXUnitRecord record,
+            DXDataSetDefinition dxModelDefinition,
+            string dxUnitType,
+            string dxElementName,
+            DataSet dataSet,
+            DbConnection conn)
+        {
+            if (record.DXElements == null)
+                return;
+
+            if (!TryGetElementBlock(record.DXElements, dxElementName, out var block))
+                return;
+
+            var parentId = record.ID;
+
+            var dxElementDefinition = dxModelDefinition.MultiFragmentDefinitions
+                .SingleOrDefault(x => x.Type == dxElementName);
+
+            var columns = dxElementDefinition == null
+                ? SQLQueryBuilder.BaseColumns
+                : EnsureDxUnitIdColumn(dxElementDefinition.GetColumns());
+
+            var adapter = this.PopulateTableToDataSet(
+                conn,
+                dataSet,
+                dxElementName,
+                columns,
+                dxFilter: this.GetWhereExpressionForDXUnitID(parentId));
+
+            var table = dataSet.Tables[dxElementName];
+
+            if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
+            {
+                if (table.Columns.Contains("ID"))
+                    table.PrimaryKey = new[] { table.Columns["ID"] };
+            }
+
+            var upsertItems = block?.Data?.Upsert ?? new List<DXElementRecord>();
+            foreach (var itemRecord in upsertItems)
+            {
+                var id = itemRecord.ID;
+                DataRow row = id != Guid.Empty ? table.Rows.Find(id) : null;
+                var item = BuildDXItemFromElementRecord(itemRecord, dxElementName, parentId);
+
+                if (row == null)
+                {
+                    row = table.NewRow();
+                    MapdxItemToRow(item, row, dxUnitType);
+                    table.Rows.Add(row);
+                }
+                else
+                {
+                    MapdxItemToRow(item, row, dxUnitType);
+                }
+            }
+
+            var mode = MapMode(block?.Meta?.Op);
+            if (mode == MultiElementsMode.Full)
+            {
+                var announcedIds = new HashSet<Guid>(upsertItems.Select(a => a.ID));
+
+                var toDelete = new List<DataRow>();
+                foreach (DataRow r in table.Rows)
+                {
+                    var rid = r.Table.Columns.Contains("ID") ? ConvertHelper.ParseGuid(r["ID"]) : (Guid?)null;
+                    if (!rid.HasValue || !announcedIds.Contains(rid.Value))
+                        toDelete.Add(r);
+                }
+                foreach (var r in toDelete) r.Delete();
+            }
+            else if (mode == MultiElementsMode.Target)
+            {
+                var deleteIds = block?.Data?.Delete?.Select(x => x.ID).ToHashSet() ?? new HashSet<Guid>();
+                ProcessDeletedItems(deleteIds, table);
+            }
+
+            this.SaveTable(adapter, conn, dataSet, table, true);
+        }
+
+        private static bool TryGetElementBlock(
+            Dictionary<string, DXDataBlock<DXElementRecord>> elements,
+            string elementName,
+            out DXDataBlock<DXElementRecord>? block)
+        {
+            if (elements.TryGetValue(elementName, out block))
+                return true;
+
+            foreach (var kvp in elements)
+            {
+                if (string.Equals(kvp.Key, elementName, StringComparison.OrdinalIgnoreCase))
+                {
+                    block = kvp.Value;
+                    return true;
+                }
+            }
+
+            block = null;
+            return false;
+        }
+
+        private static MultiElementsMode MapMode(string? op)
+        {
+            if (string.IsNullOrWhiteSpace(op))
+                return MultiElementsMode.Full;
+
+            if (op.Equals("Patch", StringComparison.OrdinalIgnoreCase))
+                return MultiElementsMode.Target;
+
+            if (op.Equals("Sync", StringComparison.OrdinalIgnoreCase))
+                return MultiElementsMode.Full;
+
+            return MultiElementsMode.Full;
+        }
+
+        private static DXItem BuildDXItemFromUnitRecord(DXUnitRecord record, string typeName)
+        {
+            var content = ConvertFieldsToObjectDict(record.Fields);
+            return new DXItem(typeName, record.ID, record.ID, record.TimeStamp, content);
+        }
+
+        private static DXItem BuildDXItemFromElementRecord(DXElementRecord record, string elementTypeName, Guid parentId)
+        {
+            var dxUnitId = record.DXUnitID == Guid.Empty ? parentId : record.DXUnitID;
+            var content = ConvertFieldsToObjectDict(record.Fields);
+            return new DXItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
+        }
+
+        private static Dictionary<string, object> ConvertFieldsToObjectDict(IDictionary<string, JToken>? fields)
+        {
+            var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            if (fields == null || fields.Count == 0)
+                return result;
+
+            foreach (var kvp in fields)
+            {
+                result[kvp.Key] = kvp.Value == null || kvp.Value.Type == JTokenType.Null
+                    ? null
+                    : kvp.Value.ToObject<object>();
+            }
+
+            return result;
+        }
+
+        private static IDictionary<string, string> EnsureDxUnitIdColumn(IDictionary<string, string> columns)
+        {
+            if (columns == null)
+                return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { Constants.DXUnitID, Constants.DXUnitID }
+                };
+
+            if (columns.Keys.Any(k => string.Equals(k, Constants.DXUnitID, StringComparison.OrdinalIgnoreCase)))
+                return columns;
+
+            var copy = new Dictionary<string, string>(columns, StringComparer.OrdinalIgnoreCase)
+            {
+                [Constants.DXUnitID] = Constants.DXUnitID
+            };
+
+            return copy;
+        }
+
+        private void ProcessDeletedItems(HashSet<Guid> idsToDelete, DataTable dataTable)
+        {
+            if (idsToDelete == null || idsToDelete.Count == 0)
+                return;
+
+            var rowsToDelete = dataTable.Rows.Cast<DataRow>()
+                .Where(x => idsToDelete.Contains(Guid.Parse(x[Constants.ID].ToString())))
+                .ToList();
+
+            foreach (var rowToDelete in rowsToDelete)
+            {
+                rowToDelete.Delete();
+            }
         }
 
         private void DeleteDXUnitFromDataSet(string dxUnitName, Guid id, DataSet dataSet, DbConnection conn)
@@ -1062,19 +1319,22 @@ namespace IV.DX.Persistence
         {
             row[Constants.ID] = dxItem.ID;
 
-            if (row.Table.Columns.Contains(Constants.DXUnitID))
+            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitID);
+            if (dxUnitIdColumn != null)
             {
-                row[Constants.DXUnitID] = dxItem.DXUnitID;
+                row[dxUnitIdColumn] = dxItem.DXUnitID;
             }
 
-            if (row.Table.Columns.Contains($"{dxModelType}ID"))
+            var modelUnitIdColumn = FindColumn(row.Table, $"{dxModelType}ID");
+            if (modelUnitIdColumn != null)
             {
-                row[$"{dxModelType}ID"] = dxItem.DXUnitID;
+                row[modelUnitIdColumn] = dxItem.DXUnitID;
             }
 
-            if (row.Table.Columns.Contains(Constants.TimeStamp))
+            var timeStampColumn = FindColumn(row.Table, Constants.TimeStamp);
+            if (timeStampColumn != null)
             {
-                row[Constants.TimeStamp] = DateTime.UtcNow;
+                row[timeStampColumn] = DateTime.UtcNow;
             }
 
             if (dxItem.Content == null)
@@ -1083,7 +1343,7 @@ namespace IV.DX.Persistence
             foreach (var column in row.Table.Columns.OfType<DataColumn>())
             {
                 if (column.ColumnName == Constants.ID
-                    || column.ColumnName == Constants.DXUnitID
+                    || string.Equals(column.ColumnName, Constants.DXUnitID, StringComparison.OrdinalIgnoreCase)
                     || column.ColumnName == Constants.TimeStamp
                     || column.ColumnName == Constants.SystemPropertyTypeName
                     || column.ColumnName == $"{dxModelType}ID")
@@ -1122,6 +1382,13 @@ namespace IV.DX.Persistence
                     }
                 }
             }
+        }
+
+        private static DataColumn? FindColumn(DataTable table, string columnName)
+        {
+            return table.Columns
+                .Cast<DataColumn>()
+                .FirstOrDefault(c => string.Equals(c.ColumnName, columnName, StringComparison.OrdinalIgnoreCase));
         }
 
         private bool IsNullOrEmpty(object obj)
