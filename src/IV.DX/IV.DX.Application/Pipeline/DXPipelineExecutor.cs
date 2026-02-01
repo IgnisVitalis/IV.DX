@@ -1,6 +1,5 @@
 ﻿using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
-using IV.DX.Kernel.Converters.DXModelConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Helpers.DXObjectHelpers;
@@ -75,11 +74,10 @@ namespace IV.DX.Application.Pipeline
                 return DXResult<JObject?>.Ok(block, baseRes.Flow);
             }
 
-            var dxModel = coreRepo.GetItem(typeName, id);
+            var recordBlock = coreRepo.GetItemRecord(typeName, id);
 
-            if (dxModel is null) return DXResult<JObject?>.NotFound();
+            if (recordBlock is null) return DXResult<JObject?>.NotFound();
 
-            var recordBlock = DXModelRecordConverter.ToBlock(dxModel);
             return DXResult<JObject?>.OkContinue(JObject.FromObject(recordBlock));
         }
 
@@ -460,23 +458,21 @@ namespace IV.DX.Application.Pipeline
                 if (baseRes.Value == null)
                     return DXResult<IEnumerable<JObject>?>.Ok(null, baseRes.Flow);
 
-                var records = baseRes.Value.Select(x => DXRecordWriter.ToRecord(x)).ToList();
+                var upsertRecords = baseRes.Value.Select(x => DXRecordWriter.ToRecord(x)).ToList();
                 var block = new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName },
-                    Data = new DXData<DXUnitRecord> { Upsert = records }
+                    Data = new DXData<DXUnitRecord> { Upsert = upsertRecords }
                 };
 
                 return DXResult<IEnumerable<JObject>?>.Ok(new List<JObject> { JObject.FromObject(block) }, baseRes.Flow);
             }
 
-            var result = coreRepo.GetItems(typeName, ids);
+            var blockRaw = coreRepo.GetItemsRecord(typeName, ids);
+            var records = blockRaw.Data?.Upsert;
 
-            var models = result.ToList();
-            if (models.Count == 0)
+            if (records == null || records.Count == 0)
                 return DXResult<IEnumerable<JObject>?>.NotFound();
-
-            var blockRaw = DXModelRecordConverter.ToBlock(models, typeName);
 
             return DXResult<IEnumerable<JObject>?>.OkContinue(new List<JObject> { JObject.FromObject(blockRaw) });
         }

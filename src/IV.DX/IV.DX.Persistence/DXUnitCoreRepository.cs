@@ -93,6 +93,15 @@ namespace IV.DX.Persistence
             });
         }
 
+        public DXDataBlock<DXUnitRecord>? GetItemRecord(DXDataSetDefinition container, Guid id, DXLoadingType typeOfLoading)
+        {
+            var model = GetItem(container, id, typeOfLoading);
+            if (model == null)
+                return null;
+
+            return DXModelRecordConverter.ToBlock(model);
+        }
+
 
         public IEnumerable<DXModel> GetItems(DXDataSetDefinition container, IEnumerable<Guid> objIds, DXLoadingType typeOfLoading)
         {
@@ -247,6 +256,15 @@ namespace IV.DX.Persistence
             return this.GetItem(modelDefinition, id, DXLoadingType.Full);
         }
 
+        public DXDataBlock<DXUnitRecord>? GetItemRecord(string typeName, Guid objectId)
+        {
+            var model = GetItem(typeName, objectId);
+            if (model == null)
+                return null;
+
+            return DXModelRecordConverter.ToBlock(model);
+        }
+
         private DXDataSetDefinition GetModelDefinition(string type)
         {
             var mainDXUnit = this.GetDXUnitDefinition(type);
@@ -273,6 +291,42 @@ namespace IV.DX.Persistence
             var ids = this.GetItemIDs(typeName, dxFilter);
 
             return this.GetItems(container, ids, typeOfLoading);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName)
+        {
+            var models = GetItems(typeName);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName, IEnumerable<Guid> objectIds)
+        {
+            var models = GetItems(typeName, objectIds);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(string typeName, string dxFilter)
+        {
+            var models = GetItems(typeName, dxFilter);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), typeName);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, DXLoadingType typeOfLoading)
+        {
+            var models = GetItems(container, typeOfLoading);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, IEnumerable<Guid> objectIds, DXLoadingType typeOfLoading)
+        {
+            var models = GetItems(container, objectIds, typeOfLoading);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
+        }
+
+        public DXDataBlock<DXUnitRecord> GetItemsRecord(DXDataSetDefinition container, string dxFilter, DXLoadingType typeOfLoading)
+        {
+            var models = GetItems(container, dxFilter, typeOfLoading);
+            return DXModelRecordConverter.ToBlock(models ?? Enumerable.Empty<DXModel>(), container.MainElement.DXUnitType);
         }
 
         private DataSet PopulateDataSetForTargetDXUnit(DXDataSetDefinition container, Guid id, DbConnection conn)
