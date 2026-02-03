@@ -285,7 +285,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         private static MultiElementsMode? MapMode(string? op)
         {
             if (string.IsNullOrWhiteSpace(op))
-                return null;
+                return MultiElementsMode.Target;
 
             if (op.Equals("Patch", StringComparison.OrdinalIgnoreCase))
                 return MultiElementsMode.Target;
@@ -293,7 +293,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
             if (op.Equals("Sync", StringComparison.OrdinalIgnoreCase))
                 return MultiElementsMode.Full;
 
-            return null;
+            return MultiElementsMode.Target;
         }
 
         private static bool IsNullable(Type type)

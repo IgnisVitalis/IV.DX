@@ -237,6 +237,10 @@ namespace IV.DX.Application.Handlers
 
         private void AssignDXUnit(DXElementDefinitionUnit dxElement, DXElementToUnitRelationElement dxElementToUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
         {
+            var existing = this.GetExistingDXElementToUnitRelationObject(dxElement, dxElementToUnitRelationElement, dxUnitToAssign);
+            if (existing != null)
+                return;
+
             var relationType = dxElement.DXElementToUnitRelationElement.Announced.Single(x => x.TargetDXUnit == dxUnitToAssign.ID).RelationType;
 
             var dxRelation = this.GetDXElementToUnitRelationObject(dxElement, dxElementToUnitRelationElement, dxUnitToAssign, relationType);

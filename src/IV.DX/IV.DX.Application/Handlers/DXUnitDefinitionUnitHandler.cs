@@ -352,6 +352,10 @@ namespace IV.DX.Application.Handlers
 
         private void AssignDXUnit(DXUnitDefinitionUnit dxUnit, DXUnitToUnitRelationElement dxUnitToUnitRelationElement, DXUnitDefinitionUnit dxUnitToAssign)
         {
+            var existing = this.GetExistingDXUnitToUnitRelationObject(dxUnit, dxUnitToUnitRelationElement, dxUnitToAssign);
+            if (existing != null)
+                return;
+
             var relationType = dxUnit.DXUnitToUnitRelationElement.Announced.Single(x => x.TargetDXUnit == dxUnitToAssign.ID).RelationType;
 
             var dxRelation = this.GetDXUnitToUnitRelationObject(dxUnit, dxUnitToUnitRelationElement, dxUnitToAssign, relationType);
@@ -361,6 +365,10 @@ namespace IV.DX.Application.Handlers
 
         private void AssignDXElement(DXUnitDefinitionUnit dxUnit, DXUnitToElementRelationElement dxUnitToElementRelationElement, DXElementDefinitionUnit dxElementToAssign)
         {
+            var existing = this.GetExistingDXUnitToElementRelationObject(dxUnit, dxUnitToElementRelationElement, dxElementToAssign);
+            if (existing != null)
+                return;
+
             var relationType = dxUnit.DXUnitToElementRelationElement.Announced.Single(x => x.TargetDXElement == dxElementToAssign.ID).RelationType;
 
             var dxRelation = this.GetDXUnitToElementRelationObject(dxUnit, dxUnitToElementRelationElement, dxElementToAssign, relationType);
@@ -438,6 +446,10 @@ namespace IV.DX.Application.Handlers
         {
             foreach (var dxElementToAssign in dxElementsToAssign)
             {
+                var existing = this.GetExistingDXElementInDXUnitRelationObject(dxUnit, dxElementToAssign);
+                if (existing != null)
+                    continue;
+
                 var relationType = dxUnit.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
 
                 dxUnitService.InsertAsync(this.GetDXElementInDXUnitRelationObject(dxUnit, dxElementToAssign, relationType)).Wait();

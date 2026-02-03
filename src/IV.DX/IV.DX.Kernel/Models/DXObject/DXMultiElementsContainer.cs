@@ -4,7 +4,7 @@ namespace IV.DX.Kernel.Models
     {
         public DXMultiElementsContainer()
         {
-            this.Mode = MultiElementsMode.Full;
+            this.Mode = MultiElementsMode.Target;
         }
 
         public MultiElementsMode Mode { get; set; }

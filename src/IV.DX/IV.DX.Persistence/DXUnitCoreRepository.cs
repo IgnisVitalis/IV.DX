@@ -776,7 +776,7 @@ namespace IV.DX.Persistence
         private static MultiElementsMode MapMode(string? op)
         {
             if (string.IsNullOrWhiteSpace(op))
-                return MultiElementsMode.Full;
+                return MultiElementsMode.Target;
 
             if (op.Equals("Patch", StringComparison.OrdinalIgnoreCase))
                 return MultiElementsMode.Target;
@@ -784,7 +784,7 @@ namespace IV.DX.Persistence
             if (op.Equals("Sync", StringComparison.OrdinalIgnoreCase))
                 return MultiElementsMode.Full;
 
-            return MultiElementsMode.Full;
+            return MultiElementsMode.Target;
         }
 
         private static RowItem BuildRowItemFromUnitRecord(DXUnitRecord record, string typeName)

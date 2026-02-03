@@ -319,9 +319,15 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced
+                    .Where(x => this.FilterForNonSystemColumns(x.Name))
+                    .Select(x => x.ID);
 
-                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => columnDescDXElementExistingIds.Contains(x.ID)).Select(x => x.ID).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced
+                    .Where(x => this.FilterForNonSystemColumns(x.Name))
+                    .Where(x => columnDescDXElementExistingIds.Contains(x.ID))
+                    .Select(x => x.ID)
+                    .ToList();
             }
             else
             {
@@ -364,9 +370,14 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var deletedIds = dataDXElementNew.DXColumnDefinitionElement.Deleted
+                    .Select(x => x.ID)
+                    .ToHashSet();
 
-                return dataDXElementNew.DXColumnDefinitionElement.Deleted.Where(x => columnDescDXElementExistingIds.Contains(x.ID)).ToList();
+                return dataDXElementExisting.DXColumnDefinitionElement.Announced
+                    .Where(x => this.FilterForNonSystemColumns(x.Name))
+                    .Where(x => deletedIds.Contains(x.ID))
+                    .ToList();
             }
             else
             {
@@ -385,9 +396,14 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         {
             if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced
+                    .Where(x => this.FilterForNonSystemColumns(x.Name))
+                    .Select(x => x.ID);
 
-                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => !columnDescDXElementExistingIds.Contains(x.ID)).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced
+                    .Where(x => this.FilterForNonSystemColumns(x.Name))
+                    .Where(x => !columnDescDXElementExistingIds.Contains(x.ID))
+                    .ToList();
             }
             else
             {
