@@ -1,5 +1,5 @@
 [
-    "DXSecurity/01_01_0000_DXSecurity_DXEnumDefinitionUnit.dat",
-    "DXSecurity/01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dat",
-    "DXSecurity/01_01_0002_DXSecurity_DXUnitDefinitionUnit.dat"
+    "DXSecurity/01_01_0000_DXSecurity_DXEnumDefinitionUnit.dx",
+    "DXSecurity/01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dx",
+    "DXSecurity/01_01_0002_DXSecurity_DXUnitDefinitionUnit.dx"
 ]

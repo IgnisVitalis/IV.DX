@@ -48,6 +48,7 @@ namespace IV.DX.Shared.IntTests
             coreRepo.DropDataBase();
             init.InitDXCoreDataAsync().Wait();
             init.InitDXQueryDataAsync().Wait();
+            init.InitDXSecurityDataAsync().Wait();
 
             init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
         }

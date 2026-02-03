@@ -13,9 +13,9 @@
       <EmbeddedResource Include="Data\DXCorePostInit.json" />
       <EmbeddedResource Include="Data\DXCorePreInit.json" />
       
-      <EmbeddedResource Include="Data\DXSecurity\01_01_0002_DXSecurity_DXUnitDefinitionUnit.dat" />
-      <EmbeddedResource Include="Data\DXSecurity\01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dat" />
-      <EmbeddedResource Include="Data\DXSecurity\01_01_0000_DXSecurity_DXEnumDefinitionUnit.dat" />
+      <EmbeddedResource Include="Data\DXSecurity\01_01_0002_DXSecurity_DXUnitDefinitionUnit.dx" />
+      <EmbeddedResource Include="Data\DXSecurity\01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dx" />
+      <EmbeddedResource Include="Data\DXSecurity\01_01_0000_DXSecurity_DXEnumDefinitionUnit.dx" />
       <EmbeddedResource Include="Data\DXQuery\01_01_0000_DXQuery_DXQueryColumnElement.dx" />
       <EmbeddedResource Include="Data\DXQuery\01_01_0002_DXQuery_DXFilterUnit.dx" />
       <EmbeddedResource Include="Data\DXQuery\01_01_0001_DXQuery_DXQueryUnit.dx" />
