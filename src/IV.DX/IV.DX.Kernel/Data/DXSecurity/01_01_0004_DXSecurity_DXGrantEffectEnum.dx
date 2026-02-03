@@ -1,0 +1,28 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXEnum",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Upsert": [
+        {
+          "Type": "DXIdentityProviderTypeEnum",
+          "ID": "50f27eba-e544-48f6-a198-8cc289fd7ad8",
+          "TimeStamp": "2025-12-19T13:29:20.599652Z",
+          "Key": 1,
+          "Value": "Allow"
+        },
+        {
+          "Type": "DXIdentityProviderTypeEnum",
+          "ID": "5af5c94b-0044-4729-b2cb-3631c93d865b",
+          "TimeStamp": "2025-12-19T13:29:20.599652Z",
+          "Key": 2,
+          "Value": "Deny"
+        }
+      ]
+    }
+  }
+]

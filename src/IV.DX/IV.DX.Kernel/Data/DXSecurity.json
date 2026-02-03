@@ -1,5 +1,9 @@
 [
     "DXSecurity/01_01_0000_DXSecurity_DXEnumDefinitionUnit.dx",
     "DXSecurity/01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dx",
-    "DXSecurity/01_01_0002_DXSecurity_DXUnitDefinitionUnit.dx"
+    "DXSecurity/01_01_0002_DXSecurity_DXUnitDefinitionUnit.dx",
+    "DXSecurity/01_01_0003_DXEnumDefinitionUnit.dx",
+    "DXSecurity/01_01_0004_DXSecurity_DXGrantEffectEnum.dx",
+    "DXSecurity/01_01_0005_DXSecurity_DXUnitGrantElement.dx"
 ]
+    
