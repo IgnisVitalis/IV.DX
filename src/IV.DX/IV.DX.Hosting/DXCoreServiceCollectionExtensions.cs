@@ -21,19 +21,9 @@ namespace IV.DX.Hosting
             services.AddOptions<DXDatabaseOptions>()
                 .Bind(configuration.GetSection("Database"));
 
-            services.AddSingleton<ISQLQueryDXHelper>(sp =>
-            {
-                var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
-
-                var typeLowerCase = o.Type.ToLower().Trim();
-
-                switch (typeLowerCase)
-                {
-                    case "postgresql": return sp.GetRequiredService<PGSQLQueryDXHelper>();
-                    case "mysql": return sp.GetRequiredService<MySQLQueryDXHelper>();
-                    default: return sp.GetRequiredService<PGSQLQueryDXHelper>();
-                }
-            });
+            services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
+            services.AddSingleton<ISQLSchemaHelper>(sp => (ISQLSchemaHelper)GetHelper(sp));
+            services.AddSingleton<ISQLDbProvider>(sp => (ISQLDbProvider)GetHelper(sp));
 
             services.AddSingleton<MySQLQueryDXHelper>();
             services.AddSingleton<PGSQLQueryDXHelper>();
@@ -43,12 +33,13 @@ namespace IV.DX.Hosting
             var func = (IServiceProvider sp) =>
             {
                 var cache = sp.GetRequiredService<IDXStructureCache>();
-                var helper = sp.GetRequiredService<ISQLQueryDXHelper>();
+                var schemaHelper = sp.GetRequiredService<ISQLSchemaHelper>();
+                var dbProvider = sp.GetRequiredService<ISQLDbProvider>();
                 var sqlQueryBuilder = sp.GetRequiredService<ISQLQueryBuilder>();
 
                 var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, helper, sqlQueryBuilder);
+                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, schemaHelper, dbProvider, sqlQueryBuilder);
             };
 
             services.AddScoped<IDXRawReader, DXCoreRepository>(func);
@@ -77,6 +68,19 @@ namespace IV.DX.Hosting
         private static void RegisterCoreHandlers(this IServiceCollection services)
         {
             services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
+        }
+
+        private static object GetHelper(IServiceProvider sp)
+        {
+            var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
+
+            var typeLowerCase = o.Type.ToLower().Trim();
+
+            return typeLowerCase switch
+            {
+                "mysql" => sp.GetRequiredService<MySQLQueryDXHelper>(),
+                _ => sp.GetRequiredService<PGSQLQueryDXHelper>()
+            };
         }
     }
 }

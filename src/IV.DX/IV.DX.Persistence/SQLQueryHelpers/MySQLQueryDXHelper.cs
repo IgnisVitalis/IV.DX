@@ -6,7 +6,10 @@ using System.Data.Common;
 
 namespace IV.DX.Persistence.SQLQueryHelpers
 {
-    internal class MySQLQueryDXHelper : ISQLQueryDXHelper
+    internal class MySQLQueryDXHelper :
+        ISQLDialect,
+        ISQLSchemaHelper,
+        ISQLDbProvider
     {
         public void BulkInsert(NpgsqlConnection conn, DataTable table, string tableName)
         {
@@ -161,6 +164,26 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement)
         {
             throw new NotImplementedException();
+        }
+
+        public string QuoteIdentifier(string identifier)
+        {
+            return $"`{identifier}`";
+        }
+
+        public string FormatTableAlias(string tableName, string alias)
+        {
+            return $"{QuoteIdentifier(tableName)} AS {QuoteIdentifier(alias)}";
+        }
+
+        public string FormatColumnReference(string tableAlias, string columnName)
+        {
+            return $"{QuoteIdentifier(tableAlias)}.{QuoteIdentifier(columnName)}";
+        }
+
+        public string FormatColumnAlias(string columnExpression, string alias)
+        {
+            return $"{columnExpression} AS {QuoteIdentifier(alias)}";
         }
     }
 

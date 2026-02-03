@@ -11,7 +11,11 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Persistence.SQLQueryHelpers
 {
-    internal class PGSQLQueryDXHelper : ISQLQueryDXHelper, IDXBulkInsertCapable
+    internal class PGSQLQueryDXHelper :
+        ISQLDialect,
+        ISQLSchemaHelper,
+        ISQLDbProvider,
+        IDXBulkInsertCapable
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
         
@@ -726,6 +730,26 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public string GetSQLQueryToSelectIDFromTable(string tableName)
         {
             return $"SELECT \"ID\" FROM \"{tableName}\"";
+        }
+
+        public string QuoteIdentifier(string identifier)
+        {
+            return $"\"{identifier}\"";
+        }
+
+        public string FormatTableAlias(string tableName, string alias)
+        {
+            return $"{QuoteIdentifier(tableName)} AS {QuoteIdentifier(alias)}";
+        }
+
+        public string FormatColumnReference(string tableAlias, string columnName)
+        {
+            return $"{QuoteIdentifier(tableAlias)}.{QuoteIdentifier(columnName)}";
+        }
+
+        public string FormatColumnAlias(string columnExpression, string alias)
+        {
+            return $"{columnExpression} AS {QuoteIdentifier(alias)}";
         }
 
         public void RunSQLQuery(string connectionString, string query)

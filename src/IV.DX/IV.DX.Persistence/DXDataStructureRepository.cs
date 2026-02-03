@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
+using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -11,18 +11,18 @@ namespace IV.DX.Persistence
     {
         public void CreateDataStructure(DXObjectDefinitionUnit dxObjectDefinition)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToCreateTable(dxObjectDefinition);
+            var sqlQuery = this._schemaHelper.GetSQLQueryToCreateTable(dxObjectDefinition);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void UpdateUniqueColumns(DXObjectDefinitionUnit dxObjectDefinition)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToSetUniqueColumns(dxObjectDefinition);
+            var sqlQuery = this._schemaHelper.GetSQLQueryToSetUniqueColumns(dxObjectDefinition);
 
             if (!string.IsNullOrEmpty(sqlQuery))
             {
-                this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+                this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
             }
         }
 
@@ -30,28 +30,28 @@ namespace IV.DX.Persistence
         {
             var sqlQuery = this.GetSQLQueryToCreateRelation(dxUnit);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void DropDataStructure(DXRelationDefinitionUnit dxUnit)
         {
             var sqlQuery = this.GetSQLQueryToDeleteRelation(dxUnit);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void CreateDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
             var sqlQuery = this.GetSQLQueryToCreateTable(obj, dxElement);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void DropDataStructure(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
             var sqlQuery = this.GetSQLQueryToDropTable(obj, dxElement);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void UpdatedDataStructure(DXObjectDefinitionUnit dataDXElement)
@@ -67,25 +67,25 @@ namespace IV.DX.Persistence
                 ? null
                 : (DXObjectDefinitionUnit)DXRecordConverter.ToDXUnit(record, typeof(DXObjectDefinitionUnit));
 
-            var sqlQuery = this._queryHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
+            var sqlQuery = this._schemaHelper.GetSQLQueryToAlterTable(dataDXElement, existingDataDXElement);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         public void DropDataStructure(DXObjectDefinitionUnit dataDXElement)
         {
-            var sqlQuery = this._queryHelper.GetSQLQueryToDropTable(dataDXElement);
-            this._queryHelper.RunSQLQuery(this._connectionStr, sqlQuery);
+            var sqlQuery = this._schemaHelper.GetSQLQueryToDropTable(dataDXElement);
+            this._dbProvider.RunSQLQuery(this._connectionStr, sqlQuery);
         }
 
         private string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            return this._queryHelper.GetSQLQueryToDropTable(obj, dxElement);
+            return this._schemaHelper.GetSQLQueryToDropTable(obj, dxElement);
         }
 
         private string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
-            return this._queryHelper.GetSQLQueryToCreateTable(obj, dxElement);
+            return this._schemaHelper.GetSQLQueryToCreateTable(obj, dxElement);
         }
 
         private string GetSQLQueryToCreateRelation(DXRelationDefinitionUnit obj)
@@ -94,7 +94,7 @@ namespace IV.DX.Persistence
 
             switch (obj.RelationType)
             {
-                case DXRelationTypeEnum.ManyToMany: result = this._queryHelper.GetSQLQueryToCreateRelationManyToMany(obj, this._connectionStr); break;
+                case DXRelationTypeEnum.ManyToMany: result = this._schemaHelper.GetSQLQueryToCreateRelationManyToMany(obj, this._connectionStr); break;
                 case DXRelationTypeEnum.ManyToOne: result = this.GetSQLQueryToCreateRelationManyToOne(obj); break;
                 case DXRelationTypeEnum.ManyToZeroOne: result = this.GetSQLQueryToCreateRelationManyToZeroOne(obj); break;
                 case DXRelationTypeEnum.OneToMany: result = this.GetSQLQueryToCreateRelationOneToMany(obj); break;
@@ -109,39 +109,39 @@ namespace IV.DX.Persistence
 
         private string GetSQLQueryToCreateRelationManyToOne(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, false, false);
+            return this._schemaHelper.GetSQLQueryToCreateRelationManyTo(obj, false, false);
         }
 
         private string GetSQLQueryToCreateRelationManyToZeroOne(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, true, false);
+            return this._schemaHelper.GetSQLQueryToCreateRelationManyTo(obj, true, false);
         }
 
         private string GetSQLQueryToCreateRelationZeroOneToOne(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationManyTo(obj, false, true);
+            return this._schemaHelper.GetSQLQueryToCreateRelationManyTo(obj, false, true);
         }
 
         private string GetSQLQueryToCreateRelationOneToMany(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, false, false);
+            return this._schemaHelper.GetSQLQueryToCreateRelationToMany(obj, false, false);
         }
 
         private string GetSQLQueryToCreateRelationZeroOneToMany(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, false);
+            return this._schemaHelper.GetSQLQueryToCreateRelationToMany(obj, true, false);
         }
 
         private string GetSQLQueryToCreateRelationOneToZeroOne(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, false, true);
+            return this._schemaHelper.GetSQLQueryToCreateRelationToMany(obj, false, true);
         }
 
         private string GetSQLQueryToCreateRelationZeroOneToZeroOne(DXRelationDefinitionUnit obj)
         {
             obj.RelationTable = obj.ObjectNameRight;
 
-            return this._queryHelper.GetSQLQueryToCreateRelationToMany(obj, true, true);
+            return this._schemaHelper.GetSQLQueryToCreateRelationToMany(obj, true, true);
         }
 
         private string GetSQLQueryToDeleteRelation(DXRelationDefinitionUnit obj)
@@ -151,13 +151,13 @@ namespace IV.DX.Persistence
             switch (obj.RelationType)
             {
                 case DXRelationTypeEnum.ManyToMany: result = this.GetSQLQueryToDeleteRelationManyToMany(obj); break;
-                case DXRelationTypeEnum.ManyToOne: result = this._queryHelper.GetSQLQueryToDeleteRelationManyToOne(obj); break;
+                case DXRelationTypeEnum.ManyToOne: result = this._schemaHelper.GetSQLQueryToDeleteRelationManyToOne(obj); break;
                 case DXRelationTypeEnum.ManyToZeroOne: result = this.GetSQLQueryToDeleteRelationManyToZeroOne(obj); break;
-                case DXRelationTypeEnum.OneToMany: result = this._queryHelper.GetSQLQueryToDeleteRelationOneToMany(obj); break;
-                case DXRelationTypeEnum.OneToZeroOne: result = this._queryHelper.GetSQLQueryToDeleteRelationOneToZeroOne(obj); break;
+                case DXRelationTypeEnum.OneToMany: result = this._schemaHelper.GetSQLQueryToDeleteRelationOneToMany(obj); break;
+                case DXRelationTypeEnum.OneToZeroOne: result = this._schemaHelper.GetSQLQueryToDeleteRelationOneToZeroOne(obj); break;
                 case DXRelationTypeEnum.ZeroOneToMany: result = this.GetSQLQueryToDeleteRelationZeroOneToMany(obj); break;
-                case DXRelationTypeEnum.ZeroOneToOne: result = this._queryHelper.GetSQLQueryToDeleteRelationZeroOneToOne(obj); break;
-                case DXRelationTypeEnum.ZeroOneToZeroOne: result = this._queryHelper.GetSQLQueryToDeleteRelationOneToZeroOne(obj); break;
+                case DXRelationTypeEnum.ZeroOneToOne: result = this._schemaHelper.GetSQLQueryToDeleteRelationZeroOneToOne(obj); break;
+                case DXRelationTypeEnum.ZeroOneToZeroOne: result = this._schemaHelper.GetSQLQueryToDeleteRelationOneToZeroOne(obj); break;
             }
 
             return result;
@@ -187,24 +187,24 @@ namespace IV.DX.Persistence
                 relationTableName = dxUnit.RelationTable;
             }
 
-            return this._queryHelper.GetSQLQueryToDropTable(relationTableName);
+            return this._schemaHelper.GetSQLQueryToDropTable(relationTableName);
         }
 
         private string GetSQLQueryToDeleteRelationManyToZeroOne(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToDeleteRelationManyToOne(obj);
+            return this._schemaHelper.GetSQLQueryToDeleteRelationManyToOne(obj);
         }
 
         private string GetSQLQueryToDeleteRelationZeroOneToMany(DXRelationDefinitionUnit obj)
         {
-            return this._queryHelper.GetSQLQueryToDeleteRelationOneToMany(obj);
+            return this._schemaHelper.GetSQLQueryToDeleteRelationOneToMany(obj);
         }
 
         public void SetDXUnitInheritance(string childDXUnit, string baseDXUnit)
         {
-            var query = this._queryHelper.GetQueryToSetDXUnitInheritance(childDXUnit, baseDXUnit);
+            var query = this._schemaHelper.GetQueryToSetDXUnitInheritance(childDXUnit, baseDXUnit);
 
-            this._queryHelper.RunSQLQuery(this._connectionStr, query);
+            this._dbProvider.RunSQLQuery(this._connectionStr, query);
         }
 
 

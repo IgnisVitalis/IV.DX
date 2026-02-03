@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.PrivateModels.DXQueryUnit
@@ -6,7 +6,7 @@ namespace IV.DX.Application.PrivateModels.DXQueryUnit
     [DXUnit("DXQueryUnit")]
     internal class DXQueryUnit : DXUnit
     {
-        [DXColumn("DXUnitName", "R(DXUnitDefinition).Name")]
+        [DXColumn("DXUnitName", "U2U(DXUnitDefinition).Name")]
         public string DXUnitName { get; set; }
 
         [DXColumn("Name")]

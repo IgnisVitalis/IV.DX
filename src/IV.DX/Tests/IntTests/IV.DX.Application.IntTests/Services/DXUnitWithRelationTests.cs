@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
@@ -38,7 +38,7 @@ namespace IV.DX.Application.IntTests.Services
         private class DXUnitDefinitionUnit : DXUnit
         {
 
-            [DXColumn("DXUnitDefinitionUnitID", "R(DXUnitDefinitionUnit).ID")]
+            [DXColumn("DXUnitDefinitionUnitID", "U2U(DXUnitDefinitionUnit).ID")]
             public Guid DXUnitDefinitionUnitID { get; set; }
         }
     }

@@ -156,7 +156,7 @@
         "TimeStamp": "2025-12-24T13:47:36.501509Z",
         "BaseDXUnit": null,
         "Name": "DXMembershipUnit",
-        "DisplayValue": "R(Account).Name",
+        "DisplayValue": "U2U(Account).Name",
         "Kind": 1,
         "DXUnitToUnitRelationElement": {
             "S_Type": "DXUnitToUnitRelationElement",

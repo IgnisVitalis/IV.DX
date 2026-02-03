@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
@@ -126,11 +126,11 @@ namespace IV.DX.Application.IntTests.Services
             {
                 {"ID","ID" },
                 {"TimeStamp", "TimeStamp"},
-                {"ChildrenID", "R(Children).ID"},
-                {"ParentID", "R(Parent).ID"}
+                {"ChildrenID", "U2U(Children).ID"},
+                {"ParentID", "U2U(Parent).ID"}
             };
 
-            var dxFilter = "R(Children).ID = '075980bc-9728-47cf-aab9-077f391ded48' AND R(Parent).ID = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
+            var dxFilter = "U2U(Children).ID = '075980bc-9728-47cf-aab9-077f391ded48' AND U2U(Parent).ID = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
 
             var result = this._dxRawReader.Get("DXNavigationItemUnit", columns, dxFilter);
 

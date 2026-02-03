@@ -1,9 +1,8 @@
-﻿using IV.DX.Kernel.Models;
-using System.Data.Common;
+using IV.DX.Kernel.Models;
 
 namespace IV.DX.Persistence.Abstractions
 {
-    internal interface ISQLQueryDXHelper
+    internal interface ISQLSchemaHelper
     {
         void CreateDataBase(string connectionString);
         void DropDataBase(string connectionString);
@@ -22,10 +21,6 @@ namespace IV.DX.Persistence.Abstractions
         string GetSQLQueryToCreateRelationManyToMany(DXRelationDefinitionUnit obj, string connectionStr);
         string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement);
         string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement);
-        DbCommandBuilder GetDbCommandBuilder(DbDataAdapter dataAdapter);
-        DbDataAdapter GetDbDataAdapter(DbConnection dbconnection, string query);
-        DbConnection GetDBConnection(string connectionStr);       
-        void RunSQLQuery(string connectionString, string query);
         string GetSQLQueryToSelectIDFromTable(string tableName);
         string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit);
     }

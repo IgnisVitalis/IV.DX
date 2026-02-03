@@ -1,21 +1,50 @@
-﻿using IV.DX.Kernel;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
+using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Data;
 using System.Text;
 
 namespace IV.DX.Persistence
 {
-    internal class SQLQueryBuilder(IDXStructureCache dxStructureCache) : ISQLQueryBuilder
+    internal class SQLQueryBuilder(
+        IDXStructureCache dxStructureCache,
+        ISQLDialect sqlDialect) : ISQLQueryBuilder
     {
+        private readonly ISQLDialect _sqlHelper = sqlDialect;
+
         public static IDictionary<string, string> AllColumns { get; } = new Dictionary<string, string>();
         public static IDictionary<string, string> BaseColumns { get; } = new Dictionary<string, string>()
         {
             {"ID","ID" },
             {"TimeStamp", "TimeStamp" }
         };
+
+        private string FormatTableAlias(string tableName, string alias)
+            => _sqlHelper.FormatTableAlias(tableName, alias);
+
+        private string FormatColumnReference(string tableAlias, string columnName)
+            => _sqlHelper.FormatColumnReference(tableAlias, columnName);
+
+        private string FormatColumnAlias(string columnExpression, string alias)
+            => _sqlHelper.FormatColumnAlias(columnExpression, alias);
+
+        private string FormatJoin(
+            string tableName,
+            string tableAlias,
+            string leftAlias,
+            string leftColumn,
+            string rightAlias,
+            string rightColumn)
+        {
+            var tablePart = FormatTableAlias(tableName, tableAlias);
+            var left = FormatColumnReference(leftAlias, leftColumn);
+            var right = FormatColumnReference(rightAlias, rightColumn);
+
+            return $"{tablePart} ON {left} = {right}";
+        }
 
         private static IReadOnlyDictionary<string, DXNode> _nodesByName =
             new Dictionary<string, DXNode>(StringComparer.Ordinal);
@@ -234,13 +263,13 @@ namespace IV.DX.Persistence
 
             DXNode GetNodeByName(string name) => nodesByName[name];
 
-            // 5. Unit ↔ Element и Unit ↔ Unit (Relation)
+            // 5. Unit ↔ Element (Containment) and Unit ↔ Unit (Relation)
             foreach (var dxUnit in unitsList)
             {
                 var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
-                // Unit → Element
+                // Unit → Element (Containment)
                 foreach (var dxElementInUnit in dxUnit.DXElementInUnitDefinitionElement.Announced)
                 {
                     var dxElement = elementsById[dxElementInUnit.DXElementDefinitionUnit];
@@ -251,15 +280,27 @@ namespace IV.DX.Persistence
                         new DXNodeRelation(
                             dxElementName,
                             dxElementName,
-                            $"\"{dxElementName}\" AS \"{dxNodeRelated.TableAlias}\" ON \"{dxNodeRelated.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
+                            FormatJoin(
+                                dxElementName,
+                                dxNodeRelated.TableAlias,
+                                dxNodeRelated.TableAlias,
+                                Constants.DXUnitID,
+                                dxNode.TableAlias,
+                                Constants.ID));
 
                     dxNode.AttachDXNode(dxNodeRelationToDXElement, dxNodeRelated);
 
                     var dxNodeRelationToDXUnit =
                         new DXNodeRelation(
                             dxUnitName,
-                            $"U({dxUnitName})",
-                            $"\"{dxUnitName}\" AS \"{dxNode.TableAlias}\" ON \"{dxNode.TableAlias}\".\"ID\" = {dxNodeRelated.TableAlias}.\"DXUnitID\"");
+                            $"E2UIn({dxUnitName})",
+                            FormatJoin(
+                                dxUnitName,
+                                dxNode.TableAlias,
+                                dxNode.TableAlias,
+                                Constants.ID,
+                                dxNodeRelated.TableAlias,
+                                Constants.DXUnitID));
 
                     dxNodeRelated.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
@@ -293,11 +334,105 @@ namespace IV.DX.Persistence
                     var dxNodeFrom = GetNodeByName(dxRelation.ObjectNameRight);
                     var dxNodeTo = GetNodeByName(dxRelation.ObjectNameLeft);
 
-                    var dxNodeJoin = GetJoinForDXUnitRelationInternal(dxRelation, dxNodeFrom, dxNodeTo);
+                    var dxNodeJoin = GetJoinForDXUnitRelationInternal(_sqlHelper, dxRelation, dxNodeFrom, dxNodeTo);
 
                     var dxNodeRelation = new DXNodeRelation(
                         dxUnitNameRelated,
-                        $"R({dxRelMain.RelationNameRight})",
+                        $"U2U({dxRelMain.RelationNameRight})",
+                        dxNodeJoin);
+
+                    dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                }
+
+                // Unit → Element (Equal Relation)
+                if (dxUnit.DXUnitToElementRelationElement != null)
+                {
+                    foreach (var dxUnitToElementRelationElement in dxUnit.DXUnitToElementRelationElement.Announced)
+                    {
+                        var dxElementRelated = elementsById[dxUnitToElementRelationElement.TargetDXElement];
+                        var dxElementNameRelated = dxElementRelated.Name;
+
+                        var dxNodeRelated = GetNodeByName(dxElementNameRelated);
+
+                        var candidates = relationsByLeft[dxUnitName]
+                            .Where(r => r.ObjectNameRight == dxElementNameRelated
+                                && r.RelationNameLeft == dxUnitToElementRelationElement.OwnRelationName
+                                && r.RelationNameRight == dxUnitToElementRelationElement.TargetRelationName)
+                            .ToList();
+
+                        if (candidates.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        if (candidates.Count > 1)
+                        {
+                            throw new InvalidOperationException(
+                                $"Sequence contains more than one matching element for pair ({dxUnitName}, {dxElementNameRelated}).");
+                        }
+
+                        var dxRelation = candidates[0];
+
+                        var dxNodeFrom = GetNodeByName(dxRelation.ObjectNameRight);
+                        var dxNodeTo = GetNodeByName(dxRelation.ObjectNameLeft);
+
+                        var dxNodeJoin = GetJoinForDXUnitRelationInternal(_sqlHelper, dxRelation, dxNodeFrom, dxNodeTo);
+
+                        var dxNodeRelation = new DXNodeRelation(
+                            dxElementNameRelated,
+                            $"U2E({dxRelation.RelationNameRight})",
+                            dxNodeJoin);
+
+                        dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
+                    }
+                }
+            }
+
+            // 5.1 Element → Unit (Equal Relation)
+            foreach (var dxElement in elementsList)
+            {
+                if (dxElement.DXElementToUnitRelationElement == null)
+                {
+                    continue;
+                }
+
+                var dxElementName = dxElement.Name;
+                var dxNode = GetNodeByName(dxElementName);
+
+                foreach (var dxElementToUnitRelationElement in dxElement.DXElementToUnitRelationElement.Announced)
+                {
+                    var dxUnitRelated = unitsById[dxElementToUnitRelationElement.TargetDXUnit];
+                    var dxUnitNameRelated = dxUnitRelated.Name;
+
+                    var dxNodeRelated = GetNodeByName(dxUnitNameRelated);
+
+                    var candidates = relationsByLeft[dxElementName]
+                        .Where(r => r.ObjectNameRight == dxUnitNameRelated
+                            && r.RelationNameLeft == dxElementToUnitRelationElement.OwnRelationName
+                            && r.RelationNameRight == dxElementToUnitRelationElement.TargetRelationName)
+                        .ToList();
+
+                    if (candidates.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    if (candidates.Count > 1)
+                    {
+                        throw new InvalidOperationException(
+                            $"Sequence contains more than one matching element for pair ({dxElementName}, {dxUnitNameRelated}).");
+                    }
+
+                    var dxRelation = candidates[0];
+
+                    var dxNodeFrom = GetNodeByName(dxRelation.ObjectNameRight);
+                    var dxNodeTo = GetNodeByName(dxRelation.ObjectNameLeft);
+
+                    var dxNodeJoin = GetJoinForDXUnitRelationInternal(_sqlHelper, dxRelation, dxNodeFrom, dxNodeTo);
+
+                    var dxNodeRelation = new DXNodeRelation(
+                        dxUnitNameRelated,
+                        $"E2U({dxRelation.RelationNameRight})",
                         dxNodeJoin);
 
                     dxNode.AttachDXNode(dxNodeRelation, dxNodeRelated);
@@ -318,7 +453,7 @@ namespace IV.DX.Persistence
                 var baseDXUnit = unitsById[dxUnit.BaseDXUnit.Value];
                 var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.Name);
 
-                dxNode.SetBaseDXNode(dxNodeForBaseDXUnit);
+                dxNode.SetBaseDXNode(dxNodeForBaseDXUnit, _sqlHelper);
 
                 foreach (var item in dxNodeForBaseDXUnit.DXNodes.Where(x => x.Value.Kind != DXNodeKind.DXProperty))
                 {
@@ -329,12 +464,21 @@ namespace IV.DX.Persistence
 
                     dxNode.AttachDXNode(relation, item.Value);
 
-                    var dxNodeRelationToDXUnit = new DXNodeRelation(
-                        dxUnitName,
-                        $"U({dxUnitName})",
-                        $"\"{item.Value.Name}\" AS \"{item.Value.TableAlias}\" ON \"{item.Value.TableAlias}\".\"DXUnitID\" = \"{dxNode.TableAlias}\".\"ID\"");
+                    if (item.Value.Kind == DXNodeKind.DXElement)
+                    {
+                        var dxNodeRelationToDXUnit = new DXNodeRelation(
+                            dxUnitName,
+                            $"E2UIn({dxUnitName})",
+                            FormatJoin(
+                                item.Value.Name,
+                                item.Value.TableAlias,
+                                item.Value.TableAlias,
+                                Constants.DXUnitID,
+                                dxNode.TableAlias,
+                                Constants.ID));
 
-                    item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
+                        item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
+                    }
                 }
             }
 
@@ -350,7 +494,7 @@ namespace IV.DX.Persistence
                 {
                     var dxRelationsByLeft = relationsByLeft[dxUnitName];
 
-                    var clones = dxNode.Clone(dxRelationsByLeft);
+                    var clones = dxNode.Clone(dxRelationsByLeft, _sqlHelper);
 
                     foreach (var clone in clones)
                     {
@@ -413,7 +557,7 @@ namespace IV.DX.Persistence
             var columnsExpressionItems = new List<string>();
 
             if (columns.Count() == 0)
-                return $"\"{coreDXNode.TableAlias}\".*";
+                return $"{_sqlHelper.QuoteIdentifier(coreDXNode.TableAlias)}.*";
 
             if (columns is not null)
             {
@@ -443,7 +587,9 @@ namespace IV.DX.Persistence
 
                     if (startDXNode.ContainsProperty(columnName))
                     {
-                        columnExpressionItem = $"\"{startDXNode.TableAlias}\".\"{columnName}\" AS \"{alias}\"";
+                        columnExpressionItem = FormatColumnAlias(
+                            FormatColumnReference(startDXNode.TableAlias, columnName),
+                            alias);
                     }
                     else
                     {
@@ -451,7 +597,9 @@ namespace IV.DX.Persistence
 
                         RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
 
-                        columnExpressionItem = $"\"{baseDXNode.TableAlias}\".\"{columnName}\" AS \"{alias}\"";
+                        columnExpressionItem = FormatColumnAlias(
+                            FormatColumnReference(baseDXNode.TableAlias, columnName),
+                            alias);
                     }
 
                     columnsExpressionItems.Add(columnExpressionItem);
@@ -504,7 +652,7 @@ namespace IV.DX.Persistence
 
                 if (startDXNode.ContainsProperty(propertyName))
                 {
-                    condition = $"\"{startDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+                    condition = $"{FormatColumnReference(startDXNode.TableAlias, propertyName)}{propertyValue}";
                 }
                 else
                 {
@@ -512,7 +660,7 @@ namespace IV.DX.Persistence
 
                     RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
 
-                    condition = $"\"{baseDXNode.TableAlias}\".\"{propertyName}\"{propertyValue}";
+                    condition = $"{FormatColumnReference(baseDXNode.TableAlias, propertyName)}{propertyValue}";
                 }
 
                 whereExpressionItems.Add(
@@ -527,6 +675,7 @@ namespace IV.DX.Persistence
         }
 
         static string GetJoinForDXUnitRelationInternal(
+                ISQLDialect sqlHelper,
                 DXRelationDefinitionUnit dxRelation,
                 DXNode dxNodeFrom,
                 DXNode dxNodeTo)
@@ -537,15 +686,24 @@ namespace IV.DX.Persistence
             var dxNode2 = dxNodeFrom;
 
             var query1 =
-                $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"ID\" = \"{dxNode1.TableAlias}\".\"{dxRelationData.RelationNameRight}\"";
+                $"{sqlHelper.FormatTableAlias(dxRelationData.ObjectNameRight, dxNode2.TableAlias)} ON " +
+                $"{sqlHelper.FormatColumnReference(dxNode2.TableAlias, Constants.ID)} = " +
+                $"{sqlHelper.FormatColumnReference(dxNode1.TableAlias, dxRelationData.RelationNameRight)}";
 
             var query2 =
-                $"\"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode1.TableAlias}\".\"ID\"";
+                $"{sqlHelper.FormatTableAlias(dxRelationData.ObjectNameRight, dxNode2.TableAlias)} ON " +
+                $"{sqlHelper.FormatColumnReference(dxNode2.TableAlias, dxRelationData.RelationNameLeft)} = " +
+                $"{sqlHelper.FormatColumnReference(dxNode1.TableAlias, Constants.ID)}";
 
             return dxRelationData.RelationType switch
             {
                 DXRelationTypeEnum.ManyToMany =>
-                    $"\"{dxRelationData.RelationTable}\" AS \"{dxRelationData.RelationTable}\" ON \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameLeft}\" = \"{dxNode1.TableAlias}\".\"ID\"\nLEFT JOIN \"{dxRelationData.ObjectNameRight}\" AS \"{dxNode2.TableAlias}\" ON \"{dxNode2.TableAlias}\".\"ID\" = \"{dxRelationData.RelationTable}\".\"{dxRelationData.RelationNameRight}\"",
+                    $"{sqlHelper.FormatTableAlias(dxRelationData.RelationTable, dxRelationData.RelationTable)} ON " +
+                    $"{sqlHelper.FormatColumnReference(dxRelationData.RelationTable, dxRelationData.RelationNameLeft)} = " +
+                    $"{sqlHelper.FormatColumnReference(dxNode1.TableAlias, Constants.ID)}\n" +
+                    $"LEFT JOIN {sqlHelper.FormatTableAlias(dxRelationData.ObjectNameRight, dxNode2.TableAlias)} ON " +
+                    $"{sqlHelper.FormatColumnReference(dxNode2.TableAlias, Constants.ID)} = " +
+                    $"{sqlHelper.FormatColumnReference(dxRelationData.RelationTable, dxRelationData.RelationNameRight)}",
 
                 DXRelationTypeEnum.ManyToOne
                     or DXRelationTypeEnum.ManyToZeroOne
@@ -574,7 +732,7 @@ namespace IV.DX.Persistence
 
             var dxNode = Get(typeName);
 
-            fromExpression.Append($"\"{typeName}\" AS \"{dxNode.TableAlias}\"\n");
+            fromExpression.Append($"{FormatTableAlias(typeName, dxNode.TableAlias)}\n");
 
             foreach (var idPair in idPairs)
             {
@@ -639,7 +797,7 @@ namespace IV.DX.Persistence
                 return _relationsByTargetId[targetId];
             }
 
-            public void SetBaseDXNode(DXNode baseDXNode)
+            public void SetBaseDXNode(DXNode baseDXNode, ISQLDialect sqlHelper)
             {
                 this.BaseDXNode = baseDXNode;
 
@@ -647,7 +805,9 @@ namespace IV.DX.Persistence
                    new DXNodeRelation(
                        this.Name,
                        this.Name,
-                       $"\"{baseDXNode.Name}\" AS \"{baseDXNode.TableAlias}\" ON \"{baseDXNode.TableAlias}\".\"ID\" = \"{this.TableAlias}\".\"ID\"");
+                       $"{sqlHelper.FormatTableAlias(baseDXNode.Name, baseDXNode.TableAlias)} ON " +
+                       $"{sqlHelper.FormatColumnReference(baseDXNode.TableAlias, Constants.ID)} = " +
+                       $"{sqlHelper.FormatColumnReference(this.TableAlias, Constants.ID)}");
 
                 this.AttachDXNode(dxNodeReltionToBaseDXUnit, baseDXNode);
 
@@ -655,12 +815,16 @@ namespace IV.DX.Persistence
                     new DXNodeRelation(
                         baseDXNode.Name,
                         baseDXNode.Name,
-                        $"\"{this.Name}\" AS \"{this.TableAlias}\" ON \"{this.TableAlias}\".\"ID\" = \"{baseDXNode.TableAlias}\".\"ID\"");
+                        $"{sqlHelper.FormatTableAlias(this.Name, this.TableAlias)} ON " +
+                        $"{sqlHelper.FormatColumnReference(this.TableAlias, Constants.ID)} = " +
+                        $"{sqlHelper.FormatColumnReference(baseDXNode.TableAlias, Constants.ID)}");
 
                 baseDXNode.AttachDXNode(dxNodeReltionToInheritedDXUnit, this);
             }
 
-            public IEnumerable<DXNode> Clone(IEnumerable<DXRelationDefinitionUnit> dxRelations)
+            public IEnumerable<DXNode> Clone(
+                IEnumerable<DXRelationDefinitionUnit> dxRelations,
+                ISQLDialect sqlHelper)
             {
                 int counter = 1;
 
@@ -685,11 +849,11 @@ namespace IV.DX.Persistence
 
                     clones.Add(clone);
 
-                    var dxJoin = GetJoinForDXUnitRelationInternal(dxRelation, clone, this);
+                    var dxJoin = GetJoinForDXUnitRelationInternal(sqlHelper, dxRelation, clone, this);
 
                     var dxNodeRelation2 = new DXNodeRelation(
                         dxRelation.ObjectNameLeft,
-                        $"R({dxRelation.RelationNameRight})",
+                        $"U2U({dxRelation.RelationNameRight})",
                         dxJoin);
 
                     this.AttachDXNode(dxNodeRelation2, clone);

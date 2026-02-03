@@ -16,18 +16,21 @@ namespace IV.DX.Persistence
     internal partial class DXCoreRepository : IDXUnitCoreRepository, IDXStructureRepository, IDXEnumCoreRepository, IDXStructureRawReader, IDXElementCoreRepository, IDXRawReader
     {
         protected string _connectionStr;
-        protected ISQLQueryDXHelper _queryHelper;
+        protected ISQLSchemaHelper _schemaHelper;
+        protected ISQLDbProvider _dbProvider;
         IDXStructureCache _dxStructureCache;
         ISQLQueryBuilder _sqlQueryBuilder;
 
         public DXCoreRepository(
             DXDatabaseOptions options,
             IDXStructureCache dxStructureCache,
-            ISQLQueryDXHelper queryHelper,
+            ISQLSchemaHelper schemaHelper,
+            ISQLDbProvider dbProvider,
             ISQLQueryBuilder sqlQueryBuilder)
         {
             this._connectionStr = options.ConnectionString;
-            this._queryHelper = queryHelper;
+            this._schemaHelper = schemaHelper;
+            this._dbProvider = dbProvider;
             this._dxStructureCache = dxStructureCache;
             this._sqlQueryBuilder = sqlQueryBuilder;
         }
@@ -117,7 +120,7 @@ namespace IV.DX.Persistence
             {
                 var dataSet = new DataSet(typeName);
 
-                var adapter = this._queryHelper.GetDbDataAdapter(conn, sqlQuery);
+                var adapter = this._dbProvider.GetDbDataAdapter(conn, sqlQuery);
 
                 adapter.Fill(dataSet, typeName);
 
@@ -591,13 +594,13 @@ namespace IV.DX.Persistence
             if (table == null || table.Rows.Count == 0) return;
 
             // bulk for multi-таблиц
-            if (isMultiTable && _queryHelper is IDXBulkInsertCapable bulk && table.Rows.Count >= bulkThreshold)
+            if (isMultiTable && _dbProvider is IDXBulkInsertCapable bulk && table.Rows.Count >= bulkThreshold)
             {
                 bulk.BulkUpsert(conn, table, table.TableName);
                 return;
             }
 
-            _queryHelper.GetDbCommandBuilder(adapter);
+            _dbProvider.GetDbCommandBuilder(adapter);
             adapter.Update(table);
         }
 
@@ -853,7 +856,7 @@ namespace IV.DX.Persistence
                 SQLQueryBuilder.BaseColumns,
                 dxFilter: this.GetWhereExpressionForID(id));
 
-            var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
+            var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
             dxModelBuilder.GetDeleteCommand();
 
@@ -876,7 +879,7 @@ namespace IV.DX.Persistence
                 SQLQueryBuilder.BaseColumns,
                 dxFilter: this.GetWhereExpressionForDXUnitID(objectID));
 
-            var dxModelBuilder = this._queryHelper.GetDbCommandBuilder(dxModelAdapter);
+            var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
             dxModelBuilder.GetDeleteCommand();
 
@@ -1349,7 +1352,7 @@ namespace IV.DX.Persistence
 
                 if (table.Rows.Count == 0)
                 {
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetInsertCommand();
 
                     dataRow = table.NewRow();
@@ -1361,7 +1364,7 @@ namespace IV.DX.Persistence
                 }
                 else
                 {
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
                     dataRow = table.Rows[0];
@@ -1398,7 +1401,7 @@ namespace IV.DX.Persistence
 
                     row[relationInfo.RelationNameRight] = obj2Id;
 
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
                     SaveTable(adapter, conn, dataSet, table, true);
@@ -1434,7 +1437,7 @@ namespace IV.DX.Persistence
 
                     row[relationInfo.RelationNameLeft] = obj1Id;
 
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
                     SaveTable(adapter, conn, dataSet, table, true);
@@ -1485,7 +1488,7 @@ namespace IV.DX.Persistence
 
                 if (rows.Count > 0)
                 {
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetDeleteCommand();
 
                     for (int i = 0; i < rows.Count; i++)
@@ -1534,7 +1537,7 @@ namespace IV.DX.Persistence
 
                     row[relationInfo.RelationNameRight] = DBNull.Value;
 
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
                     SaveTable(adapter, conn, dataSet, table, true);
@@ -1590,7 +1593,7 @@ namespace IV.DX.Persistence
 
                     row[relationInfo.RelationNameLeft] = DBNull.Value;
 
-                    var modelBuilder = this._queryHelper.GetDbCommandBuilder(adapter);
+                    var modelBuilder = this._dbProvider.GetDbCommandBuilder(adapter);
                     modelBuilder.GetUpdateCommand();
 
                     SaveTable(adapter, conn, dataSet, table, true);
@@ -1697,7 +1700,7 @@ namespace IV.DX.Persistence
         {
             var query = _sqlQueryBuilder.BuildSQLExpression(tableName, columns, dxFilter);
 
-            var adapter = _queryHelper.GetDbDataAdapter(conn, query);
+            var adapter = _dbProvider.GetDbDataAdapter(conn, query);
 
             if (fillSchema)
             {
@@ -1726,7 +1729,7 @@ namespace IV.DX.Persistence
 
         private T RunRequestInTransaction<T>(Func<DbConnection, T> func)
         {
-            using (DbConnection conn = this._queryHelper.GetDBConnection(this._connectionStr))
+            using (DbConnection conn = this._dbProvider.GetDBConnection(this._connectionStr))
             {
                 conn.Open();
                 var transaction = conn.BeginTransaction(IsolationLevel.ReadCommitted);
@@ -1757,7 +1760,7 @@ namespace IV.DX.Persistence
 
         private void RunRequest(Action<DbConnection> action)
         {
-            using (DbConnection conn = this._queryHelper.GetDBConnection(this._connectionStr))
+            using (DbConnection conn = this._dbProvider.GetDBConnection(this._connectionStr))
             {
                 conn.Open();
 
@@ -1767,7 +1770,7 @@ namespace IV.DX.Persistence
 
         private T RunRequest<T>(Func<DbConnection, T> func)
         {
-            using (DbConnection conn = this._queryHelper.GetDBConnection(this._connectionStr))
+            using (DbConnection conn = this._dbProvider.GetDBConnection(this._connectionStr))
             {
                 conn.Open();
 
@@ -1777,12 +1780,12 @@ namespace IV.DX.Persistence
 
         public void DropDataBase()
         {
-            this._queryHelper.DropDataBase(this._connectionStr);
+            this._schemaHelper.DropDataBase(this._connectionStr);
         }
 
         public void CreateDataBase()
         {
-            this._queryHelper.CreateDataBase(this._connectionStr);
+            this._schemaHelper.CreateDataBase(this._connectionStr);
         }
 
         private enum ProcessingType

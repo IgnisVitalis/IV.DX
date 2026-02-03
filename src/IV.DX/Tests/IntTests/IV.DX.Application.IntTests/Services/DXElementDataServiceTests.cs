@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,7 @@ namespace IV.DX.Application.IntTests.Services
         // public async Task GetItemsAsync_UsingDXFilterWithRelation_Ok()
         // {
         //     // Init
-        //     var dxFilter = "R(EnumType).Name = 'DXColumnTypeEnum'";
+        //     var dxFilter = "U2U(EnumType).Name = 'DXColumnTypeEnum'";
 
         //     // Action
         //     var dxElements = await _service.GetItemsAsync<DXObjectEnumElement>("DXColumnTypeEnum", dxFilter);
