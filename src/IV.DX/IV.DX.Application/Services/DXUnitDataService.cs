@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
@@ -442,9 +442,9 @@ namespace IV.DX.Application.Services
 
             var output = new List<DXUnitRecord>();
 
-            if (block.Data?.Upsert != null)
+            if (block.Data?.Items != null)
             {
-                foreach (var record in block.Data.Upsert)
+                foreach (var record in block.Data.Items)
                 {
                     if (record == null) continue;
 
@@ -456,7 +456,7 @@ namespace IV.DX.Application.Services
                         Meta = block.Meta,
                         Data = new DXData<DXUnitRecord>
                         {
-                            Upsert = new List<DXUnitRecord> { record }
+                            Items = new List<DXUnitRecord> { record }
                         }
                     };
 
@@ -464,8 +464,8 @@ namespace IV.DX.Application.Services
                         ? await UpdateAsync(singleBlock, context, ct)
                         : await InsertAsync(singleBlock, context, ct);
 
-                    if (processed.Data?.Upsert != null)
-                        output.AddRange(processed.Data.Upsert);
+                    if (processed.Data?.Items != null)
+                        output.AddRange(processed.Data.Items);
                 }
             }
 
@@ -488,10 +488,11 @@ namespace IV.DX.Application.Services
                 Meta = block.Meta,
                 Data = new DXData<DXUnitRecord>
                 {
-                    Upsert = output.Count == 0 ? null : output,
+                    Items = output.Count == 0 ? null : output,
                     Delete = block.Data?.Delete
                 }
             };
         }
     }
 }
+

@@ -28,7 +28,7 @@ namespace IV.DX.Kernel.Models
     public sealed class DXData<TRecord>
     {
         [JsonConverter(typeof(DXSingleOrArrayConverter))]
-        public List<TRecord>? Upsert { get; set; }
+        public List<TRecord>? Items { get; set; }
 
         [JsonConverter(typeof(DXSingleOrArrayConverter))]
         public List<DXDeleteRef>? Delete { get; set; }
@@ -68,7 +68,7 @@ namespace IV.DX.Kernel.Models
         public IDictionary<string, JToken>? Fields { get; set; }
     }
 
-    // Accepts either a single object or an array for Upsert/Delete.
+    // Accepts either a single object or an array for Items/Delete.
     public sealed class DXSingleOrArrayConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)

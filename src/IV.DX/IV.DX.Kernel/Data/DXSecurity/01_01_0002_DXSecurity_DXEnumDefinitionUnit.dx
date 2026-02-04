@@ -7,7 +7,7 @@
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "DXElements": {
           "DXColumnDefinitionElement": {
@@ -21,7 +21,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": [
+              "Items": [
                 {
                   "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "ID": "31a70676-4fd0-4be4-8a86-2fdd09eb8848",
@@ -89,7 +89,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": [
+              "Items": [
                 {
                   "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "ID": "0a39760b-2982-4505-8aba-bb07209f76d7",
@@ -112,7 +112,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": null,
+              "Items": null,
               "Delete": null
             }
           }

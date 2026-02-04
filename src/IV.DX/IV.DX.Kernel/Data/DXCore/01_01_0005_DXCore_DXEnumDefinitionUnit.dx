@@ -7,7 +7,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         { "Type": "DXElementInUnitTypeEnum", "ID": "56cfe59b-069a-4bc6-ac44-59cac46d7153", "TimeStamp": "2021-10-02T00:00:00", "Key": 1, "Value": "SingleMandatory" },
         { "Type": "DXElementInUnitTypeEnum", "ID": "08e793f0-07c9-4fc5-818f-515d74731b65", "TimeStamp": "2021-10-02T00:00:00", "Key": 2, "Value": "SingleOptional" },
         { "Type": "DXElementInUnitTypeEnum", "ID": "57df2e3d-352d-4824-a8d4-25464e52d2be", "TimeStamp": "2021-10-02T00:00:00", "Key": 3, "Value": "MultiMandatory" },
@@ -43,3 +43,4 @@
     }
   }
 ]
+

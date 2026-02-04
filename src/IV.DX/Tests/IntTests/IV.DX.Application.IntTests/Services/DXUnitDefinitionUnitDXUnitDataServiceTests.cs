@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -50,7 +50,7 @@ namespace IV.DX.Application.IntTests.Services
             // Assert
             var block = this._coreRepo.GetItemsRecord(dxUnitName);
 
-            Assert.True(block.Data == null || block.Data.Upsert == null || block.Data.Upsert.Count == 0);
+            Assert.True(block.Data == null || block.Data.Items == null || block.Data.Items.Count == 0);
 
             await this._dxStructureCache.RefreshAsync();
             var existigDXUnitStructure = this._dxStructureCache.GetDXUnit(dxUnitName);
@@ -69,3 +69,4 @@ namespace IV.DX.Application.IntTests.Services
         }
     }
 }
+

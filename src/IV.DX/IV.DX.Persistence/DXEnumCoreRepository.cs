@@ -22,7 +22,7 @@ namespace IV.DX.Persistence
         bool IDXEnumCoreRepository.IsItemExisting(string typeName, Guid objectId)
         {
             var item = ((IDXEnumCoreRepository)this).GetItemRecord(typeName, objectId);
-            return item != null && item.Data?.Upsert?.Count > 0;
+            return item != null && item.Data?.Items?.Count > 0;
         }
 
         private DXDataSetDefinition GetEnumModelDefinition(string type)
@@ -54,11 +54,11 @@ namespace IV.DX.Persistence
         {
             ArgumentNullException.ThrowIfNull(block);
 
-            if (block.Data?.Upsert == null || block.Data.Upsert.Count == 0)
+            if (block.Data?.Items == null || block.Data.Items.Count == 0)
                 return Guid.Empty;
 
             Guid lastId = Guid.Empty;
-            foreach (var record in block.Data.Upsert)
+            foreach (var record in block.Data.Items)
             {
                 if (record == null) continue;
 
@@ -183,9 +183,9 @@ namespace IV.DX.Persistence
         {
             var records = new List<DXEnumRecord>();
 
-            if (unitBlock.Data?.Upsert != null)
+            if (unitBlock.Data?.Items != null)
             {
-                foreach (var record in unitBlock.Data.Upsert)
+                foreach (var record in unitBlock.Data.Items)
                 {
                     if (record == null) continue;
                     records.Add(MapUnitRecordToEnumRecord(record, enumTypeName));
@@ -201,7 +201,7 @@ namespace IV.DX.Persistence
                 },
                 Data = new DXData<DXEnumRecord>
                 {
-                    Upsert = records
+                    Items = records
                 }
             };
         }
@@ -242,3 +242,4 @@ namespace IV.DX.Persistence
         }
     }
 }
+

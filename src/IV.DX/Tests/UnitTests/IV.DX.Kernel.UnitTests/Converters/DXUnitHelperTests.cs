@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
@@ -74,7 +74,7 @@ namespace IV.DX.Contracts.UnitTests
         public void ConvertToRecord_UsingDXUnit_Ok()
         {
             var block = DXRecordWriter.ToBlock(this.dxUnit);
-            var record = block.Data?.Upsert?.SingleOrDefault();
+            var record = block.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
             Assert.Equal(this.dxUnit.ID, record!.ID);
@@ -86,7 +86,7 @@ namespace IV.DX.Contracts.UnitTests
         public void DXUnitParse_UsingRecord_Ok()
         {
             var block = DXRecordWriter.ToBlock(this.dxUnit, new DXRecordWriteOptions { IncludeDeleteFields = true });
-            var record = block.Data?.Upsert?.Single();
+            var record = block.Data?.Items?.Single();
             var result = (MyObject)DXRecordConverter.ToDXUnit(record!, typeof(MyObject));
 
             // Assert
@@ -99,7 +99,7 @@ namespace IV.DX.Contracts.UnitTests
             var block = DXRecordWriter.ToBlock(this.dxUnit, new DXRecordWriteOptions { IncludeDeleteFields = true });
             var jObject = JObject.FromObject(block);
             var parsed = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
-            var record = parsed?.Data?.Upsert?.Single();
+            var record = parsed?.Data?.Items?.Single();
             var result = (MyObject)DXRecordConverter.ToDXUnit(record!, typeof(MyObject));
 
             // Assert
@@ -171,3 +171,4 @@ namespace IV.DX.Contracts.UnitTests
         public DateTime Date { get; set; }
     }
 }
+

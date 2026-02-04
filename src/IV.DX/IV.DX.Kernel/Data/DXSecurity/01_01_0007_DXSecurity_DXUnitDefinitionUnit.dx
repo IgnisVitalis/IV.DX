@@ -1,0 +1,128 @@
+{
+  "Meta": {
+    "Kind": "DXUnit",
+    "Type": "DXUnitDefinitionUnit",
+    "Op": "Sync",
+    "IsMulti": true,
+    "IsRequired": null,
+    "DXFilter": null,
+    "DXUnitContext": null
+  },
+  "Data": {
+    "Items": [
+      {
+        "DXElements": {
+          "DXElementInUnitDefinitionElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXElementInUnitDefinitionElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "ID": "9a5b8dff-9c65-4e57-862c-c7b455630c87",
+                  "TimeStamp": "2026-02-04T11:58:59.111324Z",
+                  "DXUnitDefinitionUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "RelationType": 4,
+                  "DXElementDefinitionUnit": "18da50ef-94c3-49c3-8da7-534b8ea29f40"
+                }
+              ],
+              "Delete": null
+            }
+          },
+          "DXColumnDefinitionElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXColumnDefinitionElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "ID": "3b15310f-e983-4f9b-84d1-f641ec821290",
+                  "TimeStamp": "2026-02-04T11:55:07.723825Z",
+                  "DXObjectDefinitionUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "Name": "ID",
+                  "Length": null,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 1
+                },
+                {
+                  "DXUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "ID": "2c55c5ab-6170-4225-8705-18bb2290c072",
+                  "TimeStamp": "2026-02-04T11:55:07.723845Z",
+                  "DXObjectDefinitionUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "Name": "TimeStamp",
+                  "Length": null,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 2
+                },
+                {
+                  "DXUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "ID": "7c838007-54e6-4958-aba4-31ff221d105d",
+                  "TimeStamp": "2026-02-04T11:55:07.72386Z",
+                  "DXObjectDefinitionUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "Name": "Name",
+                  "Length": 100,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 3
+                }
+              ],
+              "Delete": null
+            }
+          },
+          "DXUniqueColumnsElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXUniqueColumnsElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "ID": "bdfd0e84-6a9a-4a4d-b325-ab5985ca5945",
+                  "TimeStamp": "2026-02-04T12:10:21.312578Z",
+                  "DXObjectDefinitionUnitID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+                  "Columns": "Name"
+                }
+              ],
+              "Delete": null
+            }
+          }
+        },
+        "ID": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
+        "TimeStamp": "2026-02-04T11:58:59.107016Z",
+        "BaseDXUnit": null,
+        "Name": "DXSecurityMemberUnit",
+        "DisplayValue": "Name",
+        "Kind": 1
+      }
+    ],
+    "Delete": null
+  }
+}

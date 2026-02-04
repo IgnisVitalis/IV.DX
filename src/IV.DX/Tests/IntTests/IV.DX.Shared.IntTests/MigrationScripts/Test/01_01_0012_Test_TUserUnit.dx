@@ -8,7 +8,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
           "TimeStamp": "2021-10-02T00:00:00",
@@ -24,7 +24,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "38746c7d-6c26-4285-aa38-c179d1868dc6",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -44,7 +44,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "cffde4b2-1b25-45c5-b216-8819d94c461b",
                     "TimeStamp": "2021-10-02T00:00:00",

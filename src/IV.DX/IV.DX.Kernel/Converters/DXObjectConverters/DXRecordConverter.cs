@@ -36,7 +36,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 
             foreach (var block in blocks)
             {
-                var items = block?.Data?.Upsert;
+                var items = block?.Data?.Items;
                 if (items == null) continue;
 
                 foreach (var record in items)
@@ -88,7 +88,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 
             foreach (var block in blocks)
             {
-                var items = block?.Data?.Upsert;
+                var items = block?.Data?.Items;
                 if (items == null) continue;
 
                 foreach (var record in items)
@@ -162,7 +162,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 if (!TryGetElementBlock(elementMap, elementTypeName, prop.Name, out var block))
                     continue;
 
-                var record = block?.Data?.Upsert?.FirstOrDefault();
+                var record = block?.Data?.Items?.FirstOrDefault();
                 if (record == null) continue;
 
                 var element = (DXElement)CreateElement(elementType, record, unit.ID);
@@ -216,9 +216,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
             if (mode != null)
                 container.Mode = mode.Value;
 
-            if (block.Data?.Upsert != null)
+            if (block.Data?.Items != null)
             {
-                foreach (var record in block.Data.Upsert)
+                foreach (var record in block.Data.Items)
                 {
                     var element = CreateElementGeneric<TElement>(record, unitId);
                     container.Announced.Add(element);
@@ -311,3 +311,4 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         }
     }
 }
+

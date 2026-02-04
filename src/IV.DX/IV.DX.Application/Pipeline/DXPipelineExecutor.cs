@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Pipeline;
+using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Converters.DXObjectConverters;
 using IV.DX.Kernel.Helpers;
@@ -324,7 +324,7 @@ namespace IV.DX.Application.Pipeline
                 Data = new DXData<DXUnitRecord>()
             };
 
-            var records = block.Data?.Upsert;
+            var records = block.Data?.Items;
             if (records == null || records.Count == 0)
                 return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(resultBlock);
 
@@ -360,7 +360,7 @@ namespace IV.DX.Application.Pipeline
                         Meta = block.Meta,
                         Data = new DXData<DXUnitRecord>
                         {
-                            Upsert = new List<DXUnitRecord> { record }
+                            Items = new List<DXUnitRecord> { record }
                         }
                     };
 
@@ -373,7 +373,7 @@ namespace IV.DX.Application.Pipeline
                 }
             }
 
-            resultBlock.Data.Upsert = output.Count == 0 ? null : output;
+            resultBlock.Data.Items = output.Count == 0 ? null : output;
             return DXResult<DXDataBlock<DXUnitRecord>>.OkContinue(resultBlock);
         }
 
@@ -462,14 +462,14 @@ namespace IV.DX.Application.Pipeline
                 var block = new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName },
-                    Data = new DXData<DXUnitRecord> { Upsert = upsertRecords }
+                    Data = new DXData<DXUnitRecord> { Items = upsertRecords }
                 };
 
                 return DXResult<IEnumerable<JObject>?>.Ok(new List<JObject> { JObject.FromObject(block) }, baseRes.Flow);
             }
 
             var blockRaw = coreRepo.GetItemsRecord(typeName, ids);
-            var records = blockRaw.Data?.Upsert;
+            var records = blockRaw.Data?.Items;
 
             if (records == null || records.Count == 0)
                 return DXResult<IEnumerable<JObject>?>.NotFound();
@@ -743,3 +743,4 @@ namespace IV.DX.Application.Pipeline
         }
     }
 }
+

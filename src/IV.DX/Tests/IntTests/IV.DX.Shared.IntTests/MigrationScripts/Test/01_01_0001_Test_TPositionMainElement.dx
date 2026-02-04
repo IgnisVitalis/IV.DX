@@ -8,7 +8,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "d8b2ddce-8c18-436e-8e54-c360c781123f",
           "TimeStamp": "2021-10-02T00:00:00",
@@ -24,7 +24,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "2ff3b898-7d1f-4495-9ae6-9bbb08a3cafb",
                     "TimeStamp": "2021-10-02T00:00:00",

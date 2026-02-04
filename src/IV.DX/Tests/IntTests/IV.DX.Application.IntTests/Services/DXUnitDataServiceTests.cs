@@ -63,7 +63,7 @@ namespace IV.DX.Application.IntTests.Services
                 },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Upsert = new List<DXUnitRecord>
+                    Items = new List<DXUnitRecord>
                     {
                         new DXUnitRecord
                         {
@@ -88,7 +88,7 @@ namespace IV.DX.Application.IntTests.Services
                                     },
                                     Data = new DXData<DXElementRecord>
                                     {
-                                        Upsert = new List<DXElementRecord>
+                                        Items = new List<DXElementRecord>
                                         {
                                             new DXElementRecord
                                             {
@@ -135,7 +135,7 @@ namespace IV.DX.Application.IntTests.Services
             var result = this._dxRawReader.Get("DXNavigationItemUnit", columns, dxFilter);
 
             Assert.NotNull(result);
-            Assert.Empty(result.Data?.Upsert ?? new List<DXUnitRecord>());
+            Assert.Empty(result.Data?.Items ?? new List<DXUnitRecord>());
 
             var sql = this._sqlBuilder.BuildSQLExpression("DXNavigationItemUnit", columns, dxFilter);
 
@@ -205,7 +205,7 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             var block = item.ToObject<DXDataBlock<DXUnitRecord>>();
-            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var record = block?.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
             Assert.Equal(id, record!.ID);
@@ -592,7 +592,7 @@ namespace IV.DX.Application.IntTests.Services
                 },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Upsert = new List<DXUnitRecord>
+                    Items = new List<DXUnitRecord>
                     {
                         new DXUnitRecord
                         {
@@ -635,7 +635,7 @@ namespace IV.DX.Application.IntTests.Services
                 },
                 Data = new DXData<DXElementRecord>
                 {
-                    Upsert = new List<DXElementRecord>(),
+                    Items = new List<DXElementRecord>(),
                     Delete = new List<DXDeleteRef>()
                 }
             };
@@ -679,3 +679,4 @@ namespace IV.DX.Application.IntTests.Services
         }
     }
 }
+

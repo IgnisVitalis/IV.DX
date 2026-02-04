@@ -9,7 +9,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "72f6f3f3-e55f-4a24-915d-893b69932f67",
           "TimeStamp": "2021-10-02T00:00:00",

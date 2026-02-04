@@ -1,0 +1,51 @@
+{
+  "Meta": {
+    "Kind": "DXUnit",
+    "Type": "DXElementDefinitionUnit",
+    "Op": "Sync",
+    "IsMulti": true,
+    "IsRequired": null,
+    "DXFilter": null,
+    "DXUnitContext": null
+  },
+  "Data": {
+    "Items": [
+      {
+        "DXElements": {
+          "DXElementToUnitRelationElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXElementToUnitRelationElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "18da50ef-94c3-49c3-8da7-534b8ea29f40",
+                  "ID": "6dea711d-1a85-4455-9564-b70b4d0b8ee7",
+                  "TimeStamp": "2026-02-04T11:58:38.577361Z",
+                  "DXElementDefinitionUnitID": "18da50ef-94c3-49c3-8da7-534b8ea29f40",
+                  "OwnRelationName": "Members",
+                  "TargetRelationName": "Role",
+                  "RelationType": 4,
+                  "TargetDXUnit": "0bc15498-fda6-4164-b612-39e04131f32c"
+                }
+              ],
+              "Delete": null
+            }
+          }
+        },
+        "ID": "18da50ef-94c3-49c3-8da7-534b8ea29f40",
+        "TimeStamp": "2026-02-04T11:58:38.572911Z",
+        "Name": "DXRoleElement",
+        "DisplayValue": "Role.Name",
+        "Kind": 1
+      }
+    ],
+    "Delete": null
+  }
+}

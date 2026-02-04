@@ -1,4 +1,4 @@
-﻿using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -29,8 +29,9 @@ namespace IV.DX.Persistence.IntTests
             var block = this._dxEnumGenericRepo.GetItemsRecord(enumTypeName);
 
             // Assert
-            var count = block.Data?.Upsert?.Count ?? 0;
+            var count = block.Data?.Items?.Count ?? 0;
             Assert.Equal(expectedAmount, count);
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -167,7 +167,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             // Assert
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
-            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var record = block?.Data?.Items?.SingleOrDefault();
             var user = record?.Fields?["User"]?.ToObject<string>();
 
             Assert.NotNull(user);
@@ -442,3 +442,4 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public string StrCln { get; set; }
     }
 }
+

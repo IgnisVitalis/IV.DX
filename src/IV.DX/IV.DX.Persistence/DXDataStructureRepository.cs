@@ -62,7 +62,7 @@ namespace IV.DX.Persistence
                 DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit), dxUnitInheritance),
                 dataDXElement.ID,
                 DXLoadingType.Full);
-            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var record = block?.Data?.Items?.SingleOrDefault();
             var existingDataDXElement = record == null
                 ? null
                 : (DXObjectDefinitionUnit)DXRecordConverter.ToDXUnit(record, typeof(DXObjectDefinitionUnit));
@@ -175,7 +175,7 @@ namespace IV.DX.Persistence
                     DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit), dxUnitInheritance),
                     dxUnit.ID,
                     DXLoadingType.Full);
-                var record = block?.Data?.Upsert?.SingleOrDefault();
+                var record = block?.Data?.Items?.SingleOrDefault();
                 var existingDXUnit = record == null
                     ? null
                     : (DXRelationDefinitionUnit)DXRecordConverter.ToDXUnit(record, typeof(DXRelationDefinitionUnit));
@@ -366,3 +366,4 @@ namespace IV.DX.Persistence
         }
     }
 }
+

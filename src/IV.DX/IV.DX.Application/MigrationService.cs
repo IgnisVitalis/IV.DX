@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -343,9 +343,9 @@ namespace IV.DX.Application
 
                 ct.ThrowIfCancellationRequested();
 
-                if (block.Data?.Upsert != null)
+                if (block.Data?.Items != null)
                 {
-                    foreach (var record in block.Data.Upsert)
+                    foreach (var record in block.Data.Items)
                     {
                         if (record == null) continue;
 
@@ -354,7 +354,7 @@ namespace IV.DX.Application
                             Meta = block.Meta,
                             Data = new DXData<DXUnitRecord>
                             {
-                                Upsert = new List<DXUnitRecord> { record }
+                                Items = new List<DXUnitRecord> { record }
                             }
                         };
 
@@ -408,10 +408,10 @@ namespace IV.DX.Application
 
                 ct.ThrowIfCancellationRequested();
 
-                if (block.Data?.Upsert == null)
+                if (block.Data?.Items == null)
                     continue;
 
-                foreach (var record in block.Data.Upsert)
+                foreach (var record in block.Data.Items)
                 {
                     if (record == null) continue;
 
@@ -420,7 +420,7 @@ namespace IV.DX.Application
                         Meta = block.Meta,
                         Data = new DXData<DXEnumRecord>
                         {
-                            Upsert = new List<DXEnumRecord> { record }
+                            Items = new List<DXEnumRecord> { record }
                         }
                     };
 
@@ -449,10 +449,10 @@ namespace IV.DX.Application
 
                 ct.ThrowIfCancellationRequested();
 
-                if (block.Data?.Upsert == null)
+                if (block.Data?.Items == null)
                     continue;
 
-                foreach (var record in block.Data.Upsert)
+                foreach (var record in block.Data.Items)
                 {
                     if (record == null) continue;
 
@@ -461,7 +461,7 @@ namespace IV.DX.Application
                         Meta = block.Meta,
                         Data = new DXData<DXElementRecord>
                         {
-                            Upsert = new List<DXElementRecord> { record }
+                            Items = new List<DXElementRecord> { record }
                         }
                     };
 
@@ -550,3 +550,4 @@ namespace IV.DX.Application
                 : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
     }
 }
+

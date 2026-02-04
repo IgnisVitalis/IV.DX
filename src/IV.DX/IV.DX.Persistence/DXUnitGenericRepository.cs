@@ -35,7 +35,7 @@ namespace IV.DX.Persistence
             var dxModelDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(T), dxUnitInheritance);
             var block = this._coreRepo.GetItemRecord(dxModelDefinition, id, DXLoadingType.Full);
 
-            var record = block?.Data?.Upsert?.FirstOrDefault();
+            var record = block?.Data?.Items?.FirstOrDefault();
             return record == null ? default! : (T)DXRecordConverter.ToDXUnit(record, typeof(T));
         }
 
@@ -47,7 +47,7 @@ namespace IV.DX.Persistence
                 DXDataSetDefinitionConverter.ToDXModelDefinition<T>(dxUnitInheritance),
                 DXLoadingType.Full);
 
-            return (block.Data?.Upsert ?? new List<DXUnitRecord>())
+            return (block.Data?.Items ?? new List<DXUnitRecord>())
                 .Select(x => (T)DXRecordConverter.ToDXUnit(x, typeof(T)))
                 .ToList();
         }
@@ -61,7 +61,7 @@ namespace IV.DX.Persistence
                 ids,
                 DXLoadingType.Full);
 
-            return (block.Data?.Upsert ?? new List<DXUnitRecord>())
+            return (block.Data?.Items ?? new List<DXUnitRecord>())
                 .Select(x => (T)DXRecordConverter.ToDXUnit(x, typeof(T)))
                 .ToList();
         }
@@ -75,7 +75,7 @@ namespace IV.DX.Persistence
                 dxFilter,
                 DXLoadingType.Full);
 
-            return (block.Data?.Upsert ?? new List<DXUnitRecord>())
+            return (block.Data?.Items ?? new List<DXUnitRecord>())
                 .Select(x => (T)DXRecordConverter.ToDXUnit(x, typeof(T)))
                 .ToList();
         }
@@ -130,3 +130,4 @@ namespace IV.DX.Persistence
 
     }
 }
+

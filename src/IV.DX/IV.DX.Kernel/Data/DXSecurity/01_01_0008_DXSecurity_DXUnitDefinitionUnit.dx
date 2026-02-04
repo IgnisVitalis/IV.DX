@@ -8,7 +8,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "87081445-19e8-46d1-b210-a93924ba3819",
           "TimeStamp": "2025-12-24T12:43:02.611181Z",
@@ -26,7 +26,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "1f0c81b2-5529-46ac-b264-4a08c7db6e56",
                     "TimeStamp": "2025-12-24T12:43:02.601843Z",
@@ -47,7 +47,7 @@
         {
           "ID": "6bae3c45-a19b-4a2b-ae92-6512c926efa9",
           "TimeStamp": "2025-12-24T13:45:53.84862Z",
-          "BaseDXUnit": null,
+          "BaseDXUnit": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
           "Name": "DXAccountUnit",
           "DisplayValue": "Name",
           "Kind": 1,
@@ -61,7 +61,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "ebd35911-85c3-4183-90da-79e949f7ca1c",
                     "TimeStamp": "2025-12-24T13:45:44.401007Z",
@@ -96,7 +96,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "6a21e45d-07da-4a64-878c-cbfc47178164",
                     "TimeStamp": "2025-12-24T12:41:30.981283Z",
@@ -133,7 +133,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "b0f23f39-a637-4b8c-b019-272cae532917",
                     "TimeStamp": "2025-12-24T12:41:30.986829Z",
@@ -152,7 +152,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "fb62e0ae-0815-4253-a72a-306671fe5722",
                     "TimeStamp": "2025-12-24T12:41:30.99042Z",
@@ -174,7 +174,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "fc8906c2-75dc-415e-aec5-bb65b7ffd543",
                     "TimeStamp": "2025-12-24T12:44:05.013204Z",
@@ -192,7 +192,7 @@
         {
           "ID": "cf85a667-b58d-4d40-b279-c7db025fd290",
           "TimeStamp": "2025-12-24T13:47:36.501509Z",
-          "BaseDXUnit": null,
+          "BaseDXUnit": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
           "Name": "DXMembershipUnit",
           "DisplayValue": "U2U(Account).Name",
           "Kind": 1,
@@ -206,7 +206,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "e7045040-0b51-4e77-bb87-25395cef223c",
                     "TimeStamp": "2025-12-24T13:47:36.505248Z",
@@ -237,7 +237,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "2619432b-645a-4c54-9e5d-e1e534633f3a",
                     "TimeStamp": "2026-01-25T12:31:42.125456Z",
@@ -253,3 +253,4 @@
     }
   }
 ]
+

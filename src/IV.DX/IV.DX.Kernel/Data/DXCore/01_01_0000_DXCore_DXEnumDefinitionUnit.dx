@@ -8,7 +8,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "5e8630a5-e51a-4717-b63e-92a176e2aa8e",
           "TimeStamp": "2021-10-02T00:00:00",
@@ -25,7 +25,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "72d914ae-c902-45dd-b405-fb12d5021597",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -57,7 +57,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "44892f0b-5f87-4373-b3c2-a7eac4a41ffd",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -85,7 +85,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "940d5067-9271-4dc2-9ae0-b1b83c519e11",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -117,7 +117,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "ff9aab92-03c6-4c38-8147-08c77e694fe9",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -145,7 +145,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "6212d559-2cf3-4341-a517-89f3a57abe78",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -177,7 +177,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "2038343f-0d46-4534-8408-963ab18e763f",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -205,7 +205,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "c16e1093-6e36-4963-9a20-707429832b4d",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -237,7 +237,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "f3e6e16c-6dc0-4056-aab2-6176e17c7ab4",
                     "TimeStamp": "2021-10-02T00:00:00",

@@ -8,7 +8,7 @@
       "IsRequired": false
     },
     "Data": {
-      "Upsert": [
+      "Items": [
         {
           "ID": "ce754889-4efb-4281-ad1f-14d710b30007",
           "TimeStamp": "2021-10-02T00:00:00",
@@ -25,7 +25,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "203f9137-b7e0-46a5-b12b-551dd4493c67",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -92,7 +92,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "544ef309-2fb1-4d63-9b40-bcc9d060f51b",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -122,7 +122,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "836b5fdc-c995-46d6-9151-fd562bfada19",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -154,7 +154,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "b5c5faa6-2b4f-402c-9915-c1946576ed86",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -194,7 +194,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "4ba2d83b-e858-447a-ae2f-6e9b6ca45dd1",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -224,7 +224,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "c320e3c7-4424-4353-ad0e-6617f45749e0",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -257,7 +257,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "37bf9fca-8112-48ea-b358-da1608664c4c",
                     "TimeStamp": "2021-10-02T00:00:00",
@@ -287,7 +287,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "e3a33688-97b0-429f-8b4f-f8afc371efd3",
                     "TimeStamp": "2026-01-26T11:52:33.752221Z",
@@ -324,7 +324,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "a1a23781-496f-4845-b086-99e31f3f88db",
                     "TimeStamp": "2026-01-26T11:53:41.644566Z",
@@ -355,7 +355,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "146a871a-e374-4d37-a23c-686ee752c0a5",
                     "TimeStamp": "2026-01-26T11:52:23.040219Z",
@@ -392,7 +392,7 @@
                 "IsRequired": false
               },
               "Data": {
-                "Upsert": [
+                "Items": [
                   {
                     "ID": "9f2e0e6a-5d73-4a8c-bf66-ac5a62a2801d",
                     "TimeStamp": "2026-01-26T11:53:31.976507Z",

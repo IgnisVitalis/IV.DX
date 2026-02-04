@@ -7,7 +7,7 @@
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "DXElements": {
           "DXElementToUnitRelationElement": {
@@ -21,7 +21,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": [
+              "Items": [
                 {
                   "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
                   "ID": "de86b326-f925-444f-99cd-0e23dcb49187",
@@ -47,46 +47,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": [
-                {
-                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "ID": "8dd30b03-e8a2-4719-b9a8-9a2710b42eef",
-                  "TimeStamp": "2026-02-03T17:29:21.643445Z",
-                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "Name": "ID",
-                  "Length": null,
-                  "Precision": null,
-                  "Scale": null,
-                  "AllowNull": false,
-                  "DefaultValue": null,
-                  "ColumnType": 1
-                },
-                {
-                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "ID": "b3b477a3-9143-4747-8095-5800053e8e35",
-                  "TimeStamp": "2026-02-03T17:29:21.643474Z",
-                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "Name": "TimeStamp",
-                  "Length": null,
-                  "Precision": null,
-                  "Scale": null,
-                  "AllowNull": false,
-                  "DefaultValue": null,
-                  "ColumnType": 2
-                },
-                {
-                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "ID": "0c757c85-8907-4661-b679-08ba684943fa",
-                  "TimeStamp": "2026-02-03T17:29:21.643492Z",
-                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
-                  "Name": "DXUnitID",
-                  "Length": null,
-                  "Precision": null,
-                  "Scale": null,
-                  "AllowNull": false,
-                  "DefaultValue": null,
-                  "ColumnType": 1
-                },
+              "Items": [
                 {
                   "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
                   "ID": "3225803c-7e65-48d2-ab27-75a5e89f28bd",
@@ -141,7 +102,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": null,
+              "Items": null,
               "Delete": null
             }
           },
@@ -156,7 +117,7 @@
               "DXUnitContext": null
             },
             "Data": {
-              "Upsert": [
+              "Items": [
                 {
                   "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
                   "ID": "873e6d15-68b4-45ad-acf2-37d24b77ca3c",

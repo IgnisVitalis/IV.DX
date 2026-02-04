@@ -47,8 +47,8 @@ public sealed class DXMeta
 
 public sealed class DXData<TRecord>
 {
-    // JSON accepts a single object or an array for Upsert/Delete.
-    public List<TRecord>? Upsert { get; set; }
+    // JSON accepts a single object or an array for Items/Delete.
+    public List<TRecord>? Items { get; set; }
     public List<DXDeleteRef>? Delete { get; set; }
 }
 
@@ -105,7 +105,7 @@ public sealed class DXDeleteRef
 | `DXFilter`     | Optional                 | usually DXUnit    | Selection filter for `Sync` operations                                |
 | `DXUnitContext`| Required for standalone  | DXElement         | Execution context when a DXElement block is not nested inside a unit  |
 
-> NOTE: `IsMulti` and `IsRequired` are hints for validation and defaults. JSON parsing accepts a single object or array for `Upsert` and `Delete`.
+> NOTE: `IsMulti` and `IsRequired` are hints for validation and defaults. JSON parsing accepts a single object or array for `Items` and `Delete`.
 
 ---
 
@@ -129,12 +129,12 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
 ## 5) Op (processing mode)
 
 ### Patch
-- apply `Upsert` items
+- apply `Items` items
 - apply `Delete` items
 - do **not** remove anything else implicitly
 
 ### Sync
-- `Upsert` represents the desired final set **within the scope**
+- `Items` represents the desired final set **within the scope**
 - objects missing from that set may be removed **within the scope**
 - scope may be defined by `DXFilter` (typically for DXUnit sync-many)
 
@@ -173,8 +173,8 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
 - `Meta.Kind` is present and is one of `DXUnit`, `DXElement`, `DXEnum`.
 - `Meta.Type` is present for DXUnit/DXElement blocks; for DXEnum it can be omitted only if every record has `Type`.
 - For standalone DXElement blocks, `Meta.DXUnitContext` is present.
-- `Upsert`/`Delete` accept single object or array. If `IsMulti = true`, prefer array; if `IsMulti = false`, allow single object.
-- If `IsRequired = true`, `Upsert` must exist (and must not be empty for multi).
+- `Items`/`Delete` accept single object or array. If `IsMulti = true`, prefer array; if `IsMulti = false`, allow single object.
+- If `IsRequired = true`, `Items` must exist (and must not be empty for multi).
 - DXUnit records:
   - `DXElements` keys are element type names.
   - Nested blocks must have `Meta.Kind = DXElement`.
@@ -204,7 +204,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
         "TimeStamp": "2021-10-02T00:00:00",
@@ -221,7 +221,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
               "IsRequired": false
             },
             "Data": {
-              "Upsert": [
+              "Items": [
                 {
                   "ID": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
                   "TimeStamp": "2021-10-02T00:00:00",
@@ -253,7 +253,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "Type": "DXElementInUnitTypeEnum",
         "ID": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
@@ -286,7 +286,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "ID": "72f6f3f3-e55f-4a24-915d-893b69932f67",
         "TimeStamp": "2021-10-02T00:00:00",
@@ -313,7 +313,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
     "IsRequired": false
   },
   "Data": {
-    "Upsert": [
+    "Items": [
       {
         "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
         "TimeStamp": "2021-10-02T00:00:00",
@@ -328,3 +328,4 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
 ---
 
 End of document.
+

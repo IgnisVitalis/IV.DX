@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests;
 using IV.DX.Shared.IntTests.Models.Test;
@@ -128,7 +128,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("ce754889-4efb-4281-ad1f-14d710b30007"));
 
             var block = dxElementJObject.ToObject<DXDataBlock<DXUnitRecord>>();
-            var record = block?.Data?.Upsert?.SingleOrDefault();
+            var record = block?.Data?.Items?.SingleOrDefault();
 
             // Checking result
             Assert.NotNull(record);
@@ -164,3 +164,4 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
     }
 }
+

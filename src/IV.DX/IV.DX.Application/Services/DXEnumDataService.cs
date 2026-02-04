@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace IV.DX.Application.Services
             };
 
             var enums = dxRawReader.Get(enumTypeName, columns);
-            var records = enums.Data?.Upsert ?? new List<DXUnitRecord>();
+            var records = enums.Data?.Items ?? new List<DXUnitRecord>();
 
             var items = records.ToDictionary(
                 x => x.Fields != null && x.Fields.TryGetValue("Key", out var k)
@@ -50,3 +50,4 @@ namespace IV.DX.Application.Services
         }
     }
 }
+

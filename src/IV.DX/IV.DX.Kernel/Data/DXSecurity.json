@@ -1,9 +1,12 @@
 [
     "DXSecurity/01_01_0000_DXSecurity_DXEnumDefinitionUnit.dx",
-    "DXSecurity/01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dx",
-    "DXSecurity/01_01_0002_DXSecurity_DXUnitDefinitionUnit.dx",
-    "DXSecurity/01_01_0003_DXEnumDefinitionUnit.dx",
-    "DXSecurity/01_01_0004_DXSecurity_DXGrantEffectEnum.dx",
-    "DXSecurity/01_01_0005_DXSecurity_DXUnitGrantElement.dx"
+    "DXSecurity/01_01_0001_DXSecurity_DXIdentityProviderTypeEnum.dx",    
+    "DXSecurity/01_01_0002_DXSecurity_DXEnumDefinitionUnit.dx",
+    "DXSecurity/01_01_0003_DXSecurity_DXGrantEffectEnum.dx",
+    "DXSecurity/01_01_0004_DXSecurity_DXUnitGrantElement.dx",
+    "DXSecurity/01_01_0005_DXSecurity_DXUnitDefinitionUnit.dx",
+    "DXSecurity/01_01_0006_DXSecurity_DXElementDefinitionUnit.dx",
+    "DXSecurity/01_01_0007_DXSecurity_DXUnitDefinitionUnit.dx",
+    "DXSecurity/01_01_0008_DXSecurity_DXUnitDefinitionUnit.dx"
 ]
     

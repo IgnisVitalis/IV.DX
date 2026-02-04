@@ -37,7 +37,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXUnitRecord>
                 {
-                    Upsert = new List<DXUnitRecord> { record }
+                    Items = new List<DXUnitRecord> { record }
                 }
             };
         }
@@ -64,7 +64,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXElementRecord>
                 {
-                    Upsert = new List<DXElementRecord> { record }
+                    Items = new List<DXElementRecord> { record }
                 }
             };
         }
@@ -81,7 +81,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXEnumRecord>
                 {
-                    Upsert = records
+                    Items = records
                 }
             };
         }
@@ -142,7 +142,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXElementRecord>
                 {
-                    Upsert = new List<DXElementRecord> { BuildElementRecord(element, element.DXUnitID) }
+                    Items = new List<DXElementRecord> { BuildElementRecord(element, element.DXUnitID) }
                 }
             };
         }
@@ -175,7 +175,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXElementRecord>
                 {
-                    Upsert = upsert.Count == 0 ? null : upsert,
+                    Items = upsert.Count == 0 ? null : upsert,
                     Delete = delete.Count == 0 ? null : delete
                 }
             };
@@ -475,3 +475,4 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         public bool IncludeDeleteFields { get; set; }
     }
 }
+

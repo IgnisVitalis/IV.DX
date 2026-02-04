@@ -35,7 +35,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             foreach (var block in blocks)
             {
-                var items = block?.Data?.Upsert;
+                var items = block?.Data?.Items;
                 if (items == null) continue;
 
                 foreach (var record in items)
@@ -85,3 +85,4 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         #endregion      
     }
 }
+

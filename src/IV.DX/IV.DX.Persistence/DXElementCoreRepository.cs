@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +25,11 @@ namespace IV.DX.Persistence
             if (string.IsNullOrWhiteSpace(elementTypeName))
                 throw new InvalidOperationException("DXElement block Meta.Type is required.");
 
-            if (block.Data?.Upsert == null || block.Data.Upsert.Count == 0)
+            if (block.Data?.Items == null || block.Data.Items.Count == 0)
                 return Guid.Empty;
 
             Guid lastId = Guid.Empty;
-            foreach (var record in block.Data.Upsert)
+            foreach (var record in block.Data.Items)
             {
                 if (record == null) continue;
 
@@ -258,3 +258,4 @@ namespace IV.DX.Persistence
 
     }
 }
+

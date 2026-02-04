@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 using Xunit;
 
@@ -28,7 +28,8 @@ namespace IV.DX.Kernel.UnitTests.Models
             // Assert
             Assert.NotNull(block);
             Assert.NotNull(block.Data);
-            Assert.NotNull(block.Data.Upsert);
+            Assert.NotNull(block.Data.Items);
         }
     }
 }
+

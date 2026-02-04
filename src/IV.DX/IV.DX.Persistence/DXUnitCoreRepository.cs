@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
@@ -101,7 +101,7 @@ namespace IV.DX.Persistence
                         },
                         Data = new DXData<DXUnitRecord>
                         {
-                            Upsert = new List<DXUnitRecord> { record }
+                            Items = new List<DXUnitRecord> { record }
                         }
                     };
                 }
@@ -164,7 +164,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
             return GetItemsRecord(modelDefinition, DXLoadingType.Full);
@@ -178,7 +178,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
             return GetItemsRecord(modelDefinition, objectIds, DXLoadingType.Full);
@@ -192,7 +192,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
             return GetItemsRecord(modelDefinition, dxFilter, DXLoadingType.Full);
@@ -210,7 +210,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = container?.MainElement?.DXUnitType, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
             }
 
@@ -219,7 +219,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = container.MainElement.DXUnitType, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
             }
 
@@ -245,7 +245,7 @@ namespace IV.DX.Persistence
                     },
                     Data = new DXData<DXUnitRecord>
                     {
-                        Upsert = items
+                        Items = items
                     }
                 };
             });
@@ -303,7 +303,7 @@ namespace IV.DX.Persistence
                     },
                     Data = new DXData<DXElementRecord>
                     {
-                        Upsert = new List<DXElementRecord> { elementRecord }
+                        Items = new List<DXElementRecord> { elementRecord }
                     }
                 };
             }
@@ -335,7 +335,7 @@ namespace IV.DX.Persistence
                     },
                     Data = new DXData<DXElementRecord>
                     {
-                        Upsert = announced.Count == 0 ? null : announced
+                        Items = announced.Count == 0 ? null : announced
                     }
                 };
             }
@@ -497,12 +497,12 @@ namespace IV.DX.Persistence
             if (string.IsNullOrWhiteSpace(typeName))
                 throw new InvalidOperationException("DXUnitRecord block Meta.Type is required.");
 
-            if (block.Data?.Upsert == null || block.Data.Upsert.Count == 0)
+            if (block.Data?.Items == null || block.Data.Items.Count == 0)
                 return Guid.Empty;
 
             Guid lastId = Guid.Empty;
 
-            foreach (var record in block.Data.Upsert)
+            foreach (var record in block.Data.Items)
             {
                 if (record == null) continue;
 
@@ -526,7 +526,7 @@ namespace IV.DX.Persistence
 
             var item = this.GetItemRecord(dd, objectId, DXLoadingType.Base);
 
-            return item != null && item.Data?.Upsert?.Count > 0;
+            return item != null && item.Data?.Items?.Count > 0;
         }     
 
 
@@ -637,7 +637,7 @@ namespace IV.DX.Persistence
             if (!TryGetElementBlock(record.DXElements, dxElementName, out var block))
                 return;
 
-            var elementRecord = block?.Data?.Upsert?.FirstOrDefault();
+            var elementRecord = block?.Data?.Items?.FirstOrDefault();
             if (elementRecord == null)
                 return;
 
@@ -710,7 +710,7 @@ namespace IV.DX.Persistence
                     table.PrimaryKey = new[] { table.Columns["ID"] };
             }
 
-            var upsertItems = block?.Data?.Upsert ?? new List<DXElementRecord>();
+            var upsertItems = block?.Data?.Items ?? new List<DXElementRecord>();
             foreach (var itemRecord in upsertItems)
             {
                 var id = itemRecord.ID;
@@ -1828,3 +1828,4 @@ namespace IV.DX.Persistence
         }
     }
 }
+

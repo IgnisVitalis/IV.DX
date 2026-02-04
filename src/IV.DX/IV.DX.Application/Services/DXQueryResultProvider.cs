@@ -1,4 +1,4 @@
-﻿using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Models;
 using IV.DX.Application.Helpers;
 using IV.DX.Application.PrivateModels.DXQueryUnit;
@@ -109,7 +109,7 @@ namespace IV.DX.Application.Services
             };
 
             var result = dxRawReader.Get(typeName, columns);
-            var records = result.Data?.Upsert ?? new List<DXUnitRecord>();
+            var records = result.Data?.Items ?? new List<DXUnitRecord>();
 
             var displayValues = records.Select(x => new DXDisplayValue()
             {
@@ -124,3 +124,4 @@ namespace IV.DX.Application.Services
         }
     }
 }
+

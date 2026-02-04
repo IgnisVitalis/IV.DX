@@ -1,4 +1,4 @@
-﻿using IV.DX.Kernel;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -15,7 +15,7 @@ namespace IV.DX.Persistence
                 return new DXDataBlock<DXUnitRecord>
                 {
                     Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
-                    Data = new DXData<DXUnitRecord> { Upsert = new List<DXUnitRecord>() }
+                    Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
             columns[Constants.ID] = Constants.ID;
@@ -49,7 +49,7 @@ namespace IV.DX.Persistence
                     },
                     Data = new DXData<DXUnitRecord>
                     {
-                        Upsert = records
+                        Items = records
                     }
                 };
             });
@@ -86,3 +86,4 @@ namespace IV.DX.Persistence
         }
     }
 }
+
