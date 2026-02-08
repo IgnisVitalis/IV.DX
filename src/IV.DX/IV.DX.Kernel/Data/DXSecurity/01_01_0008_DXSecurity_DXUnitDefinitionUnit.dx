@@ -92,7 +92,7 @@
                     "Scale": null,
                     "AllowNull": true,
                     "DefaultValue": null,
-                    "ColumnType": 4
+                    "ColumnType": 14
                   }
                 ]
               }
