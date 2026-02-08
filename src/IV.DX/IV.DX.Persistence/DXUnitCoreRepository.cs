@@ -953,6 +953,15 @@ namespace IV.DX.Persistence
                 {
                     if (value != null)
                     {
+                        if (this.IsNullOrEmpty(value)
+                            && (IsHashedStringColumn(row.Table, column.ColumnName) || IsEncryptedStringColumn(row.Table, column.ColumnName))
+                            && row.RowState != DataRowState.Detached
+                            && row[column] != DBNull.Value)
+                        {
+                            // UI masking may send empty string for sensitive fields; treat as "no change" on update.
+                            continue;
+                        }
+
                         if (this.IsNullOrEmpty(value))
                         {
                             if (column.AllowDBNull)

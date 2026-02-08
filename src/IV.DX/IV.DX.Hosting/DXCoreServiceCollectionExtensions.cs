@@ -61,6 +61,7 @@ namespace IV.DX.Hosting
             services.AddScoped<ISQLQueryBuilder, SQLQueryBuilder>();
 
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
+            services.AddScoped<IDXUnitDataReader, DXUnitDataReader>();
             services.AddScoped<IDXEnumDataService, DXEnumDataService>();
             services.AddScoped<IDXElementDataService, DXElementDataService>();
             services.AddScoped<IDXMigrationService, MigrationService>();

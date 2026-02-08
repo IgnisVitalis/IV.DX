@@ -28,6 +28,7 @@ namespace IV.DX.Application.IntTests.Services
     public class DXUnitDataServiceTests : IntTestController
     {
         IDXUnitDataService _service;
+        IDXUnitDataReader _reader;
         IDXUnitGenericRepository _genericRepo;
         IDXRawReader _dxRawReader;
         IDXStructureRepository _dataStructureRepo;
@@ -36,6 +37,7 @@ namespace IV.DX.Application.IntTests.Services
         public DXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             this._service = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            this._reader = base.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
             this._genericRepo = base.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
             this._dataStructureRepo = base.ServiceProvider.GetRequiredService<IDXStructureRepository>();
             this._dxRawReader = base.ServiceProvider.GetRequiredService<IDXRawReader>();
@@ -740,6 +742,173 @@ namespace IV.DX.Application.IntTests.Services
             var secondSecret = secondRead.Data.Items.Single().Fields["Secret"]?.ToString();
 
             Assert.Equal(plaintext, secondSecret);
+
+            await this._service.DeleteAsync(new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                }
+            });
+        }
+
+        [Fact]
+        public async Task GetItemAsync_UsingDataReader_MasksSensitiveFieldsAndKeepsUnchangedOnUpdate_Ok()
+        {
+            IDXStructureCache cache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
+            await cache.RefreshAsync();
+
+            var unitDefinitionId = Guid.NewGuid();
+            var encryptedColumnId = Guid.NewGuid();
+            var hashedColumnId = Guid.NewGuid();
+            var now = DateTime.UtcNow;
+
+            var unitName = $"DXSensitiveUnit_{Guid.NewGuid():N}";
+
+            var unitDefinitionBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = "DXUnitDefinitionUnit"
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Items = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = unitDefinitionId,
+                            TimeStamp = now,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Name", JToken.FromObject(unitName) },
+                                { "DisplayValue", JToken.FromObject("Secret") },
+                                { "Kind", JToken.FromObject(1) }
+                            },
+                            DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                ["DXColumnDefinitionElement"] = new DXDataBlock<DXElementRecord>
+                                {
+                                    Meta = new DXMeta
+                                    {
+                                        Kind = "DXElement",
+                                        Type = "DXColumnDefinitionElement",
+                                        Op = "Patch",
+                                        IsMulti = true
+                                    },
+                                    Data = new DXData<DXElementRecord>
+                                    {
+                                        Items = new List<DXElementRecord>
+                                        {
+                                            new DXElementRecord
+                                            {
+                                                ID = encryptedColumnId,
+                                                DXUnitID = unitDefinitionId,
+                                                TimeStamp = now,
+                                                Fields = new Dictionary<string, JToken>
+                                                {
+                                                    { "Name", JToken.FromObject("Secret") },
+                                                    { "Length", JValue.CreateNull() },
+                                                    { "Precision", JValue.CreateNull() },
+                                                    { "Scale", JValue.CreateNull() },
+                                                    { "AllowNull", JToken.FromObject(false) },
+                                                    { "DefaultValue", JValue.CreateNull() },
+                                                    { "ColumnType", JToken.FromObject((int)DXColumnTypeEnum.EncryptedString) }
+                                                }
+                                            },
+                                            new DXElementRecord
+                                            {
+                                                ID = hashedColumnId,
+                                                DXUnitID = unitDefinitionId,
+                                                TimeStamp = now,
+                                                Fields = new Dictionary<string, JToken>
+                                                {
+                                                    { "Name", JToken.FromObject("PasswordHash") },
+                                                    { "Length", JToken.FromObject(255) },
+                                                    { "Precision", JValue.CreateNull() },
+                                                    { "Scale", JValue.CreateNull() },
+                                                    { "AllowNull", JToken.FromObject(false) },
+                                                    { "DefaultValue", JValue.CreateNull() },
+                                                    { "ColumnType", JToken.FromObject((int)DXColumnTypeEnum.HashedString) }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                ["DXUniqueColumnsElement"] = BuildEmptyMultiElementBlock("DXUniqueColumnsElement"),
+                                ["DXObjectEnumElement"] = BuildEmptyMultiElementBlock("DXObjectEnumElement")
+                            }
+                        }
+                    }
+                }
+            };
+
+            await this._service.InsertOrUpdateAsync(unitDefinitionBlock);
+            await cache.RefreshAsync();
+
+            var instanceId = Guid.NewGuid();
+            var secretPlain = "super-secret";
+            var passwordPlain = "P@ssw0rd";
+
+            var insertBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = unitName
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Items = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = instanceId,
+                            TimeStamp = now,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Secret", JToken.FromObject(secretPlain) },
+                                { "PasswordHash", JToken.FromObject(passwordPlain) }
+                            }
+                        }
+                    }
+                }
+            };
+
+            await this._service.InsertAsync(insertBlock);
+
+            var dbOptions = base.ServiceProvider.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
+
+            (string Secret, string PasswordHash) ReadDb()
+            {
+                using var conn = new NpgsqlConnection(dbOptions.ConnectionString);
+                conn.Open();
+                using var cmd = new NpgsqlCommand($"SELECT \"Secret\", \"PasswordHash\" FROM \"{unitName}\" WHERE \"ID\" = @id", conn);
+                cmd.Parameters.AddWithValue("id", instanceId);
+                using var r = cmd.ExecuteReader();
+                Assert.True(r.Read());
+                return (r.GetString(0), r.GetString(1));
+            }
+
+            var storedBefore = ReadDb();
+            Assert.StartsWith("$aesgcm$", storedBefore.Secret);
+            Assert.StartsWith("$pbkdf2-sha512$", storedBefore.PasswordHash);
+
+            var masked = await this._reader.GetItemAsync(unitName, instanceId);
+            var maskedBlock = masked.ToObject<DXDataBlock<DXUnitRecord>>();
+
+            Assert.NotNull(maskedBlock);
+            var maskedRec = maskedBlock.Data.Items.Single();
+            Assert.Equal(string.Empty, maskedRec.Fields["Secret"]?.ToString());
+            Assert.Equal(string.Empty, maskedRec.Fields["PasswordHash"]?.ToString());
+
+            await this._service.UpdateAsync(masked);
+
+            var storedAfter = ReadDb();
+            Assert.Equal(storedBefore.Secret, storedAfter.Secret);
+            Assert.Equal(storedBefore.PasswordHash, storedAfter.PasswordHash);
 
             await this._service.DeleteAsync(new DXDataBlock<DXUnitRecord>
             {
