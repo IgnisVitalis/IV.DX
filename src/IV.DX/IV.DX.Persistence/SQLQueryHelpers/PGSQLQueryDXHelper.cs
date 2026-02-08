@@ -888,6 +888,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 case DXColumnTypeEnum.String:
                     pgbSqlDataType = "varchar";
                     break;
+                case DXColumnTypeEnum.HashedString:
+                    pgbSqlDataType = "varchar";
+                    break;
                 case DXColumnTypeEnum.TimeStamp:
                     //pgbSqlDataType = "timestamp";
                     pgbSqlDataType = "timestamp with time zone";

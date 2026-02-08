@@ -20,7 +20,7 @@ namespace IV.DX.Persistence.IntTests
 
         [Theory]
         [InlineData("DXObjectKindEnum", 3)]
-        [InlineData("DXColumnTypeEnum", 13)]
+        [InlineData("DXColumnTypeEnum", 14)]
         [InlineData("DXElementInUnitTypeEnum", 4)]
         [InlineData("DXRelationTypeEnum", 8)]
         public void GetItems_UsingDifferentTypes_Ok(string enumTypeName, int expectedAmount)

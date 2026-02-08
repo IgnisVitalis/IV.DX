@@ -949,7 +949,20 @@ namespace IV.DX.Persistence
                         }
                         else
                         {
-                            this.SetJPropertyValueToRowCell(row, column, value);
+                            var mappedValue = value;
+                            if (IsHashedStringColumn(row.Table, column.ColumnName))
+                            {
+                                var incoming = ConvertHelper.ParseString(value);
+                                var existing = row.RowState == DataRowState.Detached || row[column] == DBNull.Value
+                                    ? null
+                                    : ConvertHelper.ParseString(row[column]);
+
+                                mappedValue = !string.IsNullOrEmpty(existing) && string.Equals(existing, incoming, StringComparison.Ordinal)
+                                    ? incoming
+                                    : DXPasswordHashHelper.Hash(incoming);
+                            }
+
+                            this.SetJPropertyValueToRowCell(row, column, mappedValue);
                         }
                     }
                     else if (
@@ -961,6 +974,21 @@ namespace IV.DX.Persistence
                     }
                 }
             }
+        }
+
+        private bool IsHashedStringColumn(DataTable table, string columnName)
+        {
+            if (table == null || string.IsNullOrWhiteSpace(columnName))
+                return false;
+
+            DXObjectDefinitionUnit? dxObject =
+                (DXObjectDefinitionUnit?)this._dxStructureCache.GetDXUnit(table.TableName)
+                ?? (DXObjectDefinitionUnit?)this._dxStructureCache.GetDXElement(table.TableName);
+
+            var column = dxObject?.DXColumnDefinitionElement?.Announced?
+                .FirstOrDefault(x => x?.Name != null && x.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+
+            return column != null && column.ColumnType == DXColumnTypeEnum.HashedString;
         }
 
         private static DataColumn? FindColumn(DataTable table, string columnName)

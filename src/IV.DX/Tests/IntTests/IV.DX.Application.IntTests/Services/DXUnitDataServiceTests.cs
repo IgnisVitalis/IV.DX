@@ -117,7 +117,6 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             var id = definitionId;
-            var index = 20;
             var existingItem = await this._service.GetItemAsync("DXNavigationItemUnit", id);
 
             Assert.Null(existingItem);
@@ -138,6 +137,10 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Empty(result.Data?.Items ?? new List<DXUnitRecord>());
 
             var sql = this._sqlBuilder.BuildSQLExpression("DXNavigationItemUnit", columns, dxFilter);
+
+            var match = System.Text.RegularExpressions.Regex.Match(sql, "\"T_(\\d+)_0\"");
+            Assert.True(match.Success);
+            var index = int.Parse(match.Groups[1].Value);
 
             var expectedSqlQuery = $"SELECT\n\"T_{index}_0\".\"ID\" AS \"ID\",\n\"T_{index}_0\".\"TimeStamp\" AS \"TimeStamp\",\n\"T_{index}_1\".\"ID\" AS \"ChildrenID\",\n\"T_{index}_2\".\"ID\" AS \"ParentID\"\nFROM\n\"DXNavigationItemUnit\" AS \"T_{index}_0\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_1\" ON \"T_{index}_1\".\"Parent\" = \"T_{index}_0\".\"ID\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_2\" ON \"T_{index}_2\".\"ID\" = \"T_{index}_0\".\"Parent\"\nWHERE\n\"T_{index}_1\".\"ID\" = '075980bc-9728-47cf-aab9-077f391ded48'  AND  \"T_{index}_2\".\"ID\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
 
@@ -407,6 +410,166 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             Assert.NotNull(item);
+        }
+
+        [Fact]
+        public async Task InsertAndUpdate_UsingHashedStringColumn_HashesAndAvoidsDoubleHash_Ok()
+        {
+            IDXStructureCache cache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
+            await cache.RefreshAsync();
+
+            var unitDefinitionId = Guid.NewGuid();
+            var columnDefinitionId = Guid.NewGuid();
+            var now = DateTime.UtcNow;
+
+            var unitName = $"DXHashedSecretUnit_{Guid.NewGuid():N}";
+
+            var unitDefinitionBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = "DXUnitDefinitionUnit"
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Items = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = unitDefinitionId,
+                            TimeStamp = now,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Name", JToken.FromObject(unitName) },
+                                { "DisplayValue", JToken.FromObject("Secret") },
+                                { "Kind", JToken.FromObject(1) }
+                            },
+                            DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                ["DXColumnDefinitionElement"] = new DXDataBlock<DXElementRecord>
+                                {
+                                    Meta = new DXMeta
+                                    {
+                                        Kind = "DXElement",
+                                        Type = "DXColumnDefinitionElement",
+                                        Op = "Patch",
+                                        IsMulti = true
+                                    },
+                                    Data = new DXData<DXElementRecord>
+                                    {
+                                        Items = new List<DXElementRecord>
+                                        {
+                                            new DXElementRecord
+                                            {
+                                                ID = columnDefinitionId,
+                                                DXUnitID = unitDefinitionId,
+                                                TimeStamp = now,
+                                                Fields = new Dictionary<string, JToken>
+                                                {
+                                                    { "Name", JToken.FromObject("Secret") },
+                                                    { "Length", JToken.FromObject(255) },
+                                                    { "Precision", JValue.CreateNull() },
+                                                    { "Scale", JValue.CreateNull() },
+                                                    { "AllowNull", JToken.FromObject(false) },
+                                                    { "DefaultValue", JValue.CreateNull() },
+                                                    { "ColumnType", JToken.FromObject((int)DXColumnTypeEnum.HashedString) }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                ["DXUniqueColumnsElement"] = BuildEmptyMultiElementBlock("DXUniqueColumnsElement"),
+                                ["DXObjectEnumElement"] = BuildEmptyMultiElementBlock("DXObjectEnumElement")
+                            }
+                        }
+                    }
+                }
+            };
+
+            await this._service.InsertOrUpdateAsync(unitDefinitionBlock);
+            await cache.RefreshAsync();
+
+            var instanceId = Guid.NewGuid();
+            var plaintext = "P@ssw0rd";
+
+            var insertBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = unitName
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Items = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = instanceId,
+                            TimeStamp = now,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Secret", JToken.FromObject(plaintext) }
+                            }
+                        }
+                    }
+                }
+            };
+
+            await this._service.InsertAsync(insertBlock);
+
+            var columns = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Secret"] = "Secret"
+            };
+
+            var firstRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var firstSecret = firstRead.Data.Items.Single().Fields["Secret"]?.ToString();
+
+            Assert.NotNull(firstSecret);
+            Assert.NotEqual(plaintext, firstSecret);
+            Assert.StartsWith("$pbkdf2-sha512$", firstSecret);
+
+            var updateBlock = new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta
+                {
+                    Kind = "DXUnit",
+                    Type = unitName
+                },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Items = new List<DXUnitRecord>
+                    {
+                        new DXUnitRecord
+                        {
+                            ID = instanceId,
+                            TimeStamp = now,
+                            Fields = new Dictionary<string, JToken>
+                            {
+                                { "Secret", JToken.FromObject(firstSecret) }
+                            }
+                        }
+                    }
+                }
+            };
+
+            await this._service.UpdateAsync(updateBlock);
+
+            var secondRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var secondSecret = secondRead.Data.Items.Single().Fields["Secret"]?.ToString();
+
+            Assert.Equal(firstSecret, secondSecret);
+
+            await this._service.DeleteAsync(new DXDataBlock<DXUnitRecord>
+            {
+                Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
+                Data = new DXData<DXUnitRecord>
+                {
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                }
+            });
         }
 
         [Fact]

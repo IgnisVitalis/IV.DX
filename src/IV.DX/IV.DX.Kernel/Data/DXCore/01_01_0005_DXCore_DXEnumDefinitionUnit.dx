@@ -26,6 +26,7 @@
         { "Type": "DXColumnTypeEnum", "ID": "09227e91-76e4-49f8-838b-f77cc1c2e0c7", "TimeStamp": "2021-10-02T00:00:00", "Key": 11, "Value": "Float" },
         { "Type": "DXColumnTypeEnum", "ID": "23cbe2cc-cd51-45e6-adc3-0c65b7187f3c", "TimeStamp": "2021-10-02T00:00:00", "Key": 12, "Value": "Currency" },
         { "Type": "DXColumnTypeEnum", "ID": "186354e6-dac8-45d4-a0d9-b58244acbe72", "TimeStamp": "2021-10-02T00:00:00", "Key": 13, "Value": "Blob" },
+        { "Type": "DXColumnTypeEnum", "ID": "4a4eb3af-7b47-44b5-a874-6b5d2be1d2b4", "TimeStamp": "2021-10-02T00:00:00", "Key": 14, "Value": "HashedString" },
 
         { "Type": "DXObjectKindEnum", "ID": "9eff6fef-16bd-4d98-b835-fb4303917442", "TimeStamp": "2021-10-02T00:00:00", "Key": 1, "Value": "Core" },
         { "Type": "DXObjectKindEnum", "ID": "aace43e2-691f-4fc0-a2dd-81120add8db8", "TimeStamp": "2021-10-02T00:00:00", "Key": 2, "Value": "Custom" },
