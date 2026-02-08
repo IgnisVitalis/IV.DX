@@ -50,34 +50,7 @@
           "BaseDXUnit": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
           "Name": "DXAccountUnit",
           "DisplayValue": "Name",
-          "Kind": 1,
-          "DXElements": {
-            "DXColumnDefinitionElement": {
-              "Meta": {
-                "Kind": "DXElement",
-                "Type": "DXColumnDefinitionElement",
-                "Op": "Patch",
-                "IsMulti": true,
-                "IsRequired": false
-              },
-              "Data": {
-                "Items": [
-                  {
-                    "ID": "ebd35911-85c3-4183-90da-79e949f7ca1c",
-                    "TimeStamp": "2025-12-24T13:45:44.401007Z",
-                    "DXUnitID": "6bae3c45-a19b-4a2b-ae92-6512c926efa9",
-                    "Name": "Name",
-                    "Length": 100,
-                    "Precision": null,
-                    "Scale": null,
-                    "AllowNull": false,
-                    "DefaultValue": null,
-                    "ColumnType": 3
-                  }
-                ]
-              }
-            }
-          }
+          "Kind": 1
         },
         {
           "ID": "dfe404f5-f877-44c2-8b2d-e79ac87752bb",

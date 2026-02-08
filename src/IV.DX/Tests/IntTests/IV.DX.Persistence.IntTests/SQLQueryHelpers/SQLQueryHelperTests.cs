@@ -26,19 +26,21 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         IDXUnitGenericRepository _genericRepo;
         ISQLQueryBuilder _sqlQueryBuilder;
 
+        const int dxUnitStartIndex = 14;
+        const int dxElementStartIndex = 30;
 
         string tableRelation_TUserUnit_TBookUnit_0 = "Relation_TUserUnit_TBookUnit_0";
-        string tableAlias_TPassportUnit_0 = "T_8_0";//TPassportUnit
-        string tableAlias_TPositionUnit_0 = "T_9_0";//TPositionUnit        
-        string tableAlias_TDocumentUnit_0 = "T_10_0";//TDocumentUnit
-        string tableAlias_TDeviceUnit_0 = "T_11_0";//TDeviceUnit
-        string tableAlias_TBookUnit_0 = "T_12_0";//TBookUnit     
-        string tableAlias_TUserUnit_0 = "T_13_0";//TUserUnit
-        string tableAlias_TPassportMainElement_0 = "T_22_0";//TPassportMainElement
-        string tableAlias_TPositionMainElement_0 = "T_23_0";//TPositionMainElement
-        string tableAlias_TUserMainElement_0 = "T_24_0";//TUserMainElement
-        string tableAlias_TDeviceMainElement_0 = "T_25_0";//TDeviceMainElement
-        string tableAlias_TBookMainElement_0 = "T_26_0";//TBookMainElement
+        string tableAlias_TPassportUnit_0 = $"T_{dxUnitStartIndex}_0";//TPassportUnit
+        string tableAlias_TPositionUnit_0 = $"T_{dxUnitStartIndex + 1}_0";//TPositionUnit        
+        string tableAlias_TDocumentUnit_0 = $"T_{dxUnitStartIndex + 2}_0";//TDocumentUnit
+        string tableAlias_TDeviceUnit_0 = $"T_{dxUnitStartIndex + 3}_0";//TDeviceUnit
+        string tableAlias_TBookUnit_0 = $"T_{dxUnitStartIndex + 4}_0";//TBookUnit     
+        string tableAlias_TUserUnit_0 = $"T_{dxUnitStartIndex + 5}_0";//TUserUnit
+        string tableAlias_TPassportMainElement_0 = $"T_{dxElementStartIndex}_0";//TPassportMainElement
+        string tableAlias_TPositionMainElement_0 = $"T_{dxElementStartIndex + 1}_0";//TPositionMainElement
+        string tableAlias_TUserMainElement_0 = $"T_{dxElementStartIndex + 2}_0";//TUserMainElement
+        string tableAlias_TDeviceMainElement_0 = $"T_{dxElementStartIndex + 3}_0";//TDeviceMainElement
+        string tableAlias_TBookMainElement_0 = $"T_{dxElementStartIndex + 4}_0";//TBookMainElement
 
 
         public SQLQueryHelperTests(DXTestFixture fx, ITestOutputHelper output)
@@ -109,7 +111,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Init
             var dxFilter = "U2U(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPassportMainElement\" AS \"{tableAlias_TPassportMainElement_0}\" ON \"{tableAlias_TPassportMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPassportUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPassportMainElement_0}\".\"SerialNumber\" = '6bcc2af44aa3'";
-            
+
             var expectedUser = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
             var relations = this.GetAllRelations();
 
@@ -543,7 +545,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
                 }
             }, "").Wait();
 
-          
+
         }
     }
 }
