@@ -6,6 +6,7 @@ using IV.DX.Persistence;
 using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.SQLQueryHelpers;
+using IV.DX.Kernel.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -20,6 +21,12 @@ namespace IV.DX.Hosting
         {
             services.AddOptions<DXDatabaseOptions>()
                 .Bind(configuration.GetSection("Database"));
+
+            services.AddOptions<DXEncryptionOptions>()
+                .Bind(configuration.GetSection("Encryption"));
+
+            services.AddSingleton<IDXEncryptionKeyProvider, DXConfiguredEncryptionKeyProvider>();
+            services.AddSingleton<IDXStringProtector, DXAesGcmStringProtector>();
 
             services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
             services.AddSingleton<ISQLSchemaHelper>(sp => (ISQLSchemaHelper)GetHelper(sp));
@@ -36,10 +43,11 @@ namespace IV.DX.Hosting
                 var schemaHelper = sp.GetRequiredService<ISQLSchemaHelper>();
                 var dbProvider = sp.GetRequiredService<ISQLDbProvider>();
                 var sqlQueryBuilder = sp.GetRequiredService<ISQLQueryBuilder>();
+                var protector = sp.GetRequiredService<IDXStringProtector>();
 
                 var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, schemaHelper, dbProvider, sqlQueryBuilder);
+                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, schemaHelper, dbProvider, sqlQueryBuilder, protector);
             };
 
             services.AddScoped<IDXRawReader, DXCoreRepository>(func);

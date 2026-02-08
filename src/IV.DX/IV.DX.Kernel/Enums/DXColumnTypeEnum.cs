@@ -15,6 +15,7 @@ namespace IV.DX.Kernel.Enums
         Float = 11,
         Currency = 12,
         Blob = 13,
-        HashedString = 14
+        HashedString = 14,
+        EncryptedString = 15
     }
 }

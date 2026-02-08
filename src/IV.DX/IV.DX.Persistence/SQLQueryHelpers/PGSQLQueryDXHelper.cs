@@ -107,7 +107,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             sqlClmDef = $"\"{clmDesc.Name}\" {this.GetPostgreSQLDataType(clmDesc.ColumnType)}";
 
-            if (clmDesc.Length.HasValue)
+            if (clmDesc.Length.HasValue
+                && (clmDesc.ColumnType == DXColumnTypeEnum.String
+                    || clmDesc.ColumnType == DXColumnTypeEnum.HashedString))
             {
                 sqlClmDef += $"({clmDesc.Length.Value})";
             }
@@ -172,7 +174,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             var mySQLQueryToChangeColumn = $"ALTER COLUMN \"{DXColumnDefinitionElementExisting.Name}\" TYPE {this.GetPostgreSQLDataType(DXColumnDefinitionElementNew.ColumnType)}";
 
-            if (DXColumnDefinitionElementNew.Length.HasValue)
+            if (DXColumnDefinitionElementNew.Length.HasValue
+                && (DXColumnDefinitionElementNew.ColumnType == DXColumnTypeEnum.String
+                    || DXColumnDefinitionElementNew.ColumnType == DXColumnTypeEnum.HashedString))
             {
                 mySQLQueryToChangeColumn += $"({DXColumnDefinitionElementNew.Length.Value})";
             }
@@ -890,6 +894,9 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                     break;
                 case DXColumnTypeEnum.HashedString:
                     pgbSqlDataType = "varchar";
+                    break;
+                case DXColumnTypeEnum.EncryptedString:
+                    pgbSqlDataType = "text";
                     break;
                 case DXColumnTypeEnum.TimeStamp:
                     //pgbSqlDataType = "timestamp";

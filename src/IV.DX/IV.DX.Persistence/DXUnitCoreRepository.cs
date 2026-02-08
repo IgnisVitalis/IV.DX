@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace IV.DX.Persistence
 {
@@ -20,19 +21,22 @@ namespace IV.DX.Persistence
         protected ISQLDbProvider _dbProvider;
         IDXStructureCache _dxStructureCache;
         ISQLQueryBuilder _sqlQueryBuilder;
+        private readonly IDXStringProtector _stringProtector;
 
         public DXCoreRepository(
             DXDatabaseOptions options,
             IDXStructureCache dxStructureCache,
             ISQLSchemaHelper schemaHelper,
             ISQLDbProvider dbProvider,
-            ISQLQueryBuilder sqlQueryBuilder)
+            ISQLQueryBuilder sqlQueryBuilder,
+            IDXStringProtector stringProtector)
         {
             this._connectionStr = options.ConnectionString;
             this._schemaHelper = schemaHelper;
             this._dbProvider = dbProvider;
             this._dxStructureCache = dxStructureCache;
             this._sqlQueryBuilder = sqlQueryBuilder;
+            this._stringProtector = stringProtector;
         }
 
         public bool Delete(string typeName, Guid id)
@@ -484,6 +488,19 @@ namespace IV.DX.Persistence
             {
                 var bytes = (byte[])dataRow[dataColumn];
                 return bytes.Length == 0 ? string.Empty : Convert.ToBase64String(bytes);
+            }
+
+            if (IsEncryptedStringColumn(dataRow.Table, dataColumn.ColumnName))
+            {
+                var encrypted = ConvertHelper.ParseString(dataRow[dataColumn]);
+
+                if (this._stringProtector.TryUnprotect(encrypted, out var plaintext))
+                    return plaintext;
+
+                if (encrypted.StartsWith("$aesgcm$", StringComparison.Ordinal))
+                    throw new CryptographicException("Encrypted value cannot be decrypted with the configured key(s).");
+
+                return encrypted;
             }
 
             return dataRow[dataColumn];
@@ -961,6 +978,34 @@ namespace IV.DX.Persistence
                                     ? incoming
                                     : DXPasswordHashHelper.Hash(incoming);
                             }
+                            else if (IsEncryptedStringColumn(row.Table, column.ColumnName))
+                            {
+                                var incoming = ConvertHelper.ParseString(value);
+                                var existing = row.RowState == DataRowState.Detached || row[column] == DBNull.Value
+                                    ? null
+                                    : ConvertHelper.ParseString(row[column]);
+
+                                if (!string.IsNullOrEmpty(existing) && string.Equals(existing, incoming, StringComparison.Ordinal))
+                                {
+                                    mappedValue = incoming;
+                                }
+                                else if (_stringProtector.TryUnprotect(incoming, out _))
+                                {
+                                    // Already protected with a known key.
+                                    mappedValue = incoming;
+                                }
+                                else if (!string.IsNullOrEmpty(existing)
+                                    && _stringProtector.TryUnprotect(existing, out var existingPlaintext)
+                                    && string.Equals(existingPlaintext, incoming, StringComparison.Ordinal))
+                                {
+                                    // Preserve stored ciphertext when plaintext did not change.
+                                    mappedValue = existing;
+                                }
+                                else
+                                {
+                                    mappedValue = _stringProtector.Protect(incoming);
+                                }
+                            }
 
                             this.SetJPropertyValueToRowCell(row, column, mappedValue);
                         }
@@ -989,6 +1034,21 @@ namespace IV.DX.Persistence
                 .FirstOrDefault(x => x?.Name != null && x.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
 
             return column != null && column.ColumnType == DXColumnTypeEnum.HashedString;
+        }
+
+        private bool IsEncryptedStringColumn(DataTable table, string columnName)
+        {
+            if (table == null || string.IsNullOrWhiteSpace(columnName))
+                return false;
+
+            DXObjectDefinitionUnit? dxObject =
+                (DXObjectDefinitionUnit?)this._dxStructureCache.GetDXUnit(table.TableName)
+                ?? (DXObjectDefinitionUnit?)this._dxStructureCache.GetDXElement(table.TableName);
+
+            var column = dxObject?.DXColumnDefinitionElement?.Announced?
+                .FirstOrDefault(x => x?.Name != null && x.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+
+            return column != null && column.ColumnType == DXColumnTypeEnum.EncryptedString;
         }
 
         private static DataColumn? FindColumn(DataTable table, string columnName)
