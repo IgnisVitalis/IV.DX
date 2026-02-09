@@ -61,19 +61,18 @@ namespace IV.DX.Persistence
         {
             BuildDXNodeTree();
 
-            var joinPairs = new List<KeyValuePair<DXNodeKey, DXNodeKey>>();
-            var joinPairSet = new HashSet<(DXNodeKey BaseId, DXNodeKey RelatedId)>();
+            var queryContext = new QueryContext();
 
             string whereExpression = string.Empty;
             bool hasFilter = !string.IsNullOrEmpty(dxFilter);
 
             if (hasFilter)
             {
-                whereExpression = ProcessDXFilter(typeName, dxFilter!, joinPairs, joinPairSet);
+                whereExpression = ProcessDXFilter(typeName, dxFilter!, queryContext);
             }
 
-            var columnExpression = ProcessDXColumns(typeName, columns, joinPairs, joinPairSet);
-            var fromExpression = GetFromExpression(typeName, joinPairs);
+            var columnExpression = ProcessDXColumns(typeName, columns, queryContext);
+            var fromExpression = GetFromExpression(typeName, queryContext);
 
             var sb = new StringBuilder();
             sb.Append("SELECT\n")
@@ -89,6 +88,86 @@ namespace IV.DX.Persistence
 
             return sb.ToString();
         }
+
+        private sealed class QueryContext
+        {
+            private readonly Dictionary<string, string> _aliasByPath =
+                new(StringComparer.Ordinal);
+
+            private readonly HashSet<string> _usedAliases =
+                new(StringComparer.Ordinal);
+
+            private readonly Dictionary<string, int> _nextDisambiguatorByAlias =
+                new(StringComparer.Ordinal);
+
+            private readonly HashSet<(string BasePath, string RelatedPath)> _joinSet =
+                new();
+
+            public List<JoinInstance> Joins { get; } =
+                new();
+
+            public string GetOrCreateAlias(string pathKey, DXNode schemaNode)
+            {
+                if (_aliasByPath.TryGetValue(pathKey, out var existing))
+                {
+                    return existing;
+                }
+
+                var candidate = schemaNode.TableAlias;
+                var alias = candidate;
+
+                if (!_usedAliases.Add(alias))
+                {
+                    if (!_nextDisambiguatorByAlias.TryGetValue(candidate, out var disambiguator))
+                    {
+                        disambiguator = 1;
+                    }
+
+                    while (true)
+                    {
+                        alias = $"{candidate}_{disambiguator}";
+                        disambiguator++;
+
+                        if (_usedAliases.Add(alias))
+                        {
+                            _nextDisambiguatorByAlias[candidate] = disambiguator;
+                            break;
+                        }
+                    }
+                }
+
+                _aliasByPath[pathKey] = alias;
+                return alias;
+            }
+
+            public void RegisterJoin(
+                string basePathKey,
+                DXNode baseSchemaNode,
+                string baseAlias,
+                string relatedPathKey,
+                DXNode relatedSchemaNode,
+                string relatedAlias)
+            {
+                if (_joinSet.Add((basePathKey, relatedPathKey)))
+                {
+                    Joins.Add(new JoinInstance(
+                        basePathKey,
+                        baseSchemaNode,
+                        baseAlias,
+                        relatedPathKey,
+                        relatedSchemaNode,
+                        relatedAlias));
+                }
+            }
+        }
+
+        private readonly record struct JoinInstance(
+            string BasePathKey,
+            DXNode BaseSchemaNode,
+            string BaseAlias,
+            string RelatedPathKey,
+            DXNode RelatedSchemaNode,
+            string RelatedAlias);
 
         private void BuildDXNodeTree()
         {
@@ -453,7 +532,12 @@ namespace IV.DX.Persistence
                 var baseDXUnit = unitsById[dxUnit.BaseDXUnit.Value];
                 var dxNodeForBaseDXUnit = GetNodeByName(baseDXUnit.Name);
 
-                dxNode.SetBaseDXNode(dxNodeForBaseDXUnit, _sqlHelper);
+                // Use a dedicated base node instance per derived unit to avoid alias collisions when the same
+                // base table is joined through different traversal paths in a single query.
+                var baseDXNodeForThisDerived = dxNodeForBaseDXUnit.CloneWithNewKey(new DXNodeKey(counter++));
+                RegisterNode(baseDXNodeForThisDerived, nodesById, nodesByName, registerByName: false);
+
+                dxNode.SetBaseDXNode(baseDXNodeForThisDerived, _sqlHelper);
 
                 foreach (var item in dxNodeForBaseDXUnit.DXNodes.Where(x => x.Value.Kind != DXNodeKind.DXProperty))
                 {
@@ -549,15 +633,16 @@ namespace IV.DX.Persistence
         private string ProcessDXColumns(
             string typeName,
             IDictionary<string, string> columns,
-            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs,
-            ISet<(DXNodeKey BaseId, DXNodeKey RelatedId)> idPairSet)
+            QueryContext queryContext)
         {
             var coreDXNode = Get(typeName);
+            var corePathKey = typeName;
+            var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreDXNode);
 
             var columnsExpressionItems = new List<string>();
 
             if (columns.Count() == 0)
-                return $"{_sqlHelper.QuoteIdentifier(coreDXNode.TableAlias)}.*";
+                return $"{_sqlHelper.QuoteIdentifier(coreAlias)}.*";
 
             if (columns is not null)
             {
@@ -567,38 +652,65 @@ namespace IV.DX.Persistence
                     var expression = column.Value;
 
                     var route = expression.Split('.');
-                    var startDXNode = coreDXNode;
+                    var startSchemaNode = coreDXNode;
+                    var startPathKey = corePathKey;
+                    var startAlias = coreAlias;
 
                     for (int i = 0; i < route.Length - 1; i++)
                     {
                         var relationValue = route[i];
 
-                        var relatedPair = Get(startDXNode, relationValue);
+                        var relatedPair = Get(startSchemaNode, relationValue);
                         var relatedNode = relatedPair.Value;
 
-                        RegisterIdPair(startDXNode, relatedNode, idPairs, idPairSet);
+                        var relatedPathKey = $"{startPathKey}.{relationValue}";
+                        var relatedAlias = queryContext.GetOrCreateAlias(relatedPathKey, relatedNode);
 
-                        startDXNode = relatedNode;
+                        queryContext.RegisterJoin(
+                            startPathKey,
+                            startSchemaNode,
+                            startAlias,
+                            relatedPathKey,
+                            relatedNode,
+                            relatedAlias);
+
+                        startSchemaNode = relatedNode;
+                        startPathKey = relatedPathKey;
+                        startAlias = relatedAlias;
                     }
 
                     string columnExpressionItem;
 
                     var columnName = route[^1];
 
-                    if (startDXNode.ContainsProperty(columnName))
+                    if (startSchemaNode.ContainsProperty(columnName))
                     {
                         columnExpressionItem = FormatColumnAlias(
-                            FormatColumnReference(startDXNode.TableAlias, columnName),
+                            FormatColumnReference(startAlias, columnName),
                             alias);
                     }
                     else
                     {
-                        var baseDXNode = startDXNode.GetBaseDXNodeWithProperty(columnName);
+                        var baseDXNode = startSchemaNode.GetBaseDXNodeWithProperty(columnName);
+                        if (baseDXNode is null)
+                        {
+                            throw new InvalidOperationException(
+                                $"Property '{columnName}' not found for type '{typeName}'.");
+                        }
 
-                        RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
+                        var basePathKey = $"{startPathKey}.__base({baseDXNode.Name})";
+                        var baseAlias = queryContext.GetOrCreateAlias(basePathKey, baseDXNode);
+
+                        queryContext.RegisterJoin(
+                            startPathKey,
+                            startSchemaNode,
+                            startAlias,
+                            basePathKey,
+                            baseDXNode,
+                            baseAlias);
 
                         columnExpressionItem = FormatColumnAlias(
-                            FormatColumnReference(baseDXNode.TableAlias, columnName),
+                            FormatColumnReference(baseAlias, columnName),
                             alias);
                     }
 
@@ -612,10 +724,11 @@ namespace IV.DX.Persistence
         private string ProcessDXFilter(
             string typeName,
             string dxFilter,
-            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs,
-            ISet<(DXNodeKey BaseId, DXNodeKey RelatedId)> idPairSet)
+            QueryContext queryContext)
         {
             var coreDXNode = Get(typeName);
+            var corePathKey = typeName;
+            var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreDXNode);
 
             var expressions = dxFilter.Trim()
                 .SplitAndKeep(
@@ -628,18 +741,31 @@ namespace IV.DX.Persistence
             foreach (var expression in expressions)
             {
                 var route = expression.Key.Split('.');
-                var startDXNode = coreDXNode;
+                var startSchemaNode = coreDXNode;
+                var startPathKey = corePathKey;
+                var startAlias = coreAlias;
 
                 for (int i = 0; i < route.Length - 1; i++)
                 {
                     var relationValue = route[i];
 
-                    var relatedPair = Get(startDXNode, relationValue);
+                    var relatedPair = Get(startSchemaNode, relationValue);
                     var relatedNode = relatedPair.Value;
 
-                    RegisterIdPair(startDXNode, relatedNode, idPairs, idPairSet);
+                    var relatedPathKey = $"{startPathKey}.{relationValue}";
+                    var relatedAlias = queryContext.GetOrCreateAlias(relatedPathKey, relatedNode);
 
-                    startDXNode = relatedNode;
+                    queryContext.RegisterJoin(
+                        startPathKey,
+                        startSchemaNode,
+                        startAlias,
+                        relatedPathKey,
+                        relatedNode,
+                        relatedAlias);
+
+                    startSchemaNode = relatedNode;
+                    startPathKey = relatedPathKey;
+                    startAlias = relatedAlias;
                 }
 
                 var whereExpressionItem = route[^1];
@@ -650,17 +776,31 @@ namespace IV.DX.Persistence
 
                 string condition;
 
-                if (startDXNode.ContainsProperty(propertyName))
+                if (startSchemaNode.ContainsProperty(propertyName))
                 {
-                    condition = $"{FormatColumnReference(startDXNode.TableAlias, propertyName)}{propertyValue}";
+                    condition = $"{FormatColumnReference(startAlias, propertyName)}{propertyValue}";
                 }
                 else
                 {
-                    var baseDXNode = startDXNode.GetBaseDXNodeWithProperty(propertyName);
+                    var baseDXNode = startSchemaNode.GetBaseDXNodeWithProperty(propertyName);
+                    if (baseDXNode is null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Property '{propertyName}' not found for type '{typeName}'.");
+                    }
 
-                    RegisterIdPair(startDXNode, baseDXNode, idPairs, idPairSet);
+                    var basePathKey = $"{startPathKey}.__base({baseDXNode.Name})";
+                    var baseAlias = queryContext.GetOrCreateAlias(basePathKey, baseDXNode);
 
-                    condition = $"{FormatColumnReference(baseDXNode.TableAlias, propertyName)}{propertyValue}";
+                    queryContext.RegisterJoin(
+                        startPathKey,
+                        startSchemaNode,
+                        startAlias,
+                        basePathKey,
+                        baseDXNode,
+                        baseAlias);
+
+                    condition = $"{FormatColumnReference(baseAlias, propertyName)}{propertyValue}";
                 }
 
                 whereExpressionItems.Add(
@@ -723,26 +863,38 @@ namespace IV.DX.Persistence
             };
         }
 
+        private string ReplaceQuotedAlias(string sql, string fromAlias, string toAlias)
+            => sql.Replace(_sqlHelper.QuoteIdentifier(fromAlias), _sqlHelper.QuoteIdentifier(toAlias));
 
         private string GetFromExpression(
             string typeName,
-            IList<KeyValuePair<DXNodeKey, DXNodeKey>> idPairs)
+            QueryContext queryContext)
         {
             var fromExpression = new StringBuilder();
 
-            var dxNode = Get(typeName);
+            var coreSchemaNode = Get(typeName);
+            var corePathKey = typeName;
+            var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreSchemaNode);
 
-            fromExpression.Append($"{FormatTableAlias(typeName, dxNode.TableAlias)}\n");
+            fromExpression.Append($"{FormatTableAlias(typeName, coreAlias)}\n");
 
-            foreach (var idPair in idPairs)
+            foreach (var join in queryContext.Joins)
             {
-                var baseDXNode = Get(idPair.Key);
-                var relatedDXNode = Get(idPair.Value);
+                var baseSchemaNode = join.BaseSchemaNode;
+                var relatedSchemaNode = join.RelatedSchemaNode;
 
-                var relation = GetRelation(baseDXNode, relatedDXNode);
+                var relation = GetRelation(baseSchemaNode, relatedSchemaNode);
+                if (relation.Join is null)
+                {
+                    throw new InvalidOperationException(
+                        $"Missing JOIN expression for relation from '{baseSchemaNode.Name}' to '{relatedSchemaNode.Name}'.");
+                }
 
                 fromExpression.Append("LEFT JOIN ")
-                              .Append(relation.Join)
+                              .Append(ReplaceQuotedAlias(
+                                  ReplaceQuotedAlias(relation.Join, baseSchemaNode.TableAlias, join.BaseAlias),
+                                  relatedSchemaNode.TableAlias,
+                                  join.RelatedAlias))
                               .Append('\n');
             }
 
@@ -860,6 +1012,26 @@ namespace IV.DX.Persistence
                 }
 
                 return clones;
+            }
+
+            public DXNode CloneWithNewKey(DXNodeKey key)
+            {
+                var clone = new DXNode(key, this.Name, this.Kind);
+
+                clone.OriginalNode = this.OriginalNode ?? this;
+                clone.BaseDXNode = this.BaseDXNode;
+
+                foreach (var item in DXNodes)
+                {
+                    var dxNodeRelation = new DXNodeRelation(
+                        item.Key.TargetObjectName,
+                        item.Key.RelationName,
+                        item.Key.Join?.Replace($"{this.TableAlias}", $"{clone.TableAlias}"));
+
+                    clone.AttachDXNode(dxNodeRelation, item.Value);
+                }
+
+                return clone;
             }
 
             public override string ToString()
