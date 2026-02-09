@@ -48,7 +48,7 @@
           "ID": "6bae3c45-a19b-4a2b-ae92-6512c926efa9",
           "TimeStamp": "2025-12-24T13:45:53.84862Z",
           "BaseDXUnit": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
-          "Name": "DXAccountUnit",
+          "Name": "DXTenantUnit",
           "DisplayValue": "Name",
           "Kind": 1
         },
@@ -167,7 +167,7 @@
           "TimeStamp": "2025-12-24T13:47:36.501509Z",
           "BaseDXUnit": "0486d304-84f3-4ccc-a6eb-0c275465fb27",
           "Name": "DXMembershipUnit",
-          "DisplayValue": "U2U(Account).Name",
+          "DisplayValue": "Name",
           "Kind": 1,
           "DXElements": {
             "DXUnitToUnitRelationElement": {
@@ -194,7 +194,7 @@
                     "TimeStamp": "2025-12-24T13:47:36.505308Z",
                     "DXUnitID": "cf85a667-b58d-4d40-b279-c7db025fd290",
                     "OwnRelationName": "Memberships",
-                    "TargetRelationName": "Account",
+                    "TargetRelationName": "Tenant",
                     "RelationType": 4,
                     "TargetDXUnit": "6bae3c45-a19b-4a2b-ae92-6512c926efa9"
                   }
@@ -215,7 +215,7 @@
                     "ID": "2619432b-645a-4c54-9e5d-e1e534633f3a",
                     "TimeStamp": "2026-01-25T12:31:42.125456Z",
                     "DXUnitID": "cf85a667-b58d-4d40-b279-c7db025fd290",
-                    "Columns": "Identity, Account"
+                    "Columns": "Tenant, Identity"
                   }
                 ]
               }

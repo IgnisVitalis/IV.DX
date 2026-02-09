@@ -30,9 +30,9 @@ namespace IV.DX.Persistence.IntTests
             var columns = new Dictionary<string, string>
             {
                 { "Name", "Name" } ,
-                { "AccountName", "U2U(Account).Name"},
+                { "TenantName", "U2U(Tenant).Name"},
                 { "RoleNameFromMembership", "DXRoleElement.E2U(Role).Name" } ,
-                { "RoleNameFromAccount", "U2U(Account).DXRoleElement.E2U(Role).Name" } ,
+                { "RoleNameFromTenant", "U2U(Tenant).DXRoleElement.E2U(Role).Name" } ,
             };
 
             var sql = this._sqlQueryBuilder.BuildSQLExpression("DXMembershipUnit", columns);
