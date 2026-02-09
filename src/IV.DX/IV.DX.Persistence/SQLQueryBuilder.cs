@@ -108,6 +108,8 @@ namespace IV.DX.Persistence
 
             public string GetOrCreateAlias(string pathKey, DXNode schemaNode)
             {
+                ArgumentNullException.ThrowIfNull(schemaNode);
+
                 if (_aliasByPath.TryGetValue(pathKey, out var existing))
                 {
                     return existing;
@@ -168,6 +170,110 @@ namespace IV.DX.Persistence
             string RelatedPathKey,
             DXNode RelatedSchemaNode,
             string RelatedAlias);
+
+        private static string FormatAvailableRelations(DXNode node, int maxPerGroup = 20)
+        {
+            static string FormatList(IReadOnlyList<string> items, int max)
+            {
+                if (items.Count == 0)
+                {
+                    return "<none>";
+                }
+
+                if (items.Count <= max)
+                {
+                    return string.Join(", ", items);
+                }
+
+                return $"{string.Join(", ", items.Take(max))}, ... (+{items.Count - max} more)";
+            }
+
+            var relations = node.GetRelations()
+                .Select(x => new { Name = x.RelationName, TargetKind = x.TargetNode.Kind })
+                .ToList();
+
+            if (relations.Count == 0)
+            {
+                return "<none>";
+            }
+
+            var directProperties = relations
+                .Where(x => x.TargetKind == DXNodeKind.DXProperty)
+                .Select(x => x.Name)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
+
+            var unitElements = relations
+                .Where(x => x.TargetKind == DXNodeKind.DXElement
+                    && !x.Name.StartsWith("U2E(", StringComparison.Ordinal))
+                .Select(x => x.Name)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
+
+            var relatedUnitsU2U = relations
+                .Where(x => x.Name.StartsWith("U2U(", StringComparison.Ordinal))
+                .Select(x => x.Name)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
+
+            var relatedElementsU2E = relations
+                .Where(x => x.Name.StartsWith("U2E(", StringComparison.Ordinal))
+                .Select(x => x.Name)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
+
+            var included = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var item in directProperties) included.Add(item);
+            foreach (var item in unitElements) included.Add(item);
+            foreach (var item in relatedUnitsU2U) included.Add(item);
+            foreach (var item in relatedElementsU2E) included.Add(item);
+
+            var other = relations
+                .Select(x => x.Name)
+                .Where(x => !included.Contains(x))
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(x => x, StringComparer.Ordinal)
+                .ToList();
+
+            var lines = new List<string>(capacity: 5)
+            {
+                $"Own properties: {FormatList(directProperties, maxPerGroup)}",
+                $"Related DXElements: {FormatList(unitElements, maxPerGroup)}",
+                $"Related DXUnits (U2U): {FormatList(relatedUnitsU2U, maxPerGroup)}",
+                $"Related DXElements (U2E): {FormatList(relatedElementsU2E, maxPerGroup)}"
+            };
+
+            if (other.Count > 0)
+            {
+                lines.Add($"Other: {FormatList(other, maxPerGroup)}");
+            }
+
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        private static DXNode GetRelatedNodeOrThrow(
+            DXNode startSchemaNode,
+            string relationValue,
+            string typeName,
+            string expression,
+            string expressionAlias,
+            int segmentIndex,
+            int segmentCount)
+        {
+            if (startSchemaNode.TryGetRelation(relationValue, out var relatedPair) && relatedPair.Value is not null)
+            {
+                return relatedPair.Value;
+            }
+
+            throw new InvalidOperationException(
+                $"Invalid DX expression '{expression}' (alias '{expressionAlias}') for type '{typeName}': " +
+                $"cannot resolve relation '{relationValue}' from '{startSchemaNode.Name}' at segment {segmentIndex}/{segmentCount}. " +
+                $"{Environment.NewLine}Available relations:{Environment.NewLine}{FormatAvailableRelations(startSchemaNode)}");
+        }
 
         private void BuildDXNodeTree()
         {
@@ -650,6 +756,11 @@ namespace IV.DX.Persistence
                 {
                     var alias = column.Key;
                     var expression = column.Value;
+                    if (string.IsNullOrWhiteSpace(expression))
+                    {
+                        throw new InvalidOperationException(
+                            $"Column '{alias}' has an empty DX expression for type '{typeName}'.");
+                    }
 
                     var route = expression.Split('.');
                     var startSchemaNode = coreDXNode;
@@ -660,8 +771,14 @@ namespace IV.DX.Persistence
                     {
                         var relationValue = route[i];
 
-                        var relatedPair = Get(startSchemaNode, relationValue);
-                        var relatedNode = relatedPair.Value;
+                        var relatedNode = GetRelatedNodeOrThrow(
+                            startSchemaNode,
+                            relationValue,
+                            typeName,
+                            expression,
+                            alias,
+                            segmentIndex: i + 1,
+                            segmentCount: route.Length - 1);
 
                         var relatedPathKey = $"{startPathKey}.{relationValue}";
                         var relatedAlias = queryContext.GetOrCreateAlias(relatedPathKey, relatedNode);
@@ -682,6 +799,11 @@ namespace IV.DX.Persistence
                     string columnExpressionItem;
 
                     var columnName = route[^1];
+                    if (string.IsNullOrWhiteSpace(columnName))
+                    {
+                        throw new InvalidOperationException(
+                            $"Invalid DX expression '{expression}' (alias '{alias}') for type '{typeName}': missing column name.");
+                    }
 
                     if (startSchemaNode.ContainsProperty(columnName))
                     {
@@ -749,8 +871,14 @@ namespace IV.DX.Persistence
                 {
                     var relationValue = route[i];
 
-                    var relatedPair = Get(startSchemaNode, relationValue);
-                    var relatedNode = relatedPair.Value;
+                    var relatedNode = GetRelatedNodeOrThrow(
+                        startSchemaNode,
+                        relationValue,
+                        typeName,
+                        expression.Key,
+                        expressionAlias: "<filter>",
+                        segmentIndex: i + 1,
+                        segmentCount: route.Length - 1);
 
                     var relatedPathKey = $"{startPathKey}.{relationValue}";
                     var relatedAlias = queryContext.GetOrCreateAlias(relatedPathKey, relatedNode);
@@ -769,8 +897,18 @@ namespace IV.DX.Persistence
                 }
 
                 var whereExpressionItem = route[^1];
+                if (string.IsNullOrWhiteSpace(whereExpressionItem))
+                {
+                    throw new InvalidOperationException(
+                        $"Invalid DX filter expression '{expression.Key}' for type '{typeName}': missing condition.");
+                }
 
                 var spaceIndex = whereExpressionItem.IndexOf(' ');
+                if (spaceIndex < 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Invalid DX filter expression '{expression.Key}' for type '{typeName}': missing operator/value after '{whereExpressionItem}'.");
+                }
                 var propertyName = whereExpressionItem.Substring(0, spaceIndex);
                 var propertyValue = whereExpressionItem.Substring(spaceIndex);
 
@@ -942,6 +1080,19 @@ namespace IV.DX.Persistence
                 out KeyValuePair<DXNodeRelation, DXNode> relation)
             {
                 return _relationsByName.TryGetValue(relationName, out relation);
+            }
+
+            public IEnumerable<string> GetRelationNames()
+            {
+                return _relationsByName.Keys;
+            }
+
+            public IEnumerable<(string RelationName, DXNodeRelation Relation, DXNode TargetNode)> GetRelations()
+            {
+                foreach (var item in _relationsByName)
+                {
+                    yield return (item.Key, item.Value.Key, item.Value.Value);
+                }
             }
 
             public DXNodeRelation GetRelationTo(DXNodeKey targetId)

@@ -1,6 +1,7 @@
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -49,6 +50,21 @@ namespace IV.DX.Persistence.IntTests
             // Assert
 
         }
+
+        [Fact]
+        public void BuildSQLExpression_UsingWrongExpression_ThrowsReadableError()
+        {
+            var columns = new Dictionary<string, string>
+            {
+                { "RoleNameFromAccountWrong", "E2U(Account).DXRoleElement.E2U(Role).Name" }
+            };
+
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                this._sqlQueryBuilder.BuildSQLExpression("DXMembershipUnit", columns));
+
+            Assert.Contains("RoleNameFromAccountWrong", ex.Message);
+            Assert.Contains("E2U(Account)", ex.Message);
+            Assert.Contains("DXMembershipUnit", ex.Message);
+        }
     }
 }
-
