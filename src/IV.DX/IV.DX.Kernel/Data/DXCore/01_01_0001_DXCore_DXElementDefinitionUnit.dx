@@ -15,6 +15,7 @@
           "Name": "DXColumnDefinitionElement",
           "DisplayValue": "Name",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
@@ -112,6 +113,7 @@
           "Name": "DXUniqueColumnsElement",
           "DisplayValue": "Columns",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
@@ -144,6 +146,7 @@
           "Name": "DXObjectEnumElement",
           "DisplayValue": "Name",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
@@ -184,6 +187,7 @@
           "Name": "DXElementInUnitDefinitionElement",
           "DisplayValue": "RelationType",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXObjectEnumElement": {
               "Meta": {
@@ -214,6 +218,7 @@
           "Name": "DXUnitToUnitRelationElement",
           "DisplayValue": "OwnRelationName",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
@@ -277,6 +282,7 @@
           "Name": "DXElementToUnitRelationElement",
           "DisplayValue": "OwnRelationName",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
@@ -345,6 +351,7 @@
           "Name": "DXUnitToElementRelationElement",
           "DisplayValue": "OwnRelationName",
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {

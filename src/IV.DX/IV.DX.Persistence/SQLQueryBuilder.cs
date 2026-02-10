@@ -302,6 +302,11 @@ namespace IV.DX.Persistence
             var elementsById = elementsList.ToDictionary(x => x.ID);
             var enumsById = enumsList.ToDictionary(x => x.ID);
 
+            var commonElementNames = elementsList
+                .Where(x => x.IsCommon)
+                .Select(x => x.Name)
+                .ToHashSet(StringComparer.Ordinal);
+
             var relationsByLeft = relationsList
                 .ToLookup(r => r.ObjectNameLeft);
 
@@ -461,17 +466,36 @@ namespace IV.DX.Persistence
                     var dxElementName = dxElement.Name;
                     var dxNodeRelated = GetNodeByName(dxElementName);
 
+                    var joinUnitToElement = FormatJoin(
+                        dxElementName,
+                        dxNodeRelated.TableAlias,
+                        dxNodeRelated.TableAlias,
+                        Constants.DXUnitID,
+                        dxNode.TableAlias,
+                        Constants.ID);
+
+                    var joinElementToUnit = FormatJoin(
+                        dxUnitName,
+                        dxNode.TableAlias,
+                        dxNode.TableAlias,
+                        Constants.ID,
+                        dxNodeRelated.TableAlias,
+                        Constants.DXUnitID);
+
+                    if (dxElement.IsCommon)
+                    {
+                        var dxUnitTypeFilter =
+                            $"{FormatColumnReference(dxNodeRelated.TableAlias, Constants.DXUnitType)} = '{dxUnit.ID}'";
+
+                        joinUnitToElement = $"{joinUnitToElement} AND {dxUnitTypeFilter}";
+                        joinElementToUnit = $"{joinElementToUnit} AND {dxUnitTypeFilter}";
+                    }
+
                     var dxNodeRelationToDXElement =
                         new DXNodeRelation(
                             dxElementName,
                             dxElementName,
-                            FormatJoin(
-                                dxElementName,
-                                dxNodeRelated.TableAlias,
-                                dxNodeRelated.TableAlias,
-                                Constants.DXUnitID,
-                                dxNode.TableAlias,
-                                Constants.ID));
+                            joinUnitToElement);
 
                     dxNode.AttachDXNode(dxNodeRelationToDXElement, dxNodeRelated);
 
@@ -479,13 +503,7 @@ namespace IV.DX.Persistence
                         new DXNodeRelation(
                             dxUnitName,
                             $"E2UIn({dxUnitName})",
-                            FormatJoin(
-                                dxUnitName,
-                                dxNode.TableAlias,
-                                dxNode.TableAlias,
-                                Constants.ID,
-                                dxNodeRelated.TableAlias,
-                                Constants.DXUnitID));
+                            joinElementToUnit);
 
                     dxNodeRelated.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                 }
@@ -656,16 +674,32 @@ namespace IV.DX.Persistence
 
                     if (item.Value.Kind == DXNodeKind.DXElement)
                     {
+                        var elementToUnitJoin = FormatJoin(
+                            item.Value.Name,
+                            item.Value.TableAlias,
+                            item.Value.TableAlias,
+                            Constants.DXUnitID,
+                            dxNode.TableAlias,
+                            Constants.ID);
+
+                        if (commonElementNames.Contains(item.Value.Name) && relation.Join != null && relation.Join.Contains(Constants.DXUnitType, StringComparison.Ordinal))
+                        {
+                            var match = System.Text.RegularExpressions.Regex.Match(
+                                relation.Join,
+                                $"\\\"{Constants.DXUnitType}\\\"\\s*=\\s*'(?<id>[^']+)'",
+                                System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+                            if (match.Success && Guid.TryParse(match.Groups["id"].Value, out var inheritedUnitTypeId))
+                            {
+                                elementToUnitJoin =
+                                    $"{elementToUnitJoin} AND {FormatColumnReference(item.Value.TableAlias, Constants.DXUnitType)} = '{inheritedUnitTypeId}'";
+                            }
+                        }
+
                         var dxNodeRelationToDXUnit = new DXNodeRelation(
                             dxUnitName,
                             $"E2UIn({dxUnitName})",
-                            FormatJoin(
-                                item.Value.Name,
-                                item.Value.TableAlias,
-                                item.Value.TableAlias,
-                                Constants.DXUnitID,
-                                dxNode.TableAlias,
-                                Constants.ID));
+                            elementToUnitJoin);
 
                         item.Value.AttachDXNode(dxNodeRelationToDXUnit, dxNode);
                     }
@@ -1196,6 +1230,9 @@ namespace IV.DX.Persistence
                     return true;
 
                 if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitID)
+                    return true;
+
+                if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitType)
                     return true;
 
                 // Need to define columns for table for N to M relation

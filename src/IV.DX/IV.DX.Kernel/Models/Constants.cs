@@ -14,6 +14,7 @@
         public static string DXCustomUnitID(string typeName) => $"{typeName}{ID}";
         public static string TimeStamp { get; } = "TimeStamp";
         public static string DXUnitID { get; } = $"DX{DXUnitIDSuffix}";
+        public static string DXUnitType { get; } = "DXUnitType";
         public static string Announced { get; } = "Announced";
         public static string Deleted { get; } = "Deleted";
         public static string Mode { get; } = "Mode";
@@ -21,7 +22,7 @@
         {
             get
             {
-                return new[] { ID, DXUnitID, TimeStamp, SystemPropertyTypeName };
+                return new[] { ID, DXUnitID, DXUnitType, TimeStamp, SystemPropertyTypeName };
             }
         }
     }

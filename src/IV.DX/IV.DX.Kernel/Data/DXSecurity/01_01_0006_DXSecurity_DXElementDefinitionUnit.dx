@@ -43,7 +43,8 @@
         "TimeStamp": "2026-02-04T11:58:38.572911Z",
         "Name": "DXRoleElement",
         "DisplayValue": "Role.Name",
-        "Kind": 1
+        "Kind": 1,
+        "IsCommon": false
       }
     ],
     "Delete": null

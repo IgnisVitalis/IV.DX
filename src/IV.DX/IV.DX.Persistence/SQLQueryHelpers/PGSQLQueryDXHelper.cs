@@ -18,7 +18,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         IDXBulkInsertCapable
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
-        
+
         public void CreateDataBase(string connectionString)
         {
             var args = this.GetParametersToCreateOrDeleteBD(connectionString);
@@ -85,7 +85,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
 
             };
-        }        
+        }
 
         public string GetQueryToSetDXUnitInheritance(string childDXUnit, string baseDXUnit)
         {
@@ -602,13 +602,13 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             //        var query = this.GetSQLQueryToCreateRelationToMany(
             //            dataDXElement.Name,
             //            clmDefEnum.);
-                    
+
             //        sb.Append(query);
             //    }
             //}
 
             // Alter Unique constrains
-          
+
 
 
             return sb.ToString();
@@ -644,6 +644,48 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 return null;
 
             StringBuilder sb = new StringBuilder();
+
+            if (dxElement.IsCommon)
+            {
+                // Common DXElement stores the owning DXUnit via (DXUnitID, DXUnitType) instead of per-unit nullable <DXUnitTypeName>ID columns.
+                sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
+                sb.Append($"ADD COLUMN IF NOT EXISTS \"DXUnitType\" uuid; ");
+
+                var fkName = $"FK_{dxElement.Name}_DXUnitType_0000";
+                sb.Append($@"
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = '{fkName}') THEN
+        ALTER TABLE ""{dxElement.Name}""
+        ADD CONSTRAINT ""{fkName}""
+        FOREIGN KEY (""DXUnitType"")
+        REFERENCES ""DXUnitDefinitionUnit"" (""ID"")
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION;
+    END IF;
+END $$;
+");
+
+                sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_DXUnitType_DXUnitID\" ");
+                sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitType\", \"DXUnitID\"); ");
+
+                // Per-unit cardinality enforcement via partial index (needed because a common DXElement can be Single in one DXUnit and Multi in another).
+                if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
+                    || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory)
+                {
+                    sb.Append($"CREATE UNIQUE INDEX IF NOT EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitID\" ");
+                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitID\") ");
+                    sb.Append($"WHERE \"DXUnitType\" = '{obj.ID}'; ");
+                }
+                else
+                {
+                    sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitID\" ");
+                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitID\") ");
+                    sb.Append($"WHERE \"DXUnitType\" = '{obj.ID}'; ");
+                }
+
+                return sb.ToString();
+            }
 
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
             sb.Append($"ADD COLUMN \"{obj.Name}ID\" uuid; ");
@@ -735,14 +777,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
         public string GetSQLQueryToDropTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
         {
+            if (obj == null || dxElement == null)
+                return null;
+
             StringBuilder sb = new StringBuilder();
 
+            if (dxElement.IsCommon)
+            {
+                sb.Append($"DROP INDEX IF EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitID\"; ");
+                sb.Append($"DROP INDEX IF EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitID\"; ");
+                return sb.ToString();
+            }
+
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"DROP CONSTRAINT \"FK_{dxElement.Name}_{obj.Name}_0000\"; ");
+            sb.Append($"DROP CONSTRAINT IF EXISTS \"FK_{dxElement.Name}_{obj.Name}_0000\"; ");
+            sb.Append($"DROP INDEX IF EXISTS \"FK_{dxElement.Name}_{obj.Name}_0000_idx\"; ");
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"DROP INDEX \"FK_{dxElement.Name}_{obj.Name}_0000_idx\";");
-            sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"DROP COLUMN \"{obj.Name}ID;\" ");
+            sb.Append($"DROP COLUMN IF EXISTS \"{obj.Name}ID\"; ");
 
             return sb.ToString();
         }

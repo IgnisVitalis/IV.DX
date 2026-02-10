@@ -230,6 +230,27 @@
                   }
                 ]
               }
+            },
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "d8c6a759-8eb4-4241-8a7d-4ce290dcf734",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577",
+                    "ColumnType": 6,
+                    "Name": "IsCommon",
+                    "AllowNull": false
+                  }
+                ]
+              }
             }
           }
         },

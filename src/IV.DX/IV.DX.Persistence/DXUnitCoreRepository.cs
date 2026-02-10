@@ -59,7 +59,7 @@ namespace IV.DX.Persistence
                     // Delete related dxElements
                     foreach (var relatedDXElement in dxUnitHierarchyItem.AllDXElements)
                     {
-                        this.DeleteDXElementsFromDataSet(relatedDXElement.Name, id, dataSet, conn);
+                        this.DeleteDXElementsFromDataSet(dxUnitHierarchyItem.DXUnit.Name, relatedDXElement.Name, id, dataSet, conn);
                     }
 
                     // Delete dxUnit
@@ -373,20 +373,20 @@ namespace IV.DX.Persistence
                 columns: container.MainElement.GetColumns(),
                 dxFilter: this.GetWhereExpressionForID(id), fillSchema: false);
 
-            var whereClauseForDXUnitID = this.GetWhereExpressionForDXUnitID(id);
-
             foreach (var singleItem in container.SingleFragmentDefinitions)
             {
+                var dxFilter = this.GetWhereExpressionForDXElementRows(container.MainElement.DXUnitType, singleItem.Type, id);
                 this.PopulateTableToDataSet(conn, dataSet, singleItem.Type,
                     columns: singleItem.GetColumns(),
-                    dxFilter: whereClauseForDXUnitID, fillSchema: false);
+                    dxFilter: dxFilter, fillSchema: false);
             }
 
             foreach (var multiItem in container.MultiFragmentDefinitions)
             {
+                var dxFilter = this.GetWhereExpressionForDXElementRows(container.MainElement.DXUnitType, multiItem.Type, id);
                 this.PopulateTableToDataSet(conn, dataSet, multiItem.Type,
                     columns: multiItem.GetColumns(),
-                    dxFilter: whereClauseForDXUnitID, fillSchema: false);
+                    dxFilter: dxFilter, fillSchema: false);
             }
 
             return dataSet;
@@ -406,27 +406,27 @@ namespace IV.DX.Persistence
                     dxFilter: this.GetWhereExpressionForID(ids),
                     fillSchema: false);
 
-                var whereClauseForDXUnitIDs = this.GetWhereExpressionForDXUnitID(ids);
-
                 foreach (var singleItem in container.SingleFragmentDefinitions)
                 {
+                    var dxFilter = this.GetWhereExpressionForDXElementRows(container.MainElement.DXUnitType, singleItem.Type, ids);
                     this.PopulateTableToDataSet(
                         conn,
                         dataSet,
                         singleItem.Type,
                         columns: singleItem.GetColumns(),
-                        dxFilter: whereClauseForDXUnitIDs,
+                        dxFilter: dxFilter,
                         fillSchema: false);
                 }
 
                 foreach (var multiItem in container.MultiFragmentDefinitions)
                 {
+                    var dxFilter = this.GetWhereExpressionForDXElementRows(container.MainElement.DXUnitType, multiItem.Type, ids);
                     this.PopulateTableToDataSet(
                         conn,
                         dataSet,
                         multiItem.Type,
                         columns: multiItem.GetColumns(),
-                        dxFilter: whereClauseForDXUnitIDs,
+                        dxFilter: dxFilter,
                         fillSchema: false);
                 }
             }
@@ -717,7 +717,7 @@ namespace IV.DX.Persistence
                 dataSet,
                 dxElementName,
                 columns,
-                dxFilter: this.GetWhereExpressionForDXUnitID(parentId));
+                dxFilter: this.GetWhereExpressionForDXElementRows(dxUnitType, dxElementName, parentId));
 
             var table = dataSet.Tables[dxElementName];
 
@@ -887,14 +887,14 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxUnitName);
         }
 
-        private void DeleteDXElementsFromDataSet(string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
+        private void DeleteDXElementsFromDataSet(string dxUnitTypeName, string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(
                 conn,
                 dataSet,
                 dxElementName,
                 SQLQueryBuilder.BaseColumns,
-                dxFilter: this.GetWhereExpressionForDXUnitID(objectID));
+                dxFilter: this.GetWhereExpressionForDXElementRows(dxUnitTypeName, dxElementName, objectID));
 
             var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
@@ -927,6 +927,16 @@ namespace IV.DX.Persistence
                 row[modelUnitIdColumn] = item.DXUnitID;
             }
 
+            var dxUnitTypeColumn = FindColumn(row.Table, Constants.DXUnitType);
+            if (dxUnitTypeColumn != null)
+            {
+                var unitDef = _dxStructureCache.GetDXUnit(dxModelType);
+                if (unitDef != null)
+                {
+                    row[dxUnitTypeColumn] = unitDef.ID;
+                }
+            }
+
             var timeStampColumn = FindColumn(row.Table, Constants.TimeStamp);
             if (timeStampColumn != null)
             {
@@ -940,6 +950,7 @@ namespace IV.DX.Persistence
             {
                 if (column.ColumnName == Constants.ID
                     || string.Equals(column.ColumnName, Constants.DXUnitID, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(column.ColumnName, Constants.DXUnitType, StringComparison.OrdinalIgnoreCase)
                     || column.ColumnName == Constants.TimeStamp
                     || column.ColumnName == Constants.SystemPropertyTypeName
                     || column.ColumnName == $"{dxModelType}ID")
@@ -1890,6 +1901,58 @@ namespace IV.DX.Persistence
             Insert = 1,
             Update = 2,
             Delete = 3
+        }
+
+        private bool TryGetCommonDXElementUnitTypeId(
+            string dxUnitTypeName,
+            string dxElementTypeName,
+            out Guid dxUnitDefinitionId)
+        {
+            dxUnitDefinitionId = Guid.Empty;
+
+            if (string.IsNullOrWhiteSpace(dxUnitTypeName) || string.IsNullOrWhiteSpace(dxElementTypeName))
+            {
+                return false;
+            }
+
+            var elementDef = _dxStructureCache.GetDXElement(dxElementTypeName);
+            if (elementDef == null || !elementDef.IsCommon)
+            {
+                return false;
+            }
+
+            var unitDef = _dxStructureCache.GetDXUnit(dxUnitTypeName);
+            if (unitDef == null)
+            {
+                return false;
+            }
+
+            dxUnitDefinitionId = unitDef.ID;
+            return true;
+        }
+
+        private string GetWhereExpressionForDXElementRows(string dxUnitTypeName, string dxElementTypeName, Guid parentId)
+        {
+            var where = this.GetWhereExpressionForDXUnitID(parentId);
+
+            if (TryGetCommonDXElementUnitTypeId(dxUnitTypeName, dxElementTypeName, out var dxUnitTypeId))
+            {
+                where = $"{where} AND {Constants.DXUnitType} = '{dxUnitTypeId}'";
+            }
+
+            return where;
+        }
+
+        private string GetWhereExpressionForDXElementRows(string dxUnitTypeName, string dxElementTypeName, IEnumerable<Guid> parentIds)
+        {
+            var where = this.GetWhereExpressionForDXUnitID(parentIds);
+
+            if (TryGetCommonDXElementUnitTypeId(dxUnitTypeName, dxElementTypeName, out var dxUnitTypeId))
+            {
+                where = $"{where} AND {Constants.DXUnitType} = '{dxUnitTypeId}'";
+            }
+
+            return where;
         }
 
         private string GetWhereExpressionForID(Guid id)

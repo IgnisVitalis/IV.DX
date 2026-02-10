@@ -15,6 +15,7 @@
           "Name": "DXQueryColumnElement",
           "DisplayValue": null,
           "Kind": 1,
+          "IsCommon": false,
           "DXElements": {
             "DXColumnDefinitionElement": {
               "Meta": {
