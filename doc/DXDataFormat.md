@@ -71,6 +71,8 @@ public sealed class DXUnitRecord : DXObjectRecord
 public sealed class DXElementRecord : DXObjectRecord
 {
     public Guid DXUnitID { get; set; }
+
+    // Other DXElement columns (including system-managed ones like "DXUnitType") are captured in Fields.
 }
 
 public sealed class DXEnumRecord : DXObjectRecord
@@ -157,6 +159,17 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
 - If the element is **standalone** (top-level block with `Kind = DXElement`), you must provide `Meta.DXUnitContext`.
 - `Delete` references may include extra fields (e.g., `DXUnitID`) in `DXDeleteRef.Fields`.
 
+### Common DXElements (`DXElementDefinitionUnit.IsCommon`)
+
+Some DXElement types can be configured as **common** (by setting `IsCommon = true` on their `DXElementDefinitionUnit` record). This changes how containment is represented in storage to avoid creating a growing number of nullable `"<DXUnitTypeName>ID"` columns when the same DXElement type can belong to many different DXUnit types.
+
+- When an element type is **common**, element rows use:
+  - `DXUnitID` (the owning unit instance ID)
+  - `DXUnitType` (the owning unit *definition* ID, i.e., `DXUnitDefinitionUnit.ID`)
+- `DXUnitType` is treated as a system field and may appear inside `DXElementRecord.Fields` (and/or `DXDeleteRef.Fields`).
+- Writers typically do **not** need to provide `DXUnitType` explicitly when nesting elements inside a DXUnit; the engine can derive it from the parent unit type.
+- For standalone DXElement blocks, `Meta.DXUnitContext` remains required and provides the unit-type context used to infer the correct `DXUnitType` for common elements.
+
 ---
 
 ## 8) DXEnumRecord specifics
@@ -181,6 +194,7 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
   - Each nested element record has `DXUnitID` equal to the parent unit ID.
 - DXElement records:
   - `DXUnitID` is required.
+  - If present, `DXUnitType` (in `Fields`) is a GUID identifying the owning unit definition (used for common elements).
 - DXEnum records:
   - `Key` and `Value` are required.
   - `Type` resolves from `Meta.Type` or record `Type` when Meta is missing.
