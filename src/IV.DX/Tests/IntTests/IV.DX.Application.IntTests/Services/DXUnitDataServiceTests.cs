@@ -122,7 +122,7 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             var id = definitionId;
-            var existingItem = await this._service.GetItemAsync("DXNavigationItemUnit", id);
+            var existingItem = await this._reader.GetItemAsync("DXNavigationItemUnit", id);
 
             Assert.Null(existingItem);
 
@@ -179,7 +179,7 @@ namespace IV.DX.Application.IntTests.Services
             string filter = "Kind = 999888777";
 
             // Action
-            var items = await this._service.GetItemsAsync(typeName, filter);
+            var items = await this._reader.GetItemsAsync(typeName, filter);
 
             // Assert
             Assert.NotNull(items);
@@ -194,7 +194,7 @@ namespace IV.DX.Application.IntTests.Services
             string filter = "Kind = 1";
 
             // Action
-            var items = await this._service.GetItemsAsync(typeName, filter);
+            var items = await this._reader.GetItemsAsync(typeName, filter);
 
             // Assert
             Assert.NotNull(items);
@@ -209,7 +209,7 @@ namespace IV.DX.Application.IntTests.Services
             var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
 
             // Action
-            var item = await this._service.GetItemAsync(typeName, id);
+            var item = await this._reader.GetItemAsync(typeName, id);
 
             // Assert
             var block = item.ToObject<DXDataBlock<DXUnitRecord>>();
@@ -229,7 +229,7 @@ namespace IV.DX.Application.IntTests.Services
             var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
 
             // Action
-            var item = await this._service.GetItemAsync(typeName, id);
+            var item = await this._reader.GetItemAsync(typeName, id);
 
             // Assert
             Assert.NotNull(item);
@@ -308,8 +308,8 @@ namespace IV.DX.Application.IntTests.Services
             var item3 = await this._service.InsertAsync(dxUnit3);
 
             // Assert
-            var existingItem1 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id1);
-            var existingItem2 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id2);
+            var existingItem1 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id1);
+            var existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id2);
 
             Assert.Single(existingItem1.DXUnitToUnitRelationElement.Announced);
 
@@ -359,8 +359,8 @@ namespace IV.DX.Application.IntTests.Services
             item2 = await this._service.UpdateAsync(dxUnit2);
 
             // Assert
-            existingItem2 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id2);
-            var existingItem3 = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id3);
+            existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id2);
+            var existingItem3 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id3);
 
             Assert.Single(existingItem2.DXUnitToUnitRelationElement.Announced);
 
@@ -411,7 +411,7 @@ namespace IV.DX.Application.IntTests.Services
             var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
 
             // Action
-            var item = await this._service.GetItemAsync(typeName, id);
+            var item = await this._reader.GetItemAsync(typeName, id);
 
             // Assert
             Assert.NotNull(item);
@@ -948,7 +948,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var existingItem = await EstimatePerformanceAsync(async () =>
             {
-                return await this._service.GetItemAsync<TBookUnit>(id);
+                return await this._reader.GetItemAsync<TBookUnit>(id);
             }, $"GetItemAsync unit with {text.Count()} multi items");
 
             Assert.NotNull(existingItem);
@@ -1007,7 +1007,7 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.InsertAsync(dxUnit);
 
             // Assert
-            var createdDXUnit = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
+            var createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id);
 
             Assert.NotNull(createdDXUnit);
 
@@ -1036,7 +1036,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.Null(createdRelationInverted);
 
-            var instancesWithObjectKind = await this._service.GetItemsAsync<DXUnitWithKindEnum>();
+            var instancesWithObjectKind = await this._reader.GetItemsAsync<DXUnitWithKindEnum>();
 
             Assert.Empty(instancesWithObjectKind);
 
@@ -1053,7 +1053,7 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.UpdateAsync(dxUnit);
 
             // Assert
-            createdDXUnit = await this._service.GetItemAsync<DXUnitDefinitionUnit>(id);
+            createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id);
 
             Assert.NotNull(createdDXUnit);
 
@@ -1082,7 +1082,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.Null(createdRelationInverted);
 
-            var instanceWithRelationType = await this._service.GetItemsAsync<DXUnitWithRelationTypeEnum>();
+            var instanceWithRelationType = await this._reader.GetItemsAsync<DXUnitWithRelationTypeEnum>();
 
             Assert.Empty(instanceWithRelationType);
         }

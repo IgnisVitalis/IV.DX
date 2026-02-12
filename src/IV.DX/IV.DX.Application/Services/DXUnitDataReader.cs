@@ -1,4 +1,5 @@
 using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
@@ -7,30 +8,198 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Services
 {
-    internal sealed class DXUnitDataReader(IDXUnitDataService dataService, IDXStructureCache structureCache) : IDXUnitDataReader
+    internal sealed class DXUnitDataReader(IDXPipelineExecutor dxPipelineExecutor, IDXStructureCache structureCache) : IDXUnitDataReader
     {
+        public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
+                }
+            }
+
+            throw new Exception($"There are an error to get dxUnit by ID ({id}): {result.Error}");
+        }
+
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
+
+            throw new Exception($"There are an error to get all dxUnit: {result.Error}");
+        }
+
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(IEnumerable<Guid> ids, DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(ids, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
+
+            throw new Exception($"There are an error to get dxUnit by ids: {result.Error}");
+        }
+
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string dxFilter, DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
+        {
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync<T>(dxFilter, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value;
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return Enumerable.Empty<T>();
+                }
+            }
+
+            throw new Exception($"There are an error to get dxUnit by query ({dxFilter}): {result.Error}");
+        }
+
         public async Task<JObject> GetItemAsync(string typeName, Guid id, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
-            var obj = await dataService.GetItemAsync(typeName, id, context, ct);
-            return MaskSensitive(obj, typeName);
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return MaskSensitive(result.Value, typeName);
+                }
+                else if (result.Outcome == DXOutcome.NotFound)
+                {
+                    return null;
+                }
+            }
+
+            throw new Exception($"There are an error to get dxModel by ID ({id}): {result.Error}");
         }
 
         public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
-            var items = await dataService.GetItemsAsync(typeName, context, ct);
-            return items.Select(x => MaskSensitive(x, typeName)).ToList();
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                }
+                else if (result.Outcome == DXOutcome.NotFound || result.Value == null)
+                {
+                    return Enumerable.Empty<JObject>();
+                }
+            }
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}): {result.Error}");
         }
 
         public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, IEnumerable<Guid> ids, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
-            var items = await dataService.GetItemsAsync(typeName, ids, context, ct);
-            return items.Select(x => MaskSensitive(x, typeName)).ToList();
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, ids, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                }
+                else if (result.Outcome == DXOutcome.NotFound || result.Value == null)
+                {
+                    return Enumerable.Empty<JObject>();
+                }
+            }
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {result.Error}");
         }
 
         public async Task<IEnumerable<JObject>> GetItemsAsync(string typeName, string dxFilter, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
-            var items = await dataService.GetItemsAsync(typeName, dxFilter, context, ct);
-            return items.Select(x => MaskSensitive(x, typeName)).ToList();
+            if (context == null)
+            {
+                context = new DXHandlerContext();
+            }
+
+            var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxFilter, context, ct);
+
+            if (result.IsSuccess)
+            {
+                if (result.Outcome == DXOutcome.Ok && result.Value != null)
+                {
+                    return result.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                }
+                else if (result.Outcome == DXOutcome.NotFound || result.Value == null)
+                {
+                    return Enumerable.Empty<JObject>();
+                }
+            }
+
+            throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxFilter}): {result.Error}");
         }
 
         private JObject MaskSensitive(JObject? jObject, string? typeName)

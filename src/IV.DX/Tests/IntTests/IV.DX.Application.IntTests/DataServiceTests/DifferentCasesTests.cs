@@ -17,14 +17,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     [Collection("DX:one-time")]
     public class DifferentCasesTests : IntTestController
     {
-        IDXUnitDataService _dataService;
-        IDXUnitGenericRepository _genericRepo;
+        private readonly IDXUnitDataService _dataService;
+        private readonly IDXUnitDataReader _dataReader;
+        private readonly IDXUnitGenericRepository _genericRepo;
 
         public DifferentCasesTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
-            this._genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
+            _dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            _dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
+            _genericRepo = this.ServiceProvider.GetRequiredService<IDXUnitGenericRepository>();
         }
 
         [Fact]
@@ -163,7 +165,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
 
             // Action
-            var jObject = await this._dataService.GetItemAsync("TDeviceUnit", id);
+            var jObject = await _dataReader.GetItemAsync("TDeviceUnit", id);
 
             // Assert
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
@@ -241,7 +243,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
 
             Assert.Single(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
 
@@ -262,7 +264,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(existingDXUnit).Wait();
 
             // Assert
-            existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
+            existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
             Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
 
@@ -314,10 +316,10 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.DeleteAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
             Assert.Null(existingDXUnit);
 
-            var existingDXElement = await this._dataService.GetItemAsync<DXElementDefinitionUnit>(dxElement.ID);
+            var existingDXElement = await _dataReader.GetItemAsync<DXElementDefinitionUnit>(dxElement.ID);
             Assert.NotNull(existingDXElement);
         }
 
@@ -411,7 +413,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await this._dataService.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitID);
             Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
     }

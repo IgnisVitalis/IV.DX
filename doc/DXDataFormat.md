@@ -138,7 +138,16 @@ This matches `DXElementInUnitTypeEnum` values in DXCore:
 ### Sync
 - `Items` represents the desired final set **within the scope**
 - objects missing from that set may be removed **within the scope**
-- scope may be defined by `DXFilter` (typically for DXUnit sync-many)
+- scope is typically defined by `Meta.DXFilter` (most commonly for “sync many” DXUnit blocks)
+
+#### Sync scope rule (important)
+Sync without an explicit scope is dangerous (it could imply “delete everything not present in `Items`”).
+
+In this project’s implementation:
+- implicit “delete-missing” is only performed when `Meta.Op = "Sync"` **and** `Meta.DXFilter` is provided (non-empty)
+- if `Meta.DXFilter` is null/empty, Sync behaves like Patch (upsert `Items` + explicit `Delete` only)
+
+`Meta.DXFilter` must be valid DXSQL (see `doc/DXSQL.md`). Expressions like `1=1` are not valid DXSQL; to match “everything” you’d use a valid DXSQL condition such as `ID IS NOT NULL` (be careful: that makes Sync operate over all rows of the type).
 
 ---
 
@@ -188,6 +197,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
 - For standalone DXElement blocks, `Meta.DXUnitContext` is present.
 - `Items`/`Delete` accept single object or array. If `IsMulti = true`, prefer array; if `IsMulti = false`, allow single object.
 - If `IsRequired = true`, `Items` must exist (and must not be empty for multi).
+- If `Meta.Op = Sync` and you expect “delete-missing”, ensure `Meta.DXFilter` is present to define the scope.
 - DXUnit records:
   - `DXElements` keys are element type names.
   - Nested blocks must have `Meta.Kind = DXElement`.

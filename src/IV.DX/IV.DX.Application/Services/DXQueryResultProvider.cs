@@ -14,11 +14,11 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Application.Services
 {
-    internal class DXQueryResultProvider(IDXUnitDataService dataService, IDXRawReader dxRawReader, IDXStructureCache dxStructureCache) : IDXQueryResultProvider
+    internal class DXQueryResultProvider(IDXUnitDataReader dataReader, IDXRawReader dxRawReader, IDXStructureCache dxStructureCache) : IDXQueryResultProvider
     {
         public async Task<JObject> GetAsync(Guid dxQueryID, Guid? dxFilterID, CancellationToken ct = default)
         {
-            var dxQuery = await dataService.GetItemAsync<DXQueryUnit>(dxQueryID);
+            var dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryID);
 
             if (dxQuery == null)
                 return null;

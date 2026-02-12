@@ -167,7 +167,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return new DXDataBlock<DXUnitRecord>
                 {
-                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Patch", IsMulti = true },
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
@@ -181,7 +181,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return new DXDataBlock<DXUnitRecord>
                 {
-                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Patch", IsMulti = true },
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
@@ -195,7 +195,7 @@ namespace IV.DX.Persistence
             if (modelDefinition == null)
                 return new DXDataBlock<DXUnitRecord>
                 {
-                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Sync", IsMulti = true },
+                    Meta = new DXMeta { Kind = "DXUnit", Type = typeName, Op = "Patch", IsMulti = true },
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
@@ -213,7 +213,7 @@ namespace IV.DX.Persistence
             {
                 return new DXDataBlock<DXUnitRecord>
                 {
-                    Meta = new DXMeta { Kind = "DXUnit", Type = container?.MainElement?.DXUnitType, Op = "Sync", IsMulti = true },
+                    Meta = new DXMeta { Kind = "DXUnit", Type = container?.MainElement?.DXUnitType, Op = "Patch", IsMulti = true },
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
             }
@@ -222,7 +222,7 @@ namespace IV.DX.Persistence
             {
                 return new DXDataBlock<DXUnitRecord>
                 {
-                    Meta = new DXMeta { Kind = "DXUnit", Type = container.MainElement.DXUnitType, Op = "Sync", IsMulti = true },
+                    Meta = new DXMeta { Kind = "DXUnit", Type = container.MainElement.DXUnitType, Op = "Patch", IsMulti = true },
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
             }

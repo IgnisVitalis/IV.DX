@@ -15,12 +15,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     [Collection("DX:one-time")]
     public class CommonTests : IntTestController
     {
-        IDXUnitDataService _dataService;
+        private readonly IDXUnitDataService _dataService;
+        private readonly IDXUnitDataReader _dataReader;
 
         public CommonTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._dataService = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            _dataService = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            _dataReader = base.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
         }
 
         [Fact]
@@ -83,14 +85,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             await EstimatePerformanceAsync(async () =>
             {
-                var books = await _dataService.GetItemsAsync<TBookUnit>(ids100);
+                var books = await _dataReader.GetItemsAsync<TBookUnit>(ids100);
             }, $"GetItems({ids100.Count()})");
 
             await EstimatePerformanceAsync(async () =>
             {
                 foreach (var id in ids100)
                 {
-                    var book = await _dataService.GetItemAsync<TBookUnit>(id);
+                    var book = await _dataReader.GetItemAsync<TBookUnit>(id);
                 }
             }, $"GetItem x {ids100.Count()}");
 
@@ -102,7 +104,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             }, $"Deleting x {ids.Count()}");
 
-            Assert.Empty(await _dataService.GetItemsAsync<TBookUnit>(ids));
+            Assert.Empty(await _dataReader.GetItemsAsync<TBookUnit>(ids));
         }
 
         [Fact]
@@ -111,7 +113,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Init
 
             // Action
-            var dxElements = await _dataService.GetItemsAsync<DXElementDefinitionUnit>();
+            var dxElements = await _dataReader.GetItemsAsync<DXElementDefinitionUnit>();
 
             // Checking result
             Assert.NotEmpty(dxElements);
@@ -125,7 +127,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Init
 
             // Action           
-            var dxElementJObject = await _dataService.GetItemAsync("DXElementDefinitionUnit", new Guid("ce754889-4efb-4281-ad1f-14d710b30007"));
+            var dxElementJObject = await _dataReader.GetItemAsync("DXElementDefinitionUnit", new Guid("ce754889-4efb-4281-ad1f-14d710b30007"));
 
             var block = dxElementJObject.ToObject<DXDataBlock<DXUnitRecord>>();
             var record = block?.Data?.Items?.SingleOrDefault();
@@ -141,7 +143,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var objectID = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
 
             // Action
-            var objs = await _dataService.GetItemsAsync<DXUnitDefinitionUnit>($"ID = '{objectID}'");
+            var objs = await _dataReader.GetItemsAsync<DXUnitDefinitionUnit>($"ID = '{objectID}'");
 
             // Checking result
             Assert.Single(objs);
@@ -157,7 +159,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Init
 
             // Action
-            var objs = await _dataService.GetItemsAsync("DXUnitDefinitionUnit");
+            var objs = await _dataReader.GetItemsAsync("DXUnitDefinitionUnit");
 
             // Checking result
             Assert.NotEmpty(objs);

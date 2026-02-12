@@ -1,0 +1,66 @@
+classDiagram
+direction TB
+
+namespace "Enums" {
+  class DXObjectKindEnum {
+    <<enumeration>>
+    Core = 1
+    Custom = 2
+    Test = 3
+  }
+
+  class DXColumnTypeEnum {
+    <<enumeration>>
+    GUID = 1
+    TimeStamp = 2
+    String = 3
+    Text = 4
+    DateTime = 5
+    Bool = 6
+    Short = 7
+    Int = 8
+    Long = 9
+    Decimal = 10
+    Float = 11
+    Currency = 12
+    Blob = 13
+  }
+
+  class DXRelationTypeEnum {
+    <<enumeration>>
+    "1 to 0/1" = 1
+    "0/1 to 1" = 2
+    "1 to M" = 3
+    "N to 1" = 4
+    "0/1 to M" = 5
+    "N to 0/1" = 6
+    "N to M" = 7
+    "0/1 to 0/1" = 8
+  }
+
+  class DXElementInUnitTypeEnum {
+    <<enumeration>>
+    "Single mandatory" = 1
+    "Single optional" = 2
+    "Multi mandatory" = 3
+    "Multi optional" = 4
+  }
+}
+
+namespace "Used by" {
+  class DXObjectDefinitionUnit
+  class DXColumnDefinitionElement
+  class DXRelationDefinitionUnit
+  class DXUnitToUnitRelationElement
+  class DXUnitToElementRelationElement
+  class DXElementInUnitDefinitionElement
+}
+
+DXObjectDefinitionUnit --> DXObjectKindEnum : Kind
+DXColumnDefinitionElement --> DXColumnTypeEnum : ColumnType
+DXRelationDefinitionUnit --> DXObjectKindEnum : Kind
+DXRelationDefinitionUnit --> DXRelationTypeEnum : RelationType
+DXRelationDefinitionUnit --> DXColumnTypeEnum : RelationColumnTypeLeft/Right
+DXUnitToUnitRelationElement --> DXRelationTypeEnum : RelationType
+DXUnitToElementRelationElement --> DXRelationTypeEnum : RelationType
+DXElementInUnitDefinitionElement --> DXElementInUnitTypeEnum : RelationType

@@ -1,0 +1,61 @@
+classDiagram
+direction LR
+
+%% =========================
+%% DX Core (clean) - conceptual view
+%% (No namespace/package blocks to keep compatibility with older Mermaid renderers)
+%% =========================
+
+%% --- Definitions (Units) ---
+class DXObjectDefinitionUnit {
+  +DisplayValue : string(500)
+  +Name : string(50)
+  +Kind : DXObjectKindEnum
+}
+
+class DXUnitDefinitionUnit
+class DXElementDefinitionUnit
+class DXEnumDefinitionUnit
+class DXMigrationScriptsUnit
+
+%% --- Structure (Elements) ---
+class DXColumnDefinitionElement {
+  +Name : string(50)
+  +ColumnType : DXColumnTypeEnum
+  +Length : int
+  +AllowNull : bool
+  +DefaultValue : string(50)
+  +Precision : int
+  +Scale : int
+}
+
+class DXUniqueColumnsElement {
+  +Columns : string(500)
+}
+
+class DXElementInUnitDefinitionElement {
+  +Name : string(50)
+  +IsRequired : bool
+  +IsMulti : bool
+}
+
+%% =========================
+%% Relationships (conceptual)
+%% =========================
+
+%% What kind of object a definition represents (conceptual typing)
+DXObjectDefinitionUnit "0..1" --> "1" DXUnitDefinitionUnit : is (unit)
+DXObjectDefinitionUnit "0..1" --> "1" DXElementDefinitionUnit : is (element)
+DXObjectDefinitionUnit "0..1" --> "1" DXEnumDefinitionUnit : is (enum)
+DXObjectDefinitionUnit "0..1" --> "1" DXMigrationScriptsUnit : is (scripts)
+
+%% Columns inside element
+DXElementDefinitionUnit "1" *-- "0..*" DXColumnDefinitionElement : columns
+DXElementDefinitionUnit "0..1" --> "1" DXUniqueColumnsElement : unique
+
+%% Unit composition (what elements are part of a unit)
+DXUnitDefinitionUnit "1" *-- "0..*" DXElementInUnitDefinitionElement : elements
+DXElementInUnitDefinitionElement "*" --> "1" DXElementDefinitionUnit : element
+
+%% Base unit (inheritance-like)
+DXUnitDefinitionUnit "0..1" --> "1" DXUnitDefinitionUnit : BaseDXUnit

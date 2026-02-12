@@ -89,6 +89,16 @@
         <None Update="MigrationScripts\Test\01_01_0026_Test_DXRelationItemUnit.dx">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+
+        <None Update="MigrationScripts\Sync.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Sync\01_01_0100_Test_TUserUnitSyncSeed.dx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="MigrationScripts\Sync\01_01_0101_Test_TUserUnitSync.dx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

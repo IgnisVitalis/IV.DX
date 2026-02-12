@@ -116,3 +116,10 @@ E2UIn(UnitName)  Element -> Unit (containment reverse)
 - No parentheses or precedence rules.
 - Requires spaces around operators in filters.
 - The DSL is not parameterized; caller must ensure safe values.
+
+### 8.1 “Always true” filters
+DXSQL is **not** a raw SQL WHERE clause. The filter must be a DXSQL condition that starts with a valid property/path (e.g., `ID = '...'`, `TUserMainElement.Name = '...'`).
+
+So expressions like `1=1` / `1 = 1` are **not** valid DXSQL.
+
+If you need a filter that matches “everything”, use a valid DXSQL condition such as `ID IS NOT NULL` (and be careful: combined with Sync semantics, that can make a migration operate over the entire table/type).

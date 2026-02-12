@@ -16,6 +16,7 @@ namespace IV.DX.Application
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private readonly IDXUnitDataService _dataService;
+        private readonly IDXUnitCoreRepository _coreRepo;
         private readonly IDXUnitGenericRepository _genericRepo;
         private readonly IDXEnumDataService _enumDataService;
         private readonly IDXElementDataService _elementDataService;
@@ -25,11 +26,13 @@ namespace IV.DX.Application
         public MigrationService(
             IDXUnitGenericRepository genericRepo,
             IDXUnitDataService dataService,
+            IDXUnitCoreRepository coreRepo,
               IDXEnumDataService enumDataService,
               IDXElementDataService elementDataService)
         {
             _genericRepo = genericRepo;
             _dataService = dataService;
+            _coreRepo = coreRepo;
             _enumDataService = enumDataService;
             _elementDataService = elementDataService;
         }
@@ -343,6 +346,29 @@ namespace IV.DX.Application
 
                 ct.ThrowIfCancellationRequested();
 
+                var deleteRefById = new Dictionary<Guid, DXDeleteRef>();
+
+                if (deleteAction != null
+                    && block.Meta?.Op?.Equals("Sync", StringComparison.OrdinalIgnoreCase) == true
+                    && !string.IsNullOrWhiteSpace(block.Meta.DXFilter)
+                    && !string.IsNullOrWhiteSpace(block.Meta.Type))
+                {
+                    var existingIds = new HashSet<Guid>(_coreRepo.GetItemIDs(block.Meta.Type, block.Meta.DXFilter));
+
+                    var incomingIds = new HashSet<Guid>(
+                        block.Data?.Items?.Where(r => r != null).Select(r => r.ID) ?? Enumerable.Empty<Guid>());
+
+                    existingIds.ExceptWith(incomingIds);
+
+                    foreach (var id in existingIds)
+                    {
+                        if (id == Guid.Empty)
+                            continue;
+
+                        deleteRefById.TryAdd(id, new DXDeleteRef { ID = id });
+                    }
+                }
+
                 if (block.Data?.Items != null)
                 {
                     foreach (var record in block.Data.Items)
@@ -371,7 +397,18 @@ namespace IV.DX.Application
 
                 if (deleteAction != null && block.Data?.Delete != null)
                 {
-                    foreach (var deleteRef in block.Data.Delete)
+                    foreach (var deleteRef in block.Data.Delete.Where(x => x != null))
+                    {
+                        if (deleteRef.ID == Guid.Empty)
+                            continue;
+
+                        deleteRefById[deleteRef.ID] = deleteRef;
+                    }
+                }
+
+                if (deleteAction != null && deleteRefById.Count > 0)
+                {
+                    foreach (var deleteRef in deleteRefById.Values)
                     {
                         var single = new DXDataBlock<DXUnitRecord>
                         {

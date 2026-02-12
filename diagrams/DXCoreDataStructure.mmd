@@ -1,0 +1,184 @@
+classDiagram
+%% Auto-converted from DXCoreDataStructure.drawio (Core tab)
+class DXColumnDefinitionElement_0_N["DXColumnDefinitionElement 0/N"]
+class DXUniqueColumnsElement_0_N["DXUniqueColumnsElement 0/N"]
+class DXObjectEnumElement_0_N["DXObjectEnumElement 0/N"]
+class DXElementToUnitRelationElement_0_N["DXElementToUnitRelationElement 0/N"]
+class DXElementInUnitDefinitionElement_0_N["DXElementInUnitDefinitionElement 0/N"]
+class DXUnitToUnitRelationElement_0_N["DXUnitToUnitRelationElement 0/N"]
+class DXUnitToElementRelationElement_0_N["DXUnitToElementRelationElement 0/N"]
+
+class DXElementInUnitTypeEnum {
+  <<enumeration>>
+  Single mandatory = 1
+  Single optional = 2
+  Multi mandatory = 3
+  Multi optional = 4
+}
+
+class DXColumnTypeEnum {
+  <<enumeration>>
+  GUID = 1
+  TimeStamp = 2
+  String = 3
+  Text = 4
+  DateTime = 5
+  Bool = 6
+  Short = 7
+  Int = 8
+  Long = 9
+  Decimal = 10
+  Float = 11
+  Currency = 12
+  Blob = 13
+}
+
+class DXObjectDefinitionUnit {
+  +DXUnitDefinitionUnit : relation
+  +DXElementDefinitionUnit : relation
+  +DXEnumDefinitionUnit : relation
+  +Kind : relation
+  +DisplayValue : string(500)
+  +Name : string(50)
+}
+
+class DXColumnDefinitionElement_0_N {
+  +Enums : relation
+  +Name : string(50)
+  +ColumnType : int
+  +Length : int
+  +AllowNull : bool
+  +DefaultValue : string(50)
+  +Precision : int
+  +Scale : int
+}
+
+class DXUniqueColumnsElement_0_N {
+  +Columns : string(300)
+}
+
+class DXObjectEnumElement_0_N {
+  +EnumKey : relation
+  +EnumType : relation
+  +Name : string(50)
+  +AllowNull : bool
+}
+
+class DXObjectKindEnum {
+  <<enumeration>>
+  Core = 1
+  Custom = 2
+  Test = 3
+}
+
+class DXRelationDefinitionUnit {
+  +ObjectNameLeft : string(100)
+  +Kind : relation
+  +RelationType : relation
+  +RelationColumnTypeRight : relation
+  +RelationColumnNameRight : string (100)
+  +RelationColumnTypeLeft : relation
+  +RelationColumnNameLeft : string (100)
+  +RelationTable : string(100)
+  +RelationNameRight : string(100)
+  +ObjectNameRight : string(100)
+  +RelationNameLeft : string(100)
+}
+
+class DXRelationTypeEnum {
+  <<enumeration>>
+  1 to 0/1 = 1
+  0/1 to 1 = 2
+  1 to M = 3
+  N to 1 = 4
+  0/1 to M = 5
+  N to 0/1 = 6
+  N to M = 7
+  0/1 to 0/1 = 8
+}
+
+class DXEnumDefinitionUnit {
+  +DPObjectDescObject : relation
+  +TargetRelationName : string(50)
+  +Enums : relation
+}
+
+class DXElementDefinitionUnit {
+  +DPObjectDescObject : relation
+  +DPEntityDescObject : relation
+  +RelatedDXUnits : relation
+  +IsCommon : bool
+}
+
+class DXElementToUnitRelationElement_0_N {
+  +RelationType : relation
+  +TargetDXUnit : relation
+  +OwnRelationName : string(50)
+  +TargetRelationName : string(50)
+}
+
+class DXUnitDefinitionUnit {
+  +DPObjectDescObject : relation
+  +RelatedDXUnits : relation
+  +RelatedDXElements : relation
+  +BaseDXUnit : relation
+  +DerivedDXUnits : relation
+}
+
+class DXElementInUnitDefinitionElement_0_N {
+  +RelationType : int
+  +DXElementDefinitionUnit : relation
+}
+
+class DXUnitToUnitRelationElement_0_N {
+  +RelationType : relation
+  +TargetDXUnit : relation
+  +OwnRelationName : string(50)
+  +TargetRelationName : string(50)
+}
+
+class DXUnitToElementRelationElement_0_N {
+  +RelationType : relation
+  +TargetDXElement : relation
+  +OwnRelationName : string(50)
+  +TargetRelationName : string(50)
+}
+
+class DXMigrationScriptsUnit {
+  +Version : string(2)
+  +FilePath : string(100)
+  +Extention : string(5)
+  +Name : string(30)
+  +AppName : string(10)
+  +Number : string(4)
+  +Build : string(2)
+}
+
+%% Containment (derived from draw.io nesting)
+DXObjectDefinitionUnit "1" *-- "0..*" DXColumnDefinitionElement_0_N : contains
+DXColumnDefinitionElement_0_N "1" *-- "0..*" DXUniqueColumnsElement_0_N : contains
+DXUniqueColumnsElement_0_N "1" *-- "0..*" DXObjectEnumElement_0_N : contains
+DXElementDefinitionUnit "1" *-- "0..*" DXElementToUnitRelationElement_0_N : contains
+DXUnitDefinitionUnit "1" *-- "0..*" DXElementInUnitDefinitionElement_0_N : contains
+DXElementInUnitDefinitionElement_0_N "1" *-- "0..*" DXUnitToUnitRelationElement_0_N : contains
+DXUnitToUnitRelationElement_0_N "1" *-- "0..*" DXUnitToElementRelationElement_0_N : contains
+
+%% Relations (derived from draw.io connectors)
+DXObjectEnumElement_0_N <--> DXColumnDefinitionElement_0_N : EnumKey
+DXRelationDefinitionUnit --> DXRelationTypeEnum : RelationType
+DXRelationDefinitionUnit --> DXObjectKindEnum : Kind
+DXUnitDefinitionUnit <--> DXUnitDefinitionUnit : BaseDXUnit
+DXUnitToUnitRelationElement_0_N <--> DXUnitDefinitionUnit : TargetDXUnit
+DXObjectDefinitionUnit <--> DXElementDefinitionUnit : DXElementDefinitionUnit
+DXObjectDefinitionUnit <--> DXEnumDefinitionUnit : DXEnumDefinitionUnit
+DXObjectDefinitionUnit <--> DXUnitDefinitionUnit : DXUnitDefinitionUnit
+DXObjectEnumElement_0_N <--> DXEnumDefinitionUnit : EnumType
+DXObjectDefinitionUnit --> DXObjectKindEnum : Kind
+DXElementInUnitDefinitionElement_0_N <--> DXElementDefinitionUnit : DXElementDefinitionUnit
+DXElementInUnitDefinitionElement_0_N --> DXElementInUnitTypeEnum : RelationType
+DXRelationDefinitionUnit --> DXColumnTypeEnum : RelationColumnTypeLeft
+DXRelationDefinitionUnit --> DXColumnTypeEnum : RelationColumnTypeRight
+DXColumnDefinitionElement_0_N --> DXColumnTypeEnum : ColumnType
+DXUnitToUnitRelationElement_0_N --> DXRelationTypeEnum : RelationType
+DXElementDefinitionUnit <--> DXUnitToElementRelationElement_0_N : RelatedDXUnits
+DXUnitDefinitionUnit <--> DXElementToUnitRelationElement_0_N : RelatedDXElements

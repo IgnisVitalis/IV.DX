@@ -14,24 +14,24 @@ namespace IV.DX.Application.IntTests
     [Collection("DX:one-time")]
     public class Test : IntTestController
     {
-        IDXUnitDataService _dataService;
+        private readonly IDXUnitDataReader _dataReader;
 
         public Test(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
-            this._dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            _dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
         }
 
         [Fact]
         public async Task Test2()
         {
             // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            var dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
 
             var dataSource1 = new DataSource("TBookUnit", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
             var dataSource2 = new DataSource("TUserUnit", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
 
-            var subject = new DataSourceManager(dataService);
+            var subject = new DataSourceManager(dataReader);
 
             subject.Attach(dataSource1);
             subject.Attach(dataSource2);
@@ -48,14 +48,14 @@ namespace IV.DX.Application.IntTests
         public async Task Test3()
         {
             // Init
-            IDXUnitDataService dataService = this.ServiceProvider.GetRequiredService<IDXUnitDataService>();
+            var dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
 
-            var dxUnitMetadata = await _dataService.GetItemAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
-            var objectMetadata = await _dataService.GetItemAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
+            var dxUnitMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            var objectMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
             //var dxUnitMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             //var objectMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
 
-            var item = await _dataService.GetItemAsync<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            var item = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
             // Action
         }
     }
@@ -64,12 +64,12 @@ namespace IV.DX.Application.IntTests
     {
         public IList<DataSource> Subscribers { get; private set; }
 
-        public IDXUnitDataService DataService { get; private set; }
+        public IDXUnitDataReader DataReader { get; private set; }
 
-        public DataSourceManager(IDXUnitDataService dataService)
+        public DataSourceManager(IDXUnitDataReader dataReader)
         {
             this.Subscribers = new List<DataSource>();
-            this.DataService = dataService;
+            this.DataReader = dataReader;
         }
 
         public void Attach(DataSource dataSource)
@@ -116,7 +116,7 @@ namespace IV.DX.Application.IntTests
         {
             this.State = 1;
 
-            this.Result = await dataSourceManager.DataService.GetItemAsync(this.Type, this.Id);
+            this.Result = await dataSourceManager.DataReader.GetItemAsync(this.Type, this.Id);
 
             this.State = 2;
         }
