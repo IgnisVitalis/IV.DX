@@ -54,6 +54,10 @@ namespace IV.DX.Persistence
 
         private static int _version = 0;
 
+        private static WeakReference<IDXStructureCache>? _cacheRef;
+
+        private static readonly object _schemaLock = new();
+
         public string BuildSQLExpression(
             string typeName,
             IDictionary<string, string> columns,
@@ -276,15 +280,41 @@ namespace IV.DX.Persistence
         }
 
         private void BuildDXNodeTree()
+            => BuildDXNodeTree(force: false);
+
+        private void BuildDXNodeTree(bool force)
         {
-            if (dxStructureCache.Version > _version)
+            lock (_schemaLock)
             {
+                var cacheChanged =
+                    _cacheRef == null
+                    || !_cacheRef.TryGetTarget(out var cached)
+                    || !ReferenceEquals(cached, dxStructureCache);
+
+                if (!force && !cacheChanged && dxStructureCache.Version <= _version)
+                    return;
+
                 Load(
                     dxStructureCache.DXRelations,
                     dxStructureCache.DXUnits,
                     dxStructureCache.DXElements,
                     dxStructureCache.DXEnums);
+
+                _cacheRef = new WeakReference<IDXStructureCache>(dxStructureCache);
             }
+        }
+
+        private DXNode GetNode(string name)
+        {
+            if (_nodesByName.TryGetValue(name, out var node))
+                return node;
+
+            BuildDXNodeTree(force: true);
+
+            if (_nodesByName.TryGetValue(name, out node))
+                return node;
+
+            throw new KeyNotFoundException($"The given key '{name}' was not present in the dictionary.");
         }
 
         private void Load(
@@ -775,7 +805,7 @@ namespace IV.DX.Persistence
             IDictionary<string, string> columns,
             QueryContext queryContext)
         {
-            var coreDXNode = Get(typeName);
+            var coreDXNode = GetNode(typeName);
             var corePathKey = typeName;
             var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreDXNode);
 
@@ -882,7 +912,7 @@ namespace IV.DX.Persistence
             string dxFilter,
             QueryContext queryContext)
         {
-            var coreDXNode = Get(typeName);
+            var coreDXNode = GetNode(typeName);
             var corePathKey = typeName;
             var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreDXNode);
 
@@ -1044,7 +1074,7 @@ namespace IV.DX.Persistence
         {
             var fromExpression = new StringBuilder();
 
-            var coreSchemaNode = Get(typeName);
+            var coreSchemaNode = GetNode(typeName);
             var corePathKey = typeName;
             var coreAlias = queryContext.GetOrCreateAlias(corePathKey, coreSchemaNode);
 
