@@ -9,7 +9,10 @@ using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Services
 {
-    internal class DXUnitDataService(IDXUnitCoreRepository coreRepo, IDXPipelineExecutor dxPipelineExecutor) : IDXUnitDataService
+    internal class DXUnitDataService(
+        IDXUnitCoreRepository coreRepo,
+        IDXPipelineExecutor dxPipelineExecutor,
+        IDXUnitTypeAccessChecker unitTypeAccessChecker) : IDXUnitDataService
     {
         public async Task<T> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
@@ -17,6 +20,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
 
             var result = await dxPipelineExecutor.InsertAsync(dxUnit, context, ct);
 
@@ -38,6 +43,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
+            EnsureWriteAccess(typeName);
 
             var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
 
@@ -58,6 +64,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
+
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -77,6 +85,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureReadAccess(typeName);
+
             var result = await dxPipelineExecutor.IsUnitExistingAsync(typeName, id, context, ct);
 
             if (result.IsSuccess)
@@ -95,7 +105,9 @@ namespace IV.DX.Application.Services
             if (context == null)
             {
                 context = new DXHandlerContext();
-            }          
+            }
+
+            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
 
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
@@ -116,6 +128,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureWriteAccess(ExtractTypeName(jObject));
+
             var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -135,6 +149,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureWriteAccess(ExtractTypeName(jObject));
+
             var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -153,6 +169,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureWriteAccess(ExtractTypeName(jObject));
                 
             var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
@@ -173,6 +191,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureWriteAccess(ExtractTypeName(jObject));
+
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
             if (block == null)
                 throw new Exception("Invalid DXDataBlock payload.");
@@ -187,6 +207,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureWriteAccess(block?.Meta?.Type);
 
             var result = await dxPipelineExecutor.InsertAsync(block, context, ct);
 
@@ -207,6 +229,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureWriteAccess(block?.Meta?.Type);
+
             var result = await dxPipelineExecutor.UpdateAsync(block, context, ct);
 
             if (result.IsSuccess && result.Value != null)
@@ -225,6 +249,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureWriteAccess(block?.Meta?.Type);
 
             var result = await dxPipelineExecutor.DeleteAsync(block, context, ct);
 
@@ -247,6 +273,7 @@ namespace IV.DX.Application.Services
 
             ArgumentNullException.ThrowIfNull(block);
             var typeName = block.Meta?.Type;
+            EnsureWriteAccess(typeName);
 
             var output = new List<DXUnitRecord>();
 
@@ -257,7 +284,7 @@ namespace IV.DX.Application.Services
                     if (record == null) continue;
 
                     var itemIsExisting = !string.IsNullOrWhiteSpace(typeName)
-                        && await this.IsItemExistingAsync(typeName, record.ID);
+                        && await this.IsItemExistingAsync(typeName, record.ID, context, ct);
 
                     var singleBlock = new DXDataBlock<DXUnitRecord>
                     {
@@ -300,6 +327,27 @@ namespace IV.DX.Application.Services
                     Delete = block.Data?.Delete
                 }
             };
+        }
+
+        private static string? ExtractTypeName(JObject jObject)
+        {
+            return jObject["Meta"]?["Type"]?.ToString();
+        }
+
+        private void EnsureReadAccess(string? typeName)
+        {
+            if (!string.IsNullOrWhiteSpace(typeName))
+            {
+                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
+            }
+        }
+
+        private void EnsureWriteAccess(string? typeName)
+        {
+            if (!string.IsNullOrWhiteSpace(typeName))
+            {
+                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Write);
+            }
         }
     }
 }

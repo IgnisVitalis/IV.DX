@@ -27,6 +27,8 @@ namespace IV.DX.Hosting
 
             services.AddSingleton<IDXEncryptionKeyProvider, DXConfiguredEncryptionKeyProvider>();
             services.AddSingleton<IDXStringProtector, DXAesGcmStringProtector>();
+            services.AddSingleton<IDXExecutionContextAccessor, DXExecutionContextAccessor>();
+            services.AddScoped<IDXUnitTypeAccessChecker, DXContextualUnitTypeAccessChecker>();
 
             services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
             services.AddSingleton<ISQLSchemaHelper>(sp => (ISQLSchemaHelper)GetHelper(sp));
@@ -44,10 +46,11 @@ namespace IV.DX.Hosting
                 var dbProvider = sp.GetRequiredService<ISQLDbProvider>();
                 var sqlQueryBuilder = sp.GetRequiredService<ISQLQueryBuilder>();
                 var protector = sp.GetRequiredService<IDXStringProtector>();
+                var accessChecker = sp.GetRequiredService<IDXUnitTypeAccessChecker>();
 
                 var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, schemaHelper, dbProvider, sqlQueryBuilder, protector);
+                return new DXCoreRepository(new DXDatabaseOptions() { ConnectionString = o.ConnectionString }, cache, schemaHelper, dbProvider, sqlQueryBuilder, protector, accessChecker);
             };
 
             services.AddScoped<IDXRawReader, DXCoreRepository>(func);

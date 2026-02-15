@@ -19,11 +19,13 @@ namespace IV.DX.Application.IntTests.Services
     {
         private readonly IDXUnitDataService _dataService;
         private readonly IDXQueryResultProvider _queryProvider;
+        private readonly IDXExecutionContextAccessor _executionContextAccessor;
 
         public DXQueryResultProviderTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
             _dataService = base.ServiceProvider.GetRequiredService<IDXUnitDataService>();
             _queryProvider = base.ServiceProvider.GetRequiredService<IDXQueryResultProvider>();
+            _executionContextAccessor = base.ServiceProvider.GetRequiredService<IDXExecutionContextAccessor>();
         }
 
         [Fact]
@@ -228,6 +230,21 @@ namespace IV.DX.Application.IntTests.Services
                     Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = queryId } }
                 }
             });
+        }
+
+        [Fact]
+        public async Task GetDisplayValuesAsync_WhenReadAccessDenied_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "query-provider-test-user",
+                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXRoleUnit"
+                }
+            });
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _queryProvider.GetDisplayValuesAsync("DXUnitDefinitionUnit"));
         }
 
         private static DXDataBlock<DXElementRecord> BuildEmptyMultiElementBlock(string elementType)

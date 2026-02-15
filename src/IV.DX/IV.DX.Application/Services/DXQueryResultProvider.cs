@@ -14,14 +14,22 @@ using System.Text.RegularExpressions;
 
 namespace IV.DX.Application.Services
 {
-    internal class DXQueryResultProvider(IDXUnitDataReader dataReader, IDXRawReader dxRawReader, IDXStructureCache dxStructureCache) : IDXQueryResultProvider
+    internal class DXQueryResultProvider(
+        IDXUnitDataReader dataReader,
+        IDXRawReader dxRawReader,
+        IDXStructureCache dxStructureCache,
+        IDXUnitTypeAccessChecker unitTypeAccessChecker) : IDXQueryResultProvider
     {
         public async Task<JObject> GetAsync(Guid dxQueryID, Guid? dxFilterID, CancellationToken ct = default)
         {
+            unitTypeAccessChecker.EnsureAccess(nameof(DXQueryUnit), DXUnitTypeAccessOperation.Read);
+
             var dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryID);
 
             if (dxQuery == null)
                 return null;
+
+            unitTypeAccessChecker.EnsureAccess(dxQuery.DXUnitName, DXUnitTypeAccessOperation.Read);
 
             JObject jObject = new JObject();
 
@@ -82,6 +90,8 @@ namespace IV.DX.Application.Services
 
         public async Task<IEnumerable<DXDisplayValue>> GetDisplayValuesAsync(string typeName, CancellationToken ct = default)
         {
+            unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
+
             DXObjectDefinitionUnit dxObjectInfo;
 
             dxObjectInfo = dxStructureCache.GetDXUnit(typeName);

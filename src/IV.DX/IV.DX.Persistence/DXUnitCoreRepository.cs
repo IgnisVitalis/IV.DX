@@ -22,6 +22,7 @@ namespace IV.DX.Persistence
         IDXStructureCache _dxStructureCache;
         ISQLQueryBuilder _sqlQueryBuilder;
         private readonly IDXStringProtector _stringProtector;
+        private readonly IDXUnitTypeAccessChecker _unitTypeAccessChecker;
 
         public DXCoreRepository(
             DXDatabaseOptions options,
@@ -29,7 +30,8 @@ namespace IV.DX.Persistence
             ISQLSchemaHelper schemaHelper,
             ISQLDbProvider dbProvider,
             ISQLQueryBuilder sqlQueryBuilder,
-            IDXStringProtector stringProtector)
+            IDXStringProtector stringProtector,
+            IDXUnitTypeAccessChecker unitTypeAccessChecker)
         {
             this._connectionStr = options.ConnectionString;
             this._schemaHelper = schemaHelper;
@@ -37,6 +39,7 @@ namespace IV.DX.Persistence
             this._dxStructureCache = dxStructureCache;
             this._sqlQueryBuilder = sqlQueryBuilder;
             this._stringProtector = stringProtector;
+            this._unitTypeAccessChecker = unitTypeAccessChecker;
         }
 
         public bool Delete(string typeName, Guid id)

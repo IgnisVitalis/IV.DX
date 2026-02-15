@@ -18,6 +18,8 @@ namespace IV.DX.Persistence
                     Data = new DXData<DXUnitRecord> { Items = new List<DXUnitRecord>() }
                 };
 
+            this._unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
+
             columns[Constants.ID] = Constants.ID;
             columns[Constants.TimeStamp] = Constants.TimeStamp;
 

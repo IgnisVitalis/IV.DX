@@ -15,12 +15,14 @@ namespace IV.DX.Persistence.IntTests
     {
         IDXRawReader _dxRawReader;
         ISQLQueryBuilder _sqlQueryBuilder;
+        IDXExecutionContextAccessor _executionContextAccessor;
 
         public DXRawReaderTests(DXTestFixture fx, ITestOutputHelper output)
             : base(fx, output)
         {
             this._dxRawReader = this.ServiceProvider.GetRequiredService<IDXRawReader>();
             this._sqlQueryBuilder = this.ServiceProvider.GetRequiredService<ISQLQueryBuilder>();
+            this._executionContextAccessor = this.ServiceProvider.GetRequiredService<IDXExecutionContextAccessor>();
         }
 
         [Fact]
@@ -65,6 +67,26 @@ namespace IV.DX.Persistence.IntTests
             Assert.Contains("RoleNameFromAccountWrong", ex.Message);
             Assert.Contains("E2U(Account)", ex.Message);
             Assert.Contains("DXMembershipUnit", ex.Message);
+        }
+
+        [Fact]
+        public void Get_WhenReadAccessDenied_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "raw-reader-test-user",
+                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXRoleUnit"
+                }
+            });
+
+            var columns = new Dictionary<string, string>
+            {
+                { "ID", "ID" }
+            };
+
+            Assert.Throws<UnauthorizedAccessException>(() => this._dxRawReader.Get("DXMembershipUnit", columns));
         }
     }
 }

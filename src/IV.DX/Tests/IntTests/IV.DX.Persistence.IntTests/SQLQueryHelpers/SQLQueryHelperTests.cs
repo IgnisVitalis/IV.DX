@@ -26,8 +26,8 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         IDXUnitGenericRepository _genericRepo;
         ISQLQueryBuilder _sqlQueryBuilder;
 
-        const int dxUnitStartIndex = 14;
-        const int dxElementStartIndex = 30;
+        const int dxUnitStartIndex = 16;
+        const int dxElementStartIndex = 32;
 
         string tableRelation_TUserUnit_TBookUnit_0 = "Relation_TUserUnit_TBookUnit_0";
         string tableAlias_TPassportUnit_0 = $"T_{dxUnitStartIndex}_0";//TPassportUnit

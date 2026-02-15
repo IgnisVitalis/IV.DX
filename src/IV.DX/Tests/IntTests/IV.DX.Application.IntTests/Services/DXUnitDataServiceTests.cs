@@ -33,6 +33,7 @@ namespace IV.DX.Application.IntTests.Services
         IDXRawReader _dxRawReader;
         IDXStructureRepository _dataStructureRepo;
         ISQLQueryBuilder _sqlBuilder;
+        IDXExecutionContextAccessor _executionContextAccessor;
 
         public DXUnitDataServiceTests(DXTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
@@ -42,6 +43,7 @@ namespace IV.DX.Application.IntTests.Services
             this._dataStructureRepo = base.ServiceProvider.GetRequiredService<IDXStructureRepository>();
             this._dxRawReader = base.ServiceProvider.GetRequiredService<IDXRawReader>();
             this._sqlBuilder = base.ServiceProvider.GetRequiredService<ISQLQueryBuilder>();
+            this._executionContextAccessor = base.ServiceProvider.GetRequiredService<IDXExecutionContextAccessor>();
         }
 
         [Fact]
@@ -169,6 +171,30 @@ namespace IV.DX.Application.IntTests.Services
 
             // Assert
             Assert.NotNull(createdItem);
+        }
+
+        [Fact]
+        public async Task InsertAsync_WhenWriteAccessDenied_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "unit-service-test-user",
+                AllowedWriteUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXRoleUnit"
+                }
+            });
+
+            var id = Guid.NewGuid();
+            var dxUnit = new DXUnitDefinitionUnit
+            {
+                ID = id,
+                Name = $"Denied_{id:N}",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test
+            };
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._service.InsertAsync(dxUnit));
         }
 
         [Fact]
