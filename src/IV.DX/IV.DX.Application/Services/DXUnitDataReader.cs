@@ -2,13 +2,17 @@ using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Enums;
+using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 
 namespace IV.DX.Application.Services
 {
-    internal sealed class DXUnitDataReader(IDXPipelineExecutor dxPipelineExecutor, IDXStructureCache structureCache) : IDXUnitDataReader
+    internal sealed class DXUnitDataReader(
+        IDXPipelineExecutor dxPipelineExecutor,
+        IDXStructureCache structureCache,
+        IDXUnitTypeAccessChecker unitTypeAccessChecker) : IDXUnitDataReader
     {
         public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
@@ -16,6 +20,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
 
             var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
 
@@ -41,6 +47,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+
             var result = await dxPipelineExecutor.GetItemsAsync<T>(context, ct);
 
             if (result.IsSuccess)
@@ -64,6 +72,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
 
             var result = await dxPipelineExecutor.GetItemsAsync<T>(ids, context, ct);
 
@@ -89,6 +99,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+
             var result = await dxPipelineExecutor.GetItemsAsync<T>(dxFilter, context, ct);
 
             if (result.IsSuccess)
@@ -112,6 +124,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureReadAccess(typeName);
 
             var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
 
@@ -137,6 +151,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureReadAccess(typeName);
+
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, context, ct);
 
             if (result.IsSuccess)
@@ -161,6 +177,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
+            EnsureReadAccess(typeName);
+
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, ids, context, ct);
 
             if (result.IsSuccess)
@@ -184,6 +202,8 @@ namespace IV.DX.Application.Services
             {
                 context = new DXHandlerContext();
             }
+
+            EnsureReadAccess(typeName);
 
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxFilter, context, ct);
 
@@ -314,6 +334,14 @@ namespace IV.DX.Application.Services
             }
 
             return result;
+        }
+
+        private void EnsureReadAccess(string? typeName)
+        {
+            if (!string.IsNullOrWhiteSpace(typeName))
+            {
+                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
+            }
         }
     }
 }

@@ -228,6 +228,53 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task GetItemsAsync_UsingHierarchicalAccessWithoutGroup_Ok()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "hierarchical-read-user",
+                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                ApplyGroupRestrictions = false
+            });
+
+            var items = await this._reader.GetItemsAsync("DXUnitDefinitionUnit");
+
+            Assert.NotNull(items);
+            Assert.NotEmpty(items);
+        }
+
+        [Fact]
+        public async Task GetItemsAsync_UsingHierarchicalAccessWhenMembershipDenied_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "hierarchical-read-user",
+                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXRoleUnit"
+                },
+                GroupReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                ApplyGroupRestrictions = true
+            });
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("DXUnitDefinitionUnit"));
+        }
+
+        [Fact]
         public async Task GetItemAsync_UsingDXElementDefinitionUnitAndIDForExistingItem_Ok()
         {
             // Init

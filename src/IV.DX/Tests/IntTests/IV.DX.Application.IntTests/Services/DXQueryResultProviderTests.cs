@@ -247,6 +247,30 @@ namespace IV.DX.Application.IntTests.Services
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _queryProvider.GetDisplayValuesAsync("DXUnitDefinitionUnit"));
         }
 
+        [Fact]
+        public async Task GetDisplayValuesAsync_WhenTenantDeniedAndMembershipOrGroupAllowed_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "hierarchy-query-user",
+                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXRoleUnit"
+                },
+                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                GroupReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                },
+                ApplyGroupRestrictions = true
+            });
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _queryProvider.GetDisplayValuesAsync("DXUnitDefinitionUnit"));
+        }
+
         private static DXDataBlock<DXElementRecord> BuildEmptyMultiElementBlock(string elementType)
         {
             return new DXDataBlock<DXElementRecord>
