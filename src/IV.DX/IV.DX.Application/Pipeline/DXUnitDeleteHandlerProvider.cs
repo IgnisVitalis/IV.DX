@@ -1,133 +1,156 @@
-﻿using IV.DX.Application.Contracts.Handlers;
+using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
-using System.Reflection;
 
 namespace IV.DX.Application.Pipeline
 {
-    internal class DXUnitDeleteHandlerProvider : IDXUnitDeleteHandlerProvider
+    internal sealed class DXUnitDeleteHandlerProvider : IDXUnitDeleteHandlerProvider
     {
-        private static readonly Dictionary<string, Type> _typesByName =
-            new(StringComparer.OrdinalIgnoreCase);
+        private readonly IServiceProvider _serviceProvider;
+        private readonly DXUnitDeleteHandlerStore _store;
 
-        private readonly Dictionary<Type, List<object>> _beforeDelete = new();
-        private readonly Dictionary<Type, List<object>> _afterDelete = new();
-
-        private readonly object _lock = new();
-
-        public static void InitCore(params Assembly[] scanAssemblies)
+        public DXUnitDeleteHandlerProvider(IServiceProvider serviceProvider, DXUnitDeleteHandlerStore store)
         {
-            _typesByName.Clear();
-
-            var units = scanAssemblies
-                .SelectMany(a => a.DefinedTypes)
-                .Where(t => !t.IsAbstract && typeof(DXUnit).IsAssignableFrom(t))
-                .Cast<Type>();
-
-            foreach (var t in units)
-            {
-                var alias = DXTypeName.Get(t);
-                _typesByName[alias] = t;
-                _typesByName[t.Name] = t;
-                if (t.FullName is not null) _typesByName[t.FullName] = t;
-            }
-        }
-
-        private static void EnsureAliases(Type key)
-        {
-            var alias = DXTypeName.Get(key);
-            _typesByName.TryAdd(alias, key);
-            _typesByName.TryAdd(key.Name, key);
-            if (key.FullName is not null) _typesByName.TryAdd(key.FullName, key);
+            _serviceProvider = serviceProvider;
+            _store = store;
         }
 
         public bool TryResolveType(string typeName, out Type type)
-            => _typesByName.TryGetValue(typeName, out type!);
+        {
+            lock (_store.SyncRoot)
+            {
+                return _store.TypesByName.TryGetValue(typeName, out type!);
+            }
+        }
 
         public void Register<T>(IDXBeforeDeleteHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
-            {
-                if (!_beforeDelete.TryGetValue(key, out var list))
-                    _beforeDelete[key] = list = new List<object>();
+            RegisterHandler(
+                key,
+                handler.GetType(),
+                _store.BeforeDeleteHandlers,
+                typeof(IDXUniqueBeforeDeleteHandler),
+                "BeforeDelete");
 
-                var incomingIsUnique = handler is IDXUniqueBeforeDeleteHandler;
-                var existsUnique = list.Any(h => h is IDXUniqueBeforeDeleteHandler);
-
-                if (incomingIsUnique && list.Count > 0)
-                    throw new InvalidOperationException(
-                        $"BeforeDelete handler for {key.Name} must be unique, " +
-                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
-
-                if (!incomingIsUnique && existsUnique)
-                    throw new InvalidOperationException(
-                        $"BeforeDelete for {key.Name} already has a unique handler; " +
-                        $"cannot add '{handler.GetType().Name}'.");
-
-                list.Add(handler);
-            }
             EnsureAliases(key);
         }
 
         public void Register<T>(IDXAfterDeleteHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
-            {
-                if (!_afterDelete.TryGetValue(key, out var list))
-                    _afterDelete[key] = list = new List<object>();
+            RegisterHandler(
+                key,
+                handler.GetType(),
+                _store.AfterDeleteHandlers,
+                typeof(IDXUniqueAfterDeleteHandler),
+                "AfterDelete");
 
-                var incomingIsUnique = handler is IDXUniqueAfterDeleteHandler;
-                var existsUnique = list.Any(h => h is IDXUniqueAfterDeleteHandler);
-
-                if (incomingIsUnique && list.Count > 0)
-                    throw new InvalidOperationException(
-                        $"AfterDelete handler for {key.Name} must be unique, " +
-                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
-
-                if (!incomingIsUnique && existsUnique)
-                    throw new InvalidOperationException(
-                        $"AfterDelete for {key.Name} already has a unique handler; " +
-                        $"cannot add '{handler.GetType().Name}'.");
-
-                list.Add(handler);
-            }
             EnsureAliases(key);
         }
 
         public IEnumerable<IDXBeforeDeleteHandler<T>> GetBeforeDeleteHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
+            Type[] handlerTypes;
+
+            lock (_store.SyncRoot)
             {
-                if (!_beforeDelete.TryGetValue(key, out var list))
+                if (!_store.BeforeDeleteHandlers.TryGetValue(key, out var list))
                     return Enumerable.Empty<IDXBeforeDeleteHandler<T>>();
 
-                return list
-                    .OfType<IDXBeforeDeleteHandler<T>>()
-                    .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
-                    .ThenBy(h => h.GetType().FullName)
-                    .ToArray();
+                handlerTypes = list.ToArray();
             }
+
+            return handlerTypes
+                .Select(handlerType => (IDXBeforeDeleteHandler<T>)ResolveRequired(handlerType))
+                .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
+                .ThenBy(h => h.GetType().FullName)
+                .ToArray();
         }
 
         public IEnumerable<IDXAfterDeleteHandler<T>> GetAfterDeleteHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
+            Type[] handlerTypes;
+
+            lock (_store.SyncRoot)
             {
-                if (!_afterDelete.TryGetValue(key, out var list))
+                if (!_store.AfterDeleteHandlers.TryGetValue(key, out var list))
                     return Enumerable.Empty<IDXAfterDeleteHandler<T>>();
 
-                return list
-                    .OfType<IDXAfterDeleteHandler<T>>()
-                    .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
-                    .ThenBy(h => h.GetType().FullName)
-                    .ToArray();
+                handlerTypes = list.ToArray();
+            }
+
+            return handlerTypes
+                .Select(handlerType => (IDXAfterDeleteHandler<T>)ResolveRequired(handlerType))
+                .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
+                .ThenBy(h => h.GetType().FullName)
+                .ToArray();
+        }
+
+        private object ResolveRequired(Type handlerType)
+        {
+            return _serviceProvider.GetService(handlerType)
+                ?? throw new InvalidOperationException($"Handler '{handlerType.FullName}' is not registered.");
+        }
+
+        private void EnsureAliases(Type key)
+        {
+            var alias = DXTypeName.Get(key);
+
+            lock (_store.SyncRoot)
+            {
+                _store.TypesByName.TryAdd(alias, key);
+                _store.TypesByName.TryAdd(key.Name, key);
+                if (key.FullName is not null)
+                    _store.TypesByName.TryAdd(key.FullName, key);
+            }
+        }
+
+        private void RegisterHandler(
+            Type key,
+            Type handlerType,
+            Dictionary<Type, List<Type>> registry,
+            Type uniqueMarkerInterface,
+            string operationName)
+        {
+            lock (_store.SyncRoot)
+            {
+                if (!registry.TryGetValue(key, out var list))
+                    registry[key] = list = new List<Type>();
+
+                if (list.Contains(handlerType))
+                    return;
+
+                var incomingIsUnique = uniqueMarkerInterface.IsAssignableFrom(handlerType);
+                var existsUnique = list.Any(uniqueMarkerInterface.IsAssignableFrom);
+
+                if (incomingIsUnique && list.Count > 0)
+                {
+                    throw new InvalidOperationException(
+                        $"{operationName} handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.Name))}");
+                }
+
+                if (!incomingIsUnique && existsUnique)
+                {
+                    throw new InvalidOperationException(
+                        $"{operationName} for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handlerType.Name}'.");
+                }
+
+                list.Add(handlerType);
             }
         }
     }
 
+    internal sealed class DXUnitDeleteHandlerStore
+    {
+        public object SyncRoot { get; } = new();
+        public Dictionary<string, Type> TypesByName { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<Type, List<Type>> BeforeDeleteHandlers { get; } = new();
+        public Dictionary<Type, List<Type>> AfterDeleteHandlers { get; } = new();
+    }
 }

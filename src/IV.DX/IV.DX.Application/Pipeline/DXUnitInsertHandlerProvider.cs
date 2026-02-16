@@ -1,132 +1,156 @@
-﻿using IV.DX.Application.Contracts.Handlers;
+using IV.DX.Application.Contracts.Handlers;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
 using IV.DX.Kernel.Models;
-using System.Reflection;
 
 namespace IV.DX.Application.Pipeline
 {
     internal sealed class DXUnitInsertHandlerProvider : IDXUnitInsertHandlerProvider
     {
-        private static readonly Dictionary<string, Type> _typesByName =
-            new(StringComparer.OrdinalIgnoreCase);
+        private readonly IServiceProvider _serviceProvider;
+        private readonly DXUnitInsertHandlerStore _store;
 
-        private readonly Dictionary<Type, List<object>> _beforeInsert = new();
-        private readonly Dictionary<Type, List<object>> _afterInsert = new();
-
-        private readonly object _lock = new();
-
-        public static void InitCore(params Assembly[] scanAssemblies)
+        public DXUnitInsertHandlerProvider(IServiceProvider serviceProvider, DXUnitInsertHandlerStore store)
         {
-            _typesByName.Clear();
-
-            var units = scanAssemblies
-                .SelectMany(a => a.DefinedTypes)
-                .Where(t => !t.IsAbstract && typeof(DXUnit).IsAssignableFrom(t))
-                .Cast<Type>();
-
-            foreach (var t in units)
-            {
-                var alias = DXTypeName.Get(t);
-                _typesByName[alias] = t;
-                _typesByName[t.Name] = t;
-                if (t.FullName is not null) _typesByName[t.FullName] = t;
-            }
-        }
-
-        private static void EnsureAliases(Type key)
-        {
-            var alias = DXTypeName.Get(key);
-            _typesByName.TryAdd(alias, key);
-            _typesByName.TryAdd(key.Name, key);
-            if (key.FullName is not null) _typesByName.TryAdd(key.FullName, key);
+            _serviceProvider = serviceProvider;
+            _store = store;
         }
 
         public bool TryResolveType(string typeName, out Type type)
-            => _typesByName.TryGetValue(typeName, out type!);
+        {
+            lock (_store.SyncRoot)
+            {
+                return _store.TypesByName.TryGetValue(typeName, out type!);
+            }
+        }
+
         public void Register<T>(IDXBeforeInsertHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
-            {
-                if (!_beforeInsert.TryGetValue(key, out var list))
-                    _beforeInsert[key] = list = new List<object>();
+            RegisterHandler(
+                key,
+                handler.GetType(),
+                _store.BeforeInsertHandlers,
+                typeof(IDXUniqueBeforeInsertHandler),
+                "BeforeInsert");
 
-                var incomingIsUnique = handler is IDXUniqueBeforeInsertHandler;
-                var existsUnique = list.Any(h => h is IDXUniqueBeforeInsertHandler);
-
-                if (incomingIsUnique && list.Count > 0)
-                    throw new InvalidOperationException(
-                        $"BeforeInsert handler for {key.Name} must be unique, " +
-                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
-
-                if (!incomingIsUnique && existsUnique)
-                    throw new InvalidOperationException(
-                        $"BeforeInsert for {key.Name} already has a unique handler; " +
-                        $"cannot add '{handler.GetType().Name}'.");
-
-                list.Add(handler);
-            }
             EnsureAliases(key);
         }
 
         public void Register<T>(IDXAfterInsertHandler<T> handler) where T : DXUnit
         {
             var key = typeof(T);
-            lock (_lock)
-            {
-                if (!_afterInsert.TryGetValue(key, out var list))
-                    _afterInsert[key] = list = new List<object>();
+            RegisterHandler(
+                key,
+                handler.GetType(),
+                _store.AfterInsertHandlers,
+                typeof(IDXUniqueAfterInsertHandler),
+                "AfterInsert");
 
-                var incomingIsUnique = handler is IDXUniqueAfterInsertHandler;
-                var existsUnique = list.Any(h => h is IDXUniqueAfterInsertHandler);
-
-                if (incomingIsUnique && list.Count > 0)
-                    throw new InvalidOperationException(
-                        $"AfterInsert handler for {key.Name} must be unique, " +
-                        $"but already registered: {string.Join(", ", list.Select(x => x.GetType().Name))}");
-
-                if (!incomingIsUnique && existsUnique)
-                    throw new InvalidOperationException(
-                        $"AfterInsert for {key.Name} already has a unique handler; " +
-                        $"cannot add '{handler.GetType().Name}'.");
-
-                list.Add(handler);
-            }
             EnsureAliases(key);
         }
 
         public IEnumerable<IDXBeforeInsertHandler<T>> GetBeforeInsertHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
+            Type[] handlerTypes;
 
-            lock (_lock)
+            lock (_store.SyncRoot)
             {
-                if (!_beforeInsert.TryGetValue(key, out var list))
+                if (!_store.BeforeInsertHandlers.TryGetValue(key, out var list))
                     return Enumerable.Empty<IDXBeforeInsertHandler<T>>();
 
-                return list.OfType<IDXBeforeInsertHandler<T>>()
-                           .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
-                           .ThenBy(h => h.GetType().FullName)
-                           .ToArray();
+                handlerTypes = list.ToArray();
             }
+
+            return handlerTypes
+                .Select(handlerType => (IDXBeforeInsertHandler<T>)ResolveRequired(handlerType))
+                .OrderBy(h => (h as IDXBeforeOrdered)?.BeforeOrder ?? 0)
+                .ThenBy(h => h.GetType().FullName)
+                .ToArray();
         }
 
         public IEnumerable<IDXAfterInsertHandler<T>> GetAfterInsertHandlers<T>() where T : DXUnit
         {
             var key = typeof(T);
+            Type[] handlerTypes;
 
-            lock (_lock)
+            lock (_store.SyncRoot)
             {
-                if (!_afterInsert.TryGetValue(key, out var list))
+                if (!_store.AfterInsertHandlers.TryGetValue(key, out var list))
                     return Enumerable.Empty<IDXAfterInsertHandler<T>>();
 
-                return list.OfType<IDXAfterInsertHandler<T>>()
-                           .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
-                           .ThenBy(h => h.GetType().FullName)
-                           .ToArray();
+                handlerTypes = list.ToArray();
+            }
+
+            return handlerTypes
+                .Select(handlerType => (IDXAfterInsertHandler<T>)ResolveRequired(handlerType))
+                .OrderBy(h => (h as IDXAfterOrdered)?.AfterOrder ?? 0)
+                .ThenBy(h => h.GetType().FullName)
+                .ToArray();
+        }
+
+        private object ResolveRequired(Type handlerType)
+        {
+            return _serviceProvider.GetService(handlerType)
+                ?? throw new InvalidOperationException($"Handler '{handlerType.FullName}' is not registered.");
+        }
+
+        private void EnsureAliases(Type key)
+        {
+            var alias = DXTypeName.Get(key);
+
+            lock (_store.SyncRoot)
+            {
+                _store.TypesByName.TryAdd(alias, key);
+                _store.TypesByName.TryAdd(key.Name, key);
+                if (key.FullName is not null)
+                    _store.TypesByName.TryAdd(key.FullName, key);
+            }
+        }
+
+        private void RegisterHandler(
+            Type key,
+            Type handlerType,
+            Dictionary<Type, List<Type>> registry,
+            Type uniqueMarkerInterface,
+            string operationName)
+        {
+            lock (_store.SyncRoot)
+            {
+                if (!registry.TryGetValue(key, out var list))
+                    registry[key] = list = new List<Type>();
+
+                if (list.Contains(handlerType))
+                    return;
+
+                var incomingIsUnique = uniqueMarkerInterface.IsAssignableFrom(handlerType);
+                var existsUnique = list.Any(uniqueMarkerInterface.IsAssignableFrom);
+
+                if (incomingIsUnique && list.Count > 0)
+                {
+                    throw new InvalidOperationException(
+                        $"{operationName} handler for {key.Name} must be unique, " +
+                        $"but already registered: {string.Join(", ", list.Select(x => x.Name))}");
+                }
+
+                if (!incomingIsUnique && existsUnique)
+                {
+                    throw new InvalidOperationException(
+                        $"{operationName} for {key.Name} already has a unique handler; " +
+                        $"cannot add '{handlerType.Name}'.");
+                }
+
+                list.Add(handlerType);
             }
         }
     }
 
+    internal sealed class DXUnitInsertHandlerStore
+    {
+        public object SyncRoot { get; } = new();
+        public Dictionary<string, Type> TypesByName { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<Type, List<Type>> BeforeInsertHandlers { get; } = new();
+        public Dictionary<Type, List<Type>> AfterInsertHandlers { get; } = new();
+    }
 }

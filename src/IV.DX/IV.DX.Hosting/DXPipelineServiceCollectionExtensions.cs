@@ -7,11 +7,16 @@ namespace IV.DX.Hosting
     public static class DXPipelineServiceCollectionExtensions
     {
         public static IServiceCollection AddDXPipeline(this IServiceCollection services)
-        {         
-            services.AddSingleton<IDXUnitGetHandlerProvider, DXUnitGetHandlerProvider>();
-            services.AddSingleton<IDXUnitInsertHandlerProvider, DXUnitInsertHandlerProvider>();
-            services.AddSingleton<IDXUnitUpdateHandlerProvider, DXUnitUpdateHandlerProvider>();
-            services.AddSingleton<IDXUnitDeleteHandlerProvider, DXUnitDeleteHandlerProvider>();
+        {
+            services.AddSingleton<DXUnitGetHandlerStore>();
+            services.AddSingleton<DXUnitInsertHandlerStore>();
+            services.AddSingleton<DXUnitUpdateHandlerStore>();
+            services.AddSingleton<DXUnitDeleteHandlerStore>();
+
+            services.AddScoped<IDXUnitGetHandlerProvider, DXUnitGetHandlerProvider>();
+            services.AddScoped<IDXUnitInsertHandlerProvider, DXUnitInsertHandlerProvider>();
+            services.AddScoped<IDXUnitUpdateHandlerProvider, DXUnitUpdateHandlerProvider>();
+            services.AddScoped<IDXUnitDeleteHandlerProvider, DXUnitDeleteHandlerProvider>();
 
             services.AddScoped<IDXPipelineExecutor, DXPipelineExecutor>();
 

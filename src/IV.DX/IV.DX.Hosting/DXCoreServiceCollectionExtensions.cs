@@ -86,7 +86,7 @@ namespace IV.DX.Hosting
         {
             var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
-            var typeLowerCase = o.Type.ToLower().Trim();
+            var typeLowerCase = o.Type?.Trim().ToLowerInvariant();
 
             return typeLowerCase switch
             {

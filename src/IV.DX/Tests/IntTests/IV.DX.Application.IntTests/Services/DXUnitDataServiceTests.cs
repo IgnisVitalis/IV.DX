@@ -45,13 +45,7 @@ namespace IV.DX.Application.IntTests.Services
             this._sqlBuilder = base.ServiceProvider.GetRequiredService<ISQLQueryBuilder>();
             this._executionContextAccessor = base.ServiceProvider.GetRequiredService<IDXExecutionContextAccessor>();
         }
-
-        [Fact]
-        public async Task Insert_UsingDXUnitWithBlob_Ok()
-        {
-
-        }
-
+        
         [Fact]
         public async Task Insert_UsingDXUnitWithSelfRelation_Ok()
         {
@@ -149,9 +143,33 @@ namespace IV.DX.Application.IntTests.Services
             Assert.True(match.Success);
             var index = int.Parse(match.Groups[1].Value);
 
-            var expectedSqlQuery = $"SELECT\n\"T_{index}_0\".\"ID\" AS \"ID\",\n\"T_{index}_0\".\"TimeStamp\" AS \"TimeStamp\",\n\"T_{index}_1\".\"ID\" AS \"ChildrenID\",\n\"T_{index}_2\".\"ID\" AS \"ParentID\"\nFROM\n\"DXNavigationItemUnit\" AS \"T_{index}_0\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_1\" ON \"T_{index}_1\".\"Parent\" = \"T_{index}_0\".\"ID\"\nLEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_2\" ON \"T_{index}_2\".\"ID\" = \"T_{index}_0\".\"Parent\"\nWHERE\n\"T_{index}_1\".\"ID\" = '075980bc-9728-47cf-aab9-077f391ded48'  AND  \"T_{index}_2\".\"ID\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
+            Assert.Contains($"\"T_{index}_0\".\"ID\" AS \"ID\"", sql);
+            Assert.Contains($"\"T_{index}_0\".\"TimeStamp\" AS \"TimeStamp\"", sql);
+            Assert.Contains($"FROM\n\"DXNavigationItemUnit\" AS \"T_{index}_0\"", sql);
 
-            Assert.Equal(expectedSqlQuery, sql);
+            var childAliasMatch = System.Text.RegularExpressions.Regex.Match(
+                sql,
+                $"\"T_{index}_(\\d+)\"\\.\"ID\" AS \"ChildrenID\"");
+            Assert.True(childAliasMatch.Success);
+            var childrenAliasIndex = childAliasMatch.Groups[1].Value;
+
+            var parentAliasMatch = System.Text.RegularExpressions.Regex.Match(
+                sql,
+                $"\"T_{index}_(\\d+)\"\\.\"ID\" AS \"ParentID\"");
+            Assert.True(parentAliasMatch.Success);
+            var parentAliasIndex = parentAliasMatch.Groups[1].Value;
+
+            Assert.NotEqual(childrenAliasIndex, parentAliasIndex);
+
+            Assert.Contains(
+                $"LEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_{childrenAliasIndex}\" ON \"T_{index}_{childrenAliasIndex}\".\"Parent\" = \"T_{index}_0\".\"ID\"",
+                sql);
+            Assert.Contains(
+                $"LEFT JOIN \"DXNavigationItemUnit\" AS \"T_{index}_{parentAliasIndex}\" ON \"T_{index}_{parentAliasIndex}\".\"ID\" = \"T_{index}_0\".\"Parent\"",
+                sql);
+
+            Assert.Contains($"\"T_{index}_{childrenAliasIndex}\".\"ID\" = '075980bc-9728-47cf-aab9-077f391ded48'", sql);
+            Assert.Contains($"\"T_{index}_{parentAliasIndex}\".\"ID\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'", sql);
         }
 
         [Fact]

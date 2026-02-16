@@ -11,6 +11,11 @@ namespace IV.DX.Hosting
             this IServiceCollection services,
             params Assembly[] scanAssemblies)
         {
+            services.AddSingleton<DXUnitGetHandlerStore>();
+            services.AddSingleton<DXUnitInsertHandlerStore>();
+            services.AddSingleton<DXUnitUpdateHandlerStore>();
+            services.AddSingleton<DXUnitDeleteHandlerStore>();
+
             services.AddScoped<IDXUnitInsertHandlerProvider, DXUnitInsertHandlerProvider>();
             services.AddScoped<IDXUnitUpdateHandlerProvider, DXUnitUpdateHandlerProvider>();
             services.AddScoped<IDXUnitDeleteHandlerProvider, DXUnitDeleteHandlerProvider>();
