@@ -286,6 +286,13 @@ namespace IV.DX.Persistence
         {
             lock (_schemaLock)
             {
+                if (dxStructureCache.DXUnits.Count == 0
+                    && dxStructureCache.DXElements.Count == 0
+                    && dxStructureCache.DXEnums.Count == 0)
+                {
+                    dxStructureCache.RefreshAsync().GetAwaiter().GetResult();
+                }
+
                 var cacheChanged =
                     _cacheRef == null
                     || !_cacheRef.TryGetTarget(out var cached)
@@ -309,6 +316,12 @@ namespace IV.DX.Persistence
             if (_nodesByName.TryGetValue(name, out var node))
                 return node;
 
+            BuildDXNodeTree(force: true);
+
+            if (_nodesByName.TryGetValue(name, out node))
+                return node;
+
+            dxStructureCache.RefreshAsync().GetAwaiter().GetResult();
             BuildDXNodeTree(force: true);
 
             if (_nodesByName.TryGetValue(name, out node))
@@ -470,7 +483,10 @@ namespace IV.DX.Persistence
 
             foreach (var item in customProps)
             {
-                var dxNode = GetNodeByName(item.Key);
+                if (!nodesByName.TryGetValue(item.Key, out var dxNode))
+                {
+                    continue;
+                }
 
                 foreach (var column in item.Value)
                 {

@@ -1,6 +1,7 @@
 ﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
+using IV.DX.Kernel.Data.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
@@ -27,6 +28,8 @@ namespace IV.DX.Persistence
         {
             lock (_gate)
             {
+                this.EnsureBootstrapSnapshot();
+
                 using var scope = _scopeFactory.CreateScope();
                 var repo = scope.ServiceProvider.GetRequiredService<IDXStructureRawReader>();
 
@@ -116,6 +119,11 @@ namespace IV.DX.Persistence
 
         public DXUnitInheritance GetDXUnitInheritance(DXUnitDefinitionUnit dxUnit)
         {
+            if (dxUnit == null)
+            {
+                throw new InvalidOperationException("DXUnit is not found in structure cache.");
+            }
+
             var dxUnitDefinitionUnitHierarchy = new DXUnitInheritance();
             dxUnitDefinitionUnitHierarchy.Add(this.GetDXUnitDefinitionUnitHierarchyItem(dxUnit));
 
@@ -155,8 +163,8 @@ namespace IV.DX.Persistence
 
         public HashSet<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit, DXElementInUnitTypeEnum relationType)
         {
-            if (dxUnit.DXElementInUnitDefinitionElement == null)
-                return null;
+            if (dxUnit?.DXElementInUnitDefinitionElement?.Announced == null)
+                return new HashSet<DXElementDefinitionUnit>();
 
             var relatedDXElementIds =
               dxUnit.DXElementInUnitDefinitionElement
@@ -171,8 +179,8 @@ namespace IV.DX.Persistence
 
         public HashSet<DXElementDefinitionUnit> GetRelatedDXElementDefinitions(DXUnitDefinitionUnit dxUnit)
         {
-            if (dxUnit.DXElementInUnitDefinitionElement == null)
-                return null;
+            if (dxUnit?.DXElementInUnitDefinitionElement?.Announced == null)
+                return new HashSet<DXElementDefinitionUnit>();
 
             var relatedDXElementIds =
                 dxUnit.DXElementInUnitDefinitionElement
@@ -186,7 +194,18 @@ namespace IV.DX.Persistence
 
         public DXUnitInheritance GetDXUnitInheritance(string dxUnitTypeName)
         {
+            if (string.IsNullOrWhiteSpace(dxUnitTypeName))
+            {
+                throw new ArgumentException("DX unit type name is required.", nameof(dxUnitTypeName));
+            }
+
             var dxUnit = GetDXUnit(dxUnitTypeName);
+
+            if (dxUnit == null)
+            {
+                this.EnsureBootstrapSnapshot();
+                dxUnit = GetDXUnit(dxUnitTypeName);
+            }
 
             return this.GetDXUnitInheritance(dxUnit);
         }
@@ -206,6 +225,35 @@ namespace IV.DX.Persistence
             }
 
             return result;
+        }
+
+        private void EnsureBootstrapSnapshot()
+        {
+            if (!_snapshot.DXElements.IsDefaultOrEmpty
+                || !_snapshot.DXUnits.IsDefaultOrEmpty
+                || !_snapshot.DXEnums.IsDefaultOrEmpty
+                || !_snapshot.DXRelations.IsDefaultOrEmpty)
+            {
+                return;
+            }
+
+            var dxElements = DXElementDefinitionUnitItems.Items.ToList();
+            var dxUnits = DXUnitDefinitionUnitItems.Items.ToList();
+            var dxEnums = DXEnumDefinitionUnitItems.Items.ToList();
+            var dxRelations = DXRelationDefinitionUnitItems.Items.ToList();
+
+            this.SetColumnsFromRelations(dxRelations, dxUnits);
+            this.SetColumnsFromRelations(dxRelations, dxElements);
+            this.SetColumnsFromRelations(dxRelations, dxEnums);
+
+            var bootstrapSnapshot = new Snapshot(
+                dxElements.ToImmutableArray(),
+                dxUnits.ToImmutableArray(),
+                dxEnums.ToImmutableArray(),
+                dxRelations.ToImmutableArray(),
+                1);
+
+            Volatile.Write(ref _snapshot, bootstrapSnapshot);
         }
 
         private sealed record Snapshot(

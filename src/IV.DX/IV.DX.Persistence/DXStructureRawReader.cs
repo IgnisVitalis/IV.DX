@@ -68,11 +68,21 @@ namespace IV.DX.Persistence
             // Enumerable.Empty<DXRelationDefinitionUnit>();
 
             var dxUnitInheritance = _dxStructureCache.GetDXUnitInheritance("DXRelationDefinitionUnit");
-            var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(dxUnitInheritance);
+            try
+            {
+                var dxModeDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition<DXRelationDefinitionUnit>(dxUnitInheritance);
+                var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
+                return DXRecordConverter.ToDXUnits<DXRelationDefinitionUnit>(new[] { block }).ToList();
+            }
+            catch (InvalidOperationException ex)
+                when (ex.Message.Contains("not found for type 'DXRelationDefinitionUnit'", StringComparison.Ordinal))
+            {
+                var dxModeDefinition = "DXRelationDefinitionUnit".ToDXModelDefinition(dxUnitInheritance);
+                var block = this.GetItemsRecord(dxModeDefinition, DXLoadingType.Full);
 
-            return DXRecordConverter.ToDXUnits<DXRelationDefinitionUnit>(new[] { block }).ToList();
+                return DXRecordConverter.ToDXUnits<DXRelationDefinitionUnit>(new[] { block }).ToList();
+            }
         }
     }
 }
