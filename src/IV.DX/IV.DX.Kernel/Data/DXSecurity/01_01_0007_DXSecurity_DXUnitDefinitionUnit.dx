@@ -335,7 +335,7 @@
           }
         },
         {
-          "DXElements": {          
+          "DXElements": {
             "DXUnitToUnitRelationElement": {
               "Meta": {
                 "Kind": "DXElement",
@@ -407,13 +407,215 @@
                 ],
                 "Delete": null
               }
-            }  
+            }
           },
           "ID": "a7e6bc7c-2959-4a69-8b2c-314300c7f8e2",
           "TimeStamp": "2026-02-15T14:32:01.321354Z",
           "BaseDXUnit": null,
           "Name": "DXGroupMembershipUnit",
           "DisplayValue": "U2U(Group).Name",
+          "Kind": 1
+        },
+        {
+          "DXElements": {
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Sync",
+                "IsMulti": true,
+                "IsRequired": false,
+                "DXFilter": null,
+                "DXUnitContext": null
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "d3481b22-c969-42de-a427-ff699734c23e",
+                    "TimeStamp": "2026-02-19T12:40:09.028966Z",
+                    "DXUnitDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "OwnRelationName": "Sessions",
+                    "TargetRelationName": "IdentityLogin",
+                    "RelationType": 4,
+                    "TargetDXUnit": "dfe404f5-f877-44c2-8b2d-e79ac87752bb"
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "3788f88f-7e8f-4e14-93b0-aa6011726027",
+                    "TimeStamp": "2026-02-19T12:42:41.296742Z",
+                    "DXUnitDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "OwnRelationName": "ReplacedBySession",
+                    "TargetRelationName": "ReplacesSession",
+                    "RelationType": 8,
+                    "TargetDXUnit": "c9e3907f-3896-4415-9cb0-09c8603ba3df"
+                  }
+                ],
+                "Delete": null
+              }
+            },
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Sync",
+                "IsMulti": true,
+                "IsRequired": false,
+                "DXFilter": null,
+                "DXUnitContext": null
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "97a23978-4ec5-4c8e-a684-e828f0a57c57",
+                    "TimeStamp": "2026-02-19T12:38:48.313882Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "SessionId",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "ColumnType": 1
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "c2f40238-78aa-49f5-8443-db9c1bd8478b",
+                    "TimeStamp": "2026-02-19T12:38:48.313914Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "RefreshTokenHash",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "ColumnType": 14
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "c88c02db-111d-472c-a232-61a4bfae727c",
+                    "TimeStamp": "2026-02-19T12:38:48.313928Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "ExpiresAt",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "ColumnType": 5
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "9d596e46-9a1b-4a02-b6b3-4e321e2a21bc",
+                    "TimeStamp": "2026-02-19T12:38:48.313942Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "CreatedAt",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "ColumnType": 5
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "b527c80e-4b6f-4aca-ac32-502b3159bc31",
+                    "TimeStamp": "2026-02-19T12:38:48.313963Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "LastUsedAt",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "ColumnType": 5
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "b2312e7c-eb77-4ee8-84bd-c1a556f767cc",
+                    "TimeStamp": "2026-02-19T12:38:48.313985Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "RevokedAt",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "ColumnType": 5
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "8f0d3c40-f298-4bee-971a-cb630a54c8b2",
+                    "TimeStamp": "2026-02-19T12:38:48.314002Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "UserAgent",
+                    "Length": 100,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "ColumnType": 3
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "ef8a0187-0a93-44de-98b8-851b50fb6846",
+                    "TimeStamp": "2026-02-19T12:38:48.314029Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "IpAddress",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "ColumnType": 3
+                  },
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "0e16a968-38d8-417d-aadb-9587c305e4c6",
+                    "TimeStamp": "2026-02-19T12:38:48.314046Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Name": "DeviceId",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": true,
+                    "DefaultValue": null,
+                    "ColumnType": 3
+                  }
+                ],
+                "Delete": null
+              }
+            },
+            "DXUniqueColumnsElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUniqueColumnsElement",
+                "Op": "Sync",
+                "IsMulti": true,
+                "IsRequired": false,
+                "DXFilter": null,
+                "DXUnitContext": null
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "DXUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "ID": "f03ee347-059e-4c75-b749-c3c8b4727ef2",
+                    "TimeStamp": "2026-02-19T13:04:22.768773Z",
+                    "DXObjectDefinitionUnitID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+                    "Columns": "SessionId"
+                  }
+                ],
+                "Delete": null
+              }
+            }
+          },
+          "ID": "c9e3907f-3896-4415-9cb0-09c8603ba3df",
+          "TimeStamp": "2026-02-19T12:42:41.321765Z",
+          "BaseDXUnit": null,
+          "Name": "DXAuthSessionUnit",
+          "DisplayValue": "SessionId",
           "Kind": 1
         }
       ]

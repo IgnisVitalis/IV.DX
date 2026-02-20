@@ -1,5 +1,6 @@
 ﻿using IV.DX.Application;
 using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Application.Contracts.Models;
 using IV.DX.Application.Handlers;
 using IV.DX.Application.Services;
 using IV.DX.Persistence;
@@ -24,10 +25,13 @@ namespace IV.DX.Hosting
 
             services.AddOptions<DXEncryptionOptions>()
                 .Bind(configuration.GetSection("Encryption"));
+            services.AddOptions<DXSecurityOptions>()
+                .Bind(configuration.GetSection("Security"));
 
             services.AddSingleton<IDXEncryptionKeyProvider, DXConfiguredEncryptionKeyProvider>();
             services.AddSingleton<IDXStringProtector, DXAesGcmStringProtector>();
             services.AddSingleton<IDXExecutionContextAccessor, DXExecutionContextAccessor>();
+            services.AddScoped<IDXExecutionContextResolver, DXExecutionContextResolver>();
             services.AddScoped<IDXUnitTypeAccessChecker, DXContextualUnitTypeAccessChecker>();
 
             services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
@@ -67,6 +71,7 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitDataReader, DXUnitDataReader>();
             services.AddScoped<IDXEnumDataService, DXEnumDataService>();
             services.AddScoped<IDXElementDataService, DXElementDataService>();
+            services.AddScoped<IDXSecurityService, DXSecurityService>();
             services.AddScoped<IDXMigrationService, MigrationService>();
             services.AddScoped<IDXStructureService, DXStructureService>();
 

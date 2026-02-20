@@ -23,7 +23,8 @@ namespace IV.DX.Shared.IntTests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     { "Database:Type", "PostgreSQL"},
-                    { "Database:ConnectionString", $"Server=localhost;Database={Database};User ID=postgres;password=root;" }
+                    { "Database:ConnectionString", $"Server=localhost;Database={Database};User ID=postgres;password=root;" },
+                    { "Security:JwtSigningKey", "int-tests-signing-key-change-me-32-bytes" }
                 })
                 .AddEnvironmentVariables()
                 .Build();
