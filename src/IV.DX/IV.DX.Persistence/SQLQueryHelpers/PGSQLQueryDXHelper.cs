@@ -15,6 +15,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         ISQLDialect,
         ISQLSchemaHelper,
         ISQLDbProvider,
+        ISQLMigrationLockHelper,
         IDXBulkInsertCapable
     {
         private readonly string closeSessionToDatabaseQuery = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{0}';";
@@ -858,6 +859,75 @@ END $$;
                     throw new AggregateException(exceptions);
                 }
             }
+        }
+
+        public async Task<bool> TryAcquireMigrationLockAsync(
+            DbConnection connection,
+            string lockName,
+            CancellationToken cancellationToken)
+        {
+            return await ExecuteBoolScalarAsync(
+                    connection,
+                    "SELECT pg_try_advisory_lock(hashtext(@p0), 0);",
+                    cancellationToken,
+                    ("@p0", lockName))
+                .ConfigureAwait(false);
+        }
+
+        public async Task ReleaseMigrationLockAsync(
+            DbConnection connection,
+            string lockName,
+            CancellationToken cancellationToken)
+        {
+            await ExecuteBoolScalarAsync(
+                    connection,
+                    "SELECT pg_advisory_unlock(hashtext(@p0), 0);",
+                    cancellationToken,
+                    ("@p0", lockName))
+                .ConfigureAwait(false);
+        }
+
+        private static async Task<bool> ExecuteBoolScalarAsync(
+            DbConnection connection,
+            string commandText,
+            CancellationToken cancellationToken,
+            params (string Name, object Value)[] parameters)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = commandText;
+
+            foreach (var (name, value) in parameters)
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = name;
+                parameter.Value = value ?? DBNull.Value;
+                command.Parameters.Add(parameter);
+            }
+
+            var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+            return ToBool(result);
+        }
+
+        private static bool ToBool(object? value)
+        {
+            if (value == null || value is DBNull)
+            {
+                return false;
+            }
+
+            return value switch
+            {
+                bool b => b,
+                byte b => b != 0,
+                short s => s != 0,
+                int i => i != 0,
+                long l => l != 0,
+                decimal d => d != 0,
+                string s => string.Equals(s, "true", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(s, "t", StringComparison.OrdinalIgnoreCase)
+                    || s == "1",
+                _ => Convert.ToInt64(value) != 0
+            };
         }
 
         private void RunSQLQueryWithoutTransactionDXElement(string connectionString, string query)

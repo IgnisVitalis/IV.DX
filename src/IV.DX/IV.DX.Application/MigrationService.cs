@@ -20,6 +20,7 @@ namespace IV.DX.Application
         private readonly IDXUnitGenericRepository _genericRepo;
         private readonly IDXEnumDataService _enumDataService;
         private readonly IDXElementDataService _elementDataService;
+        private readonly IDXMigrationDistributedLock _migrationDistributedLock;
 
         private readonly SemaphoreSlim _lock = new(1, 1);
 
@@ -27,43 +28,29 @@ namespace IV.DX.Application
             IDXUnitGenericRepository genericRepo,
             IDXUnitDataService dataService,
             IDXUnitCoreRepository coreRepo,
-              IDXEnumDataService enumDataService,
-              IDXElementDataService elementDataService)
+            IDXEnumDataService enumDataService,
+            IDXElementDataService elementDataService,
+            IDXMigrationDistributedLock migrationDistributedLock)
         {
             _genericRepo = genericRepo;
             _dataService = dataService;
             _coreRepo = coreRepo;
             _enumDataService = enumDataService;
             _elementDataService = elementDataService;
+            _migrationDistributedLock = migrationDistributedLock;
         }
 
         public async Task MigrateCustomAsync(string path, CancellationToken ct = default)
         {
-            await _lock.WaitAsync(ct);
-            try
-            {
-                await LoadAsync(path, ct);
-            }
-            finally
-            {
-                _lock.Release();
-            }
+            await ExecuteLockedAsync(() => LoadAsync(path, ct), ct).ConfigureAwait(false);
         }
 
         public async Task MigrateCustomEmbeddedAsync(Assembly assembly, string path, CancellationToken ct = default)
         {
-            await _lock.WaitAsync(ct);
-
-            try
+            await ExecuteLockedAsync(async () =>
             {
-                var list = ResourceReader.ReadEmbeddedText(assembly, path);
-
-                await LoadAsync(assembly, path, ct);
-            }
-            finally
-            {
-                _lock.Release();
-            }
+                await LoadAsync(assembly, path, ct).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
         }
 
         public async Task MigrateCoreAsync(
@@ -72,9 +59,7 @@ namespace IV.DX.Application
             string postInitListPath,
             CancellationToken ct = default)
         {
-            await _lock.WaitAsync(ct);
-
-            try
+            await ExecuteLockedAsync(async () =>
             {
                 IEnumerable<DXMigrationScriptsUnit> scriptsHistory;
                 try
@@ -121,9 +106,26 @@ namespace IV.DX.Application
                         await _dataService.InsertAsync(script, new DXUnitHandlerMigrationServiceContext(script), ct).ConfigureAwait(false);
                     }
                 }
+            }, ct).ConfigureAwait(false);
+        }
+
+        private async Task ExecuteLockedAsync(Func<Task> action, CancellationToken ct)
+        {
+            await _lock.WaitAsync(ct).ConfigureAwait(false);
+            IAsyncDisposable? distributedLockLease = null;
+
+            try
+            {
+                distributedLockLease = await _migrationDistributedLock.AcquireAsync(ct).ConfigureAwait(false);
+                await action().ConfigureAwait(false);
             }
             finally
             {
+                if (distributedLockLease != null)
+                {
+                    await distributedLockLease.DisposeAsync().ConfigureAwait(false);
+                }
+
                 _lock.Release();
             }
         }

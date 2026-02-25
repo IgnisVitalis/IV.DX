@@ -37,6 +37,7 @@ namespace IV.DX.Hosting
             services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
             services.AddSingleton<ISQLSchemaHelper>(sp => (ISQLSchemaHelper)GetHelper(sp));
             services.AddSingleton<ISQLDbProvider>(sp => (ISQLDbProvider)GetHelper(sp));
+            services.AddSingleton<ISQLMigrationLockHelper>(sp => (ISQLMigrationLockHelper)GetHelper(sp));
 
             services.AddSingleton<MySQLQueryDXHelper>();
             services.AddSingleton<PGSQLQueryDXHelper>();
@@ -71,6 +72,7 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXUnitDataReader, DXUnitDataReader>();
             services.AddScoped<IDXEnumDataService, DXEnumDataService>();
             services.AddScoped<IDXElementDataService, DXElementDataService>();
+            services.AddSingleton<IDXMigrationDistributedLock, DXMigrationDistributedLock>();
             services.AddScoped<IDXSecurityService, DXSecurityService>();
             services.AddScoped<IDXMigrationService, MigrationService>();
             services.AddScoped<IDXStructureService, DXStructureService>();

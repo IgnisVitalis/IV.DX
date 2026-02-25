@@ -9,7 +9,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     internal class MySQLQueryDXHelper :
         ISQLDialect,
         ISQLSchemaHelper,
-        ISQLDbProvider
+        ISQLDbProvider,
+        ISQLMigrationLockHelper
     {
         public void BulkInsert(NpgsqlConnection conn, DataTable table, string tableName)
         {
@@ -159,6 +160,22 @@ namespace IV.DX.Persistence.SQLQueryHelpers
         public void RunSQLQuery(string connectionString, string query)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> TryAcquireMigrationLockAsync(
+            DbConnection connection,
+            string lockName,
+            CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Distributed migration lock is not implemented for MySQL.");
+        }
+
+        public Task ReleaseMigrationLockAsync(
+            DbConnection connection,
+            string lockName,
+            CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException("Distributed migration lock is not implemented for MySQL.");
         }
 
         public string GetSQLQueryToSetUniqueColumns(DXObjectDefinitionUnit dataDXElement)

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,6 +31,10 @@ namespace IV.DX.Shared.IntTests
                 .Build();
 
             configuration["Database:ConnectionString"] = $"{ReplaceDatabase(configuration["Database:ConnectionString"], Database)}";
+            var connectionString = configuration["Database:ConnectionString"];
+            var resolvedDatabase = GetDatabaseName(connectionString);
+
+            Console.WriteLine($"[DX IntTests] Initializing fixture for DB '{resolvedDatabase}'.");
 
             var services = new ServiceCollection();
 
@@ -45,13 +50,31 @@ namespace IV.DX.Shared.IntTests
             var init = scope.ServiceProvider.GetRequiredService<IDXInitializer>();
 
             var coreRepo = scope.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
+            using var migrationMutex = new Mutex(false, "IV.DX.IntTests.DbInit");
+            var isLocked = false;
 
-            coreRepo.DropDataBase();
-            init.InitDXCoreDataAsync().Wait();
-            init.InitDXQueryDataAsync().Wait();
-            init.InitDXSecurityDataAsync().Wait();
+            try
+            {
+                isLocked = migrationMutex.WaitOne(TimeSpan.FromMinutes(5));
+                if (!isLocked)
+                {
+                    throw new TimeoutException("Timeout while waiting for IV.DX integration test database initialization mutex.");
+                }
 
-            init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
+                coreRepo.DropDataBase();
+                init.InitDXCoreDataAsync().Wait();
+                init.InitDXQueryDataAsync().Wait();
+                init.InitDXSecurityDataAsync().Wait();
+
+                init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
+            }
+            finally
+            {
+                if (isLocked)
+                {
+                    migrationMutex.ReleaseMutex();
+                }
+            }
         }
 
         public static string ReplaceDatabase(string connectionString, string newDatabase)
@@ -71,6 +94,22 @@ namespace IV.DX.Shared.IntTests
 
             builder["Database"] = newDatabase;
             return builder.ConnectionString;
+        }
+
+        private static string GetDatabaseName(string connectionString)
+        {
+            var builder = new DbConnectionStringBuilder { ConnectionString = connectionString };
+
+            var possibleKeys = new[] { "Database", "Initial Catalog" };
+            foreach (var key in possibleKeys)
+            {
+                if (builder.ContainsKey(key) && builder[key] != null)
+                {
+                    return builder[key].ToString();
+                }
+            }
+
+            return "<unknown>";
         }
 
         public async Task InitializeAsync()
