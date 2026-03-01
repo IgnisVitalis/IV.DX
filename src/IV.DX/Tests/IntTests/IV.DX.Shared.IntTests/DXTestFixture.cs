@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -61,12 +63,23 @@ namespace IV.DX.Shared.IntTests
                     throw new TimeoutException("Timeout while waiting for IV.DX integration test database initialization mutex.");
                 }
 
-                coreRepo.DropDataBase();
-                init.InitDXCoreDataAsync().Wait();
-                init.InitDXQueryDataAsync().Wait();
-                init.InitDXSecurityDataAsync().Wait();
-
-                init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
+                const int maxAttempts = 3;
+                for (var attempt = 1; attempt <= maxAttempts; attempt++)
+                {
+                    try
+                    {
+                        coreRepo.DropDataBase();
+                        init.InitDXCoreDataAsync().Wait();
+                        init.InitDXQueryDataAsync().Wait();
+                        init.InitDXSecurityDataAsync().Wait();
+                        init.InitCustomDataAsync("MigrationScripts/Test.json").Wait();
+                        break;
+                    }
+                    catch (Exception ex) when (attempt < maxAttempts && IsTransientTransportFailure(ex))
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(attempt * 2));
+                    }
+                }
             }
             finally
             {
@@ -112,10 +125,56 @@ namespace IV.DX.Shared.IntTests
             return "<unknown>";
         }
 
-        public async Task InitializeAsync()
+        private static bool IsTransientTransportFailure(Exception exception)
         {
+            foreach (var ex in FlattenExceptions(exception))
+            {
+                if (ex is SocketException)
+                {
+                    return true;
+                }
 
+                if (ex.Message.IndexOf("Exception while writing to stream", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+
+                if (ex.Message.IndexOf("forcibly closed by the remote host", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
+
+        private static IEnumerable<Exception> FlattenExceptions(Exception exception)
+        {
+            if (exception is AggregateException aggregate)
+            {
+                foreach (var inner in aggregate.Flatten().InnerExceptions)
+                {
+                    foreach (var flattened in FlattenExceptions(inner))
+                    {
+                        yield return flattened;
+                    }
+                }
+
+                yield break;
+            }
+
+            yield return exception;
+
+            if (exception.InnerException != null)
+            {
+                foreach (var inner in FlattenExceptions(exception.InnerException))
+                {
+                    yield return inner;
+                }
+            }
+        }
+
+        public Task InitializeAsync() => Task.CompletedTask;
 
         public Task DisposeAsync() => Task.CompletedTask;
         public void Dispose() => Root.Dispose();

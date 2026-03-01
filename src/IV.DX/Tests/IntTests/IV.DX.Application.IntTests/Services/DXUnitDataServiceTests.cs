@@ -216,6 +216,45 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task GetItemsAsync_WhenNonSystemHasExplicitReadGrantToCore_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "core-read-denied-user",
+                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                }
+            });
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("DXUnitDefinitionUnit"));
+        }
+
+        [Fact]
+        public async Task InsertAsync_WhenNonSystemHasExplicitWriteGrantToCore_ThrowsUnauthorizedAccessException()
+        {
+            using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+            {
+                SubjectId = "core-write-denied-user",
+                AllowedWriteUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "DXUnitDefinitionUnit"
+                }
+            });
+
+            var id = Guid.NewGuid();
+            var dxUnit = new DXUnitDefinitionUnit
+            {
+                ID = id,
+                Name = $"DeniedCore_{id:N}",
+                DisplayValue = "Name",
+                Kind = DXObjectKindEnum.Test
+            };
+
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._service.InsertAsync(dxUnit));
+        }
+
+        [Fact]
         public async Task GetItemsAsync_UsingFilterForNonExistingItems_EmptyEnumerable()
         {
             // Init
@@ -246,37 +285,37 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
-        public async Task GetItemsAsync_UsingHierarchicalAccessWithoutGroup_Ok()
+        public async Task GetItemsAsync_UsingHierarchicalAccessWithoutGroupForNonCoreUnit_Ok()
         {
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "hierarchical-read-user",
                 TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "DXUnitDefinitionUnit"
+                    "TUserUnit"
                 },
                 MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "DXUnitDefinitionUnit"
+                    "TUserUnit"
                 },
                 ApplyGroupRestrictions = false
             });
 
-            var items = await this._reader.GetItemsAsync("DXUnitDefinitionUnit");
+            var items = await this._reader.GetItemsAsync("TUserUnit");
 
             Assert.NotNull(items);
             Assert.NotEmpty(items);
         }
 
         [Fact]
-        public async Task GetItemsAsync_UsingHierarchicalAccessWhenMembershipDenied_ThrowsUnauthorizedAccessException()
+        public async Task GetItemsAsync_UsingHierarchicalAccessForNonCoreUnitWhenMembershipDenied_ThrowsUnauthorizedAccessException()
         {
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "hierarchical-read-user",
                 TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "DXUnitDefinitionUnit"
+                    "TUserUnit"
                 },
                 MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -284,12 +323,12 @@ namespace IV.DX.Application.IntTests.Services
                 },
                 GroupReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "DXUnitDefinitionUnit"
+                    "TUserUnit"
                 },
                 ApplyGroupRestrictions = true
             });
 
-            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("DXUnitDefinitionUnit"));
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("TUserUnit"));
         }
 
         [Fact]

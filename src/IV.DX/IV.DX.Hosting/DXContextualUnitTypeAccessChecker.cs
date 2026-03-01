@@ -1,10 +1,12 @@
+using IV.DX.Kernel.Enums;
 using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Hosting
 {
     internal sealed class DXContextualUnitTypeAccessChecker(
         IDXExecutionContextAccessor executionContextAccessor,
-        IDXSecurityState securityState) : IDXUnitTypeAccessChecker
+        IDXSecurityState securityState,
+        IDXStructureCache structureCache) : IDXUnitTypeAccessChecker
     {
         public void EnsureAccess(string typeName, DXUnitTypeAccessOperation operation)
         {
@@ -31,6 +33,9 @@ namespace IV.DX.Hosting
 
             if (context.IsSystem)
                 return DXAccessDecision.Allowed;
+
+            if (IsCoreUnit(typeName))
+                return DXAccessDecision.Denied;
 
             var tenantAllowedTypes = operation switch
             {
@@ -89,6 +94,12 @@ namespace IV.DX.Hosting
             return context.IdentityID.HasValue
                 ? DXAccessDecision.AllowedOwnedOnly
                 : DXAccessDecision.Denied;
+        }
+
+        private bool IsCoreUnit(string typeName)
+        {
+            var unit = structureCache.GetDXUnit(typeName);
+            return unit?.Kind == DXObjectKindEnum.Core;
         }
 
         private static bool IsRestrictionProvided(IReadOnlyCollection<string>? allowedTypes)
