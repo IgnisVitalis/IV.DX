@@ -21,6 +21,7 @@ namespace IV.DX.Application
         private readonly IDXEnumDataService _enumDataService;
         private readonly IDXElementDataService _elementDataService;
         private readonly IDXMigrationDistributedLock _migrationDistributedLock;
+        private readonly IDXExecutionContextAccessor _executionContextAccessor;
 
         private readonly SemaphoreSlim _lock = new(1, 1);
 
@@ -30,7 +31,8 @@ namespace IV.DX.Application
             IDXUnitCoreRepository coreRepo,
             IDXEnumDataService enumDataService,
             IDXElementDataService elementDataService,
-            IDXMigrationDistributedLock migrationDistributedLock)
+            IDXMigrationDistributedLock migrationDistributedLock,
+            IDXExecutionContextAccessor executionContextAccessor)
         {
             _genericRepo = genericRepo;
             _dataService = dataService;
@@ -38,6 +40,7 @@ namespace IV.DX.Application
             _enumDataService = enumDataService;
             _elementDataService = elementDataService;
             _migrationDistributedLock = migrationDistributedLock;
+            _executionContextAccessor = executionContextAccessor;
         }
 
         public async Task MigrateCustomAsync(string path, CancellationToken ct = default)
@@ -117,6 +120,11 @@ namespace IV.DX.Application
             try
             {
                 distributedLockLease = await _migrationDistributedLock.AcquireAsync(ct).ConfigureAwait(false);
+                using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
+                {
+                    SubjectId = "system:migration",
+                    IsSystem = true
+                });
                 await action().ConfigureAwait(false);
             }
             finally

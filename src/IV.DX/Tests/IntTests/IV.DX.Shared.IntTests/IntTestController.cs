@@ -12,6 +12,7 @@ namespace IV.DX.Shared.IntTests
     {
         protected Action _finalizationAction;
 
+        private readonly IDisposable _executionContextScope;
         private readonly IServiceScope _scope;
         protected IServiceProvider ServiceProvider => _scope.ServiceProvider;
 
@@ -21,6 +22,16 @@ namespace IV.DX.Shared.IntTests
         {
             this.Output = output;
             _scope = fx.Root.CreateScope();
+
+            var executionContextAccessor = _scope.ServiceProvider.GetService<IDXExecutionContextAccessor>();
+            if (executionContextAccessor != null)
+            {
+                _executionContextScope = executionContextAccessor.BeginScope(new DXExecutionContext
+                {
+                    SubjectId = "system:int-tests",
+                    IsSystem = true
+                });
+            }
         }
 
         public void Dispose()
@@ -29,6 +40,9 @@ namespace IV.DX.Shared.IntTests
             {
                 this._finalizationAction.Invoke();
             }
+
+            _executionContextScope?.Dispose();
+            _scope.Dispose();
         }
 
         protected void RunActionSafety(Action action)

@@ -6,12 +6,26 @@ namespace IV.DX.Hosting
     {
         public void EnsureAccess(string typeName, DXUnitTypeAccessOperation operation)
         {
+            var decision = CheckAccess(typeName, operation);
+
+            if (decision != DXAccessDecision.Allowed)
+            {
+                var context = executionContextAccessor.Current;
+                ThrowDenied(context, typeName, operation);
+            }
+        }
+
+        public DXAccessDecision CheckAccess(string typeName, DXUnitTypeAccessOperation operation)
+        {
             ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
 
             var context = executionContextAccessor.Current;
 
-            if (context == null || context.IsSystem)
-                return;
+            if (context == null)
+                return DXAccessDecision.Denied;
+
+            if (context.IsSystem)
+                return DXAccessDecision.Allowed;
 
             var tenantAllowedTypes = operation switch
             {
@@ -22,7 +36,7 @@ namespace IV.DX.Hosting
 
             if (IsRestrictionProvided(tenantAllowedTypes) && !ContainsType(tenantAllowedTypes, typeName))
             {
-                ThrowDenied(context, typeName, operation);
+                return FallbackToOwnership(context);
             }
 
             var membershipAllowedTypes = operation switch
@@ -34,7 +48,7 @@ namespace IV.DX.Hosting
 
             if (IsRestrictionProvided(membershipAllowedTypes) && !ContainsType(membershipAllowedTypes, typeName))
             {
-                ThrowDenied(context, typeName, operation);
+                return FallbackToOwnership(context);
             }
 
             if (context.ApplyGroupRestrictions)
@@ -48,7 +62,7 @@ namespace IV.DX.Hosting
 
                 if (!ContainsTypeStrict(groupAllowedTypes, typeName))
                 {
-                    ThrowDenied(context, typeName, operation);
+                    return FallbackToOwnership(context);
                 }
             }
 
@@ -60,9 +74,16 @@ namespace IV.DX.Hosting
             };
 
             if (ContainsType(globalAllowedTypes, typeName))
-                return;
+                return DXAccessDecision.Allowed;
 
-            ThrowDenied(context, typeName, operation);
+            return FallbackToOwnership(context);
+        }
+
+        private static DXAccessDecision FallbackToOwnership(DXExecutionContext context)
+        {
+            return context.IdentityID.HasValue
+                ? DXAccessDecision.AllowedOwnedOnly
+                : DXAccessDecision.Denied;
         }
 
         private static bool IsRestrictionProvided(IReadOnlyCollection<string>? allowedTypes)
@@ -70,9 +91,11 @@ namespace IV.DX.Hosting
             return allowedTypes != null;
         }
 
-        private static void ThrowDenied(DXExecutionContext context, string typeName, DXUnitTypeAccessOperation operation)
+        private static void ThrowDenied(DXExecutionContext? context, string typeName, DXUnitTypeAccessOperation operation)
         {
-            var subject = string.IsNullOrWhiteSpace(context.SubjectId) ? "anonymous" : context.SubjectId;
+            var subject = context == null || string.IsNullOrWhiteSpace(context.SubjectId)
+                ? "anonymous"
+                : context.SubjectId;
             throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
         }
 

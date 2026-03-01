@@ -45,6 +45,7 @@ namespace IV.DX.Hosting
             var tenantRoleIds = new HashSet<Guid>();
             var membershipRoleIds = new HashSet<Guid>();
             var groupRoleIds = new HashSet<Guid>();
+            var activeGroupIDs = new HashSet<Guid>();
 
             foreach (var membership in memberships)
             {
@@ -57,6 +58,7 @@ namespace IV.DX.Hosting
                 foreach (var groupMembership in groupMemberships)
                 {
                     groupRoleIds.UnionWith(GetRoleIdsForMember(groupMembership.Group));
+                    activeGroupIDs.Add(groupMembership.Group);
                 }
             }
 
@@ -89,6 +91,8 @@ namespace IV.DX.Hosting
             {
                 SubjectId = resolvedSubject,
                 IsSystem = false,
+                IdentityID = identityLogin.Identity,
+                ActiveGroupIDs = activeGroupIDs.Count > 0 ? activeGroupIDs : null,
                 AllowedReadUnitTypes = finalRead,
                 AllowedWriteUnitTypes = finalWrite,
                 TenantReadUnitTypes = tenantRead,

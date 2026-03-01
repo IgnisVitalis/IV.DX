@@ -12,7 +12,9 @@ namespace IV.DX.Application.Services
     internal sealed class DXUnitDataReader(
         IDXPipelineExecutor dxPipelineExecutor,
         IDXStructureCache structureCache,
-        IDXUnitTypeAccessChecker unitTypeAccessChecker) : IDXUnitDataReader
+        IDXUnitTypeAccessChecker unitTypeAccessChecker,
+        IDXUnitGenericRepository genericRepo,
+        IDXExecutionContextAccessor executionContextAccessor) : IDXUnitDataReader
     {
         public async Task<T> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
@@ -21,7 +23,14 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+            var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly && !IsReadOwned(typeName, id))
+                return null;
 
             var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
 
@@ -47,7 +56,32 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+            var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                if (ownedIds.Count == 0)
+                    return Enumerable.Empty<T>();
+
+                var idFilter = BuildIdInFilter(ownedIds, null);
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync<T>(idFilter, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value;
+                    if (filteredResult.Outcome == DXOutcome.NotFound)
+                        return Enumerable.Empty<T>();
+                }
+
+                throw new Exception($"There are an error to get all dxUnit: {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync<T>(context, ct);
 
@@ -73,7 +107,33 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+            var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var filteredIds = ids.Where(id => ownedIds.Contains(id)).ToList();
+
+                if (filteredIds.Count == 0)
+                    return Enumerable.Empty<T>();
+
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync<T>(filteredIds, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value;
+                    if (filteredResult.Outcome == DXOutcome.NotFound)
+                        return Enumerable.Empty<T>();
+                }
+
+                throw new Exception($"There are an error to get dxUnit by ids: {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync<T>(ids, context, ct);
 
@@ -99,7 +159,32 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(AttributeReader.GetDXUnitTypeName(typeof(T)));
+            var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                if (ownedIds.Count == 0)
+                    return Enumerable.Empty<T>();
+
+                var composedFilter = BuildIdInFilter(ownedIds, dxFilter);
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync<T>(composedFilter, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value;
+                    if (filteredResult.Outcome == DXOutcome.NotFound)
+                        return Enumerable.Empty<T>();
+                }
+
+                throw new Exception($"There are an error to get dxUnit by query ({dxFilter}): {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync<T>(dxFilter, context, ct);
 
@@ -125,7 +210,13 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(typeName);
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly && !IsReadOwned(typeName, id))
+                return null;
 
             var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
 
@@ -151,7 +242,31 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(typeName);
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                if (ownedIds.Count == 0)
+                    return Enumerable.Empty<JObject>();
+
+                var idFilter = BuildIdInFilter(ownedIds, null);
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync(typeName, idFilter, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                    if (filteredResult.Outcome == DXOutcome.NotFound || filteredResult.Value == null)
+                        return Enumerable.Empty<JObject>();
+                }
+
+                throw new Exception($"There are an error to get all dxModel by type ({typeName}): {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, context, ct);
 
@@ -177,7 +292,32 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(typeName);
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var filteredIds = ids.Where(id => ownedIds.Contains(id)).ToList();
+
+                if (filteredIds.Count == 0)
+                    return Enumerable.Empty<JObject>();
+
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync(typeName, filteredIds, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                    if (filteredResult.Outcome == DXOutcome.NotFound || filteredResult.Value == null)
+                        return Enumerable.Empty<JObject>();
+                }
+
+                throw new Exception($"There are an error to get all dxModel by type ({typeName}) and IDs: {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, ids, context, ct);
 
@@ -203,7 +343,31 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(typeName);
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.Denied)
+                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
+            {
+                var ctx = executionContextAccessor.Current;
+                var ownedIds = CollectOwnedIds(typeName, ctx);
+                if (ownedIds.Count == 0)
+                    return Enumerable.Empty<JObject>();
+
+                var composedFilter = BuildIdInFilter(ownedIds, dxFilter);
+                var filteredResult = await dxPipelineExecutor.GetItemsAsync(typeName, composedFilter, context, ct);
+
+                if (filteredResult.IsSuccess)
+                {
+                    if (filteredResult.Outcome == DXOutcome.Ok && filteredResult.Value != null)
+                        return filteredResult.Value.Select(x => MaskSensitive(x, typeName)).ToList();
+                    if (filteredResult.Outcome == DXOutcome.NotFound || filteredResult.Value == null)
+                        return Enumerable.Empty<JObject>();
+                }
+
+                throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxFilter}): {filteredResult.Error}");
+            }
 
             var result = await dxPipelineExecutor.GetItemsAsync(typeName, dxFilter, context, ct);
 
@@ -220,6 +384,95 @@ namespace IV.DX.Application.Services
             }
 
             throw new Exception($"There are an error to get all dxModel by type ({typeName}) and query ({dxFilter}): {result.Error}");
+        }
+
+        private bool IsReadOwned(string typeName, Guid instanceId)
+        {
+            var ctx = executionContextAccessor.Current;
+            if (ctx == null)
+                return false;
+
+            var unitDef = structureCache.GetDXUnit(typeName);
+            if (unitDef == null || !unitDef.SupportsOwnership)
+                return false;
+
+            if (ctx.IdentityID.HasValue)
+            {
+                var identityOwnership = genericRepo
+                    .GetDXUnits<DXIdentityOwnershipUnit>(
+                        $"IdentityID = '{ctx.IdentityID.Value}' AND DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{instanceId}'")
+                    .FirstOrDefault();
+
+                if (identityOwnership != null)
+                    return true;
+            }
+
+            if (ctx.ActiveGroupIDs != null)
+            {
+                foreach (var groupId in ctx.ActiveGroupIDs)
+                {
+                    var groupOwnership = genericRepo
+                        .GetDXUnits<DXGroupOwnershipUnit>(
+                            $"GroupID = '{groupId}' AND DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{instanceId}'")
+                        .FirstOrDefault();
+
+                    if (groupOwnership != null)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private HashSet<Guid> CollectOwnedIds(string typeName, DXExecutionContext? ctx)
+        {
+            var result = new HashSet<Guid>();
+
+            if (ctx == null)
+                return result;
+
+            var unitDef = structureCache.GetDXUnit(typeName);
+            if (unitDef == null || !unitDef.SupportsOwnership)
+                return result;
+
+            if (ctx.IdentityID.HasValue)
+            {
+                var identityOwned = genericRepo.GetDXUnits<DXIdentityOwnershipUnit>(
+                    $"IdentityID = '{ctx.IdentityID.Value}' AND DXUnitDefinitionID = '{unitDef.ID}'");
+
+                foreach (var o in identityOwned)
+                    result.Add(o.OwnedDXUnitID);
+            }
+
+            if (ctx.ActiveGroupIDs != null)
+            {
+                foreach (var groupId in ctx.ActiveGroupIDs)
+                {
+                    var groupOwned = genericRepo.GetDXUnits<DXGroupOwnershipUnit>(
+                        $"GroupID = '{groupId}' AND DXUnitDefinitionID = '{unitDef.ID}'");
+
+                    foreach (var o in groupOwned)
+                        result.Add(o.OwnedDXUnitID);
+                }
+            }
+
+            return result;
+        }
+
+        private static string BuildIdInFilter(IReadOnlyCollection<Guid> ids, string? originalFilter)
+        {
+            var inList = string.Join(",", ids.Select(x => $"'{x}'"));
+            var idIn = $"ID IN ({inList})";
+            return string.IsNullOrWhiteSpace(originalFilter)
+                ? idIn
+                : $"({idIn}) AND ({originalFilter})";
+        }
+
+        private void ThrowDenied(string typeName, DXUnitTypeAccessOperation operation)
+        {
+            var ctx = executionContextAccessor.Current;
+            var subject = ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
+            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
         }
 
         private JObject MaskSensitive(JObject? jObject, string? typeName)
@@ -334,14 +587,6 @@ namespace IV.DX.Application.Services
             }
 
             return result;
-        }
-
-        private void EnsureReadAccess(string? typeName)
-        {
-            if (!string.IsNullOrWhiteSpace(typeName))
-            {
-                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
-            }
         }
     }
 }

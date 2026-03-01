@@ -7,6 +7,9 @@ namespace IV.DX.Kernel.Models
     {
         [DXColumn("BaseDXUnit")]
         public Guid? BaseDXUnit { get; set; }
+
+        [DXColumn("SupportsOwnership")]
+        public bool SupportsOwnership { get; set; }
  
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
 

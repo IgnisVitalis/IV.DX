@@ -12,7 +12,10 @@ namespace IV.DX.Application.Services
     internal class DXUnitDataService(
         IDXUnitCoreRepository coreRepo,
         IDXPipelineExecutor dxPipelineExecutor,
-        IDXUnitTypeAccessChecker unitTypeAccessChecker) : IDXUnitDataService
+        IDXUnitTypeAccessChecker unitTypeAccessChecker,
+        IDXUnitGenericRepository genericRepo,
+        IDXStructureCache structureCache,
+        IDXExecutionContextAccessor executionContextAccessor) : IDXUnitDataService
     {
         public async Task<T> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
@@ -21,12 +24,14 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
+            var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
+            EnsureWriteAccessForInsert(typeName);
 
             var result = await dxPipelineExecutor.InsertAsync(dxUnit, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
+                TryCreateIdentityOwnership(typeName, result.Value.ID);
                 return result.Value;
             }
             else
@@ -43,7 +48,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureWriteAccess(typeName);
+            EnsureWriteAccessForInsert(typeName);
 
             var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
 
@@ -64,7 +69,8 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
+            var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
+            EnsureWriteAccessForInstance(typeName, dxUnit.ID);
 
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
@@ -107,12 +113,14 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(AttributeReader.GetDXUnitTypeName(dxUnit.GetType()));
+            var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
+            EnsureWriteAccessForInstance(typeName, dxUnit.ID);
 
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
             if (result.IsSuccess)
             {
+                TryDeleteOwnership(typeName, dxUnit.ID);
                 return true;
             }
             else
@@ -128,12 +136,14 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(ExtractTypeName(jObject));
+            var typeName = ExtractTypeName(jObject);
+            EnsureWriteAccessForInsert(typeName);
 
             var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
+                TryCreateIdentityOwnershipFromJObject(typeName, result.Value);
                 return result.Value;
             }
             else
@@ -149,7 +159,12 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(ExtractTypeName(jObject));
+            var typeName = ExtractTypeName(jObject);
+            var instanceId = ExtractInstanceId(jObject);
+            if (instanceId.HasValue)
+                EnsureWriteAccessForInstance(typeName, instanceId.Value);
+            else
+                EnsureWriteAccessForInsert(typeName);
 
             var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
@@ -170,12 +185,19 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(ExtractTypeName(jObject));
-                
+            var typeName = ExtractTypeName(jObject);
+            var instanceId = ExtractInstanceId(jObject);
+            if (instanceId.HasValue)
+                EnsureWriteAccessForInstance(typeName, instanceId.Value);
+            else
+                EnsureWriteAccessForInsert(typeName);
+
             var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
             if (result.IsSuccess)
             {
+                if (instanceId.HasValue && typeName != null)
+                    TryDeleteOwnership(typeName, instanceId.Value);
                 return true;
             }
             else
@@ -191,7 +213,7 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(ExtractTypeName(jObject));
+            EnsureWriteAccessForInsert(ExtractTypeName(jObject));
 
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
             if (block == null)
@@ -208,12 +230,13 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(block?.Meta?.Type);
+            EnsureWriteAccessForInsert(block?.Meta?.Type);
 
             var result = await dxPipelineExecutor.InsertAsync(block, context, ct);
 
             if (result.IsSuccess && result.Value != null)
             {
+                TryCreateIdentityOwnershipFromBlock(result.Value);
                 return result.Value;
             }
             else
@@ -229,7 +252,19 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(block?.Meta?.Type);
+            var typeName = block?.Meta?.Type;
+            if (!string.IsNullOrWhiteSpace(typeName) && block?.Data?.Items != null)
+            {
+                foreach (var record in block.Data.Items)
+                {
+                    if (record != null)
+                        EnsureWriteAccessForInstance(typeName, record.ID);
+                }
+            }
+            else
+            {
+                EnsureWriteAccessForInsert(typeName);
+            }
 
             var result = await dxPipelineExecutor.UpdateAsync(block, context, ct);
 
@@ -250,12 +285,33 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureWriteAccess(block?.Meta?.Type);
+            var typeName = block?.Meta?.Type;
+            var deleteRefs = block?.Data?.Delete;
+            if (!string.IsNullOrWhiteSpace(typeName) && deleteRefs != null)
+            {
+                foreach (var deleteRef in deleteRefs)
+                {
+                    if (deleteRef != null)
+                        EnsureWriteAccessForInstance(typeName, deleteRef.ID);
+                }
+            }
+            else
+            {
+                EnsureWriteAccessForInsert(typeName);
+            }
 
             var result = await dxPipelineExecutor.DeleteAsync(block, context, ct);
 
             if (result.IsSuccess)
             {
+                if (!string.IsNullOrWhiteSpace(typeName) && deleteRefs != null)
+                {
+                    foreach (var deleteRef in deleteRefs)
+                    {
+                        if (deleteRef != null)
+                            TryDeleteOwnership(typeName, deleteRef.ID);
+                    }
+                }
                 return true;
             }
             else
@@ -273,7 +329,7 @@ namespace IV.DX.Application.Services
 
             ArgumentNullException.ThrowIfNull(block);
             var typeName = block.Meta?.Type;
-            EnsureWriteAccess(typeName);
+            EnsureWriteAccessForInsert(typeName);
 
             var output = new List<DXUnitRecord>();
 
@@ -334,6 +390,14 @@ namespace IV.DX.Application.Services
             return jObject["Meta"]?["Type"]?.ToString();
         }
 
+        private static Guid? ExtractInstanceId(JObject jObject)
+        {
+            var idToken = jObject["Data"]?["Items"]?[0]?["ID"] ?? jObject["ID"];
+            if (idToken != null && Guid.TryParse(idToken.ToString(), out var id))
+                return id;
+            return null;
+        }
+
         private void EnsureReadAccess(string? typeName)
         {
             if (!string.IsNullOrWhiteSpace(typeName))
@@ -342,13 +406,159 @@ namespace IV.DX.Application.Services
             }
         }
 
-        private void EnsureWriteAccess(string? typeName)
+        private void EnsureWriteAccessForInsert(string? typeName)
         {
-            if (!string.IsNullOrWhiteSpace(typeName))
+            if (string.IsNullOrWhiteSpace(typeName))
+                return;
+
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Write);
+
+            if (decision == DXAccessDecision.Allowed)
+                return;
+
+            // AllowedOwnedOnly or Denied: cannot create without type-level write grant
+            var ctx = executionContextAccessor.Current;
+            var subject = ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
+            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({DXUnitTypeAccessOperation.Write}).");
+        }
+
+        private void EnsureWriteAccessForInstance(string? typeName, Guid instanceId)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return;
+
+            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Write);
+
+            if (decision == DXAccessDecision.Allowed)
+                return;
+
+            if (decision == DXAccessDecision.AllowedOwnedOnly)
             {
-                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Write);
+                EnsureOwnership(typeName, instanceId);
+                return;
             }
+
+            var ctx = executionContextAccessor.Current;
+            var subject = ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
+            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({DXUnitTypeAccessOperation.Write}).");
+        }
+
+        private void EnsureOwnership(string typeName, Guid instanceId)
+        {
+            var unitDef = structureCache.GetDXUnit(typeName);
+            if (unitDef == null || !unitDef.SupportsOwnership)
+            {
+                var ctx = executionContextAccessor.Current;
+                var subject = ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
+                throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' instance '{instanceId}'.");
+            }
+
+            var context = executionContextAccessor.Current;
+
+            if (context?.IdentityID.HasValue == true)
+            {
+                var identityOwnership = genericRepo
+                    .GetDXUnits<DXIdentityOwnershipUnit>(
+                        $"IdentityID = '{context.IdentityID.Value}' AND DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{instanceId}'")
+                    .FirstOrDefault();
+
+                if (identityOwnership != null)
+                    return;
+            }
+
+            if (context?.ActiveGroupIDs != null)
+            {
+                foreach (var groupId in context.ActiveGroupIDs)
+                {
+                    var groupOwnership = genericRepo
+                        .GetDXUnits<DXGroupOwnershipUnit>(
+                            $"GroupID = '{groupId}' AND DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{instanceId}'")
+                        .FirstOrDefault();
+
+                    if (groupOwnership != null)
+                        return;
+                }
+            }
+
+            var subjectId = context == null || string.IsNullOrWhiteSpace(context.SubjectId) ? "anonymous" : context.SubjectId;
+            throw new UnauthorizedAccessException($"Access denied for '{subjectId}' to '{typeName}' instance '{instanceId}'.");
+        }
+
+        private void TryCreateIdentityOwnership(string? typeName, Guid unitId)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return;
+
+            var ctx = executionContextAccessor.Current;
+            if (ctx == null || ctx.IsSystem || !ctx.IdentityID.HasValue)
+                return;
+
+            var unitDef = structureCache.GetDXUnit(typeName);
+            if (unitDef == null || unitDef.Kind == DXObjectKindEnum.Core || !unitDef.SupportsOwnership)
+                return;
+
+            var ownership = new DXIdentityOwnershipUnit
+            {
+                ID = Guid.NewGuid(),
+                TimeStamp = DateTime.UtcNow,
+                Identity = ctx.IdentityID.Value,
+                DXUnitDefinition = unitDef.ID,
+                OwnedDXUnitID = unitId
+            };
+
+            genericRepo.Insert(ownership);
+        }
+
+        private void TryCreateIdentityOwnershipFromJObject(string? typeName, JObject resultValue)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return;
+
+            var block = resultValue.ToObject<DXDataBlock<DXUnitRecord>>();
+            if (block?.Data?.Items == null)
+                return;
+
+            foreach (var item in block.Data.Items)
+            {
+                if (item != null && item.ID != Guid.Empty)
+                    TryCreateIdentityOwnership(typeName, item.ID);
+            }
+        }
+
+        private void TryCreateIdentityOwnershipFromBlock(DXDataBlock<DXUnitRecord> block)
+        {
+            var typeName = block.Meta?.Type;
+            if (string.IsNullOrWhiteSpace(typeName) || block.Data?.Items == null)
+                return;
+
+            foreach (var item in block.Data.Items)
+            {
+                if (item != null && item.ID != Guid.Empty)
+                    TryCreateIdentityOwnership(typeName, item.ID);
+            }
+        }
+
+        private void TryDeleteOwnership(string typeName, Guid unitId)
+        {
+            var unitDef = structureCache.GetDXUnit(typeName);
+            if (unitDef == null || unitDef.Kind == DXObjectKindEnum.Core || !unitDef.SupportsOwnership)
+                return;
+
+            var identityOwners = genericRepo
+                .GetDXUnits<DXIdentityOwnershipUnit>(
+                    $"DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{unitId}'")
+                .ToList();
+
+            foreach (var owner in identityOwners)
+                genericRepo.Delete(owner);
+
+            var groupOwners = genericRepo
+                .GetDXUnits<DXGroupOwnershipUnit>(
+                    $"DXUnitDefinitionID = '{unitDef.ID}' AND DXUnitID = '{unitId}'")
+                .ToList();
+
+            foreach (var owner in groupOwners)
+                genericRepo.Delete(owner);
         }
     }
 }
-

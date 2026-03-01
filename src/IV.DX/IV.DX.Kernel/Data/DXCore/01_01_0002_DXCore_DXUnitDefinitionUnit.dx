@@ -114,6 +114,31 @@
           "Kind": 1,
           "BaseDXUnit": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
           "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "4a5b6c7d-8e9f-0cd2-a3b4-c5d6e7f80910",
+                    "TimeStamp": "2026-02-26T00:00:00Z",
+                    "DXUnitID": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5",
+                    "Name": "SupportsOwnership",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": "false",
+                    "ColumnType": 6
+                  }
+                ]
+              }
+            },
             "DXElementInUnitDefinitionElement": {
               "Meta": {
                 "Kind": "DXElement",

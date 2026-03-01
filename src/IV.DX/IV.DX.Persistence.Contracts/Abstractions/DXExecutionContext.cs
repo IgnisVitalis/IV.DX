@@ -4,6 +4,8 @@ namespace IV.DX.Persistence.Contracts.Abstractions
     {
         public string? SubjectId { get; init; }
         public bool IsSystem { get; init; }
+        public Guid? IdentityID { get; init; }
+        public IReadOnlyCollection<Guid>? ActiveGroupIDs { get; init; }
 
         // Legacy global allow-lists (kept for backward compatibility).
         public IReadOnlyCollection<string>? AllowedReadUnitTypes { get; init; }
