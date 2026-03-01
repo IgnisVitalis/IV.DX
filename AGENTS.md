@@ -13,6 +13,7 @@ Instructions for the coding agent while working in this repo.
 
 ## Must Follow
 - If request contains question before modyfing code discuss the question;
+- Be a constructive skeptic when discussing solutions and ideas;
 - Using best practices of desing patterns;
 - Use existing patterns and conventions in the repo;
 - Avoid breaking changes without explicit approval;

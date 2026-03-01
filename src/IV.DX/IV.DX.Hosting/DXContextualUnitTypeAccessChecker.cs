@@ -2,7 +2,9 @@ using IV.DX.Persistence.Contracts.Abstractions;
 
 namespace IV.DX.Hosting
 {
-    internal sealed class DXContextualUnitTypeAccessChecker(IDXExecutionContextAccessor executionContextAccessor) : IDXUnitTypeAccessChecker
+    internal sealed class DXContextualUnitTypeAccessChecker(
+        IDXExecutionContextAccessor executionContextAccessor,
+        IDXSecurityState securityState) : IDXUnitTypeAccessChecker
     {
         public void EnsureAccess(string typeName, DXUnitTypeAccessOperation operation)
         {
@@ -18,6 +20,9 @@ namespace IV.DX.Hosting
         public DXAccessDecision CheckAccess(string typeName, DXUnitTypeAccessOperation operation)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
+
+            if (!securityState.IsEnabled)
+                return DXAccessDecision.Allowed;
 
             var context = executionContextAccessor.Current;
 

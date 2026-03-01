@@ -31,6 +31,7 @@ namespace IV.DX.Hosting
             services.AddSingleton<IDXEncryptionKeyProvider, DXConfiguredEncryptionKeyProvider>();
             services.AddSingleton<IDXStringProtector, DXAesGcmStringProtector>();
             services.AddSingleton<IDXExecutionContextAccessor, DXExecutionContextAccessor>();
+            services.AddSingleton<IDXSecurityState, DXSecurityState>();
             services.AddScoped<IDXExecutionContextResolver, DXExecutionContextResolver>();
             services.AddScoped<IDXUnitTypeAccessChecker, DXContextualUnitTypeAccessChecker>();
 

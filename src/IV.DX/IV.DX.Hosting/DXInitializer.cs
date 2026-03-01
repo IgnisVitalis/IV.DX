@@ -11,17 +11,20 @@ namespace IV.DX.Hosting
         private readonly IDXUnitCoreRepository _coreRepo;
         private readonly IDXMigrationService _migration;
         private readonly IDXStructureCache _dXStructureCache;
+        private readonly IDXSecurityState _securityState;
 
         private bool _isCoreInitialized;
 
         public DXInitializer(
             IDXUnitCoreRepository coreRepo,
             IDXMigrationService migration,
-            IDXStructureCache dXStructureCache)
+            IDXStructureCache dXStructureCache,
+            IDXSecurityState securityState)
         {
             _coreRepo = coreRepo;
             _migration = migration;
             _dXStructureCache = dXStructureCache;
+            _securityState = securityState;
         }
 
         public async Task InitDXCoreDataAsync(CancellationToken ct = default)
@@ -39,6 +42,7 @@ namespace IV.DX.Hosting
             DXMaintenanceToken.StopMaintenanceCore();
 
             await _dXStructureCache.RefreshAsync(ct);
+            _securityState.LoadFromStructure();
             
             this._isCoreInitialized = true;
         }
@@ -61,6 +65,7 @@ namespace IV.DX.Hosting
             }
 
             await MigrateCustomEmbeddedAsync("Data/DXSecurity.json", ct);
+            _securityState.SetEnabled(true);
         }
 
         public async Task InitCustomDataAsync(string configPath, CancellationToken ct = default)
