@@ -33,7 +33,7 @@ on:
       db_password:
         description: 'DB password'
         required: false
-        default: 'postgres'
+        default: 'root'
       coverage_min:
         description: 'Minimum total code coverage percentage required'
         required: false
@@ -59,7 +59,7 @@ jobs:
       DB_PORT:      ${{ github.event.inputs.db_port      || '5432'       }}
       DB_NAME:      ${{ github.event.inputs.db_name      || 'appdb'      }}
       DB_USER:      ${{ github.event.inputs.db_user      || 'postgres'   }}
-      DB_PASSWORD:  ${{ github.event.inputs.db_password  || 'postgres'   }}
+      DB_PASSWORD:  ${{ github.event.inputs.db_password  || 'root'       }}
 
       COVERAGE_MIN: ${{ github.event.inputs.coverage_min || '60' }}
 
@@ -68,7 +68,7 @@ jobs:
         image: postgres:18
         env:
           POSTGRES_USER:     ${{ github.event.inputs.db_user     || 'postgres' }}
-          POSTGRES_PASSWORD: ${{ github.event.inputs.db_password || 'postgres' }}
+          POSTGRES_PASSWORD: ${{ github.event.inputs.db_password || 'root'     }}
           POSTGRES_DB:       ${{ github.event.inputs.db_name     || 'appdb'    }}
         ports:
           - "${{ github.event.inputs.db_port || 5432 }}:5432"
