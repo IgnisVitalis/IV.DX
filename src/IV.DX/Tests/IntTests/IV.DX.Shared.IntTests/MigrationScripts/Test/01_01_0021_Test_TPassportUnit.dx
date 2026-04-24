@@ -1,0 +1,92 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "TPassportUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "1f852be3-f851-4807-807f-cfd45a0b4093",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
+          "DXElements": {
+            "TPassportMainElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "TPassportMainElement",
+                "Op": "Patch",
+                "IsMulti": false,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "365ee65a-eb05-4865-8988-1d6ed3cbff5c",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "1f852be3-f851-4807-807f-cfd45a0b4093",
+                    "SerialNumber": "6bcc2af44aa3"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "459276b0-69db-43da-bf9d-c2683c4b4d39",
+          "User": "60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff",
+          "DXElements": {
+            "TPassportMainElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "TPassportMainElement",
+                "Op": "Patch",
+                "IsMulti": false,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "9582877a-b115-41f4-8a0d-98f5b994ce70",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "459276b0-69db-43da-bf9d-c2683c4b4d39",
+                    "SerialNumber": "4a82ceaa1cff"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "ID": "bd56ffdd-0d30-4d9f-b879-7875162fc7b6",
+          "User": "dfb7bb88-30d9-46d7-9885-6ca8ae455e82",
+          "DXElements": {
+            "TPassportMainElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "TPassportMainElement",
+                "Op": "Patch",
+                "IsMulti": false,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "c13efbf5-348a-4551-806a-206dfc44a861",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "bd56ffdd-0d30-4d9f-b879-7875162fc7b6",
+                    "SerialNumber": "6ca8ae455e82"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
+

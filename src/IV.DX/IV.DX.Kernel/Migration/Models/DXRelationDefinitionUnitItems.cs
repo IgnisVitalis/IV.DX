@@ -1,0 +1,29 @@
+using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Converters.DXObjectConverters;
+using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
+using Newtonsoft.Json;
+using System.Reflection;
+
+namespace IV.DX.Kernel.Migration.Models
+{
+    internal static class DXRelationDefinitionUnitItems
+    {
+        public static IEnumerable<DXRelationDefinitionUnit> Items { get; private set; }
+
+        static DXRelationDefinitionUnitItems()
+        {
+            var text = ResourceReader.ReadEmbeddedText(
+                Assembly.GetAssembly(typeof(DXUnitAttribute))!,
+                "Migration/DXCore/01_01_0003_DXCore_DXRelationDefinitionUnit.dx");
+
+            var blocks = JsonConvert.DeserializeObject<List<DXDataBlock<DXUnitRecord>>>(text)
+                         ?? new List<DXDataBlock<DXUnitRecord>>();
+
+            var items = DXRecordConverter.ToDXUnits<DXRelationDefinitionUnit>(blocks).ToList();
+            var revertedItems = items.Select(x => x.CreateInvertedRelationObject()).ToList();
+
+            Items = items.Concat(revertedItems).ToList();
+        }
+    }
+}

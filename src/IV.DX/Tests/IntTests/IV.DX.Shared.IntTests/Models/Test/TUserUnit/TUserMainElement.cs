@@ -1,0 +1,17 @@
+using IV.DX.Kernel.Attributes;
+using IV.DX.Kernel.Models;
+using System;
+
+namespace IV.DX.Shared.IntTests.Models.Test
+{
+    [DXElement("TUserMainElement")]
+    public class TUserMainElement : DXElement
+    {
+        [DXColumn("Name")]
+        public string Name { get; set; }
+        [DXColumn("Surname")]
+        public string Surname { get; set; }
+        [DXColumn("Birth")]
+        public DateTime Birth { get; set; }
+    }
+}

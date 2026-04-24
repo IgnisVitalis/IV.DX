@@ -1,0 +1,74 @@
+﻿using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace IV.DX.Persistence.IntTests
+{
+    [Collection("DX:one-time")]
+    public class DXUnitCoreRepository : IntTestController
+    {
+        IDXUnitCoreRepository _dxUnitCoreRepo;
+
+        public DXUnitCoreRepository(DXTestFixture fx, ITestOutputHelper output)
+            : base(fx, output)
+        {
+            this._dxUnitCoreRepo = this.ServiceProvider.GetRequiredService<IDXUnitCoreRepository>();
+        }
+
+        [Fact]
+        public void GetItem_UsingTypeNameAndID_WholeDXRecord()
+        {
+            // Init
+            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+
+            // Action
+            var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("DXUnitDefinitionUnit", id);
+
+            // Assert
+            Assert.NotNull(dxUnitDefinition);
+
+            var item = Assert.Single(dxUnitDefinition.Data.Items);
+            Assert.Equal(id, item.ID);
+            Assert.NotNull(item.Fields);
+            Assert.Equal("DXObjectDefinitionUnit", item.Fields["Name"].ToString());
+            Assert.True(item.Fields.ContainsKey("DerivedDXUnitType"), "DerivedDXUnitType field must be present");
+            Assert.True(Guid.TryParse(item.Fields["DerivedDXUnitType"].ToString(), out _), "DerivedDXUnitType must be a valid Guid");
+        }
+
+        [Fact]
+        public void GetItem_UsingBaseTypeNameAndID_BaseDXRecord()
+        {
+            // Init
+            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+
+            // Action
+            var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("DXObjectDefinitionUnit", id);
+
+            // Assert
+            Assert.NotNull(dxUnitDefinition);
+
+            var item = Assert.Single(dxUnitDefinition.Data.Items);
+            Assert.Equal(id, item.ID);
+            Assert.NotNull(item.Fields);
+            Assert.Equal("DXObjectDefinitionUnit", item.Fields["Name"].ToString());
+            Assert.True(item.Fields.ContainsKey("DerivedDXUnitType"), "DerivedDXUnitType field must be present");
+            Assert.True(Guid.TryParse(item.Fields["DerivedDXUnitType"].ToString(), out _), "DerivedDXUnitType must be a valid Guid");
+        }
+
+        [Fact]
+        public void GetComputer_UsingID_WholeDXRecord()
+        {
+            // Init
+            var id = new Guid("4da76122-8615-4a98-a873-20e1f57aa517");
+
+            // Action
+            var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("TComputerUnit", id);
+
+            // Assert
+            Assert.NotNull(dxUnitDefinition);
+        }
+    }
+}

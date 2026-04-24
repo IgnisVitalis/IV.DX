@@ -1,0 +1,82 @@
+﻿using IV.DX.Application.Contracts.Handlers;
+using IV.DX.Application.Contracts.Pipeline;
+using IV.DX.Application.Pipeline;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
+
+namespace IV.DX.Hosting
+{
+    internal sealed class DXUnitHandlerRegistryInitializer : IHostedService
+    {
+        private readonly IServiceProvider _root;
+        private readonly Assembly[] _assemblies;
+
+        public DXUnitHandlerRegistryInitializer(IServiceProvider root, IEnumerable<Assembly> assembliesToScan)
+        {
+            _root = root;
+            _assemblies = assembliesToScan?.ToArray() ?? Array.Empty<Assembly>();
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            var handlerTypes = DXUnitHandlerScanner.FindHandlerTypes(_assemblies);
+
+            using var scope = _root.CreateScope();
+
+            var insertProv = scope.ServiceProvider.GetRequiredService<IDXUnitInsertHandlerProvider>();
+            var updateProv = scope.ServiceProvider.GetRequiredService<IDXUnitUpdateHandlerProvider>();
+            var deleteProv = scope.ServiceProvider.GetRequiredService<IDXUnitDeleteHandlerProvider>();
+            var getProv = scope.ServiceProvider.GetRequiredService<IDXUnitGetHandlerProvider>();
+
+            foreach (var hType in handlerTypes)
+            {
+                var handler = scope.ServiceProvider.GetRequiredService(hType);
+
+                foreach (var (handlerType, openInterface, unitType) in DXUnitHandlerScanner.EnumerateDxHandlerInterfaces(hType))
+                {
+                    var closedIface = openInterface.MakeGenericType(unitType);
+
+                    if (openInterface == typeof(IDXBeforeInsertHandler<>))
+                        CallRegister(insertProv, nameof(insertProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXAfterInsertHandler<>))
+                        CallRegister(insertProv, nameof(insertProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXBeforeUpdateHandler<>))
+                        CallRegister(updateProv, nameof(updateProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXAfterUpdateHandler<>))
+                        CallRegister(updateProv, nameof(updateProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXBeforeDeleteHandler<>))
+                        CallRegister(deleteProv, nameof(deleteProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXAfterDeleteHandler<>))
+                        CallRegister(deleteProv, nameof(deleteProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXBeforeGetHandler<>))
+                        CallRegister(getProv, nameof(getProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXAfterGetHadnler<>))
+                        CallRegister(getProv, nameof(getProv.Register), closedIface, handler);
+                    else if (openInterface == typeof(IDXIsItemExistingHandler<>))
+                        CallRegister(getProv, nameof(getProv.Register), closedIface, handler);
+                }
+            }
+
+            await Task.CompletedTask;
+
+            static void CallRegister(object provider, string methodName, Type handlerInterface, object handlerInstance)
+            {
+                var provType = provider.GetType();
+                var mi = provType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .First(m =>
+                        m.Name == methodName &&
+                        m.IsGenericMethodDefinition &&
+                        m.GetParameters().Length == 1 &&
+                        m.GetParameters()[0].ParameterType.IsGenericType);
+
+                var t = handlerInterface.GetGenericArguments()[0];
+
+                var closed = mi.MakeGenericMethod(t);
+                closed.Invoke(provider, new[] { handlerInstance });
+            }
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
+}

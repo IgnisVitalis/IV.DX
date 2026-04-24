@@ -1,0 +1,94 @@
+[
+    {
+        "Meta": {
+            "Kind": "DXUnit",
+            "Type": "DXElementDefinitionUnit",
+            "Op": "Patch",
+            "IsMulti": true,
+            "IsRequired": false
+        },
+        "Data": {
+            "Items": [
+                {
+                    "ID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                    "TimeStamp": "2026-03-25T00:00:00Z",
+                    "Name": "DXActionInParameterElement",
+                    "DXTitleExpression": "Value",
+                    "Kind": 1,
+                    "IsCommon": false,
+                    "DXElements": {
+                        "DXColumnDefinitionElement": {
+                            "Meta": {
+                                "Kind": "DXElement",
+                                "Type": "DXColumnDefinitionElement",
+                                "Op": "Patch",
+                                "IsMulti": true
+                            },
+                            "Data": {
+                                "Items": [
+                                    {
+                                        "ID": "ba64e003-b107-4bc3-96fa-bc3bfbed28b2",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                                        "ColumnType": 3,
+                                        "Name": "Key",
+                                        "Length": 100,
+                                        "AllowNull": false
+                                    },                                 
+                                    {
+                                        "ID": "12a1b3bf-def3-458f-b0ac-6daf68250fa0",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                                        "ColumnType": 3,
+                                        "Name": "DefaultValue",
+                                        "Length": 500,
+                                        "AllowNull": true
+                                    },
+                                    {
+                                        "ID": "49760489-15f0-400a-b86c-388b32c1a7f9",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                                        "ColumnType": 6,
+                                        "Name": "Required",
+                                        "AllowNull": false,
+                                        "DefaultValue": "0"
+                                    },
+                                    {
+                                        "ID": "3ed4e4c1-859e-42cd-8179-22de2586604a",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                                        "ColumnType": 6,
+                                        "Name": "IsMulti",
+                                        "AllowNull": false,
+                                        "DefaultValue": "0"
+                                    }
+                                ]
+                            }
+                        },
+                        "DXObjectEnumElement": {
+                            "Meta": {
+                                "Kind": "DXElement",
+                                "Type": "DXObjectEnumElement",
+                                "Op": "Patch",
+                                "IsMulti": true
+                            },
+                            "Data": {
+                                "Items": [                                 
+                                    {
+                                        "ID": "c7fe202f-fff2-4343-a049-74bf3384e2c8",
+                                        "TimeStamp": "2026-01-26T11:53:31.976507Z",
+                                        "Name": "Type",
+                                        "AllowNull": false,
+                                        "DXUnitID": "c5a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+                                        "EnumKey": "fab7a3a9-7adc-4c07-8120-39285ad46dbb",
+                                        "EnumType": "5584152f-335d-4b7f-b09b-9f6bac4b82aa"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+]

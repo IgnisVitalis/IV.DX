@@ -1,0 +1,223 @@
+name: publish-nuget
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Manual version (e.g. 1.2.3). If empty and no tag, uses csproj version.'
+        required: false
+        default: ''
+      db_type:
+        description: 'DB type for tests'
+        required: false
+        default: 'PostgreSQL'
+      db_host:
+        description: 'DB host'
+        required: false
+        default: 'localhost'
+      db_port:
+        description: 'DB port'
+        required: false
+        default: '5432'
+      db_name:
+        description: 'DB name'
+        required: false
+        default: 'appdb'
+      db_user:
+        description: 'DB user'
+        required: false
+        default: 'postgres'
+      db_password:
+        description: 'DB password'
+        required: false
+        default: 'postgres'
+      coverage_min:
+        description: 'Minimum total code coverage percentage required'
+        required: false
+        default: '60'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  pack-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      SOLUTION_PATH: src/IV.DX/IV.DX.sln
+      PROJECT_PATH: src/IV.DX/IV.DX.Hosting/IV.DX.Hosting.csproj
+      TEST_SETTINGS: src/IV.DX/Tests/CodeCoverage.runsettings
+      GPR_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      NUGET_SOURCE: https://api.nuget.org/v3/index.json
+
+      DB_TYPE:      ${{ github.event.inputs.db_type      || 'PostgreSQL' }}
+      DB_HOST:      ${{ github.event.inputs.db_host      || 'localhost'  }}
+      DB_PORT:      ${{ github.event.inputs.db_port      || '5432'       }}
+      DB_NAME:      ${{ github.event.inputs.db_name      || 'appdb'      }}
+      DB_USER:      ${{ github.event.inputs.db_user      || 'postgres'   }}
+      DB_PASSWORD:  ${{ github.event.inputs.db_password  || 'postgres'   }}
+
+      COVERAGE_MIN: ${{ github.event.inputs.coverage_min || '60' }}
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER:     ${{ github.event.inputs.db_user     || 'postgres' }}
+          POSTGRES_PASSWORD: ${{ github.event.inputs.db_password || 'postgres' }}
+          POSTGRES_DB:       ${{ github.event.inputs.db_name     || 'appdb'    }}
+        ports:
+          - "${{ github.event.inputs.db_port || 5432 }}:5432"
+        options: >-
+          --health-cmd="pg_isready -U $${POSTGRES_USER}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore (solution)
+        run: dotnet restore "$SOLUTION_PATH"
+
+      - name: Determine version from tag or input
+        id: v
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            RAW="${GITHUB_REF_NAME}"
+            VER="${RAW#v}"
+          elif [[ -n "${{ github.event.inputs.version }}" ]]; then
+            VER="${{ github.event.inputs.version }}"
+          else
+            VER=""
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+
+      - name: Build (Release, solution)
+        run: |
+          if [ -n "${{ steps.v.outputs.version }}" ]; then
+            dotnet build "$SOLUTION_PATH" -c Release --no-restore -p:Version=${{ steps.v.outputs.version }} -p:TreatWarningsAsErrors=true
+          else
+            dotnet build "$SOLUTION_PATH" -c Release --no-restore -p:TreatWarningsAsErrors=true
+          fi
+
+      - name: Export unified DB config to env
+        shell: bash
+        run: |
+          echo "Database__Type=${DB_TYPE}" >> "$GITHUB_ENV"
+          echo "Database__ConnectionString=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD};IncludeErrorDetail=true" >> "$GITHUB_ENV"
+
+      - name: Wait for Postgres (TCP check)
+        shell: bash
+        run: |
+          for i in {1..60}; do
+            (echo > /dev/tcp/${DB_HOST}/${DB_PORT}) >/dev/null 2>&1 && { echo "Postgres is accepting TCP connections"; exit 0; }
+            echo "Waiting for Postgres... ($i/60)"
+            sleep 2
+          done
+          echo "Postgres did not become ready in time"; exit 1
+
+      - name: Test (with coverage)
+        run: |
+          dotnet test "$SOLUTION_PATH" -c Release --no-build --settings "$TEST_SETTINGS" --collect:"XPlat Code Coverage"
+
+      - name: Install reportgenerator tool
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: Generate coverage reports (TextSummary + Html + JsonSummary)
+        run: |
+          reportgenerator \
+            -reports:"**/coverage.cobertura.xml" \
+            -targetdir:"coveragereport" \
+            -reporttypes:"TextSummary;Html;JsonSummary"
+
+      - name: Print coverage summary
+        run: |
+          echo "===== COVERAGE SUMMARY ====="
+          cat coveragereport/Summary.txt || true
+          echo "============================"
+
+      - name: Enforce coverage threshold
+        shell: bash
+        run: |
+          if [[ -f "coveragereport/Summary.json" ]]; then
+          PCT=$(grep -m1 -oE '"coverage"\s*:\s*[0-9]+(\.[0-9]+)?' coveragereport/Summary.json \
+            | grep -oE '[0-9]+(\.[0-9]+)?')
+          fi
+
+          if [[ -z "$PCT" && -f "coveragereport/Summary.txt" ]]; then
+          PCT=$(grep -m1 -oE 'Coverage:\s*[0-9]+(\.[0-9]+)?%' coveragereport/Summary.txt \
+            | grep -oE '[0-9]+(\.[0-9]+)?')
+          fi
+
+          if [[ -z "$PCT" ]]; then
+            echo "Could not determine total coverage. Failing to be safe."
+            exit 1
+          fi
+
+          echo "Total coverage: ${PCT}% (threshold: ${COVERAGE_MIN}%)"
+
+          awk -v p="$PCT" -v t="$COVERAGE_MIN" 'BEGIN{ if (p+0 < t+0) exit 1 }' \
+            && echo "✅ Coverage gate PASSED." \
+            || { echo "❌ Coverage gate FAILED: ${PCT}% < ${COVERAGE_MIN}%"; exit 1; }
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: coveragereport
+          if-no-files-found: ignore
+
+      - name: Pack (project)
+        run: |
+          mkdir -p artifacts
+          if [ -n "${{ steps.v.outputs.version }}" ]; then
+            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts -p:Version=${{ steps.v.outputs.version }} -p:TreatWarningsAsErrors=true
+          else
+            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts -p:TreatWarningsAsErrors=true
+          fi
+
+      - name: Upload test results & coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/TestResults/**
+            **/coverage.cobertura.xml
+          if-no-files-found: ignore
+
+      - name: Upload nupkgs
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+
+      - name: Add GitHub Packages source
+        run: |
+          dotnet nuget add source "$GPR_SOURCE" \
+            --name "github" \
+            --username "${{ github.repository_owner }}" \
+            --password "${{ secrets.GITHUB_TOKEN }}" \
+            --store-password-in-clear-text
+
+      - name: Push to GitHub Packages
+        run: |
+          dotnet nuget push "artifacts/*.nupkg" \
+            --api-key "${{ secrets.GITHUB_TOKEN }}" \
+            --source "github" \
+            --skip-duplicate

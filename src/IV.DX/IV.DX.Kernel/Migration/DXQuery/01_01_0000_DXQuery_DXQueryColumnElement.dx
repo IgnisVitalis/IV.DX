@@ -1,0 +1,75 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
+          "TimeStamp": "2025-12-01T10:41:22.915737Z",
+          "Name": "DXQueryColumnElement",
+          "DXTitleExpression": "Name",
+          "Kind": 1,
+          "IsCommon": false,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "0973ae90-417c-45f5-ad47-95ce9cd9c4ef",
+                    "TimeStamp": "2025-12-01T10:41:22.90784Z",
+                    "Name": "Name",
+                    "Length": 50,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
+                    "ColumnType": 3
+                  },
+                  {
+                    "ID": "af47fb88-e7df-46a5-9ba1-f91a470dc89f",
+                    "TimeStamp": "2025-12-01T10:41:22.908031Z",
+                    "Name": "Expression",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
+                    "ColumnType": 4
+                  },
+                  {
+                    "ID": "f73a45ec-2e52-4eeb-a7fc-ced3c73cc06c",
+                    "TimeStamp": "2025-12-01T10:41:22.908044Z",
+                    "Name": "Order",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "DXUnitID": "1954b32e-d486-418f-84e3-5e6ce515d2ff",
+                    "ColumnType": 8
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
+

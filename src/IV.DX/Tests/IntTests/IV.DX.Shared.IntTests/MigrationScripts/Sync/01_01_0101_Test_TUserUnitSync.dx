@@ -1,0 +1,43 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "TUserUnit",
+      "Op": "Sync",
+      "IsMulti": true,
+      "IsRequired": false,
+      "DXFilter": "TUserMainElement.Name = 'SyncSeed-A' OR TUserMainElement.Name = 'SyncSeed-B' OR TUserMainElement.Name = 'SyncSeed-C'"
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "DXElements": {
+            "TUserMainElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "TUserMainElement",
+                "Op": "Patch",
+                "IsMulti": false,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "f1679d86-6095-4d86-8160-4cb6e8c4e54a",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
+                    "Name": "SyncSeed-A",
+                    "Surname": "User",
+                    "Birth": "1990-01-01T00:00:00Z"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

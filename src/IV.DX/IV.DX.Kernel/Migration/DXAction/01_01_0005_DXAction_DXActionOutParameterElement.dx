@@ -1,0 +1,85 @@
+[
+    {
+        "Meta": {
+            "Kind": "DXUnit",
+            "Type": "DXElementDefinitionUnit",
+            "Op": "Patch",
+            "IsMulti": true,
+            "IsRequired": false
+        },
+        "Data": {
+            "Items": [
+                {
+                    "ID": "6b4f69d6-858e-4190-8da0-55462be450a8",
+                    "TimeStamp": "2026-03-25T00:00:00Z",
+                    "Name": "DXActionOutParameterElement",
+                    "DXTitleExpression": "Value",
+                    "Kind": 1,
+                    "IsCommon": false,
+                    "DXElements": {
+                        "DXColumnDefinitionElement": {
+                            "Meta": {
+                                "Kind": "DXElement",
+                                "Type": "DXColumnDefinitionElement",
+                                "Op": "Patch",
+                                "IsMulti": true
+                            },
+                            "Data": {
+                                "Items": [
+                                    {
+                                        "ID": "d640467d-604f-46d8-96f4-6c2d72ac9c7a",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "6b4f69d6-858e-4190-8da0-55462be450a8",
+                                        "ColumnType": 3,
+                                        "Name": "Key",
+                                        "Length": 100,
+                                        "AllowNull": false
+                                    },       
+                                    {
+                                        "ID": "90332994-1a32-49ad-a567-3392f37d6021",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "6b4f69d6-858e-4190-8da0-55462be450a8",
+                                        "ColumnType": 6,
+                                        "Name": "Required",
+                                        "AllowNull": false,
+                                        "DefaultValue": "0"
+                                    },
+                                    {
+                                        "ID": "61ae9b6a-0433-463e-9a9e-6a30190f3fe0",
+                                        "TimeStamp": "2026-03-25T00:00:00Z",
+                                        "DXUnitID": "6b4f69d6-858e-4190-8da0-55462be450a8",
+                                        "ColumnType": 6,
+                                        "Name": "IsMulti",
+                                        "AllowNull": false,
+                                        "DefaultValue": "0"
+                                    }
+                                ]
+                            }
+                        },
+                        "DXObjectEnumElement": {
+                            "Meta": {
+                                "Kind": "DXElement",
+                                "Type": "DXObjectEnumElement",
+                                "Op": "Patch",
+                                "IsMulti": true
+                            },
+                            "Data": {
+                                "Items": [                                 
+                                    {
+                                        "ID": "c7840873-89a8-4076-b402-2c167efe18bd",
+                                        "TimeStamp": "2026-01-26T11:53:31.976507Z",
+                                        "Name": "Type",
+                                        "AllowNull": false,
+                                        "DXUnitID": "6b4f69d6-858e-4190-8da0-55462be450a8",
+                                        "EnumKey": "fab7a3a9-7adc-4c07-8120-39285ad46dbb",
+                                        "EnumType": "5584152f-335d-4b7f-b09b-9f6bac4b82aa"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+]

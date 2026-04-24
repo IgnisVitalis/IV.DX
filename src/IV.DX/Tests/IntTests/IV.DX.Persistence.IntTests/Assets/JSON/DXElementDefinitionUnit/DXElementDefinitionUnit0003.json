@@ -1,0 +1,68 @@
+{
+    "Meta": {
+        "Kind": "DXUnit",
+        "Type": "DXElementDefinitionUnit",
+        "Op": "Patch",
+        "IsMulti": false,
+        "IsRequired": false
+    },
+    "Data": {
+        "Items": [
+            {
+                "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "TimeStamp": "2021-10-02T00:00:00",
+                "Name": "NewDataDXElement",
+                "Type": 1,
+                "Kind": 2,
+                "DXElements": {
+                    "DXColumnDefinitionElement": {
+                        "Meta": {
+                            "Kind": "DXElement",
+                            "Type": "DXColumnDefinitionElement",
+                            "Op": "Sync",
+                            "IsMulti": true,
+                            "IsRequired": false
+                        },
+                        "Data": {
+                            "Items": [
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 1,
+                                    "Name": "GuidColumn"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 2,
+                                    "Name": "TimeStampColumn",
+                                    "DefaultValue": "CURRENT_TIMESTAMP"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 12,
+                                    "Name": "CurrencyColumn",
+                                    "AllowNull": true,
+                                    "DefaultValue": "0"
+                                },
+                                {
+                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
+                                    "TimeStamp": "2021-10-02T00:00:00",
+                                    "ColumnType": 13,
+                                    "Name": "BlobColumn",
+                                    "AllowNull": true
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}
+

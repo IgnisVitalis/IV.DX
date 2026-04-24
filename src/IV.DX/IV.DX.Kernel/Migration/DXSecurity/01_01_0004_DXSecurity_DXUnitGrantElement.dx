@@ -1,0 +1,146 @@
+{
+  "Meta": {
+    "Kind": "DXUnit",
+    "Type": "DXElementDefinitionUnit",
+    "Op": "Sync",
+    "IsMulti": true,
+    "IsRequired": false
+  },
+  "Data": {
+    "Items": [
+      {
+        "DXElements": {
+          "DXElementToUnitRelationElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXElementToUnitRelationElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "ID": "de86b326-f925-444f-99cd-0e23dcb49187",
+                  "TimeStamp": "2026-02-03T17:29:21.657268Z",
+                  "DXElementDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "OwnRelationName": "DXUnitGrants",
+                  "TargetRelationName": "DXUnit",
+                  "RelationType": 4,
+                  "TargetDXUnit": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"
+                }
+              ],
+              "Delete": null
+            }
+          },
+          "DXColumnDefinitionElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXColumnDefinitionElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "ID": "3225803c-7e65-48d2-ab27-75a5e89f28bd",
+                  "TimeStamp": "2026-02-03T17:29:55.785917Z",
+                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "Name": "Read",
+                  "Length": null,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 6
+                },
+                {
+                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "ID": "8b5eabc2-fdd8-471d-beee-95f1f6de358f",
+                  "TimeStamp": "2026-02-03T17:29:55.785937Z",
+                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "Name": "Write",
+                  "Length": null,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 6
+                },
+                {
+                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "ID": "1aec6aef-0b37-4d21-a2de-e5863856234b",
+                  "TimeStamp": "2026-02-03T17:29:55.785969Z",
+                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "Name": "Delete",
+                  "Length": null,
+                  "Precision": null,
+                  "Scale": null,
+                  "AllowNull": false,
+                  "DefaultValue": null,
+                  "ColumnType": 6
+                }
+              ],
+              "Delete": null
+            }
+          },
+          "DXUniqueColumnsElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXUniqueColumnsElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": null,
+              "Delete": null
+            }
+          },
+          "DXObjectEnumElement": {
+            "Meta": {
+              "Kind": "DXElement",
+              "Type": "DXObjectEnumElement",
+              "Op": "Sync",
+              "IsMulti": true,
+              "IsRequired": false,
+              "DXFilter": null,
+              "DXUnitContext": null
+            },
+            "Data": {
+              "Items": [
+                {
+                  "DXUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "ID": "873e6d15-68b4-45ad-acf2-37d24b77ca3c",
+                  "TimeStamp": "2026-02-03T17:29:33.389201Z",
+                  "DXObjectDefinitionUnitID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+                  "Name": "Effect",
+                  "AllowNull": false,
+                  "EnumKey": "0197265c-dce9-48fb-89eb-a370c572fe1a",
+                  "EnumType": "3e3540c8-1d80-4236-ab87-efd00f30609c"
+                }
+              ],
+              "Delete": null
+            }
+          }
+        },
+        "ID": "10cb622c-8532-4eff-ac3b-09829ed99bd2",
+        "TimeStamp": "2026-02-03T17:29:55.798813Z",
+        "Name": "DXUnitGrantElement",
+        "DXTitleExpression": "DXUnit.Name",
+        "Kind": 1,
+        "IsCommon": false
+      }
+    ],
+    "Delete": null
+  }
+}

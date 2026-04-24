@@ -1,0 +1,54 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXElementDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "547a5481-9931-4d48-982c-6f8cf959712e",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TBookChapterElement",
+          "Kind": 3,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "c6d486e5-b592-45fd-ac73-ebace0f02322",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "ColumnType": 8,
+                    "Name": "Number",
+                    "AllowNull": true,
+                    "DefaultValue": null
+                  },
+                  {
+                    "ID": "6abca4b2-51cf-4237-9593-8387761ba049",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "ColumnType": 4,
+                    "Name": "Text",
+                    "AllowNull": true,
+                    "DefaultValue": null
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

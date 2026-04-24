@@ -1,0 +1,91 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+          "TimeStamp": "2026-03-02T00:00:00Z",
+          "BaseDXUnit": null,
+          "Name": "DXPublicAccessUnit",
+          "DXTitleExpression": "PublicDXUnitID",
+          "Kind": 1,
+          "DXElements": {
+            "DXColumnDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXColumnDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "a8d16f0c-84d6-45c7-b26e-cf167f3de31a",
+                    "TimeStamp": "2026-03-02T00:00:00Z",
+                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "Name": "PublicDXUnitID",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": null,
+                    "ColumnType": 1
+                  }
+                ]
+              }
+            },
+            "DXUniqueColumnsElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUniqueColumnsElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "c6d7a4cb-c031-4722-b1cc-3f286462f024",
+                    "TimeStamp": "2026-03-02T00:00:00Z",
+                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "Columns": "DXUnitDefinition, PublicDXUnitID"
+                  }
+                ]
+              }
+            },
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "8baf5b36-4385-4b3d-97f4-ad4c7ae711b0",
+                    "TimeStamp": "2026-03-02T00:00:00Z",
+                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "OwnRelationName": "PublicAccesses",
+                    "TargetRelationName": "DXUnitDefinition",
+                    "RelationType": 4,
+                    "TargetDXUnit": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

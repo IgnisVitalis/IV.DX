@@ -1,0 +1,44 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TUserUnit",
+          "DXElements": {
+            "DXUnitToUnitRelationElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXUnitToUnitRelationElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "b3e7c1a0-9f24-4d68-83ab-12c5e87f3901",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
+                    "OwnRelationName": "Users",
+                    "TargetRelationName": "Manager",
+                    "RelationType": 6,
+                    "TargetDXUnit": "cbd4a353-726c-4d81-8e2e-2397d7f052f3"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

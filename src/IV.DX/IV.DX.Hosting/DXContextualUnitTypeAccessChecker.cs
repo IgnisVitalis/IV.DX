@@ -1,0 +1,156 @@
+using IV.DX.Kernel.Enums;
+using IV.DX.Persistence.Contracts.Abstractions;
+
+namespace IV.DX.Hosting
+{
+    internal sealed class DXContextualUnitTypeAccessChecker(
+        IDXExecutionContextAccessor executionContextAccessor,
+        IDXSecurityState securityState,
+        IDXStructureCache structureCache) : IDXUnitTypeAccessChecker
+    {
+        public void EnsureAccess(string typeName, DXUnitTypeAccessOperation operation)
+        {
+            var decision = CheckAccess(typeName, operation);
+
+            if (decision != DXAccessDecision.Allowed)
+            {
+                var context = executionContextAccessor.Current;
+                ThrowDenied(context, typeName, operation);
+            }
+        }
+
+        public DXAccessDecision CheckAccess(string typeName, DXUnitTypeAccessOperation operation)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(typeName);
+
+            if (!securityState.IsEnabled)
+                return DXAccessDecision.Allowed;
+
+            var context = executionContextAccessor.Current;
+
+            if (context?.IsSystem == true)
+                return DXAccessDecision.Allowed;
+
+            if (IsCoreUnit(typeName))
+                return DXAccessDecision.Denied;
+
+            if (operation == DXUnitTypeAccessOperation.Read && IsPublicReadUnit(typeName))
+                return DXAccessDecision.Allowed;
+
+            if (context == null)
+                return DXAccessDecision.Denied;
+
+            var tenantAllowedTypes = operation switch
+            {
+                DXUnitTypeAccessOperation.Read => context.TenantReadUnitTypes,
+                DXUnitTypeAccessOperation.Write => context.TenantWriteUnitTypes,
+                DXUnitTypeAccessOperation.Delete => context.TenantDeleteUnitTypes,
+                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
+            };
+
+            if (IsRestrictionProvided(tenantAllowedTypes) && !ContainsType(tenantAllowedTypes, typeName))
+            {
+                return FallbackToOwnership(context);
+            }
+
+            var membershipAllowedTypes = operation switch
+            {
+                DXUnitTypeAccessOperation.Read => context.MembershipReadUnitTypes,
+                DXUnitTypeAccessOperation.Write => context.MembershipWriteUnitTypes,
+                DXUnitTypeAccessOperation.Delete => context.MembershipDeleteUnitTypes,
+                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
+            };
+
+            if (IsRestrictionProvided(membershipAllowedTypes) && !ContainsType(membershipAllowedTypes, typeName))
+            {
+                return FallbackToOwnership(context);
+            }
+
+            if (context.ApplyGroupRestrictions)
+            {
+                var groupAllowedTypes = operation switch
+                {
+                    DXUnitTypeAccessOperation.Read => context.GroupReadUnitTypes,
+                    DXUnitTypeAccessOperation.Write => context.GroupWriteUnitTypes,
+                    DXUnitTypeAccessOperation.Delete => context.GroupDeleteUnitTypes,
+                    _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
+                };
+
+                if (!ContainsTypeStrict(groupAllowedTypes, typeName))
+                {
+                    return FallbackToOwnership(context);
+                }
+            }
+
+            var globalAllowedTypes = operation switch
+            {
+                DXUnitTypeAccessOperation.Read => context.AllowedReadUnitTypes,
+                DXUnitTypeAccessOperation.Write => context.AllowedWriteUnitTypes,
+                DXUnitTypeAccessOperation.Delete => context.AllowedDeleteUnitTypes,
+                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
+            };
+
+            if (ContainsType(globalAllowedTypes, typeName))
+                return DXAccessDecision.Allowed;
+
+            return FallbackToOwnership(context);
+        }
+
+        private static DXAccessDecision FallbackToOwnership(DXExecutionContext context)
+        {
+            return context.IdentityID.HasValue
+                ? DXAccessDecision.AllowedOwnedOnly
+                : DXAccessDecision.Denied;
+        }
+
+        private bool IsCoreUnit(string typeName)
+        {
+            var unit = structureCache.GetDXUnit(typeName);
+            return unit?.Kind == DXObjectKindEnum.Core;
+        }
+
+        private bool IsPublicReadUnit(string typeName)
+        {
+            var unit = structureCache.GetDXUnit(typeName);
+            return unit?.IsPublicRead == true;
+        }
+
+        private static bool IsRestrictionProvided(IReadOnlyCollection<string>? allowedTypes)
+        {
+            return allowedTypes != null;
+        }
+
+        private static void ThrowDenied(DXExecutionContext? context, string typeName, DXUnitTypeAccessOperation operation)
+        {
+            var subject = context == null || string.IsNullOrWhiteSpace(context.SubjectId)
+                ? "anonymous"
+                : context.SubjectId;
+            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
+        }
+
+        private static bool ContainsType(IReadOnlyCollection<string>? allowedTypes, string typeName)
+        {
+            if (allowedTypes == null || allowedTypes.Count == 0)
+                return true;
+
+            foreach (var allowedType in allowedTypes)
+            {
+                if (string.Equals(allowedType, "*", StringComparison.Ordinal))
+                    return true;
+
+                if (string.Equals(allowedType, typeName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool ContainsTypeStrict(IReadOnlyCollection<string>? allowedTypes, string typeName)
+        {
+            if (allowedTypes == null || allowedTypes.Count == 0)
+                return false;
+
+            return ContainsType(allowedTypes, typeName);
+        }
+    }
+}

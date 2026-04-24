@@ -1,0 +1,10 @@
+[
+    "DXAction/01_01_0000_DXAction_DXActionParameterTypeEnum.dx",
+    "DXAction/01_01_0001_DXAction_DXActionParameterTypeEnumValues.dx",
+    "DXAction/01_01_0002_DXAction_DXActionKindEnum.dx",
+    "DXAction/01_01_0003_DXAction_DXActionKindEnumValues.dx",
+    "DXAction/01_01_0004_DXAction_DXActionInParameterElement.dx",
+    "DXAction/01_01_0005_DXAction_DXActionOutParameterElement.dx",
+    "DXAction/01_01_0006_DXAction_DXActionDefinitionUnit.dx",
+    "DXAction/01_01_0007_DXAction_DXBaseActionUnit.dx"
+]

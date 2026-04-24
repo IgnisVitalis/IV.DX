@@ -1,0 +1,17 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXEnum",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        { "Type": "DXActionParameterTypeEnum", "ID": "2894eb00-e8ce-4dd3-9ec8-98e672df36a7", "TimeStamp": "2026-03-25T00:00:00Z", "Key": 1, "Value": "GUID" },
+        { "Type": "DXActionParameterTypeEnum", "ID": "5e003eb6-3f42-4b32-bb57-efc0c163b856", "TimeStamp": "2026-03-25T00:00:00Z", "Key": 2, "Value": "String" },
+        { "Type": "DXActionParameterTypeEnum", "ID": "f1a47173-6cd2-4d68-9e2a-eaca3eacc71b", "TimeStamp": "2026-03-25T00:00:00Z", "Key": 3, "Value": "Int" }
+      ]
+    }
+  }
+]

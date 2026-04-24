@@ -1,0 +1,43 @@
+[
+  {
+    "Meta": {
+      "Kind": "DXUnit",
+      "Type": "DXUnitDefinitionUnit",
+      "Op": "Patch",
+      "IsMulti": true,
+      "IsRequired": false
+    },
+    "Data": {
+      "Items": [
+        {
+          "ID": "7f8501fd-7f16-42f8-8a7d-297619126e13",
+          "TimeStamp": "2021-10-02T00:00:00",
+          "Name": "TDeviceUnit",
+          "Kind": 3,
+          "DXElements": {
+            "DXElementInUnitDefinitionElement": {
+              "Meta": {
+                "Kind": "DXElement",
+                "Type": "DXElementInUnitDefinitionElement",
+                "Op": "Patch",
+                "IsMulti": true,
+                "IsRequired": false
+              },
+              "Data": {
+                "Items": [
+                  {
+                    "ID": "5be8d83d-6e4f-43a8-bbb1-7221ffd901e5",
+                    "TimeStamp": "2021-10-02T00:00:00",
+                    "DXUnitID": "7f8501fd-7f16-42f8-8a7d-297619126e13",
+                    "RelationType": 1,
+                    "DXElementDefinitionUnit": "e9c63b28-a714-415d-899e-2c9d387f8b6d"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
