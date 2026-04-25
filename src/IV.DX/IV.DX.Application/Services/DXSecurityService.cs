@@ -37,7 +37,7 @@ namespace IV.DX.Application.Services
             var now = DateTime.UtcNow;
             var identity = new DXIdentityUnit
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 TimeStamp = now,
                 Name = string.IsNullOrWhiteSpace(request.Name) ? request.Subject : request.Name
             };
@@ -46,18 +46,18 @@ namespace IV.DX.Application.Services
 
             var identityLogin = new DXIdentityLoginUnit
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 TimeStamp = now,
                 Subject = request.Subject,
                 SecretHash = request.Password,
                 Provider = DXIdentityProviderTypeEnum.Local,
-                Identity = identity.ID
+                Identity = identity.Id
             };
 
             dxUnitGenericRepository.Insert(identityLogin);
             logger.LogInformation(
                 "Local identity {IdentityId} registered for subject {Subject}.",
-                identity.ID,
+                identity.Id,
                 request.Subject);
 
             return Task.FromResult(CreateAuthResult(
@@ -85,7 +85,7 @@ namespace IV.DX.Application.Services
             logger.LogInformation(
                 "Local login succeeded for subject {Subject} and identity login {IdentityLoginId}.",
                 request.Subject,
-                identityLogin.ID);
+                identityLogin.Id);
 
             return Task.FromResult(CreateAuthResult(
                 identityLogin,
@@ -136,7 +136,7 @@ namespace IV.DX.Application.Services
             }
 
             var next = CreateSession(
-                identityLogin.ID,
+                identityLogin.Id,
                 Coalesce(request.UserAgent, session.UserAgent),
                 Coalesce(request.IpAddress, session.IpAddress),
                 Coalesce(request.DeviceId, session.DeviceId),
@@ -147,7 +147,7 @@ namespace IV.DX.Application.Services
 
             session.LastUsedAt = now;
             session.RevokedAt = now;
-            session.ReplacedBySession = next.ID;
+            session.ReplacedBySession = next.Id;
             dxUnitGenericRepository.Update(session);
             logger.LogInformation(
                 "Refresh succeeded for session {SessionId}. Replacement session {ReplacementSessionId} created.",
@@ -186,18 +186,18 @@ namespace IV.DX.Application.Services
             ct.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(request);
 
-            if (request.IdentityLoginID == Guid.Empty)
+            if (request.IdentityLoginId == Guid.Empty)
             {
-                throw new ArgumentException("IdentityLoginID is required.", nameof(request.IdentityLoginID));
+                throw new ArgumentException("IdentityLoginId is required.", nameof(request.IdentityLoginId));
             }
 
-            var filter = $"IdentityLogin = '{request.IdentityLoginID}' AND RevokedAt IS NULL";
+            var filter = $"IdentityLogin = '{request.IdentityLoginId}' AND RevokedAt IS NULL";
             var sessions = dxUnitGenericRepository.GetDXUnits<DXAuthSessionUnit>(filter).ToList();
             if (sessions.Count == 0)
             {
                 logger.LogDebug(
                     "LogoutAll found no active sessions for identity login {IdentityLoginId}.",
-                    request.IdentityLoginID);
+                    request.IdentityLoginId);
                 return Task.CompletedTask;
             }
 
@@ -211,7 +211,7 @@ namespace IV.DX.Application.Services
             logger.LogInformation(
                 "Revoked {SessionCount} active session(s) for identity login {IdentityLoginId}.",
                 sessions.Count,
-                request.IdentityLoginID);
+                request.IdentityLoginId);
 
             return Task.CompletedTask;
         }
@@ -237,7 +237,7 @@ namespace IV.DX.Application.Services
             string? deviceId)
         {
             var now = DateTime.UtcNow;
-            var session = CreateSession(identityLogin.ID, userAgent, ipAddress, deviceId, now, out var refreshToken);
+            var session = CreateSession(identityLogin.Id, userAgent, ipAddress, deviceId, now, out var refreshToken);
 
             dxUnitGenericRepository.Insert(session);
 
@@ -259,7 +259,7 @@ namespace IV.DX.Application.Services
 
             return new DXAuthSessionUnit
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 TimeStamp = now,
                 SessionId = Guid.NewGuid(),
                 RefreshTokenHash = refreshToken,
@@ -289,8 +289,8 @@ namespace IV.DX.Application.Services
                 RefreshToken = refreshToken,
                 RefreshTokenExpiresAt = session.ExpiresAt,
                 SessionId = session.SessionId,
-                IdentityID = identityLogin.Identity,
-                IdentityLoginID = identityLogin.ID
+                IdentityId = identityLogin.Identity,
+                IdentityLoginId = identityLogin.Id
             };
         }
 
@@ -327,7 +327,7 @@ namespace IV.DX.Application.Services
             var claims = new List<Claim>
             {
                 new(DXSecurityClaimNames.Subject, identityLogin.Identity.ToString()),
-                new(DXSecurityClaimNames.IdentityLoginId, identityLogin.ID.ToString()),
+                new(DXSecurityClaimNames.IdentityLoginId, identityLogin.Id.ToString()),
                 new(DXSecurityClaimNames.SessionId, session.SessionId.ToString())
             };
 

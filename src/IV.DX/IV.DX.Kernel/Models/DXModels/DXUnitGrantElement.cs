@@ -18,7 +18,7 @@ namespace IV.DX.Kernel.Models
         [DXColumn("Effect")]
         public DXGrantEffectEnum Effect { get; set; }
 
-        [DXColumn("DXUnit", "E2U(DXUnit).ID", DXLoadingType.Base)]
-        public Guid TargetDXUnitID { get; set; }
+        [DXColumn("DXUnit", "E2U(DXUnit).Id", DXLoadingType.Base)]
+        public Guid TargetDXUnitId { get; set; }
     }
 }

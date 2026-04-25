@@ -3,7 +3,7 @@
     public class DXTitleExpression
     {
         public string Type { get; set; } = null!;
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public string Expression { get; set; } = null!;
     }
 }

@@ -15,7 +15,7 @@ namespace IV.DX.Application.IntTests.Services
     [Collection("DX:one-time")]
     public class DXUnitDataReaderTests : IntTestController
     {
-        // TDeviceUnit definition ID (from 01_01_0010_Test_TDeviceUnit.dx)
+        // TDeviceUnit definition Id (from 01_01_0010_Test_TDeviceUnit.dx)
         private static readonly Guid TDeviceUnitDefinitionId = new Guid("7f8501fd-7f16-42f8-8a7d-297619126e13");
 
         // Seeded TDeviceUnit instance IDs (from 01_01_0023_Test_TDeviceUnit.dx)
@@ -42,7 +42,7 @@ namespace IV.DX.Application.IntTests.Services
             var record = block?.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
-            Assert.Equal(TDeviceUnit1Id, record!.ID);
+            Assert.Equal(TDeviceUnit1Id, record!.Id);
         }
 
         [Fact]
@@ -81,8 +81,8 @@ namespace IV.DX.Application.IntTests.Services
             var records = items?.ToObject<DXDataBlock<DXUnitRecord>>()?.Data?.Items ?? [];
 
             Assert.Equal(2, records.Count);
-            Assert.Contains(records, r => r.ID == TDeviceUnit1Id);
-            Assert.Contains(records, r => r.ID == TDeviceUnit2Id);
+            Assert.Contains(records, r => r.Id == TDeviceUnit1Id);
+            Assert.Contains(records, r => r.Id == TDeviceUnit2Id);
         }
 
         // -------------------------------------------------------------------
@@ -92,17 +92,17 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task GetItemsAsync_UsingTypeNameAndFilter_ReturnsMatchingItems()
         {
-            var items = await _reader.GetItemsAsync("TDeviceUnit", $"ID = '{TDeviceUnit1Id}'");
+            var items = await _reader.GetItemsAsync("TDeviceUnit", $"Id = '{TDeviceUnit1Id}'");
 
             var record = items?.ToObject<DXDataBlock<DXUnitRecord>>()?.Data?.Items?.SingleOrDefault();
             Assert.NotNull(record);
-            Assert.Equal(TDeviceUnit1Id, record!.ID);
+            Assert.Equal(TDeviceUnit1Id, record!.Id);
         }
 
         [Fact]
         public async Task GetItemsAsync_UsingTypeNameAndNonMatchingFilter_ReturnsEmpty()
         {
-            var items = await _reader.GetItemsAsync("TDeviceUnit", $"ID = '{Guid.NewGuid()}'");
+            var items = await _reader.GetItemsAsync("TDeviceUnit", $"Id = '{Guid.NewGuid()}'");
 
             Assert.NotNull(items);
             var block = items.ToObject<DXDataBlock<DXUnitRecord>>();
@@ -122,7 +122,7 @@ namespace IV.DX.Application.IntTests.Services
             var record = block?.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
-            Assert.Equal(TDeviceUnit1Id, record!.ID);
+            Assert.Equal(TDeviceUnit1Id, record!.Id);
         }
 
         [Fact]
@@ -175,8 +175,8 @@ namespace IV.DX.Application.IntTests.Services
             var records = items?.ToObject<DXDataBlock<DXUnitRecord>>()?.Data?.Items ?? [];
 
             Assert.Equal(2, records.Count);
-            Assert.Contains(records, r => r.ID == TDeviceUnit1Id);
-            Assert.Contains(records, r => r.ID == TDeviceUnit2Id);
+            Assert.Contains(records, r => r.Id == TDeviceUnit1Id);
+            Assert.Contains(records, r => r.Id == TDeviceUnit2Id);
         }
 
         // -------------------------------------------------------------------
@@ -186,17 +186,17 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task GetItemsAsync_UsingDefinitionIdAndFilter_ReturnsMatchingItems()
         {
-            var items = await _reader.GetItemsAsync(TDeviceUnitDefinitionId, $"ID = '{TDeviceUnit1Id}'");
+            var items = await _reader.GetItemsAsync(TDeviceUnitDefinitionId, $"Id = '{TDeviceUnit1Id}'");
 
             var record = items?.ToObject<DXDataBlock<DXUnitRecord>>()?.Data?.Items?.SingleOrDefault();
             Assert.NotNull(record);
-            Assert.Equal(TDeviceUnit1Id, record!.ID);
+            Assert.Equal(TDeviceUnit1Id, record!.Id);
         }
 
         [Fact]
         public async Task GetItemsAsync_UsingDefinitionIdAndNonMatchingFilter_ReturnsEmpty()
         {
-            var items = await _reader.GetItemsAsync(TDeviceUnitDefinitionId, $"ID = '{Guid.NewGuid()}'");
+            var items = await _reader.GetItemsAsync(TDeviceUnitDefinitionId, $"Id = '{Guid.NewGuid()}'");
 
             Assert.NotNull(items);
             var block = items.ToObject<DXDataBlock<DXUnitRecord>>();

@@ -42,8 +42,8 @@ namespace IV.DX.Application.Handlers
             if (dataDXElement == null)
                 throw new Exception("DXObjectDefinitionUnit is NULL;");
 
-            if (dataDXElement.ID == default(Guid))
-                throw new Exception("DXObjectDefinitionUnit.ID has Default value;");
+            if (dataDXElement.Id == default(Guid))
+                throw new Exception("DXObjectDefinitionUnit.Id has Default value;");
 
             if (string.IsNullOrEmpty(dataDXElement.Name))
                 throw new Exception("DXObjectDefinitionUnit.Name is NULL or Empty;");
@@ -57,10 +57,10 @@ namespace IV.DX.Application.Handlers
             {
                 if (objectInfoIncome is DXElementDefinitionUnit)
                 {
-                    this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.DXUnitID);
+                    this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.DXUnitId);
                 }
 
-                this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.ID);
+                this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.Id);
                 this.SetColumn(objectInfoIncome, objectInfoFromDB, ImportantColumn.TimeStamp);
 
                 this.OrderColumn(objectInfoIncome);
@@ -74,7 +74,7 @@ namespace IV.DX.Application.Handlers
                 return null;
             }
 
-            return genericRepo.GetDXUnit<T>(objectInfoIncome.ID);
+            return genericRepo.GetDXUnit<T>(objectInfoIncome.Id);
         }
 
         protected async Task ProcessEnumRelationsAsync(DXObjectDefinitionUnit obj, DXObjectDefinitionUnit? dxUnitExisting, CancellationToken ct)
@@ -231,8 +231,8 @@ namespace IV.DX.Application.Handlers
             var currentActualEnumColumns = obj.DXObjectEnumElement.Announced;
             var actualEnumColumns = dxUnitExisting.DXObjectEnumElement.Announced;
 
-            var currentActualEnumColumnIDs = currentActualEnumColumns.Select(x => x.ID).ToList();
-            var actualEnumColumnIDs = actualEnumColumns.Select(x => x.ID).ToList();
+            var currentActualEnumColumnIDs = currentActualEnumColumns.Select(x => x.Id).ToList();
+            var actualEnumColumnIDs = actualEnumColumns.Select(x => x.Id).ToList();
 
             var enumColumnIDsToAdd = currentActualEnumColumnIDs.Except(actualEnumColumnIDs);
             var enumColumnIDsToUpdate = currentActualEnumColumnIDs.Intersect(actualEnumColumnIDs);
@@ -240,11 +240,11 @@ namespace IV.DX.Application.Handlers
 
             foreach (var enumColumnIDToAdd in enumColumnIDsToAdd)
             {
-                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.ID == enumColumnIDToAdd);
+                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.Id == enumColumnIDToAdd);
 
                 var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType);
 
-                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.Id == enumColumnToAdd.EnumKey);
 
                 var relationObject = this.CreateDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
 
@@ -253,11 +253,11 @@ namespace IV.DX.Application.Handlers
 
             foreach (var enumColumnIDToUpdate in enumColumnIDsToUpdate)
             {
-                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.ID == enumColumnIDToUpdate);
+                var enumColumnToAdd = currentActualEnumColumns.Single(x => x.Id == enumColumnIDToUpdate);
 
                 var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType);
 
-                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.Id == enumColumnToAdd.EnumKey);
 
                 var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
 
@@ -266,11 +266,11 @@ namespace IV.DX.Application.Handlers
 
             foreach (var enumColumnIDToDelete in enumColumnIDsToDelete)
             {
-                var enumColumnToAdd = actualEnumColumns.Single(x => x.ID == enumColumnIDToDelete);
+                var enumColumnToAdd = actualEnumColumns.Single(x => x.Id == enumColumnIDToDelete);
 
                 var enumInfo = dataStructureRepo.GetDXEnumDefinition(enumColumnToAdd.EnumType);
 
-                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.ID == enumColumnToAdd.EnumKey);
+                var enumColumn = enumInfo!.DXColumnDefinitionElement.Announced.Single(x => x.Id == enumColumnToAdd.EnumKey);
 
                 var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, enumInfo, enumColumn, enumColumnToAdd);
 
@@ -290,9 +290,9 @@ namespace IV.DX.Application.Handlers
 
             foreach (var announcedEnumInfo in announcedEnumInfos!)
             {
-                var columnWithEnumValue = obj.DXObjectEnumElement.Announced.Single(x => x.EnumType == announcedEnumInfo.ID);
+                var columnWithEnumValue = obj.DXObjectEnumElement.Announced.Single(x => x.EnumType == announcedEnumInfo.Id);
 
-                var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.ID == columnWithEnumValue.EnumKey);
+                var enumColumn = announcedEnumInfo.DXColumnDefinitionElement.Announced.Single(x => x.Id == columnWithEnumValue.EnumKey);
 
                 var relationObject = this.CreateDXObjectEnumElementRelationObject(obj, announcedEnumInfo, enumColumn, columnWithEnumValue);
 
@@ -301,9 +301,9 @@ namespace IV.DX.Application.Handlers
 
             foreach (var deletedEnumInfo in deletedEnumInfos!)
             {
-                var columnWithEnumValue = obj.DXObjectEnumElement.Deleted.Single(x => x.EnumType == deletedEnumInfo.ID);
+                var columnWithEnumValue = obj.DXObjectEnumElement.Deleted.Single(x => x.EnumType == deletedEnumInfo.Id);
 
-                var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.ID == columnWithEnumValue.EnumKey);
+                var enumColumn = deletedEnumInfo.DXColumnDefinitionElement.Deleted.Single(x => x.Id == columnWithEnumValue.EnumKey);
 
                 var relationObject = this.GetExistingDXObjectEnumElementRelationObject(obj, deletedEnumInfo, enumColumn, columnWithEnumValue);
 
@@ -317,11 +317,11 @@ namespace IV.DX.Application.Handlers
             DXColumnDefinitionElement enumColumn,
             DXObjectEnumElement columnWithEnumValue)
         {
-            var objID = Guid.NewGuid();
+            var objId = Guid.NewGuid();
 
             var result = new DXRelationDefinitionUnit()
             {
-                ID = objID,
+                Id = objId,
                 ObjectNameLeft = obj.Name,
                 RelationNameLeft = obj.Name + columnWithEnumValue.Name,
                 ObjectNameRight = enumObj.Name,
@@ -363,8 +363,8 @@ namespace IV.DX.Application.Handlers
             {
                 var objectIdColumnDesc = new DXColumnDefinitionElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = objectInfoIncome.ID
+                    Id = Guid.NewGuid(),
+                    DXUnitId = objectInfoIncome.Id
                 };
 
                 this.SetImportantValues(objectIdColumnDesc, column);
@@ -391,7 +391,7 @@ namespace IV.DX.Application.Handlers
             }
             else if (objectIdColumnDescFromDataBase != null && objectIdColumnDescFromModel != null)
             {
-                objectIdColumnDescFromModel.ID = objectIdColumnDescFromDataBase.ID;
+                objectIdColumnDescFromModel.Id = objectIdColumnDescFromDataBase.Id;
 
                 this.SetImportantValues(objectIdColumnDescFromModel, column);
             }
@@ -403,10 +403,10 @@ namespace IV.DX.Application.Handlers
 
             switch (column)
             {
-                case ImportantColumn.ID:
+                case ImportantColumn.Id:
                     columnName = "id";
                     break;
-                case ImportantColumn.DXUnitID:
+                case ImportantColumn.DXUnitId:
                     columnName = "objectid";
                     break;
                 case ImportantColumn.TimeStamp:
@@ -419,8 +419,8 @@ namespace IV.DX.Application.Handlers
 
         private enum ImportantColumn
         {
-            ID,
-            DXUnitID,
+            Id,
+            DXUnitId,
             TimeStamp
         }
 
@@ -428,11 +428,11 @@ namespace IV.DX.Application.Handlers
         {
             switch (columnType)
             {
-                case ImportantColumn.ID:
+                case ImportantColumn.Id:
                     this.SetImportantValuesForIDColumn(columnInfo);
                     break;
-                case ImportantColumn.DXUnitID:
-                    this.SetImportantValuesForDXUnitIDColumn(columnInfo);
+                case ImportantColumn.DXUnitId:
+                    this.SetImportantValuesForDXUnitIdColumn(columnInfo);
                     break;
                 case ImportantColumn.TimeStamp:
                     this.SetImportantValuesForTimeStampColumn(columnInfo);
@@ -445,15 +445,15 @@ namespace IV.DX.Application.Handlers
             idColumn.AllowNull = false;
             idColumn.DefaultValue = string.Empty;
             idColumn.ColumnType = DXColumnTypeEnum.GUID;
-            idColumn.Name = Constants.ID;
+            idColumn.Name = Constants.Id;
         }
 
-        private void SetImportantValuesForDXUnitIDColumn(DXColumnDefinitionElement objectIDColumn)
+        private void SetImportantValuesForDXUnitIdColumn(DXColumnDefinitionElement objectIDColumn)
         {
             objectIDColumn.AllowNull = false;
             objectIDColumn.DefaultValue = string.Empty;
             objectIDColumn.ColumnType = DXColumnTypeEnum.GUID;
-            objectIDColumn.Name = Constants.DXUnitID;
+            objectIDColumn.Name = Constants.DXUnitId;
         }
 
         private void SetImportantValuesForTimeStampColumn(DXColumnDefinitionElement timeStamplColumnDesc)

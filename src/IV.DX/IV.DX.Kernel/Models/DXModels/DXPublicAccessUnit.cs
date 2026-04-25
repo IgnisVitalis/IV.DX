@@ -9,7 +9,7 @@ namespace IV.DX.Kernel.Models
         [DXColumn("DXUnitDefinition", "DXUnitDefinition", DXLoadingType.Base)]
         public Guid DXUnitDefinition { get; set; }
 
-        [DXColumn("PublicDXUnitID")]
-        public Guid PublicDXUnitID { get; set; }
+        [DXColumn("PublicDXUnitId")]
+        public Guid PublicDXUnitId { get; set; }
     }
 }

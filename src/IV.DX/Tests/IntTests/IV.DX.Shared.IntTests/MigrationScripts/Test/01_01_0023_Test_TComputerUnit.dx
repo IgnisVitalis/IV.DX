@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "ID": "4da76122-8615-4a98-a873-20e1f57aa517",
+          "Id": "4da76122-8615-4a98-a873-20e1f57aa517",
           "TimeStamp": "2021-10-02T00:00:00",
           "User": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
           "DXElements": {
@@ -25,9 +25,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "428cf962-b651-4113-8733-36757a0d613b",
+                    "Id": "428cf962-b651-4113-8733-36757a0d613b",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "4da76122-8615-4a98-a873-20e1f57aa517",
+                    "DXUnitId": "4da76122-8615-4a98-a873-20e1f57aa517",
                     "Model": "Model1",
                     "UUID": "60a3305a-0b1a-4db0-bd9a-025f147a3ee5"
                   }

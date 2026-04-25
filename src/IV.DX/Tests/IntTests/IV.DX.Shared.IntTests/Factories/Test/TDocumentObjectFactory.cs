@@ -9,12 +9,12 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TDocumentUnit()
             {
-                ID = id,
-                //User = user.ID,
+                Id = id,
+                //User = user.Id,
                 TDocumentMainElement = new TDocumentMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     Name = name
                 }
             };

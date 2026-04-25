@@ -54,7 +54,7 @@ public sealed class DXData<TRecord>
 
 public abstract class DXObjectRecord
 {
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
     public DateTime TimeStamp { get; set; }
     public string? DXTitle { get; set; }   // computed display label — see section 11
 
@@ -71,7 +71,7 @@ public sealed class DXUnitRecord : DXObjectRecord
 
 public sealed class DXElementRecord : DXObjectRecord
 {
-    public Guid DXUnitID { get; set; }
+    public Guid DXUnitId { get; set; }
 
     // Other DXElement columns (including system-managed ones like "DXUnitType") are captured in Fields.
 }
@@ -85,7 +85,7 @@ public sealed class DXEnumRecord : DXObjectRecord
 
 public sealed class DXDeleteRef
 {
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
 
     // Optional extra fields (for disambiguation on delete).
     [JsonExtensionData]
@@ -148,7 +148,7 @@ In this project’s implementation:
 - implicit “delete-missing” is only performed when `Meta.Op = "Sync"` **and** `Meta.DXFilter` is provided (non-empty)
 - if `Meta.DXFilter` is null/empty, Sync behaves like Patch (upsert `Items` + explicit `Delete` only)
 
-`Meta.DXFilter` must be valid DXSQL (see `doc/DXSQL.md`). Expressions like `1=1` are not valid DXSQL; to match “everything” you’d use a valid DXSQL condition such as `ID IS NOT NULL` (be careful: that makes Sync operate over all rows of the type).
+`Meta.DXFilter` must be valid DXSQL (see `doc/DXSQL.md`). Expressions like `1=1` are not valid DXSQL; to match “everything” you’d use a valid DXSQL condition such as `Id IS NOT NULL` (be careful: that makes Sync operate over all rows of the type).
 
 ---
 
@@ -159,16 +159,16 @@ In this project’s implementation:
   - key = element type name
   - value = `DXDataBlock<DXElementRecord>`
 - Nested element blocks usually **omit** `DXUnitContext` (context is the parent unit).
-- Each nested `DXElementRecord` still includes `DXUnitID` (must match the parent unit ID).
+- Each nested `DXElementRecord` still includes `DXUnitId` (must match the parent unit Id).
 
 ### DerivedDXUnitType (system column on base unit tables)
 
 When a DXUnit type is declared as a **derived type** (its `DXUnitDefinitionUnit` record has a `BaseDXUnit` reference), the physical table of the **base unit** gains a system-managed `DerivedDXUnitType` column.
 
 - **Type**: `uuid` / `Guid`, NOT NULL.
-- **Value**: the `DXUnitDefinitionUnit.ID` of the most-derived concrete type for that row.
-  - A row that belongs to the base type itself (no further derivation) stores the **base type's own definition ID**.
-  - A row that belongs to a derived type stores the **derived type's definition ID**.
+- **Value**: the `DXUnitDefinitionUnit.Id` of the most-derived concrete type for that row.
+  - A row that belongs to the base type itself (no further derivation) stores the **base type's own definition Id**.
+  - A row that belongs to a derived type stores the **derived type's definition Id**.
 - **Purpose**: allows polymorphic discrimination directly from the base table — you can tell whether a row is a pure base-type record or belongs to a more specific derived type without joining additional tables.
 - **Relation**: the engine creates a `ManyToOne` relation from the base unit table to `DXUnitDefinitionUnit` under the relation name `DerivedDXUnitType`. The inverted (`OneToMany`) side lives on `DXUnitDefinitionUnit`.
 - **Reads**: the field appears in `DXUnitRecord.Fields["DerivedDXUnitType"]` when reading base-unit records through `IDXUnitDataReader` or `IDXRawReader`.
@@ -178,17 +178,17 @@ When a DXUnit type is declared as a **derived type** (its `DXUnitDefinitionUnit`
 
 ## 7) DXElementRecord specifics
 
-- `DXUnitID` is required.
+- `DXUnitId` is required.
 - If the element is **standalone** (top-level block with `Kind = DXElement`), you must provide `Meta.DXUnitContext`.
-- `Delete` references may include extra fields (e.g., `DXUnitID`) in `DXDeleteRef.Fields`.
+- `Delete` references may include extra fields (e.g., `DXUnitId`) in `DXDeleteRef.Fields`.
 
 ### Common DXElements (`DXElementDefinitionUnit.IsCommon`)
 
-Some DXElement types can be configured as **common** (by setting `IsCommon = true` on their `DXElementDefinitionUnit` record). This changes how containment is represented in storage to avoid creating a growing number of nullable `"<DXUnitTypeName>ID"` columns when the same DXElement type can belong to many different DXUnit types.
+Some DXElement types can be configured as **common** (by setting `IsCommon = true` on their `DXElementDefinitionUnit` record). This changes how containment is represented in storage to avoid creating a growing number of nullable `"<DXUnitTypeName>Id"` columns when the same DXElement type can belong to many different DXUnit types.
 
 - When an element type is **common**, element rows use:
-  - `DXUnitID` (the owning unit instance ID)
-  - `DXUnitType` (the owning unit *definition* ID, i.e., `DXUnitDefinitionUnit.ID`)
+  - `DXUnitId` (the owning unit instance Id)
+  - `DXUnitType` (the owning unit *definition* Id, i.e., `DXUnitDefinitionUnit.Id`)
 - `DXUnitType` is treated as a system field and may appear inside `DXElementRecord.Fields` (and/or `DXDeleteRef.Fields`).
 - Writers typically do **not** need to provide `DXUnitType` explicitly when nesting elements inside a DXUnit; the engine can derive it from the parent unit type.
 - For standalone DXElement blocks, `Meta.DXUnitContext` remains required and provides the unit-type context used to infer the correct `DXUnitType` for common elements.
@@ -215,15 +215,15 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
 - DXUnit records:
   - `DXElements` keys are element type names.
   - Nested blocks must have `Meta.Kind = DXElement`.
-  - Each nested element record has `DXUnitID` equal to the parent unit ID.
+  - Each nested element record has `DXUnitId` equal to the parent unit Id.
 - DXElement records:
-  - `DXUnitID` is required.
+  - `DXUnitId` is required.
   - If present, `DXUnitType` (in `Fields`) is a GUID identifying the owning unit definition (used for common elements).
 - DXEnum records:
   - `Key` and `Value` are required.
   - `Type` resolves from `Meta.Type` or record `Type` when Meta is missing.
 - Delete refs:
-  - `ID` is required.
+  - `Id` is required.
   - Extra fields are allowed in `DXDeleteRef.Fields` for disambiguation.
 
 ---
@@ -244,7 +244,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "ID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+        "Id": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXObjectDefinitionUnit",
         "DXTitleExpression": "Name",
@@ -261,9 +261,9 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
             "Data": {
               "Items": [
                 {
-                  "ID": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
+                  "Id": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
                   "TimeStamp": "2021-10-02T00:00:00",
-                  "DXUnitID": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+                  "DXUnitId": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
                   "ColumnType": 3,
                   "Name": "Name",
                   "AllowNull": false,
@@ -294,14 +294,14 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
     "Items": [
       {
         "Type": "DXElementInUnitTypeEnum",
-        "ID": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
+        "Id": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
         "TimeStamp": "2021-10-02T00:00:00",
         "Key": 1,
         "Value": "SingleMandatory"
       },
       {
         "Type": "DXElementInUnitTypeEnum",
-        "ID": "08e793f0-07c9-4fc5-818f-515d74731b65",
+        "Id": "08e793f0-07c9-4fc5-818f-515d74731b65",
         "TimeStamp": "2021-10-02T00:00:00",
         "Key": 2,
         "Value": "SingleOptional"
@@ -326,9 +326,9 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "ID": "72f6f3f3-e55f-4a24-915d-893b69932f67",
+        "Id": "72f6f3f3-e55f-4a24-915d-893b69932f67",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXUnitID": "65bd9684-6709-409a-a46b-7c605dcb715b",
+        "DXUnitId": "65bd9684-6709-409a-a46b-7c605dcb715b",
         "OwnRelationName": "RelatedDXUnits",
         "TargetRelationName": "TargetDXElement",
         "RelationType": 4,
@@ -353,7 +353,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "ID": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
+        "Id": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
         "TimeStamp": "2021-10-02T00:00:00",
         "BaseDXUnit": "DXObjectDefinitionUnit",
         "ChildDXUnit": "DXUnitDefinitionUnit"
@@ -381,7 +381,7 @@ Set `DXTitleExpression` on the `DXUnitDefinitionUnit` record for the type. The v
 
 ```json
 {
-  "ID": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
+  "Id": "cbd4a353-726c-4d81-8e2e-2397d7f052f3",
   "TimeStamp": "2021-10-02T00:00:00",
   "Name": "TUserUnit",
   "DXTitleExpression": "TUserMainElement.Name",
@@ -389,7 +389,7 @@ Set `DXTitleExpression` on the `DXUnitDefinitionUnit` record for the type. The v
 }
 ```
 
-If `DXTitleExpression` is empty or not set, the framework falls back to `"ID"` — the record's own ID becomes its title.
+If `DXTitleExpression` is empty or not set, the framework falls back to `"Id"` — the record's own Id becomes its title.
 
 ### When it is populated
 
@@ -397,15 +397,15 @@ If `DXTitleExpression` is empty or not set, the framework falls back to `"ID"` �
 - `IDXUnitCoreRepository.GetItemRecord(string typeName, Guid id)`
 - `IDXUnitGenericRepository.GetDXUnit<T>` / `GetDXUnits<T>` (all overloads)
 
-It is **not** populated on base reads (ID-only queries) or when fetching elements nested inside a unit.
+It is **not** populated on base reads (Id-only queries) or when fetching elements nested inside a unit.
 
 ### JSON representation
 
-`DXTitle` appears as a top-level field alongside `ID` and `TimeStamp` — it is **not** inside `Fields`:
+`DXTitle` appears as a top-level field alongside `Id` and `TimeStamp` — it is **not** inside `Fields`:
 
 ```json
 {
-  "ID": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
+  "Id": "8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3",
   "TimeStamp": "2021-10-02T00:00:00",
   "DXTitle": "Victor",
   "Name": "...",

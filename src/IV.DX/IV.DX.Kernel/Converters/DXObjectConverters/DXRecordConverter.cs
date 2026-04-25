@@ -50,7 +50,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         public static DXUnit ToDXUnit(DXUnitRecord record, Type unitType)
         {
             var unit = (DXUnit)Activator.CreateInstance(unitType)!;
-            unit.ID = record.ID;
+            unit.Id = record.Id;
             unit.TimeStamp = record.TimeStamp;
             unit.DXTitle = record.DXTitle;
 
@@ -64,9 +64,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             var element = new T
             {
-                ID = record.ID,
+                Id = record.Id,
                 TimeStamp = record.TimeStamp,
-                DXUnitID = record.DXUnitID
+                DXUnitId = record.DXUnitId
             };
 
             ApplyFields(element, record.Fields);
@@ -103,7 +103,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             return new DXEnumItem
             {
-                ID = record.ID,
+                Id = record.Id,
                 TimeStamp = record.TimeStamp,
                 Type = record.Type ?? fallbackType ?? string.Empty,
                 Key = ConvertTokenToObject(record.Key),
@@ -166,7 +166,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 var record = block?.Data?.Items?.FirstOrDefault();
                 if (record == null) continue;
 
-                var element = (DXElement)CreateElement(elementType, record, unit.ID);
+                var element = (DXElement)CreateElement(elementType, record, unit.Id);
                 prop.SetValue(unit, element);
             }
         }
@@ -181,7 +181,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 if (!TryGetElementBlock(elementMap, elementTypeName, prop.Name, out var block))
                     continue;
 
-                var container = BuildContainer(elementType, block!, unit.ID);
+                var container = BuildContainer(elementType, block!, unit.Id);
                 prop.SetValue(unit, container);
             }
         }
@@ -241,9 +241,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         private static DXElement CreateElement(Type elementType, DXElementRecord record, Guid unitId)
         {
             var element = (DXElement)Activator.CreateInstance(elementType)!;
-            element.ID = record.ID;
+            element.Id = record.Id;
             element.TimeStamp = record.TimeStamp;
-            element.DXUnitID = record.DXUnitID == Guid.Empty ? unitId : record.DXUnitID;
+            element.DXUnitId = record.DXUnitId == Guid.Empty ? unitId : record.DXUnitId;
 
             ApplyFields(element, record.Fields);
             return element;
@@ -252,9 +252,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         private static TElement CreateElementGeneric<TElement>(DXElementRecord record, Guid unitId) where TElement : DXElement
         {
             var element = (TElement)Activator.CreateInstance(typeof(TElement))!;
-            element.ID = record.ID;
+            element.Id = record.Id;
             element.TimeStamp = record.TimeStamp;
-            element.DXUnitID = record.DXUnitID == Guid.Empty ? unitId : record.DXUnitID;
+            element.DXUnitId = record.DXUnitId == Guid.Empty ? unitId : record.DXUnitId;
 
             ApplyFields(element, record.Fields);
             return element;
@@ -263,12 +263,12 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         private static TElement CreateElementFromDeleteGeneric<TElement>(DXDeleteRef deleteRef, Guid unitId) where TElement : DXElement
         {
             var element = (TElement)Activator.CreateInstance(typeof(TElement))!;
-            element.ID = deleteRef.ID;
+            element.Id = deleteRef.Id;
 
             ApplyFields(element, deleteRef.Fields);
 
-            if (element.DXUnitID == Guid.Empty)
-                element.DXUnitID = unitId;
+            if (element.DXUnitId == Guid.Empty)
+                element.DXUnitId = unitId;
 
             return element;
         }

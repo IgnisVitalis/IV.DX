@@ -7,7 +7,7 @@ namespace IV.DX.Kernel.Models
     {
         [DXColumn("DerivedDXUnitType")]
         public Guid DerivedDXUnitType { get; set; }
-        [DXColumn("DXObjectID")]
-        public Guid DXObjectID { get; set; }
+        [DXColumn("DXObjectId")]
+        public Guid DXObjectId { get; set; }
     }
 }

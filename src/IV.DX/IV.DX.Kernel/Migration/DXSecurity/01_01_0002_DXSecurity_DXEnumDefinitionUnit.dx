@@ -23,11 +23,11 @@
             "Data": {
               "Items": [
                 {
-                  "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "ID": "31a70676-4fd0-4be4-8a86-2fdd09eb8848",
+                  "DXUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Id": "31a70676-4fd0-4be4-8a86-2fdd09eb8848",
                   "TimeStamp": "2026-02-03T17:10:08.434785Z",
-                  "DXObjectDefinitionUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "Name": "ID",
+                  "DXObjectDefinitionUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Name": "Id",
                   "Length": null,
                   "Precision": null,
                   "Scale": null,
@@ -36,10 +36,10 @@
                   "ColumnType": 1
                 },
                 {
-                  "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "ID": "6eb22bd1-07cd-423c-a45f-b46b26e745d2",
+                  "DXUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Id": "6eb22bd1-07cd-423c-a45f-b46b26e745d2",
                   "TimeStamp": "2026-02-03T17:10:08.434945Z",
-                  "DXObjectDefinitionUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "DXObjectDefinitionUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "Name": "TimeStamp",
                   "Length": null,
                   "Precision": null,
@@ -49,10 +49,10 @@
                   "ColumnType": 2
                 },
                 {
-                  "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "ID": "0197265c-dce9-48fb-89eb-a370c572fe1a",
+                  "DXUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Id": "0197265c-dce9-48fb-89eb-a370c572fe1a",
                   "TimeStamp": "2026-02-03T17:10:08.434954Z",
-                  "DXObjectDefinitionUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "DXObjectDefinitionUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "Name": "Key",
                   "Length": null,
                   "Precision": null,
@@ -62,10 +62,10 @@
                   "ColumnType": 8
                 },
                 {
-                  "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "ID": "3baa71c7-6c50-4ec2-b212-f7c08c98fc72",
+                  "DXUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Id": "3baa71c7-6c50-4ec2-b212-f7c08c98fc72",
                   "TimeStamp": "2026-02-03T17:10:08.434975Z",
-                  "DXObjectDefinitionUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "DXObjectDefinitionUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "Name": "Value",
                   "Length": 50,
                   "Precision": null,
@@ -91,10 +91,10 @@
             "Data": {
               "Items": [
                 {
-                  "DXUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
-                  "ID": "0a39760b-2982-4505-8aba-bb07209f76d7",
+                  "DXUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "Id": "0a39760b-2982-4505-8aba-bb07209f76d7",
                   "TimeStamp": "2026-02-03T17:10:18.836122Z",
-                  "DXObjectDefinitionUnitID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+                  "DXObjectDefinitionUnitId": "3e3540c8-1d80-4236-ab87-efd00f30609c",
                   "Columns": "Key"
                 }
               ],
@@ -117,7 +117,7 @@
             }
           }
         },
-        "ID": "3e3540c8-1d80-4236-ab87-efd00f30609c",
+        "Id": "3e3540c8-1d80-4236-ab87-efd00f30609c",
         "TimeStamp": "2026-02-03T17:10:18.843379Z",
         "Name": "DXGrantEffectEnum",
         "DXTitleExpression": "Value",

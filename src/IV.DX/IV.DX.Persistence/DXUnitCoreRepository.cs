@@ -133,7 +133,7 @@ namespace IV.DX.Persistence
 
                 var table = dataSet.Tables[typeName]!;
 
-                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID])).ToList();
+                var ids = table.Rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.Id])).ToList();
 
                 return ids;
             });
@@ -161,7 +161,7 @@ namespace IV.DX.Persistence
             var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(type, dxUnitHierarchy);
 
             dxUnitDefinition.MainElement.DXTitleExpression =
-                string.IsNullOrEmpty(mainDXUnit.DXTitleExpression) ? Constants.ID : mainDXUnit.DXTitleExpression;
+                string.IsNullOrEmpty(mainDXUnit.DXTitleExpression) ? Constants.Id : mainDXUnit.DXTitleExpression;
 
             return dxUnitDefinition;
         }
@@ -272,12 +272,12 @@ namespace IV.DX.Persistence
 
         private DXUnitRecord ConvertToDXUnitRecord(DataSet dataSet, DataRow row, DXDataSetDefinition container)
         {
-            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var id = ConvertHelper.ParseGuid(row[Constants.Id]);
             var mainItem = BuildRowItemFromRow(row, container.MainElement);
 
             var record = new DXUnitRecord
             {
-                ID = id,
+                Id = id,
                 TimeStamp = mainItem.TimeStamp,
                 DXTitle = mainItem.Content.TryGetValue(Constants.DXTitle, out var titleValue) ? titleValue?.ToString() : null,
                 Fields = ConvertContentToFields(mainItem.Content),
@@ -288,7 +288,7 @@ namespace IV.DX.Persistence
             {
                 var dataTable = dataSet.Tables[singleItem.Type]!;
                 var dataRow = dataTable.Rows.Cast<DataRow>()
-                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id);
+                    .SingleOrDefault(y => ConvertHelper.ParseGuid(y[Constants.DXUnitId]) == id);
 
                 if (dataRow == null)
                     continue;
@@ -296,9 +296,9 @@ namespace IV.DX.Persistence
                 var dxItem = BuildRowItemFromRow(dataRow, singleItem);
                 var elementRecord = new DXElementRecord
                 {
-                    ID = dxItem.ID,
+                    Id = dxItem.Id,
                     TimeStamp = dxItem.TimeStamp,
-                    DXUnitID = dxItem.DXUnitID,
+                    DXUnitId = dxItem.DXUnitId,
                     Fields = ConvertContentToFields(dxItem.Content)
                 };
 
@@ -323,13 +323,13 @@ namespace IV.DX.Persistence
             {
                 var dataTable = dataSet.Tables[multiItem.Name]!;
                 var announced = dataTable.Rows.Cast<DataRow>()
-                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitID]) == id)
+                    .Where(y => ConvertHelper.ParseGuid(y[Constants.DXUnitId]) == id)
                     .Select(x => BuildRowItemFromRow(x, multiItem))
                     .Select(x => new DXElementRecord
                     {
-                        ID = x.ID,
+                        Id = x.Id,
                         TimeStamp = x.TimeStamp,
-                        DXUnitID = x.DXUnitID,
+                        DXUnitId = x.DXUnitId,
                         Fields = ConvertContentToFields(x.Content)
                     })
                     .ToList();
@@ -378,7 +378,7 @@ namespace IV.DX.Persistence
 
             this.PopulateTableToDataSet(conn, dataSet, container.MainElement.DXUnitType,
                 columns: container.MainElement.GetColumns(),
-                dxFilter: this.GetWhereExpressionForID(id), fillSchema: false);
+                dxFilter: this.GetWhereExpressionForId(id), fillSchema: false);
 
             foreach (var singleItem in container.SingleFragmentDefinitions)
             {
@@ -410,7 +410,7 @@ namespace IV.DX.Persistence
                     dataSet,
                     container.MainElement.DXUnitType,
                     columns: container.MainElement.GetColumns(),
-                    dxFilter: this.GetWhereExpressionForID(ids),
+                    dxFilter: this.GetWhereExpressionForId(ids),
                     fillSchema: false);
 
                 foreach (var singleItem in container.SingleFragmentDefinitions)
@@ -476,7 +476,7 @@ namespace IV.DX.Persistence
                 }
             }
 
-            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var id = ConvertHelper.ParseGuid(row[Constants.Id]);
             var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
             var dxUnitId = ResolveDxUnitId(row, dxUnitType, id);
 
@@ -534,7 +534,7 @@ namespace IV.DX.Persistence
                 if (mainDXUnitInfo == null)
                     throw new Exception($"Unit type '{typeName}' is not registered.");
 
-                var processingType = this.IsItemExisting(typeName, record.ID)
+                var processingType = this.IsItemExisting(typeName, record.Id)
                     ? ProcessingType.Update
                     : ProcessingType.Insert;
 
@@ -577,7 +577,7 @@ namespace IV.DX.Persistence
                     var relatedMO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
                     var unitTable = dxUnitInfo.Name;
-                    var objectId = record.ID;
+                    var objectId = record.Id;
 
                     // 1) OWN
                     var adapter = PopulateTableToDataSet(
@@ -585,10 +585,10 @@ namespace IV.DX.Persistence
                         dataSet,
                         unitTable,
                         dxUnitColumns,
-                        dxFilter: this.GetWhereExpressionForID(objectId));
+                        dxFilter: this.GetWhereExpressionForId(objectId));
 
                     UpsertOwnRowFromRecord(record, dataSet.Tables[unitTable]!, unitTable);
-                    SetDerivedDXUnitTypeIfPresent(dataSet.Tables[unitTable], record.ID, mainDXUnitInfo.ID);
+                    SetDerivedDXUnitTypeIfPresent(dataSet.Tables[unitTable], record.Id, mainDXUnitInfo.Id);
                     SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable]!, false);
 
                     // 2) SINGLE
@@ -611,7 +611,7 @@ namespace IV.DX.Persistence
                 return true;
             });
 
-            return record.ID;
+            return record.Id;
         }
 
         private void SaveTable(DbDataAdapter adapter, DbConnection conn, DataSet dataSet, DataTable table, bool isMultiTable, int bulkThreshold = 500)
@@ -631,7 +631,7 @@ namespace IV.DX.Persistence
 
         private void UpsertOwnRowFromRecord(DXUnitRecord record, DataTable table, string dxUnitType)
         {
-            var id = record.ID;
+            var id = record.Id;
 
             var row = table.Rows.Find(id);
             var item = BuildRowItemFromUnitRecord(record, dxUnitType);
@@ -676,12 +676,12 @@ namespace IV.DX.Persistence
 
             var adapter = PopulateTableToDataSet(conn, dataSet, dxElementName,
                 columns,
-                dxFilter: this.GetWhereExpressionForID(elementRecord.ID));
+                dxFilter: this.GetWhereExpressionForId(elementRecord.Id));
 
             var table = dataSet.Tables[dxElementName]!;
-            var id = elementRecord.ID;
+            var id = elementRecord.Id;
             var row = id != Guid.Empty ? table.Rows.Find(id) : null;
-            var item = BuildRowItemFromElementRecord(elementRecord, dxElementName, record.ID);
+            var item = BuildRowItemFromElementRecord(elementRecord, dxElementName, record.Id);
 
             if (row == null)
             {
@@ -711,7 +711,7 @@ namespace IV.DX.Persistence
             if (!TryGetElementBlock(record.DXElements, dxElementName, out var block))
                 return;
 
-            var parentId = record.ID;
+            var parentId = record.Id;
 
             var dxElementDefinition = dxModelDefinition.MultiFragmentDefinitions
                 .SingleOrDefault(x => x.Type == dxElementName);
@@ -731,14 +731,14 @@ namespace IV.DX.Persistence
 
             if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
             {
-                if (table.Columns.Contains("ID"))
-                    table.PrimaryKey = new[] { table.Columns["ID"]! };
+                if (table.Columns.Contains("Id"))
+                    table.PrimaryKey = new[] { table.Columns["Id"]! };
             }
 
             var upsertItems = block?.Data?.Items ?? new List<DXElementRecord>();
             foreach (var itemRecord in upsertItems)
             {
-                var id = itemRecord.ID;
+                var id = itemRecord.Id;
                 DataRow? row = id != Guid.Empty ? table.Rows.Find(id) : null;
                 var item = BuildRowItemFromElementRecord(itemRecord, dxElementName, parentId);
 
@@ -757,12 +757,12 @@ namespace IV.DX.Persistence
             var mode = MapMode(block?.Meta?.Op);
             if (mode == MultiElementsMode.Full)
             {
-                var announcedIds = new HashSet<Guid>(upsertItems.Select(a => a.ID));
+                var announcedIds = new HashSet<Guid>(upsertItems.Select(a => a.Id));
 
                 var toDelete = new List<DataRow>();
                 foreach (DataRow r in table.Rows)
                 {
-                    var rid = r.Table.Columns.Contains("ID") ? ConvertHelper.ParseGuid(r["ID"]) : (Guid?)null;
+                    var rid = r.Table.Columns.Contains("Id") ? ConvertHelper.ParseGuid(r["Id"]) : (Guid?)null;
                     if (!rid.HasValue || !announcedIds.Contains(rid.Value))
                         toDelete.Add(r);
                 }
@@ -770,7 +770,7 @@ namespace IV.DX.Persistence
             }
             else if (mode == MultiElementsMode.Target)
             {
-                var deleteIds = block?.Data?.Delete?.Select(x => x.ID).ToHashSet() ?? new HashSet<Guid>();
+                var deleteIds = block?.Data?.Delete?.Select(x => x.Id).ToHashSet() ?? new HashSet<Guid>();
                 ProcessDeletedItems(deleteIds, table);
             }
 
@@ -815,14 +815,14 @@ namespace IV.DX.Persistence
         private static RowItem BuildRowItemFromUnitRecord(DXUnitRecord record, string typeName)
         {
             var content = ConvertFieldsToObjectDict(record.Fields);
-            return new RowItem(typeName, record.ID, record.ID, record.TimeStamp, content);
+            return new RowItem(typeName, record.Id, record.Id, record.TimeStamp, content);
         }
 
         private static RowItem BuildRowItemFromElementRecord(DXElementRecord record, string elementTypeName, Guid parentId)
         {
-            var dxUnitId = record.DXUnitID == Guid.Empty ? parentId : record.DXUnitID;
+            var dxUnitId = record.DXUnitId == Guid.Empty ? parentId : record.DXUnitId;
             var content = ConvertFieldsToObjectDict(record.Fields);
-            return new RowItem(elementTypeName, record.ID, dxUnitId, record.TimeStamp, content);
+            return new RowItem(elementTypeName, record.Id, dxUnitId, record.TimeStamp, content);
         }
 
         private static Dictionary<string, object> ConvertFieldsToObjectDict(IDictionary<string, JToken>? fields)
@@ -846,15 +846,15 @@ namespace IV.DX.Persistence
             if (columns == null)
                 return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    { Constants.DXUnitID, Constants.DXUnitID }
+                    { Constants.DXUnitId, Constants.DXUnitId }
                 };
 
-            if (columns.Keys.Any(k => string.Equals(k, Constants.DXUnitID, StringComparison.OrdinalIgnoreCase)))
+            if (columns.Keys.Any(k => string.Equals(k, Constants.DXUnitId, StringComparison.OrdinalIgnoreCase)))
                 return columns;
 
             var copy = new Dictionary<string, string>(columns, StringComparer.OrdinalIgnoreCase)
             {
-                [Constants.DXUnitID] = Constants.DXUnitID
+                [Constants.DXUnitId] = Constants.DXUnitId
             };
 
             return copy;
@@ -866,7 +866,7 @@ namespace IV.DX.Persistence
                 return;
 
             var rowsToDelete = dataTable.Rows.Cast<DataRow>()
-                .Where(x => idsToDelete.Contains(Guid.Parse(x[Constants.ID].ToString()!)))
+                .Where(x => idsToDelete.Contains(Guid.Parse(x[Constants.Id].ToString()!)))
                 .ToList();
 
             foreach (var rowToDelete in rowsToDelete)
@@ -879,7 +879,7 @@ namespace IV.DX.Persistence
         {
             var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, dxUnitName,
                 SQLQueryBuilder.BaseColumns,
-                dxFilter: this.GetWhereExpressionForID(id));
+                dxFilter: this.GetWhereExpressionForId(id));
 
             var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
@@ -895,14 +895,14 @@ namespace IV.DX.Persistence
             dxModelAdapter.Update(dataSet, dxUnitName);
         }
 
-        private void DeleteDXElementsFromDataSet(string dxUnitTypeName, string dxElementName, Guid objectID, DataSet dataSet, DbConnection conn)
+        private void DeleteDXElementsFromDataSet(string dxUnitTypeName, string dxElementName, Guid objectId, DataSet dataSet, DbConnection conn)
         {
             var dxModelAdapter = this.PopulateTableToDataSet(
                 conn,
                 dataSet,
                 dxElementName,
                 SQLQueryBuilder.BaseColumns,
-                dxFilter: this.GetWhereExpressionForDXElementRows(dxUnitTypeName, dxElementName, objectID));
+                dxFilter: this.GetWhereExpressionForDXElementRows(dxUnitTypeName, dxElementName, objectId));
 
             var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
@@ -921,18 +921,18 @@ namespace IV.DX.Persistence
 
         private void MapRowItemToRow(RowItem item, DataRow row, string dxModelType)
         {
-            row[Constants.ID] = item.ID;
+            row[Constants.Id] = item.Id;
 
-            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitID);
+            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitId);
             if (dxUnitIdColumn != null)
             {
-                row[dxUnitIdColumn] = item.DXUnitID;
+                row[dxUnitIdColumn] = item.DXUnitId;
             }
 
-            var modelUnitIdColumn = FindColumn(row.Table, $"{dxModelType}ID");
+            var modelUnitIdColumn = FindColumn(row.Table, $"{dxModelType}Id");
             if (modelUnitIdColumn != null)
             {
-                row[modelUnitIdColumn] = item.DXUnitID;
+                row[modelUnitIdColumn] = item.DXUnitId;
             }
 
             var dxUnitTypeColumn = FindColumn(row.Table, Constants.DXUnitType);
@@ -941,7 +941,7 @@ namespace IV.DX.Persistence
                 var unitDef = _dxStructureCache.GetDXUnit(dxModelType);
                 if (unitDef != null)
                 {
-                    row[dxUnitTypeColumn] = unitDef.ID;
+                    row[dxUnitTypeColumn] = unitDef.Id;
                 }
             }
 
@@ -956,11 +956,11 @@ namespace IV.DX.Persistence
 
             foreach (var column in row.Table.Columns.OfType<DataColumn>())
             {
-                if (column.ColumnName == Constants.ID
-                    || string.Equals(column.ColumnName, Constants.DXUnitID, StringComparison.OrdinalIgnoreCase)
+                if (column.ColumnName == Constants.Id
+                    || string.Equals(column.ColumnName, Constants.DXUnitId, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(column.ColumnName, Constants.DXUnitType, StringComparison.OrdinalIgnoreCase)
                     || column.ColumnName == Constants.TimeStamp
-                    || column.ColumnName == $"{dxModelType}ID")
+                    || column.ColumnName == $"{dxModelType}Id")
                 {
                     continue;
                 }
@@ -1164,11 +1164,11 @@ namespace IV.DX.Persistence
 
         private static Guid ResolveDxUnitId(DataRow row, string dxUnitType, Guid fallbackId)
         {
-            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitID);
+            var dxUnitIdColumn = FindColumn(row.Table, Constants.DXUnitId);
             if (dxUnitIdColumn != null && row[dxUnitIdColumn] != DBNull.Value)
                 return ConvertHelper.ParseGuid(row[dxUnitIdColumn]);
 
-            var modelUnitIdColumn = FindColumn(row.Table, $"{dxUnitType}ID");
+            var modelUnitIdColumn = FindColumn(row.Table, $"{dxUnitType}Id");
             if (modelUnitIdColumn != null && row[modelUnitIdColumn] != DBNull.Value)
                 return ConvertHelper.ParseGuid(row[modelUnitIdColumn]);
 
@@ -1194,15 +1194,15 @@ namespace IV.DX.Persistence
             public RowItem(string type, Guid id, Guid dxUnitId, DateTime timeStamp, IDictionary<string, object> content)
             {
                 Type = type;
-                ID = id;
-                DXUnitID = dxUnitId;
+                Id = id;
+                DXUnitId = dxUnitId;
                 TimeStamp = timeStamp;
                 Content = content ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             }
 
             public string Type { get; }
-            public Guid ID { get; }
-            public Guid DXUnitID { get; }
+            public Guid Id { get; }
+            public Guid DXUnitId { get; }
             public DateTime TimeStamp { get; }
             public IDictionary<string, object> Content { get; }
         }
@@ -1444,7 +1444,7 @@ namespace IV.DX.Persistence
                 {
                     RelationType = (DXRelationTypeEnum)ConvertHelper.ParseInt(row["RelationType"]),
                     RelationTable = ConvertHelper.ParseString(row["RelationTable"]),
-                    ID = ConvertHelper.ParseGuid(row[Constants.ID]),
+                    Id = ConvertHelper.ParseGuid(row[Constants.Id]),
                     ObjectNameLeft = ConvertHelper.ParseString(row["ObjectNameLeft"]),
                     ObjectNameRight = ConvertHelper.ParseString(row["ObjectNameRight"]),
                     RelationNameLeft = ConvertHelper.ParseString(row["RelationNameLeft"]),
@@ -1519,7 +1519,7 @@ namespace IV.DX.Persistence
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
                     SQLQueryBuilder.AllColumns,
-                    dxFilter: this.GetWhereExpressionForID(obj1Id));
+                    dxFilter: this.GetWhereExpressionForId(obj1Id));
 
                 var table = dataSet.Tables[tableName]!;
                 var rows = table.Rows;
@@ -1555,7 +1555,7 @@ namespace IV.DX.Persistence
 
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, tableName,
                     SQLQueryBuilder.AllColumns,
-                    dxFilter: this.GetWhereExpressionForID(obj2Id));
+                    dxFilter: this.GetWhereExpressionForId(obj2Id));
 
                 var table = dataSet.Tables[tableName]!;
                 var rows = table.Rows;
@@ -1583,9 +1583,9 @@ namespace IV.DX.Persistence
 
         private bool AddRelationZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
-            bool isRightTableContainsRelationID = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
+            bool isRightTableContainsRelationId = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
 
-            if (isRightTableContainsRelationID)
+            if (isRightTableContainsRelationId)
             {
                 return this.AddRelationOneToMany(relationInfo, obj1Id, obj2Id);
             }
@@ -1652,7 +1652,7 @@ namespace IV.DX.Persistence
                      this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
-                            { "ID", obj1Id },
+                            { "Id", obj1Id },
                             { relationInfo.RelationNameRight, obj2Id }
                         })
                      );
@@ -1683,9 +1683,9 @@ namespace IV.DX.Persistence
 
         private bool RemoveRelationZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id, Guid obj2Id)
         {
-            bool isRightTableContainsRelationID = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
+            bool isRightTableContainsRelationId = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
 
-            if (isRightTableContainsRelationID)
+            if (isRightTableContainsRelationId)
             {
                 return this.RemoveRelationZeroOneToMany(relationInfo, obj1Id, obj2Id);
             }
@@ -1708,7 +1708,7 @@ namespace IV.DX.Persistence
                     dxFilter: this.GetWhereExpressionWithAnd(
                         new Dictionary<string, object>()
                         {
-                            { "ID", obj2Id },
+                            { "Id", obj2Id },
                             { relationInfo.RelationNameLeft, obj1Id}
                         })
                     );
@@ -1774,7 +1774,7 @@ namespace IV.DX.Persistence
 
                 this.PopulateTableToDataSet(conn, dataSet, tableName,
                     SQLQueryBuilder.AllColumns,
-                    dxFilter: this.GetWhereExpressionForID(obj1Id), fillSchema: false);
+                    dxFilter: this.GetWhereExpressionForId(obj1Id), fillSchema: false);
 
                 var table = dataSet.Tables[tableName]!;
                 var rows = table.Rows;
@@ -1808,15 +1808,15 @@ namespace IV.DX.Persistence
 
                 var rows = table.Rows;
 
-                return rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.ID]));
+                return rows.Cast<DataRow>().Select(x => ConvertHelper.ParseGuid(x[Constants.Id]));
             });
         }
 
         private IEnumerable<Guid> GetRelationsZeroOneToZeroOne(DXRelationDefinitionUnit relationInfo, Guid obj1Id)
         {
-            bool isRightTableContainsRelationID = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
+            bool isRightTableContainsRelationId = relationInfo.RelationTable!.Equals(relationInfo.ObjectNameRight);
 
-            return isRightTableContainsRelationID ? this.GetRelationsOneToMany(relationInfo, obj1Id) : this.GetRelationsManyToOne(relationInfo, obj1Id);
+            return isRightTableContainsRelationId ? this.GetRelationsOneToMany(relationInfo, obj1Id) : this.GetRelationsManyToOne(relationInfo, obj1Id);
         }
 
         private DbDataAdapter PopulateTableToDataSet(
@@ -1948,13 +1948,13 @@ namespace IV.DX.Persistence
                 return false;
             }
 
-            dxUnitDefinitionId = unitDef.ID;
+            dxUnitDefinitionId = unitDef.Id;
             return true;
         }
 
         private string GetWhereExpressionForDXElementRows(string dxUnitTypeName, string dxElementTypeName, Guid parentId)
         {
-            var where = this.GetWhereExpressionForDXUnitID(parentId);
+            var where = this.GetWhereExpressionForDXUnitId(parentId);
 
             if (TryGetCommonDXElementUnitTypeId(dxUnitTypeName, dxElementTypeName, out var dxUnitTypeId))
             {
@@ -1966,7 +1966,7 @@ namespace IV.DX.Persistence
 
         private string GetWhereExpressionForDXElementRows(string dxUnitTypeName, string dxElementTypeName, IEnumerable<Guid> parentIds)
         {
-            var where = this.GetWhereExpressionForDXUnitID(parentIds);
+            var where = this.GetWhereExpressionForDXUnitId(parentIds);
 
             if (TryGetCommonDXElementUnitTypeId(dxUnitTypeName, dxElementTypeName, out var dxUnitTypeId))
             {
@@ -1976,28 +1976,28 @@ namespace IV.DX.Persistence
             return where;
         }
 
-        private string GetWhereExpressionForID(Guid id)
+        private string GetWhereExpressionForId(Guid id)
         {
-            return $"ID = '{id}'";
+            return $"Id = '{id}'";
         }
 
-        private string GetWhereExpressionForDXUnitID(Guid id)
+        private string GetWhereExpressionForDXUnitId(Guid id)
         {
-            return $"DXUnitID = '{id}'";
+            return $"DXUnitId = '{id}'";
         }
 
-        private string GetWhereExpressionForID(IEnumerable<Guid> ids)
+        private string GetWhereExpressionForId(IEnumerable<Guid> ids)
         {
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-            return $"ID IN ({idsString})";
+            return $"Id IN ({idsString})";
         }
 
-        private string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
+        private string GetWhereExpressionForDXUnitId(IEnumerable<Guid> ids)
         {
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-            return $"DXUnitID IN ({idsString})";
+            return $"DXUnitId IN ({idsString})";
         }
 
         private string? GetWhereExpressionWithAnd(IDictionary<string, object> values)

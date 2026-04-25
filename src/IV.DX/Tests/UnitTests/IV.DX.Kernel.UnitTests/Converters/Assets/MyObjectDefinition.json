@@ -1,14 +1,14 @@
 {
     "S_Type": "MyObjectDefinition",
-    "ID": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
+    "Id": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
     "TimeStamp": "2020-12-01T00:00:00",
     "MyDXElementSingleItem": {
         "S_Type": "MyDXElementDefinition",
         "Name": "Name1",
         "Value": 1,
         "Date": "2020-12-01T00:00:00",
-        "ID": "b2669009-536a-4252-a920-ccef4456a08a",
-        "DXUnitID": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
+        "Id": "b2669009-536a-4252-a920-ccef4456a08a",
+        "DXUnitId": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
         "TimeStamp": "2020-12-01T00:00:00"
     },
     "MyDXElementMultiItems": {
@@ -20,8 +20,8 @@
                 "Name": "Name2",
                 "Value": 2,
                 "Date": "2020-12-02T00:00:00",
-                "ID": "293e5981-2e59-4714-95e5-52d9ff5ef76a",
-                "DXUnitID": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
+                "Id": "293e5981-2e59-4714-95e5-52d9ff5ef76a",
+                "DXUnitId": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
                 "TimeStamp": "2020-12-02T00:00:00"
             },
             {
@@ -29,8 +29,8 @@
                 "Name": "Name3",
                 "Value": 3,
                 "Date": "2020-12-03T00:00:00",
-                "ID": "30f22efa-6402-4c94-bcdd-ca4d2e8d40c2",
-                "DXUnitID": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
+                "Id": "30f22efa-6402-4c94-bcdd-ca4d2e8d40c2",
+                "DXUnitId": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
                 "TimeStamp": "2020-12-03T00:00:00"
             }
         ],
@@ -40,8 +40,8 @@
                 "Name": "Name4",
                 "Value": 4,
                 "Date": "2020-12-04T00:00:00",
-                "ID": "7fd1ccda-feb4-435a-95db-39b656fe12a6",
-                "DXUnitID": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
+                "Id": "7fd1ccda-feb4-435a-95db-39b656fe12a6",
+                "DXUnitId": "032169a1-fdfa-45b8-b0ec-381a6888ff35",
                 "TimeStamp": "2020-12-04T00:00:00"
             }
         ]

@@ -37,9 +37,9 @@ namespace IV.DX.Application.IntTests.Services
             Assert.False(string.IsNullOrWhiteSpace(auth.AccessToken));
             Assert.False(string.IsNullOrWhiteSpace(auth.RefreshToken));
             Assert.NotEqual(Guid.Empty, auth.SessionId);
-            Assert.NotEqual(Guid.Empty, auth.IdentityLoginID);
+            Assert.NotEqual(Guid.Empty, auth.IdentityLoginId);
 
-            var identityLogin = _unitRepository.GetDXUnit<DXIdentityLoginUnit>(auth.IdentityLoginID);
+            var identityLogin = _unitRepository.GetDXUnit<DXIdentityLoginUnit>(auth.IdentityLoginId);
             Assert.NotNull(identityLogin);
             Assert.NotEqual(password, identityLogin!.SecretHash);
             Assert.True(DXPasswordHashHelper.Verify(password, identityLogin.SecretHash));
@@ -73,7 +73,7 @@ namespace IV.DX.Application.IntTests.Services
             var nextSession = GetSessionBySessionId(refreshed.SessionId);
 
             Assert.True(previousSession.RevokedAt.HasValue);
-            Assert.Equal(nextSession.ID, previousSession.ReplacedBySession);
+            Assert.Equal(nextSession.Id, previousSession.ReplacedBySession);
             Assert.Null(nextSession.RevokedAt);
             Assert.True(DXPasswordHashHelper.Verify(refreshed.RefreshToken, nextSession.RefreshTokenHash));
 
@@ -133,11 +133,11 @@ namespace IV.DX.Application.IntTests.Services
 
             await _securityService.LogoutAllAsync(new DXLogoutAllRequest
             {
-                IdentityLoginID = auth1.IdentityLoginID
+                IdentityLoginId = auth1.IdentityLoginId
             });
 
             var sessions = _unitRepository
-                .GetDXUnits<DXAuthSessionUnit>($"IdentityLogin = '{auth1.IdentityLoginID}'")
+                .GetDXUnits<DXAuthSessionUnit>($"IdentityLogin = '{auth1.IdentityLoginId}'")
                 .ToList();
 
             Assert.True(sessions.Count >= 2);

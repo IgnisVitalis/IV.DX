@@ -165,7 +165,7 @@ namespace IV.DX.Application.IntTests.Services
                 using var _ = _contextAccessor.BeginScope(ctx);
 
                 var result = await _dataService.DeleteAsync(
-                    new TUserUnit { ID = insertedId, TimeStamp = DateTime.UtcNow });
+                    new TUserUnit { Id = insertedId, TimeStamp = DateTime.UtcNow });
 
                 Assert.True(result);
             }
@@ -197,7 +197,7 @@ namespace IV.DX.Application.IntTests.Services
 
                 await Assert.ThrowsAsync<UnauthorizedAccessException>(
                     () => _dataService.DeleteAsync(
-                        new TUserUnit { ID = insertedId, TimeStamp = DateTime.UtcNow }));
+                        new TUserUnit { Id = insertedId, TimeStamp = DateTime.UtcNow }));
             }
             finally
             {
@@ -374,7 +374,7 @@ namespace IV.DX.Application.IntTests.Services
                 using (var _ = _contextAccessor.BeginScope(ctx))
                 {
                     var result = await _dataService.DeleteAsync(
-                        new TUserUnit { ID = insertedId, TimeStamp = DateTime.UtcNow });
+                        new TUserUnit { Id = insertedId, TimeStamp = DateTime.UtcNow });
 
                     Assert.True(result);
                 }
@@ -411,7 +411,7 @@ namespace IV.DX.Application.IntTests.Services
 
                 await Assert.ThrowsAsync<UnauthorizedAccessException>(
                     () => _dataService.DeleteAsync(
-                        new TUserUnit { ID = insertedId, TimeStamp = DateTime.UtcNow }));
+                        new TUserUnit { Id = insertedId, TimeStamp = DateTime.UtcNow }));
             }
             finally
             {
@@ -447,11 +447,11 @@ namespace IV.DX.Application.IntTests.Services
                     var unitDef = _structureCache.GetDXUnit("TUserUnit");
                     _genericRepo.Insert(new DXIdentityOwnershipUnit
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         TimeStamp = DateTime.UtcNow,
                         Identity = _rbacFx.IdentityId,
-                        DXUnitDefinition = unitDef.ID,
-                        OwnedDXUnitID = insertedId
+                        DXUnitDefinition = unitDef.Id,
+                        OwnedDXUnitId = insertedId
                     });
                 });
 
@@ -493,15 +493,15 @@ namespace IV.DX.Application.IntTests.Services
             await RunAsSystemAsync(async () =>
                 await _dataService.InsertAsync(new DXTenantUnit
                 {
-                    ID = id,
+                    Id = id,
                     TimeStamp = DateTime.UtcNow,
                     Name = $"rbac-tenant-{id:N}",
                     DXRoleElement = new DXMultiElementsContainer<DXRoleElement>
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = id,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
@@ -516,7 +516,7 @@ namespace IV.DX.Application.IntTests.Services
             await RunAsSystemAsync(async () =>
                 await _dataService.InsertAsync(new DXMembershipUnit
                 {
-                    ID = id,
+                    Id = id,
                     TimeStamp = DateTime.UtcNow,
                     Name = $"rbac-membership-{id:N}",
                     Identity = identityId,
@@ -525,8 +525,8 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = id,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
@@ -541,7 +541,7 @@ namespace IV.DX.Application.IntTests.Services
             await RunAsSystemAsync(async () =>
                 await _dataService.InsertAsync(new DXGroupUnit
                 {
-                    ID = id,
+                    Id = id,
                     TimeStamp = DateTime.UtcNow,
                     Name = $"rbac-group-{id:N}",
                     Tenant = tenantId,
@@ -549,8 +549,8 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = id,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
@@ -566,7 +566,7 @@ namespace IV.DX.Application.IntTests.Services
             {
                 _genericRepo.Insert(new DXGroupMembershipUnit
                 {
-                    ID = id,
+                    Id = id,
                     TimeStamp = DateTime.UtcNow,
                     Group = groupId,
                     Membership = membershipId
@@ -587,7 +587,7 @@ namespace IV.DX.Application.IntTests.Services
             await RunAsSystemAsync(async () =>
                 await _dataService.InsertAsync(new DXRoleUnit
                 {
-                    ID = roleId,
+                    Id = roleId,
                     TimeStamp = DateTime.UtcNow,
                     Name = $"rbac-role-{roleId:N}",
                     DXUnitGrantElement = new DXMultiElementsContainer<DXUnitGrantElement>
@@ -596,14 +596,14 @@ namespace IV.DX.Application.IntTests.Services
                         {
                             new DXUnitGrantElement
                             {
-                                ID = Guid.NewGuid(),
-                                DXUnitID = roleId,
+                                Id = Guid.NewGuid(),
+                                DXUnitId = roleId,
                                 TimeStamp = DateTime.UtcNow,
                                 Read = read,
                                 Write = write,
                                 Delete = delete,
                                 Effect = effect,
-                                TargetDXUnitID = targetUnitDefId
+                                TargetDXUnitId = targetUnitDefId
                             }
                         }
                     }
@@ -615,7 +615,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var unit = _structureCache.GetDXUnit(typeName);
             Assert.NotNull(unit);
-            return unit.ID;
+            return unit.Id;
         }
 
         private async Task SetSupportsOwnershipAsync(string typeName, bool value)
@@ -646,7 +646,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var deleteRefs = ids
                 .Where(x => x != Guid.Empty)
-                .Select(x => new DXDeleteRef { ID = x })
+                .Select(x => new DXDeleteRef { Id = x })
                 .ToList();
 
             if (deleteRefs.Count == 0)

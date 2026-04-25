@@ -112,9 +112,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPassportMainElement\" AS \"{tableAlias_TPassportMainElement_0}\" ON \"{tableAlias_TPassportMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPassportUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPassportMainElement_0}\".\"SerialNumber\" = '6bcc2af44aa3'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPassportMainElement\" AS \"{tableAlias_TPassportMainElement_0}\" ON \"{tableAlias_TPassportMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPassportUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPassportMainElement_0}\".\"SerialNumber\" = '6bcc2af44aa3'";
 
-            var expectedUser = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
+            var expectedUser = this.users.Single(x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -131,7 +131,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var userExisting = usersExisting.Single();
 
-            Assert.Equal(expectedUser.ID, userExisting.ID);
+            Assert.Equal(expectedUser.Id, userExisting.Id);
         }
 
         [Fact]
@@ -139,9 +139,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedPassport = this.passports.Single(x => x.ID == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
+            var expectedPassport = this.passports.Single(x => x.Id == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -158,7 +158,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var passportExisting = passportsExisting.Single();
 
-            Assert.Equal(expectedPassport.ID, passportExisting.ID);
+            Assert.Equal(expectedPassport.Id, passportExisting.Id);
         }
 
         [Fact]
@@ -166,9 +166,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Devices).TDeviceMainElement.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\" ON \"{tableAlias_TDeviceUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TDeviceMainElement\" AS \"{tableAlias_TDeviceMainElement_0}\" ON \"{tableAlias_TDeviceMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TDeviceUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TDeviceMainElement_0}\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\" ON \"{tableAlias_TDeviceUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TDeviceMainElement\" AS \"{tableAlias_TDeviceMainElement_0}\" ON \"{tableAlias_TDeviceMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TDeviceUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TDeviceMainElement_0}\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
 
-            var expectedUser = this.users.Single(x => x.ID == new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
+            var expectedUser = this.users.Single(x => x.Id == new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -185,7 +185,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var userExisting = usersExisting.Single();
 
-            Assert.Equal(expectedUser.ID, userExisting.ID);
+            Assert.Equal(expectedUser.Id, userExisting.Id);
         }
 
         [Fact]
@@ -193,10 +193,10 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedDevice1 = this.devices.Single(x => x.ID == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
-            var expectedDevice2 = this.devices.Single(x => x.ID == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
+            var expectedDevice1 = this.devices.Single(x => x.Id == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
+            var expectedDevice2 = this.devices.Single(x => x.Id == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -211,13 +211,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, devicesExisting.Count());
 
-            var passportExisting1 = devicesExisting.Single(x => x.ID == expectedDevice1.ID);
+            var passportExisting1 = devicesExisting.Single(x => x.Id == expectedDevice1.Id);
 
-            Assert.Equal(expectedDevice1.ID, passportExisting1.ID);
+            Assert.Equal(expectedDevice1.Id, passportExisting1.Id);
 
-            var passportExisting2 = devicesExisting.Single(x => x.ID == expectedDevice2.ID);
+            var passportExisting2 = devicesExisting.Single(x => x.Id == expectedDevice2.Id);
 
-            Assert.Equal(expectedDevice2.ID, passportExisting2.ID);
+            Assert.Equal(expectedDevice2.Id, passportExisting2.Id);
         }
 
         // TODO: need to update expectedSQLQuery to check.
@@ -226,7 +226,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
             var relations = this.GetAllRelations();
 
@@ -248,7 +248,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Position).TPositionMainElement.Name = 'Middle'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPositionUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Middle'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Middle'";
 
             var relations = this.GetAllRelations();
 
@@ -270,9 +270,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Position).TPositionMainElement.Name = 'Master'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPositionUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
 
-            var expectedUser = this.users.Single(x => x.ID == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
+            var expectedUser = this.users.Single(x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -289,7 +289,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var userExisting = usersExisting.Single();
 
-            Assert.Equal(expectedUser.ID, userExisting.ID);
+            Assert.Equal(expectedUser.Id, userExisting.Id);
         }
 
         [Fact]
@@ -297,7 +297,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Victor' AND U2U(User).TUserMainElement.Surname = 'Suvorov'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Victor'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorov'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Victor'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorov'";
 
             var relations = this.GetAllRelations();
 
@@ -319,9 +319,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedPosition = this.positions.Single(x => x.ID == new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"));
+            var expectedPosition = this.positions.Single(x => x.Id == new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -338,7 +338,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var positionExisting = positionsExisting.Single();
 
-            Assert.Equal(expectedPosition.ID, positionExisting.ID);
+            Assert.Equal(expectedPosition.Id, positionExisting.Id);
         }
 
         [Fact]
@@ -346,7 +346,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Pavel' AND U2U(User).TUserMainElement.Surname = 'Plamenev'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
 
             var relations = this.GetAllRelations();
 
@@ -368,10 +368,10 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedDocument1 = this.documents.Single(x => x.ID == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
-            var expectedDocument6 = this.documents.Single(x => x.ID == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
+            var expectedDocument1 = this.documents.Single(x => x.Id == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
+            var expectedDocument6 = this.documents.Single(x => x.Id == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -386,13 +386,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, positionsExisting.Count());
 
-            var positionExisting1 = positionsExisting.Single(x => x.ID == expectedDocument1.ID);
+            var positionExisting1 = positionsExisting.Single(x => x.Id == expectedDocument1.Id);
 
-            Assert.Equal(expectedDocument1.ID, positionExisting1.ID);
+            Assert.Equal(expectedDocument1.Id, positionExisting1.Id);
 
-            var positionExisting6 = positionsExisting.Single(x => x.ID == expectedDocument6.ID);
+            var positionExisting6 = positionsExisting.Single(x => x.Id == expectedDocument6.Id);
 
-            Assert.Equal(expectedDocument6.ID, positionExisting6.ID);
+            Assert.Equal(expectedDocument6.Id, positionExisting6.Id);
         }
 
         [Fact]
@@ -400,7 +400,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Users).TUserMainElement.Name = 'Pavel' AND U2U(Users).TUserMainElement.Surname = 'Plamenev'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"ID\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
 
             var relations = this.GetAllRelations();
 
@@ -422,10 +422,10 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Users).TUserMainElement.Name = 'Svitlana' AND U2U(Users).TUserMainElement.Surname = 'Suvorova'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"ID\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedBook1 = this.books.Single(x => x.ID == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
-            var expectedBook2 = this.books.Single(x => x.ID == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
+            var expectedBook1 = this.books.Single(x => x.Id == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
+            var expectedBook2 = this.books.Single(x => x.Id == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -440,13 +440,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, booksExisting.Count());
 
-            var bookExisting1 = booksExisting.Single(x => x.ID == expectedBook1.ID);
+            var bookExisting1 = booksExisting.Single(x => x.Id == expectedBook1.Id);
 
-            Assert.Equal(expectedBook1.ID, bookExisting1.ID);
+            Assert.Equal(expectedBook1.Id, bookExisting1.Id);
 
-            var bookExisting2 = booksExisting.Single(x => x.ID == expectedBook2.ID);
+            var bookExisting2 = booksExisting.Single(x => x.Id == expectedBook2.Id);
 
-            Assert.Equal(expectedBook2.ID, bookExisting2.ID);
+            Assert.Equal(expectedBook2.Id, bookExisting2.Id);
         }
 
         [Fact]
@@ -454,7 +454,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Books).TBookMainElement.Name = 'book3'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"ID\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TBookUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book3'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book3'";
 
             var relations = this.GetAllRelations();
 
@@ -473,10 +473,10 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(Books).TBookMainElement.Name = 'book1'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"ID\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TBookUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book1'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book1'";
 
-            var expectedUser1 = this.users.Single(x => x.ID == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
-            var expectedUser2 = this.users.Single(x => x.ID == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
+            var expectedUser1 = this.users.Single(x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
+            var expectedUser2 = this.users.Single(x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -491,13 +491,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, usersExisting.Count());
 
-            var userExisting1 = usersExisting.Single(x => x.ID == expectedUser1.ID);
+            var userExisting1 = usersExisting.Single(x => x.Id == expectedUser1.Id);
 
-            Assert.Equal(expectedUser1.ID, userExisting1.ID);
+            Assert.Equal(expectedUser1.Id, userExisting1.Id);
 
-            var userExisting2 = usersExisting.Single(x => x.ID == expectedUser2.ID);
+            var userExisting2 = usersExisting.Single(x => x.Id == expectedUser2.Id);
 
-            Assert.Equal(expectedUser2.ID, userExisting2.ID);
+            Assert.Equal(expectedUser2.Id, userExisting2.Id);
         }
 
         [Fact]
@@ -505,9 +505,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         {
             // Init
             var dxFilter = "U2U(User).U2U(Position).TPositionMainElement.Name = 'Master'";
-            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPositionUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
+            string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
 
-            var expectedPassport = this.passports.Single(x => x.ID == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
+            var expectedPassport = this.passports.Single(x => x.Id == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
             var relations = this.GetAllRelations();
 
             // Action
@@ -524,7 +524,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             var passportExisting = passportsExisting.Single();
 
-            Assert.Equal(expectedPassport.ID, passportExisting.ID);
+            Assert.Equal(expectedPassport.Id, passportExisting.Id);
         }
 
         [Fact]
@@ -534,7 +534,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             {
                 // Init
                 var dxFilter = $"U2U(User).U2U(Position).TPositionMainElement.Name {operation} 'Master'";
-                string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"ID\" AS \"ID\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"ID\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"ID\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitID\" = \"{tableAlias_TPositionUnit_0}\".\"ID\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" {operation} 'Master'";
+                string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" {operation} 'Master'";
 
                 var relations = this.GetAllRelations();
 

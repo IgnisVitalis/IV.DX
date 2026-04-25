@@ -50,7 +50,7 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNull(dxElement);
 
             var elementTypeName = AttributeReader.GetDXElementTypeName(dxElement.GetType());
-            return dxElementCoreRepo.Delete(elementTypeName, dxElement.ID);
+            return dxElementCoreRepo.Delete(elementTypeName, dxElement.Id);
         }
 
         public T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement, new()

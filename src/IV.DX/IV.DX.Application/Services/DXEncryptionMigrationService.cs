@@ -81,7 +81,7 @@ namespace IV.DX.Application.Services
             var encryptedElementIds = structureService.DXElements
                 .Where(e => e.DXColumnDefinitionElement.Announced
                     .Any(c => c.ColumnType == DXColumnTypeEnum.EncryptedString))
-                .Select(e => e.ID)
+                .Select(e => e.Id)
                 .ToHashSet();
 
             return structureService.DXUnits

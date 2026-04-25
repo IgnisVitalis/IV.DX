@@ -23,7 +23,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             throw new NotImplementedException();
         }
 
-        public void BulkUpsert(NpgsqlConnection conn, DataTable table, string tableName, string keyColumn = "ID")
+        public void BulkUpsert(NpgsqlConnection conn, DataTable table, string tableName, string keyColumn = "Id")
         {
             throw new NotImplementedException();
         }
@@ -138,22 +138,22 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             throw new NotImplementedException();
         }
 
-        public string GetWhereExpressionForID(Guid id)
+        public string GetWhereExpressionForId(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public string GetWhereExpressionForID(IEnumerable<Guid> ids)
+        public string GetWhereExpressionForId(IEnumerable<Guid> ids)
         {
             throw new NotImplementedException();
         }
 
-        public string GetWhereExpressionForDXUnitID(Guid id)
+        public string GetWhereExpressionForDXUnitId(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
+        public string GetWhereExpressionForDXUnitId(IEnumerable<Guid> ids)
         {
             throw new NotImplementedException();
         }
@@ -296,7 +296,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //    public string GetSelectQuery(DXCoreNode coreNode)
     //    {
-    //        return $"SELECT {coreNode.MainTableAlias}.ID FROM {coreNode.Value} AS {coreNode.MainTableAlias}";
+    //        return $"SELECT {coreNode.MainTableAlias}.Id FROM {coreNode.Value} AS {coreNode.MainTableAlias}";
     //    }
 
     //    public string GetSQLQueryToCreateTable(DXObjectDefinitionUnit dataDXElement)
@@ -346,13 +346,13 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //    public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
     //    {
-    //        // TODO: need to find solution how to drop table by DXUnitID
+    //        // TODO: need to find solution how to drop table by DXUnitId
     //        return GetSQLQueryToDropTable(dataDXElement.Name);
     //    }
 
     //    public string GetSQLQueryToDropTable(string tableName)
     //    {
-    //        // TODO: need to find solution how to drop table by DXUnitID
+    //        // TODO: need to find solution how to drop table by DXUnitId
     //        return $"DROP TABLE IF EXISTS {tableName}";
     //    }
 
@@ -380,19 +380,19 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //            mysqlClmDef += $"({clmDesc.Length.Value})";
     //        }
 
-    //        if ((!clmDesc.AllowNull || clmDesc.Name == "DXUnitID") && clmDesc.Name != "ID")
+    //        if ((!clmDesc.AllowNull || clmDesc.Name == "DXUnitId") && clmDesc.Name != "Id")
     //        {
     //            mysqlClmDef += $" NOT NULL";
     //        }
 
     //        if (!string.IsNullOrEmpty(clmDesc.DefaultValue)
-    //        && clmDesc.Name != "ID"
-    //        && clmDesc.Name != "DXUnitID")
+    //        && clmDesc.Name != "Id"
+    //        && clmDesc.Name != "DXUnitId")
     //        {
     //            mysqlClmDef += $" DEFAULT {clmDesc.DefaultValue}";
     //        }
 
-    //        if (clmDesc.Name == "ID")
+    //        if (clmDesc.Name == "Id")
     //        {
     //            mysqlClmDef += $" PRIMARY KEY UNIQUE";
     //        }
@@ -419,8 +419,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        var columnsToAddMySQLCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
     //        var columnsToChangeMySQLCommand = columnsToChange.Select(x =>
     //            this.GetSQLColumnDefinitionToChangeInTable(
-    //                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-    //                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+    //                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+    //                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
     //        sb.Append($"ALTER TABLE {dataDXElementExisting.Name} ");
     //        if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
@@ -473,7 +473,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        // ALTER TABLE `IV.DX.TestDB`.`Table1` 
     //        // DROP INDEX `fk_Table1_Table2_0000_idx` ;
     //        // ALTER TABLE `IV.DX.TestDB`.`Table1` 
-    //        // DROP COLUMN Table2ID;
+    //        // DROP COLUMN Table2Id;
 
     //        StringBuilder sb = new StringBuilder();
 
@@ -482,7 +482,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        sb.Append($"ALTER TABLE {dxElement.Name} ");
     //        sb.Append($"DROP INDEX `FK_{dxElement.Name}_{obj.Name}_0000_idx`;");
     //        sb.Append($"ALTER TABLE {dxElement.Name} ");
-    //        sb.Append($"DROP COLUMN {obj.Name}ID; ");
+    //        sb.Append($"DROP COLUMN {obj.Name}Id; ");
 
     //        return sb.ToString();
     //    }
@@ -490,21 +490,21 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //    public string GetSQLQueryToCreateTable(DXUnitDefinitionUnit obj, DXElementDefinitionUnit dxElement)
     //    {
     //        // ALTER TABLE `IV.DX.TestDB`.`Table1` 
-    //        // ADD COLUMN Table2ID CHAR(36) CHARACTER SET UTF8MB4; ;
+    //        // ADD COLUMN Table2Id CHAR(36) CHARACTER SET UTF8MB4; ;
     //        // ALTER TABLE `IV.DX.TestDB`.`Table1` 
-    //        // ADD INDEX `fk_Table1_Table2_0000_idx` (`Table2ID` ASC) VISIBLE;
+    //        // ADD INDEX `fk_Table1_Table2_0000_idx` (`Table2Id` ASC) VISIBLE;
     //        // ;
     //        // ALTER TABLE `IV.DX.TestDB`.`Table1` 
     //        // ADD CONSTRAINT `fk_Table1_Table2_0000`
-    //        //   FOREIGN KEY (`Table2ID`)
-    //        //   REFERENCES `IV.DX.TestDB`.`Table2` (`ID`)
+    //        //   FOREIGN KEY (`Table2Id`)
+    //        //   REFERENCES `IV.DX.TestDB`.`Table2` (`Id`)
     //        //   ON DELETE NO ACTION
     //        //   ON UPDATE NO ACTION;
 
     //        if (obj == null || dxElement == null)
     //            return null;
 
-    //        var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
+    //        var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.Id);
 
     //        if (dxElementInDXUnitInfo == null)
     //            return null;
@@ -512,22 +512,22 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        StringBuilder sb = new StringBuilder();
 
     //        sb.Append($"ALTER TABLE {dxElement.Name} ");
-    //        sb.Append($"ADD COLUMN {obj.Name}ID CHAR(36) CHARACTER SET UTF8MB4; ");
+    //        sb.Append($"ADD COLUMN {obj.Name}Id CHAR(36) CHARACTER SET UTF8MB4; ");
 
     //        if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
     //        || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
     //        )
     //        {
     //            sb.Append($"ALTER TABLE {dxElement.Name} ");
-    //            sb.Append($"ADD CONSTRAINT {obj.Name}ID_unique UNIQUE({obj.Name}ID); ");
+    //            sb.Append($"ADD CONSTRAINT {obj.Name}ID_unique UNIQUE({obj.Name}Id); ");
     //        }
 
     //        sb.Append($"ALTER TABLE {dxElement.Name} ");
-    //        sb.Append($"ADD INDEX `FK_{dxElement.Name}_{obj.Name}_0000_idx` (`{obj.Name}ID` ASC) VISIBLE; ");
+    //        sb.Append($"ADD INDEX `FK_{dxElement.Name}_{obj.Name}_0000_idx` (`{obj.Name}Id` ASC) VISIBLE; ");
     //        sb.Append($"ALTER TABLE {dxElement.Name} ");
     //        sb.Append($"ADD CONSTRAINT `FK_{dxElement.Name}_{obj.Name}_0000` ");
-    //        sb.Append($"FOREIGN KEY (`{obj.Name}ID`) ");
-    //        sb.Append($"REFERENCES `{obj.Name}` (`ID`) ");
+    //        sb.Append($"FOREIGN KEY (`{obj.Name}Id`) ");
+    //        sb.Append($"REFERENCES `{obj.Name}` (`Id`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION;");
 
@@ -748,42 +748,42 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //       DXObjectDefinitionUnit dataDXElementExisting
     //       )
     //    {
-    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
+    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
 
     //        var idsToRemove = columnDescDXElementExistingIds.Where(x => !columnDescDXElementNewIds.Contains(x));
 
-    //        return dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
+    //        return dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.Id)).ToList();
     //    }
 
     //    private IEnumerable<DXColumnDefinitionElement> GetColumnDescDXElementsToAdd(
     //        DXObjectDefinitionUnit dataDXElementNew,
     //        DXObjectDefinitionUnit dataDXElementExisting)
     //    {
-    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
+    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
 
     //        var idsToAdd = columnDescDXElementNewIds.Where(x => !columnDescDXElementExistingIds.Contains(x));
 
-    //        return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
+    //        return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.Id)).ToList();
     //    }
 
     //    private bool FilterForNonSystemColumns(string columnName)
     //    {
-    //        return columnName != "ID" && columnName != "DXUnitID" && columnName != "TimeStamp";
+    //        return columnName != "Id" && columnName != "DXUnitId" && columnName != "TimeStamp";
     //    }
 
     //    private IEnumerable<Guid> GetColumnDescDXElementsToChange(
     //        DXObjectDefinitionUnit dataDXElementNew,
     //        DXObjectDefinitionUnit dataDXElementExisting)
     //    {
-    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => x.Name != "ID" && x.Name != "DXUnitID").Select(x => x.ID);
-    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => x.Name != "ID" && x.Name != "DXUnitID").Select(x => x.ID);
+    //        var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => x.Name != "Id" && x.Name != "DXUnitId").Select(x => x.Id);
+    //        var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => x.Name != "Id" && x.Name != "DXUnitId").Select(x => x.Id);
 
     //        var idsToChange = columnDescDXElementNewIds.Intersect(columnDescDXElementExistingIds).Where(x =>
     //        {
-    //            var DXColumnDefinitionElementNew = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
-    //            var DXColumnDefinitionElementExisting = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
+    //            var DXColumnDefinitionElementNew = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x);
+    //            var DXColumnDefinitionElementExisting = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x);
 
     //            var result = !(DXColumnDefinitionElementNew.AllowNull == DXColumnDefinitionElementExisting.AllowNull
     //            && this.AreEqual(DXColumnDefinitionElementNew.DefaultValue, DXColumnDefinitionElementExisting.DefaultValue)
@@ -794,7 +794,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //            return result;
     //        });
 
-    //        //return dataDXElementNew.DXColumnDefinitionElement.Where(x => idsToChange.Contains(x.ID)).ToList();
+    //        //return dataDXElementNew.DXColumnDefinitionElement.Where(x => idsToChange.Contains(x.Id)).ToList();
     //        return idsToChange;
     //    }
 
@@ -944,7 +944,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //    public string GetSQLQueryToSelectIDFromTable(string tableName)
     //    {
-    //        return $"SELECT ID FROM {tableName}";
+    //        return $"SELECT Id FROM {tableName}";
     //    }
 
     //    public void DropDataBase(string connectionString)
@@ -991,22 +991,22 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
     //        sb.Append($"ALTER TABLE {childDXUnit} ");
     //        sb.Append($"ADD CONSTRAINT `FK_{childDXUnit}_{baseDXUnit}_Base` ");
-    //        sb.Append($"FOREIGN KEY (`ID`) ");
-    //        sb.Append($"REFERENCES `{baseDXUnit}` (`ID`) ");
+    //        sb.Append($"FOREIGN KEY (`Id`) ");
+    //        sb.Append($"REFERENCES `{baseDXUnit}` (`Id`) ");
     //        sb.Append($"ON DELETE NO ACTION ");
     //        sb.Append($"ON UPDATE NO ACTION;");
 
     //        return sb.ToString();
     //    }
 
-    //    public string GetWhereExpressionForID(Guid id)
+    //    public string GetWhereExpressionForId(Guid id)
     //    {
-    //        return $"ID = '{id}'";
+    //        return $"Id = '{id}'";
     //    }
 
-    //    public string GetWhereExpressionForDXUnitID(Guid id)
+    //    public string GetWhereExpressionForDXUnitId(Guid id)
     //    {
-    //        return $"DXUnitID = '{id}'";
+    //        return $"DXUnitId = '{id}'";
     //    }
 
     //    public string GetWhereExpressionWithAnd(IDictionary<string, object> values)
@@ -1017,18 +1017,18 @@ namespace IV.DX.Persistence.SQLQueryHelpers
     //        return string.Join(" AND ", values.Select(x => $"{x.Key} = '{x.Value}'"));
     //    }
 
-    //    public string GetWhereExpressionForID(IEnumerable<Guid> ids)
+    //    public string GetWhereExpressionForId(IEnumerable<Guid> ids)
     //    {
     //        string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-    //        return $"ID IN ({idsString})";
+    //        return $"Id IN ({idsString})";
     //    }
 
-    //    public string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
+    //    public string GetWhereExpressionForDXUnitId(IEnumerable<Guid> ids)
     //    {
     //        string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-    //        return $"DXUnitID IN ({idsString})";
+    //        return $"DXUnitId IN ({idsString})";
     //    }
     //}
 }

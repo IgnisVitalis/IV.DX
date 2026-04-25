@@ -9,7 +9,7 @@
     "Data": {
         "Items": [
             {
-                "ID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                "Id": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
                 "TimeStamp": "2021-10-02T00:00:00",
                 "Name": "UpdatedDataDXElement",
                 "Type": 1,
@@ -26,23 +26,23 @@
                         "Data": {
                             "Items": [
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "5BCDF497-6004-4028-BB18-5185576E2094",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "5BCDF497-6004-4028-BB18-5185576E2094",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 1,
                                     "Name": "GuidColumn"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "C44DB212-4612-4367-8FBF-B5826667EA4C",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "C44DB212-4612-4367-8FBF-B5826667EA4C",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 2,
                                     "Name": "TimeStampColumnUpdated",
                                     "DefaultValue": "CURRENT_TIMESTAMP"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "966EF3FD-B092-4465-9B7C-EBECA6E47CE6",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "966EF3FD-B092-4465-9B7C-EBECA6E47CE6",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 3,
                                     "Name": "StringColumnUpdated",
@@ -51,16 +51,16 @@
                                     "DefaultValue": "'StringValueUpdated'"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "68EBA29A-BFA8-48C4-9FE6-122DE13DA225",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "68EBA29A-BFA8-48C4-9FE6-122DE13DA225",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 4,
                                     "Name": "TextColumnUpdated",
                                     "AllowNull": false
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "2A7272C8-73E7-4DBF-B3D1-08BE2C0B47A6",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 5,
                                     "Name": "DateTimeColumnUpdated",
@@ -68,8 +68,8 @@
                                     "DefaultValue": "CURRENT_TIMESTAMP"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "BC13DDCE-1241-4515-BA44-A68320B611A1",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "BC13DDCE-1241-4515-BA44-A68320B611A1",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 6,
                                     "Name": "BoolColumnUpdated",
@@ -77,8 +77,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "0C8B0D31-6972-4A93-9355-27E2C873DBAA",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "0C8B0D31-6972-4A93-9355-27E2C873DBAA",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 7,
                                     "Name": "ShortColumnUpdated",
@@ -86,8 +86,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "F505FCAF-7021-46C6-B8AD-8E54C12325B4",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "F505FCAF-7021-46C6-B8AD-8E54C12325B4",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 8,
                                     "Name": "IntColumnUpdated",
@@ -95,8 +95,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "5482886C-3062-4F37-B550-41353835C744",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "5482886C-3062-4F37-B550-41353835C744",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 9,
                                     "Name": "LongColumnUpdated",
@@ -104,8 +104,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "D8C56687-6BC2-4E67-81F1-EFF5F4F2AE89",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 10,
                                     "Name": "DecimalColumnUpdated",
@@ -115,8 +115,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "7C8954BF-EEF0-4C18-B240-4FD42D53E27C",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "7C8954BF-EEF0-4C18-B240-4FD42D53E27C",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 11,
                                     "Name": "FloatColumnUpdated",
@@ -126,8 +126,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "3736BFE6-BF1E-41C3-A72C-A0CA073B1F38",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 12,
                                     "Name": "CurrencyColumnUpdated",
@@ -135,8 +135,8 @@
                                     "DefaultValue": "1"
                                 },
                                 {
-                                    "DXUnitID": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
-                                    "ID": "029B39F4-CF55-49D5-876B-6C69C633B856",
+                                    "DXUnitId": "7989B845-6AAA-4ADB-99ED-B4F0840348F8",
+                                    "Id": "029B39F4-CF55-49D5-876B-6C69C633B856",
                                     "TimeStamp": "2021-10-02T00:00:00",
                                     "ColumnType": 13,
                                     "Name": "BlobColumnUpdated",

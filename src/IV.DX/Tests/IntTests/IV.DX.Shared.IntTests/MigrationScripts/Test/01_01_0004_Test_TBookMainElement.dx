@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "ID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+          "Id": "0953cb79-4001-4add-87d6-2ebce5ecc848",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookMainElement",
           "Kind": 3,
@@ -26,9 +26,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "20e239fb-5775-45cb-97a5-b400c231e707",
+                    "Id": "20e239fb-5775-45cb-97a5-b400c231e707",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+                    "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
                     "ColumnType": 3,
                     "Name": "Name",
                     "Length": 50,

@@ -98,7 +98,7 @@ namespace IV.DX.Hosting
 
         private static DXAccessDecision FallbackToOwnership(DXExecutionContext context)
         {
-            return context.IdentityID.HasValue
+            return context.IdentityId.HasValue
                 ? DXAccessDecision.AllowedOwnedOnly
                 : DXAccessDecision.Denied;
         }

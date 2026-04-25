@@ -2,6 +2,6 @@ namespace IV.DX.Application.Contracts.Models
 {
     public class DXLogoutAllRequest
     {
-        public Guid IdentityLoginID { get; set; }
+        public Guid IdentityLoginId { get; set; }
     }
 }

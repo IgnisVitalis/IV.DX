@@ -36,7 +36,7 @@ namespace IV.DX.Kernel.Models
 
     public abstract class DXObjectRecord
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public DateTime TimeStamp { get; set; }
         public string? DXTitle { get; set; }
 
@@ -51,7 +51,7 @@ namespace IV.DX.Kernel.Models
 
     public sealed class DXElementRecord : DXObjectRecord
     {
-        public Guid DXUnitID { get; set; }
+        public Guid DXUnitId { get; set; }
     }
 
     public sealed class DXEnumRecord : DXObjectRecord
@@ -63,7 +63,7 @@ namespace IV.DX.Kernel.Models
 
     public sealed class DXDeleteRef
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         [JsonExtensionData]
         public IDictionary<string, JToken>? Fields { get; set; }

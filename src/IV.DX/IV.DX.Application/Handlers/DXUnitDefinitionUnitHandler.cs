@@ -159,7 +159,7 @@ namespace IV.DX.Application.Handlers
 
         private async Task DeleteRelationsAsync(DXUnitDefinitionUnit dxUnit, DXHandlerBaseContext ctx, CancellationToken ct)
         {
-            var existingDXUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.ID);
+            var existingDXUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnit.Id);
 
             if (existingDXUnit == null)
                 return;
@@ -358,15 +358,15 @@ namespace IV.DX.Application.Handlers
         {
             var targetUnit = genericRepo.GetDXUnit<DXUnitDefinitionUnit>(dxUnitToUnitRelationElement.TargetDXUnit);
             if (targetUnit?.DXUnitToUnitRelationElement?.Announced.Any(x =>
-                    x.TargetDXUnit == dxUnitToUnitRelationElement.DXUnitID
+                    x.TargetDXUnit == dxUnitToUnitRelationElement.DXUnitId
                     && x.OwnRelationName == dxUnitToUnitRelationElement.TargetRelationName
                     && x.TargetRelationName == dxUnitToUnitRelationElement.OwnRelationName) == true)
                 return;
 
             var revertedDXUnitToUnitRelationElement = dxUnitToUnitRelationElement.GetReverted();
 
-            revertedDXUnitToUnitRelationElement.ID = Guid.NewGuid();
-            revertedDXUnitToUnitRelationElement.DXUnitID = dxUnitToUnitRelationElement.TargetDXUnit;
+            revertedDXUnitToUnitRelationElement.Id = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.DXUnitId = dxUnitToUnitRelationElement.TargetDXUnit;
 
             dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitToUnitRelationElement);
         }
@@ -375,8 +375,8 @@ namespace IV.DX.Application.Handlers
         {
             var revertedDXUnitToUnitRelationElement = dxUnitToElementRelationElement.GetReverted();
 
-            revertedDXUnitToUnitRelationElement.ID = Guid.NewGuid();
-            revertedDXUnitToUnitRelationElement.DXUnitID = dxUnitToElementRelationElement.TargetDXElement;
+            revertedDXUnitToUnitRelationElement.Id = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.DXUnitId = dxUnitToElementRelationElement.TargetDXElement;
 
             dxElementGenericRepo.Insert("DXElementDefinitionUnit", revertedDXUnitToUnitRelationElement);
         }
@@ -387,7 +387,7 @@ namespace IV.DX.Application.Handlers
                 return;
 
             var revertedElementsToDelete = relatedDXUnit.DXUnitToUnitRelationElement.Announced
-                .Where(x => x.TargetDXUnit == DXUnitToUnitRelationElement.DXUnitID)
+                .Where(x => x.TargetDXUnit == DXUnitToUnitRelationElement.DXUnitId)
                 .ToList();
 
             foreach (var element in revertedElementsToDelete)
@@ -397,7 +397,7 @@ namespace IV.DX.Application.Handlers
         private void DeleteRevertedDXUnitToElementRelationElement(DXUnitToElementRelationElement dxUnitToElementRelationElement, DXElementDefinitionUnit relatedDXElement)
         {
             var revertedDXElementToDelete =
-                relatedDXElement.DXElementToUnitRelationElement.Announced.SingleOrDefault(x => x.TargetDXUnit == dxUnitToElementRelationElement.DXUnitID);
+                relatedDXElement.DXElementToUnitRelationElement.Announced.SingleOrDefault(x => x.TargetDXUnit == dxUnitToElementRelationElement.DXUnitId);
 
             dxElementGenericRepo.Delete(revertedDXElementToDelete!);
         }
@@ -424,7 +424,7 @@ namespace IV.DX.Application.Handlers
             if (existing != null)
                 return;
 
-            var relationType = dxUnit.DXUnitToElementRelationElement.Announced.Single(x => x.TargetDXElement == dxElementToAssign.ID).RelationType;
+            var relationType = dxUnit.DXUnitToElementRelationElement.Announced.Single(x => x.TargetDXElement == dxElementToAssign.Id).RelationType;
 
             var dxRelation = this.GetDXUnitToElementRelationObject(dxUnit, dxUnitToElementRelationElement, dxElementToAssign, relationType);
 
@@ -505,7 +505,7 @@ namespace IV.DX.Application.Handlers
                 if (existing != null)
                     continue;
 
-                var relationType = dxUnit.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.ID).RelationType;
+                var relationType = dxUnit.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElementToAssign.Id).RelationType;
 
                 dxUnitService.InsertAsync(this.GetDXElementInDXUnitRelationObject(dxUnit, dxElementToAssign, relationType)).Wait();
             }
@@ -538,13 +538,13 @@ namespace IV.DX.Application.Handlers
 
             return new DXRelationDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 ObjectNameLeft = dxUnit.Name,
-                RelationNameLeft = $"{dxUnit.Name}ID",
+                RelationNameLeft = $"{dxUnit.Name}Id",
                 ObjectNameRight = dxElement.Name,
                 RelationNameRight = dxElement.Name,
-                RelationColumnNameLeft = "ID",
-                RelationColumnNameRight = $"{dxUnit.Name}ID",
+                RelationColumnNameLeft = "Id",
+                RelationColumnNameRight = $"{dxUnit.Name}Id",
                 RelationColumnTypeLeft = DXColumnTypeEnum.GUID,
                 RelationColumnTypeRight = DXColumnTypeEnum.GUID,
                 Kind = dxUnit.Kind,
@@ -570,9 +570,9 @@ namespace IV.DX.Application.Handlers
             {
                 case DXRelationTypeEnum.ManyToMany:
                     relationTable = $"Relation_{dxUnit.Name}_{dxUnitRelated.Name}";
-                    relationColumnNameLeft = "ID";
+                    relationColumnNameLeft = "Id";
                     relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                    relationColumnNameRight = "ID";
+                    relationColumnNameRight = "Id";
                     relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     break;
                 case DXRelationTypeEnum.ManyToOne:
@@ -581,7 +581,7 @@ namespace IV.DX.Application.Handlers
                     {
                         relationColumnNameLeft = DXUnitToUnitRelationElement.TargetRelationName;
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                        relationColumnNameRight = "ID";
+                        relationColumnNameRight = "Id";
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }
                     break;
@@ -590,7 +590,7 @@ namespace IV.DX.Application.Handlers
                 case DXRelationTypeEnum.OneToZeroOne:
                 case DXRelationTypeEnum.ZeroOneToZeroOne:
                     {
-                        relationColumnNameLeft = "ID";
+                        relationColumnNameLeft = "Id";
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                         relationColumnNameRight = DXUnitToUnitRelationElement.OwnRelationName;
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
@@ -600,7 +600,7 @@ namespace IV.DX.Application.Handlers
 
             return new DXRelationDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 ObjectNameLeft = dxUnit.Name,
                 RelationNameLeft = DXUnitToUnitRelationElement.OwnRelationName,
                 ObjectNameRight = dxUnitRelated.Name,
@@ -633,9 +633,9 @@ namespace IV.DX.Application.Handlers
             {
                 case DXRelationTypeEnum.ManyToMany:
                     relationTable = $"Relation_{dxUnit.Name}_{dxElementRelated.Name}";
-                    relationColumnNameLeft = "ID";
+                    relationColumnNameLeft = "Id";
                     relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                    relationColumnNameRight = "ID";
+                    relationColumnNameRight = "Id";
                     relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     break;
                 case DXRelationTypeEnum.ManyToOne:
@@ -644,7 +644,7 @@ namespace IV.DX.Application.Handlers
                     {
                         relationColumnNameLeft = DXUnitToUnitRelationElement.TargetRelationName;
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                        relationColumnNameRight = "ID";
+                        relationColumnNameRight = "Id";
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }
                     break;
@@ -653,7 +653,7 @@ namespace IV.DX.Application.Handlers
                 case DXRelationTypeEnum.OneToZeroOne:
                 case DXRelationTypeEnum.ZeroOneToZeroOne:
                     {
-                        relationColumnNameLeft = "ID";
+                        relationColumnNameLeft = "Id";
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                         relationColumnNameRight = DXUnitToUnitRelationElement.OwnRelationName;
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
@@ -663,7 +663,7 @@ namespace IV.DX.Application.Handlers
 
             return new DXRelationDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 ObjectNameLeft = dxUnit.Name,
                 RelationNameLeft = DXUnitToUnitRelationElement.OwnRelationName,
                 ObjectNameRight = dxElementRelated.Name,
@@ -713,7 +713,7 @@ namespace IV.DX.Application.Handlers
         {
             var query = $"ObjectNameLeft = '{dxUnit.Name}' " +
                $"AND ObjectNameRight = '{dxElement.Name}' " +
-               $"AND RelationNameLeft = '{dxUnit.Name}ID' " +
+               $"AND RelationNameLeft = '{dxUnit.Name}Id' " +
                $"AND RelationNameRight = '{dxElement.Name}'";
 
             var items = genericRepo.GetDXUnits<DXRelationDefinitionUnit>(query);
@@ -725,11 +725,11 @@ namespace IV.DX.Application.Handlers
         {
             return new DXUnitToUnitRelationElement()
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = dxUnit.ID,
+                Id = Guid.NewGuid(),
+                DXUnitId = dxUnit.Id,
                 OwnRelationName = dxUnit.Name + "Items",
                 RelationType = DXRelationTypeEnum.ManyToOne,
-                TargetDXUnit = Constants.DXUnitDefinitionUnitID,
+                TargetDXUnit = Constants.DXUnitDefinitionUnitId,
                 TargetRelationName = Constants.DerivedDXUnitType,
                 TimeStamp = DateTime.UtcNow
             };

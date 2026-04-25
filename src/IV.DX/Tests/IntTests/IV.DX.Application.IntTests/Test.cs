@@ -142,7 +142,7 @@ namespace IV.DX.Application.IntTests
 
     public class DataDXElement
     {
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         public IEnumerable<Property> Properties { get; set; }
     }

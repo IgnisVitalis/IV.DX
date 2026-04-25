@@ -9,11 +9,11 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TUserUnit()
             {
-                ID = id,
+                Id = id,
                 TUserMainElement = new TUserMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     Name = name,
                     Surname = surname,
                     Birth = birth

@@ -35,7 +35,7 @@ Defines a projected column. A `DXQueryUnit` can have zero or more of these.
 | `Expression` | text       | Yes      | DXSQL expression evaluated to produce the column value             |
 | `Order`      | int        | Yes      | Sort order for consistent column ordering in the result definition |
 
-The `ID` column is always included automatically regardless of what columns are defined.
+The `Id` column is always included automatically regardless of what columns are defined.
 
 ---
 
@@ -69,22 +69,22 @@ JObject result = await provider.GetAsync(dxQueryId);
 ```json
 {
   "QueryDefinition": [
-    { "Name": "ID",   "Expression": "ID",   "Order": -1 },
+    { "Name": "Id",   "Expression": "Id",   "Order": -1 },
     { "Name": "Name", "Expression": "TUserMainElement.Name", "Order": 0 }
   ],
   "Content": {
     "Meta": { "Kind": "DXUnit", "Type": "TUserUnit", "Op": "Sync", "IsMulti": true },
     "Data": {
       "Items": [
-        { "ID": "...", "TimeStamp": "...", "Name": "Victor" }
+        { "Id": "...", "TimeStamp": "...", "Name": "Victor" }
       ]
     }
   }
 }
 ```
 
-- **`QueryDefinition`** — ordered array of column descriptors. The `ID` entry (Order -1) is always prepended. `ID`, `DXUnitID`, and `TimeStamp` fields are stripped from each descriptor since they are system columns.
-- **`Content`** — a standard `DXDataBlock<DXUnitRecord>` (see `doc/DXDataFormat.md`). Each item contains only the projected columns plus `ID` and `TimeStamp`.
+- **`QueryDefinition`** — ordered array of column descriptors. The `Id` entry (Order -1) is always prepended. `Id`, `DXUnitId`, and `TimeStamp` fields are stripped from each descriptor since they are system columns.
+- **`Content`** — a standard `DXDataBlock<DXUnitRecord>` (see `doc/DXDataFormat.md`). Each item contains only the projected columns plus `Id` and `TimeStamp`.
 
 ### Access control
 
@@ -103,7 +103,7 @@ Sensitive columns (`EncryptedString`, `HashedString`) are masked to empty string
 ```csharp
 var query = new DXQueryUnit
 {
-    ID = Guid.NewGuid(),
+    Id = Guid.NewGuid(),
     TimeStamp = DateTime.UtcNow,
     Name = "Active users",
     DXUnitDefinition = userUnitDefinitionId,
@@ -114,8 +114,8 @@ var query = new DXQueryUnit
         {
             new DXQueryColumnElement
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = query.ID,
+                Id = Guid.NewGuid(),
+                DXUnitId = query.Id,
                 TimeStamp = DateTime.UtcNow,
                 Name = "Name",
                 Expression = "TUserMainElement.Name",
@@ -128,11 +128,11 @@ var query = new DXQueryUnit
 await dataService.InsertOrUpdateAsync(query);
 ```
 
-`DXUnitDefinition` must be the `DXUnitDefinitionUnit.ID` for the target type. To resolve it:
+`DXUnitDefinition` must be the `DXUnitDefinitionUnit.Id` for the target type. To resolve it:
 
 ```csharp
 var unitDef = structureCache.GetDXUnit("TUserUnit"); // by type name
-Guid unitDefinitionId = unitDef.ID;
+Guid unitDefinitionId = unitDef.Id;
 ```
 
 ---

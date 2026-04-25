@@ -169,14 +169,14 @@ For private types (`IsPublicRead = false`), selected entries can still be public
 `DXPublicAccessUnit` fields:
 
 - `DXUnitDefinition` -> target unit definition id.
-- `PublicDXUnitID` -> concrete public record id for that type.
+- `PublicDXUnitId` -> concrete public record id for that type.
 
 Runtime behavior for anonymous read:
 
 - `GetItem(type, id)` returns item only if mapping exists for `(type, id)`.
 - `GetItems(type)` returns only mapped ids for that type.
 - `GetItems(type, ids)` intersects requested ids with mapped ids.
-- `GetItems(type, filter)` applies `ID IN (mapped ids)` and original filter together.
+- `GetItems(type, filter)` applies `Id IN (mapped ids)` and original filter together.
 
 Typical use: mostly private dataset with curated public subset.
 

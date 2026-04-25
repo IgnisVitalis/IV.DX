@@ -80,8 +80,8 @@ namespace IV.DX.Hosting
         }
 
         /// <summary>
-        /// Derives a short, stable, URL-safe key ID from the key bytes using SHA-256.
-        /// The same key bytes always produce the same ID; different keys produce different IDs.
+        /// Derives a short, stable, URL-safe key Id from the key bytes using SHA-256.
+        /// The same key bytes always produce the same Id; different keys produce different IDs.
         /// </summary>
         internal static string DeriveKeyId(byte[] keyBytes)
         {

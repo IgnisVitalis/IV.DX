@@ -25,10 +25,10 @@
             "Data": {
               "Items": [
                 {
-                  "DXUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
-                  "ID": "1f24f88d-1285-49cf-bbb7-c6226d4354d7",
+                  "DXUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "Id": "1f24f88d-1285-49cf-bbb7-c6226d4354d7",
                   "TimeStamp": "2026-02-04T11:54:19.27909Z",
-                  "DXUnitDefinitionUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "DXUnitDefinitionUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
                   "RelationType": 4,
                   "DXElementDefinitionUnit": "10cb622c-8532-4eff-ac3b-09829ed99bd2"
                 }
@@ -49,10 +49,10 @@
             "Data": {
               "Items": [              
                 {
-                  "DXUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
-                  "ID": "ddbf418f-463e-4eb4-9804-5a00aabfc799",
+                  "DXUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "Id": "ddbf418f-463e-4eb4-9804-5a00aabfc799",
                   "TimeStamp": "2026-02-04T11:54:19.267587Z",
-                  "DXObjectDefinitionUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "DXObjectDefinitionUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
                   "Name": "Name",
                   "Length": 100,
                   "Precision": null,
@@ -78,10 +78,10 @@
             "Data": {
               "Items": [
                 {
-                  "DXUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
-                  "ID": "99d6356b-0a6e-4f15-b1ba-3a38806c3f5c",
+                  "DXUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "Id": "99d6356b-0a6e-4f15-b1ba-3a38806c3f5c",
                   "TimeStamp": "2026-02-04T12:09:33.96704Z",
-                  "DXObjectDefinitionUnitID": "0bc15498-fda6-4164-b612-39e04131f32c",
+                  "DXObjectDefinitionUnitId": "0bc15498-fda6-4164-b612-39e04131f32c",
                   "Columns": "Name"
                 }
               ],
@@ -89,7 +89,7 @@
             }
           }
         },
-        "ID": "0bc15498-fda6-4164-b612-39e04131f32c",
+        "Id": "0bc15498-fda6-4164-b612-39e04131f32c",
         "TimeStamp": "2026-02-04T11:54:19.276521Z",
         "BaseDXUnit": null,
         "Name": "DXRoleUnit",

@@ -26,7 +26,7 @@ namespace IV.DX.Persistence
 
             var dxTypeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
 
-            return this._coreRepo.Delete(dxTypeName, dxUnit.ID);
+            return this._coreRepo.Delete(dxTypeName, dxUnit.Id);
         }
 
         public T GetDXUnit<T>(Guid id) where T : DXUnit
@@ -81,7 +81,7 @@ namespace IV.DX.Persistence
             var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
             var typeInfo = _dxStructureCache.GetDXUnit(typeName);
             definition.MainElement.DXTitleExpression =
-                string.IsNullOrEmpty(typeInfo?.DXTitleExpression) ? Constants.ID : typeInfo.DXTitleExpression;
+                string.IsNullOrEmpty(typeInfo?.DXTitleExpression) ? Constants.Id : typeInfo.DXTitleExpression;
         }
 
         public Guid Insert(DXUnit dxUnit)
@@ -114,10 +114,10 @@ namespace IV.DX.Persistence
 
             return this._coreRepo.AddRelation(
                 relationItem.ObjectTypeNameLeft,
-                     relationItem.DXUnitIDLeft,
+                     relationItem.DXUnitIdLeft,
                      relationItem.RelationNameRight,
                      relationItem.ObjectTypeNameRight,
-                     relationItem.DXUnitIDRight);
+                     relationItem.DXUnitIdRight);
         }
 
         public bool RemoveDXRelation(DXRelationItemUnit relationItem)
@@ -126,10 +126,10 @@ namespace IV.DX.Persistence
 
             return this._coreRepo.RemoveRelation(
                 relationItem.ObjectTypeNameLeft,
-                relationItem.DXUnitIDLeft,
+                relationItem.DXUnitIdLeft,
                 relationItem.RelationNameRight,
                 relationItem.ObjectTypeNameRight,
-                relationItem.DXUnitIDRight);
+                relationItem.DXUnitIdRight);
         }
 
     }

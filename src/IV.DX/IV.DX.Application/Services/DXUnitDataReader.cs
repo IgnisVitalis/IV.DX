@@ -50,7 +50,7 @@ namespace IV.DX.Application.Services
             }
 
             LogReadFailure("GetItem", typeName, result.Error, id: id);
-            throw new Exception($"There are an error to get dxUnit by ID ({id}): {result.Error}");
+            throw new Exception($"There are an error to get dxUnit by Id ({id}): {result.Error}");
         }
 
         public async Task<IEnumerable<T>> GetItemsAsync<T>(DXHandlerBaseContext? context = default, DXLoadingType typeOfLoading = DXLoadingType.Full, CancellationToken ct = default) where T : DXUnit, new()
@@ -247,7 +247,7 @@ namespace IV.DX.Application.Services
             }
 
             LogReadFailure("GetItem", typeName, result.Error, id: id);
-            throw new Exception($"There are an error to get dxModel by ID ({id}): {result.Error}");
+            throw new Exception($"There are an error to get dxModel by Id ({id}): {result.Error}");
         }
 
         public async Task<JObject> GetItemsAsync(string typeName, DXHandlerBaseContext? context = default, CancellationToken ct = default)
@@ -412,8 +412,8 @@ namespace IV.DX.Application.Services
 
         private string ResolveTypeName(Guid unitDefinitionId)
         {
-            var unit = structureCache.DXUnits.FirstOrDefault(x => x.ID == unitDefinitionId)
-                ?? throw new ArgumentException($"No DX unit definition found for ID '{unitDefinitionId}'.");
+            var unit = structureCache.DXUnits.FirstOrDefault(x => x.Id == unitDefinitionId)
+                ?? throw new ArgumentException($"No DX unit definition found for Id '{unitDefinitionId}'.");
             return unit.Name;
         }
 
@@ -425,11 +425,11 @@ namespace IV.DX.Application.Services
             if (unitDef == null)
                 return false;
 
-            if (unitDef.SupportsOwnership && ctx?.IdentityID.HasValue == true)
+            if (unitDef.SupportsOwnership && ctx?.IdentityId.HasValue == true)
             {
                 var identityOwnership = genericRepo
                     .GetDXUnits<DXIdentityOwnershipUnit>(
-                        $"Identity = '{ctx.IdentityID.Value}' AND DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{instanceId}'")
+                        $"Identity = '{ctx.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'")
                     .FirstOrDefault();
 
                 if (identityOwnership != null)
@@ -442,7 +442,7 @@ namespace IV.DX.Application.Services
                 {
                     var groupOwnership = genericRepo
                         .GetDXUnits<DXGroupOwnershipUnit>(
-                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{instanceId}'")
+                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'")
                         .FirstOrDefault();
 
                     if (groupOwnership != null)
@@ -452,7 +452,7 @@ namespace IV.DX.Application.Services
 
             var publicAccess = genericRepo
                 .GetDXUnits<DXPublicAccessUnit>(
-                    $"DXUnitDefinition = '{unitDef.ID}' AND PublicDXUnitID = '{instanceId}'")
+                    $"DXUnitDefinition = '{unitDef.Id}' AND PublicDXUnitId = '{instanceId}'")
                 .FirstOrDefault();
 
             return publicAccess != null;
@@ -466,13 +466,13 @@ namespace IV.DX.Application.Services
             if (unitDef == null)
                 return result;
 
-            if (unitDef.SupportsOwnership && ctx?.IdentityID.HasValue == true)
+            if (unitDef.SupportsOwnership && ctx?.IdentityId.HasValue == true)
             {
                 var identityOwned = genericRepo.GetDXUnits<DXIdentityOwnershipUnit>(
-                    $"Identity = '{ctx.IdentityID.Value}' AND DXUnitDefinition = '{unitDef.ID}'");
+                    $"Identity = '{ctx.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                 foreach (var o in identityOwned)
-                    result.Add(o.OwnedDXUnitID);
+                    result.Add(o.OwnedDXUnitId);
             }
 
             if (unitDef.SupportsOwnership && ctx?.ActiveGroupIDs != null)
@@ -480,20 +480,20 @@ namespace IV.DX.Application.Services
                 foreach (var groupId in ctx.ActiveGroupIDs)
                 {
                     var groupOwned = genericRepo.GetDXUnits<DXGroupOwnershipUnit>(
-                        $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.ID}'");
+                        $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                     foreach (var o in groupOwned)
-                        result.Add(o.OwnedDXUnitID);
+                        result.Add(o.OwnedDXUnitId);
                 }
             }
 
             var publicAccess = genericRepo.GetDXUnits<DXPublicAccessUnit>(
-                $"DXUnitDefinition = '{unitDef.ID}'");
+                $"DXUnitDefinition = '{unitDef.Id}'");
 
             foreach (var access in publicAccess)
             {
-                if (access.PublicDXUnitID != Guid.Empty)
-                    result.Add(access.PublicDXUnitID);
+                if (access.PublicDXUnitId != Guid.Empty)
+                    result.Add(access.PublicDXUnitId);
             }
 
             return result;
@@ -509,7 +509,7 @@ namespace IV.DX.Application.Services
         private static string BuildIdInFilter(IReadOnlyCollection<Guid> ids, string? originalFilter)
         {
             var inList = string.Join(",", ids.Select(x => $"'{x}'"));
-            var idIn = $"ID IN ({inList})";
+            var idIn = $"Id IN ({inList})";
             return string.IsNullOrWhiteSpace(originalFilter)
                 ? idIn
                 : $"({idIn}) AND ({originalFilter})";

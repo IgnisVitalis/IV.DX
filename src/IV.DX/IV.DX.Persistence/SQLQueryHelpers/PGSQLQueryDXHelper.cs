@@ -94,8 +94,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             sb.Append($"ALTER TABLE \"{childDXUnit}\" ");
             sb.Append($"ADD CONSTRAINT \"FK_{childDXUnit}_{baseDXUnit}_Base\" ");
-            sb.Append($"FOREIGN KEY (\"ID\") ");
-            sb.Append($"REFERENCES \"{baseDXUnit}\" (\"ID\") ");
+            sb.Append($"FOREIGN KEY (\"Id\") ");
+            sb.Append($"REFERENCES \"{baseDXUnit}\" (\"Id\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
@@ -115,14 +115,14 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 sqlClmDef += $"({clmDesc.Length.Value})";
             }
 
-            if ((!clmDesc.AllowNull || clmDesc.Name == "DXUnitID") && clmDesc.Name != "ID")
+            if ((!clmDesc.AllowNull || clmDesc.Name == "DXUnitId") && clmDesc.Name != "Id")
             {
                 sqlClmDef += $" NOT NULL";
             }
 
             if (!string.IsNullOrEmpty(clmDesc.DefaultValue)
-            && clmDesc.Name != "ID"
-            && clmDesc.Name != "DXUnitID")
+            && clmDesc.Name != "Id"
+            && clmDesc.Name != "DXUnitId")
             {
                 if (clmDesc.ColumnType == DXColumnTypeEnum.Bool)
                 {
@@ -134,7 +134,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                 }
             }
 
-            if (clmDesc.Name == "ID")
+            if (clmDesc.Name == "Id")
             {
                 sqlClmDef += $" PRIMARY KEY";
             }
@@ -251,23 +251,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             var columnsToAddMySQLCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
             var columnsToAlterColumnSetTypeCommand = columnIDsToChange.Select(x =>
                 this.GetSQLColumnDefinitionToAlterColumnSetType(
-                    dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                    dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                    dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+                    dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
             var columnsToAlterColumnSetAllowNullCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetAllowNull(
-                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
             var columnsToAlterColumnSetDefaultValueCommand = columnIDsToChange.Select(x =>
             this.GetSQLColumnDefinitionToAlterColumnSetDefaultValue(
-                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+                dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
             var columnsToChangeNamesCommand = columnIDsToChange.Select(x =>
               this.GetSQLColumnDefinitionToChangeColumnNames(
-                  dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x),
-                  dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x)));
+                  dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+                  dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
             if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
             {
@@ -331,23 +331,23 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
                 var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced
                     .Where(x => this.FilterForNonSystemColumns(x.Name))
-                    .Select(x => x.ID);
+                    .Select(x => x.Id);
 
                 return dataDXElementNew.DXColumnDefinitionElement.Announced
                     .Where(x => this.FilterForNonSystemColumns(x.Name))
-                    .Where(x => columnDescDXElementExistingIds.Contains(x.ID))
-                    .Select(x => x.ID)
+                    .Where(x => columnDescDXElementExistingIds.Contains(x.Id))
+                    .Select(x => x.Id)
                     .ToList();
             }
             else
             {
-                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
 
                 var idsToChange = columnDescDXElementNewIds.Intersect(columnDescDXElementExistingIds).Where(x =>
                 {
-                    var DXColumnDefinitionElementNew = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
-                    var DXColumnDefinitionElementExisting = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.ID == x);
+                    var DXColumnDefinitionElementNew = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x);
+                    var DXColumnDefinitionElementExisting = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x);
 
                     var result = !(DXColumnDefinitionElementNew.AllowNull == DXColumnDefinitionElementExisting.AllowNull
                     && this.AreEqual(DXColumnDefinitionElementNew.DefaultValue, DXColumnDefinitionElementExisting.DefaultValue)
@@ -381,22 +381,22 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (dataDXElementNew.DXColumnDefinitionElement.Mode == MultiElementsMode.Target)
             {
                 var deletedIds = dataDXElementNew.DXColumnDefinitionElement.Deleted
-                    .Select(x => x.ID)
+                    .Select(x => x.Id)
                     .ToHashSet();
 
                 return dataDXElementExisting.DXColumnDefinitionElement.Announced
                     .Where(x => this.FilterForNonSystemColumns(x.Name))
-                    .Where(x => deletedIds.Contains(x.ID))
+                    .Where(x => deletedIds.Contains(x.Id))
                     .ToList();
             }
             else
             {
-                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
 
                 var idsToRemove = columnDescDXElementExistingIds.Where(x => !columnDescDXElementNewIds.Contains(x));
 
-                return dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.ID)).ToList();
+                return dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => idsToRemove.Contains(x.Id)).ToList();
             }
         }
 
@@ -408,27 +408,27 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             {
                 var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced
                     .Where(x => this.FilterForNonSystemColumns(x.Name))
-                    .Select(x => x.ID);
+                    .Select(x => x.Id);
 
                 return dataDXElementNew.DXColumnDefinitionElement.Announced
                     .Where(x => this.FilterForNonSystemColumns(x.Name))
-                    .Where(x => !columnDescDXElementExistingIds.Contains(x.ID))
+                    .Where(x => !columnDescDXElementExistingIds.Contains(x.Id))
                     .ToList();
             }
             else
             {
-                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
-                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.ID);
+                var columnDescDXElementNewIds = dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
+                var columnDescDXElementExistingIds = dataDXElementExisting.DXColumnDefinitionElement.Announced.Where(x => this.FilterForNonSystemColumns(x.Name)).Select(x => x.Id);
 
                 var idsToAdd = columnDescDXElementNewIds.Where(x => !columnDescDXElementExistingIds.Contains(x));
 
-                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.ID)).ToList();
+                return dataDXElementNew.DXColumnDefinitionElement.Announced.Where(x => idsToAdd.Contains(x.Id)).ToList();
             }
         }
 
         private bool FilterForNonSystemColumns(string columnName)
         {
-            return columnName != "ID" && columnName != "DXUnitID" && columnName != "TimeStamp";
+            return columnName != "Id" && columnName != "DXUnitId" && columnName != "TimeStamp";
         }
 
         public string GetSQLQueryToCreateRelationManyTo(DXRelationDefinitionUnit obj, bool isNullable, bool isUnique)
@@ -638,7 +638,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             if (obj == null || dxElement == null)
                 return null;
 
-            var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.ID);
+            var dxElementInDXUnitInfo = obj.DXElementInUnitDefinitionElement?.Announced.SingleOrDefault(x => x.DXElementDefinitionUnit == dxElement.Id);
 
             if (dxElementInDXUnitInfo == null)
                 return null;
@@ -647,7 +647,7 @@ namespace IV.DX.Persistence.SQLQueryHelpers
 
             if (dxElement.IsCommon)
             {
-                // Common DXElement stores the owning DXUnit via (DXUnitID, DXUnitType) instead of per-unit nullable <DXUnitTypeName>ID columns.
+                // Common DXElement stores the owning DXUnit via (DXUnitId, DXUnitType) instead of per-unit nullable <DXUnitTypeName>Id columns.
                 sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
                 sb.Append($"ADD COLUMN IF NOT EXISTS \"DXUnitType\" uuid; ");
 
@@ -659,51 +659,51 @@ BEGIN
         ALTER TABLE ""{dxElement.Name}""
         ADD CONSTRAINT ""{fkName}""
         FOREIGN KEY (""DXUnitType"")
-        REFERENCES ""DXUnitDefinitionUnit"" (""ID"")
+        REFERENCES ""DXUnitDefinitionUnit"" (""Id"")
         ON DELETE NO ACTION
         ON UPDATE NO ACTION;
     END IF;
 END $$;
 ");
 
-                sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_DXUnitType_DXUnitID\" ");
-                sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitType\", \"DXUnitID\"); ");
+                sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_DXUnitType_DXUnitId\" ");
+                sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitType\", \"DXUnitId\"); ");
 
                 // Per-unit cardinality enforcement via partial index (needed because a common DXElement can be Single in one DXUnit and Multi in another).
                 if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
                     || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory)
                 {
-                    sb.Append($"CREATE UNIQUE INDEX IF NOT EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitID\" ");
-                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitID\") ");
-                    sb.Append($"WHERE \"DXUnitType\" = '{obj.ID}'; ");
+                    sb.Append($"CREATE UNIQUE INDEX IF NOT EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitId\" ");
+                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitId\") ");
+                    sb.Append($"WHERE \"DXUnitType\" = '{obj.Id}'; ");
                 }
                 else
                 {
-                    sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitID\" ");
-                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitID\") ");
-                    sb.Append($"WHERE \"DXUnitType\" = '{obj.ID}'; ");
+                    sb.Append($"CREATE INDEX IF NOT EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitId\" ");
+                    sb.Append($"ON \"{dxElement.Name}\" (\"DXUnitId\") ");
+                    sb.Append($"WHERE \"DXUnitType\" = '{obj.Id}'; ");
                 }
 
                 return sb.ToString();
             }
 
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"ADD COLUMN \"{obj.Name}ID\" uuid; ");
+            sb.Append($"ADD COLUMN \"{obj.Name}Id\" uuid; ");
 
             if (dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleOptional
             || dxElementInDXUnitInfo.RelationType == DXElementInUnitTypeEnum.SingleMandatory
             )
             {
                 sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-                sb.Append($"ADD CONSTRAINT \"{obj.Name}ID_unique\" UNIQUE(\"{obj.Name}ID\"); ");
+                sb.Append($"ADD CONSTRAINT \"{obj.Name}ID_unique\" UNIQUE(\"{obj.Name}Id\"); ");
             }
 
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"ADD INDEX \"FK_{dxElement.Name}_{obj.Name}_0000_idx\" (\"{obj.Name}ID\" ASC) VISIBLE; ");
+            sb.Append($"ADD INDEX \"FK_{dxElement.Name}_{obj.Name}_0000_idx\" (\"{obj.Name}Id\" ASC) VISIBLE; ");
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
             sb.Append($"ADD CONSTRAINT \"FK_{dxElement.Name}_{obj.Name}_0000\" ");
-            sb.Append($"FOREIGN KEY (\"{obj.Name}ID\") ");
-            sb.Append($"REFERENCES \"{obj.Name}\" (\"ID\") ");
+            sb.Append($"FOREIGN KEY (\"{obj.Name}Id\") ");
+            sb.Append($"REFERENCES \"{obj.Name}\" (\"Id\") ");
             sb.Append($"ON DELETE NO ACTION ");
             sb.Append($"ON UPDATE NO ACTION;");
 
@@ -765,13 +765,13 @@ END $$;
 
         public string GetSQLQueryToDropTable(DXObjectDefinitionUnit dataDXElement)
         {
-            // TODO: need to find solution how to drop table by DXUnitID
+            // TODO: need to find solution how to drop table by DXUnitId
             return GetSQLQueryToDropTable(dataDXElement.Name);
         }
 
         public string GetSQLQueryToDropTable(string tableName)
         {
-            // TODO: need to find solution how to drop table by DXUnitID
+            // TODO: need to find solution how to drop table by DXUnitId
             return $"DROP TABLE IF EXISTS \"{tableName}\"";
         }
 
@@ -784,8 +784,8 @@ END $$;
 
             if (dxElement.IsCommon)
             {
-                sb.Append($"DROP INDEX IF EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitID\"; ");
-                sb.Append($"DROP INDEX IF EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitID\"; ");
+                sb.Append($"DROP INDEX IF EXISTS \"UX_{dxElement.Name}_{obj.Name}_DXUnitId\"; ");
+                sb.Append($"DROP INDEX IF EXISTS \"IX_{dxElement.Name}_{obj.Name}_DXUnitId\"; ");
                 return sb.ToString();
             }
 
@@ -793,14 +793,14 @@ END $$;
             sb.Append($"DROP CONSTRAINT IF EXISTS \"FK_{dxElement.Name}_{obj.Name}_0000\"; ");
             sb.Append($"DROP INDEX IF EXISTS \"FK_{dxElement.Name}_{obj.Name}_0000_idx\"; ");
             sb.Append($"ALTER TABLE \"{dxElement.Name}\" ");
-            sb.Append($"DROP COLUMN IF EXISTS \"{obj.Name}ID\"; ");
+            sb.Append($"DROP COLUMN IF EXISTS \"{obj.Name}Id\"; ");
 
             return sb.ToString();
         }
 
         public string GetSQLQueryToSelectIDFromTable(string tableName)
         {
-            return $"SELECT \"ID\" FROM \"{tableName}\"";
+            return $"SELECT \"Id\" FROM \"{tableName}\"";
         }
 
         public string GetSQLQueryToSetColumnNotNull(string tableName, string columnName)
@@ -810,7 +810,7 @@ END $$;
 
         public string GetSQLQueryToUpdateColumn(string tableName, string columnName, object value, Guid id)
         {
-            return $"UPDATE \"{tableName}\" SET \"{columnName}\" = {FormatSQLValue(value)} WHERE \"ID\" = '{id}'";
+            return $"UPDATE \"{tableName}\" SET \"{columnName}\" = {FormatSQLValue(value)} WHERE \"Id\" = '{id}'";
         }
 
         public string GetSQLQueryToUpdateColumn(string tableName, string columnName, object value, IDictionary<string, object> whereConditions)
@@ -1073,14 +1073,14 @@ END $$;
             return pgbSqlDataType;
         }
 
-        public string GetWhereExpressionForID(Guid id)
+        public string GetWhereExpressionForId(Guid id)
         {
-            return $"\"ID\" = '{id}'";
+            return $"\"Id\" = '{id}'";
         }
 
-        public string GetWhereExpressionForDXUnitID(Guid id)
+        public string GetWhereExpressionForDXUnitId(Guid id)
         {
-            return $"\"DXUnitID\" = '{id}'";
+            return $"\"DXUnitId\" = '{id}'";
         }
 
         public string? GetWhereExpressionWithAnd(IDictionary<string, object> values)
@@ -1091,18 +1091,18 @@ END $$;
             return string.Join(" AND ", values.Select(x => $"\"{x.Key}\" = '{x.Value}'"));
         }
 
-        public string GetWhereExpressionForID(IEnumerable<Guid> ids)
+        public string GetWhereExpressionForId(IEnumerable<Guid> ids)
         {
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-            return $"\"ID\" IN ({idsString})";
+            return $"\"Id\" IN ({idsString})";
         }
 
-        public string GetWhereExpressionForDXUnitID(IEnumerable<Guid> ids)
+        public string GetWhereExpressionForDXUnitId(IEnumerable<Guid> ids)
         {
             string idsString = String.Join(",", ids.Select(x => $"'{x}'"));
 
-            return $"\"DXUnitID\" IN ({idsString})";
+            return $"\"DXUnitId\" IN ({idsString})";
         }
 
         public void BulkInsert(DbConnection connection, DataTable table, string tableName)
@@ -1143,7 +1143,7 @@ END $$;
             writer.Complete();
         }
 
-        public void BulkUpsert(DbConnection connection, DataTable table, string tableName, string keyColumn = "ID")
+        public void BulkUpsert(DbConnection connection, DataTable table, string tableName, string keyColumn = "Id")
         {
             if (connection is not NpgsqlConnection conn)
                 throw new ArgumentException("BulkUpsert requires NpgsqlConnection.", nameof(connection));

@@ -49,14 +49,14 @@ namespace IV.DX.Application.IntTests.Services
 
             _genericRepo.Insert(new DXIdentityUnit
             {
-                ID = IdentityId,
+                Id = IdentityId,
                 TimeStamp = now,
                 Name = $"rbac-fixture-{IdentityId:N}"
             });
 
             _genericRepo.Insert(new DXIdentityLoginUnit
             {
-                ID = LoginId,
+                Id = LoginId,
                 TimeStamp = now,
                 Subject = $"rbac.fixture.{Guid.NewGuid():N}",
                 SecretHash = "test-password",
@@ -66,7 +66,7 @@ namespace IV.DX.Application.IntTests.Services
 
             _genericRepo.Insert(new DXAuthSessionUnit
             {
-                ID = SessionRecordId,
+                Id = SessionRecordId,
                 TimeStamp = now,
                 SessionId = SessionId,
                 RefreshTokenHash = "test-token",
@@ -80,7 +80,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await _dataService.InsertAsync(new DXTenantUnit
             {
-                ID = TenantId,
+                Id = TenantId,
                 TimeStamp = now,
                 Name = $"rbac-fixture-tenant-{TenantId:N}"
             });
@@ -94,7 +94,7 @@ namespace IV.DX.Application.IntTests.Services
                 IsSystem = true
             });
 
-            try { await _dataService.DeleteAsync(new DXTenantUnit { ID = TenantId, TimeStamp = DateTime.UtcNow }); } catch { }
+            try { await _dataService.DeleteAsync(new DXTenantUnit { Id = TenantId, TimeStamp = DateTime.UtcNow }); } catch { }
             try { var s = _genericRepo.GetDXUnit<DXAuthSessionUnit>(SessionRecordId); if (s != null) _genericRepo.Delete(s); } catch { }
             try { var l = _genericRepo.GetDXUnit<DXIdentityLoginUnit>(LoginId); if (l != null) _genericRepo.Delete(l); } catch { }
             try { var i = _genericRepo.GetDXUnit<DXIdentityUnit>(IdentityId); if (i != null) _genericRepo.Delete(i); } catch { }

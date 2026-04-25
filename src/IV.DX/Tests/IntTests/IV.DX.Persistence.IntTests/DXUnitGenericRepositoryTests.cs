@@ -47,9 +47,9 @@ namespace IV.DX.Persistence.IntTests
             var result = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
-            Assert.Equal(objectId, result.ID);
+            Assert.Equal(objectId, result.Id);
             Assert.NotNull(result);
-            Assert.True(result.ID != default(Guid));
+            Assert.True(result.Id != default(Guid));
             Assert.Equal("SomeTestName", result.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
@@ -61,9 +61,9 @@ namespace IV.DX.Persistence.IntTests
             result = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objectId);
 
             Assert.NotNull(result);
-            Assert.Equal(objectId, result.ID);
+            Assert.Equal(objectId, result.Id);
             Assert.NotNull(result);
-            Assert.True(result.ID != default(Guid));
+            Assert.True(result.Id != default(Guid));
             Assert.Equal("UpdatedSomeTestName", result.Name);
             Assert.True(result is DXUnitDefinitionUnit);
 
@@ -110,21 +110,21 @@ namespace IV.DX.Persistence.IntTests
             // Checking result
             var result = this._genericRepo.GetDXUnits<DXUnitDefinitionUnit>();
 
-            var resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
+            var resultItem1 = result.SingleOrDefault(x => x.Id == objectId1);
 
             Assert.NotNull(resultItem1);
-            Assert.Equal(objectId1, resultItem1.ID);
+            Assert.Equal(objectId1, resultItem1.Id);
             Assert.NotNull(resultItem1);
-            Assert.True(resultItem1.ID != default(Guid));
+            Assert.True(resultItem1.Id != default(Guid));
             Assert.Equal("SomeTestName1", resultItem1.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
-            var resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
+            var resultItem2 = result.SingleOrDefault(x => x.Id == objectId2);
 
             Assert.NotNull(resultItem2);
-            Assert.Equal(objectId2, resultItem2.ID);
+            Assert.Equal(objectId2, resultItem2.Id);
             Assert.NotNull(resultItem2);
-            Assert.True(resultItem2.ID != default(Guid));
+            Assert.True(resultItem2.Id != default(Guid));
             Assert.Equal("SomeTestName2", resultItem2.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 
@@ -138,21 +138,21 @@ namespace IV.DX.Persistence.IntTests
             // Checking result
             result = this._genericRepo.GetDXUnits<DXUnitDefinitionUnit>();
 
-            resultItem1 = result.SingleOrDefault(x => x.ID == objectId1);
+            resultItem1 = result.SingleOrDefault(x => x.Id == objectId1);
 
             Assert.NotNull(resultItem1);
-            Assert.Equal(objectId1, resultItem1.ID);
+            Assert.Equal(objectId1, resultItem1.Id);
             Assert.NotNull(resultItem1);
-            Assert.True(resultItem1.ID != default(Guid));
+            Assert.True(resultItem1.Id != default(Guid));
             Assert.Equal("UpdatedSomeTestName1", resultItem1.Name);
             Assert.True(resultItem1 is DXUnitDefinitionUnit);
 
-            resultItem2 = result.SingleOrDefault(x => x.ID == objectId2);
+            resultItem2 = result.SingleOrDefault(x => x.Id == objectId2);
 
             Assert.NotNull(resultItem2);
-            Assert.Equal(objectId2, resultItem2.ID);
+            Assert.Equal(objectId2, resultItem2.Id);
             Assert.NotNull(resultItem2);
-            Assert.True(resultItem2.ID != default(Guid));
+            Assert.True(resultItem2.Id != default(Guid));
             Assert.Equal("UpdatedSomeTestName2", resultItem2.Name);
             Assert.True(resultItem2 is DXUnitDefinitionUnit);
 

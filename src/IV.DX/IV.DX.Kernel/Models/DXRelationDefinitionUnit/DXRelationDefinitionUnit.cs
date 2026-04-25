@@ -45,7 +45,7 @@ namespace IV.DX.Kernel.Models
 
             return new DXRelationDefinitionUnit()
             {
-                ID = objectId,
+                Id = objectId,
 
 
                 ObjectNameLeft = this.ObjectNameRight,

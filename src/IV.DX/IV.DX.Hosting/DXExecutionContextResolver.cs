@@ -49,11 +49,11 @@ namespace IV.DX.Hosting
 
             foreach (var membership in memberships)
             {
-                membershipRoleIds.UnionWith(GetRoleIdsForMember(membership.ID));
+                membershipRoleIds.UnionWith(GetRoleIdsForMember(membership.Id));
                 tenantRoleIds.UnionWith(GetRoleIdsForMember(membership.Tenant));
 
                 var groupMemberships = dxUnitGenericRepository
-                    .GetDXUnits<DXGroupMembershipUnit>($"Membership = '{membership.ID}'");
+                    .GetDXUnits<DXGroupMembershipUnit>($"Membership = '{membership.Id}'");
 
                 foreach (var groupMembership in groupMemberships)
                 {
@@ -99,7 +99,7 @@ namespace IV.DX.Hosting
             {
                 SubjectId = resolvedSubject,
                 IsSystem = false,
-                IdentityID = identityLogin.Identity,
+                IdentityId = identityLogin.Identity,
                 ActiveGroupIDs = activeGroupIDs.Count > 0 ? activeGroupIDs : null,
                 AllowedReadUnitTypes = finalRead,
                 AllowedWriteUnitTypes = finalWrite,
@@ -125,7 +125,7 @@ namespace IV.DX.Hosting
             }
 
             var roleElements = dxElementGenericRepository
-                .GetItems<DXRoleElement>("DXSecurityMemberUnit", $"ID = '{memberId}'");
+                .GetItems<DXRoleElement>("DXSecurityMemberUnit", $"Id = '{memberId}'");
 
             return roleElements
                 .Select(x => x.Role)
@@ -147,25 +147,25 @@ namespace IV.DX.Hosting
             foreach (var roleId in roleIds)
             {
                 var grants = dxElementGenericRepository
-                    .GetItems<DXUnitGrantElement>("DXRoleUnit", $"ID = '{roleId}'");
+                    .GetItems<DXUnitGrantElement>("DXRoleUnit", $"Id = '{roleId}'");
 
                 foreach (var grant in grants)
                 {
-                    if (!operationSelector(grant) || grant.TargetDXUnitID == Guid.Empty)
+                    if (!operationSelector(grant) || grant.TargetDXUnitId == Guid.Empty)
                     {
                         continue;
                     }
 
                     if (grant.Effect == DXGrantEffectEnum.Deny)
                     {
-                        effectByUnit[grant.TargetDXUnitID] = DXGrantEffectEnum.Deny;
+                        effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Deny;
                         continue;
                     }
 
-                    if (!effectByUnit.TryGetValue(grant.TargetDXUnitID, out var currentEffect)
+                    if (!effectByUnit.TryGetValue(grant.TargetDXUnitId, out var currentEffect)
                         || currentEffect != DXGrantEffectEnum.Deny)
                     {
-                        effectByUnit[grant.TargetDXUnitID] = DXGrantEffectEnum.Allow;
+                        effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Allow;
                     }
                 }
             }
@@ -181,7 +181,7 @@ namespace IV.DX.Hosting
             }
 
             var names = dxStructureCache.DXUnits
-                .Where(x => allowedUnitIds.Contains(x.ID))
+                .Where(x => allowedUnitIds.Contains(x.Id))
                 .Select(x => x.Name)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);

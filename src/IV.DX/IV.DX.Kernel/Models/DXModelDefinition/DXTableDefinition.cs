@@ -20,17 +20,17 @@ namespace IV.DX.Kernel.Models
 
             _items = new List<DXColumnDefinition>()
             {
-                new DXColumnDefinition(Constants.ID, new DXColumnAttribute(Constants.ID)),
+                new DXColumnDefinition(Constants.Id, new DXColumnAttribute(Constants.Id)),
                 new DXColumnDefinition(Constants.TimeStamp, new DXColumnAttribute(Constants.TimeStamp)),
-                new DXColumnDefinition(Constants.DXCustomUnitID(dxUnitType), new DXColumnAttribute(Constants.DXCustomUnitID(dxUnitType)))
+                new DXColumnDefinition(Constants.DXCustomUnitId(dxUnitType), new DXColumnAttribute(Constants.DXCustomUnitId(dxUnitType)))
             };
         }
 
         public void AddPropertyDefinition(DXColumnDefinition item)
         {
-            if (item.Name == Constants.ID
+            if (item.Name == Constants.Id
                 || item.Name == Constants.TimeStamp
-                || item.Name == Constants.DXCustomUnitID(this.DXUnitType)
+                || item.Name == Constants.DXCustomUnitId(this.DXUnitType)
                 )
                 return;
 

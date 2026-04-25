@@ -33,7 +33,7 @@ namespace IV.DX.Application.Services
 
             if (result.IsSuccess && result.Value != null)
             {
-                TryCreateIdentityOwnership(typeName, result.Value.ID);
+                TryCreateIdentityOwnership(typeName, result.Value.Id);
                 return result.Value;
             }
             else
@@ -53,7 +53,7 @@ namespace IV.DX.Application.Services
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
             EnsureWriteAccessForInsert(typeName);
 
-            var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.ID);
+            var itemIsExisting = coreRepo.IsItemExisting(typeName, dxUnit.Id);
 
             if (itemIsExisting)
             {
@@ -73,7 +73,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureWriteAccessForInstance(typeName, dxUnit.ID);
+            EnsureWriteAccessForInstance(typeName, dxUnit.Id);
 
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
@@ -83,7 +83,7 @@ namespace IV.DX.Application.Services
             }
             else
             {
-                LogWriteFailure("update", typeName, result.Error, dxUnit.ID);
+                LogWriteFailure("update", typeName, result.Error, dxUnit.Id);
                 throw new Exception($"There are an error to update dxUnit: {result.Error}");
             }
         }
@@ -123,18 +123,18 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureDeleteAccessForInstance(typeName, dxUnit.ID);
+            EnsureDeleteAccessForInstance(typeName, dxUnit.Id);
 
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
             if (result.IsSuccess)
             {
-                TryDeleteOwnership(typeName, dxUnit.ID);
+                TryDeleteOwnership(typeName, dxUnit.Id);
                 return true;
             }
             else
             {
-                LogDeleteFailure(typeName, result.Error, dxUnit.ID);
+                LogDeleteFailure(typeName, result.Error, dxUnit.Id);
                 return false;
             }
         }
@@ -275,7 +275,7 @@ namespace IV.DX.Application.Services
                 foreach (var record in block.Data.Items)
                 {
                     if (record != null)
-                        EnsureWriteAccessForInstance(typeName, record.ID);
+                        EnsureWriteAccessForInstance(typeName, record.Id);
                 }
             }
             else
@@ -310,7 +310,7 @@ namespace IV.DX.Application.Services
                 foreach (var deleteRef in deleteRefs)
                 {
                     if (deleteRef != null)
-                        EnsureDeleteAccessForInstance(typeName, deleteRef.ID);
+                        EnsureDeleteAccessForInstance(typeName, deleteRef.Id);
                 }
             }
             else
@@ -327,7 +327,7 @@ namespace IV.DX.Application.Services
                     foreach (var deleteRef in deleteRefs)
                     {
                         if (deleteRef != null)
-                            TryDeleteOwnership(typeName, deleteRef.ID);
+                            TryDeleteOwnership(typeName, deleteRef.Id);
                     }
                 }
                 return true;
@@ -359,7 +359,7 @@ namespace IV.DX.Application.Services
                     if (record == null) continue;
 
                     var itemIsExisting = !string.IsNullOrWhiteSpace(typeName)
-                        && await this.IsItemExistingAsync(typeName, record.ID, context, ct);
+                        && await this.IsItemExistingAsync(typeName, record.Id, context, ct);
 
                     var singleBlock = new DXDataBlock<DXUnitRecord>
                     {
@@ -411,7 +411,7 @@ namespace IV.DX.Application.Services
 
         private static Guid? ExtractInstanceId(JObject jObject)
         {
-            var idToken = jObject["Data"]?["Items"]?[0]?["ID"] ?? jObject["ID"];
+            var idToken = jObject["Data"]?["Items"]?[0]?["Id"] ?? jObject["Id"];
             if (idToken != null && Guid.TryParse(idToken.ToString(), out var id))
                 return id;
             return null;
@@ -509,11 +509,11 @@ namespace IV.DX.Application.Services
 
             var context = executionContextAccessor.Current;
 
-            if (context?.IdentityID.HasValue == true)
+            if (context?.IdentityId.HasValue == true)
             {
                 var identityOwnership = genericRepo
                     .GetDXUnits<DXIdentityOwnershipUnit>(
-                        $"Identity = '{context.IdentityID.Value}' AND DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{instanceId}'")
+                        $"Identity = '{context.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'")
                     .FirstOrDefault();
 
                 if (identityOwnership != null)
@@ -526,7 +526,7 @@ namespace IV.DX.Application.Services
                 {
                     var groupOwnership = genericRepo
                         .GetDXUnits<DXGroupOwnershipUnit>(
-                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{instanceId}'")
+                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'")
                         .FirstOrDefault();
 
                     if (groupOwnership != null)
@@ -549,7 +549,7 @@ namespace IV.DX.Application.Services
                 return;
 
             var ctx = executionContextAccessor.Current;
-            if (ctx == null || ctx.IsSystem || !ctx.IdentityID.HasValue)
+            if (ctx == null || ctx.IsSystem || !ctx.IdentityId.HasValue)
                 return;
 
             var unitDef = structureCache.GetDXUnit(typeName);
@@ -558,11 +558,11 @@ namespace IV.DX.Application.Services
 
             var ownership = new DXIdentityOwnershipUnit
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 TimeStamp = DateTime.UtcNow,
-                Identity = ctx.IdentityID.Value,
-                DXUnitDefinition = unitDef.ID,
-                OwnedDXUnitID = unitId
+                Identity = ctx.IdentityId.Value,
+                DXUnitDefinition = unitDef.Id,
+                OwnedDXUnitId = unitId
             };
 
             genericRepo.Insert(ownership);
@@ -579,8 +579,8 @@ namespace IV.DX.Application.Services
 
             foreach (var item in block.Data.Items)
             {
-                if (item != null && item.ID != Guid.Empty)
-                    TryCreateIdentityOwnership(typeName, item.ID);
+                if (item != null && item.Id != Guid.Empty)
+                    TryCreateIdentityOwnership(typeName, item.Id);
             }
         }
 
@@ -592,8 +592,8 @@ namespace IV.DX.Application.Services
 
             foreach (var item in block.Data.Items)
             {
-                if (item != null && item.ID != Guid.Empty)
-                    TryCreateIdentityOwnership(typeName, item.ID);
+                if (item != null && item.Id != Guid.Empty)
+                    TryCreateIdentityOwnership(typeName, item.Id);
             }
         }
 
@@ -605,7 +605,7 @@ namespace IV.DX.Application.Services
 
             var identityOwners = genericRepo
                 .GetDXUnits<DXIdentityOwnershipUnit>(
-                    $"DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{unitId}'")
+                    $"DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{unitId}'")
                 .ToList();
 
             foreach (var owner in identityOwners)
@@ -613,7 +613,7 @@ namespace IV.DX.Application.Services
 
             var groupOwners = genericRepo
                 .GetDXUnits<DXGroupOwnershipUnit>(
-                    $"DXUnitDefinition = '{unitDef.ID}' AND OwnedDXUnitID = '{unitId}'")
+                    $"DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{unitId}'")
                 .ToList();
 
             foreach (var owner in groupOwners)

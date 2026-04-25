@@ -9,12 +9,12 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TPositionUnit()
             {
-                ID = id,
-                //User = user.ID,
+                Id = id,
+                //User = user.Id,
                 TPositionMainElement = new TPositionMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     Name = name
                 }
             };

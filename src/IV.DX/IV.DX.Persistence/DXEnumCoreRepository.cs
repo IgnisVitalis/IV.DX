@@ -127,19 +127,19 @@ namespace IV.DX.Persistence
                     conn,
                     dataSet,
                     enumTable,
-                    dxFilter: this.GetWhereExpressionForID(record.ID),
+                    dxFilter: this.GetWhereExpressionForId(record.Id),
                     columns: modelDefinition.MainElement.GetColumns());
 
                 var table = dataSet.Tables[enumTable]!;
 
                 if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
                 {
-                    if (table.Columns.Contains("ID"))
-                        table.PrimaryKey = new[] { table.Columns["ID"]! };
+                    if (table.Columns.Contains("Id"))
+                        table.PrimaryKey = new[] { table.Columns["Id"]! };
                 }
 
                 var item = BuildEnumItem(enumInfo.Name, record);
-                var row = table.Rows.Find(item.ID);
+                var row = table.Rows.Find(item.Id);
 
                 if (row == null)
                 {
@@ -155,7 +155,7 @@ namespace IV.DX.Persistence
                 SaveTable(adapter, conn, dataSet, table, false);
 
                 dataSet.AcceptChanges();
-                return item.ID;
+                return item.Id;
             });
         }
 
@@ -176,7 +176,7 @@ namespace IV.DX.Persistence
             if (record.Value != null)
                 content["Value"] = ConvertEnumTokenToObject(record.Value)!;
 
-            return new RowItem(enumTypeName, record.ID, record.ID, record.TimeStamp, content);
+            return new RowItem(enumTypeName, record.Id, record.Id, record.TimeStamp, content);
         }
 
         private static DXDataBlock<DXEnumRecord> MapUnitBlockToEnumBlock(string enumTypeName, DXDataBlock<DXUnitRecord> unitBlock)
@@ -210,7 +210,7 @@ namespace IV.DX.Persistence
         {
             var result = new DXEnumRecord
             {
-                ID = record.ID,
+                Id = record.Id,
                 TimeStamp = record.TimeStamp,
                 Type = enumTypeName
             };

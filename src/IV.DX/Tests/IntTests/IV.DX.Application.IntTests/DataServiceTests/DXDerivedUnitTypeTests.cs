@@ -69,7 +69,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         {
             var columns = new Dictionary<string, string> { ["DerivedDXUnitType"] = "DerivedDXUnitType" };
             var rows    = _rawReader.Get("TDeviceUnit", columns);
-            var byId    = rows.Data.Items.ToDictionary(x => x.ID);
+            var byId    = rows.Data.Items.ToDictionary(x => x.Id);
 
             foreach (var id in SeededTDeviceUnitIds)
             {
@@ -92,14 +92,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 id,
                 model: "TestModelDevice",
                 uuid:  Guid.NewGuid(),
-                user:  new TUserUnit { ID = ExistingUserId });
+                user:  new TUserUnit { Id = ExistingUserId });
 
             await _service.InsertAsync(device);
 
             var columns = new Dictionary<string, string> { ["DerivedDXUnitType"] = "DerivedDXUnitType" };
             var row     = _rawReader.Get("TDeviceUnit", columns)
                                     .Data.Items
-                                    .SingleOrDefault(x => x.ID == id);
+                                    .SingleOrDefault(x => x.Id == id);
 
             Assert.NotNull(row);
             Assert.Equal(TDeviceUnitDefinitionId, Guid.Parse(row.Fields["DerivedDXUnitType"].ToString()));
@@ -115,12 +115,12 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var id = new Guid("e828afee-3986-4a4a-ad31-36fc6224e280");
             var computer = new TComputerUnit
             {
-                ID   = id,
+                Id   = id,
                 User = ExistingUserId,
                 TDeviceMainElement = new TDeviceMainElement
                 {
-                    ID       = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id       = Guid.NewGuid(),
+                    DXUnitId = id,
                     Model    = "TestModelComputer",
                     UUID     = Guid.NewGuid()
                 }
@@ -131,7 +131,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var columns = new Dictionary<string, string> { ["DerivedDXUnitType"] = "DerivedDXUnitType" };
             var row     = _rawReader.Get("TDeviceUnit", columns)
                                     .Data.Items
-                                    .SingleOrDefault(x => x.ID == id);
+                                    .SingleOrDefault(x => x.Id == id);
 
             Assert.NotNull(row);
             Assert.Equal(TComputerUnitDefinitionId, Guid.Parse(row.Fields["DerivedDXUnitType"].ToString()));

@@ -31,7 +31,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxUnitDefinition);
 
             var item = Assert.Single(dxUnitDefinition.Data.Items);
-            Assert.Equal(id, item.ID);
+            Assert.Equal(id, item.Id);
             Assert.NotNull(item.Fields);
             Assert.Equal("DXObjectDefinitionUnit", item.Fields["Name"].ToString());
             Assert.True(item.Fields.ContainsKey("DerivedDXUnitType"), "DerivedDXUnitType field must be present");
@@ -51,7 +51,7 @@ namespace IV.DX.Persistence.IntTests
             Assert.NotNull(dxUnitDefinition);
 
             var item = Assert.Single(dxUnitDefinition.Data.Items);
-            Assert.Equal(id, item.ID);
+            Assert.Equal(id, item.Id);
             Assert.NotNull(item.Fields);
             Assert.Equal("DXObjectDefinitionUnit", item.Fields["Name"].ToString());
             Assert.True(item.Fields.ContainsKey("DerivedDXUnitType"), "DerivedDXUnitType field must be present");

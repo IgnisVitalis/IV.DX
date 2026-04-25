@@ -7,13 +7,13 @@ namespace IV.DX.Kernel.Models
     {
         [DXColumn("ObjectTypeNameLeft")]
         public string ObjectTypeNameLeft { get; set; } = null!;
-        [DXColumn("DXUnitIDLeft")]
-        public Guid DXUnitIDLeft { get; set; }
+        [DXColumn("DXUnitIdLeft")]
+        public Guid DXUnitIdLeft { get; set; }
         [DXColumn("RelationNameRight")]
         public string RelationNameRight { get; set; } = null!;
         [DXColumn("ObjectTypeNameRight")]
         public string ObjectTypeNameRight { get; set; } = null!;
-        [DXColumn("DXUnitIDRight")]
-        public Guid DXUnitIDRight { get; set; }
+        [DXColumn("DXUnitIdRight")]
+        public Guid DXUnitIdRight { get; set; }
     }
 }

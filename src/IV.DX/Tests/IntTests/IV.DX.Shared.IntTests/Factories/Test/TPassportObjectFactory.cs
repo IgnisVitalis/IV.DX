@@ -9,12 +9,12 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TPassportUnit()
             {
-                ID = id,
-                User = user.ID,
+                Id = id,
+                User = user.Id,
                 TPassportMainElement = new TPassportMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     SerialNumber = serialNumber
                 }
             };

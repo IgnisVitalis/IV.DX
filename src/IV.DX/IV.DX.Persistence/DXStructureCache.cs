@@ -99,7 +99,7 @@ namespace IV.DX.Persistence
             var dxUnit = this.GetDXUnit(dxUnitTypeName);
             var dxElement = this.GetDXElement(dxElementTypeName);
 
-            var relation = dxUnit!.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElement!.ID);
+            var relation = dxUnit!.DXElementInUnitDefinitionElement.Announced.Single(x => x.DXElementDefinitionUnit == dxElement!.Id);
 
             return relation.RelationType;
         }
@@ -172,7 +172,7 @@ namespace IV.DX.Persistence
               .Where(x => x.RelationType == relationType)
               .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToHashSet();
+            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.Id)).ToHashSet();
 
             return relatedDXElements;
         }
@@ -187,7 +187,7 @@ namespace IV.DX.Persistence
                 .Announced
                 .Select(x => x.DXElementDefinitionUnit).ToList();
 
-            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.ID)).ToHashSet();
+            var relatedDXElements = this.DXElements.Where(x => relatedDXElementIds.Contains(x.Id)).ToHashSet();
 
             return relatedDXElements;
         }
@@ -215,13 +215,13 @@ namespace IV.DX.Persistence
             if (derivedDXUnit == null || !derivedDXUnit.BaseDXUnit.HasValue)
                 return null;
 
-            var result = this.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
+            var result = this.DXUnits.SingleOrDefault(x => x.Id == derivedDXUnit.BaseDXUnit);
 
             if (result == null)
             {
                 this.RefreshAsync().Wait();
 
-                result = this.DXUnits.SingleOrDefault(x => x.ID == derivedDXUnit.BaseDXUnit);
+                result = this.DXUnits.SingleOrDefault(x => x.Id == derivedDXUnit.BaseDXUnit);
             }
 
             return result;

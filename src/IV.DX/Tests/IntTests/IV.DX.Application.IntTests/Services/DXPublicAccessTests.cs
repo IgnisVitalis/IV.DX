@@ -43,7 +43,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await RunAsSystemAsync(async () =>
             {
-                var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.ID);
+                var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.Id);
                 mutable.IsPublicRead = true;
                 _genericRepo.Update(mutable);
 
@@ -58,7 +58,7 @@ namespace IV.DX.Application.IntTests.Services
 
             try
             {
-                var items = (await _reader.GetItemsAsync<TUserUnit>()).Select(x => x.ID).ToHashSet();
+                var items = (await _reader.GetItemsAsync<TUserUnit>()).Select(x => x.Id).ToHashSet();
                 Assert.Contains(insertedId, items);
             }
             finally
@@ -67,7 +67,7 @@ namespace IV.DX.Application.IntTests.Services
                 {
                     await DeleteByIdsAsync("TUserUnit", new[] { insertedId });
 
-                    var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.ID);
+                    var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.Id);
                     mutable.IsPublicRead = originalIsPublicRead;
                     _genericRepo.Update(mutable);
 
@@ -88,7 +88,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await RunAsSystemAsync(async () =>
             {
-                var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.ID);
+                var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.Id);
                 mutable.IsPublicRead = false;
                 _genericRepo.Update(mutable);
 
@@ -108,10 +108,10 @@ namespace IV.DX.Application.IntTests.Services
 
                 await _dataService.InsertAsync(new DXPublicAccessUnit
                 {
-                    ID = publicAccessId,
+                    Id = publicAccessId,
                     TimeStamp = DateTime.UtcNow,
-                    DXUnitDefinition = unitDef.ID,
-                    PublicDXUnitID = publicItemId
+                    DXUnitDefinition = unitDef.Id,
+                    PublicDXUnitId = publicItemId
                 });
             });
 
@@ -119,7 +119,7 @@ namespace IV.DX.Application.IntTests.Services
             {
                 var publicItem = await _reader.GetItemAsync<TUserUnit>(publicItemId);
                 var privateItem = await _reader.GetItemAsync<TUserUnit>(privateItemId);
-                var visibleIds = (await _reader.GetItemsAsync<TUserUnit>()).Select(x => x.ID).ToHashSet();
+                var visibleIds = (await _reader.GetItemsAsync<TUserUnit>()).Select(x => x.Id).ToHashSet();
 
                 Assert.NotNull(publicItem);
                 Assert.Null(privateItem);
@@ -133,7 +133,7 @@ namespace IV.DX.Application.IntTests.Services
                     await DeleteByIdsAsync("DXPublicAccessUnit", new[] { publicAccessId });
                     await DeleteByIdsAsync("TUserUnit", new[] { publicItemId, privateItemId });
 
-                    var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.ID);
+                    var mutable = _genericRepo.GetDXUnit<DXUnitDefinitionUnit>(unitDef.Id);
                     mutable.IsPublicRead = originalIsPublicRead;
                     _genericRepo.Update(mutable);
 
@@ -157,7 +157,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var deleteRefs = ids
                 .Where(x => x != Guid.Empty)
-                .Select(x => new DXDeleteRef { ID = x })
+                .Select(x => new DXDeleteRef { Id = x })
                 .ToList();
 
             if (deleteRefs.Count == 0)

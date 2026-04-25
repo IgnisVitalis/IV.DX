@@ -48,7 +48,7 @@ namespace IV.DX.Application.IntTests.Services
             await _dataService.InsertAsync(TUserUnitFactory.GetItem(otherId, $"FltOther_{Guid.NewGuid():N}", "Test", now.Date));
 
             var queryId = Guid.NewGuid();
-            await InsertQueryUnitAsync(queryId, userUnitDef.ID, filterExpression: $"TUserMainElement.Name = '{targetName}'");
+            await InsertQueryUnitAsync(queryId, userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{targetName}'");
 
             try
             {
@@ -67,9 +67,9 @@ namespace IV.DX.Application.IntTests.Services
             }
             finally
             {
-                await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = targetId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = otherId });
+                await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = targetId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = otherId });
             }
         }
 
@@ -85,7 +85,7 @@ namespace IV.DX.Application.IntTests.Services
             await _dataService.InsertAsync(TUserUnitFactory.GetItem(itemId, $"FltNoMatch_{Guid.NewGuid():N}", "Test", now.Date));
 
             var queryId = Guid.NewGuid();
-            await InsertQueryUnitAsync(queryId, userUnitDef.ID, filterExpression: $"TUserMainElement.Name = '{nonExistentName}'");
+            await InsertQueryUnitAsync(queryId, userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{nonExistentName}'");
 
             try
             {
@@ -103,8 +103,8 @@ namespace IV.DX.Application.IntTests.Services
             }
             finally
             {
-                await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = itemId });
+                await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = itemId });
             }
         }
 
@@ -122,7 +122,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var unitDefinition = new DXUnitDefinitionUnit
             {
-                ID = unitDefinitionId,
+                Id = unitDefinitionId,
                 TimeStamp = now,
                 Name = unitName,
                 DXTitleExpression = "Secret",
@@ -133,8 +133,8 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXColumnDefinitionElement
                         {
-                            ID = columnDefinitionId,
-                            DXUnitID = unitDefinitionId,
+                            Id = columnDefinitionId,
+                            DXUnitId = unitDefinitionId,
                             TimeStamp = now,
                             Name = "Secret",
                             AllowNull = false,
@@ -163,7 +163,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -181,7 +181,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var query = new DXQueryUnit
             {
-                ID = queryId,
+                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = unitDefinitionId,
@@ -191,8 +191,8 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            ID = queryColumnId,
-                            DXUnitID = queryId,
+                            Id = queryColumnId,
+                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "Secret",
                             Expression = "Secret",
@@ -214,7 +214,7 @@ namespace IV.DX.Application.IntTests.Services
             var contentBlock = content!.ToObject<DXDataBlock<DXUnitRecord>>();
             Assert.NotNull(contentBlock);
 
-            var item = contentBlock!.Data?.Items?.SingleOrDefault(x => x.ID == instanceId);
+            var item = contentBlock!.Data?.Items?.SingleOrDefault(x => x.Id == instanceId);
             Assert.NotNull(item);
 
             var secret = item!.Fields != null && item.Fields.TryGetValue("Secret", out var v) ? v?.ToString() : null;
@@ -225,11 +225,11 @@ namespace IV.DX.Application.IntTests.Services
                 Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { Id = instanceId } }
                 }
             });
 
-            await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
+            await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
         }
 
         [Fact]
@@ -247,23 +247,23 @@ namespace IV.DX.Application.IntTests.Services
             position.User = userId;
 
             await _dataService.InsertAsync(TUserUnitFactory.GetItem(userId, $"TUser_{Guid.NewGuid():N}", "Test", now.Date));
-            await _dataService.InsertAsync(TPassportUnitFactory.GetItem(passportId, "SERIAL-TRANSITIVE", new TUserUnit { ID = userId }));
+            await _dataService.InsertAsync(TPassportUnitFactory.GetItem(passportId, "SERIAL-TRANSITIVE", new TUserUnit { Id = userId }));
             await _dataService.InsertAsync(position);
 
             var query = new DXQueryUnit
             {
-                ID = queryId,
+                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
-                DXUnitDefinition = passportUnitDef.ID,
+                DXUnitDefinition = passportUnitDef.Id,
                 DXQueryColumnElement = new DXMultiElementsContainer<DXQueryColumnElement>
                 {
                     Announced = new HashSet<DXQueryColumnElement>
                     {
                         new DXQueryColumnElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = queryId,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "SerialNumber",
                             Expression = "TPassportMainElement.SerialNumber",
@@ -271,8 +271,8 @@ namespace IV.DX.Application.IntTests.Services
                         },
                         new DXQueryColumnElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = queryId,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "PositionName",
                             Expression = "U2U(User).U2U(Position).TPositionMainElement.Name",
@@ -302,7 +302,7 @@ namespace IV.DX.Application.IntTests.Services
                 var contentBlock = content.ToObject<DXDataBlock<DXUnitRecord>>();
                 Assert.NotNull(contentBlock);
 
-                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.ID == passportId);
+                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.Id == passportId);
                 Assert.NotNull(item);
 
                 var positionName = item.Fields != null && item.Fields.TryGetValue("PositionName", out var v) ? v?.ToString() : null;
@@ -310,10 +310,10 @@ namespace IV.DX.Application.IntTests.Services
             }
             finally
             {
-                await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
-                await _dataService.DeleteAsync(new TPassportUnit { ID = passportId });
-                await _dataService.DeleteAsync(new TPositionUnit { ID = positionId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = userId });
+                await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
+                await _dataService.DeleteAsync(new TPassportUnit { Id = passportId });
+                await _dataService.DeleteAsync(new TPositionUnit { Id = positionId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = userId });
             }
         }
 
@@ -373,7 +373,7 @@ namespace IV.DX.Application.IntTests.Services
                 using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
                 {
                     SubjectId = "qrp-owned-only-user",
-                    IdentityID = identityId,
+                    IdentityId = identityId,
                     AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "SomeOtherUnit" }
                 });
 
@@ -413,19 +413,19 @@ namespace IV.DX.Application.IntTests.Services
 
             var query = new DXQueryUnit
             {
-                ID = queryId,
+                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
-                DXUnitDefinition = userUnitDef.ID,
-                FilterExpression = $"ID = '{userId}'",
+                DXUnitDefinition = userUnitDef.Id,
+                FilterExpression = $"Id = '{userId}'",
                 DXQueryColumnElement = new DXMultiElementsContainer<DXQueryColumnElement>
                 {
                     Announced = new HashSet<DXQueryColumnElement>
                     {
                         new DXQueryColumnElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = queryId,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "PositionName",
                             Expression = "U2U(Position).TPositionMainElement.Name",
@@ -455,7 +455,7 @@ namespace IV.DX.Application.IntTests.Services
                 var contentBlock = content.ToObject<DXDataBlock<DXUnitRecord>>();
                 Assert.NotNull(contentBlock);
 
-                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.ID == userId);
+                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.Id == userId);
                 Assert.NotNull(item);
 
                 var positionName = item.Fields != null && item.Fields.TryGetValue("PositionName", out var v) ? v?.ToString() : null;
@@ -463,10 +463,10 @@ namespace IV.DX.Application.IntTests.Services
             }
             finally
             {
-                await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
-                await _dataService.DeleteAsync(new TPositionUnit { ID = positionId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = userId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = managerId });
+                await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
+                await _dataService.DeleteAsync(new TPositionUnit { Id = positionId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = userId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = managerId });
             }
         }
 
@@ -482,12 +482,12 @@ namespace IV.DX.Application.IntTests.Services
 
             var computer = new TComputerUnit
             {
-                ID = computerId,
+                Id = computerId,
                 User = userId,
                 TDeviceMainElement = new TDeviceMainElement
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = computerId,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = computerId,
                     Model = "TransitiveTestComputer",
                     UUID = Guid.NewGuid()
                 }
@@ -498,18 +498,18 @@ namespace IV.DX.Application.IntTests.Services
 
             var query = new DXQueryUnit
             {
-                ID = queryId,
+                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
-                DXUnitDefinition = userUnitDef.ID,
+                DXUnitDefinition = userUnitDef.Id,
                 DXQueryColumnElement = new DXMultiElementsContainer<DXQueryColumnElement>
                 {
                     Announced = new HashSet<DXQueryColumnElement>
                     {
                         new DXQueryColumnElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = queryId,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "DeviceTypeName",
                             Expression = "U2U(Devices).U2U(DerivedDXUnitType).Name",
@@ -539,7 +539,7 @@ namespace IV.DX.Application.IntTests.Services
                 var contentBlock = content.ToObject<DXDataBlock<DXUnitRecord>>();
                 Assert.NotNull(contentBlock);
 
-                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.ID == userId);
+                var item = contentBlock.Data?.Items?.SingleOrDefault(x => x.Id == userId);
                 Assert.NotNull(item);
 
                 var deviceTypeName = item.Fields != null && item.Fields.TryGetValue("DeviceTypeName", out var v) ? v?.ToString() : null;
@@ -547,23 +547,23 @@ namespace IV.DX.Application.IntTests.Services
             }
             finally
             {
-                await _dataService.DeleteAsync(new DXQueryUnit { ID = queryId });
-                await _dataService.DeleteAsync(new TComputerUnit { ID = computerId });
-                await _dataService.DeleteAsync(new TUserUnit { ID = userId });
+                await _dataService.DeleteAsync(new DXQueryUnit { Id = queryId });
+                await _dataService.DeleteAsync(new TComputerUnit { Id = computerId });
+                await _dataService.DeleteAsync(new TUserUnit { Id = userId });
             }
         }
 
         private HashSet<Guid> ExtractContentIds(JObject result)
         {
             var contentBlock = result["Content"]?.ToObject<DXDataBlock<DXUnitRecord>>();
-            return contentBlock?.Data?.Items?.Select(x => x.ID).ToHashSet() ?? new HashSet<Guid>();
+            return contentBlock?.Data?.Items?.Select(x => x.Id).ToHashSet() ?? new HashSet<Guid>();
         }
 
         private async Task InsertQueryUnitAsync(Guid queryId, Guid unitDefinitionId, string filterExpression = null)
         {
             var query = new DXQueryUnit
             {
-                ID = queryId,
+                Id = queryId,
                 TimeStamp = DateTime.UtcNow,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = unitDefinitionId,
@@ -574,8 +574,8 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = queryId,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = queryId,
                             TimeStamp = DateTime.UtcNow,
                             Name = "Name",
                             Expression = "TUserMainElement.Name",

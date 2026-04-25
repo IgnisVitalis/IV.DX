@@ -29,7 +29,7 @@ namespace IV.DX.Application.Handlers
                         nameof(DXObjectDefinitionUnit),
                         Constants.DerivedDXUnitType,
                         element.DerivedDXUnitType,
-                        element.DXObjectID);
+                        element.DXObjectId);
                 }
 
                 dataStructureRepo.SetColumnNotNull(nameof(DXObjectDefinitionUnit), Constants.DerivedDXUnitType);

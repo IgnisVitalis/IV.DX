@@ -10,7 +10,7 @@
   "Data": {
     "Items": [
       {
-        "ID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+        "Id": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "TUserMainElement",
         "Kind": 3,
@@ -26,9 +26,9 @@
             "Data": {
               "Items": [
                 {
-                  "ID": "cddb8804-83c0-4631-97bf-39822988720f",
+                  "Id": "cddb8804-83c0-4631-97bf-39822988720f",
                   "TimeStamp": "2021-10-02T00:00:00",
-                  "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                  "DXUnitId": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                   "ColumnType": 3,
                   "Name": "Name",
                   "Length": 50,
@@ -36,9 +36,9 @@
                   "DefaultValue": null
                 },
                 {
-                  "ID": "3d7110eb-3827-47f6-b3fc-3de4a871e87f",
+                  "Id": "3d7110eb-3827-47f6-b3fc-3de4a871e87f",
                   "TimeStamp": "2021-10-02T00:00:00",
-                  "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                  "DXUnitId": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                   "ColumnType": 3,
                   "Name": "Surname",
                   "Length": 50,
@@ -46,9 +46,9 @@
                   "DefaultValue": null
                 },
                 {
-                  "ID": "f9f982c1-385e-4906-a616-c849875f08cc",
+                  "Id": "f9f982c1-385e-4906-a616-c849875f08cc",
                   "TimeStamp": "2021-10-02T00:00:00",
-                  "DXUnitID": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
+                  "DXUnitId": "f57b61b7-3e76-4ccf-826e-c1b46c44b397",
                   "ColumnType": 5,
                   "Name": "Birth",
                   "AllowNull": true,

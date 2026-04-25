@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "ID": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
+          "Id": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
           "TimeStamp": "2021-10-02T00:00:00",
           "DXElements": {
             "TUserMainElement": {
@@ -24,9 +24,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "f1679d86-6095-4d86-8160-4cb6e8c4e54a",
+                    "Id": "f1679d86-6095-4d86-8160-4cb6e8c4e54a",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
+                    "DXUnitId": "e6845581-680e-4d6d-9d75-bb9c2d747aa5",
                     "Name": "SyncSeed-A",
                     "Surname": "User",
                     "Birth": "1990-01-01T00:00:00Z"
@@ -37,7 +37,7 @@
           }
         },
         {
-          "ID": "702689cb-fe31-400a-b84d-9ceaaf548deb",
+          "Id": "702689cb-fe31-400a-b84d-9ceaaf548deb",
           "TimeStamp": "2021-10-02T00:00:00",
           "DXElements": {
             "TUserMainElement": {
@@ -51,9 +51,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "85f9e0ac-5954-4aa0-9ea9-3eacb9f9bebc",
+                    "Id": "85f9e0ac-5954-4aa0-9ea9-3eacb9f9bebc",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "702689cb-fe31-400a-b84d-9ceaaf548deb",
+                    "DXUnitId": "702689cb-fe31-400a-b84d-9ceaaf548deb",
                     "Name": "SyncSeed-B",
                     "Surname": "User",
                     "Birth": "1991-01-01T00:00:00Z"
@@ -64,7 +64,7 @@
           }
         },
         {
-          "ID": "869fab30-c037-483f-86ac-e0fad536a5b9",
+          "Id": "869fab30-c037-483f-86ac-e0fad536a5b9",
           "TimeStamp": "2021-10-02T00:00:00",
           "DXElements": {
             "TUserMainElement": {
@@ -78,9 +78,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "9a4e8368-3971-4048-ae56-02f33cde36f5",
+                    "Id": "9a4e8368-3971-4048-ae56-02f33cde36f5",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "869fab30-c037-483f-86ac-e0fad536a5b9",
+                    "DXUnitId": "869fab30-c037-483f-86ac-e0fad536a5b9",
                     "Name": "SyncSeed-C",
                     "Surname": "User",
                     "Birth": "1992-01-01T00:00:00Z"

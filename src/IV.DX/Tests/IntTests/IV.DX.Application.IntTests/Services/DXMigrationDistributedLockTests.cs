@@ -70,7 +70,7 @@ namespace IV.DX.Application.IntTests.Services
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    { "Secrets:DatabaseConnectionString", $"Server=localhost;Database={DatabaseName};User ID=postgres;password=root;" },
+                    { "Secrets:DatabaseConnectionString", $"Server=localhost;Database={DatabaseName};User Id=postgres;password=root;" },
                     { "Secrets:DatabaseType", "PostgreSQL" },
                     { "Secrets:JwtSigningKey", "int-tests-signing-key-change-me-32-bytes" },
                     { "Secrets:EncryptionKey", "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcy0hISE=" },

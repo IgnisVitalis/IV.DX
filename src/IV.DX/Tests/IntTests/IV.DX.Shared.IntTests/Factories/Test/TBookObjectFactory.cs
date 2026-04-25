@@ -12,11 +12,11 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TBookUnit()
             {
-                ID = id,
+                Id = id,
                 TBookMainElement = new TBookMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     Name = name
                 }
             };
@@ -33,8 +33,8 @@ namespace IV.DX.Shared.IntTests.Factories.Test
                 Announced = text.Select(x =>
                     new TBookChapterElement()
                     {
-                        ID = Guid.NewGuid(),
-                        DXUnitID = result.ID,
+                        Id = Guid.NewGuid(),
+                        DXUnitId = result.Id,
                         Text = x,
                         Number = number++
                     }).ToHashSet()

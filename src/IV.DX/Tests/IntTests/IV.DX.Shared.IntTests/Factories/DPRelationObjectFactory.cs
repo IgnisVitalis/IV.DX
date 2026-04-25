@@ -25,9 +25,9 @@ namespace IV.DX.Shared.IntTests.Factories
             {
                 case DXRelationTypeEnum.ManyToMany:
                     relationTable = $"Relation_{objectNameLeft.Name}_{objectNameRight.Name}";
-                    relationColumnNameLeft = "ID";
+                    relationColumnNameLeft = "Id";
                     relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                    relationColumnNameRight = "ID";
+                    relationColumnNameRight = "Id";
                     relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     break;
                 case DXRelationTypeEnum.ManyToOne:
@@ -36,7 +36,7 @@ namespace IV.DX.Shared.IntTests.Factories
                     {
                         relationColumnNameLeft = relationNameRight;
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
-                        relationColumnNameRight = "ID";
+                        relationColumnNameRight = "Id";
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
                     }
                     break;
@@ -45,7 +45,7 @@ namespace IV.DX.Shared.IntTests.Factories
                 case DXRelationTypeEnum.OneToZeroOne:
                 case DXRelationTypeEnum.ZeroOneToZeroOne:
                     {
-                        relationColumnNameLeft = "ID";
+                        relationColumnNameLeft = "Id";
                         relationColumnTypeLeft = DXColumnTypeEnum.GUID;
                         relationColumnNameRight = relationNameLeft;
                         relationColumnTypeRight = DXColumnTypeEnum.GUID;
@@ -55,7 +55,7 @@ namespace IV.DX.Shared.IntTests.Factories
 
             DXRelationDefinitionUnit obj = new DXRelationDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 RelationType = relationType,
                 RelationNameLeft = relationNameLeft,
                 RelationNameRight = relationNameRight,

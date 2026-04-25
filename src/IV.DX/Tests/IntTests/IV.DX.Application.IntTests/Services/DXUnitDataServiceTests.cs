@@ -68,7 +68,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = definitionId,
+                            Id = definitionId,
                             TimeStamp = definitionTime,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -93,8 +93,8 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                ID = relationId,
-                                                DXUnitID = definitionId,
+                                                Id = relationId,
+                                                DXUnitId = definitionId,
                                                 TimeStamp = relationTime,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -124,13 +124,13 @@ namespace IV.DX.Application.IntTests.Services
 
             var columns = new Dictionary<string, string>()
             {
-                {"ID","ID" },
+                {"Id","Id" },
                 {"TimeStamp", "TimeStamp"},
-                {"ChildrenID", "U2U(Children).ID"},
-                {"ParentID", "U2U(Parent).ID"}
+                {"ChildrenId", "U2U(Children).Id"},
+                {"ParentId", "U2U(Parent).Id"}
             };
 
-            var dxFilter = "U2U(Children).ID = '075980bc-9728-47cf-aab9-077f391ded48' AND U2U(Parent).ID = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
+            var dxFilter = "U2U(Children).Id = '075980bc-9728-47cf-aab9-077f391ded48' AND U2U(Parent).Id = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'";
 
             var result = this._dxRawReader.Get("DXPNavigationItemUnit", columns, dxFilter);
 
@@ -143,33 +143,33 @@ namespace IV.DX.Application.IntTests.Services
             Assert.True(match.Success);
             var index = int.Parse(match.Groups[1].Value);
 
-            Assert.Contains($"\"T_{index}_0\".\"ID\" AS \"ID\"", sql);
+            Assert.Contains($"\"T_{index}_0\".\"Id\" AS \"Id\"", sql);
             Assert.Contains($"\"T_{index}_0\".\"TimeStamp\" AS \"TimeStamp\"", sql);
             Assert.Contains($"FROM\n\"DXPNavigationItemUnit\" AS \"T_{index}_0\"", sql);
 
             var childAliasMatch = System.Text.RegularExpressions.Regex.Match(
                 sql,
-                $"\"T_{index}_(\\d+)\"\\.\"ID\" AS \"ChildrenID\"");
+                $"\"T_{index}_(\\d+)\"\\.\"Id\" AS \"ChildrenId\"");
             Assert.True(childAliasMatch.Success);
             var childrenAliasIndex = childAliasMatch.Groups[1].Value;
 
             var parentAliasMatch = System.Text.RegularExpressions.Regex.Match(
                 sql,
-                $"\"T_{index}_(\\d+)\"\\.\"ID\" AS \"ParentID\"");
+                $"\"T_{index}_(\\d+)\"\\.\"Id\" AS \"ParentId\"");
             Assert.True(parentAliasMatch.Success);
             var parentAliasIndex = parentAliasMatch.Groups[1].Value;
 
             Assert.NotEqual(childrenAliasIndex, parentAliasIndex);
 
             Assert.Contains(
-                $"LEFT JOIN \"DXPNavigationItemUnit\" AS \"T_{index}_{childrenAliasIndex}\" ON \"T_{index}_{childrenAliasIndex}\".\"Parent\" = \"T_{index}_0\".\"ID\"",
+                $"LEFT JOIN \"DXPNavigationItemUnit\" AS \"T_{index}_{childrenAliasIndex}\" ON \"T_{index}_{childrenAliasIndex}\".\"Parent\" = \"T_{index}_0\".\"Id\"",
                 sql);
             Assert.Contains(
-                $"LEFT JOIN \"DXPNavigationItemUnit\" AS \"T_{index}_{parentAliasIndex}\" ON \"T_{index}_{parentAliasIndex}\".\"ID\" = \"T_{index}_0\".\"Parent\"",
+                $"LEFT JOIN \"DXPNavigationItemUnit\" AS \"T_{index}_{parentAliasIndex}\" ON \"T_{index}_{parentAliasIndex}\".\"Id\" = \"T_{index}_0\".\"Parent\"",
                 sql);
 
-            Assert.Contains($"\"T_{index}_{childrenAliasIndex}\".\"ID\" = '075980bc-9728-47cf-aab9-077f391ded48'", sql);
-            Assert.Contains($"\"T_{index}_{parentAliasIndex}\".\"ID\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'", sql);
+            Assert.Contains($"\"T_{index}_{childrenAliasIndex}\".\"Id\" = '075980bc-9728-47cf-aab9-077f391ded48'", sql);
+            Assert.Contains($"\"T_{index}_{parentAliasIndex}\".\"Id\" = '88bbeb1b-627f-4eaf-be6a-4e52f13cab5d'", sql);
         }
 
         [Fact]
@@ -206,7 +206,7 @@ namespace IV.DX.Application.IntTests.Services
             var id = Guid.NewGuid();
             var dxUnit = new DXUnitDefinitionUnit
             {
-                ID = id,
+                Id = id,
                 Name = $"Denied_{id:N}",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
@@ -245,7 +245,7 @@ namespace IV.DX.Application.IntTests.Services
             var id = Guid.NewGuid();
             var dxUnit = new DXUnitDefinitionUnit
             {
-                ID = id,
+                Id = id,
                 Name = $"DeniedCore_{id:N}",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
@@ -350,7 +350,7 @@ namespace IV.DX.Application.IntTests.Services
             var record = block?.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
-            Assert.Equal(id, record!.ID);
+            Assert.Equal(id, record!.Id);
             Assert.Equal("DXColumnDefinitionElement", record.Fields?["Name"]?.ToObject<string>());
             Assert.Equal("Name", record.Fields?["DXTitleExpression"]?.ToObject<string>());
         }
@@ -379,7 +379,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit1 = new DXUnitDefinitionUnit()
             {
-                ID = id1,
+                Id = id1,
                 Name = "dxUnit1",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
@@ -387,7 +387,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit2 = new DXUnitDefinitionUnit()
             {
-                ID = id2,
+                Id = id2,
                 Name = "dxUnit2",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
@@ -395,7 +395,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit3 = new DXUnitDefinitionUnit()
             {
-                ID = id3,
+                Id = id3,
                 Name = "dxUnit3",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
@@ -403,8 +403,8 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnitRelation1 = new DXUnitToUnitRelationElement()
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = id2,
+                Id = Guid.NewGuid(),
+                DXUnitId = id2,
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.OneToMany,
                 TargetRelationName = "dxUnit1RelationName",
@@ -413,8 +413,8 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnitRelation2 = new DXUnitToUnitRelationElement()
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = id2,
+                Id = Guid.NewGuid(),
+                DXUnitId = id2,
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.ManyToMany,
                 TargetRelationName = "dxUnit3RelationName",
@@ -452,8 +452,8 @@ namespace IV.DX.Application.IntTests.Services
             var dxUnitRelation1Existing = existingItem1.DXUnitToUnitRelationElement.Announced.Single();
             var dxUnitRelation2Existing = existingItem2.DXUnitToUnitRelationElement.Announced.Single();
 
-            Assert.Equal(dxUnitRelation1Existing.TargetDXUnit, dxUnitRelation2Existing.DXUnitID);
-            Assert.Equal(dxUnitRelation1Existing.DXUnitID, dxUnitRelation2Existing.TargetDXUnit);
+            Assert.Equal(dxUnitRelation1Existing.TargetDXUnit, dxUnitRelation2Existing.DXUnitId);
+            Assert.Equal(dxUnitRelation1Existing.DXUnitId, dxUnitRelation2Existing.TargetDXUnit);
             Assert.Equal(dxUnitRelation1Existing.OwnRelationName, dxUnitRelation2Existing.TargetRelationName);
             Assert.Equal(dxUnitRelation1Existing.TargetRelationName, dxUnitRelation2Existing.OwnRelationName);
             Assert.Equal(dxUnitRelation1Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation2Existing.RelationType));
@@ -503,8 +503,8 @@ namespace IV.DX.Application.IntTests.Services
             dxUnitRelation2Existing = existingItem2.DXUnitToUnitRelationElement.Announced.Single();
             var dxUnitRelation3Existing = existingItem3.DXUnitToUnitRelationElement.Announced.Single();
 
-            Assert.Equal(dxUnitRelation2Existing.TargetDXUnit, dxUnitRelation3Existing.DXUnitID);
-            Assert.Equal(dxUnitRelation2Existing.DXUnitID, dxUnitRelation3Existing.TargetDXUnit);
+            Assert.Equal(dxUnitRelation2Existing.TargetDXUnit, dxUnitRelation3Existing.DXUnitId);
+            Assert.Equal(dxUnitRelation2Existing.DXUnitId, dxUnitRelation3Existing.TargetDXUnit);
             Assert.Equal(dxUnitRelation2Existing.OwnRelationName, dxUnitRelation3Existing.TargetRelationName);
             Assert.Equal(dxUnitRelation2Existing.TargetRelationName, dxUnitRelation3Existing.OwnRelationName);
             Assert.Equal(dxUnitRelation2Existing.RelationType, DXRelationTypeEnumHelper.GetInvertedRelationType(dxUnitRelation3Existing.RelationType));
@@ -573,7 +573,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = unitDefinitionId,
+                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -598,8 +598,8 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                ID = columnDefinitionId,
-                                                DXUnitID = unitDefinitionId,
+                                                Id = columnDefinitionId,
+                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -641,7 +641,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -659,7 +659,7 @@ namespace IV.DX.Application.IntTests.Services
                 ["Secret"] = "Secret"
             };
 
-            var firstRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var firstRead = this._dxRawReader.Get(unitName, columns, $"Id = '{instanceId}'");
             var firstSecret = firstRead.Data.Items.Single().Fields["Secret"]?.ToString();
 
             Assert.NotNull(firstSecret);
@@ -679,7 +679,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -692,7 +692,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await this._service.UpdateAsync(updateBlock);
 
-            var secondRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var secondRead = this._dxRawReader.Get(unitName, columns, $"Id = '{instanceId}'");
             var secondSecret = secondRead.Data.Items.Single().Fields["Secret"]?.ToString();
 
             Assert.Equal(firstSecret, secondSecret);
@@ -702,7 +702,7 @@ namespace IV.DX.Application.IntTests.Services
                 Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { Id = instanceId } }
                 }
             });
         }
@@ -729,7 +729,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = unitDefinitionId,
+                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -754,8 +754,8 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                ID = columnDefinitionId,
-                                                DXUnitID = unitDefinitionId,
+                                                Id = columnDefinitionId,
+                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -797,7 +797,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -815,7 +815,7 @@ namespace IV.DX.Application.IntTests.Services
                 ["Secret"] = "Secret"
             };
 
-            var firstRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var firstRead = this._dxRawReader.Get(unitName, columns, $"Id = '{instanceId}'");
             var firstSecret = firstRead.Data.Items.Single().Fields["Secret"]?.ToString();
 
             Assert.NotNull(firstSecret);
@@ -827,7 +827,7 @@ namespace IV.DX.Application.IntTests.Services
             using (var conn = new NpgsqlConnection(dbOptions.ConnectionString))
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand($"SELECT \"Secret\" FROM \"{unitName}\" WHERE \"ID\" = @id", conn);
+                using var cmd = new NpgsqlCommand($"SELECT \"Secret\" FROM \"{unitName}\" WHERE \"Id\" = @id", conn);
                 cmd.Parameters.AddWithValue("id", instanceId);
                 storedCiphertext = cmd.ExecuteScalar() as string ?? string.Empty;
             }
@@ -848,7 +848,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -865,14 +865,14 @@ namespace IV.DX.Application.IntTests.Services
             using (var conn = new NpgsqlConnection(dbOptions.ConnectionString))
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand($"SELECT \"Secret\" FROM \"{unitName}\" WHERE \"ID\" = @id", conn);
+                using var cmd = new NpgsqlCommand($"SELECT \"Secret\" FROM \"{unitName}\" WHERE \"Id\" = @id", conn);
                 cmd.Parameters.AddWithValue("id", instanceId);
                 storedCiphertextAfter = cmd.ExecuteScalar() as string ?? string.Empty;
             }
 
             Assert.Equal(storedCiphertext, storedCiphertextAfter);
 
-            var secondRead = this._dxRawReader.Get(unitName, columns, $"ID = '{instanceId}'");
+            var secondRead = this._dxRawReader.Get(unitName, columns, $"Id = '{instanceId}'");
             var secondSecret = secondRead.Data.Items.Single().Fields["Secret"]?.ToString();
 
             Assert.Equal(plaintext, secondSecret);
@@ -882,7 +882,7 @@ namespace IV.DX.Application.IntTests.Services
                 Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { Id = instanceId } }
                 }
             });
         }
@@ -913,7 +913,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = unitDefinitionId,
+                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -938,8 +938,8 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                ID = encryptedColumnId,
-                                                DXUnitID = unitDefinitionId,
+                                                Id = encryptedColumnId,
+                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -954,8 +954,8 @@ namespace IV.DX.Application.IntTests.Services
                                             },
                                             new DXElementRecord
                                             {
-                                                ID = hashedColumnId,
-                                                DXUnitID = unitDefinitionId,
+                                                Id = hashedColumnId,
+                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -999,7 +999,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = instanceId,
+                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -1019,7 +1019,7 @@ namespace IV.DX.Application.IntTests.Services
             {
                 using var conn = new NpgsqlConnection(dbOptions.ConnectionString);
                 conn.Open();
-                using var cmd = new NpgsqlCommand($"SELECT \"Secret\", \"PasswordHash\" FROM \"{unitName}\" WHERE \"ID\" = @id", conn);
+                using var cmd = new NpgsqlCommand($"SELECT \"Secret\", \"PasswordHash\" FROM \"{unitName}\" WHERE \"Id\" = @id", conn);
                 cmd.Parameters.AddWithValue("id", instanceId);
                 using var r = cmd.ExecuteReader();
                 Assert.True(r.Read());
@@ -1049,7 +1049,7 @@ namespace IV.DX.Application.IntTests.Services
                 Meta = new DXMeta { Kind = "DXUnit", Type = unitName },
                 Data = new DXData<DXUnitRecord>
                 {
-                    Delete = new List<DXDeleteRef> { new DXDeleteRef { ID = instanceId } }
+                    Delete = new List<DXDeleteRef> { new DXDeleteRef { Id = instanceId } }
                 }
             });
         }
@@ -1097,8 +1097,8 @@ namespace IV.DX.Application.IntTests.Services
 
             var objectKindEnum = new DXObjectEnumElement()
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = id,
+                Id = Guid.NewGuid(),
+                DXUnitId = id,
                 AllowNull = true,
                 Name = "ObjectKind",
                 EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
@@ -1107,8 +1107,8 @@ namespace IV.DX.Application.IntTests.Services
 
             var relaionTypeEnum = new DXObjectEnumElement()
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = id,
+                Id = Guid.NewGuid(),
+                DXUnitId = id,
                 AllowNull = true,
                 Name = "RelationType",
                 EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
@@ -1117,7 +1117,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit = new DXUnitDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 Name = "DXUnitWithEnum",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test,
@@ -1147,7 +1147,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotEmpty(createdDXUnit.DXObjectEnumElement.Announced);
 
-            var createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => objectKindEnum.ID == x.ID);
+            var createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => objectKindEnum.Id == x.Id);
             Assert.NotNull(createdEnums);
 
             var createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXObjectKindEnum", "ObjectKind", "DXUnitWithEnum", "DXUnitWithEnumObjectKind");
@@ -1193,7 +1193,7 @@ namespace IV.DX.Application.IntTests.Services
 
             Assert.NotEmpty(createdDXUnit.DXObjectEnumElement.Announced);
 
-            createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => relaionTypeEnum.ID == x.ID);
+            createdEnums = createdDXUnit.DXObjectEnumElement.Announced.SingleOrDefault(x => relaionTypeEnum.Id == x.Id);
             Assert.NotNull(createdEnums);
 
             createdRelation = this._dataStructureRepo.GetDXRelationDefinition("DXRelationTypeEnum", "RelationType", "DXUnitWithEnum", "DXUnitWithEnumRelationType");
@@ -1241,7 +1241,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = unitId,
+                            Id = unitId,
                             TimeStamp = unitTime,
                             Fields = new Dictionary<string, JToken>
                             {

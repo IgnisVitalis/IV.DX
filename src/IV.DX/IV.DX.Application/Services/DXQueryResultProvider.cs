@@ -21,7 +21,7 @@ namespace IV.DX.Application.Services
         IDXExecutionContextAccessor executionContextAccessor,
         ILogger<DXQueryResultProvider> logger) : IDXQueryResultProvider
     {
-        public async Task<JObject?> GetAsync(Guid dxQueryID, CancellationToken ct = default)
+        public async Task<JObject?> GetAsync(Guid dxQueryId, CancellationToken ct = default)
         {
             DXQueryUnit? dxQuery;
 
@@ -33,17 +33,17 @@ namespace IV.DX.Application.Services
                     IsSystem = true
                 });
 
-                dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryID);
+                dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryId);
             }
             else
             {
                 unitTypeAccessChecker.EnsureAccess(nameof(DXQueryUnit), DXUnitTypeAccessOperation.Read);
-                dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryID);
+                dxQuery = await dataReader.GetItemAsync<DXQueryUnit>(dxQueryId);
             }
 
             if (dxQuery == null)
             {
-                logger.LogWarning("DX query {QueryId} was not found.", dxQueryID);
+                logger.LogWarning("DX query {QueryId} was not found.", dxQueryId);
                 return null;
             }
 
@@ -61,15 +61,15 @@ namespace IV.DX.Application.Services
             {
                 new DXQueryColumnElement()
                 {
-                    Name = Constants.ID,
-                    Expression = Constants.ID,
+                    Name = Constants.Id,
+                    Expression = Constants.Id,
                     Order = -1
                 }
             };
 
             var orderedColumns = list.Concat(dxQuery.DXQueryColumnElement.Announced.OrderBy(x => x.Order));
 
-            var propsToIgnore = new[] { Constants.ID, Constants.DXUnitID, Constants.TimeStamp };
+            var propsToIgnore = new[] { Constants.Id, Constants.DXUnitId, Constants.TimeStamp };
 
             var settings = new JsonSerializerSettings
             {
@@ -83,15 +83,15 @@ namespace IV.DX.Application.Services
 
         private JProperty GetContent(DXQueryUnit dxQuery)
         {
-            var unitName = dxStructureCache.DXUnits.FirstOrDefault(x => x.ID == dxQuery.DXUnitDefinition)?.Name;
+            var unitName = dxStructureCache.DXUnits.FirstOrDefault(x => x.Id == dxQuery.DXUnitDefinition)?.Name;
 
             var orderedColumns = dxQuery.DXQueryColumnElement.Announced.OrderBy(x => x.Order);
 
             var columns = orderedColumns.ToDictionary(x => x.Name, x => x.Expression);
 
-            if (!columns.ContainsKey(Constants.ID))
+            if (!columns.ContainsKey(Constants.Id))
             {
-                columns.Add(Constants.ID, Constants.ID);
+                columns.Add(Constants.Id, Constants.Id);
             }
 
             if (!columns.ContainsKey(Constants.TimeStamp))
@@ -125,12 +125,12 @@ namespace IV.DX.Application.Services
 
             var DXTitleExpressionExpression =
                 string.IsNullOrEmpty(dxObjectInfo.DXTitleExpression) ?
-                "ID" :
+                "Id" :
                 dxObjectInfo.DXTitleExpression;
 
             var columns = new Dictionary<string, string>()
             {
-                {Constants.ID, Constants.ID },
+                {Constants.Id, Constants.Id },
                 {Constants.TimeStamp, Constants.TimeStamp },
                 {"DXTitleExpression",  DXTitleExpressionExpression }
             };
@@ -143,7 +143,7 @@ namespace IV.DX.Application.Services
 
             var DXTitleExpressions = records.Select(x => new DXTitleExpression()
             {
-                ID = x.ID,
+                Id = x.Id,
                 Type = typeName,
                 Expression = x.Fields != null && x.Fields.TryGetValue("DXTitleExpression", out var v)
                     ? v?.ToString() ?? string.Empty
@@ -187,13 +187,13 @@ namespace IV.DX.Application.Services
             if (unitDef == null)
                 return result;
 
-            if (unitDef.SupportsOwnership && context?.IdentityID.HasValue == true)
+            if (unitDef.SupportsOwnership && context?.IdentityId.HasValue == true)
             {
                 var identityOwned = genericRepo.GetDXUnits<DXIdentityOwnershipUnit>(
-                    $"Identity = '{context.IdentityID.Value}' AND DXUnitDefinition = '{unitDef.ID}'");
+                    $"Identity = '{context.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                 foreach (var o in identityOwned)
-                    result.Add(o.OwnedDXUnitID);
+                    result.Add(o.OwnedDXUnitId);
             }
 
             if (unitDef.SupportsOwnership && context?.ActiveGroupIDs != null)
@@ -201,20 +201,20 @@ namespace IV.DX.Application.Services
                 foreach (var groupId in context.ActiveGroupIDs)
                 {
                     var groupOwned = genericRepo.GetDXUnits<DXGroupOwnershipUnit>(
-                        $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.ID}'");
+                        $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                     foreach (var o in groupOwned)
-                        result.Add(o.OwnedDXUnitID);
+                        result.Add(o.OwnedDXUnitId);
                 }
             }
 
             var publicAccess = genericRepo.GetDXUnits<DXPublicAccessUnit>(
-                $"DXUnitDefinition = '{unitDef.ID}'");
+                $"DXUnitDefinition = '{unitDef.Id}'");
 
             foreach (var access in publicAccess)
             {
-                if (access.PublicDXUnitID != Guid.Empty)
-                    result.Add(access.PublicDXUnitID);
+                if (access.PublicDXUnitId != Guid.Empty)
+                    result.Add(access.PublicDXUnitId);
             }
 
             return result;
@@ -241,7 +241,7 @@ namespace IV.DX.Application.Services
         private static string BuildIdInFilter(IReadOnlyCollection<Guid> ids, string? originalFilter)
         {
             var inList = string.Join(",", ids.Select(x => $"'{x}'"));
-            var idIn = $"ID IN ({inList})";
+            var idIn = $"Id IN ({inList})";
             return string.IsNullOrWhiteSpace(originalFilter)
                 ? idIn
                 : $"({idIn}) AND ({originalFilter})";

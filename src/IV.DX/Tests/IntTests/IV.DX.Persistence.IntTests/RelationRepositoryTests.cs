@@ -50,8 +50,8 @@ namespace IV.DX.Persistence.IntTests
                 obj1,
                 obj2);
 
-            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft7() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight7() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft7() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight7() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -70,7 +70,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -114,8 +114,8 @@ namespace IV.DX.Persistence.IntTests
                 obj1,
                 obj2);
 
-            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft4() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight4() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft4() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight4() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -135,7 +135,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -151,7 +151,7 @@ namespace IV.DX.Persistence.IntTests
 
             foreach (var item in relTablesLeft)
             {
-                item.RelTableRightRelation = relTableFifthRight.ID;
+                item.RelTableRightRelation = relTableFifthRight.Id;
                 this._genericRepo.Insert(item);
             }
 
@@ -178,8 +178,8 @@ namespace IV.DX.Persistence.IntTests
                 obj1,
                 obj2);
 
-            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft3() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight3() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, 5).Select(x => new RelTableLeft3() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, 5).Select(x => new RelTableRight3() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFifthLeft = relTablesLeft.Skip(4).First();
@@ -199,7 +199,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -215,7 +215,7 @@ namespace IV.DX.Persistence.IntTests
 
             foreach (var item in relTablesRight)
             {
-                item.RelTableLeftRelation = relTableFifthLeft.ID;
+                item.RelTableLeftRelation = relTableFifthLeft.Id;
                 this._genericRepo.Insert(item);
             }
 
@@ -243,8 +243,8 @@ namespace IV.DX.Persistence.IntTests
                 obj2);
 
             int entriesCount = 5;
-            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft1() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight1() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft1() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight1() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -263,7 +263,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -282,7 +282,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(i).First();
                 var itemRight = relTablesRight.Skip(i).First();
 
-                itemRight.RelTableLeftRelation = itemLeft.ID;
+                itemRight.RelTableLeftRelation = itemLeft.Id;
 
                 this._genericRepo.Insert(itemRight);
             }
@@ -296,7 +296,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(1).First();
                 var itemRight = relTablesRight.Skip(2).First();
 
-                this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
             };
 
             for (int i = 0; i < entriesCount; i++)
@@ -308,7 +308,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                        this._coreRepo.AddRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
                     }
                     catch (Exception exc)
                     {
@@ -326,7 +326,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
+                        this._coreRepo.AddRelation(obj2.Name, itemRight.Id, "RelTableLeftRelation", obj1.Name, itemLeft.Id);
                     }
                     catch (Exception exc)
                     {
@@ -344,7 +344,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
                     }
                     catch (Exception exc)
                     {
@@ -362,7 +362,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
+                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.Id, "RelTableLeftRelation", obj1.Name, itemLeft.Id);
                     }
                     catch (Exception exc)
                     {
@@ -393,8 +393,8 @@ namespace IV.DX.Persistence.IntTests
                 obj2);
 
             int entriesCount = 5;
-            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft2() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight2() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft2() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight2() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -413,7 +413,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -432,7 +432,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(i).First();
                 var itemRight = relTablesRight.Skip(i).First();
 
-                itemLeft.RelTableRightRelation = itemRight.ID;
+                itemLeft.RelTableRightRelation = itemRight.Id;
 
                 this._genericRepo.Insert(itemLeft);
             }
@@ -446,7 +446,7 @@ namespace IV.DX.Persistence.IntTests
                 var itemLeft = relTablesLeft.Skip(1).First();
                 var itemRight = relTablesRight.Skip(2).First();
 
-                this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
             };
 
             for (int i = 0; i < entriesCount; i++)
@@ -458,7 +458,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                        this._coreRepo.AddRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
                     }
                     catch (Exception exc)
                     {
@@ -476,7 +476,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip((i + 1) % entriesCount).First();
 
-                        this._coreRepo.AddRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
+                        this._coreRepo.AddRelation(obj2.Name, itemRight.Id, "RelTableLeftRelation", obj1.Name, itemLeft.Id);
                     }
                     catch (Exception exc)
                     {
@@ -494,7 +494,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.ID, "RelTableRightRelation", obj2.Name, itemRight.ID);
+                        this._coreRepo.RemoveRelation(obj1.Name, itemLeft.Id, "RelTableRightRelation", obj2.Name, itemRight.Id);
                     }
                     catch (Exception exc)
                     {
@@ -512,7 +512,7 @@ namespace IV.DX.Persistence.IntTests
                         var itemLeft = relTablesLeft.Skip(i).First();
                         var itemRight = relTablesRight.Skip(i).First();
 
-                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.ID, "RelTableLeftRelation", obj1.Name, itemLeft.ID);
+                        this._coreRepo.RemoveRelation(obj2.Name, itemRight.Id, "RelTableLeftRelation", obj1.Name, itemLeft.Id);
                     }
                     catch (Exception exc)
                     {
@@ -543,8 +543,8 @@ namespace IV.DX.Persistence.IntTests
                 obj2);
 
             int entriesCount = 5;
-            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft6() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight6() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft6() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight6() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -563,7 +563,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -583,10 +583,10 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
+            var relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.Id));
 
             Assert.Equal(entriesCount, relTablesLeftCreated.Count());
-            Assert.Equal(entriesCount, relTablesLeftCreated.Select(x => x.ID).Intersect(relTablesLeft.Select(x => x.ID)).Count());
+            Assert.Equal(entriesCount, relTablesLeftCreated.Select(x => x.Id).Intersect(relTablesLeft.Select(x => x.Id)).Count());
 
             foreach (var item in relTablesLeftCreated)
             {
@@ -598,37 +598,37 @@ namespace IV.DX.Persistence.IntTests
             // Additional checking
             foreach (var item in relTablesLeft)
             {
-                this._coreRepo.AddRelation(obj1.Name, item.ID, "RelTableRightRelation", obj2.Name, relTableFirstRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, item.Id, "RelTableRightRelation", obj2.Name, relTableFirstRight.Id);
             }
 
             foreach (var item in relTablesLeft)
             {
-                var relationRightID = this._coreRepo.GetRelation(obj1.Name, item.ID, "RelTableRightRelation");
-                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.ID, "RelTableRightRelation");
+                var relationRightId = this._coreRepo.GetRelation(obj1.Name, item.Id, "RelTableRightRelation");
+                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.Id, "RelTableRightRelation");
 
-                Assert.Equal(relTableFirstRight.ID, relationRightID);
+                Assert.Equal(relTableFirstRight.Id, relationRightId);
                 Assert.Single(relationRightIDs);
-                Assert.Equal(relTableFirstRight.ID, relationRightIDs.Single());
+                Assert.Equal(relTableFirstRight.Id, relationRightIDs.Single());
             }
 
-            relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.ID));
+            relTablesLeftCreated = this._genericRepo.GetDXUnits<RelTableLeft6>(relTablesLeft.Select(x => x.Id));
 
             foreach (var item in relTablesLeftCreated)
             {
-                Assert.Equal(relTableFirstRight.ID, item.RelTableRightRelation);
+                Assert.Equal(relTableFirstRight.Id, item.RelTableRightRelation);
             }
 
-            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.Id, "RelTableLeftRelation");
 
             Assert.Equal(5, entriesCount);
-            Assert.Equal(5, relationLeftIDs.Intersect(relTablesLeft.Select(x => x.ID)).Count());
+            Assert.Equal(5, relationLeftIDs.Intersect(relTablesLeft.Select(x => x.Id)).Count());
 
             // Checking restricted actions
             Assert.Throws<Exception>(() =>
             {
                 try
                 {
-                    var relationLeftID = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                    var relationLeftId = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.Id, "RelTableLeftRelation");
                 }
                 catch (Exception exc)
                 {
@@ -658,8 +658,8 @@ namespace IV.DX.Persistence.IntTests
                 obj2);
 
             int entriesCount = 5;
-            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft5() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight5() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft5() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight5() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -678,7 +678,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -698,10 +698,10 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.ID));
+            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.Id));
 
             Assert.Equal(entriesCount, relTablesRightCreated.Count());
-            Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.ID).Intersect(relTablesRight.Select(x => x.ID)).Count());
+            Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.Id).Intersect(relTablesRight.Select(x => x.Id)).Count());
 
             foreach (var item in relTablesRightCreated)
             {
@@ -713,37 +713,37 @@ namespace IV.DX.Persistence.IntTests
             // Additional checking
             foreach (var item in relTablesRight)
             {
-                this._coreRepo.AddRelation(obj2.Name, item.ID, "RelTableLeftRelation", obj1.Name, relTableFirstLeft.ID);
+                this._coreRepo.AddRelation(obj2.Name, item.Id, "RelTableLeftRelation", obj1.Name, relTableFirstLeft.Id);
             }
 
             foreach (var item in relTablesRight)
             {
-                var relationLeftID = this._coreRepo.GetRelation(obj2.Name, item.ID, "RelTableLeftRelation");
-                var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, item.ID, "RelTableLeftRelation");
+                var relationLeftId = this._coreRepo.GetRelation(obj2.Name, item.Id, "RelTableLeftRelation");
+                var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, item.Id, "RelTableLeftRelation");
 
-                Assert.Equal(relTableFirstLeft.ID, relationLeftID);
+                Assert.Equal(relTableFirstLeft.Id, relationLeftId);
                 Assert.Single(relationLeftIDs);
-                Assert.Equal(relTableFirstLeft.ID, relationLeftIDs.Single());
+                Assert.Equal(relTableFirstLeft.Id, relationLeftIDs.Single());
             }
 
-            relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.ID));
+            relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight5>(relTablesRight.Select(x => x.Id));
 
             foreach (var item in relTablesRightCreated)
             {
-                Assert.Equal(relTableFirstLeft.ID, item.RelTableLeftRelation);
+                Assert.Equal(relTableFirstLeft.Id, item.RelTableLeftRelation);
             }
 
-            var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+            var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, relTableFirstLeft.Id, "RelTableRightRelation");
 
             Assert.Equal(5, entriesCount);
-            Assert.Equal(5, relationRightIDs.Intersect(relTablesRight.Select(x => x.ID)).Count());
+            Assert.Equal(5, relationRightIDs.Intersect(relTablesRight.Select(x => x.Id)).Count());
 
             // Checking restricted actions
             Assert.Throws<Exception>(() =>
             {
                 try
                 {
-                    var relationRightID = this._coreRepo.GetRelation(obj1.Name, relTableFirstLeft.ID, "RelTableLeftRelation");
+                    var relationRightId = this._coreRepo.GetRelation(obj1.Name, relTableFirstLeft.Id, "RelTableLeftRelation");
                 }
                 catch (Exception exc)
                 {
@@ -773,8 +773,8 @@ namespace IV.DX.Persistence.IntTests
                 obj2);
 
             int entriesCount = 5;
-            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft8() { ID = Guid.NewGuid() }).ToList();
-            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight8() { ID = Guid.NewGuid() }).ToList();
+            var relTablesLeft = Enumerable.Range(0, entriesCount).Select(x => new RelTableLeft8() { Id = Guid.NewGuid() }).ToList();
+            var relTablesRight = Enumerable.Range(0, entriesCount).Select(x => new RelTableRight8() { Id = Guid.NewGuid() }).ToList();
 
             var relTableFirstLeft = relTablesLeft.First();
             var relTableFirstRight = relTablesRight.First();
@@ -793,7 +793,7 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objRelationInfo).Wait();
 
             // Checking
-            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.ID);
+            var createdRelationEntry = this._genericRepo.GetDXUnit<DXRelationDefinitionUnit>(objRelationInfo.Id);
             var createdInvertedRelationEntry = createdRelationEntry.CreateInvertedRelationObject();
 
             this.CheckDXRelationDefinitionUnit(objRelationInfo, createdRelationEntry);
@@ -813,10 +813,10 @@ namespace IV.DX.Persistence.IntTests
             }
 
             // Checking relations between items
-            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight8>(relTablesRight.Select(x => x.ID));
+            var relTablesRightCreated = this._genericRepo.GetDXUnits<RelTableRight8>(relTablesRight.Select(x => x.Id));
 
             Assert.Equal(entriesCount, relTablesRightCreated.Count());
-            Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.ID).Intersect(relTablesRight.Select(x => x.ID)).Count());
+            Assert.Equal(entriesCount, relTablesRightCreated.Select(x => x.Id).Intersect(relTablesRight.Select(x => x.Id)).Count());
 
             foreach (var item in relTablesRightCreated)
             {
@@ -830,24 +830,24 @@ namespace IV.DX.Persistence.IntTests
 
             foreach (var item in relTablesLeft)
             {
-                this._coreRepo.AddRelation(obj1.Name, item.ID, "RelTableRightRelation", obj2.Name, relTableFirstRight.ID);
+                this._coreRepo.AddRelation(obj1.Name, item.Id, "RelTableRightRelation", obj2.Name, relTableFirstRight.Id);
 
-                var relationRightID = this._coreRepo.GetRelation(obj1.Name, item.ID, "RelTableRightRelation");
-                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.ID, "RelTableRightRelation");
+                var relationRightId = this._coreRepo.GetRelation(obj1.Name, item.Id, "RelTableRightRelation");
+                var relationRightIDs = this._coreRepo.GetRelations(obj1.Name, item.Id, "RelTableRightRelation");
 
-                Assert.Equal(relTableFirstRight.ID, relationRightID);
+                Assert.Equal(relTableFirstRight.Id, relationRightId);
                 Assert.Single(relationRightIDs);
-                Assert.Equal(relTableFirstRight.ID, relationRightIDs.Single());
+                Assert.Equal(relTableFirstRight.Id, relationRightIDs.Single());
 
                 lastItemLeft = item;
             }
 
-            var relationLeftID = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+            var relationLeftId = this._coreRepo.GetRelation(obj2.Name, relTableFirstRight.Id, "RelTableLeftRelation");
+            var relationLeftIDs = this._coreRepo.GetRelations(obj2.Name, relTableFirstRight.Id, "RelTableLeftRelation");
 
-            Assert.Equal(lastItemLeft.ID, relationLeftID);
+            Assert.Equal(lastItemLeft.Id, relationLeftId);
             Assert.Single(relationLeftIDs);
-            Assert.Equal(lastItemLeft.ID, relationLeftIDs.Single());
+            Assert.Equal(lastItemLeft.Id, relationLeftIDs.Single());
         }
 
         [DXUnit("RelTableLeft43a1")]
@@ -946,7 +946,7 @@ namespace IV.DX.Persistence.IntTests
 
         private void CheckDXRelationDefinitionUnit(DXRelationDefinitionUnit objRelationInfo, DXRelationDefinitionUnit createdEntry)
         {
-            Assert.Equal(objRelationInfo.ID, createdEntry.ID);
+            Assert.Equal(objRelationInfo.Id, createdEntry.Id);
             Assert.Equal(objRelationInfo.RelationType, createdEntry.RelationType);
             Assert.Equal(objRelationInfo.RelationNameLeft, createdEntry.RelationNameLeft);
             Assert.Equal(objRelationInfo.RelationNameRight, createdEntry.RelationNameRight);
@@ -973,21 +973,21 @@ namespace IV.DX.Persistence.IntTests
             var actionsForAdding = new List<Action>() {
                 new Action(() =>
                 {
-                    this._coreRepo.AddRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.Name, relTableFirstRight.ID);
+                    this._coreRepo.AddRelation(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation", objRight.Name, relTableFirstRight.Id);
                 }),
                 new Action(() =>
                 {
-                    this._coreRepo.AddRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.ID);
+                    this._coreRepo.AddRelation(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.Id);
                 }),
             };
             var actionsForRemoving = new List<Action>() {
                 new Action(() =>
                 {
-                    this._coreRepo.RemoveRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation", objRight.Name, relTableFirstRight.ID);
+                    this._coreRepo.RemoveRelation(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation", objRight.Name, relTableFirstRight.Id);
                 }),
                 new Action(() =>
                 {
-                    this._coreRepo.RemoveRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.ID);
+                    this._coreRepo.RemoveRelation(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation", objLeft.Name, relTableFirstLeft.Id);
                 }),
             };
 
@@ -999,19 +999,19 @@ namespace IV.DX.Persistence.IntTests
                     actionForAdding.Invoke();
 
                     // Checking
-                    var relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                    var relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
+                    var relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation");
+                    var relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation");
 
-                    Assert.Equal(relTableFirstRight.ID, relationIdRight);
+                    Assert.Equal(relTableFirstRight.Id, relationIdRight);
                     Assert.Single(relationIdsRight);
-                    Assert.Equal(relTableFirstRight.ID, relationIdsRight.Single());
+                    Assert.Equal(relTableFirstRight.Id, relationIdsRight.Single());
 
-                    var relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-                    var relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                    var relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation");
+                    var relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation");
 
-                    Assert.Equal(relTableFirstLeft.ID, relationIdLeft);
+                    Assert.Equal(relTableFirstLeft.Id, relationIdLeft);
                     Assert.Single(relationIdsLeft);
-                    Assert.Equal(relTableFirstLeft.ID, relationIdsLeft.Single());
+                    Assert.Equal(relTableFirstLeft.Id, relationIdsLeft.Single());
 
                     if (relationInfo.RelationType != DXRelationTypeEnum.ManyToOne
                         && relationInfo.RelationType != DXRelationTypeEnum.OneToMany
@@ -1021,10 +1021,10 @@ namespace IV.DX.Persistence.IntTests
                         // Action
                         actionForRemoving.Invoke();
 
-                        relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                        relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.ID, "RelTableRightRelation");
-                        relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
-                        relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.ID, "RelTableLeftRelation");
+                        relationIdRight = this._coreRepo.GetRelation(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation");
+                        relationIdsRight = this._coreRepo.GetRelations(objLeft.Name, relTableFirstLeft.Id, "RelTableRightRelation");
+                        relationIdLeft = this._coreRepo.GetRelation(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation");
+                        relationIdsLeft = this._coreRepo.GetRelations(objRight.Name, relTableFirstRight.Id, "RelTableLeftRelation");
 
                         Assert.Null(relationIdRight);
                         Assert.Null(relationIdLeft);

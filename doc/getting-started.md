@@ -81,7 +81,7 @@ During migration the app is fully operational:
    That's it. No other variables need to change.
 
 3. Restart the app. On startup:
-   - `DXConfiguredEncryptionKeyProvider` derives a stable ID from each key's bytes, so the new and old keys automatically get different IDs without any manual configuration.
+   - `DXConfiguredEncryptionKeyProvider` derives a stable Id from each key's bytes, so the new and old keys automatically get different IDs without any manual configuration.
    - It loads both keys into memory: current from env, previous from the state file.
    - `DXEncryptionRotationService` detects the key change and starts background re-encryption.
    - The app is immediately available — reads transparently decrypt using whichever key matches the `kid=` in each stored value.
@@ -119,7 +119,7 @@ public interface IDXEncryptionKeyProvider
     /// <summary>Returns the key used to encrypt new data.</summary>
     DXEncryptionKey GetCurrent();
 
-    /// <summary>Tries to find a key by its ID (used when decrypting existing data).</summary>
+    /// <summary>Tries to find a key by its Id (used when decrypting existing data).</summary>
     bool TryGet(string keyId, out DXEncryptionKey key);
 }
 ```
@@ -300,12 +300,12 @@ public class TBookUnit : DXUnit
 
 DXUnit types support single-table inheritance. A derived type declares its base type via the `BaseDXUnit` field in its `DXUnitDefinitionUnit` migration record. The physical table of the **base unit** is shared across all types in the hierarchy.
 
-When at least one derived type exists, the base unit table gains a system-managed `DerivedDXUnitType` column (`uuid NOT NULL`). This column stores the `DXUnitDefinitionUnit.ID` of the most-derived concrete type for each row:
+When at least one derived type exists, the base unit table gains a system-managed `DerivedDXUnitType` column (`uuid NOT NULL`). This column stores the `DXUnitDefinitionUnit.Id` of the most-derived concrete type for each row:
 
 | Row belongs to | DerivedDXUnitType value |
 |----------------|------------------------|
-| Base type (no further derivation) | Base type's own definition ID |
-| Derived type | Derived type's definition ID |
+| Base type (no further derivation) | Base type's own definition Id |
+| Derived type | Derived type's definition Id |
 
 This enables polymorphic discrimination directly from the base table — you can identify the concrete type of any row without joining additional tables.
 
@@ -315,7 +315,7 @@ Example migration for a derived type:
 
 ```json
 {
-  "ID": "020357c3-bfb2-4583-b285-3ed31e0e24f7",
+  "Id": "020357c3-bfb2-4583-b285-3ed31e0e24f7",
   "TimeStamp": "2021-10-02T00:00:00",
   "Name": "TComputerUnit",
   "Kind": 3,
@@ -323,7 +323,7 @@ Example migration for a derived type:
 }
 ```
 
-Here `BaseDXUnit` references the `DXUnitDefinitionUnit.ID` of `TDeviceUnit`. After migration, every row in the `TDeviceUnit` table carries a `DerivedDXUnitType` value — `7f8501fd…` for pure device rows and `020357c3…` for computer rows.
+Here `BaseDXUnit` references the `DXUnitDefinitionUnit.Id` of `TDeviceUnit`. After migration, every row in the `TDeviceUnit` table carries a `DerivedDXUnitType` value — `7f8501fd…` for pure device rows and `020357c3…` for computer rows.
 
 ### 5.2 DXElement (owned data block)
 
@@ -396,7 +396,7 @@ This creates the `TBookMainElement` element type with a `Name` column:
     "Data": {
       "Items": [
         {
-          "ID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+          "Id": "0953cb79-4001-4add-87d6-2ebce5ecc848",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookMainElement",
           "Kind": 3,
@@ -412,9 +412,9 @@ This creates the `TBookMainElement` element type with a `Name` column:
               "Data": {
                 "Items": [
                   {
-                    "ID": "20e239fb-5775-45cb-97a5-b400c231e707",
+                    "Id": "20e239fb-5775-45cb-97a5-b400c231e707",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+                    "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
                     "ColumnType": 3,
                     "Name": "Name",
                     "Length": 100,
@@ -449,7 +449,7 @@ This creates the `TBookUnit` unit type and links its elements:
     "Data": {
       "Items": [
         {
-          "ID": "05fdf970-e682-436d-8a09-94fc60d6b650",
+          "Id": "05fdf970-e682-436d-8a09-94fc60d6b650",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookUnit",
           "Kind": 3,
@@ -465,9 +465,9 @@ This creates the `TBookUnit` unit type and links its elements:
               "Data": {
                 "Items": [
                   {
-                    "ID": "90b0963c-294c-4e05-97aa-f77045502dc2",
+                    "Id": "90b0963c-294c-4e05-97aa-f77045502dc2",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitID": "05fdf970-e682-436d-8a09-94fc60d6b650",
+                    "DXUnitId": "05fdf970-e682-436d-8a09-94fc60d6b650",
                     "RelationType": 1,
                     "DXElementDefinitionUnit": "0953cb79-4001-4add-87d6-2ebce5ecc848"
                   }
@@ -537,7 +537,7 @@ Unique constraints are processed **after** relation columns are created. This me
 // Insert a type with a unique constraint on (name, surname)
 var element = new DXElementDefinitionUnit
 {
-    ID = Guid.NewGuid(),
+    Id = Guid.NewGuid(),
     Name = "TPersonMainElement",
     // ... columns ...
     DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsElement>
@@ -547,8 +547,8 @@ var element = new DXElementDefinitionUnit
         {
             new DXUniqueColumnsElement
             {
-                ID = Guid.NewGuid(),
-                DXUnitID = element.ID,
+                Id = Guid.NewGuid(),
+                DXUnitId = element.Id,
                 Columns = "name,surname"   // column order does not matter
             }
         }
@@ -563,7 +563,7 @@ element.DXUniqueColumnsElement = new DXMultiElementsContainer<DXUniqueColumnsEle
     Mode = MultiElementsMode.Full,
     Announced = new HashSet<DXUniqueColumnsElement>
     {
-        new DXUniqueColumnsElement { ID = Guid.NewGuid(), DXUnitID = element.ID, Columns = "email" }
+        new DXUniqueColumnsElement { Id = Guid.NewGuid(), DXUnitId = element.Id, Columns = "email" }
     }
 };
 
@@ -574,7 +574,7 @@ await dataService.UpdateAsync(element);
 
 ```json
 {
-  "ID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+  "Id": "0953cb79-4001-4add-87d6-2ebce5ecc848",
   "TimeStamp": "2024-01-01T00:00:00",
   "Name": "TPersonMainElement",
   "Kind": 3,
@@ -583,9 +583,9 @@ await dataService.UpdateAsync(element);
       "Meta": { "Kind": "DXElement", "Type": "DXColumnDefinitionElement", "Op": "Patch", "IsMulti": true, "IsRequired": false },
       "Data": {
         "Items": [
-          { "ID": "aaaa0001-0000-0000-0000-000000000001", "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "name",    "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
-          { "ID": "aaaa0001-0000-0000-0000-000000000002", "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "surname", "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
-          { "ID": "aaaa0001-0000-0000-0000-000000000003", "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "email",   "ColumnType": 3, "Length": 200, "DefaultValue": "''" }
+          { "Id": "aaaa0001-0000-0000-0000-000000000001", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "name",    "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
+          { "Id": "aaaa0001-0000-0000-0000-000000000002", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "surname", "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
+          { "Id": "aaaa0001-0000-0000-0000-000000000003", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "email",   "ColumnType": 3, "Length": 200, "DefaultValue": "''" }
         ]
       }
     },
@@ -594,13 +594,13 @@ await dataService.UpdateAsync(element);
       "Data": {
         "Items": [
           {
-            "ID": "bbbb0001-0000-0000-0000-000000000001",
-            "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+            "Id": "bbbb0001-0000-0000-0000-000000000001",
+            "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
             "Columns": "name,surname"
           },
           {
-            "ID": "bbbb0001-0000-0000-0000-000000000002",
-            "DXUnitID": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+            "Id": "bbbb0001-0000-0000-0000-000000000002",
+            "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
             "Columns": "email"
           }
         ]
@@ -623,11 +623,11 @@ Inject `IDXUnitDataService` (writes) and `IDXUnitDataReader` (reads) from DI.
 ```csharp
 var book = new TBookUnit
 {
-    ID = Guid.NewGuid(),
+    Id = Guid.NewGuid(),
     TBookMainElement = new TBookMainElement
     {
-        ID = Guid.NewGuid(),
-        DXUnitID = /* same as TBookUnit.ID */ book.ID,
+        Id = Guid.NewGuid(),
+        DXUnitId = /* same as TBookUnit.Id */ book.Id,
         Name = "My Book"
     }
 };
@@ -648,7 +648,7 @@ var updated = await dataService.UpdateAsync(book);
 await dataService.DeleteAsync(book);
 ```
 
-### 7.4 Read by ID
+### 7.4 Read by Id
 
 ```csharp
 var book = await dataReader.GetItemAsync<TBookUnit>(id);
@@ -765,7 +765,7 @@ var result = await security.LoginLocalAsync(new DXLoginLocalRequest
 ```csharp
 var result = await security.RefreshAsync(new DXRefreshRequest
 {
-    IdentityLoginID = result.IdentityLoginID,
+    IdentityLoginId = result.IdentityLoginId,
     SessionId = result.SessionId,
     RefreshToken = result.RefreshToken
 });
@@ -801,10 +801,10 @@ See [DXSecurity.md](DXSecurity.md) for the full RBAC model reference.
 ```csharp
 var queryProvider = scope.ServiceProvider.GetRequiredService<IDXQueryResultProvider>();
 
-// Execute a query by its stored ID
+// Execute a query by its stored Id
 var result = await queryProvider.GetAsync(dxQueryId, dxFilterId: null);
 
-// Get display values (Name/ID pairs) for a type
+// Get display values (Name/Id pairs) for a type
 var DXTitleExpressions = await queryProvider.GetDXTitleExpressionsAsync("TBookUnit");
 ```
 

@@ -10,11 +10,11 @@
     "Data": {
       "Items": [
         {
-          "ID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+          "Id": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
           "TimeStamp": "2026-03-02T00:00:00Z",
           "BaseDXUnit": null,
           "Name": "DXPublicAccessUnit",
-          "DXTitleExpression": "PublicDXUnitID",
+          "DXTitleExpression": "PublicDXUnitId",
           "Kind": 1,
           "DXElements": {
             "DXColumnDefinitionElement": {
@@ -28,10 +28,10 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "a8d16f0c-84d6-45c7-b26e-cf167f3de31a",
+                    "Id": "a8d16f0c-84d6-45c7-b26e-cf167f3de31a",
                     "TimeStamp": "2026-03-02T00:00:00Z",
-                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
-                    "Name": "PublicDXUnitID",
+                    "DXUnitId": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "Name": "PublicDXUnitId",
                     "Length": null,
                     "Precision": null,
                     "Scale": null,
@@ -53,10 +53,10 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "c6d7a4cb-c031-4722-b1cc-3f286462f024",
+                    "Id": "c6d7a4cb-c031-4722-b1cc-3f286462f024",
                     "TimeStamp": "2026-03-02T00:00:00Z",
-                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
-                    "Columns": "DXUnitDefinition, PublicDXUnitID"
+                    "DXUnitId": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "Columns": "DXUnitDefinition, PublicDXUnitId"
                   }
                 ]
               }
@@ -72,9 +72,9 @@
               "Data": {
                 "Items": [
                   {
-                    "ID": "8baf5b36-4385-4b3d-97f4-ad4c7ae711b0",
+                    "Id": "8baf5b36-4385-4b3d-97f4-ad4c7ae711b0",
                     "TimeStamp": "2026-03-02T00:00:00Z",
-                    "DXUnitID": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
+                    "DXUnitId": "91f7f10d-1d82-4d53-a18c-c4d50530f0c0",
                     "OwnRelationName": "PublicAccesses",
                     "TargetRelationName": "DXUnitDefinition",
                     "RelationType": 4,

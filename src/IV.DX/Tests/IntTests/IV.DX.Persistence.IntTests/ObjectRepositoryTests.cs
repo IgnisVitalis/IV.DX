@@ -44,7 +44,7 @@ namespace IV.DX.Persistence.IntTests
             var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
+            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.Id);
             Assert.Equal("NewObject", objDefinition.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
@@ -71,7 +71,7 @@ namespace IV.DX.Persistence.IntTests
             var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
 
             Assert.NotNull(objDefinition);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.ID);
+            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.Id);
             Assert.Equal("UpdatedObject", objDefinition.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }

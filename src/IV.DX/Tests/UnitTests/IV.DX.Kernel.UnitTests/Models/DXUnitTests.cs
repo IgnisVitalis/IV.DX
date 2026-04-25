@@ -15,7 +15,7 @@ namespace IV.DX.Kernel.UnitTests.Models
 
             var dxUnit = new DXElementDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 TimeStamp = timeStamp,
                 Kind = DXObjectKindEnum.Core,
                 DXTitleExpression = "Name",

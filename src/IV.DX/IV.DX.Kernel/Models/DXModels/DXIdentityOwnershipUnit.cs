@@ -11,7 +11,7 @@ namespace IV.DX.Kernel.Models
         [DXColumn("DXUnitDefinition")]
         public Guid DXUnitDefinition { get; set; }
 
-        [DXColumn("OwnedDXUnitID")]
-        public Guid OwnedDXUnitID { get; set; }
+        [DXColumn("OwnedDXUnitId")]
+        public Guid OwnedDXUnitId { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace IV.DX.Persistence
         public static IDictionary<string, string> AllColumns { get; } = new Dictionary<string, string>();
         public static IDictionary<string, string> BaseColumns { get; } = new Dictionary<string, string>()
         {
-            {"ID","ID" },
+            {"Id","Id" },
             {"TimeStamp", "TimeStamp" }
         };
 
@@ -326,9 +326,9 @@ namespace IV.DX.Persistence
             var enumsList = dxEnums as IList<DXEnumDefinitionUnit> ?? dxEnums.ToList();
             var relationsList = dxRelations as IList<DXRelationDefinitionUnit> ?? dxRelations.ToList();
 
-            var unitsById = unitsList.ToDictionary(x => x.ID);
-            var elementsById = elementsList.ToDictionary(x => x.ID);
-            var enumsById = enumsList.ToDictionary(x => x.ID);
+            var unitsById = unitsList.ToDictionary(x => x.Id);
+            var elementsById = elementsList.ToDictionary(x => x.Id);
+            var enumsById = enumsList.ToDictionary(x => x.Id);
 
             var commonElementNames = elementsList
                 .Where(x => x.IsCommon)
@@ -493,7 +493,7 @@ namespace IV.DX.Persistence
                     var dxElementName = dxElement.Name;
                     var dxNodeRelated = GetNodeByName(dxElementName);
 
-                    Guid? unitTypeFilter = dxElement.IsCommon ? dxUnit.ID : null;
+                    Guid? unitTypeFilter = dxElement.IsCommon ? dxUnit.Id : null;
 
                     var dxNodeRelationToDXElement =
                         new DXNodeRelation(
@@ -502,8 +502,8 @@ namespace IV.DX.Persistence
                             new JoinSpec
                             {
                                 TargetTable      = dxElementName,
-                                SourceColumn     = Constants.ID,
-                                TargetColumn     = Constants.DXUnitID,
+                                SourceColumn     = Constants.Id,
+                                TargetColumn     = Constants.DXUnitId,
                                 DXUnitTypeFilter = unitTypeFilter
                             });
 
@@ -516,8 +516,8 @@ namespace IV.DX.Persistence
                             new JoinSpec
                             {
                                 TargetTable              = dxUnitName,
-                                SourceColumn             = Constants.DXUnitID,
-                                TargetColumn             = Constants.ID,
+                                SourceColumn             = Constants.DXUnitId,
+                                TargetColumn             = Constants.Id,
                                 DXUnitTypeFilter         = unitTypeFilter,
                                 DXUnitTypeFilterOnSource = true
                             });
@@ -526,7 +526,7 @@ namespace IV.DX.Persistence
                 }
 
                 // Unit → Other Unit (DXRelation)
-                foreach (var DXUnitToUnitRelationElement in dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitID))
+                foreach (var DXUnitToUnitRelationElement in dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit != x.DXUnitId))
                 {
                     var dxUnitRelated = unitsById[DXUnitToUnitRelationElement.TargetDXUnit];
                     var dxUnitNameRelated = dxUnitRelated.Name;
@@ -677,8 +677,8 @@ namespace IV.DX.Persistence
                             new JoinSpec
                             {
                                 TargetTable              = dxUnitName,
-                                SourceColumn             = Constants.DXUnitID,
-                                TargetColumn             = Constants.ID,
+                                SourceColumn             = Constants.DXUnitId,
+                                TargetColumn             = Constants.Id,
                                 DXUnitTypeFilter         = item.Key.JoinSpec?.DXUnitTypeFilter,
                                 DXUnitTypeFilterOnSource = true
                             });
@@ -694,7 +694,7 @@ namespace IV.DX.Persistence
                 var dxUnitName = dxUnit.Name;
                 var dxNode = GetNodeByName(dxUnitName);
 
-                var selfRelatedRelations = dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitID);
+                var selfRelatedRelations = dxUnit.DXUnitToUnitRelationElement.Announced.Where(x => x.TargetDXUnit == x.DXUnitId);
 
                 if (selfRelatedRelations.Count() > 0)
                 {
@@ -980,8 +980,8 @@ namespace IV.DX.Persistence
                 new JoinSpec
                 {
                     TargetTable  = r.ObjectNameRight,
-                    SourceColumn = Constants.ID,
-                    TargetColumn = Constants.ID,
+                    SourceColumn = Constants.Id,
+                    TargetColumn = Constants.Id,
                     ViaTable     = new ManyToManySpec
                     {
                         TableName    = r.RelationTable!,
@@ -993,17 +993,17 @@ namespace IV.DX.Persistence
             DXRelationTypeEnum.ManyToOne
                 or DXRelationTypeEnum.ManyToZeroOne
                 or DXRelationTypeEnum.ZeroOneToOne =>
-                new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = r.RelationNameRight, TargetColumn = Constants.ID },
+                new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = r.RelationNameRight, TargetColumn = Constants.Id },
 
             DXRelationTypeEnum.OneToMany
                 or DXRelationTypeEnum.ZeroOneToMany
                 or DXRelationTypeEnum.OneToZeroOne =>
-                new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = Constants.ID, TargetColumn = r.RelationNameLeft },
+                new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = Constants.Id, TargetColumn = r.RelationNameLeft },
 
             DXRelationTypeEnum.ZeroOneToZeroOne =>
-                r.RelationColumnNameRight == "ID"
-                    ? new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = r.RelationNameRight, TargetColumn = Constants.ID }
-                    : new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = Constants.ID,        TargetColumn = r.RelationNameLeft },
+                r.RelationColumnNameRight == "Id"
+                    ? new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = r.RelationNameRight, TargetColumn = Constants.Id }
+                    : new JoinSpec { TargetTable = r.ObjectNameRight, SourceColumn = Constants.Id,        TargetColumn = r.RelationNameLeft },
 
             _ => throw new Exception($"DXNode processing. There are no DXRelation type {r.RelationType}")
         };
@@ -1087,7 +1087,7 @@ namespace IV.DX.Persistence
                 this.Key = key;
                 this.Name = name;
                 this.Kind = kind;
-                this.TableAlias = $"T_{Key.ID}_{Key.SubID}";
+                this.TableAlias = $"T_{Key.Id}_{Key.SubId}";
                 this.OriginalNode = null;
             }
 
@@ -1128,21 +1128,21 @@ namespace IV.DX.Persistence
             {
                 this.BaseDXNode = baseDXNode;
 
-                // derived → base: derived.ID = base.ID
+                // derived → base: derived.Id = base.Id
                 var dxNodeReltionToBaseDXUnit =
                    new DXNodeRelation(
                        this.Name,
                        this.Name,
-                       new JoinSpec { TargetTable = baseDXNode.Name, SourceColumn = Constants.ID, TargetColumn = Constants.ID });
+                       new JoinSpec { TargetTable = baseDXNode.Name, SourceColumn = Constants.Id, TargetColumn = Constants.Id });
 
                 this.AttachDXNode(dxNodeReltionToBaseDXUnit, baseDXNode);
 
-                // base → derived: derived.ID = base.ID
+                // base → derived: derived.Id = base.Id
                 var dxNodeReltionToInheritedDXUnit =
                     new DXNodeRelation(
                         baseDXNode.Name,
                         baseDXNode.Name,
-                        new JoinSpec { TargetTable = this.Name, SourceColumn = Constants.ID, TargetColumn = Constants.ID });
+                        new JoinSpec { TargetTable = this.Name, SourceColumn = Constants.Id, TargetColumn = Constants.Id });
 
                 baseDXNode.AttachDXNode(dxNodeReltionToInheritedDXUnit, this);
             }
@@ -1155,7 +1155,7 @@ namespace IV.DX.Persistence
 
                 foreach (var dxRelation in dxRelations)
                 {
-                    var clone = new DXNode(new DXNodeKey(this.Key.ID, counter++), this.Name, this.Kind);
+                    var clone = new DXNode(new DXNodeKey(this.Key.Id, counter++), this.Name, this.Kind);
 
                     clone.OriginalNode = this;
                     clone.BaseDXNode = this.BaseDXNode;
@@ -1212,10 +1212,10 @@ namespace IV.DX.Persistence
 
             public bool ContainsProperty(string propertyName)
             {
-                if (propertyName == Constants.ID || propertyName == Constants.TimeStamp)
+                if (propertyName == Constants.Id || propertyName == Constants.TimeStamp)
                     return true;
 
-                if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitID)
+                if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitId)
                     return true;
 
                 if (this.Kind == DXNodeKind.DXElement && propertyName == Constants.DXUnitType)
@@ -1280,19 +1280,19 @@ namespace IV.DX.Persistence
 
         private struct DXNodeKey
         {
-            public int ID { get; }
-            public int SubID { get; }
+            public int Id { get; }
+            public int SubId { get; }
 
             public DXNodeKey(int id)
             {
-                this.ID = id;
-                this.SubID = 0;
+                this.Id = id;
+                this.SubId = 0;
             }
 
-            public DXNodeKey(int id, int subID)
+            public DXNodeKey(int id, int subId)
             {
-                this.ID = id;
-                this.SubID = subID;
+                this.Id = id;
+                this.SubId = subId;
             }
         }
 

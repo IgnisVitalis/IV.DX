@@ -9,12 +9,12 @@ namespace IV.DX.Shared.IntTests.Factories.Test
         {
             return new TDeviceUnit()
             {
-                ID = id,
-                User = user.ID,
+                Id = id,
+                User = user.Id,
                 TDeviceMainElement = new TDeviceMainElement()
                 {
-                    ID = Guid.NewGuid(),
-                    DXUnitID = id,
+                    Id = Guid.NewGuid(),
+                    DXUnitId = id,
                     Model = model,
                     UUID = uuid
                 }

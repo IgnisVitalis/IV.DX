@@ -83,7 +83,7 @@ namespace IV.DX.Persistence.IntTests
 
             var columns = new Dictionary<string, string>
             {
-                { "ID", "ID" }
+                { "Id", "Id" }
             };
 
             Assert.Throws<UnauthorizedAccessException>(() => this._dxRawReader.Get("DXMembershipUnit", columns));

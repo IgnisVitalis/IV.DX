@@ -12,8 +12,8 @@ namespace IV.DX.Application.Contracts.Models
 
         public Guid SessionId { get; set; }
 
-        public Guid IdentityID { get; set; }
+        public Guid IdentityId { get; set; }
 
-        public Guid IdentityLoginID { get; set; }
+        public Guid IdentityLoginId { get; set; }
     }
 }

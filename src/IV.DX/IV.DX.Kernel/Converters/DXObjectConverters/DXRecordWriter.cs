@@ -56,7 +56,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 
             options.DXUnitContext = context;
 
-            var record = BuildElementRecord(element, element.DXUnitID);
+            var record = BuildElementRecord(element, element.DXUnitId);
             var meta = BuildSingleElementMeta(element.GetType(), options, isStandalone: true);
 
             return new DXDataBlock<DXElementRecord>
@@ -90,7 +90,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             var record = new DXUnitRecord
             {
-                ID = unit.ID,
+                Id = unit.Id,
                 TimeStamp = unit.TimeStamp,
                 Fields = ReadScalarFields(unit),
                 DXElements = new Dictionary<string, DXDataBlock<DXElementRecord>>(StringComparer.OrdinalIgnoreCase)
@@ -125,7 +125,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 if (string.IsNullOrWhiteSpace(elementTypeName))
                     elementTypeName = prop.Name;
 
-                var block = BuildMultiElementBlock(container, elementType, unit.ID, options, prop, elementTypeName);
+                var block = BuildMultiElementBlock(container, elementType, unit.Id, options, prop, elementTypeName);
                 record.DXElements![prop.Name] = block;
             }
         }
@@ -142,7 +142,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 Meta = meta,
                 Data = new DXData<DXElementRecord>
                 {
-                    Items = new List<DXElementRecord> { BuildElementRecord(element, element.DXUnitID) }
+                    Items = new List<DXElementRecord> { BuildElementRecord(element, element.DXUnitId) }
                 }
             };
         }
@@ -185,9 +185,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             return new DXElementRecord
             {
-                ID = element.ID,
+                Id = element.Id,
                 TimeStamp = element.TimeStamp,
-                DXUnitID = element.DXUnitID == Guid.Empty ? unitId : element.DXUnitID,
+                DXUnitId = element.DXUnitId == Guid.Empty ? unitId : element.DXUnitId,
                 Fields = ReadScalarFields(element)
             };
         }
@@ -196,7 +196,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             var delete = new DXDeleteRef
             {
-                ID = element.ID
+                Id = element.Id
             };
 
             if (options?.IncludeDeleteFields == true)
@@ -204,11 +204,11 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
                 var fields = ReadScalarFields(element);
                 delete.Fields = fields ?? new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
 
-                if (!delete.Fields.ContainsKey(Constants.DXUnitID)
-                    && (element.DXUnitID != Guid.Empty || unitId != Guid.Empty))
+                if (!delete.Fields.ContainsKey(Constants.DXUnitId)
+                    && (element.DXUnitId != Guid.Empty || unitId != Guid.Empty))
                 {
-                    delete.Fields[Constants.DXUnitID] =
-                        JToken.FromObject(element.DXUnitID == Guid.Empty ? unitId : element.DXUnitID);
+                    delete.Fields[Constants.DXUnitId] =
+                        JToken.FromObject(element.DXUnitId == Guid.Empty ? unitId : element.DXUnitId);
                 }
 
                 if (!delete.Fields.ContainsKey(Constants.TimeStamp) && element.TimeStamp != default)
@@ -224,7 +224,7 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
         {
             return new DXEnumRecord
             {
-                ID = item.ID,
+                Id = item.Id,
                 TimeStamp = item.TimeStamp,
                 Type = item.Type,
                 Key = item.Key == null ? null : JToken.FromObject(item.Key),
@@ -415,9 +415,9 @@ namespace IV.DX.Kernel.Converters.DXObjectConverters
 
         private static bool IsSystemField(string fieldName)
         {
-            return fieldName == Constants.ID
+            return fieldName == Constants.Id
                    || fieldName == Constants.TimeStamp
-                   || fieldName == Constants.DXUnitID;
+                   || fieldName == Constants.DXUnitId;
         }
 
         private static MultiElementsMode GetContainerMode(object container)

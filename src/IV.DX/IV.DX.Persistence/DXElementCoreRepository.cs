@@ -52,7 +52,7 @@ namespace IV.DX.Persistence
                 DataSet dataSet = new DataSet(typeName);
 
                 var dxModelAdapter = this.PopulateTableToDataSet(conn, dataSet, typeName, SQLQueryBuilder.BaseColumns, dxFilter:
-                    this.GetWhereExpressionForID(id));
+                    this.GetWhereExpressionForId(id));
 
                 var dxModelBuilder = this._dbProvider.GetDbCommandBuilder(dxModelAdapter);
 
@@ -60,7 +60,7 @@ namespace IV.DX.Persistence
 
                 DataTable dataTable = dataSet.Tables[typeName]!;
 
-                var existingRow = dataTable.Rows.Cast<DataRow>().SingleOrDefault(x => ConvertHelper.ParseGuid(x["ID"]) == id);
+                var existingRow = dataTable.Rows.Cast<DataRow>().SingleOrDefault(x => ConvertHelper.ParseGuid(x["Id"]) == id);
 
                 if (existingRow != null)
                 {
@@ -84,7 +84,7 @@ namespace IV.DX.Persistence
             if (container == null)
                 return null;
 
-            var sqlWhereClause = this.GetWhereExpressionForID(id);
+            var sqlWhereClause = this.GetWhereExpressionForId(id);
 
             return this.RunRequest((conn) =>
             {
@@ -142,8 +142,8 @@ namespace IV.DX.Persistence
         {
             if (string.IsNullOrWhiteSpace(elementTypeName))
                 throw new ArgumentException("Element type name is required.", nameof(elementTypeName));
-            if (record.DXUnitID == Guid.Empty)
-                throw new ArgumentException("DXUnitID is required for DXElementRecord.", nameof(record));
+            if (record.DXUnitId == Guid.Empty)
+                throw new ArgumentException("DXUnitId is required for DXElementRecord.", nameof(record));
 
             return this.RunRequestInTransaction(conn =>
             {
@@ -156,17 +156,17 @@ namespace IV.DX.Persistence
                 var columns = EnsureDxUnitIdColumn(tableDef.GetColumns());
                 var adapter = this.PopulateTableToDataSet(conn, dataSet, elementTypeName,
                     columns: columns,
-                    dxFilter: this.GetWhereExpressionForID(record.ID));
+                    dxFilter: this.GetWhereExpressionForId(record.Id));
 
                 var table = dataSet.Tables[elementTypeName]!;
                 if (table.PrimaryKey == null || table.PrimaryKey.Length == 0)
                 {
-                    if (table.Columns.Contains("ID"))
-                        table.PrimaryKey = new[] { table.Columns["ID"]! };
+                    if (table.Columns.Contains("Id"))
+                        table.PrimaryKey = new[] { table.Columns["Id"]! };
                 }
 
-                var item = BuildRowItemFromElementRecord(record, elementTypeName, record.DXUnitID);
-                var row = table.Rows.Find(item.ID);
+                var item = BuildRowItemFromElementRecord(record, elementTypeName, record.DXUnitId);
+                var row = table.Rows.Find(item.Id);
 
                 if (row == null)
                 {
@@ -182,13 +182,13 @@ namespace IV.DX.Persistence
                 SaveTable(adapter, conn, dataSet, table, false);
                 dataSet.AcceptChanges();
 
-                return item.ID;
+                return item.Id;
             });
         }
 
         private DXElementRecord BuildElementRecordFromRow(DataRow row, IDictionary<string, string> columns, string dxUnitType)
         {
-            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var id = ConvertHelper.ParseGuid(row[Constants.Id]);
             var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
             var dxUnitId = ResolveDxUnitId(row, dxUnitType, id);
 
@@ -199,7 +199,7 @@ namespace IV.DX.Persistence
                     continue;
 
                 if (Constants.SystemProperties.Any(p => string.Equals(p, column.ColumnName, StringComparison.OrdinalIgnoreCase))
-                    || string.Equals(column.ColumnName, $"{dxUnitType}ID", StringComparison.OrdinalIgnoreCase))
+                    || string.Equals(column.ColumnName, $"{dxUnitType}Id", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 var value = row[column] == DBNull.Value ? null : GetValueFromRow(row, column);
@@ -208,9 +208,9 @@ namespace IV.DX.Persistence
 
             return new DXElementRecord
             {
-                ID = id,
+                Id = id,
                 TimeStamp = timeStamp,
-                DXUnitID = dxUnitId,
+                DXUnitId = dxUnitId,
                 Fields = fields.Count == 0 ? null : fields
             };
         }
@@ -218,21 +218,21 @@ namespace IV.DX.Persistence
 
         private static DXElementRecord EnsureDxUnitId(DXElementRecord record, string dxUnitTypeName)
         {
-            if (record.DXUnitID != Guid.Empty)
+            if (record.DXUnitId != Guid.Empty)
                 return record;
 
             if (record.Fields != null)
             {
-                if (TryReadGuid(record.Fields, Constants.DXUnitID, out var value))
+                if (TryReadGuid(record.Fields, Constants.DXUnitId, out var value))
                 {
-                    record.DXUnitID = value;
+                    record.DXUnitId = value;
                     return record;
                 }
 
-                var customKey = $"{dxUnitTypeName}ID";
+                var customKey = $"{dxUnitTypeName}Id";
                 if (TryReadGuid(record.Fields, customKey, out value))
                 {
-                    record.DXUnitID = value;
+                    record.DXUnitId = value;
                     return record;
                 }
             }

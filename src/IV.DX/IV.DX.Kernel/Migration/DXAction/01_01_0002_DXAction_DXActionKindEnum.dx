@@ -10,7 +10,7 @@
         "Data": {
             "Items": [
                 {
-                    "ID": "3a013793-bfef-4173-b5ed-bd81ad021565",
+                    "Id": "3a013793-bfef-4173-b5ed-bd81ad021565",
                     "TimeStamp": "2026-03-25T00:00:00Z",
                     "Name": "DXActionKindEnum",
                     "DXTitleExpression": "Value",
@@ -26,17 +26,17 @@
                             "Data": {
                                 "Items": [
                                     {
-                                        "ID": "6611296b-3e8a-42ae-b0f0-c100aa0af565",
+                                        "Id": "6611296b-3e8a-42ae-b0f0-c100aa0af565",
                                         "TimeStamp": "2026-03-25T00:00:00Z",
-                                        "DXUnitID": "3a013793-bfef-4173-b5ed-bd81ad021565",
+                                        "DXUnitId": "3a013793-bfef-4173-b5ed-bd81ad021565",
                                         "ColumnType": 8,
                                         "Name": "Key",
                                         "AllowNull": false
                                     },
                                     {
-                                        "ID": "99053924-e750-41a9-ae17-19688239644b",
+                                        "Id": "99053924-e750-41a9-ae17-19688239644b",
                                         "TimeStamp": "2026-03-25T00:00:00Z",
-                                        "DXUnitID": "3a013793-bfef-4173-b5ed-bd81ad021565",
+                                        "DXUnitId": "3a013793-bfef-4173-b5ed-bd81ad021565",
                                         "ColumnType": 3,
                                         "Name": "Value",
                                         "Length": 50,
@@ -55,9 +55,9 @@
                             "Data": {
                                 "Items": [
                                     {
-                                        "ID": "7c84af0b-e928-453a-9212-d5432944be13",
+                                        "Id": "7c84af0b-e928-453a-9212-d5432944be13",
                                         "TimeStamp": "2026-03-25T00:00:00Z",
-                                        "DXUnitID": "3a013793-bfef-4173-b5ed-bd81ad021565",
+                                        "DXUnitId": "3a013793-bfef-4173-b5ed-bd81ad021565",
                                         "Columns": "Key"
                                     }
                                 ]

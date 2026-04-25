@@ -17,14 +17,14 @@ namespace IV.DX.Kernel.Models
 
             _items = new List<DXColumnDefinition>()
             {
-                new DXColumnDefinition(Constants.ID, new DXColumnAttribute(Constants.ID)),
+                new DXColumnDefinition(Constants.Id, new DXColumnAttribute(Constants.Id)),
                 new DXColumnDefinition(Constants.TimeStamp, new DXColumnAttribute(Constants.TimeStamp)),
             };
         }
 
         public void AddPropertyDefinition(DXColumnDefinition item)
         {
-            if (item.Name == Constants.ID
+            if (item.Name == Constants.Id
                 || item.Name == Constants.TimeStamp
                 )
                 return;

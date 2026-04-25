@@ -38,8 +38,8 @@ namespace IV.DX.Application.IntTests.Services
         private class DXUnitDefinitionUnit : DXUnit
         {
 
-            [DXColumn("DXUnitDefinitionUnitID", "U2U(DXUnitDefinitionUnit).ID")]
-            public Guid DXUnitDefinitionUnitID { get; set; }
+            [DXColumn("DXUnitDefinitionUnitId", "U2U(DXUnitDefinitionUnit).Id")]
+            public Guid DXUnitDefinitionUnitId { get; set; }
         }
     }
 }

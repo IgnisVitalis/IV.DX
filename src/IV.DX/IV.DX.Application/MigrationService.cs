@@ -66,7 +66,7 @@ namespace IV.DX.Application
 
                 return new DXMigrationScriptsUnit
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     FilePath = s.FileName,
                     Name = meta.Name,
                     Version = meta.Version,
@@ -307,7 +307,7 @@ namespace IV.DX.Application
 
                 return new DXMigrationScriptsUnit
                 {
-                    ID = id,
+                    Id = id,
 
                     FilePath = rawNorm,
                     Name = meta.Name,
@@ -336,7 +336,7 @@ namespace IV.DX.Application
                            var id = Guid.NewGuid();
                            return new DXMigrationScriptsUnit
                            {
-                               ID = id,
+                               Id = id,
 
                                FilePath = fi.FullName,
                                Name = meta.Name,
@@ -392,7 +392,7 @@ namespace IV.DX.Application
 
         private string GetMigrationErrorMessage(DXMigrationScriptsUnit file, Guid id)
         {
-            return $"{file.ToString()}\nDXUnit with ID '{id}' migration error";
+            return $"{file.ToString()}\nDXUnit with Id '{id}' migration error";
         }
 
         private static List<JToken> ParseBlocks(string content)
@@ -434,7 +434,7 @@ namespace IV.DX.Application
                     var existingIds = new HashSet<Guid>(_coreRepo.GetItemIDs(block.Meta.Type, block.Meta.DXFilter));
 
                     var incomingIds = new HashSet<Guid>(
-                        block.Data?.Items?.Where(r => r != null).Select(r => r.ID) ?? Enumerable.Empty<Guid>());
+                        block.Data?.Items?.Where(r => r != null).Select(r => r.Id) ?? Enumerable.Empty<Guid>());
 
                     existingIds.ExceptWith(incomingIds);
 
@@ -443,7 +443,7 @@ namespace IV.DX.Application
                         if (id == Guid.Empty)
                             continue;
 
-                        deleteRefById.TryAdd(id, new DXDeleteRef { ID = id });
+                        deleteRefById.TryAdd(id, new DXDeleteRef { Id = id });
                     }
                 }
 
@@ -468,7 +468,7 @@ namespace IV.DX.Application
                         }
                         catch (Exception exc)
                         {
-                            throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
+                            throw new Exception(this.GetMigrationErrorMessage(script, record.Id), exc);
                         }
                     }
                 }
@@ -477,10 +477,10 @@ namespace IV.DX.Application
                 {
                     foreach (var deleteRef in block.Data.Delete.Where(x => x != null))
                     {
-                        if (deleteRef.ID == Guid.Empty)
+                        if (deleteRef.Id == Guid.Empty)
                             continue;
 
-                        deleteRefById[deleteRef.ID] = deleteRef;
+                        deleteRefById[deleteRef.Id] = deleteRef;
                     }
                 }
 
@@ -503,7 +503,7 @@ namespace IV.DX.Application
                         }
                         catch (Exception exc)
                         {
-                            throw new Exception(this.GetMigrationErrorMessage(script, deleteRef.ID), exc);
+                            throw new Exception(this.GetMigrationErrorMessage(script, deleteRef.Id), exc);
                         }
                     }
                 }
@@ -545,7 +545,7 @@ namespace IV.DX.Application
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
+                        throw new Exception(this.GetMigrationErrorMessage(script, record.Id), exc);
                     }
                 }
             }
@@ -586,7 +586,7 @@ namespace IV.DX.Application
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(this.GetMigrationErrorMessage(script, record.ID), exc);
+                        throw new Exception(this.GetMigrationErrorMessage(script, record.Id), exc);
                     }
                 }
             }

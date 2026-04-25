@@ -37,7 +37,7 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit = new DXUnitDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 TimeStamp = timeStamp,
                 Kind = DXObjectKindEnum.Custom,
                 Name = dxUnitName,

@@ -10,9 +10,9 @@ namespace IV.DX.Shared.IntTests.Factories
         {
             DXUnitDefinitionUnit item = new DXUnitDefinitionUnit()
             {
-                ID = id,
+                Id = id,
                 Name = objectName,
-                DXTitleExpression = "ID",
+                DXTitleExpression = "Id",
                 Kind = DXObjectKindEnum.Custom,
             };
 

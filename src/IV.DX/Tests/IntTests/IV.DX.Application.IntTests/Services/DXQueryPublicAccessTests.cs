@@ -45,7 +45,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await RunAsSystemAsync(async () =>
             {
-                SetIsPublicRead(userUnitDef.ID, true);
+                SetIsPublicRead(userUnitDef.Id, true);
                 await _structureCache.RefreshAsync();
 
                 await _dataService.InsertAsync(TUserUnitFactory.GetItem(
@@ -54,7 +54,7 @@ namespace IV.DX.Application.IntTests.Services
                     "User",
                     DateTime.UtcNow.Date));
 
-                await InsertQueryForTypeAsync(queryId, userUnitDef.ID);
+                await InsertQueryForTypeAsync(queryId, userUnitDef.Id);
             });
 
             try
@@ -72,7 +72,7 @@ namespace IV.DX.Application.IntTests.Services
                     await DeleteByIdsAsync("DXQueryUnit", new[] { queryId });
                     await DeleteByIdsAsync("TUserUnit", new[] { itemId });
 
-                    SetIsPublicRead(userUnitDef.ID, originalUserIsPublicRead);
+                    SetIsPublicRead(userUnitDef.Id, originalUserIsPublicRead);
                     await _structureCache.RefreshAsync();
                 });
             }
@@ -91,7 +91,7 @@ namespace IV.DX.Application.IntTests.Services
 
             await RunAsSystemAsync(async () =>
             {
-                SetIsPublicRead(userUnitDef.ID, false);
+                SetIsPublicRead(userUnitDef.Id, false);
                 await _structureCache.RefreshAsync();
 
                 await _dataService.InsertAsync(TUserUnitFactory.GetItem(
@@ -108,13 +108,13 @@ namespace IV.DX.Application.IntTests.Services
 
                 await _dataService.InsertAsync(new DXPublicAccessUnit
                 {
-                    ID = publicAccessId,
+                    Id = publicAccessId,
                     TimeStamp = DateTime.UtcNow,
-                    DXUnitDefinition = userUnitDef.ID,
-                    PublicDXUnitID = publicItemId
+                    DXUnitDefinition = userUnitDef.Id,
+                    PublicDXUnitId = publicItemId
                 });
 
-                await InsertQueryForTypeAsync(queryId, userUnitDef.ID);
+                await InsertQueryForTypeAsync(queryId, userUnitDef.Id);
             });
 
             try
@@ -126,7 +126,7 @@ namespace IV.DX.Application.IntTests.Services
                 Assert.Contains(publicItemId, ids);
                 Assert.DoesNotContain(privateItemId, ids);
 
-                var DXTitleExpressions = (await _queryProvider.GetDXTitleExpressionsAsync(nameof(TUserUnit))).Select(x => x.ID).ToHashSet();
+                var DXTitleExpressions = (await _queryProvider.GetDXTitleExpressionsAsync(nameof(TUserUnit))).Select(x => x.Id).ToHashSet();
                 Assert.Contains(publicItemId, DXTitleExpressions);
                 Assert.DoesNotContain(privateItemId, DXTitleExpressions);
             }
@@ -138,7 +138,7 @@ namespace IV.DX.Application.IntTests.Services
                     await DeleteByIdsAsync("DXQueryUnit", new[] { queryId });
                     await DeleteByIdsAsync("TUserUnit", new[] { publicItemId, privateItemId });
 
-                    SetIsPublicRead(userUnitDef.ID, originalUserIsPublicRead);
+                    SetIsPublicRead(userUnitDef.Id, originalUserIsPublicRead);
                     await _structureCache.RefreshAsync();
                 });
             }
@@ -148,7 +148,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var contentBlock = queryResult["Content"]?.ToObject<DXDataBlock<DXUnitRecord>>();
             var records = contentBlock?.Data?.Items ?? new List<DXUnitRecord>();
-            return records.Select(x => x.ID).ToHashSet();
+            return records.Select(x => x.Id).ToHashSet();
         }
 
         private void SetIsPublicRead(Guid unitDefinitionId, bool isPublicRead)
@@ -175,7 +175,7 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            ID = queryId,
+                            Id = queryId,
                             TimeStamp = DateTime.UtcNow,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -200,13 +200,13 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                ID = queryColumnId,
-                                                DXUnitID = queryId,
+                                                Id = queryColumnId,
+                                                DXUnitId = queryId,
                                                 TimeStamp = DateTime.UtcNow,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
                                                     { "Name", JToken.FromObject("VisibleId") },
-                                                    { "Expression", JToken.FromObject("ID") },
+                                                    { "Expression", JToken.FromObject("Id") },
                                                     { "Order", JToken.FromObject(0) }
                                                 }
                                             }
@@ -235,7 +235,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var deleteRefs = ids
                 .Where(x => x != Guid.Empty)
-                .Select(x => new DXDeleteRef { ID = x })
+                .Select(x => new DXDeleteRef { Id = x })
                 .ToList();
 
             if (deleteRefs.Count == 0)

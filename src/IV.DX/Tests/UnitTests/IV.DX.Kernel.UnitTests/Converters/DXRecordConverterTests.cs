@@ -18,12 +18,12 @@ namespace IV.DX.Contracts.UnitTests
 
             this.dxUnit = new MyObject()
             {
-                ID = objectId,
+                Id = objectId,
                 TimeStamp = new DateTime(2020, 12, 1),
                 MyDXElementSingleItem = new MyDXElement()
                 {
-                    ID = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
-                    DXUnitID = objectId,
+                    Id = new Guid("B2669009-536A-4252-A920-CCEF4456A08A"),
+                    DXUnitId = objectId,
                     Date = new DateTime(2020, 12, 1),
                     Name = "Name1",
                     Value = 1,
@@ -36,8 +36,8 @@ namespace IV.DX.Contracts.UnitTests
                     {
                         new MyDXElement()
                         {
-                            ID = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
-                            DXUnitID = objectId,
+                            Id = new Guid("293E5981-2E59-4714-95E5-52D9FF5EF76A"),
+                            DXUnitId = objectId,
                             TimeStamp = new DateTime(2020, 12, 2),
                             Name = "Name2",
                             Value = 2,
@@ -45,8 +45,8 @@ namespace IV.DX.Contracts.UnitTests
                         },
                         new MyDXElement()
                         {
-                            ID = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
-                            DXUnitID = objectId,
+                            Id = new Guid("30F22EFA-6402-4C94-BCDD-CA4D2E8D40C2"),
+                            DXUnitId = objectId,
                             TimeStamp =new DateTime(2020, 12, 3),
                             Name = "Name3",
                             Value = 3,
@@ -57,8 +57,8 @@ namespace IV.DX.Contracts.UnitTests
                     {
                         new MyDXElement()
                         {
-                            ID = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
-                            DXUnitID = objectId,
+                            Id = new Guid("7FD1CCDA-FEB4-435A-95DB-39B656FE12A6"),
+                            DXUnitId = objectId,
                             TimeStamp =  new DateTime(2020, 12, 4),
                             Name = "Name4",
                             Value = 4,
@@ -77,7 +77,7 @@ namespace IV.DX.Contracts.UnitTests
             var record = block.Data?.Items?.SingleOrDefault();
 
             Assert.NotNull(record);
-            Assert.Equal(this.dxUnit.ID, record!.ID);
+            Assert.Equal(this.dxUnit.Id, record!.Id);
             Assert.Equal(this.dxUnit.TimeStamp, record.TimeStamp);
             Assert.NotNull(record.DXElements);
         }
@@ -110,10 +110,10 @@ namespace IV.DX.Contracts.UnitTests
         {
             Assert.NotNull(result);
 
-            Assert.Equal(dxUnit.ID, result.ID);
+            Assert.Equal(dxUnit.Id, result.Id);
             Assert.Equal(dxUnit.TimeStamp, result.TimeStamp);
 
-            Assert.Equal(dxUnit.MyDXElementSingleItem.ID, result.MyDXElementSingleItem.ID);
+            Assert.Equal(dxUnit.MyDXElementSingleItem.Id, result.MyDXElementSingleItem.Id);
             Assert.Equal(dxUnit.MyDXElementSingleItem.TimeStamp, result.MyDXElementSingleItem.TimeStamp);
             Assert.Equal(dxUnit.MyDXElementSingleItem.Name, result.MyDXElementSingleItem.Name);
             Assert.Equal(dxUnit.MyDXElementSingleItem.Value, result.MyDXElementSingleItem.Value);
@@ -127,11 +127,11 @@ namespace IV.DX.Contracts.UnitTests
 
             foreach (var multiElement in dxUnit.MyDXElementMultiItems.Announced)
             {
-                var multiElementFromResult = result.MyDXElementMultiItems.Announced.SingleOrDefault(x => x.ID == multiElement.ID);
+                var multiElementFromResult = result.MyDXElementMultiItems.Announced.SingleOrDefault(x => x.Id == multiElement.Id);
 
                 Assert.NotNull(multiElementFromResult);
-                Assert.Equal(multiElement.ID, multiElementFromResult!.ID);
-                Assert.Equal(multiElement.DXUnitID, multiElementFromResult.DXUnitID);
+                Assert.Equal(multiElement.Id, multiElementFromResult!.Id);
+                Assert.Equal(multiElement.DXUnitId, multiElementFromResult.DXUnitId);
                 Assert.Equal(multiElement.TimeStamp, multiElementFromResult.TimeStamp);
                 Assert.Equal(multiElement.Name, multiElementFromResult.Name);
                 Assert.Equal(multiElement.Value, multiElementFromResult.Value);
@@ -139,11 +139,11 @@ namespace IV.DX.Contracts.UnitTests
 
             foreach (var multiElement in dxUnit.MyDXElementMultiItems.Deleted)
             {
-                var multiElementFromResult = result.MyDXElementMultiItems.Deleted.SingleOrDefault(x => x.ID == multiElement.ID);
+                var multiElementFromResult = result.MyDXElementMultiItems.Deleted.SingleOrDefault(x => x.Id == multiElement.Id);
 
                 Assert.NotNull(multiElementFromResult);
-                Assert.Equal(multiElement.ID, multiElementFromResult!.ID);
-                Assert.Equal(multiElement.DXUnitID, multiElementFromResult.DXUnitID);
+                Assert.Equal(multiElement.Id, multiElementFromResult!.Id);
+                Assert.Equal(multiElement.DXUnitId, multiElementFromResult.DXUnitId);
                 Assert.Equal(multiElement.TimeStamp, multiElementFromResult.TimeStamp);
                 Assert.Equal(multiElement.Name, multiElementFromResult.Name);
                 Assert.Equal(multiElement.Value, multiElementFromResult.Value);

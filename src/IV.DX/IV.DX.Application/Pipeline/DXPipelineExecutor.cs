@@ -198,7 +198,7 @@ namespace IV.DX.Application.Pipeline
 
         public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
-            var existingDXUnit = await this.GetAsync<T>(dxUnit.ID, ctx, ct);
+            var existingDXUnit = await this.GetAsync<T>(dxUnit.Id, ctx, ct);
 
             if (!existingDXUnit.IsSuccess || !existingDXUnit.HasValue)
                 return DXResult<T>.NotFound();
@@ -287,7 +287,7 @@ namespace IV.DX.Application.Pipeline
                 if (insertHandlerProvider.TryResolveType(typeName, out var modelType))
                 {
                     var dxUnit = (DXUnit)Activator.CreateInstance(modelType)!;
-                    dxUnit.ID = deleteRef.ID;
+                    dxUnit.Id = deleteRef.Id;
 
                     var inv = GetDeleteInvoker(modelType);
                     var baseRes = await inv(this, dxUnit, ctx, ct);
@@ -295,7 +295,7 @@ namespace IV.DX.Application.Pipeline
                 }
                 else
                 {
-                    var result = coreRepo.Delete(typeName, deleteRef.ID);
+                    var result = coreRepo.Delete(typeName, deleteRef.Id);
                     if (!result)
                         return DXResult<DXDataBlock<DXUnitRecord>>.Fail("DXUnit delete failed.");
                 }

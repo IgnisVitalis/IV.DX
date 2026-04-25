@@ -21,7 +21,7 @@ namespace IV.DX.Kernel.Models
             {
                 OwnRelationName = this.TargetRelationName,
                 TargetRelationName = this.OwnRelationName,
-                TargetDXUnit = this.DXUnitID,
+                TargetDXUnit = this.DXUnitId,
                 RelationType = DXRelationTypeEnumHelper.GetInvertedRelationType(this.RelationType)
             };
         }

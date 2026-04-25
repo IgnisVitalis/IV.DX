@@ -36,7 +36,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         {
             return new DXElementDefinitionUnit
             {
-                ID = id,
+                Id = id,
                 Name = name,
                 DXTitleExpression = name,
                 DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement>
@@ -46,8 +46,8 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     {
                         new DXColumnDefinitionElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = id,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = id,
                             Name = "col1",
                             ColumnType = DXColumnTypeEnum.String,
                             Length = 100,
@@ -55,8 +55,8 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                         },
                         new DXColumnDefinitionElement
                         {
-                            ID = Guid.NewGuid(),
-                            DXUnitID = id,
+                            Id = Guid.NewGuid(),
+                            DXUnitId = id,
                             Name = "col2",
                             ColumnType = DXColumnTypeEnum.String,
                             Length = 100,
@@ -68,7 +68,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         }
 
         private static DXUniqueColumnsElement UniqueEntry(Guid elementId, string columns) =>
-            new DXUniqueColumnsElement { ID = Guid.NewGuid(), DXUnitID = elementId, Columns = columns };
+            new DXUniqueColumnsElement { Id = Guid.NewGuid(), DXUnitId = elementId, Columns = columns };
 
         // ── TargetMode ─────────────────────────────────────────────────────────────
 
@@ -198,7 +198,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             await _dataService.InsertAsync(element);
 
             var savedBefore = _genericRepo.GetDXUnit<DXElementDefinitionUnit>(id);
-            var existingElementId = savedBefore.DXUniqueColumnsElement.Announced.Single().ID;
+            var existingElementId = savedBefore.DXUniqueColumnsElement.Announced.Single().Id;
 
             // FullMode update: same columns but reversed order — should be treated as identical
             element.DXColumnDefinitionElement = new DXMultiElementsContainer<DXColumnDefinitionElement> { Mode = MultiElementsMode.Target };
@@ -214,7 +214,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             Assert.Single(savedAfter.DXUniqueColumnsElement.Announced);
 
             // The original element record must be preserved — no delete + insert
-            Assert.Equal(existingElementId, savedAfter.DXUniqueColumnsElement.Announced.Single().ID);
+            Assert.Equal(existingElementId, savedAfter.DXUniqueColumnsElement.Announced.Single().Id);
 
             Assert.True(await _schemaHelper.UniqueConstraintExistsAsync("UCTest04", UC("UCTest04", "col1", "col2")));
         }

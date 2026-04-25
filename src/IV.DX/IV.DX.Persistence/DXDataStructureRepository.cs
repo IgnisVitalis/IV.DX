@@ -66,7 +66,7 @@ namespace IV.DX.Persistence
 
             var block = this.GetItemRecord(
                 DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXObjectDefinitionUnit), dxUnitInheritance),
-                dataDXElement.ID,
+                dataDXElement.Id,
                 DXLoadingType.Full);
             var record = block?.Data?.Items?.SingleOrDefault();
             var existingDataDXElement = record == null
@@ -179,7 +179,7 @@ namespace IV.DX.Persistence
 
                 var block = this.GetItemRecord(
                     DXDataSetDefinitionConverter.ToDXModelDefinition(typeof(DXRelationDefinitionUnit), dxUnitInheritance),
-                    dxUnit.ID,
+                    dxUnit.Id,
                     DXLoadingType.Full);
                 var record = block?.Data?.Items?.SingleOrDefault();
                 var existingDXUnit = record == null
@@ -250,11 +250,11 @@ namespace IV.DX.Persistence
             return result;
         }
 
-        private class DXObjectDefinitionUnitIDComparer : IEqualityComparer<DXObjectDefinitionUnit>
+        private class DXObjectDefinitionUnitIdComparer : IEqualityComparer<DXObjectDefinitionUnit>
         {
-            public static DXObjectDefinitionUnitIDComparer Instance { get; set; } = new DXObjectDefinitionUnitIDComparer();
+            public static DXObjectDefinitionUnitIdComparer Instance { get; set; } = new DXObjectDefinitionUnitIdComparer();
 
-            private DXObjectDefinitionUnitIDComparer()
+            private DXObjectDefinitionUnitIdComparer()
             {
 
             }
@@ -270,12 +270,12 @@ namespace IV.DX.Persistence
                 if (x.GetType() != y.GetType())
                     return false;
 
-                return x.ID == y.ID;
+                return x.Id == y.Id;
             }
 
             public int GetHashCode([DisallowNull] DXObjectDefinitionUnit obj)
             {
-                return obj.ID.GetHashCode();
+                return obj.Id.GetHashCode();
             }
         }
 
@@ -303,13 +303,13 @@ namespace IV.DX.Persistence
 
         public DXUnitDefinitionUnit? GetDXUnitDefinition(Guid id)
         {
-            var existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == id);
+            var existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.Id == id);
 
             if (existingDXUnit == null)
             {
                 this.RefreshCache();
 
-                existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.ID == id);
+                existingDXUnit = this._dxStructureCache.DXUnits.SingleOrDefault(x => x.Id == id);
             }
 
             return existingDXUnit;
@@ -337,13 +337,13 @@ namespace IV.DX.Persistence
 
         public DXElementDefinitionUnit? GetDXElementDefinition(Guid id)
         {
-            var existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
+            var existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.Id == id);
 
             if (existingDXElement == null)
             {
                 this.RefreshCache();
 
-                existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.ID == id);
+                existingDXElement = this._dxStructureCache.DXElements.SingleOrDefault(x => x.Id == id);
             }
 
             return existingDXElement;
@@ -361,13 +361,13 @@ namespace IV.DX.Persistence
 
         public DXEnumDefinitionUnit? GetDXEnumDefinition(Guid id)
         {
-            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
+            var existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.Id == id);
 
             if (existingEnum == null)
             {
                 this.RefreshCache();
 
-                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.ID == id);
+                existingEnum = this._dxStructureCache.DXEnums.SingleOrDefault(x => x.Id == id);
             }
 
             return existingEnum;

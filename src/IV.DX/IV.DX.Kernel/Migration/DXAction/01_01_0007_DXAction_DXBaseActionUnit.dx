@@ -10,7 +10,7 @@
         "Data": {
             "Items": [
                 {
-                    "ID": "44557df6-3a55-4b25-9e8b-6cc110d150fb",
+                    "Id": "44557df6-3a55-4b25-9e8b-6cc110d150fb",
                     "TimeStamp": "2026-03-24T00:00:00Z",
                     "Name": "DXBaseActionUnit",
                     "DXTitleExpression": "U2U(ActionDefinition).Name",
@@ -29,9 +29,9 @@
                             "Data": {
                                 "Items": [
                                     {
-                                        "ID": "ddbe76c9-a10c-44ae-9088-d5805a5b8eb9",
+                                        "Id": "ddbe76c9-a10c-44ae-9088-d5805a5b8eb9",
                                         "TimeStamp": "2026-03-24T00:00:00Z",
-                                        "DXUnitID": "44557df6-3a55-4b25-9e8b-6cc110d150fb",
+                                        "DXUnitId": "44557df6-3a55-4b25-9e8b-6cc110d150fb",
                                         "OwnRelationName": "Actions",
                                         "TargetRelationName": "ActionDefinition",
                                         "RelationType": 4,
@@ -43,7 +43,7 @@
                     }
                 },
                 {
-                    "ID": "545966a9-b4aa-44c5-916c-1423b489fe2d",
+                    "Id": "545966a9-b4aa-44c5-916c-1423b489fe2d",
                     "TimeStamp": "2026-03-24T00:00:00Z",
                     "Name": "DXUnitBaseActionUnit",
                     "DXTitleExpression": "U2U(ActionDefinition).Name",
@@ -62,9 +62,9 @@
                             "Data": {
                                 "Items": [
                                     {
-                                        "ID": "2f1d5f39-e12d-4e9b-8b76-4a7c74266a56",
+                                        "Id": "2f1d5f39-e12d-4e9b-8b76-4a7c74266a56",
                                         "TimeStamp": "2026-03-24T00:00:00Z",
-                                        "DXUnitID": "545966a9-b4aa-44c5-916c-1423b489fe2d",
+                                        "DXUnitId": "545966a9-b4aa-44c5-916c-1423b489fe2d",
                                         "OwnRelationName": "Actions",
                                         "TargetRelationName": "ActionDefinition",
                                         "RelationType": 4,

@@ -22,7 +22,7 @@ U2U(RelationName)
 ```
 Example:
 ```
-U2U(User).ID = '...'
+U2U(User).Id = '...'
 ```
 
 ### 2.2 DXUnit -> DXElement (containment)
@@ -40,7 +40,7 @@ E2UIn(UnitName)
 ```
 Example:
 ```
-TUserMainElement.E2UIn(TUserUnit).ID = '...'
+TUserMainElement.E2UIn(TUserUnit).Id = '...'
 ```
 
 ### 2.4 DXUnit -> DXElement (equal relation)
@@ -94,13 +94,13 @@ columns["BookName"] = "TBookMainElement.Name"
 If `columns` is empty, `SQLQueryBuilder` emits `"T_*".*` for the root unit.
 
 ## 5) Inheritance behavior
-- Base/derived DXUnits are linked by ID internally.
+- Base/derived DXUnits are linked by Id internally.
 - Property lookup can walk up the base chain when the property is not present on the current unit.
 - No explicit DXSQL prefix is required for base/derived navigation.
 
 ## 6) Join behavior (implementation notes)
 - Every traversed relation adds a `LEFT JOIN`.
-- Containment joins use `DXUnitID` and unit `ID`.
+- Containment joins use `DXUnitId` and unit `Id`.
 - Equal relations use DXRelationDefinition rules (including many-to-many relation tables).
 
 ## 7) Quick reference
@@ -118,8 +118,8 @@ E2UIn(UnitName)  Element -> Unit (containment reverse)
 - The DSL is not parameterized; caller must ensure safe values.
 
 ### 8.1 “Always true” filters
-DXSQL is **not** a raw SQL WHERE clause. The filter must be a DXSQL condition that starts with a valid property/path (e.g., `ID = '...'`, `TUserMainElement.Name = '...'`).
+DXSQL is **not** a raw SQL WHERE clause. The filter must be a DXSQL condition that starts with a valid property/path (e.g., `Id = '...'`, `TUserMainElement.Name = '...'`).
 
 So expressions like `1=1` / `1 = 1` are **not** valid DXSQL.
 
-If you need a filter that matches “everything”, use a valid DXSQL condition such as `ID IS NOT NULL` (and be careful: combined with Sync semantics, that can make a migration operate over the entire table/type).
+If you need a filter that matches “everything”, use a valid DXSQL condition such as `Id IS NOT NULL` (and be careful: combined with Sync semantics, that can make a migration operate over the entire table/type).

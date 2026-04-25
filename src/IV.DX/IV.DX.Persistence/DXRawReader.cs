@@ -20,7 +20,7 @@ namespace IV.DX.Persistence
 
             this._unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
 
-            columns[Constants.ID] = Constants.ID;
+            columns[Constants.Id] = Constants.Id;
             columns[Constants.TimeStamp] = Constants.TimeStamp;
 
             return this.RunRequest((conn) =>
@@ -76,12 +76,12 @@ namespace IV.DX.Persistence
                 }
             }
 
-            var id = ConvertHelper.ParseGuid(row[Constants.ID]);
+            var id = ConvertHelper.ParseGuid(row[Constants.Id]);
             var timeStamp = ConvertHelper.ParseDateTime(row[Constants.TimeStamp]);
 
             return new DXUnitRecord
             {
-                ID = id,
+                Id = id,
                 TimeStamp = timeStamp,
                 Fields = ConvertContentToFields(content)
             };

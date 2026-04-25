@@ -8,10 +8,10 @@ namespace IV.DX.Kernel.Models
 {
     public abstract class DXElement
     {
-        [DXColumn("ID", "ID", DXLoadingType.Base)]
-        public Guid ID { get; set; }
-        [DXColumn("DXUnitID", "DXUnitID", DXLoadingType.Base)]
-        public Guid DXUnitID { get; set; }
+        [DXColumn("Id", "Id", DXLoadingType.Base)]
+        public Guid Id { get; set; }
+        [DXColumn("DXUnitId", "DXUnitId", DXLoadingType.Base)]
+        public Guid DXUnitId { get; set; }
         [DXColumn("TimeStamp", "TimeStamp", DXLoadingType.Base)]
         public DateTime TimeStamp { get; set; }
 

@@ -6,6 +6,6 @@ namespace IV.DX.Persistence.Contracts.Abstractions
     public interface IDXBulkInsertCapable
     {
         void BulkInsert(DbConnection connection, DataTable table, string tableName);
-        void BulkUpsert(DbConnection connection, DataTable table, string tableName, string keyColumn = "ID");
+        void BulkUpsert(DbConnection connection, DataTable table, string tableName, string keyColumn = "Id");
     }
 }
