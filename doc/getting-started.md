@@ -56,10 +56,10 @@ IV.DX supports **zero-downtime encryption key rotation** for single-instance app
 
 IV.DX stores the active encryption key in a state file (`encryption-key-state.json` next to the application binary). On startup, `DXEncryptionRotationService` (an `IHostedService` registered automatically by `RegisterHostedService()`) compares the key in the environment variable against the state file:
 
-| Condition                          | Action                                                                 |
-|------------------------------------|------------------------------------------------------------------------|
-| State file missing (first startup) | Write current key to state file — no migration needed.                 |
-| State file matches current key     | No-op.                                                                 |
+| Condition                           | Action                                                                                                |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------|
+| State file missing (first startup)  | Write current key to state file — no migration needed.                                                |
+| State file matches current key      | No-op.                                                                                                |
 | State file differs from current key | Load **both** keys into memory; run background re-encryption migration; update state file on success. |
 
 During migration the app is fully operational:
@@ -266,10 +266,10 @@ await root.StartDXAsync(); // run schema bootstrap and handler initialization
 
 ### What gets initialized
 
-| Always | Optional |
-|--------|---------|
-| DXCore schema (tables, system definitions) | `.AddSecurity()` — RBAC, roles, identity schema |
-| DXQuery schema (named query definitions) | `.AddCustomData(path)` — your own migration script |
+| Always                                     | Optional                                           |
+|--------------------------------------------|----------------------------------------------------|
+| DXCore schema (tables, system definitions) | `.AddSecurity()` — RBAC, roles, identity schema    |
+| DXQuery schema (named query definitions)   | `.AddCustomData(path)` — your own migration script |
 
 Custom data migration is idempotent — re-running on an existing database is safe.
 
@@ -302,10 +302,10 @@ DXUnit types support single-table inheritance. A derived type declares its base 
 
 When at least one derived type exists, the base unit table gains a system-managed `DerivedDXUnitType` column (`uuid NOT NULL`). This column stores the `DXUnitDefinitionUnit.Id` of the most-derived concrete type for each row:
 
-| Row belongs to | DerivedDXUnitType value |
-|----------------|------------------------|
+| Row belongs to                    | DerivedDXUnitType value       |
+|-----------------------------------|-------------------------------|
 | Base type (no further derivation) | Base type's own definition Id |
-| Derived type | Derived type's definition Id |
+| Derived type                      | Derived type's definition Id  |
 
 This enables polymorphic discrimination directly from the base table — you can identify the concrete type of any row without joining additional tables.
 
@@ -809,6 +809,35 @@ var DXTitleExpressions = await queryProvider.GetDXTitleExpressionsAsync("TBookUn
 ```
 
 DXQuery is always initialized as part of the standard startup — no extra configuration needed.
+
+---
+
+## 12) DTO mapper
+
+`IDXUnitDtoService<TDto>` is a ready-made CRUD service that bridges your DTOs to the DX domain model. Register it with one call — either using the built-in convention mapper (property-name matching, validated at startup) or a hand-written `DXUnitMapper<TDto, TUnit>`:
+
+```csharp
+// Convention mapper — no mapper code required
+builder.Services.AddDXUnitMapper<TBookDto, TBookUnit>();
+
+// Custom mapper — full control over the transform
+builder.Services.AddDXUnitMapper<TBookMapper>();
+```
+
+Inject `IDXUnitDtoService<TDto>` wherever you need it:
+
+```csharp
+public class BooksController(IDXUnitDtoService<TBookDto> books) : ControllerBase
+{
+    [HttpGet("{id}")]
+    public Task<TBookDto?> Get(Guid id, CancellationToken ct) => books.GetAsync(id, ct);
+
+    [HttpPost]
+    public Task Save(TBookDto dto, CancellationToken ct) => books.SaveAsync(dto, ct);
+}
+```
+
+See [DXUnitDtoMapper.md](DXUnitDtoMapper.md) for the full reference including convention mapping rules, container semantics, startup validation, and examples.
 
 ---
 

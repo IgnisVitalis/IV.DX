@@ -2,6 +2,15 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.104.0] - 2026-04-25
+
+### Added
+
+- `IDXUnitDtoService<TDto>` — application service for CRUD operations on a DTO backed by a `DXUnit`;
+- `DXUnitMapper<TDto, TUnit>` — abstract base for custom DTO mappers (two methods: `ToDtoAsync`, `ToUnitAsync`);
+- `DXConventionMapper<TDto, TUnit>` — internal reflection-based convention mapper; validates property compatibility at startup;
+- `AddDXUnitMapper<TMapper>()` and `AddDXUnitMapper<TDto, TUnit>()` extension methods on `IServiceCollection`;
+
 ## [0.103.0] - 2026-04-24
 
 ### Changed
