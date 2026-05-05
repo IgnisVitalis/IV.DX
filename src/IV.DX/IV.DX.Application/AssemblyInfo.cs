@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
+
 [assembly: InternalsVisibleTo("IV.DX.Hosting")]
 
 [assembly: InternalsVisibleTo("IV.DX.Persistence.IntTests")]
