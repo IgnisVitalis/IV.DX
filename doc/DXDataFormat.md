@@ -419,22 +419,42 @@ It is **not** populated on base reads (Id-only queries) or when fetching element
 
 ## 12) ID generation
 
-### Runtime operations
+### Runtime operations — strict rules
 
-When inserting a new unit or element through the application service layer, the `Id` field is **auto-generated** if left as `Guid.Empty`:
+ID generation at runtime is **unconditional** and **non-negotiable**: the application layer always controls the Id of any new record. The caller cannot supply or predict the Id of a record that does not yet exist in the database.
 
-- **DXUnit** — `IDXUnitDataService.InsertAsync` (typed, JObject, and DXDataBlock overloads) generates a **UUID v7** (`Guid.CreateVersion7()`) for the unit and for every nested element record with an empty Id, before the pipeline executes.
-- **DXElement** — `IDXElementDataService.InsertOrUpdateAsync` generates a **UUID v7** for the element record if its Id is `Guid.Empty`.
+#### `InsertAsync` (typed, JObject, DXDataBlock overloads)
+
+`AssignNewIds` is called unconditionally before the pipeline executes (when `DXMigrationContext.IsMigrating = false`):
+
+- The unit `Id` is **always** replaced with a new UUID v7 (`Guid.CreateVersion7()`), regardless of what value the caller provided — including non-empty GUIDs.
+- Every nested element record also gets a new UUID v7 assigned to its `Id`, and its `DXUnitId` is set to the newly assigned unit Id.
+
+**There is no "if empty" condition on `InsertAsync`.** Any Id present in the incoming record is silently discarded.
+
+#### `InsertOrUpdateAsync` (typed, JObject, DXDataBlock overloads)
+
+Before deciding which path to take, the engine calls `IsItemExisting(typeName, record.Id)` against the database:
+
+- **Record exists** (by Id) → routed to `UpdateAsync` → the existing Id is preserved, the record is updated.
+- **Record does not exist** (regardless of whether the Id is `Guid.Empty` or any other non-empty GUID) → routed to `InsertAsync` → `AssignNewIds` runs → **the Id is always overwritten** with a new UUID v7.
+
+**Consequence:** even if the caller provides a non-empty GUID for a new record, that GUID is discarded and replaced by the engine. The only way to know the actual assigned Id is to read the return value of the service call.
+
+#### Caller contract
+
+All insert and insert-or-update service methods return the assigned `Guid`. This is the **only source of truth** for the Id of a newly created record. Callers must capture and use this returned value — they must not assume their input Id was preserved.
 
 UUID v7 is time-ordered (monotonically increasing), which gives good index locality.
 
-All insert/update service methods return the assigned `Guid` so callers always know the final Id without re-reading the record.
-
 ### Migration scripts
 
-Migration scripts run under `DXMigrationContext.IsMigrating = true`. In this mode **auto-generation is skipped** — the engine uses whatever Id is already set on the record.
+Migration scripts run under `DXMigrationContext.IsMigrating = true`. In this mode `AssignNewIds` is **not called** — the engine uses the Id already set on the record exactly as provided.
 
-**Migration scripts must therefore always provide explicit, predefined Ids for every record.** This ensures migrations are deterministic and repeatable: re-running a migration script produces the same Ids, allowing safe upsert semantics (`Op: Patch`).
+**Migration scripts must always provide an explicit, non-empty, predefined Id for every record.** This is a hard requirement:
+
+- If a migration record has `Id = Guid.Empty` (all zeros), the migration process **throws an exception** — it does not silently write a bad record.
+- Ids must be stable across runs to ensure migrations are deterministic and repeatable, allowing safe upsert semantics (`Op: Patch`).
 
 ```json
 {
@@ -443,8 +463,6 @@ Migration scripts run under `DXMigrationContext.IsMigrating = true`. In this mod
   "Name": "DXObjectDefinitionUnit"
 }
 ```
-
-If a migration record has `Id = Guid.Empty` (all zeros), the engine will not assign a new Id — the record will be written with an empty Id, which is a data error. Always set explicit Ids in migration files.
 
 ---
 
