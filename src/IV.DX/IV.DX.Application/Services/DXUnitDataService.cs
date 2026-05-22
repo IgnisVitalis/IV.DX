@@ -8,6 +8,8 @@ using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IV.DX.Application.Services
 {
@@ -153,7 +155,13 @@ namespace IV.DX.Application.Services
             var typeName = ExtractTypeName(jObject);
             EnsureWriteAccessForInsert(typeName);
 
-            var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>()
+                ?? throw new Exception("Invalid DXDataBlock payload.");
+
+            if (!DXMigrationContext.IsMigrating)
+                AssignNewIds(block);
+
+            var result = await dxPipelineExecutor.InsertAsync(block, context, ct);
 
             if (result.IsSuccess)
             {
@@ -232,12 +240,8 @@ namespace IV.DX.Application.Services
 
             EnsureWriteAccessForInsert(ExtractTypeName(jObject));
 
-            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
-            if (block == null)
-            {
-                logger.LogError("InsertOrUpdate failed because the DXDataBlock payload is invalid.");
-                throw new Exception("Invalid DXDataBlock payload.");
-            }
+            var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>()
+                ?? throw new Exception("Invalid DXDataBlock payload.");
 
             var ids = await InsertOrUpdateAsync(block, context, ct);
             return ids.Single();
@@ -594,10 +598,19 @@ namespace IV.DX.Application.Services
         {
             if (block?.Data?.Items == null) return;
 
+            var idMap = new Dictionary<Guid, Guid>();
+
             foreach (var record in block.Data.Items)
             {
-                record.Id = Guid.CreateVersion7();
+                var oldId = record.Id;
+                var newId = Guid.CreateVersion7();
+                if (oldId != Guid.Empty)
+                    idMap[oldId] = newId;
+                record.Id = newId;
+            }
 
+            foreach (var record in block.Data.Items)
+            {
                 if (record.DXElements == null) continue;
                 foreach (var elementBlock in record.DXElements.Values)
                 {
@@ -606,6 +619,19 @@ namespace IV.DX.Application.Services
                     {
                         elementRecord.Id = Guid.CreateVersion7();
                         elementRecord.DXUnitId = record.Id;
+
+                        if (elementRecord.Fields == null) continue;
+                        foreach (var key in elementRecord.Fields.Keys.ToList())
+                        {
+                            var token = elementRecord.Fields[key];
+                            if (token == null || token.Type == JTokenType.Null) continue;
+                            if (token.Type == JTokenType.String &&
+                                Guid.TryParse(token.Value<string>(), out var fieldGuid) &&
+                                idMap.TryGetValue(fieldGuid, out var remappedGuid))
+                            {
+                                elementRecord.Fields[key] = JToken.FromObject(remappedGuid);
+                            }
+                        }
                     }
                 }
             }
