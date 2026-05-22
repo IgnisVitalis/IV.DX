@@ -80,7 +80,7 @@ namespace IV.DX.Application.Pipeline
             return DXResult<JObject?>.OkContinue(JObject.FromObject(recordBlock));
         }
 
-        public async Task<DXResult<T>> InsertAsync<T>(
+        public async Task<DXResult<Guid>> InsertAsync<T>(
             T dxUnit,
             DXHandlerBaseContext ctx,
             CancellationToken ct) where T : DXUnit, new()
@@ -93,52 +93,58 @@ namespace IV.DX.Application.Pipeline
             foreach (var h in insertHandlerProvider.GetBeforeInsertHandlers<T>())
             {
                 var r = await h.BeforeInsertAsync(dxUnitToProcess, ctx, ct);
-                if (!r.IsSuccess) return DXResult<T>.Fail(r.Error!);
+                if (!r.IsSuccess) return DXResult<Guid>.Fail(r.Error!);
 
                 dxUnitToProcess = r.Value!;
                 if (r.Flow == DXFlow.SkipProcess) flow = DXFlow.SkipProcess;
-                if (r.Flow == DXFlow.Stop) return DXResult<T>.OkStop(dxUnitToProcess);
+                if (r.Flow == DXFlow.Stop) return DXResult<Guid>.OkStop(dxUnitToProcess.Id);
             }
 
+            var afterInsertHandlers = insertHandlerProvider.GetAfterInsertHandlers<T>().ToList();
+
+            var insertedId = dxUnitToProcess.Id;
             if (flow != DXFlow.SkipProcess)
             {
-                var id = genericRepo.Insert(dxUnitToProcess);
-                var reloaded = genericRepo.GetDXUnit<T>(id);
+                insertedId = genericRepo.Insert(dxUnitToProcess);
 
-                if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
-                dxUnitToProcess = reloaded;
+                if (afterInsertHandlers.Count > 0)
+                {
+                    var reloaded = genericRepo.GetDXUnit<T>(insertedId);
+                    if (reloaded is null) return DXResult<Guid>.Fail("Inserted dxUnit not found.");
+                    dxUnitToProcess = reloaded;
+                }
             }
 
-            foreach (var h in insertHandlerProvider.GetAfterInsertHandlers<T>())
+            foreach (var h in afterInsertHandlers)
             {
                 var r = await h.AfterInsertAsync(dxUnitToProcess, ctx, ct);
-                if (!r.IsSuccess) return DXResult<T>.Fail(r.Error!);
+                if (!r.IsSuccess) return DXResult<Guid>.Fail(r.Error!);
             }
 
             return flow switch
             {
-                DXFlow.SkipProcess => DXResult<T>.OkSkipProcess(dxUnitToProcess),
-                DXFlow.Stop => DXResult<T>.OkStop(dxUnitToProcess),
-                _ => DXResult<T>.OkContinue(dxUnitToProcess),
+                DXFlow.SkipProcess => DXResult<Guid>.OkSkipProcess(insertedId),
+                DXFlow.Stop => DXResult<Guid>.OkStop(insertedId),
+                _ => DXResult<Guid>.OkContinue(insertedId),
             };
         }
 
-        public async Task<DXResult<JObject>> InsertAsync(
+        public async Task<DXResult<Guid>> InsertAsync(
             JObject jObject,
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
             if (block == null)
-                return DXResult<JObject>.Fail("Invalid DXDataBlock payload.");
+                return DXResult<Guid>.Fail("Invalid DXDataBlock payload.");
 
             var baseRes = await InsertAsync(block, ctx, ct);
-            if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
+            if (!baseRes.IsSuccess) return DXResult<Guid>.Fail(baseRes.Error!);
 
-            return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
+            return DXResult<Guid>.Ok(baseRes.Value, baseRes.Flow);
         }
 
-        public async Task<DXResult<T>> UpdateAsync<T>(
+        public async Task<DXResult<Guid>> UpdateAsync<T>(
             T dxUnit,
             DXHandlerBaseContext ctx,
             CancellationToken ct) where T : DXUnit, new()
@@ -151,49 +157,55 @@ namespace IV.DX.Application.Pipeline
             foreach (var h in updateHandlerProvider.GetBeforeUpdateHandlers<T>())
             {
                 var r = await h.BeforeUpdateAsync(dxUnitToProcess, ctx, ct);
-                if (!r.IsSuccess) return DXResult<T>.Fail(r.Error!);
+                if (!r.IsSuccess) return DXResult<Guid>.Fail(r.Error!);
 
                 dxUnitToProcess = r.Value!;
                 if (r.Flow == DXFlow.SkipProcess) flow = DXFlow.SkipProcess;
-                if (r.Flow == DXFlow.Stop) return DXResult<T>.OkStop(dxUnitToProcess);
+                if (r.Flow == DXFlow.Stop) return DXResult<Guid>.OkStop(dxUnitToProcess.Id);
             }
 
+            var afterUpdateHandlers = updateHandlerProvider.GetAfterUpdateHandlers<T>().ToList();
+
+            var updatedId = dxUnitToProcess.Id;
             if (flow != DXFlow.SkipProcess)
             {
-                var id = genericRepo.Update(dxUnitToProcess);
-                var reloaded = genericRepo.GetDXUnit<T>(id);
+                updatedId = genericRepo.Update(dxUnitToProcess);
 
-                if (reloaded is null) return DXResult<T>.Fail("Inserted dxUnit not found.");
-                dxUnitToProcess = reloaded;
+                if (afterUpdateHandlers.Count > 0)
+                {
+                    var reloaded = genericRepo.GetDXUnit<T>(updatedId);
+                    if (reloaded is null) return DXResult<Guid>.Fail("Updated dxUnit not found.");
+                    dxUnitToProcess = reloaded;
+                }
             }
 
-            foreach (var h in updateHandlerProvider.GetAfterUpdateHandlers<T>())
+            foreach (var h in afterUpdateHandlers)
             {
                 var r = await h.AfterUpdateAsync(dxUnitToProcess, ctx, ct);
-                if (!r.IsSuccess) return DXResult<T>.Fail(r.Error!);
+                if (!r.IsSuccess) return DXResult<Guid>.Fail(r.Error!);
             }
 
             return flow switch
             {
-                DXFlow.SkipProcess => DXResult<T>.OkSkipProcess(dxUnitToProcess),
-                DXFlow.Stop => DXResult<T>.OkStop(dxUnitToProcess),
-                _ => DXResult<T>.OkContinue(dxUnitToProcess),
+                DXFlow.SkipProcess => DXResult<Guid>.OkSkipProcess(updatedId),
+                DXFlow.Stop => DXResult<Guid>.OkStop(updatedId),
+                _ => DXResult<Guid>.OkContinue(updatedId),
             };
         }
 
-        public async Task<DXResult<JObject>> UpdateAsync(
+        public async Task<DXResult<Guid>> UpdateAsync(
             JObject jObject,
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>();
             if (block == null)
-                return DXResult<JObject>.Fail("Invalid DXDataBlock payload.");
+                return DXResult<Guid>.Fail("Invalid DXDataBlock payload.");
 
             var baseRes = await UpdateAsync(block, ctx, ct);
-            if (!baseRes.IsSuccess) return DXResult<JObject>.Fail(baseRes.Error!);
+            if (!baseRes.IsSuccess) return DXResult<Guid>.Fail(baseRes.Error!);
 
-            return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
+            return DXResult<Guid>.Ok(baseRes.Value, baseRes.Flow);
         }
 
         public async Task<DXResult<T>> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
@@ -251,20 +263,24 @@ namespace IV.DX.Application.Pipeline
             return DXResult<JObject>.Ok(JObject.FromObject(baseRes.Value!), baseRes.Flow);
         }
 
-        public async Task<DXResult<DXDataBlock<DXUnitRecord>>> InsertAsync(
+        public async Task<DXResult<Guid>> InsertAsync(
             DXDataBlock<DXUnitRecord> block,
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
-            return await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: false);
+            var res = await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: false);
+            if (!res.IsSuccess) return DXResult<Guid>.Fail(res.Error!);
+            return DXResult<Guid>.Ok(res.Value!.Data?.Items?.Single().Id ?? Guid.Empty, res.Flow);
         }
 
-        public async Task<DXResult<DXDataBlock<DXUnitRecord>>> UpdateAsync(
+        public async Task<DXResult<Guid>> UpdateAsync(
             DXDataBlock<DXUnitRecord> block,
             DXHandlerBaseContext ctx,
             CancellationToken ct)
         {
-            return await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: true);
+            var res = await ProcessRecordBlockAsync(block, ctx, ct, isUpdate: true);
+            if (!res.IsSuccess) return DXResult<Guid>.Fail(res.Error!);
+            return DXResult<Guid>.Ok(res.Value!.Data?.Items?.Single().Id ?? Guid.Empty, res.Flow);
         }
 
         public async Task<DXResult<DXDataBlock<DXUnitRecord>>> DeleteAsync(
@@ -349,8 +365,8 @@ namespace IV.DX.Application.Pipeline
                     var baseRes = await inv(this, dxUnit, ctx, ct);
                     if (!baseRes.IsSuccess) return DXResult<DXDataBlock<DXUnitRecord>>.Fail(baseRes.Error!);
 
-                    var outRecord = DXRecordWriter.ToRecord(baseRes.Value!);
-                    output.Add(outRecord);
+                    record.Id = baseRes.Value;
+                    output.Add(record);
                 }
                 else
                 {
@@ -558,10 +574,10 @@ namespace IV.DX.Application.Pipeline
             Func<DXPipelineExecutor, Guid, DXHandlerBaseContext, CancellationToken, Task<DXResult<bool>>>> _isUnitExistingInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
-            Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>> _insertInvokers = new();
+            Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>> _insertInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
-            Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>> _updateInvokers = new();
+            Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>> _updateInvokers = new();
 
         private static readonly ConcurrentDictionary<Type,
             Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>> _deleteInvokers = new();
@@ -588,20 +604,18 @@ namespace IV.DX.Application.Pipeline
             return DXResult<bool>.MapFrom(r, r.Value);
         }
 
-        private static async Task<DXResult<DXUnit>> InvokeTypedInsert<T>(
+        private static async Task<DXResult<Guid>> InvokeTypedInsert<T>(
             DXPipelineExecutor exec, DXUnit model, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
-            if (model is not T m) return DXResult<DXUnit>.Fail($"Wrong model type. Expected {typeof(T).Name}");
-            var r = await exec.InsertAsync<T>(m, ctx, ct);
-            return r.IsSuccess ? DXResult<DXUnit>.Ok(r.Value!, r.Flow) : DXResult<DXUnit>.Fail(r.Error!);
+            if (model is not T m) return DXResult<Guid>.Fail($"Wrong model type. Expected {typeof(T).Name}");
+            return await exec.InsertAsync<T>(m, ctx, ct);
         }
 
-        private static async Task<DXResult<DXUnit>> InvokeTypedUpdate<T>(
+        private static async Task<DXResult<Guid>> InvokeTypedUpdate<T>(
             DXPipelineExecutor exec, DXUnit model, DXHandlerBaseContext ctx, CancellationToken ct) where T : DXUnit, new()
         {
-            if (model is not T m) return DXResult<DXUnit>.Fail($"Wrong model type. Expected {typeof(T).Name}");
-            var r = await exec.UpdateAsync<T>(m, ctx, ct);
-            return r.IsSuccess ? DXResult<DXUnit>.Ok(r.Value!, r.Flow) : DXResult<DXUnit>.Fail(r.Error!);
+            if (model is not T m) return DXResult<Guid>.Fail($"Wrong model type. Expected {typeof(T).Name}");
+            return await exec.UpdateAsync<T>(m, ctx, ct);
         }
 
         private static async Task<DXResult<DXUnit>> InvokeTypedDelete<T>(
@@ -652,29 +666,29 @@ namespace IV.DX.Application.Pipeline
            });
 
 
-        private Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>> GetInsertInvoker(Type modelType)
+        private Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>> GetInsertInvoker(Type modelType)
             => _insertInvokers.GetOrAdd(modelType, static t =>
             {
                 var mi = typeof(DXPipelineExecutor)
                     .GetMethod(nameof(InvokeTypedInsert), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(t);
 
-                return (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>)
+                return (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>)
                     Delegate.CreateDelegate(
-                        typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>),
+                        typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>),
                         mi);
             });
 
-        private Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>> GetUpdateInvoker(Type modelType)
+        private Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>> GetUpdateInvoker(Type modelType)
             => _updateInvokers.GetOrAdd(modelType, static t =>
             {
                 var mi = typeof(DXPipelineExecutor)
                     .GetMethod(nameof(InvokeTypedUpdate), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(t);
 
-                return (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>)
+                return (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>)
                     Delegate.CreateDelegate(
-                        typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>),
+                        typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>),
                         mi);
             });
 
@@ -722,16 +736,16 @@ namespace IV.DX.Application.Pipeline
                    typeof(Func<DXPipelineExecutor, Guid, DXHandlerBaseContext, CancellationToken, Task<DXResult<bool>>>),
                    typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedIsUnitExisting), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
 
-            static Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>> MakeInsert(Type t)
-                => (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>)
+            static Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>> MakeInsert(Type t)
+                => (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>)
                    Delegate.CreateDelegate(
-                     typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>),
+                     typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>),
                      typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedInsert), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
 
-            static Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>> MakeUpdate(Type t)
-                => (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>)
+            static Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>> MakeUpdate(Type t)
+                => (Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>)
                    Delegate.CreateDelegate(
-                     typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>>),
+                     typeof(Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<Guid>>>),
                      typeof(DXPipelineExecutor).GetMethod(nameof(InvokeTypedUpdate), BindingFlags.NonPublic | BindingFlags.Static)!.MakeGenericMethod(t));
 
             static Func<DXPipelineExecutor, DXUnit, DXHandlerBaseContext, CancellationToken, Task<DXResult<DXUnit>>> MakeDelete(Type t)

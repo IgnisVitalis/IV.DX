@@ -2,6 +2,19 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.105.0] - 2026-05-22
+
+### Changed
+
+- `IDXUnitDataService.InsertAsync`, `UpdateAsync`, and `InsertOrUpdateAsync` (all overloads — typed, JObject, DXDataBlock) now return `Guid` (the assigned record Id) instead of the full model or block;
+- `IDXElementDataService.InsertOrUpdateAsync` now returns `Task<Guid>` instead of the full block;
+- `IDXPipelineExecutor.InsertAsync` and `UpdateAsync` (all overloads) now return `DXResult<Guid>` instead of the full model or block;
+- After-handler DB reload in `DXPipelineExecutor` is now conditional — the reload only occurs when after-handlers are actually registered for the type, eliminating the unconditional round-trip for types with no after-handlers;
+
+### Added
+
+- UUID v7 (`Guid.CreateVersion7()`) auto-generation for new DXUnit records (all insert paths) and new DXElement records (`IDXElementDataService.InsertOrUpdateAsync`) when `Id == Guid.Empty`; auto-generation is skipped during migration (`DXMigrationContext.IsMigrating`);
+
 ## [0.104.0] - 2026-04-25
 
 ### Added

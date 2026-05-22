@@ -37,7 +37,6 @@ namespace IV.DX.Application.IntTests.Services
             LoginId = Guid.NewGuid();
             SessionRecordId = Guid.NewGuid();
             SessionId = Guid.NewGuid();
-            TenantId = Guid.NewGuid();
 
             var now = DateTime.UtcNow;
 
@@ -78,11 +77,10 @@ namespace IV.DX.Application.IntTests.Services
                 IdentityLogin = LoginId
             });
 
-            await _dataService.InsertAsync(new DXTenantUnit
+            TenantId = await _dataService.InsertAsync(new DXTenantUnit
             {
-                Id = TenantId,
                 TimeStamp = now,
-                Name = $"rbac-fixture-tenant-{TenantId:N}"
+                Name = $"rbac-fixture-tenant-{Guid.NewGuid():N}"
             });
         }
 

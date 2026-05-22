@@ -40,21 +40,20 @@ namespace IV.DX.Application.IntTests.Services
             var userUnitDef = _genericRepo.GetDXUnits<DXUnitDefinitionUnit>("Name = 'TUserUnit'").First();
             var originalUserIsPublicRead = userUnitDef.IsPublicRead;
 
-            var itemId = Guid.NewGuid();
-            var queryId = Guid.NewGuid();
+            var itemId = Guid.Empty;
+            var queryId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
             {
                 SetIsPublicRead(userUnitDef.Id, true);
                 await _structureCache.RefreshAsync();
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    itemId,
+                itemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "QueryPublic",
                     "User",
                     DateTime.UtcNow.Date));
 
-                await InsertQueryForTypeAsync(queryId, userUnitDef.Id);
+                queryId = await InsertQueryForTypeAsync(userUnitDef.Id);
             });
 
             try
@@ -62,7 +61,7 @@ namespace IV.DX.Application.IntTests.Services
                 var result = await _queryProvider.GetAsync(queryId);
                 Assert.NotNull(result);
 
-                var ids = ExtractContentIds(result!);
+                var ids = ExtractContentIds(result);
                 Assert.Contains(itemId, ids);
             }
             finally
@@ -84,37 +83,34 @@ namespace IV.DX.Application.IntTests.Services
             var userUnitDef = _genericRepo.GetDXUnits<DXUnitDefinitionUnit>("Name = 'TUserUnit'").First();
             var originalUserIsPublicRead = userUnitDef.IsPublicRead;
 
-            var publicItemId = Guid.NewGuid();
-            var privateItemId = Guid.NewGuid();
-            var queryId = Guid.NewGuid();
-            var publicAccessId = Guid.NewGuid();
+            var publicItemId = Guid.Empty;
+            var privateItemId = Guid.Empty;
+            var queryId = Guid.Empty;
+            var publicAccessId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
             {
                 SetIsPublicRead(userUnitDef.Id, false);
                 await _structureCache.RefreshAsync();
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    publicItemId,
+                publicItemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "PublicFromQuery",
                     "Allowed",
                     DateTime.UtcNow.Date));
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    privateItemId,
+                privateItemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "PrivateFromQuery",
                     "Blocked",
                     DateTime.UtcNow.Date));
 
-                await _dataService.InsertAsync(new DXPublicAccessUnit
+                publicAccessId = await _dataService.InsertAsync(new DXPublicAccessUnit
                 {
-                    Id = publicAccessId,
                     TimeStamp = DateTime.UtcNow,
                     DXUnitDefinition = userUnitDef.Id,
                     PublicDXUnitId = publicItemId
                 });
 
-                await InsertQueryForTypeAsync(queryId, userUnitDef.Id);
+                queryId = await InsertQueryForTypeAsync(userUnitDef.Id);
             });
 
             try
@@ -122,7 +118,7 @@ namespace IV.DX.Application.IntTests.Services
                 var result = await _queryProvider.GetAsync(queryId);
                 Assert.NotNull(result);
 
-                var ids = ExtractContentIds(result!);
+                var ids = ExtractContentIds(result);
                 Assert.Contains(publicItemId, ids);
                 Assert.DoesNotContain(privateItemId, ids);
 
@@ -158,11 +154,9 @@ namespace IV.DX.Application.IntTests.Services
             _genericRepo.Update(mutable);
         }
 
-        private async Task InsertQueryForTypeAsync(Guid queryId, Guid unitDefinitionId)
+        private async Task<Guid> InsertQueryForTypeAsync(Guid unitDefinitionId)
         {
-            var queryColumnId = Guid.NewGuid();
-
-            await _dataService.InsertOrUpdateAsync(new DXDataBlock<DXUnitRecord>
+            var result = await _dataService.InsertOrUpdateAsync(new DXDataBlock<DXUnitRecord>
             {
                 Meta = new DXMeta
                 {
@@ -175,7 +169,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = queryId,
                             TimeStamp = DateTime.UtcNow,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -200,8 +193,6 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                Id = queryColumnId,
-                                                DXUnitId = queryId,
                                                 TimeStamp = DateTime.UtcNow,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -218,6 +209,7 @@ namespace IV.DX.Application.IntTests.Services
                     }
                 }
             });
+            return result.Single();
         }
 
         private async Task RunAsSystemAsync(Func<Task> action)

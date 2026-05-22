@@ -59,22 +59,22 @@ namespace IV.DX.Application.Contracts.Pipeline
             DXHandlerBaseContext ctx,
             CancellationToken ct);
 
-        Task<DXResult<T>> InsertAsync<T>(
+        Task<DXResult<Guid>> InsertAsync<T>(
             T dxUnit,
             DXHandlerBaseContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<JObject>> InsertAsync(
+        Task<DXResult<Guid>> InsertAsync(
             JObject dxModel,
             DXHandlerBaseContext ctx,
             CancellationToken ct);
 
-        Task<DXResult<T>> UpdateAsync<T>(
+        Task<DXResult<Guid>> UpdateAsync<T>(
             T dxUnit,
             DXHandlerBaseContext ctx,
             CancellationToken ct) where T : DXUnit, new();
 
-        Task<DXResult<JObject>> UpdateAsync(
+        Task<DXResult<Guid>> UpdateAsync(
            JObject dxModel,
            DXHandlerBaseContext ctx,
            CancellationToken ct);
@@ -89,12 +89,12 @@ namespace IV.DX.Application.Contracts.Pipeline
             DXHandlerBaseContext ctx,
             CancellationToken ct);
 
-        Task<DXResult<DXDataBlock<DXUnitRecord>>> InsertAsync(
+        Task<DXResult<Guid>> InsertAsync(
             DXDataBlock<DXUnitRecord> block,
             DXHandlerBaseContext ctx,
             CancellationToken ct);
 
-        Task<DXResult<DXDataBlock<DXUnitRecord>>> UpdateAsync(
+        Task<DXResult<Guid>> UpdateAsync(
             DXDataBlock<DXUnitRecord> block,
             DXHandlerBaseContext ctx,
             CancellationToken ct);

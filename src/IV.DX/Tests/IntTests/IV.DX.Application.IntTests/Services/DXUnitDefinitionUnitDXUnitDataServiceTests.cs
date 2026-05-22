@@ -45,7 +45,7 @@ namespace IV.DX.Application.IntTests.Services
             };
 
             // Action
-            var dxUnitCreated = await this._service.InsertAsync(dxUnit);
+            await this._service.InsertAsync(dxUnit);
 
             // Assert
             var block = this._coreRepo.GetItemsRecord(dxUnitName);

@@ -177,12 +177,12 @@ namespace IV.DX.Persistence.IntTests
         public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
         {
             // Init
-            var id = new Guid("27bf2430-f8a5-4293-ac66-5d834ce244c9");
+            var id = Guid.CreateVersion7();
             var itemAmount = 10000;
             var textLength = 10000;
 
             var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
-            var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
+            var item = TBookUnitFactory.GetItemWithText(id, $"NameBook", text);
 
             base._finalizationAction = () =>
             {

@@ -417,5 +417,36 @@ It is **not** populated on base reads (Id-only queries) or when fetching element
 
 ---
 
+## 12) ID generation
+
+### Runtime operations
+
+When inserting a new unit or element through the application service layer, the `Id` field is **auto-generated** if left as `Guid.Empty`:
+
+- **DXUnit** — `IDXUnitDataService.InsertAsync` (typed, JObject, and DXDataBlock overloads) generates a **UUID v7** (`Guid.CreateVersion7()`) for the unit and for every nested element record with an empty Id, before the pipeline executes.
+- **DXElement** — `IDXElementDataService.InsertOrUpdateAsync` generates a **UUID v7** for the element record if its Id is `Guid.Empty`.
+
+UUID v7 is time-ordered (monotonically increasing), which gives good index locality.
+
+All insert/update service methods return the assigned `Guid` so callers always know the final Id without re-reading the record.
+
+### Migration scripts
+
+Migration scripts run under `DXMigrationContext.IsMigrating = true`. In this mode **auto-generation is skipped** — the engine uses whatever Id is already set on the record.
+
+**Migration scripts must therefore always provide explicit, predefined Ids for every record.** This ensures migrations are deterministic and repeatable: re-running a migration script produces the same Ids, allowing safe upsert semantics (`Op: Patch`).
+
+```json
+{
+  "Id": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+  "TimeStamp": "2021-10-02T00:00:00",
+  "Name": "DXObjectDefinitionUnit"
+}
+```
+
+If a migration record has `Id = Guid.Empty` (all zeros), the engine will not assign a new Id — the record will be written with an empty Id, which is a data error. Always set explicit Ids in migration files.
+
+---
+
 End of document.
 

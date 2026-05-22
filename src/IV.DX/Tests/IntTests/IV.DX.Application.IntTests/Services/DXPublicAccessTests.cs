@@ -39,7 +39,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var unitDef = _genericRepo.GetDXUnits<DXUnitDefinitionUnit>("Name = 'TUserUnit'").First();
             var originalIsPublicRead = unitDef.IsPublicRead;
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
             {
@@ -49,8 +49,7 @@ namespace IV.DX.Application.IntTests.Services
 
                 await _structureCache.RefreshAsync();
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    insertedId,
+                insertedId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "PublicUser",
                     "ByType",
                     DateTime.UtcNow.Date));
@@ -82,9 +81,9 @@ namespace IV.DX.Application.IntTests.Services
             var unitDef = _genericRepo.GetDXUnits<DXUnitDefinitionUnit>("Name = 'TUserUnit'").First();
             var originalIsPublicRead = unitDef.IsPublicRead;
 
-            var publicItemId = Guid.NewGuid();
-            var privateItemId = Guid.NewGuid();
-            var publicAccessId = Guid.NewGuid();
+            var publicItemId = Guid.Empty;
+            var privateItemId = Guid.Empty;
+            var publicAccessId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
             {
@@ -94,21 +93,18 @@ namespace IV.DX.Application.IntTests.Services
 
                 await _structureCache.RefreshAsync();
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    publicItemId,
+                publicItemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "PublicEntry",
                     "Allowed",
                     DateTime.UtcNow.Date));
 
-                await _dataService.InsertAsync(TUserUnitFactory.GetItem(
-                    privateItemId,
+                privateItemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(
                     "PrivateEntry",
                     "Blocked",
                     DateTime.UtcNow.Date));
 
-                await _dataService.InsertAsync(new DXPublicAccessUnit
+                publicAccessId = await _dataService.InsertAsync(new DXPublicAccessUnit
                 {
-                    Id = publicAccessId,
                     TimeStamp = DateTime.UtcNow,
                     DXUnitDefinition = unitDef.Id,
                     PublicDXUnitId = publicItemId

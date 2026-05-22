@@ -530,6 +530,9 @@ namespace IV.DX.Persistence
             {
                 if (record == null) continue;
 
+                if (DXMigrationContext.IsMigrating && record.Id == Guid.Empty)
+                    throw new InvalidOperationException("Migration scripts must provide an explicit non-empty Id.");
+
                 var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
                 if (mainDXUnitInfo == null)
                     throw new Exception($"Unit type '{typeName}' is not registered.");
@@ -666,6 +669,9 @@ namespace IV.DX.Persistence
             if (elementRecord == null)
                 return;
 
+            if (DXMigrationContext.IsMigrating && elementRecord.Id == Guid.Empty)
+                throw new InvalidOperationException("Migration scripts must provide an explicit non-empty Id for element records.");
+
             var dxElementDefinition = dxModelDefinition.SingleFragmentDefinitions
                 .SingleOrDefault(x => x.Type == dxElementName);
 
@@ -738,6 +744,9 @@ namespace IV.DX.Persistence
             var upsertItems = block?.Data?.Items ?? new List<DXElementRecord>();
             foreach (var itemRecord in upsertItems)
             {
+                if (DXMigrationContext.IsMigrating && itemRecord.Id == Guid.Empty)
+                    throw new InvalidOperationException("Migration scripts must provide an explicit non-empty Id for element records.");
+
                 var id = itemRecord.Id;
                 DataRow? row = id != Guid.Empty ? table.Rows.Find(id) : null;
                 var item = BuildRowItemFromElementRecord(itemRecord, dxElementName, parentId);

@@ -39,7 +39,7 @@ namespace IV.DX.Kernel.Models
 
         public DXRelationDefinitionUnit CreateInvertedRelationObject()
         {
-            var objectId = Guid.NewGuid();
+            var objectId = Guid.CreateVersion7();
 
             this.Kind = DXObjectKindEnum.Custom;
 

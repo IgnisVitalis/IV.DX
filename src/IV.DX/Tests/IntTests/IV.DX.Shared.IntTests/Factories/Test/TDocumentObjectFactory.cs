@@ -5,16 +5,14 @@ namespace IV.DX.Shared.IntTests.Factories.Test
 {
     public static class TDocumentUnitFactory
     {
-        public static TDocumentUnit GetItem(Guid id, string name)
+        public static TDocumentUnit GetItem(string name)
         {
             return new TDocumentUnit()
             {
-                Id = id,
                 //User = user.Id,
                 TDocumentMainElement = new TDocumentMainElement()
                 {
                     Id = Guid.NewGuid(),
-                    DXUnitId = id,
                     Name = name
                 }
             };

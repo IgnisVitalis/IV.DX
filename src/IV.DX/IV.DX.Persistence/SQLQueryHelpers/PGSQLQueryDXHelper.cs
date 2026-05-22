@@ -1150,7 +1150,7 @@ END $$;
 
             if (table.Rows.Count == 0) return;
 
-            var temp = $"temp_{tableName}_{Guid.NewGuid():N}";
+            var temp = $"temp_{tableName}_{Guid.CreateVersion7():N}";
 
             using (var cmd = new NpgsqlCommand($@"CREATE TEMP TABLE ""{temp}"" AS SELECT * FROM ""{tableName}"" WITH NO DATA;", conn))
                 cmd.ExecuteNonQuery();

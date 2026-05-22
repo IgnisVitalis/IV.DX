@@ -72,11 +72,13 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: false, write: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var hiddenId = Guid.NewGuid();
+            var hiddenId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(hiddenId, "RBAC", "HiddenNoRead", DateTime.UtcNow.Date)));
+            {
+                hiddenId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "HiddenNoRead", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -102,17 +104,17 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             try
             {
                 var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
                 using var _ = _contextAccessor.BeginScope(ctx);
 
-                var inserted = await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(insertedId, "RBAC", "Write", DateTime.UtcNow.Date));
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "Write", DateTime.UtcNow.Date));
 
-                Assert.NotNull(inserted);
+                Assert.NotEqual(Guid.Empty, insertedId);
             }
             finally
             {
@@ -137,7 +139,7 @@ namespace IV.DX.Application.IntTests.Services
 
                 await Assert.ThrowsAsync<UnauthorizedAccessException>(
                     () => _dataService.InsertAsync(
-                        TUserUnitFactory.GetItem(Guid.NewGuid(), "RBAC", "Blocked", DateTime.UtcNow.Date)));
+                        TUserUnitFactory.GetItem("RBAC", "Blocked", DateTime.UtcNow.Date)));
             }
             finally
             {
@@ -153,11 +155,13 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: true);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(insertedId, "RBAC", "Delete", DateTime.UtcNow.Date)));
+            {
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "Delete", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -184,11 +188,13 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(insertedId, "RBAC", "NoDelete", DateTime.UtcNow.Date)));
+            {
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "NoDelete", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -217,11 +223,13 @@ namespace IV.DX.Application.IntTests.Services
             var allowRoleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false, effect: DXGrantEffectEnum.Allow);
             var denyRoleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false, effect: DXGrantEffectEnum.Deny);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, allowRoleId, denyRoleId);
-            var hiddenId = Guid.NewGuid();
+            var hiddenId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(hiddenId, "RBAC", "HiddenDenyRole", DateTime.UtcNow.Date)));
+            {
+                hiddenId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "HiddenDenyRole", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -263,7 +271,7 @@ namespace IV.DX.Application.IntTests.Services
                 // Tenant allows TUserUnit, membership allows only TDocumentUnit → intersection = denied for TUserUnit
                 await Assert.ThrowsAsync<UnauthorizedAccessException>(
                     () => _dataService.InsertAsync(
-                        TUserUnitFactory.GetItem(Guid.NewGuid(), "RBAC", "Intersection", DateTime.UtcNow.Date)));
+                        TUserUnitFactory.GetItem("RBAC", "Intersection", DateTime.UtcNow.Date)));
             }
             finally
             {
@@ -288,11 +296,13 @@ namespace IV.DX.Application.IntTests.Services
             var groupRoleId = await CreateRoleAsync(tDocumentUnitDefId, read: true, write: false, delete: false);
             var groupId = await CreateGroupAsync(_rbacFx.TenantId, groupRoleId);
             var groupMembershipId = await CreateGroupMembershipAsync(groupId, membershipId);
-            var hiddenId = Guid.NewGuid();
+            var hiddenId = Guid.Empty;
 
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(hiddenId, "RBAC", "HiddenGroup", DateTime.UtcNow.Date)));
+            {
+                hiddenId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "HiddenGroup", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -355,7 +365,7 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await SetSupportsOwnershipAsync("TUserUnit", true);
 
@@ -366,8 +376,8 @@ namespace IV.DX.Application.IntTests.Services
                 // Insert as user — auto-creates ownership record
                 using (var _ = _contextAccessor.BeginScope(ctx))
                 {
-                    await _dataService.InsertAsync(
-                        TUserUnitFactory.GetItem(insertedId, "RBAC", "OwnedDel", DateTime.UtcNow.Date));
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "OwnedDel", DateTime.UtcNow.Date));
                 }
 
                 // Delete as same user — owns the record → succeeds despite no delete grant
@@ -395,14 +405,16 @@ namespace IV.DX.Application.IntTests.Services
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await SetSupportsOwnershipAsync("TUserUnit", true);
 
             // Insert as system — no ownership record created for user
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(
-                    TUserUnitFactory.GetItem(insertedId, "RBAC", "NotOwned", DateTime.UtcNow.Date)));
+            {
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "NotOwned", DateTime.UtcNow.Date));
+            });
 
             try
             {
@@ -430,7 +442,7 @@ namespace IV.DX.Application.IntTests.Services
             // No write grant → AllowedOwnedOnly for writes
             var roleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
-            var insertedId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
 
             await SetSupportsOwnershipAsync("TUserUnit", true);
 
@@ -441,13 +453,13 @@ namespace IV.DX.Application.IntTests.Services
                 // Insert via system and manually create ownership for user
                 await RunAsSystemAsync(async () =>
                 {
-                    await _dataService.InsertAsync(
-                        TUserUnitFactory.GetItem(insertedId, "RBAC", "OwnedUpd", DateTime.UtcNow.Date));
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "OwnedUpd", DateTime.UtcNow.Date));
 
                     var unitDef = _structureCache.GetDXUnit("TUserUnit");
                     _genericRepo.Insert(new DXIdentityOwnershipUnit
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.CreateVersion7(),
                         TimeStamp = DateTime.UtcNow,
                         Identity = _rbacFx.IdentityId,
                         DXUnitDefinition = unitDef.Id,
@@ -461,9 +473,9 @@ namespace IV.DX.Application.IntTests.Services
 
                 // Update as user — owns the record → succeeds despite no write grant
                 using var _ = _contextAccessor.BeginScope(ctx);
-                var updated = await _dataService.UpdateAsync(existing);
+                var updatedId = await _dataService.UpdateAsync(existing);
 
-                Assert.NotNull(updated);
+                Assert.NotEqual(Guid.Empty, updatedId);
             }
             finally
             {
@@ -489,79 +501,70 @@ namespace IV.DX.Application.IntTests.Services
 
         private async Task<Guid> CreateTenantWithRolesAsync(params Guid[] roleIds)
         {
-            var id = Guid.NewGuid();
+            var insertedId = Guid.Empty;
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(new DXTenantUnit
+                insertedId = await _dataService.InsertAsync(new DXTenantUnit
                 {
-                    Id = id,
                     TimeStamp = DateTime.UtcNow,
-                    Name = $"rbac-tenant-{id:N}",
+                    Name = $"rbac-tenant-{Guid.NewGuid():N}",
                     DXRoleElement = new DXMultiElementsContainer<DXRoleElement>
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
                     }
                 }));
-            return id;
+            return insertedId;
         }
 
         private async Task<Guid> CreateMembershipAsync(Guid identityId, Guid tenantId, params Guid[] roleIds)
         {
-            var id = Guid.NewGuid();
+            var insertedId = Guid.Empty;
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(new DXMembershipUnit
+                insertedId = await _dataService.InsertAsync(new DXMembershipUnit
                 {
-                    Id = id,
                     TimeStamp = DateTime.UtcNow,
-                    Name = $"rbac-membership-{id:N}",
+                    Name = $"rbac-membership-{Guid.NewGuid():N}",
                     Identity = identityId,
                     Tenant = tenantId,
                     DXRoleElement = new DXMultiElementsContainer<DXRoleElement>
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
                     }
                 }));
-            return id;
+            return insertedId;
         }
 
         private async Task<Guid> CreateGroupAsync(Guid tenantId, params Guid[] roleIds)
         {
-            var id = Guid.NewGuid();
+            var insertedId = Guid.Empty;
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(new DXGroupUnit
+                insertedId = await _dataService.InsertAsync(new DXGroupUnit
                 {
-                    Id = id,
                     TimeStamp = DateTime.UtcNow,
-                    Name = $"rbac-group-{id:N}",
+                    Name = $"rbac-group-{Guid.NewGuid():N}",
                     Tenant = tenantId,
                     DXRoleElement = new DXMultiElementsContainer<DXRoleElement>
                     {
                         Announced = new HashSet<DXRoleElement>(roleIds.Select(roleId => new DXRoleElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = id,
                             TimeStamp = DateTime.UtcNow,
                             Role = roleId
                         }))
                     }
                 }));
-            return id;
+            return insertedId;
         }
 
         private async Task<Guid> CreateGroupMembershipAsync(Guid groupId, Guid membershipId)
         {
-            var id = Guid.NewGuid();
+            var id = Guid.CreateVersion7();
             await RunAsSystemAsync(() =>
             {
                 _genericRepo.Insert(new DXGroupMembershipUnit
@@ -583,21 +586,18 @@ namespace IV.DX.Application.IntTests.Services
             bool delete,
             DXGrantEffectEnum effect = DXGrantEffectEnum.Allow)
         {
-            var roleId = Guid.NewGuid();
+            var insertedId = Guid.Empty;
             await RunAsSystemAsync(async () =>
-                await _dataService.InsertAsync(new DXRoleUnit
+                insertedId = await _dataService.InsertAsync(new DXRoleUnit
                 {
-                    Id = roleId,
                     TimeStamp = DateTime.UtcNow,
-                    Name = $"rbac-role-{roleId:N}",
+                    Name = $"rbac-role-{Guid.NewGuid():N}",
                     DXUnitGrantElement = new DXMultiElementsContainer<DXUnitGrantElement>
                     {
                         Announced = new HashSet<DXUnitGrantElement>
                         {
                             new DXUnitGrantElement
                             {
-                                Id = Guid.NewGuid(),
-                                DXUnitId = roleId,
                                 TimeStamp = DateTime.UtcNow,
                                 Read = read,
                                 Write = write,
@@ -608,7 +608,7 @@ namespace IV.DX.Application.IntTests.Services
                         }
                     }
                 }));
-            return roleId;
+            return insertedId;
         }
 
         private Guid GetUnitDefinitionId(string typeName)

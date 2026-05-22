@@ -41,10 +41,10 @@ namespace IV.DX.Persistence.IntTests
             this._dataService.InsertAsync(objDesc).Wait();
 
             // Checking
-            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objDesc.Id);
 
             Assert.NotNull(objDefinition);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.Id);
+            Assert.Equal(objDesc.Id, objDefinition.Id);
             Assert.Equal("NewObject", objDefinition.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }
@@ -65,13 +65,14 @@ namespace IV.DX.Persistence.IntTests
 
             // Action
             this._dataService.InsertAsync(objDesc0).Wait();
+            objDesc1.Id = objDesc0.Id;
             this._dataService.UpdateAsync(objDesc1).Wait();
 
             // Checking
-            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"));
+            var objDefinition = this._genericRepo.GetDXUnit<DXUnitDefinitionUnit>(objDesc0.Id);
 
             Assert.NotNull(objDefinition);
-            Assert.Equal(new Guid("0C632EA2-D6E0-424B-8E4E-CF2B52847D54"), objDefinition.Id);
+            Assert.Equal(objDesc0.Id, objDefinition.Id);
             Assert.Equal("UpdatedObject", objDefinition.Name);
             Assert.True(objDefinition is DXUnitDefinitionUnit);
         }

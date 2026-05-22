@@ -185,10 +185,10 @@ namespace IV.DX.Application.IntTests.Services
             });
 
             // Action
-            var createdItem = await this._service.InsertAsync(jObject);
+            var createdId = await this._service.InsertAsync(jObject);
 
             // Assert
-            Assert.NotNull(createdItem);
+            Assert.NotEqual(Guid.Empty, createdId);
         }
 
         [Fact]
@@ -372,53 +372,54 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task InsertDXUnitItemAsync_UsingDXUnitWithRelatedDXUnits_Ok()
         {
-            // Init           
-            var id1 = new Guid("acc683cf-33e1-473e-b218-565697a0378e");
-            var id2 = new Guid("69a8eb15-125e-400e-8f0c-0996fca7d076");
-            var id3 = new Guid("f6c170e8-c2f4-4b3f-883c-1bdf24bddf29");
+            // Init
+            var suffix = Guid.NewGuid().ToString("N")[..8];
 
             var dxUnit1 = new DXUnitDefinitionUnit()
             {
-                Id = id1,
-                Name = "dxUnit1",
+                Name = $"dxUnit1_{suffix}",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
             };
 
             var dxUnit2 = new DXUnitDefinitionUnit()
             {
-                Id = id2,
-                Name = "dxUnit2",
+                Name = $"dxUnit2_{suffix}",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
             };
 
             var dxUnit3 = new DXUnitDefinitionUnit()
             {
-                Id = id3,
-                Name = "dxUnit3",
+                Name = $"dxUnit3_{suffix}",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test
             };
 
+            this._finalizationAction = () =>
+            {
+                this._service.DeleteAsync(dxUnit1).Wait();
+                this._service.DeleteAsync(dxUnit2).Wait();
+                this._service.DeleteAsync(dxUnit3).Wait();
+            };
+
+            // Action — insert dxUnit1 first to obtain its generated ID for the relation
+            var item1 = await this._service.InsertAsync(dxUnit1);
+
             var dxUnitRelation1 = new DXUnitToUnitRelationElement()
             {
-                Id = Guid.NewGuid(),
-                DXUnitId = id2,
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.OneToMany,
                 TargetRelationName = "dxUnit1RelationName",
-                TargetDXUnit = id1
+                TargetDXUnit = item1
             };
 
             var dxUnitRelation2 = new DXUnitToUnitRelationElement()
             {
                 Id = Guid.NewGuid(),
-                DXUnitId = id2,
                 OwnRelationName = "dxUnit2RelationName",
                 RelationType = DXRelationTypeEnum.ManyToMany,
-                TargetRelationName = "dxUnit3RelationName",
-                TargetDXUnit = id3
+                TargetRelationName = "dxUnit3RelationName"
             };
 
             dxUnit2.DXUnitToUnitRelationElement = new DXMultiElementsContainer<DXUnitToUnitRelationElement>()
@@ -429,21 +430,14 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            this._finalizationAction = () =>
-            {
-                this._service.DeleteAsync(dxUnit1).Wait();
-                this._service.DeleteAsync(dxUnit2).Wait();
-                this._service.DeleteAsync(dxUnit3).Wait();
-            };
-
-            // Action
-            var item1 = await this._service.InsertAsync(dxUnit1);
             var item2 = await this._service.InsertAsync(dxUnit2);
             var item3 = await this._service.InsertAsync(dxUnit3);
 
+            dxUnitRelation2.TargetDXUnit = item3;
+
             // Assert
-            var existingItem1 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id1);
-            var existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id2);
+            var existingItem1 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(item1);
+            var existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(item2);
 
             Assert.Single(existingItem1.DXUnitToUnitRelationElement.Announced);
 
@@ -477,6 +471,8 @@ namespace IV.DX.Application.IntTests.Services
             Assert.Equal(dxUnitRelation2Existing.RelationType, relationDefinition2.RelationType);
 
             // Action
+            dxUnitRelation2.DXUnitId = item2;
+
             dxUnit2.DXUnitToUnitRelationElement = new DXMultiElementsContainer<DXUnitToUnitRelationElement>()
             {
                 Mode = MultiElementsMode.Target,
@@ -493,8 +489,8 @@ namespace IV.DX.Application.IntTests.Services
             item2 = await this._service.UpdateAsync(dxUnit2);
 
             // Assert
-            existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id2);
-            var existingItem3 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id3);
+            existingItem2 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(item2);
+            var existingItem3 = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(item3);
 
             Assert.Single(existingItem2.DXUnitToUnitRelationElement.Announced);
 
@@ -554,8 +550,6 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task InsertAndUpdate_UsingHashedStringColumn_HashesAndAvoidsDoubleHash_Ok()
         {
-            var unitDefinitionId = Guid.NewGuid();
-            var columnDefinitionId = Guid.NewGuid();
             var now = DateTime.UtcNow;
 
             var unitName = $"DXHashedSecretUnit_{Guid.NewGuid():N}";
@@ -573,7 +567,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -598,8 +591,6 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                Id = columnDefinitionId,
-                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -625,7 +616,6 @@ namespace IV.DX.Application.IntTests.Services
 
             await this._service.InsertOrUpdateAsync(unitDefinitionBlock);
 
-            var instanceId = Guid.NewGuid();
             var plaintext = "P@ssw0rd";
 
             var insertBlock = new DXDataBlock<DXUnitRecord>
@@ -641,7 +631,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -652,7 +641,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await this._service.InsertAsync(insertBlock);
+            var instanceId = await this._service.InsertAsync(insertBlock);
 
             var columns = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -710,8 +699,6 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task InsertAndUpdate_UsingEncryptedStringColumn_EncryptsAndAvoidsDoubleEncrypt_Ok()
         {
-            var unitDefinitionId = Guid.NewGuid();
-            var columnDefinitionId = Guid.NewGuid();
             var now = DateTime.UtcNow;
 
             var unitName = $"DXEncryptedSecretUnit_{Guid.NewGuid():N}";
@@ -729,7 +716,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -754,8 +740,6 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                Id = columnDefinitionId,
-                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -781,7 +765,6 @@ namespace IV.DX.Application.IntTests.Services
 
             await this._service.InsertOrUpdateAsync(unitDefinitionBlock);
 
-            var instanceId = Guid.NewGuid();
             var plaintext = "super-secret";
 
             var insertBlock = new DXDataBlock<DXUnitRecord>
@@ -797,7 +780,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -808,7 +790,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await this._service.InsertAsync(insertBlock);
+            var instanceId = await this._service.InsertAsync(insertBlock);
 
             var columns = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -893,9 +875,6 @@ namespace IV.DX.Application.IntTests.Services
             IDXStructureCache cache = base.ServiceProvider.GetRequiredService<IDXStructureCache>();
             await cache.RefreshAsync();
 
-            var unitDefinitionId = Guid.NewGuid();
-            var encryptedColumnId = Guid.NewGuid();
-            var hashedColumnId = Guid.NewGuid();
             var now = DateTime.UtcNow;
 
             var unitName = $"DXSensitiveUnit_{Guid.NewGuid():N}";
@@ -913,7 +892,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = unitDefinitionId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -938,8 +916,6 @@ namespace IV.DX.Application.IntTests.Services
                                         {
                                             new DXElementRecord
                                             {
-                                                Id = encryptedColumnId,
-                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -954,8 +930,6 @@ namespace IV.DX.Application.IntTests.Services
                                             },
                                             new DXElementRecord
                                             {
-                                                Id = hashedColumnId,
-                                                DXUnitId = unitDefinitionId,
                                                 TimeStamp = now,
                                                 Fields = new Dictionary<string, JToken>
                                                 {
@@ -982,7 +956,6 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.InsertOrUpdateAsync(unitDefinitionBlock);
             await cache.RefreshAsync();
 
-            var instanceId = Guid.NewGuid();
             var secretPlain = "super-secret";
             var passwordPlain = "P@ssw0rd";
 
@@ -999,7 +972,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -1011,7 +983,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await this._service.InsertAsync(insertBlock);
+            var instanceId = await this._service.InsertAsync(insertBlock);
 
             var dbOptions = base.ServiceProvider.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
 
@@ -1058,12 +1030,11 @@ namespace IV.DX.Application.IntTests.Services
         public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
         {
             // Init
-            var id = new Guid("b7ef84bd-da1a-4855-8de8-8c148d2871a0");
             var itemAmount = 10000;
             var textLength = 10000;
 
             var text = Enumerable.Range(0, itemAmount).Select(x => GetRandomString(textLength)).ToHashSet();
-            var item = TBookUnitFactory.GetItemWithText(id, $"Name{id}", text);
+            var item = TBookUnitFactory.GetItemWithText(Guid.Empty, $"NameBook", text);
 
             base._finalizationAction = () =>
             {
@@ -1077,12 +1048,12 @@ namespace IV.DX.Application.IntTests.Services
             }, $"InsertAsync unit with {itemAmount} multi items. Each multi item has text with {textLength} length");
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(text.Count(), result.TBookChapterElement.Announced.Count(x => text.Contains(x.Text)));
+            Assert.NotEqual(Guid.Empty, result);
+            Assert.Equal(text.Count(), item.TBookChapterElement.Announced.Count(x => text.Contains(x.Text)));
 
             var existingItem = await EstimatePerformanceAsync(async () =>
             {
-                return await this._reader.GetItemAsync<TBookUnit>(id);
+                return await this._reader.GetItemAsync<TBookUnit>(item.Id);
             }, $"GetItemAsync unit with {text.Count()} multi items");
 
             Assert.NotNull(existingItem);
@@ -1093,12 +1064,8 @@ namespace IV.DX.Application.IntTests.Services
         public async Task InsertDXUnit_UsingEnumColumnsWithFullMode_Ok()
         {
             // Init
-            var id = new Guid("b028075c-f460-42c0-a456-36e50ba645a8");
-
             var objectKindEnum = new DXObjectEnumElement()
             {
-                Id = Guid.NewGuid(),
-                DXUnitId = id,
                 AllowNull = true,
                 Name = "ObjectKind",
                 EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
@@ -1108,7 +1075,6 @@ namespace IV.DX.Application.IntTests.Services
             var relaionTypeEnum = new DXObjectEnumElement()
             {
                 Id = Guid.NewGuid(),
-                DXUnitId = id,
                 AllowNull = true,
                 Name = "RelationType",
                 EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
@@ -1117,7 +1083,6 @@ namespace IV.DX.Application.IntTests.Services
 
             var dxUnit = new DXUnitDefinitionUnit()
             {
-                Id = id,
                 Name = "DXUnitWithEnum",
                 DXTitleExpression = "Name",
                 Kind = DXObjectKindEnum.Test,
@@ -1141,7 +1106,7 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.InsertAsync(dxUnit);
 
             // Assert
-            var createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id);
+            var createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
 
             Assert.NotNull(createdDXUnit);
 
@@ -1187,7 +1152,7 @@ namespace IV.DX.Application.IntTests.Services
             await this._service.UpdateAsync(dxUnit);
 
             // Assert
-            createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(id);
+            createdDXUnit = await this._reader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
 
             Assert.NotNull(createdDXUnit);
 
@@ -1261,10 +1226,10 @@ namespace IV.DX.Application.IntTests.Services
             };
 
             // Action
-            var existingDXUnit = await this._service.InsertOrUpdateAsync(JObject.FromObject(dxUnitBlock));
+            var insertedId = await this._service.InsertOrUpdateAsync(JObject.FromObject(dxUnitBlock));
 
             // Assert
-            Assert.NotNull(existingDXUnit);
+            Assert.NotEqual(Guid.Empty, insertedId);
         }
 
         private static DXDataBlock<DXElementRecord> BuildEmptyMultiElementBlock(string elementType)

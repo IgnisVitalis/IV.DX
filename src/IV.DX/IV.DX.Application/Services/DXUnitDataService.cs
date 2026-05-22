@@ -1,6 +1,7 @@
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Pipeline;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
@@ -19,7 +20,7 @@ namespace IV.DX.Application.Services
         IDXExecutionContextAccessor executionContextAccessor,
         ILogger<DXUnitDataService> logger) : IDXUnitDataService
     {
-        public async Task<T> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<Guid> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             if (context == null)
             {
@@ -29,12 +30,15 @@ namespace IV.DX.Application.Services
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
             EnsureWriteAccessForInsert(typeName);
 
+            if (!DXMigrationContext.IsMigrating)
+                AssignNewIds(dxUnit);
+
             var result = await dxPipelineExecutor.InsertAsync(dxUnit, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
-                TryCreateIdentityOwnership(typeName, result.Value.Id);
-                return result.Value;
+                TryCreateIdentityOwnership(typeName, dxUnit.Id);
+                return dxUnit.Id;
             }
             else
             {
@@ -43,7 +47,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<T> InsertOrUpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<Guid> InsertOrUpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             if (context == null)
             {
@@ -65,7 +69,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<T> UpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
+        public async Task<Guid> UpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
         {
             if (context == null)
             {
@@ -77,9 +81,9 @@ namespace IV.DX.Application.Services
 
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
-                return result.Value;
+                return dxUnit.Id;
             }
             else
             {
@@ -139,7 +143,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> InsertAsync(JObject jObject, DXHandlerBaseContext? context = default, CancellationToken ct = default)
+        public async Task<Guid> InsertAsync(JObject jObject, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -151,9 +155,9 @@ namespace IV.DX.Application.Services
 
             var result = await dxPipelineExecutor.InsertAsync(jObject, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
-                TryCreateIdentityOwnershipFromJObject(typeName, result.Value);
+                TryCreateIdentityOwnership(typeName, result.Value);
                 return result.Value;
             }
             else
@@ -163,7 +167,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> UpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        public async Task<Guid> UpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -179,7 +183,7 @@ namespace IV.DX.Application.Services
 
             var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
                 return result.Value;
             }
@@ -219,7 +223,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<JObject> InsertOrUpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        public async Task<Guid> InsertOrUpdateAsync(JObject jObject, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -235,11 +239,11 @@ namespace IV.DX.Application.Services
                 throw new Exception("Invalid DXDataBlock payload.");
             }
 
-            var processed = await InsertOrUpdateAsync(block, context, ct);
-            return JObject.FromObject(processed);
+            var ids = await InsertOrUpdateAsync(block, context, ct);
+            return ids.Single();
         }
 
-        public async Task<DXDataBlock<DXUnitRecord>> InsertAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = default, CancellationToken ct = default)
+        public async Task<Guid> InsertAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = default, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -248,11 +252,14 @@ namespace IV.DX.Application.Services
 
             EnsureWriteAccessForInsert(block?.Meta?.Type);
 
+            if (!DXMigrationContext.IsMigrating)
+                AssignNewIds(block);
+
             var result = await dxPipelineExecutor.InsertAsync(block!, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
-                TryCreateIdentityOwnershipFromBlock(result.Value);
+                TryCreateIdentityOwnership(block?.Meta?.Type, result.Value);
                 return result.Value;
             }
             else
@@ -262,7 +269,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<DXDataBlock<DXUnitRecord>> UpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        public async Task<Guid> UpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -285,7 +292,7 @@ namespace IV.DX.Application.Services
 
             var result = await dxPipelineExecutor.UpdateAsync(block!, context, ct);
 
-            if (result.IsSuccess && result.Value != null)
+            if (result.IsSuccess)
             {
                 return result.Value;
             }
@@ -339,7 +346,7 @@ namespace IV.DX.Application.Services
             }
         }
 
-        public async Task<DXDataBlock<DXUnitRecord>> InsertOrUpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
+        public async Task<IEnumerable<Guid>> InsertOrUpdateAsync(DXDataBlock<DXUnitRecord> block, DXHandlerBaseContext? context = null, CancellationToken ct = default)
         {
             if (context == null)
             {
@@ -350,7 +357,7 @@ namespace IV.DX.Application.Services
             var typeName = block.Meta?.Type;
             EnsureWriteAccessForInsert(typeName);
 
-            var output = new List<DXUnitRecord>();
+            var output = new List<Guid>();
 
             if (block.Data?.Items != null)
             {
@@ -370,12 +377,11 @@ namespace IV.DX.Application.Services
                         }
                     };
 
-                    var processed = itemIsExisting
+                    var id = itemIsExisting
                         ? await UpdateAsync(singleBlock, context, ct)
                         : await InsertAsync(singleBlock, context, ct);
 
-                    if (processed.Data?.Items != null)
-                        output.AddRange(processed.Data.Items);
+                    output.Add(id);
                 }
             }
 
@@ -393,15 +399,7 @@ namespace IV.DX.Application.Services
                 await DeleteAsync(deleteBlock, context, ct);
             }
 
-            return new DXDataBlock<DXUnitRecord>
-            {
-                Meta = block.Meta!,
-                Data = new DXData<DXUnitRecord>
-                {
-                    Items = output.Count == 0 ? null : output,
-                    Delete = block.Data?.Delete
-                }
-            };
+            return output;
         }
 
         private static string? ExtractTypeName(JObject jObject)
@@ -558,7 +556,7 @@ namespace IV.DX.Application.Services
 
             var ownership = new DXIdentityOwnershipUnit
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 TimeStamp = DateTime.UtcNow,
                 Identity = ctx.IdentityId.Value,
                 DXUnitDefinition = unitDef.Id,
@@ -568,32 +566,48 @@ namespace IV.DX.Application.Services
             genericRepo.Insert(ownership);
         }
 
-        private void TryCreateIdentityOwnershipFromJObject(string? typeName, JObject resultValue)
+
+        private static void AssignNewIds(DXUnit dxUnit)
         {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return;
+            dxUnit.Id = Guid.CreateVersion7();
 
-            var block = resultValue.ToObject<DXDataBlock<DXUnitRecord>>();
-            if (block?.Data?.Items == null)
-                return;
-
-            foreach (var item in block.Data.Items)
+            foreach (var prop in AttributeReader.GetSingleItemInfos(dxUnit))
             {
-                if (item != null && item.Id != Guid.Empty)
-                    TryCreateIdentityOwnership(typeName, item.Id);
+                var element = (DXElement)prop.GetValue(dxUnit)!;
+                element.Id = Guid.CreateVersion7();
+                element.DXUnitId = dxUnit.Id;
+            }
+
+            foreach (var prop in AttributeReader.GetMultiItemInfos(dxUnit))
+            {
+                var container = prop.GetValue(dxUnit)!;
+                var announced = (System.Collections.IEnumerable)container.GetType().GetProperty("Announced")!.GetValue(container)!;
+                foreach (DXElement element in announced)
+                {
+                    element.Id = Guid.CreateVersion7();
+                    element.DXUnitId = dxUnit.Id;
+                }
             }
         }
 
-        private void TryCreateIdentityOwnershipFromBlock(DXDataBlock<DXUnitRecord> block)
+        private static void AssignNewIds(DXDataBlock<DXUnitRecord>? block)
         {
-            var typeName = block.Meta?.Type;
-            if (string.IsNullOrWhiteSpace(typeName) || block.Data?.Items == null)
-                return;
+            if (block?.Data?.Items == null) return;
 
-            foreach (var item in block.Data.Items)
+            foreach (var record in block.Data.Items)
             {
-                if (item != null && item.Id != Guid.Empty)
-                    TryCreateIdentityOwnership(typeName, item.Id);
+                record.Id = Guid.CreateVersion7();
+
+                if (record.DXElements == null) continue;
+                foreach (var elementBlock in record.DXElements.Values)
+                {
+                    if (elementBlock?.Data?.Items == null) continue;
+                    foreach (var elementRecord in elementBlock.Data.Items)
+                    {
+                        elementRecord.Id = Guid.CreateVersion7();
+                        elementRecord.DXUnitId = record.Id;
+                    }
+                }
             }
         }
 

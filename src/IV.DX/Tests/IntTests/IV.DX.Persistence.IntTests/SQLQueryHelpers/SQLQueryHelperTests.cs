@@ -1,4 +1,3 @@
-using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Persistence.SQLQueryHelpers;
 using IV.DX.Shared.IntTests;
@@ -34,7 +33,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         string tableAlias_TPassportUnit_0 = $"T_{dxUnitStartIndex}_0";//TPassportUnit
         string tableAlias_TPositionUnit_0 = $"T_{dxUnitStartIndex + 1}_0";//TPositionUnit        
         string tableAlias_TDocumentUnit_0 = $"T_{dxUnitStartIndex + 2}_0";//TDocumentUnit
-         string tableAlias_TComputerUnit_0 = $"T_{dxUnitStartIndex + 3}_0";//TComputerUnit         
+        string tableAlias_TComputerUnit_0 = $"T_{dxUnitStartIndex + 3}_0";//TComputerUnit         
         string tableAlias_TDeviceUnit_0 = $"T_{dxUnitStartIndex + 4}_0";//TDeviceUnit        
         string tableAlias_TBookUnit_0 = $"T_{dxUnitStartIndex + 5}_0";//TBookUnit   
         string tableAlias_TUserUnit_0 = $"T_{dxUnitStartIndex + 6}_0";//TUserUnit
@@ -57,39 +56,39 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         private void InitData()
         {
             // Init           
-            var user1 = TUserUnitFactory.GetItem(new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"), "Victor", "Suvorov", new DateTime(1989, 9, 5));
-            var user2 = TUserUnitFactory.GetItem(new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"), "Svitlana", "Suvorova", new DateTime(1993, 11, 17));
-            var user3 = TUserUnitFactory.GetItem(new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"), "Pavel", "Plamenev", new DateTime(1980, 1, 1));
+            var user1 = TUserUnitFactory.GetItem("Victor", "Suvorov", new DateTime(1989, 9, 5));
+            var user2 = TUserUnitFactory.GetItem("Svitlana", "Suvorova", new DateTime(1993, 11, 17));
+            var user3 = TUserUnitFactory.GetItem("Pavel", "Plamenev", new DateTime(1980, 1, 1));
 
             users = new List<TUserUnit>() { user1, user2, user3 };
 
-            var passport1 = TPassportUnitFactory.GetItem(new Guid("1f852be3-f851-4807-807f-cfd45a0b4093"), "6bcc2af44aa3", user1);
-            var passport2 = TPassportUnitFactory.GetItem(new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"), "6ca8ae455e82", user2);
-            var passport3 = TPassportUnitFactory.GetItem(new Guid("459276b0-69db-43da-bf9d-c2683c4b4d39"), "4a82ceaa1cff", user3);
+            var passport1 = TPassportUnitFactory.GetItem("6bcc2af44aa3", user1);
+            var passport2 = TPassportUnitFactory.GetItem("6ca8ae455e82", user2);
+            var passport3 = TPassportUnitFactory.GetItem("4a82ceaa1cff", user3);
 
             passports = new List<TPassportUnit>() { passport1, passport2, passport3 };
 
-            var device1 = TDeviceUnitFactory.GetItem(new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7"), "Model1", new Guid("70f86100-bc9c-4b88-8f5f-759cedf85972"), user1);
-            var device2 = TDeviceUnitFactory.GetItem(new Guid("53ced1ab-2582-4aee-b2bc-50e676eebde3"), "Model2", new Guid("487704ea-ee63-41be-9e01-d1841dd472b8"), user1);
-            var device3 = TDeviceUnitFactory.GetItem(new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"), "Model3", new Guid("75d78874-5f39-4e22-bc30-ccc6743f4622"), user2);
-            var device4 = TDeviceUnitFactory.GetItem(new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"), "Model4", new Guid("8f030336-4861-4d9c-980a-38674fa2dcf5"), user2);
-            var device5 = TDeviceUnitFactory.GetItem(new Guid("24d8f6ff-b411-4acc-8a35-5e958ce7f070"), "Model5", new Guid("9966eb62-5e20-4a49-9eb1-e54614abe807"), user3);
-            var device6 = TDeviceUnitFactory.GetItem(new Guid("1c16f974-8e52-408b-9cac-acbb548864fa"), "Model6", new Guid("6b9cab10-692f-4f4c-81b7-570a40d2b561"), user3);
+            var device1 = TDeviceUnitFactory.GetItem("Model1", new Guid("70f86100-bc9c-4b88-8f5f-759cedf85972"), user1);
+            var device2 = TDeviceUnitFactory.GetItem("Model2", new Guid("487704ea-ee63-41be-9e01-d1841dd472b8"), user1);
+            var device3 = TDeviceUnitFactory.GetItem("Model3", new Guid("75d78874-5f39-4e22-bc30-ccc6743f4622"), user2);
+            var device4 = TDeviceUnitFactory.GetItem("Model4", new Guid("8f030336-4861-4d9c-980a-38674fa2dcf5"), user2);
+            var device5 = TDeviceUnitFactory.GetItem("Model5", new Guid("9966eb62-5e20-4a49-9eb1-e54614abe807"), user3);
+            var device6 = TDeviceUnitFactory.GetItem("Model6", new Guid("6b9cab10-692f-4f4c-81b7-570a40d2b561"), user3);
 
             devices = new List<TDeviceUnit>() { device1, device2, device3, device4, device5, device6 };
 
-            var position1 = TPositionUnitFactory.GetItem(new Guid("1f852be3-f851-4807-807f-cfd45a0b4093"), "Junior");
-            var position2 = TPositionUnitFactory.GetItem(new Guid("14c92f6a-88b7-4d72-9777-5f655f0914bf"), "Middle");
-            var position3 = TPositionUnitFactory.GetItem(new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"), "Master");
+            var position1 = TPositionUnitFactory.GetItem("Junior");
+            var position2 = TPositionUnitFactory.GetItem("Middle");
+            var position3 = TPositionUnitFactory.GetItem("Master");
 
             positions = new List<TPositionUnit>() { position1, position2, position3 };
 
-            var document1 = TDocumentUnitFactory.GetItem(new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"), "document1");
-            var document2 = TDocumentUnitFactory.GetItem(new Guid("a844e32e-fcf3-4f7e-b138-19685347a150"), "document2");
-            var document3 = TDocumentUnitFactory.GetItem(new Guid("ccb9da2b-12ea-41c0-96d1-a774a3f4b22b"), "document3");
-            var document4 = TDocumentUnitFactory.GetItem(new Guid("02e1591c-375b-466c-b8fb-0bed19220707"), "document4");
-            var document5 = TDocumentUnitFactory.GetItem(new Guid("6a7c4e0d-1163-41ca-8a1a-e25fe8797100"), "document5");
-            var document6 = TDocumentUnitFactory.GetItem(new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"), "document6");
+            var document1 = TDocumentUnitFactory.GetItem("document1");
+            var document2 = TDocumentUnitFactory.GetItem("document2");
+            var document3 = TDocumentUnitFactory.GetItem("document3");
+            var document4 = TDocumentUnitFactory.GetItem("document4");
+            var document5 = TDocumentUnitFactory.GetItem("document5");
+            var document6 = TDocumentUnitFactory.GetItem("document6");
 
             documents = new List<TDocumentUnit>() { document1, document2, document3, document4, document5, document6 };
 
@@ -100,13 +99,6 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             books = new List<TBookUnit>() { book1, book2, book3 };
         }
 
-        private IEnumerable<DXRelationDefinitionUnit> GetAllRelations()
-        {
-            var result = this._genericRepo.GetDXUnits<DXRelationDefinitionUnit>();
-
-            return result;
-        }
-
         [Fact]
         public void GetUser_UsingPassportSerialNumber_CorrectUser()
         {
@@ -114,24 +106,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Passport).TPassportMainElement.SerialNumber = '6bcc2af44aa3'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\" ON \"{tableAlias_TPassportUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPassportMainElement\" AS \"{tableAlias_TPassportMainElement_0}\" ON \"{tableAlias_TPassportMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPassportUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPassportMainElement_0}\".\"SerialNumber\" = '6bcc2af44aa3'";
 
-            var expectedUser = this.users.Single(x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
 
-            var userExisting = usersExisting.Single();
-
-            Assert.Equal(expectedUser.Id, userExisting.Id);
+            Assert.Equal(new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -141,24 +128,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedPassport = this.passports.Single(x => x.Id == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(dxFilter);
 
             // Checking result
             Assert.Single(passportsExisting);
 
-            var passportExisting = passportsExisting.Single();
-
-            Assert.Equal(expectedPassport.Id, passportExisting.Id);
+            Assert.Equal(new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"), passportsExisting.Single().Id);
         }
 
         [Fact]
@@ -168,24 +150,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Devices).TDeviceMainElement.UUID = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\" ON \"{tableAlias_TDeviceUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TDeviceMainElement\" AS \"{tableAlias_TDeviceMainElement_0}\" ON \"{tableAlias_TDeviceMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TDeviceUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TDeviceMainElement_0}\".\"UUID\" = '9966eb62-5e20-4a49-9eb1-e54614abe807'";
 
-            var expectedUser = this.users.Single(x => x.Id == new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
 
-            var userExisting = usersExisting.Single();
-
-            Assert.Equal(expectedUser.Id, userExisting.Id);
+            Assert.Equal(new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -195,29 +172,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedDevice1 = this.devices.Single(x => x.Id == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
-            var expectedDevice2 = this.devices.Single(x => x.Id == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TDeviceUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var devicesExisting = this._genericRepo.GetDXUnits<TDeviceUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, devicesExisting.Count());
 
-            var passportExisting1 = devicesExisting.Single(x => x.Id == expectedDevice1.Id);
-
-            Assert.Equal(expectedDevice1.Id, passportExisting1.Id);
-
-            var passportExisting2 = devicesExisting.Single(x => x.Id == expectedDevice2.Id);
-
-            Assert.Equal(expectedDevice2.Id, passportExisting2.Id);
+            Assert.Single(devicesExisting, x => x.Id == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
+            Assert.Single(devicesExisting, x => x.Id == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
         }
 
         // TODO: need to update expectedSQLQuery to check.
@@ -227,8 +195,6 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Init
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDeviceUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDeviceUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDeviceUnit\" AS \"{tableAlias_TDeviceUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDeviceUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
-
-            var relations = this.GetAllRelations();
 
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TComputerUnit", SQLQueryBuilder.BaseColumns, dxFilter);
@@ -250,15 +216,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Position).TPositionMainElement.Name = 'Middle'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Middle'";
 
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
@@ -272,24 +236,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Position).TPositionMainElement.Name = 'Master'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
 
-            var expectedUser = this.users.Single(x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Single(usersExisting);
 
-            var userExisting = usersExisting.Single();
-
-            Assert.Equal(expectedUser.Id, userExisting.Id);
+            Assert.Equal(new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -299,15 +258,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Victor' AND U2U(User).TUserMainElement.Surname = 'Suvorov'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Victor'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorov'";
 
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TPositionUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(dxFilter);
 
             // Checking result
@@ -321,24 +278,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPositionUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPositionUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPositionUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedPosition = this.positions.Single(x => x.Id == new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TPositionUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var positionsExisting = this._genericRepo.GetDXUnits<TPositionUnit>(dxFilter);
 
             // Checking result
             Assert.Single(positionsExisting);
 
-            var positionExisting = positionsExisting.Single();
-
-            Assert.Equal(expectedPosition.Id, positionExisting.Id);
+            Assert.Equal(new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"), positionsExisting.Single().Id);
         }
 
         [Fact]
@@ -348,15 +300,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Pavel' AND U2U(User).TUserMainElement.Surname = 'Plamenev'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
 
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TDocumentUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var documentsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(dxFilter);
 
             // Checking result
@@ -370,29 +320,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).TUserMainElement.Name = 'Svitlana' AND U2U(User).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TDocumentUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TDocumentUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TDocumentUnit\" AS \"{tableAlias_TDocumentUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TDocumentUnit_0}\".\"User\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedDocument1 = this.documents.Single(x => x.Id == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
-            var expectedDocument6 = this.documents.Single(x => x.Id == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TDocumentUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
-            var positionsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(dxFilter);
+            // Action
+            var documentsExisting = this._genericRepo.GetDXUnits<TDocumentUnit>(dxFilter);
 
             // Checking result
-            Assert.Equal(2, positionsExisting.Count());
+            Assert.Equal(2, documentsExisting.Count());
 
-            var positionExisting1 = positionsExisting.Single(x => x.Id == expectedDocument1.Id);
-
-            Assert.Equal(expectedDocument1.Id, positionExisting1.Id);
-
-            var positionExisting6 = positionsExisting.Single(x => x.Id == expectedDocument6.Id);
-
-            Assert.Equal(expectedDocument6.Id, positionExisting6.Id);
+            Assert.Single(documentsExisting, x => x.Id == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
+            Assert.Single(documentsExisting, x => x.Id == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
         }
 
         [Fact]
@@ -402,15 +343,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Users).TUserMainElement.Name = 'Pavel' AND U2U(Users).TUserMainElement.Surname = 'Plamenev'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Pavel'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Plamenev'";
 
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(dxFilter);
 
             // Checking result
@@ -424,29 +363,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Users).TUserMainElement.Name = 'Svitlana' AND U2U(Users).TUserMainElement.Surname = 'Suvorova'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TBookUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TBookUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\"\nLEFT JOIN \"TUserMainElement\" AS \"{tableAlias_TUserMainElement_0}\" ON \"{tableAlias_TUserMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TUserMainElement_0}\".\"Name\" = 'Svitlana'  AND  \"{tableAlias_TUserMainElement_0}\".\"Surname\" = 'Suvorova'";
 
-            var expectedBook1 = this.books.Single(x => x.Id == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
-            var expectedBook2 = this.books.Single(x => x.Id == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TBookUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var booksExisting = this._genericRepo.GetDXUnits<TBookUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, booksExisting.Count());
 
-            var bookExisting1 = booksExisting.Single(x => x.Id == expectedBook1.Id);
-
-            Assert.Equal(expectedBook1.Id, bookExisting1.Id);
-
-            var bookExisting2 = booksExisting.Single(x => x.Id == expectedBook2.Id);
-
-            Assert.Equal(expectedBook2.Id, bookExisting2.Id);
+            Assert.Single(booksExisting, x => x.Id == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
+            Assert.Single(booksExisting, x => x.Id == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
         }
 
         [Fact]
@@ -456,15 +386,13 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Books).TBookMainElement.Name = 'book3'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book3'";
 
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
         }
 
@@ -475,29 +403,20 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(Books).TBookMainElement.Name = 'book1'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TUserUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TUserUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\"\nLEFT JOIN \"{tableRelation_TUserUnit_TBookUnit_0}\" AS \"{tableRelation_TUserUnit_TBookUnit_0}\" ON \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Users\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TBookUnit\" AS \"{tableAlias_TBookUnit_0}\" ON \"{tableAlias_TBookUnit_0}\".\"Id\" = \"{tableRelation_TUserUnit_TBookUnit_0}\".\"Books\"\nLEFT JOIN \"TBookMainElement\" AS \"{tableAlias_TBookMainElement_0}\" ON \"{tableAlias_TBookMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TBookUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TBookMainElement_0}\".\"Name\" = 'book1'";
 
-            var expectedUser1 = this.users.Single(x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
-            var expectedUser2 = this.users.Single(x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TUserUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var usersExisting = this._genericRepo.GetDXUnits<TUserUnit>(dxFilter);
 
             // Checking result
             Assert.Equal(2, usersExisting.Count());
 
-            var userExisting1 = usersExisting.Single(x => x.Id == expectedUser1.Id);
-
-            Assert.Equal(expectedUser1.Id, userExisting1.Id);
-
-            var userExisting2 = usersExisting.Single(x => x.Id == expectedUser2.Id);
-
-            Assert.Equal(expectedUser2.Id, userExisting2.Id);
+            Assert.Single(usersExisting, x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
+            Assert.Single(usersExisting, x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
         }
 
         [Fact]
@@ -507,24 +426,19 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             var dxFilter = "U2U(User).U2U(Position).TPositionMainElement.Name = 'Master'";
             string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" = 'Master'";
 
-            var expectedPassport = this.passports.Single(x => x.Id == new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"));
-            var relations = this.GetAllRelations();
-
             // Action
             var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);
 
             // Checking result
             Assert.Equal(expectedSQLQuery, query);
 
-            // Action            
+            // Action
             var passportsExisting = this._genericRepo.GetDXUnits<TPassportUnit>(dxFilter);
 
             // Checking result
             Assert.Single(passportsExisting);
 
-            var passportExisting = passportsExisting.Single();
-
-            Assert.Equal(expectedPassport.Id, passportExisting.Id);
+            Assert.Equal(new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"), passportsExisting.Single().Id);
         }
 
         [Fact]
@@ -535,8 +449,6 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
                 // Init
                 var dxFilter = $"U2U(User).U2U(Position).TPositionMainElement.Name {operation} 'Master'";
                 string expectedSQLQuery = $"SELECT\n\"{tableAlias_TPassportUnit_0}\".\"Id\" AS \"Id\",\n\"{tableAlias_TPassportUnit_0}\".\"TimeStamp\" AS \"TimeStamp\"\nFROM\n\"TPassportUnit\" AS \"{tableAlias_TPassportUnit_0}\"\nLEFT JOIN \"TUserUnit\" AS \"{tableAlias_TUserUnit_0}\" ON \"{tableAlias_TUserUnit_0}\".\"Id\" = \"{tableAlias_TPassportUnit_0}\".\"User\"\nLEFT JOIN \"TPositionUnit\" AS \"{tableAlias_TPositionUnit_0}\" ON \"{tableAlias_TPositionUnit_0}\".\"User\" = \"{tableAlias_TUserUnit_0}\".\"Id\"\nLEFT JOIN \"TPositionMainElement\" AS \"{tableAlias_TPositionMainElement_0}\" ON \"{tableAlias_TPositionMainElement_0}\".\"DXUnitId\" = \"{tableAlias_TPositionUnit_0}\".\"Id\"\nWHERE\n\"{tableAlias_TPositionMainElement_0}\".\"Name\" {operation} 'Master'";
-
-                var relations = this.GetAllRelations();
 
                 // Action
                 var query = this._sqlQueryBuilder.BuildSQLExpression("TPassportUnit", SQLQueryBuilder.BaseColumns, dxFilter);

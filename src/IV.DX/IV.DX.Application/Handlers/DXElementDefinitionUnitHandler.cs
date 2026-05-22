@@ -247,7 +247,7 @@ namespace IV.DX.Application.Handlers
         {
             var revertedDXUnitToUnitRelationElement = dxElementToUnitRelationElement.GetReverted();
 
-            revertedDXUnitToUnitRelationElement.Id = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.Id = Guid.CreateVersion7();
             revertedDXUnitToUnitRelationElement.DXUnitId = dxElementToUnitRelationElement.TargetDXUnit;
 
             dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitToUnitRelationElement);
@@ -272,7 +272,7 @@ namespace IV.DX.Application.Handlers
             DXUnitDefinitionUnit dxUnitRelated,
             DXRelationTypeEnum relationType)
         {
-            var id = Guid.NewGuid();
+            var id = Guid.CreateVersion7();
 
             string? relationColumnNameLeft = null;
             string? relationColumnNameRight = null;

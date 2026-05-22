@@ -37,7 +37,7 @@ namespace IV.DX.Application.Services
             var now = DateTime.UtcNow;
             var identity = new DXIdentityUnit
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 TimeStamp = now,
                 Name = string.IsNullOrWhiteSpace(request.Name) ? request.Subject : request.Name
             };
@@ -46,7 +46,7 @@ namespace IV.DX.Application.Services
 
             var identityLogin = new DXIdentityLoginUnit
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 TimeStamp = now,
                 Subject = request.Subject,
                 SecretHash = request.Password,
@@ -259,9 +259,9 @@ namespace IV.DX.Application.Services
 
             return new DXAuthSessionUnit
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 TimeStamp = now,
-                SessionId = Guid.NewGuid(),
+                SessionId = Guid.CreateVersion7(),
                 RefreshTokenHash = refreshToken,
                 ExpiresAt = now.AddDays(refreshLifetimeDays),
                 CreatedAt = now,

@@ -317,7 +317,7 @@ namespace IV.DX.Application.Handlers
             DXColumnDefinitionElement enumColumn,
             DXObjectEnumElement columnWithEnumValue)
         {
-            var objId = Guid.NewGuid();
+            var objId = Guid.CreateVersion7();
 
             var result = new DXRelationDefinitionUnit()
             {
@@ -363,7 +363,7 @@ namespace IV.DX.Application.Handlers
             {
                 var objectIdColumnDesc = new DXColumnDefinitionElement()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.CreateVersion7(),
                     DXUnitId = objectInfoIncome.Id
                 };
 

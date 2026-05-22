@@ -87,19 +87,17 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         [Fact]
         public async Task DerivedDXUnitType_WhenInsertingNewTDeviceUnit_EqualsTDeviceUnitDefinitionId()
         {
-            var id     = new Guid("7987d811-4626-4ea7-b80d-9798be2ae389");
-            var device = TDeviceUnitFactory.GetItem(
-                id,
+            var device = TDeviceUnitFactory.GetItem(               
                 model: "TestModelDevice",
                 uuid:  Guid.NewGuid(),
                 user:  new TUserUnit { Id = ExistingUserId });
 
-            await _service.InsertAsync(device);
+            var insertedId = await _service.InsertAsync(device);
 
             var columns = new Dictionary<string, string> { ["DerivedDXUnitType"] = "DerivedDXUnitType" };
             var row     = _rawReader.Get("TDeviceUnit", columns)
                                     .Data.Items
-                                    .SingleOrDefault(x => x.Id == id);
+                                    .SingleOrDefault(x => x.Id == insertedId);
 
             Assert.NotNull(row);
             Assert.Equal(TDeviceUnitDefinitionId, Guid.Parse(row.Fields["DerivedDXUnitType"].ToString()));
@@ -112,26 +110,22 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         [Fact]
         public async Task DerivedDXUnitType_WhenInsertingTComputerUnit_EqualsTComputerUnitDefinitionIdInTDeviceUnitTable()
         {
-            var id = new Guid("e828afee-3986-4a4a-ad31-36fc6224e280");
             var computer = new TComputerUnit
             {
-                Id   = id,
                 User = ExistingUserId,
                 TDeviceMainElement = new TDeviceMainElement
                 {
-                    Id       = Guid.NewGuid(),
-                    DXUnitId = id,
-                    Model    = "TestModelComputer",
-                    UUID     = Guid.NewGuid()
+                    Model = "TestModelComputer",
+                    UUID  = Guid.NewGuid()
                 }
             };
 
-            await _service.InsertAsync(computer);
+            var insertedId = await _service.InsertAsync(computer);
 
             var columns = new Dictionary<string, string> { ["DerivedDXUnitType"] = "DerivedDXUnitType" };
             var row     = _rawReader.Get("TDeviceUnit", columns)
                                     .Data.Items
-                                    .SingleOrDefault(x => x.Id == id);
+                                    .SingleOrDefault(x => x.Id == insertedId);
 
             Assert.NotNull(row);
             Assert.Equal(TComputerUnitDefinitionId, Guid.Parse(row.Fields["DerivedDXUnitType"].ToString()));

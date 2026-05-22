@@ -33,14 +33,8 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public void UpdateDXUnitDefinition_UsingTargetModeForColumnDefinitionWithEmptyDefinitions_Ok()
         {
             // Init
-            var dxElementDescDXUnitId = new Guid("f0ff00d1-303e-42e6-9769-e482b0bf79ff");
-            var dxUnitDescDXUnitId = new Guid("f0ff00d1-303e-42e6-9769-e482b0bf79aa");
-            var testDXUnitId = new Guid("aaff00d1-303e-42e6-9769-e482b0bf79ff");
-
             var intCln = new DXColumnDefinitionElement()
             {
-                Id = Guid.NewGuid(),
-                DXUnitId = dxElementDescDXUnitId,
                 Name = "IntCln",
                 ColumnType = DXColumnTypeEnum.Int
             };
@@ -56,7 +50,6 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             DXElementDefinitionUnit dxElementDescObject = new DXElementDefinitionUnit()
             {
-                Id = dxElementDescDXUnitId,
                 Name = "TestDXElement",
                 DXTitleExpression = "Id",
 
@@ -72,32 +65,14 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             DXUnitDefinitionUnit dxUnitDescObject = new DXUnitDefinitionUnit()
             {
-                Id = dxUnitDescDXUnitId,
                 Name = "TestDXUnit",
-                DXTitleExpression = "Id",
-
-                DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
-                {
-                    Announced = new HashSet<DXElementInUnitDefinitionElement>()
-                    {
-                        new DXElementInUnitDefinitionElement()
-                        {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = dxUnitDescDXUnitId,
-                            RelationType = DXElementInUnitTypeEnum.SingleMandatory,
-                            DXElementDefinitionUnit = dxElementDescObject.Id
-                        }
-                    }
-                }
+                DXTitleExpression = "Id"
             };
 
             var item = new TestDXUnit()
             {
-                Id = testDXUnitId,
                 TestDXElement = new TestDXElement()
                 {
-                    Id = Guid.NewGuid(),
-                    DXUnitId = testDXUnitId,
                     IntCln = 123
                 }
             };
@@ -116,6 +91,19 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
             // Action
             this._dataService.InsertOrUpdateAsync(dxElementDescObject).Wait();
+
+            dxUnitDescObject.DXElementInUnitDefinitionElement = new DXMultiElementsContainer<DXElementInUnitDefinitionElement>()
+            {
+                Announced = new HashSet<DXElementInUnitDefinitionElement>()
+                {
+                    new DXElementInUnitDefinitionElement()
+                    {
+                        RelationType = DXElementInUnitTypeEnum.SingleMandatory,
+                        DXElementDefinitionUnit = dxElementDescObject.Id
+                    }
+                }
+            };
+
             this._dataService.InsertOrUpdateAsync(dxUnitDescObject).Wait();
 
             this._dataService.InsertOrUpdateAsync(item).Wait();
@@ -180,27 +168,20 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public async Task UpdateDXUnit_UsingAddedDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
-            var dxUnitId = new Guid("622c2056-9797-47ab-82c2-5c3eeb6a68ce");
-            var dxElementToAddId = new Guid("d3b5e1e2-3f3a-4f7c-8f0c-5e2b8e6f4a1c");
-            var dxElementToDeleteId = new Guid("4b95f498-f0cb-407d-be16-e7a1518fc070");
-
             var dxElementToAdd = new DXElementDefinitionUnit()
             {
-                Id = dxElementToAddId,
                 Name = "TestDXElementToAdde7a1518fc070",
                 DXTitleExpression = "Name"
             };
 
             var dxElementToDelete = new DXElementDefinitionUnit()
             {
-                Id = dxElementToDeleteId,
                 Name = "TestDXElementToDelete5e2b8e6f4a1c",
                 DXTitleExpression = "Name"
             };
 
             var dxUnit = new DXUnitDefinitionUnit()
             {
-                Id = dxUnitId,
                 Name = "TestDXUnit5c3eeb6a68ce",
                 DXTitleExpression = "Name"
             };
@@ -243,7 +224,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitId);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
 
             Assert.Single(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
 
@@ -264,7 +245,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(existingDXUnit).Wait();
 
             // Assert
-            existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitId);
+            existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
             Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
 
@@ -273,19 +254,24 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public async Task DeleteDXUnit_WithDXElements_Ok()
         {
             // Init
-            var dxUnitId = new Guid("1c4e8f3e-3f4b-4c6a-9f7e-8f9e7d6c5b4a");
-            var dxElementId = new Guid("02449441-f8c4-483a-950f-6b47f2f216b4");
-
             var dxElement = new DXElementDefinitionUnit()
             {
-                Id = dxElementId,
                 Name = "TestDXElement6b47f2f216b4",
                 DXTitleExpression = "Name"
             };
 
-            var dxUnit = new DXUnitDefinitionUnit()
+            DXUnitDefinitionUnit dxUnit = null;
+
+            base._finalizationAction = () =>
             {
-                Id = dxUnitId,
+                if (dxUnit != null) this._dataService.DeleteAsync(dxUnit).Wait();
+                this._dataService.DeleteAsync(dxElement).Wait();
+            };
+
+            this._dataService.InsertAsync(dxElement).Wait();
+
+            dxUnit = new DXUnitDefinitionUnit()
+            {
                 Name = "TestDXUnit8f9e7d6c5b4a",
                 DXTitleExpression = "Name",
 
@@ -295,7 +281,6 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     {
                         new DXElementInUnitDefinitionElement()
                         {
-                            Id = Guid.NewGuid(),
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement.Id
                         }
@@ -303,20 +288,13 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            base._finalizationAction = () =>
-            {
-                this._dataService.DeleteAsync(dxUnit).Wait();
-                this._dataService.DeleteAsync(dxElement).Wait();
-            };
-
-            this._dataService.InsertAsync(dxElement).Wait();
             this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
             this._dataService.DeleteAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitId);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
             Assert.Null(existingDXUnit);
 
             var existingDXElement = await _dataReader.GetItemAsync<DXElementDefinitionUnit>(dxElement.Id);
@@ -327,36 +305,40 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public async Task UpdateDXUnit_UsingMoreThanOnelDeletedDXElementsWithTargetMode_Ok()
         {
             // Init
-            var dxUnitId = new Guid("1873aa67-8f3e-4044-8659-c44f7a2dd5f6");
-            var dxElementID1 = new Guid("f8f68404-6143-433e-aa2c-f45215f6be1c");
-            var dxElementID2 = new Guid("63c28d39-1561-4c97-b212-fa7db5443a11");
-            var dxElementID3 = new Guid("8ae093df-d6b8-4d13-acc7-801b464bfb0f");
-
-
             var dxElement1 = new DXElementDefinitionUnit()
             {
-                Id = dxElementID1,
                 DXTitleExpression = "Name",
                 Name = "TestDXElementf45215f6be1c"
             };
 
             var dxElement2 = new DXElementDefinitionUnit()
             {
-                Id = dxElementID2,
                 Name = "TestDXElementfa7db5443a11",
                 DXTitleExpression = "Name"
             };
 
             var dxElement3 = new DXElementDefinitionUnit()
             {
-                Id = dxElementID3,
                 Name = "TestDXElement801b464bfb0f",
                 DXTitleExpression = "Name"
             };
 
-            var dxUnit = new DXUnitDefinitionUnit()
+            DXUnitDefinitionUnit dxUnit = null;
+
+            base._finalizationAction = () =>
             {
-                Id = dxUnitId,
+                if (dxUnit != null) this._dataService.DeleteAsync(dxUnit).Wait();
+                this._dataService.DeleteAsync(dxElement1).Wait();
+                this._dataService.DeleteAsync(dxElement2).Wait();
+                this._dataService.DeleteAsync(dxElement3).Wait();
+            };
+
+            this._dataService.InsertAsync(dxElement1).Wait();
+            this._dataService.InsertAsync(dxElement2).Wait();
+            this._dataService.InsertAsync(dxElement3).Wait();
+
+            dxUnit = new DXUnitDefinitionUnit()
+            {
                 Name = "TestDXUnitc44f7a2dd5f6",
                 DXTitleExpression = "Name",
 
@@ -366,22 +348,16 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                     {
                         new DXElementInUnitDefinitionElement()
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = dxUnitId,
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement1.Id
                         },
                         new DXElementInUnitDefinitionElement()
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = dxUnitId,
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement2.Id
                         },
                         new DXElementInUnitDefinitionElement()
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = dxUnitId,
                             RelationType = DXElementInUnitTypeEnum.SingleMandatory,
                             DXElementDefinitionUnit = dxElement3.Id
                         }
@@ -389,17 +365,6 @@ namespace IV.DX.Application.IntTests.DataServiceTests
                 }
             };
 
-            base._finalizationAction = () =>
-            {
-                this._dataService.DeleteAsync(dxUnit).Wait();
-                this._dataService.DeleteAsync(dxElement1).Wait();
-                this._dataService.DeleteAsync(dxElement2).Wait();
-                this._dataService.DeleteAsync(dxElement3).Wait();
-            };
-
-            this._dataService.InsertAsync(dxElement1).Wait();
-            this._dataService.InsertAsync(dxElement2).Wait();
-            this._dataService.InsertAsync(dxElement3).Wait();
             this._dataService.InsertAsync(dxUnit).Wait();
 
             // Action
@@ -413,7 +378,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             this._dataService.UpdateAsync(dxUnit).Wait();
 
             // Assert
-            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnitId);
+            var existingDXUnit = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(dxUnit.Id);
             Assert.Empty(existingDXUnit.DXElementInUnitDefinitionElement.Announced);
         }
     }

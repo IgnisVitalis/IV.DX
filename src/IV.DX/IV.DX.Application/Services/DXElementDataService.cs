@@ -13,13 +13,16 @@ namespace IV.DX.Application.Services
             return Task.FromResult(dxElementGenericRepo.GetItems<T>(dxUnitTypeName, dxFilter));
         }
 
-        public Task<DXDataBlock<DXElementRecord>> InsertOrUpdateAsync(DXDataBlock<DXElementRecord> block, CancellationToken ct = default)
+        public Task<Guid> InsertOrUpdateAsync(DXDataBlock<DXElementRecord> block, CancellationToken ct = default)
         {
             ArgumentNullException.ThrowIfNull(block);
 
-            dxElementCoreRepository.InsertOrUpdate(block);
+            var item = block.Data?.Items?.FirstOrDefault();
+            if (item != null && item.Id == Guid.Empty)
+                item.Id = Guid.CreateVersion7();
 
-            return Task.FromResult(block);
+            var id = dxElementCoreRepository.InsertOrUpdate(block);
+            return Task.FromResult(id);
         }
     }
 }

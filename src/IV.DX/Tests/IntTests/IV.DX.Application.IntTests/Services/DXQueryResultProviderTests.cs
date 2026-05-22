@@ -38,17 +38,13 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetAsync_WithFilterExpression_ReturnsOnlyMatchingItems()
         {
             var now = DateTime.UtcNow;
-            var targetId = Guid.NewGuid();
-            var otherId = Guid.NewGuid();
             var targetName = $"FltTarget_{Guid.NewGuid():N}";
 
             var userUnitDef = _structureCache.GetDXUnit("TUserUnit");
 
-            await _dataService.InsertAsync(TUserUnitFactory.GetItem(targetId, targetName, "Test", now.Date));
-            await _dataService.InsertAsync(TUserUnitFactory.GetItem(otherId, $"FltOther_{Guid.NewGuid():N}", "Test", now.Date));
-
-            var queryId = Guid.NewGuid();
-            await InsertQueryUnitAsync(queryId, userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{targetName}'");
+            var targetId = await _dataService.InsertAsync(TUserUnitFactory.GetItem(targetName, "Test", now.Date));
+            var otherId = await _dataService.InsertAsync(TUserUnitFactory.GetItem($"FltOther_{Guid.NewGuid():N}", "Test", now.Date));
+            var queryId = await InsertQueryUnitAsync(userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{targetName}'");
 
             try
             {
@@ -61,7 +57,7 @@ namespace IV.DX.Application.IntTests.Services
                 var result = await _queryProvider.GetAsync(queryId);
                 Assert.NotNull(result);
 
-                var ids = ExtractContentIds(result!);
+                var ids = ExtractContentIds(result);
                 Assert.Contains(targetId, ids);
                 Assert.DoesNotContain(otherId, ids);
             }
@@ -77,15 +73,12 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetAsync_WithFilterExpression_WhenExpressionMatchesNothing_DoesNotReturnItem()
         {
             var now = DateTime.UtcNow;
-            var itemId = Guid.NewGuid();
             var nonExistentName = $"NeverExists_{Guid.NewGuid():N}";
 
             var userUnitDef = _structureCache.GetDXUnit("TUserUnit");
 
-            await _dataService.InsertAsync(TUserUnitFactory.GetItem(itemId, $"FltNoMatch_{Guid.NewGuid():N}", "Test", now.Date));
-
-            var queryId = Guid.NewGuid();
-            await InsertQueryUnitAsync(queryId, userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{nonExistentName}'");
+            var itemId = await _dataService.InsertAsync(TUserUnitFactory.GetItem($"FltNoMatch_{Guid.NewGuid():N}", "Test", now.Date));
+            var queryId = await InsertQueryUnitAsync(userUnitDef.Id, filterExpression: $"TUserMainElement.Name = '{nonExistentName}'");
 
             try
             {
@@ -98,7 +91,7 @@ namespace IV.DX.Application.IntTests.Services
                 var result = await _queryProvider.GetAsync(queryId);
                 Assert.NotNull(result);
 
-                var ids = ExtractContentIds(result!);
+                var ids = ExtractContentIds(result);
                 Assert.DoesNotContain(itemId, ids);
             }
             finally
@@ -116,13 +109,10 @@ namespace IV.DX.Application.IntTests.Services
 
             var now = DateTime.UtcNow;
 
-            var unitDefinitionId = Guid.NewGuid();
-            var columnDefinitionId = Guid.NewGuid();
             var unitName = $"DXQueryMaskedSecretUnit_{Guid.NewGuid():N}";
 
             var unitDefinition = new DXUnitDefinitionUnit
             {
-                Id = unitDefinitionId,
                 TimeStamp = now,
                 Name = unitName,
                 DXTitleExpression = "Secret",
@@ -133,8 +123,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXColumnDefinitionElement
                         {
-                            Id = columnDefinitionId,
-                            DXUnitId = unitDefinitionId,
                             TimeStamp = now,
                             Name = "Secret",
                             AllowNull = false,
@@ -144,10 +132,9 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(unitDefinition);
+            var unitDefId = await _dataService.InsertOrUpdateAsync(unitDefinition);
             await cache.RefreshAsync();
 
-            var instanceId = Guid.NewGuid();
             var plaintext = "super-secret";
 
             var insertBlock = new DXDataBlock<DXUnitRecord>
@@ -163,7 +150,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXUnitRecord
                         {
-                            Id = instanceId,
                             TimeStamp = now,
                             Fields = new Dictionary<string, JToken>
                             {
@@ -174,25 +160,19 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertAsync(insertBlock);
-
-            var queryId = Guid.NewGuid();
-            var queryColumnId = Guid.NewGuid();
+            var instanceId = await _dataService.InsertAsync(insertBlock);
 
             var query = new DXQueryUnit
             {
-                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
-                DXUnitDefinition = unitDefinitionId,
+                DXUnitDefinition = unitDefId,
                 DXQueryColumnElement = new DXMultiElementsContainer<DXQueryColumnElement>
                 {
                     Announced = new HashSet<DXQueryColumnElement>
                     {
                         new DXQueryColumnElement
                         {
-                            Id = queryColumnId,
-                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "Secret",
                             Expression = "Secret",
@@ -202,7 +182,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(query);
+            var queryId = await _dataService.InsertOrUpdateAsync(query);
 
             var result = await _queryProvider.GetAsync(queryId);
 
@@ -236,23 +216,17 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetAsync_WithTransitiveRelationPathExpression_ReturnsLinkedFieldValue()
         {
             var now = DateTime.UtcNow;
-            var userId = Guid.NewGuid();
-            var passportId = Guid.NewGuid();
-            var positionId = Guid.NewGuid();
-            var queryId = Guid.NewGuid();
-
             var passportUnitDef = _structureCache.GetDXUnit("TPassportUnit");
 
-            var position = TPositionUnitFactory.GetItem(positionId, "SeniorEngineer");
-            position.User = userId;
+            var userId = await _dataService.InsertAsync(TUserUnitFactory.GetItem($"TUser_{Guid.NewGuid():N}", "Test", now.Date));
+            var passportId = await _dataService.InsertAsync(TPassportUnitFactory.GetItem("SERIAL-TRANSITIVE", new TUserUnit { Id = userId }));
 
-            await _dataService.InsertAsync(TUserUnitFactory.GetItem(userId, $"TUser_{Guid.NewGuid():N}", "Test", now.Date));
-            await _dataService.InsertAsync(TPassportUnitFactory.GetItem(passportId, "SERIAL-TRANSITIVE", new TUserUnit { Id = userId }));
-            await _dataService.InsertAsync(position);
+            var position = TPositionUnitFactory.GetItem("SeniorEngineer");
+            position.User = userId;
+            var positionId = await _dataService.InsertAsync(position);
 
             var query = new DXQueryUnit
             {
-                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = passportUnitDef.Id,
@@ -262,8 +236,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "SerialNumber",
                             Expression = "TPassportMainElement.SerialNumber",
@@ -271,8 +243,6 @@ namespace IV.DX.Application.IntTests.Services
                         },
                         new DXQueryColumnElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "PositionName",
                             Expression = "U2U(User).U2U(Position).TPositionMainElement.Name",
@@ -282,7 +252,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(query);
+            var queryId = await _dataService.InsertOrUpdateAsync(query);
 
             try
             {
@@ -360,11 +330,9 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetDXTitleExpressionsAsync_WhenAllowedOwnedOnly_AndNoOwnership_ReturnsEmpty()
         {
             var identityId = Guid.NewGuid();
-            var recordId = Guid.NewGuid();
 
-            // Insert a TUserUnit record as system so there is something to potentially see
-            await _dataService.InsertAsync(
-                TUserUnitFactory.GetItem(recordId, "QRP", "OwnedTest", DateTime.UtcNow.Date));
+            var recordId = await _dataService.InsertAsync(
+                TUserUnitFactory.GetItem("QRP", "OwnedTest", DateTime.UtcNow.Date));
 
             try
             {
@@ -393,27 +361,21 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetAsync_WithSelfRelationOnRootUnit_NonSelfU2URelationResolvesCorrectly()
         {
             var now = DateTime.UtcNow;
-            var managerId = Guid.NewGuid();
-            var userId = Guid.NewGuid();
-            var positionId = Guid.NewGuid();
-            var queryId = Guid.NewGuid();
-
             var userUnitDef = _structureCache.GetDXUnit("TUserUnit");
 
-            var manager = TUserUnitFactory.GetItem(managerId, $"TManager_{Guid.NewGuid():N}", "Test", now.Date);
-            var subordinate = TUserUnitFactory.GetItem(userId, $"TSubordinate_{Guid.NewGuid():N}", "Test", now.Date);
+            var manager = TUserUnitFactory.GetItem($"TManager_{Guid.NewGuid():N}", "Test", now.Date);
+            var managerId = await _dataService.InsertAsync(manager);
+
+            var subordinate = TUserUnitFactory.GetItem($"TSubordinate_{Guid.NewGuid():N}", "Test", now.Date);
             subordinate.Manager = managerId;
+            var userId = await _dataService.InsertAsync(subordinate);
 
-            var position = TPositionUnitFactory.GetItem(positionId, "SelfRelationTestPosition");
+            var position = TPositionUnitFactory.GetItem("SelfRelationTestPosition");
             position.User = userId;
-
-            await _dataService.InsertAsync(manager);
-            await _dataService.InsertAsync(subordinate);
-            await _dataService.InsertAsync(position);
+            var positionId = await _dataService.InsertAsync(position);
 
             var query = new DXQueryUnit
             {
-                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = userUnitDef.Id,
@@ -424,8 +386,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "PositionName",
                             Expression = "U2U(Position).TPositionMainElement.Name",
@@ -435,7 +395,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(query);
+            var queryId = await _dataService.InsertOrUpdateAsync(query);
 
             try
             {
@@ -474,31 +434,24 @@ namespace IV.DX.Application.IntTests.Services
         public async Task GetAsync_WithTransitiveRelationToDerivedUnitType_ReturnsDerivedTypeName()
         {
             var now = DateTime.UtcNow;
-            var userId = Guid.NewGuid();
-            var computerId = Guid.NewGuid();
-            var queryId = Guid.NewGuid();
-
             var userUnitDef = _structureCache.GetDXUnit("TUserUnit");
+
+            var userId = await _dataService.InsertAsync(TUserUnitFactory.GetItem($"TUser_{Guid.NewGuid():N}", "Test", now.Date));
 
             var computer = new TComputerUnit
             {
-                Id = computerId,
                 User = userId,
                 TDeviceMainElement = new TDeviceMainElement
                 {
-                    Id = Guid.NewGuid(),
-                    DXUnitId = computerId,
                     Model = "TransitiveTestComputer",
                     UUID = Guid.NewGuid()
                 }
             };
 
-            await _dataService.InsertAsync(TUserUnitFactory.GetItem(userId, $"TUser_{Guid.NewGuid():N}", "Test", now.Date));
-            await _dataService.InsertAsync(computer);
+            var computerId = await _dataService.InsertAsync(computer);
 
             var query = new DXQueryUnit
             {
-                Id = queryId,
                 TimeStamp = now,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = userUnitDef.Id,
@@ -508,8 +461,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = queryId,
                             TimeStamp = now,
                             Name = "DeviceTypeName",
                             Expression = "U2U(Devices).U2U(DerivedDXUnitType).Name",
@@ -519,7 +470,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(query);
+            var queryId = await _dataService.InsertOrUpdateAsync(query);
 
             try
             {
@@ -559,11 +510,10 @@ namespace IV.DX.Application.IntTests.Services
             return contentBlock?.Data?.Items?.Select(x => x.Id).ToHashSet() ?? new HashSet<Guid>();
         }
 
-        private async Task InsertQueryUnitAsync(Guid queryId, Guid unitDefinitionId, string filterExpression = null)
+        private async Task<Guid> InsertQueryUnitAsync(Guid unitDefinitionId, string filterExpression = null)
         {
             var query = new DXQueryUnit
             {
-                Id = queryId,
                 TimeStamp = DateTime.UtcNow,
                 Name = $"Q_{Guid.NewGuid():N}",
                 DXUnitDefinition = unitDefinitionId,
@@ -574,8 +524,6 @@ namespace IV.DX.Application.IntTests.Services
                     {
                         new DXQueryColumnElement
                         {
-                            Id = Guid.NewGuid(),
-                            DXUnitId = queryId,
                             TimeStamp = DateTime.UtcNow,
                             Name = "Name",
                             Expression = "TUserMainElement.Name",
@@ -585,7 +533,7 @@ namespace IV.DX.Application.IntTests.Services
                 }
             };
 
-            await _dataService.InsertOrUpdateAsync(query);
+            return await _dataService.InsertOrUpdateAsync(query);
         }
 
     }

@@ -1,5 +1,6 @@
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Application.Contracts.Runtime;
+using IV.DX.Kernel;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
 using IV.DX.Persistence.Contracts.Abstractions;
@@ -66,7 +67,7 @@ namespace IV.DX.Application
 
                 return new DXMigrationScriptsUnit
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.CreateVersion7(),
                     FilePath = s.FileName,
                     Name = meta.Name,
                     Version = meta.Version,
@@ -172,6 +173,7 @@ namespace IV.DX.Application
             _logger.LogDebug("Waiting to acquire local migration lock.");
             await _lock.WaitAsync(ct).ConfigureAwait(false);
             IAsyncDisposable? distributedLockLease = null;
+            var startedMigration = !DXMigrationContext.IsMigrating;
 
             try
             {
@@ -182,11 +184,16 @@ namespace IV.DX.Application
                     SubjectId = "system:migration",
                     IsSystem = true
                 });
+                if (startedMigration)
+                    DXMigrationContext.Start();
                 _logger.LogDebug("Migration locks acquired. Executing migration action.");
                 await action().ConfigureAwait(false);
             }
             finally
             {
+                if (startedMigration)
+                    DXMigrationContext.Stop();
+
                 if (distributedLockLease != null)
                 {
                     await distributedLockLease.DisposeAsync().ConfigureAwait(false);
@@ -303,7 +310,7 @@ namespace IV.DX.Application
 
                 var content = ResourceReader.ReadEmbeddedText(assembly, fullResourcePath);
 
-                var id = Guid.NewGuid();
+                var id = Guid.CreateVersion7();
 
                 return new DXMigrationScriptsUnit
                 {
@@ -333,7 +340,7 @@ namespace IV.DX.Application
                                throw new FormatException(
                                    $"Script name '{fi.Name}' has wrong format. Expected '<Version>_<Build>_<Number>_<Application>_<Name>.<Extention>'.");
 
-                           var id = Guid.NewGuid();
+                           var id = Guid.CreateVersion7();
                            return new DXMigrationScriptsUnit
                            {
                                Id = id,

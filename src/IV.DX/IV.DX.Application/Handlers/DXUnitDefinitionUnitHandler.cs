@@ -365,7 +365,7 @@ namespace IV.DX.Application.Handlers
 
             var revertedDXUnitToUnitRelationElement = dxUnitToUnitRelationElement.GetReverted();
 
-            revertedDXUnitToUnitRelationElement.Id = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.Id = Guid.CreateVersion7();
             revertedDXUnitToUnitRelationElement.DXUnitId = dxUnitToUnitRelationElement.TargetDXUnit;
 
             dxElementGenericRepo.Insert("DXUnitDefinitionUnit", revertedDXUnitToUnitRelationElement);
@@ -375,7 +375,7 @@ namespace IV.DX.Application.Handlers
         {
             var revertedDXUnitToUnitRelationElement = dxUnitToElementRelationElement.GetReverted();
 
-            revertedDXUnitToUnitRelationElement.Id = Guid.NewGuid();
+            revertedDXUnitToUnitRelationElement.Id = Guid.CreateVersion7();
             revertedDXUnitToUnitRelationElement.DXUnitId = dxUnitToElementRelationElement.TargetDXElement;
 
             dxElementGenericRepo.Insert("DXElementDefinitionUnit", revertedDXUnitToUnitRelationElement);
@@ -534,7 +534,7 @@ namespace IV.DX.Application.Handlers
 
         private DXRelationDefinitionUnit GetDXElementsInDXUnitElementsRelationObject(DXUnitDefinitionUnit dxUnit, DXElementDefinitionUnit dxElement, DXRelationTypeEnum relationType)
         {
-            var id = Guid.NewGuid();
+            var id = Guid.CreateVersion7();
 
             return new DXRelationDefinitionUnit()
             {
@@ -558,7 +558,7 @@ namespace IV.DX.Application.Handlers
             DXUnitDefinitionUnit dxUnitRelated,
             DXRelationTypeEnum relationType)
         {
-            var id = Guid.NewGuid();
+            var id = Guid.CreateVersion7();
 
             string? relationColumnNameLeft = null;
             string? relationColumnNameRight = null;
@@ -621,7 +621,7 @@ namespace IV.DX.Application.Handlers
             DXElementDefinitionUnit dxElementRelated,
             DXRelationTypeEnum relationType)
         {
-            var id = Guid.NewGuid();
+            var id = Guid.CreateVersion7();
 
             string? relationColumnNameLeft = null;
             string? relationColumnNameRight = null;
@@ -725,7 +725,7 @@ namespace IV.DX.Application.Handlers
         {
             return new DXUnitToUnitRelationElement()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 DXUnitId = dxUnit.Id,
                 OwnRelationName = dxUnit.Name + "Items",
                 RelationType = DXRelationTypeEnum.ManyToOne,
