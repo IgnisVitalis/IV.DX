@@ -294,14 +294,14 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
     "Items": [
       {
         "Type": "DXElementInUnitTypeEnum",
-        "Id": "56cfe59b-069a-4bc6-ac44-59cac46d7153",
+        "Id": "018fa546-a1b6-78d8-b328-b2f2c17231de",
         "TimeStamp": "2021-10-02T00:00:00",
         "Key": 1,
         "Value": "SingleMandatory"
       },
       {
         "Type": "DXElementInUnitTypeEnum",
-        "Id": "08e793f0-07c9-4fc5-818f-515d74731b65",
+        "Id": "018fa546-a59e-728f-936a-e2ea0b18b5c6",
         "TimeStamp": "2021-10-02T00:00:00",
         "Key": 2,
         "Value": "SingleOptional"
@@ -326,7 +326,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "Id": "72f6f3f3-e55f-4a24-915d-893b69932f67",
+        "Id": "018fa547-1ace-701a-9107-dbe3b4a261ce",
         "TimeStamp": "2021-10-02T00:00:00",
         "DXUnitId": "018fa545-78d6-7e8e-a30a-d48fbf08804a",
         "OwnRelationName": "RelatedDXUnits",
@@ -353,7 +353,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "Id": "ddb4f6d1-af51-47b1-860a-bdaae6a67555",
+        "Id": "018fa546-95fe-7e99-a7e7-3f1784a1dacd",
         "TimeStamp": "2021-10-02T00:00:00",
         "BaseDXUnit": "DXObjectDefinitionUnit",
         "ChildDXUnit": "DXUnitDefinitionUnit"

@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "Id": "9644dee2-2637-48b0-95d6-1b0a79835402",
+          "Id": "018fa547-2686-795c-bbb8-a6e7308abaa3",
           "TimeStamp": "2021-10-02T00:00:00",
           "DXElements": {
             "DXDerivedElement": {
@@ -24,128 +24,128 @@
               "Data": {
                 "Items": [
                   {
-                    "Id": "d0f5188c-00e0-4de0-9e34-72a7c02b1708",
+                    "Id": "018fa547-2a6e-7614-b09a-92ecdf414cf3",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-d2ae-743c-bd7d-aba62f45388c",
                     "DXObjectId": "018fa544-f01e-7cc8-a88a-6ebe0ffdf155"
                   },
                   {
-                    "Id": "a31a6f92-cea2-4fc3-9d63-07fbc0cfdf2a",
+                    "Id": "018fa547-2e56-7f5c-a46a-213ff95390c6",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-d2ae-743c-bd7d-aba62f45388c",
                     "DXObjectId": "018fa544-e07e-72a2-8359-a9605225495e"
                   },               
                   {
-                    "Id": "230621f6-3a10-4a11-9ba8-18291542657b",
+                    "Id": "018fa547-323e-7d9e-bed0-0a773749bbe4",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-d2ae-743c-bd7d-aba62f45388c",
                     "DXObjectId": "018fa544-ffbe-7e77-9a08-d6c3808267f9"
                   },
                   {
-                    "Id": "fe3717d9-e661-4714-812e-e2b36ed389f7",
+                    "Id": "018fa547-3626-7e4d-a1ad-5da3ba2bb153",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-d2ae-743c-bd7d-aba62f45388c",
                     "DXObjectId": "018fa545-0f5e-7873-aaef-714bedee7c07"
                   },
                   {
-                    "Id": "5dd65b81-2ed7-468d-b693-ed7fb17f4d17",
+                    "Id": "018fa547-3a0e-78ed-9156-e459adf32440",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-1efe-7b84-8698-30a019eac3f2"
                   },
                   {
-                    "Id": "c6059c23-636a-4143-a3cb-1571e226fa91",
+                    "Id": "018fa547-3df6-7770-b0ff-db50420fcce5",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-51c6-77ac-bb65-c849a9de7748"
                   },
                   {
-                    "Id": "456f6f1a-d81b-4c68-92a9-9525146e059e",
+                    "Id": "018fa547-41de-74aa-8343-2f6c45234b00",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-5996-7b4b-8a6e-b6af9c1207dc"
                   },
                   {
-                    "Id": "d1c2309c-17c6-4431-8c3b-6612c5290a7c",
+                    "Id": "018fa547-45c6-7382-9628-e7a9f1424a07",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-6936-72cb-98d8-bd9a8bbf1a1c"
                   },
                   {
-                    "Id": "cf656e2c-79d7-4254-806b-66580cf6b23b",
+                    "Id": "018fa547-49ae-7a6a-8f5c-6f863d262ab0",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-78d6-7e8e-a30a-d48fbf08804a"
                   },
                   {
-                    "Id": "f09425ea-d19d-4efe-a3cb-02c94680f302",
+                    "Id": "018fa547-4d96-7a14-afc2-d05113c2c5de",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-848e-7fdf-bd45-f4365acdd7ab"
                   },
                   {
-                    "Id": "b4386e14-2b97-43af-b399-a6ef09ab86f5",
+                    "Id": "018fa547-517e-7432-8650-940d574809cc",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-3e3e-7a0e-afdb-fb9cb7047ef9"
                   },
                   {
-                    "Id": "875f163b-41a9-4a34-b1a8-1278f436c375",
+                    "Id": "018fa547-5566-7511-9def-8b995e06f99e",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-c30e-72aa-8c3d-eee1750d9731",
                     "DXObjectId": "018fa545-460e-73f3-8eeb-64c20c5c3b71"
                   },
                   {
-                    "Id": "409670da-2c1e-4749-9c00-9f1b1ff50a59",
+                    "Id": "018fa547-594e-785e-9c99-57837eea55bc",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa545-8876-7a5a-a72c-3fdaf537245d"
                   },
                   {
-                    "Id": "a222b3e5-53bd-4ab7-a1ce-c8f52f516d89",
+                    "Id": "018fa547-5d36-792e-a35b-7fec51074ff1",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa545-a3ce-7500-aabb-5bbf4767a6b1"
                   },
                   {
-                    "Id": "64b8ae7e-86e3-40b7-9c01-06a33580e2b0",
+                    "Id": "018fa547-611e-7ec7-8203-339a8ee9a9ad",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa545-c30e-72aa-8c3d-eee1750d9731"
                   },
                   {
-                    "Id": "a929bfd0-f848-4d7e-9164-b48dea3519fc",
+                    "Id": "018fa547-6506-7956-bda9-fcf00f785aec",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa545-d2ae-743c-bd7d-aba62f45388c"
                   },
                   {
-                    "Id": "11021788-8424-4902-b631-d839862c9460",
+                    "Id": "018fa547-68ee-7e06-97ca-4110d8ca7d54",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa545-d696-7b34-8543-80a59aa1d6b6"
                   },
                   {
-                    "Id": "6bbb26b2-0bc3-412e-8979-55e44c360487",
+                    "Id": "018fa547-6cd6-7c23-88b8-9866c69e6358",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "9644dee2-2637-48b0-95d6-1b0a79835402",
+                    "DXUnitId": "018fa547-2686-795c-bbb8-a6e7308abaa3",
                     "DerivedDXUnitType": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
                     "DXObjectId": "018fa546-0d46-7f2d-83c1-a472b238d21b"
                   }
