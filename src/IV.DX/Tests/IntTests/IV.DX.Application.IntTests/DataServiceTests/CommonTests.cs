@@ -127,7 +127,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             // Init
 
             // Action           
-            var dxElementJObject = await _dataReader.GetItemAsync("DXElementDefinitionUnit", new Guid("ce754889-4efb-4281-ad1f-14d710b30007"));
+            var dxElementJObject = await _dataReader.GetItemAsync("DXElementDefinitionUnit", new Guid("018fa545-1efe-7b84-8698-30a019eac3f2"));
 
             var block = dxElementJObject.ToObject<DXDataBlock<DXUnitRecord>>();
             var record = block?.Data?.Items?.SingleOrDefault();
@@ -140,7 +140,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public async Task GetItems_UsingWhereExpression_CorrectValue()
         {
             // Init
-            var objectId = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
+            var objectId = new Guid("018fa545-a3ce-7500-aabb-5bbf4767a6b1");
 
             // Action
             var objs = await _dataReader.GetItemsAsync<DXUnitDefinitionUnit>($"Id = '{objectId}'");

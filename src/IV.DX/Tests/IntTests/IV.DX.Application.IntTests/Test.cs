@@ -50,12 +50,12 @@ namespace IV.DX.Application.IntTests
             // Init
             var dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
 
-            var dxUnitMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
-            var objectMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
-            //var dxUnitMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
-            //var objectMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c"));
+            var dxUnitMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("018fa545-a3ce-7500-aabb-5bbf4767a6b1"));
+            var objectMetadata = await dataReader.GetItemAsync("DXUnitDefinitionUnit", new Guid("018fa545-8876-7a5a-a72c-3fdaf537245d"));
+            //var dxUnitMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("018fa545-a3ce-7500-aabb-5bbf4767a6b1"));
+            //var objectMetadata = await dxUnitectApiClient.GetDXUnitAsync("DXUnitDefinitionUnit", new Guid("018fa545-8876-7a5a-a72c-3fdaf537245d"));
 
-            var item = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"));
+            var item = await _dataReader.GetItemAsync<DXUnitDefinitionUnit>(new Guid("018fa545-a3ce-7500-aabb-5bbf4767a6b1"));
             // Action
         }
     }

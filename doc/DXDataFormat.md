@@ -244,7 +244,7 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
   "Data": {
     "Items": [
       {
-        "Id": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+        "Id": "018fa545-8876-7a5a-a72c-3fdaf537245d",
         "TimeStamp": "2021-10-02T00:00:00",
         "Name": "DXObjectDefinitionUnit",
         "DXTitleExpression": "Name",
@@ -261,9 +261,9 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
             "Data": {
               "Items": [
                 {
-                  "Id": "2a8e6b99-37ec-45dd-8dd1-c6163e56fb36",
+                  "Id": "018fa545-8c5e-7ddf-8696-f3f0dfabd43a",
                   "TimeStamp": "2021-10-02T00:00:00",
-                  "DXUnitId": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+                  "DXUnitId": "018fa545-8876-7a5a-a72c-3fdaf537245d",
                   "ColumnType": 3,
                   "Name": "Name",
                   "AllowNull": false,
@@ -328,11 +328,11 @@ Some DXElement types can be configured as **common** (by setting `IsCommon = tru
       {
         "Id": "72f6f3f3-e55f-4a24-915d-893b69932f67",
         "TimeStamp": "2021-10-02T00:00:00",
-        "DXUnitId": "65bd9684-6709-409a-a46b-7c605dcb715b",
+        "DXUnitId": "018fa545-78d6-7e8e-a30a-d48fbf08804a",
         "OwnRelationName": "RelatedDXUnits",
         "TargetRelationName": "TargetDXElement",
         "RelationType": 4,
-        "TargetDXUnit": "cee041ff-53d1-46cc-b2ae-d9cb4db0e577"
+        "TargetDXUnit": "018fa545-c30e-72aa-8c3d-eee1750d9731"
       }
     ]
   }
@@ -458,7 +458,7 @@ Migration scripts run under `DXMigrationContext.IsMigrating = true`. In this mod
 
 ```json
 {
-  "Id": "2a30fc41-144d-45a8-b74a-e4ca528fc81c",
+  "Id": "018fa545-8876-7a5a-a72c-3fdaf537245d",
   "TimeStamp": "2021-10-02T00:00:00",
   "Name": "DXObjectDefinitionUnit"
 }

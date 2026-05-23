@@ -22,7 +22,7 @@ namespace IV.DX.Persistence.IntTests
         public void GetItem_UsingTypeNameAndID_WholeDXRecord()
         {
             // Init
-            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+            var id = new Guid("018fa545-8876-7a5a-a72c-3fdaf537245d");
 
             // Action
             var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("DXUnitDefinitionUnit", id);
@@ -42,7 +42,7 @@ namespace IV.DX.Persistence.IntTests
         public void GetItem_UsingBaseTypeNameAndID_BaseDXRecord()
         {
             // Init
-            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+            var id = new Guid("018fa545-8876-7a5a-a72c-3fdaf537245d");
 
             // Action
             var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("DXObjectDefinitionUnit", id);

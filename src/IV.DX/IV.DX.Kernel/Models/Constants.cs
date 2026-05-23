@@ -11,7 +11,7 @@
         public static string Announced { get; } = "Announced";
         public static string Deleted { get; } = "Deleted";
         public static string Mode { get; } = "Mode";
-        public static Guid DXUnitDefinitionUnitId { get; } = new Guid("c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5");
+        public static Guid DXUnitDefinitionUnitId { get; } = new Guid("018fa545-a3ce-7500-aabb-5bbf4767a6b1");
         public static string DerivedDXUnitType { get; } = "DerivedDXUnitType";
         public static string[] SystemProperties
         {

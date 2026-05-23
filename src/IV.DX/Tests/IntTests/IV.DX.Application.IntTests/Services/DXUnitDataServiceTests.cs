@@ -340,7 +340,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             // Init
             string typeName = "DXElementDefinitionUnit";
-            var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
+            var id = new Guid("018fa545-1efe-7b84-8698-30a019eac3f2");
 
             // Action
             var item = await this._reader.GetItemAsync(typeName, id);
@@ -360,7 +360,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             // Init
             string typeName = "DXUnitDefinitionUnit";
-            var id = new Guid("2a30fc41-144d-45a8-b74a-e4ca528fc81c");
+            var id = new Guid("018fa545-8876-7a5a-a72c-3fdaf537245d");
 
             // Action
             var item = await this._reader.GetItemAsync(typeName, id);
@@ -538,7 +538,7 @@ namespace IV.DX.Application.IntTests.Services
 
             // Init
             string typeName = "DXElementDefinitionUnit";
-            var id = new Guid("ce754889-4efb-4281-ad1f-14d710b30007");
+            var id = new Guid("018fa545-1efe-7b84-8698-30a019eac3f2");
 
             // Action
             var item = await this._reader.GetItemAsync(typeName, id);
@@ -1068,8 +1068,8 @@ namespace IV.DX.Application.IntTests.Services
             {
                 AllowNull = true,
                 Name = "ObjectKind",
-                EnumType = new Guid("3c9d2fa6-99e3-472b-b493-3e4790597f98"),
-                EnumKey = new Guid("15d97f21-fd2d-4019-8e0b-bd480fdc8798")
+                EnumType = new Guid("018fa544-ffbe-7e77-9a08-d6c3808267f9"),
+                EnumKey = new Guid("018fa545-078e-7f2c-bbcd-3d9481ce9dea")
             };
 
             var relaionTypeEnum = new DXObjectEnumElement()
@@ -1077,8 +1077,8 @@ namespace IV.DX.Application.IntTests.Services
                 Id = Guid.NewGuid(),
                 AllowNull = true,
                 Name = "RelationType",
-                EnumType = new Guid("3fdb5f35-33f6-4356-8f65-f92da429191c"),
-                EnumKey = new Guid("0ce6d41d-1906-4d24-adc3-31f0922fd7cd")
+                EnumType = new Guid("018fa545-0f5e-7873-aaef-714bedee7c07"),
+                EnumKey = new Guid("018fa545-172e-76b9-a4eb-c2bbda8789f0")
             };
 
             var dxUnit = new DXUnitDefinitionUnit()
@@ -1190,7 +1190,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task InsertOrUpdate_UsingExistingCoreDXUnitWithTargetModeForMultiElements_Ok()
         {
             // Init         
-            var unitId = new Guid("00b29615-f32e-457e-81c6-606a0b4fd4f7");
+            var unitId = new Guid("018fa545-5996-7b4b-8a6e-b6af9c1207dc");
             var unitTime = DateTime.Parse("2026-01-25T16:04:15.604149Z");
 
             var dxUnitBlock = new DXDataBlock<DXUnitRecord>

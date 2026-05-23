@@ -78,7 +78,7 @@
                     "OwnRelationName": "PublicAccesses",
                     "TargetRelationName": "DXUnitDefinition",
                     "RelationType": 4,
-                    "TargetDXUnit": "c60e25e6-2e6e-4d0b-8976-7b0aeb3d41d5"
+                    "TargetDXUnit": "018fa545-a3ce-7500-aabb-5bbf4767a6b1"
                   }
                 ]
               }
