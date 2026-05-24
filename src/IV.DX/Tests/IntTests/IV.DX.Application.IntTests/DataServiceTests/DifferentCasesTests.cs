@@ -161,7 +161,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
             var user = record?.Fields?["User"]?.ToObject<string>();
 
             Assert.NotNull(user);
-            Assert.Equal("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3", user);
+            Assert.Equal("018fa54a-203e-7407-9bd0-cd287e850b03", user);
         }
 
         [Fact]

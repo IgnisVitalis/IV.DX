@@ -29,7 +29,7 @@ namespace IV.DX.Application.IntTests
             var dataReader = this.ServiceProvider.GetRequiredService<IDXUnitDataReader>();
 
             var dataSource1 = new DataSource("TBookUnit", new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
-            var dataSource2 = new DataSource("TUserUnit", new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"));
+            var dataSource2 = new DataSource("TUserUnit", new Guid("018fa54a-109e-770b-927a-71016b1c6517"));
 
             var subject = new DataSourceManager(dataReader);
 

@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "Id": "547a5481-9931-4d48-982c-6f8cf959712e",
+          "Id": "018fa549-b6c6-7d4f-b022-1c65cd900dd7",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookChapterElement",
           "Kind": 3,
@@ -26,18 +26,18 @@
               "Data": {
                 "Items": [
                   {
-                    "Id": "c6d486e5-b592-45fd-ac73-ebace0f02322",
+                    "Id": "018fa549-baae-7bcb-a8ee-a0ac57fb27bf",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "DXUnitId": "018fa549-b6c6-7d4f-b022-1c65cd900dd7",
                     "ColumnType": 8,
                     "Name": "Number",
                     "AllowNull": true,
                     "DefaultValue": null
                   },
                   {
-                    "Id": "6abca4b2-51cf-4237-9593-8387761ba049",
+                    "Id": "018fa549-be96-73bf-a210-ea57406f3f8e",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "547a5481-9931-4d48-982c-6f8cf959712e",
+                    "DXUnitId": "018fa549-b6c6-7d4f-b022-1c65cd900dd7",
                     "ColumnType": 4,
                     "Name": "Text",
                     "AllowNull": true,

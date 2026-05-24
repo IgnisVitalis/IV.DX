@@ -16,7 +16,7 @@ namespace IV.DX.Application.IntTests.Services
     public class DXUnitDataReaderTests : IntTestController
     {
         // TDeviceUnit definition Id (from 01_01_0010_Test_TDeviceUnit.dx)
-        private static readonly Guid TDeviceUnitDefinitionId = new Guid("7f8501fd-7f16-42f8-8a7d-297619126e13");
+        private static readonly Guid TDeviceUnitDefinitionId = new Guid("018fa549-e1be-70ce-81f7-a6f7554ffdde");
 
         // Seeded TDeviceUnit instance IDs (from 01_01_0023_Test_TDeviceUnit.dx)
         private static readonly Guid TDeviceUnit1Id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");

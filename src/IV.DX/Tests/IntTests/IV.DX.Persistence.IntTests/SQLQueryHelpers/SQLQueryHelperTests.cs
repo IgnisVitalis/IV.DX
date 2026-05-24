@@ -118,7 +118,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(usersExisting);
 
-            Assert.Equal(new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"), usersExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-203e-7407-9bd0-cd287e850b03"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(passportsExisting);
 
-            Assert.Equal(new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"), passportsExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-37ae-709b-8890-76a6adc2a56b"), passportsExisting.Single().Id);
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(usersExisting);
 
-            Assert.Equal(new Guid("60e7ebaa-66f8-41a5-ab40-4a82ceaa1cff"), usersExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-109e-770b-927a-71016b1c6517"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -248,7 +248,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(usersExisting);
 
-            Assert.Equal(new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"), usersExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-186e-733a-a2b1-3f643f84ac4c"), usersExisting.Single().Id);
         }
 
         [Fact]
@@ -290,7 +290,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(positionsExisting);
 
-            Assert.Equal(new Guid("3040fe09-2ec2-4472-ae32-724f028b374e"), positionsExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-3f7e-751e-824e-87f774fc0447"), positionsExisting.Single().Id);
         }
 
         [Fact]
@@ -415,8 +415,8 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, usersExisting.Count());
 
-            Assert.Single(usersExisting, x => x.Id == new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3"));
-            Assert.Single(usersExisting, x => x.Id == new Guid("dfb7bb88-30d9-46d7-9885-6ca8ae455e82"));
+            Assert.Single(usersExisting, x => x.Id == new Guid("018fa54a-203e-7407-9bd0-cd287e850b03"));
+            Assert.Single(usersExisting, x => x.Id == new Guid("018fa54a-186e-733a-a2b1-3f643f84ac4c"));
         }
 
         [Fact]
@@ -438,7 +438,7 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Single(passportsExisting);
 
-            Assert.Equal(new Guid("bd56ffdd-0d30-4d9f-b879-7875162fc7b6"), passportsExisting.Single().Id);
+            Assert.Equal(new Guid("018fa54a-37ae-709b-8890-76a6adc2a56b"), passportsExisting.Single().Id);
         }
 
         [Fact]

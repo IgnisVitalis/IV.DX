@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "Id": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
+          "Id": "018fa549-c27e-7646-a0c1-b8f06862c05a",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TDocumentMainElement",
           "Kind": 3,
@@ -26,9 +26,9 @@
               "Data": {
                 "Items": [
                   {
-                    "Id": "3e273e56-2e26-4b66-b3df-e7f55525a10f",
+                    "Id": "018fa549-c666-7f5d-86ef-d93ecb28ecf6",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "6d6774d8-fb9b-4479-9db9-ac0f063fc1fb",
+                    "DXUnitId": "018fa549-c27e-7646-a0c1-b8f06862c05a",
                     "ColumnType": 3,
                     "Name": "Name",
                     "Length": 50,

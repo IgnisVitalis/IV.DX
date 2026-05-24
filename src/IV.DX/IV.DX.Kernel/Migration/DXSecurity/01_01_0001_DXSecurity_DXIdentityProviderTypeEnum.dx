@@ -10,28 +10,28 @@
       "Items": [
         {
           "Type": "DXIdentityProviderTypeEnum",
-          "Id": "ffec15db-7a29-451b-8729-f270f2ea72d0",
+          "Id": "018fa547-a76e-7b41-8017-3673baf5c4bc",
           "TimeStamp": "2025-12-19T13:29:20.599652Z",
           "Key": 1,
           "Value": "Local"
         },
         {
           "Type": "DXIdentityProviderTypeEnum",
-          "Id": "5e3de7c4-e82b-4d4a-b433-1077c0d1e2b9",
+          "Id": "018fa547-ab56-7376-9ab2-803ea6c92598",
           "TimeStamp": "2025-12-19T13:29:20.599652Z",
           "Key": 2,
           "Value": "Telegram"
         },
         {
           "Type": "DXIdentityProviderTypeEnum",
-          "Id": "82fbd560-bc6c-48df-8fe8-9bf6cf2b9aa1",
+          "Id": "018fa547-af3e-7669-bb00-36adb0191cc4",
           "TimeStamp": "2025-12-19T13:29:20.599652Z",
           "Key": 3,
           "Value": "Microsoft"
         },
         {
           "Type": "DXIdentityProviderTypeEnum",
-          "Id": "fe2dcb65-bcd5-4252-84c9-c1f96d6a78be",
+          "Id": "018fa547-b326-745e-ae67-17b5b7f15d29",
           "TimeStamp": "2025-12-19T13:29:20.599652Z",
           "Key": 4,
           "Value": "Facebook"

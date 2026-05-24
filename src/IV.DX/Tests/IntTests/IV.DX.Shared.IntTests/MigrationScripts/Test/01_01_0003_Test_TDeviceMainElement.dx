@@ -10,7 +10,7 @@
     "Data": {
       "Items": [
         {
-          "Id": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+          "Id": "018fa549-a33e-7da4-a8c4-05d9c3da0ca6",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TDeviceMainElement",
           "Kind": 3,
@@ -26,9 +26,9 @@
               "Data": {
                 "Items": [
                   {
-                    "Id": "68e37e0b-3f5c-41ad-bb31-69b09859fd57",
+                    "Id": "018fa549-a726-71ef-b80a-e9f2fd6f3d18",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+                    "DXUnitId": "018fa549-a33e-7da4-a8c4-05d9c3da0ca6",
                     "ColumnType": 3,
                     "Name": "Model",
                     "Length": 50,
@@ -36,9 +36,9 @@
                     "DefaultValue": null
                   },
                   {
-                    "Id": "81f95b0d-fb05-43c4-9d56-91173ca3e585",
+                    "Id": "018fa549-ab0e-7a3e-a318-2ea88da8542d",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "e9c63b28-a714-415d-899e-2c9d387f8b6d",
+                    "DXUnitId": "018fa549-a33e-7da4-a8c4-05d9c3da0ca6",
                     "ColumnType": 1,
                     "Name": "UUID",
                     "AllowNull": true,

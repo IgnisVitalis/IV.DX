@@ -15,7 +15,7 @@ namespace IV.DX.Persistence.IntTests
         private readonly IDXUnitCoreRepository _coreRepo;
         private readonly IDXUnitGenericRepository _genericRepo;
 
-        private static readonly Guid VictorId = new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3");
+        private static readonly Guid VictorId = new Guid("018fa54a-203e-7407-9bd0-cd287e850b03");
         private const string VictorName = "Victor";
 
         public DXTitleTests(DXTestFixture fx, ITestOutputHelper output)

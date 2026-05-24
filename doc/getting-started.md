@@ -319,7 +319,7 @@ Example migration for a derived type:
   "TimeStamp": "2021-10-02T00:00:00",
   "Name": "TComputerUnit",
   "Kind": 3,
-  "BaseDXUnit": "7f8501fd-7f16-42f8-8a7d-297619126e13"
+  "BaseDXUnit": "018fa549-e1be-70ce-81f7-a6f7554ffdde"
 }
 ```
 
@@ -396,7 +396,7 @@ This creates the `TBookMainElement` element type with a `Name` column:
     "Data": {
       "Items": [
         {
-          "Id": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+          "Id": "018fa549-aef6-778f-bad1-f12283c79aaa",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookMainElement",
           "Kind": 3,
@@ -412,9 +412,9 @@ This creates the `TBookMainElement` element type with a `Name` column:
               "Data": {
                 "Items": [
                   {
-                    "Id": "20e239fb-5775-45cb-97a5-b400c231e707",
+                    "Id": "018fa549-b2de-7741-8193-83e882ced388",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+                    "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa",
                     "ColumnType": 3,
                     "Name": "Name",
                     "Length": 100,
@@ -449,7 +449,7 @@ This creates the `TBookUnit` unit type and links its elements:
     "Data": {
       "Items": [
         {
-          "Id": "05fdf970-e682-436d-8a09-94fc60d6b650",
+          "Id": "018fa549-e98e-7d20-a34a-26a03317a998",
           "TimeStamp": "2021-10-02T00:00:00",
           "Name": "TBookUnit",
           "Kind": 3,
@@ -465,11 +465,11 @@ This creates the `TBookUnit` unit type and links its elements:
               "Data": {
                 "Items": [
                   {
-                    "Id": "90b0963c-294c-4e05-97aa-f77045502dc2",
+                    "Id": "018fa549-ed76-7778-9aa9-8b30594bda4e",
                     "TimeStamp": "2021-10-02T00:00:00",
-                    "DXUnitId": "05fdf970-e682-436d-8a09-94fc60d6b650",
+                    "DXUnitId": "018fa549-e98e-7d20-a34a-26a03317a998",
                     "RelationType": 1,
-                    "DXElementDefinitionUnit": "0953cb79-4001-4add-87d6-2ebce5ecc848"
+                    "DXElementDefinitionUnit": "018fa549-aef6-778f-bad1-f12283c79aaa"
                   }
                 ]
               }
@@ -574,7 +574,7 @@ await dataService.UpdateAsync(element);
 
 ```json
 {
-  "Id": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+  "Id": "018fa549-aef6-778f-bad1-f12283c79aaa",
   "TimeStamp": "2024-01-01T00:00:00",
   "Name": "TPersonMainElement",
   "Kind": 3,
@@ -583,9 +583,9 @@ await dataService.UpdateAsync(element);
       "Meta": { "Kind": "DXElement", "Type": "DXColumnDefinitionElement", "Op": "Patch", "IsMulti": true, "IsRequired": false },
       "Data": {
         "Items": [
-          { "Id": "aaaa0001-0000-0000-0000-000000000001", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "name",    "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
-          { "Id": "aaaa0001-0000-0000-0000-000000000002", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "surname", "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
-          { "Id": "aaaa0001-0000-0000-0000-000000000003", "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848", "Name": "email",   "ColumnType": 3, "Length": 200, "DefaultValue": "''" }
+          { "Id": "aaaa0001-0000-0000-0000-000000000001", "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa", "Name": "name",    "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
+          { "Id": "aaaa0001-0000-0000-0000-000000000002", "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa", "Name": "surname", "ColumnType": 3, "Length": 100, "DefaultValue": "''" },
+          { "Id": "aaaa0001-0000-0000-0000-000000000003", "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa", "Name": "email",   "ColumnType": 3, "Length": 200, "DefaultValue": "''" }
         ]
       }
     },
@@ -595,12 +595,12 @@ await dataService.UpdateAsync(element);
         "Items": [
           {
             "Id": "bbbb0001-0000-0000-0000-000000000001",
-            "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+            "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa",
             "Columns": "name,surname"
           },
           {
             "Id": "bbbb0001-0000-0000-0000-000000000002",
-            "DXUnitId": "0953cb79-4001-4add-87d6-2ebce5ecc848",
+            "DXUnitId": "018fa549-aef6-778f-bad1-f12283c79aaa",
             "Columns": "email"
           }
         ]

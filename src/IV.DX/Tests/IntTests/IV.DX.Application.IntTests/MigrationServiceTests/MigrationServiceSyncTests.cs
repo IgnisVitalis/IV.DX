@@ -13,9 +13,9 @@ namespace IV.DX.Application.IntTests.MigrationServiceTests
     [Collection("DX:one-time")]
     public sealed class MigrationServiceSyncTests : IntTestController
     {
-        private const string ExpectedUnitId = "e6845581-680e-4d6d-9d75-bb9c2d747aa5";
-        private const string DeletedUnitId1 = "702689cb-fe31-400a-b84d-9ceaaf548deb";
-        private const string DeletedUnitId2 = "869fab30-c037-483f-86ac-e0fad536a5b9";
+        private const string ExpectedUnitId = "018fa549-7c2e-7b59-b61e-5454e89fdd51";
+        private const string DeletedUnitId1 = "018fa549-6c8e-7e4f-b6d1-9c9e349c1e2d";
+        private const string DeletedUnitId2 = "018fa549-745e-7029-b07d-ee08c316b8f4";
 
         private const string ScopeFilter =
             "TUserMainElement.Name = 'SyncSeed-A' OR " +

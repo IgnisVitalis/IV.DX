@@ -18,9 +18,9 @@ namespace IV.DX.Application.IntTests.DataServiceTests
     [Collection("DX:one-time")]
     public class DXDerivedUnitTypeTests : IntTestController
     {
-        private static readonly Guid TDeviceUnitDefinitionId  = new Guid("7f8501fd-7f16-42f8-8a7d-297619126e13");
+        private static readonly Guid TDeviceUnitDefinitionId  = new Guid("018fa549-e1be-70ce-81f7-a6f7554ffdde");
         private static readonly Guid TComputerUnitDefinitionId = new Guid("020357c3-bfb2-4583-b285-3ed31e0e24f7");
-        private static readonly Guid ExistingUserId            = new Guid("8d8b5eb0-9fc6-44c9-a185-6bcc2af44aa3");
+        private static readonly Guid ExistingUserId            = new Guid("018fa54a-203e-7407-9bd0-cd287e850b03");
 
         private static readonly IReadOnlyList<Guid> SeededTDeviceUnitIds = new[]
         {
