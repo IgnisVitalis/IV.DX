@@ -150,7 +150,7 @@ namespace IV.DX.Application.IntTests.DataServiceTests
         public async Task GetItem_UsingMultidxElementWithRelation_Ok()
         {
             // Init
-            var id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
+            var id = new Guid("018fa54a-5ad6-7327-a7ea-2fd57bcab0ef");
 
             // Action
             var jObject = await _dataReader.GetItemAsync("TDeviceUnit", id);

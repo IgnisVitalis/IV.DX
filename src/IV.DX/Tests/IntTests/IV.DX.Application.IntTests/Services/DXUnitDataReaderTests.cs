@@ -19,8 +19,8 @@ namespace IV.DX.Application.IntTests.Services
         private static readonly Guid TDeviceUnitDefinitionId = new Guid("018fa549-e1be-70ce-81f7-a6f7554ffdde");
 
         // Seeded TDeviceUnit instance IDs (from 01_01_0023_Test_TDeviceUnit.dx)
-        private static readonly Guid TDeviceUnit1Id = new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7");
-        private static readonly Guid TDeviceUnit2Id = new Guid("53ced1ab-2582-4aee-b2bc-50e676eebde3");
+        private static readonly Guid TDeviceUnit1Id = new Guid("018fa54a-5ad6-7327-a7ea-2fd57bcab0ef");
+        private static readonly Guid TDeviceUnit2Id = new Guid("018fa54a-62a6-77ca-8a5a-0412f03aa136");
 
         private readonly IDXUnitDataReader _reader;
 

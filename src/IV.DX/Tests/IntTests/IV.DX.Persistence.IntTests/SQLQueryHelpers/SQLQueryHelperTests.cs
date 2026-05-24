@@ -92,9 +92,9 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
 
             documents = new List<TDocumentUnit>() { document1, document2, document3, document4, document5, document6 };
 
-            var book1 = TBookUnitFactory.GetItemWithText(new Guid("1b51edff-1d99-4043-9a69-209996729b69"), "book1", new List<string>() { "book1.page1", "book1.page2" });
-            var book2 = TBookUnitFactory.GetItemWithText(new Guid("4782b530-6343-4d11-846a-65127cf71f3b"), "book2", new List<string>() { "book2.page1", "book2.page2", "book2.page3" });
-            var book3 = TBookUnitFactory.GetItemWithText(new Guid("456fb3b7-6d98-40d2-a127-753d38fb5848"), "book3", new List<string>() { "book3.page1", "book3.page2", "book3.page3", "book3.page4" });
+            var book1 = TBookUnitFactory.GetItemWithText(new Guid("018fa54a-89b6-7da6-9d89-7303290c59e3"), "book1", new List<string>() { "book1.page1", "book1.page2" });
+            var book2 = TBookUnitFactory.GetItemWithText(new Guid("018fa54a-9186-76ce-a855-1a90a1813c79"), "book2", new List<string>() { "book2.page1", "book2.page2", "book2.page3" });
+            var book3 = TBookUnitFactory.GetItemWithText(new Guid("018fa54a-9956-798e-97f0-fd9572a95e32"), "book3", new List<string>() { "book3.page1", "book3.page2", "book3.page3", "book3.page4" });
 
             books = new List<TBookUnit>() { book1, book2, book3 };
         }
@@ -184,8 +184,8 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, devicesExisting.Count());
 
-            Assert.Single(devicesExisting, x => x.Id == new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"));
-            Assert.Single(devicesExisting, x => x.Id == new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"));
+            Assert.Single(devicesExisting, x => x.Id == new Guid("018fa54a-6a76-7dcb-84aa-2a4dbe265969"));
+            Assert.Single(devicesExisting, x => x.Id == new Guid("018fa54a-7246-7ffa-9a4d-e8397a819387"));
         }
 
         // TODO: need to update expectedSQLQuery to check.
@@ -332,8 +332,8 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, documentsExisting.Count());
 
-            Assert.Single(documentsExisting, x => x.Id == new Guid("ce7a2422-7df4-426a-b1fe-2a2090443246"));
-            Assert.Single(documentsExisting, x => x.Id == new Guid("c2caacbe-f9c8-4409-8c65-535a3b530a3d"));
+            Assert.Single(documentsExisting, x => x.Id == new Guid("018fa54a-a126-7077-b5aa-85176536994b"));
+            Assert.Single(documentsExisting, x => x.Id == new Guid("018fa54a-c836-7bf7-b8ac-c234cf19e5a6"));
         }
 
         [Fact]
@@ -375,8 +375,8 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
             // Checking result
             Assert.Equal(2, booksExisting.Count());
 
-            Assert.Single(booksExisting, x => x.Id == new Guid("1b51edff-1d99-4043-9a69-209996729b69"));
-            Assert.Single(booksExisting, x => x.Id == new Guid("4782b530-6343-4d11-846a-65127cf71f3b"));
+            Assert.Single(booksExisting, x => x.Id == new Guid("018fa54a-89b6-7da6-9d89-7303290c59e3"));
+            Assert.Single(booksExisting, x => x.Id == new Guid("018fa54a-9186-76ce-a855-1a90a1813c79"));
         }
 
         [Fact]

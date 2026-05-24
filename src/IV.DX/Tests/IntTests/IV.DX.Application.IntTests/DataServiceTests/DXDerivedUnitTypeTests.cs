@@ -24,12 +24,12 @@ namespace IV.DX.Application.IntTests.DataServiceTests
 
         private static readonly IReadOnlyList<Guid> SeededTDeviceUnitIds = new[]
         {
-            new Guid("a03f744d-d5db-4d4e-95a8-d5fbf4bad2d7"),
-            new Guid("53ced1ab-2582-4aee-b2bc-50e676eebde3"),
-            new Guid("58a98dbf-ce5d-43d1-adb2-670dea20c7bf"),
-            new Guid("36ab0a14-f382-4c3a-aefa-fa5cb3c1e00b"),
-            new Guid("24d8f6ff-b411-4acc-8a35-5e958ce7f070"),
-            new Guid("1c16f974-8e52-408b-9cac-acbb548864fa")
+            new Guid("018fa54a-5ad6-7327-a7ea-2fd57bcab0ef"),
+            new Guid("018fa54a-62a6-77ca-8a5a-0412f03aa136"),
+            new Guid("018fa54a-6a76-7dcb-84aa-2a4dbe265969"),
+            new Guid("018fa54a-7246-7ffa-9a4d-e8397a819387"),
+            new Guid("018fa54a-7a16-7f44-965c-7cb805baa65d"),
+            new Guid("018fa54a-81e6-7fd5-ba56-ff6a7c44bf9d")
         };
 
         private readonly IDXUnitDataService _service;

@@ -62,7 +62,7 @@ namespace IV.DX.Persistence.IntTests
         public void GetComputer_UsingID_WholeDXRecord()
         {
             // Init
-            var id = new Guid("4da76122-8615-4a98-a873-20e1f57aa517");
+            var id = new Guid("018fa54a-5306-7a28-99f7-599b35d6b299");
 
             // Action
             var dxUnitDefinition = this._dxUnitCoreRepo.GetItemRecord("TComputerUnit", id);
