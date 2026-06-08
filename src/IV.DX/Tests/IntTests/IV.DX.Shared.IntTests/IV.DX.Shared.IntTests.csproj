@@ -15,6 +15,7 @@
         <PackageReference Include="xunit.abstractions" Version="2.0.3" />
         <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+        <PackageReference Include="Testcontainers.PostgreSql" Version="4.4.0" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" />

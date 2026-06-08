@@ -10,30 +10,6 @@ on:
         description: 'Manual version (e.g. 1.2.3). If empty and no tag, uses csproj version.'
         required: false
         default: ''
-      db_type:
-        description: 'DB type for tests'
-        required: false
-        default: 'PostgreSQL'
-      db_host:
-        description: 'DB host'
-        required: false
-        default: 'localhost'
-      db_port:
-        description: 'DB port'
-        required: false
-        default: '5432'
-      db_name:
-        description: 'DB name'
-        required: false
-        default: 'appdb'
-      db_user:
-        description: 'DB user'
-        required: false
-        default: 'postgres'
-      db_password:
-        description: 'DB password'
-        required: false
-        default: 'root'
       coverage_min:
         description: 'Minimum total code coverage percentage required'
         required: false
@@ -54,29 +30,7 @@ jobs:
       GPR_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       NUGET_SOURCE: https://api.nuget.org/v3/index.json
 
-      DB_TYPE:      ${{ github.event.inputs.db_type      || 'PostgreSQL' }}
-      DB_HOST:      ${{ github.event.inputs.db_host      || 'localhost'  }}
-      DB_PORT:      ${{ github.event.inputs.db_port      || '5432'       }}
-      DB_NAME:      ${{ github.event.inputs.db_name      || 'appdb'      }}
-      DB_USER:      ${{ github.event.inputs.db_user      || 'postgres'   }}
-      DB_PASSWORD:  ${{ github.event.inputs.db_password  || 'root'       }}
-
       COVERAGE_MIN: ${{ github.event.inputs.coverage_min || '60' }}
-
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_USER:     ${{ github.event.inputs.db_user     || 'postgres' }}
-          POSTGRES_PASSWORD: ${{ github.event.inputs.db_password || 'root'     }}
-          POSTGRES_DB:       ${{ github.event.inputs.db_name     || 'appdb'    }}
-        ports:
-          - "${{ github.event.inputs.db_port || 5432 }}:5432"
-        options: >-
-          --health-cmd="pg_isready -U $${POSTGRES_USER}"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
 
     steps:
       - name: Checkout
@@ -111,22 +65,6 @@ jobs:
           else
             dotnet build "$SOLUTION_PATH" -c Release --no-restore -p:TreatWarningsAsErrors=true
           fi
-
-      - name: Export unified DB config to env
-        shell: bash
-        run: |
-          echo "Database__Type=${DB_TYPE}" >> "$GITHUB_ENV"
-          echo "Database__ConnectionString=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD};IncludeErrorDetail=true" >> "$GITHUB_ENV"
-
-      - name: Wait for Postgres (TCP check)
-        shell: bash
-        run: |
-          for i in {1..60}; do
-            (echo > /dev/tcp/${DB_HOST}/${DB_PORT}) >/dev/null 2>&1 && { echo "Postgres is accepting TCP connections"; exit 0; }
-            echo "Waiting for Postgres... ($i/60)"
-            sleep 2
-          done
-          echo "Postgres did not become ready in time"; exit 1
 
       - name: Test (with coverage)
         run: |

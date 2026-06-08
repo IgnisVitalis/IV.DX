@@ -2,6 +2,7 @@ using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Hosting;
 using IV.DX.Kernel.Attributes;
 using IV.DX.Persistence.Contracts.Abstractions;
+using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,8 +13,16 @@ using Xunit;
 
 namespace IV.DX.Application.IntTests.Services
 {
+    [Collection("DX:one-time")]
     public class DXSecurityInitializationModeTests
     {
+        private readonly DXTestFixture _fx;
+
+        public DXSecurityInitializationModeTests(DXTestFixture fx)
+        {
+            _fx = fx;
+        }
+
         [Fact]
         public async Task CoreOnlyMode_AccessChecker_AllowsWithoutSecurityInitialization()
         {
@@ -82,7 +91,7 @@ namespace IV.DX.Application.IntTests.Services
                 Assert.Equal(DXAccessDecision.Denied, securityDecision);
 
                 var scriptsAssembly = Assembly.GetAssembly(typeof(DXUnitAttribute));
-                await migrationService.MigrateCustomEmbeddedAsync(scriptsAssembly!, "Migration/DXQuery.json");
+                await migrationService.MigrateCustomEmbeddedAsync(scriptsAssembly, "Migration/DXQuery.json");
             }
             finally
             {
@@ -90,17 +99,18 @@ namespace IV.DX.Application.IntTests.Services
             }
         }
 
-        private static ServiceProvider BuildIsolatedRoot(string databaseName, bool withSecurity)
+        private ServiceProvider BuildIsolatedRoot(string databaseName, bool withSecurity)
         {
+            var connectionString = DXTestFixtureBase.ReplaceDatabase(_fx.ConnectionString, databaseName);
+
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    { "Secrets:DatabaseConnectionString", $"Server=localhost;Database={databaseName};User Id=postgres;password=root;" },
+                    { "Secrets:DatabaseConnectionString", connectionString },
                     { "Secrets:DatabaseType", "PostgreSQL" },
                     { "Secrets:JwtSigningKey", "int-tests-signing-key-change-me-32-bytes" },
                     { "Secrets:EncryptionKey", "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcy0hISE=" }
                 })
-                .AddEnvironmentVariables()
                 .Build();
 
             var services = new ServiceCollection();

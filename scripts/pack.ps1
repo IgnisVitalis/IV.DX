@@ -10,9 +10,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$RepoRoot = Resolve-Path "$PSScriptRoot/.."
-$ArtifactsRoot = Resolve-Path "$RepoRoot/../.."
-$OutputPath = Join-Path $ArtifactsRoot ".artifacts"
+$RepoRoot   = Resolve-Path "$PSScriptRoot/.."
+$OutputPath = Join-Path $env:USERPROFILE ".nuget\local-feed"
 if (-not (Test-Path $OutputPath)) { New-Item -ItemType Directory -Path $OutputPath | Out-Null }
 
 function Get-NearestSolution {
