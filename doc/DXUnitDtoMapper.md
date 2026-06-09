@@ -2,66 +2,71 @@
 
 The DTO mapper feature provides a thin application-layer bridge between the DX domain model (`DXUnit`/`DXElement`) and the DTOs your API or UI exposes. It handles the mechanical work of copying scalar properties and synchronizing element containers, leaving your code free of boilerplate reflection.
 
+Request and response shapes are first-class: the mapper hierarchy supports symmetric (same DTO in/out), read-only, write-only, and fully asymmetric (different request/response) configurations.
+
 ---
 
 ## Concepts
 
 | Type | Role |
 |---|---|
-| `DXUnitMapper<TDto, TUnit>` | Abstract base. Implement this for full control. |
-| `DXConventionMapper<TDto, TUnit>` | Built-in convention mapper. No code required. |
-| `IDXUnitDtoService<TDto>` | Service interface. Inject this in controllers/services. |
+| `DXUnitMapper<TRequest, TResponse, TUnit>` | Abstract base for full CRUD mappers. Implement both directions. |
+| `DXUnitReadMapper<TResponse, TUnit>` | Abstract base for read-only mappers. Implement `ToDtoAsync` only. |
+| `DXUnitWriteMapper<TRequest, TUnit>` | Abstract base for write-only mappers. Implement `ToUnitAsync` only. |
+| `DXConventionMapper<TDto, TUnit>` | Built-in symmetric convention mapper. No code required. |
+| `IDXUnitDtoService<TRequest, TResponse>` | Full CRUD service. Inject in controllers/services. |
+| `IDXUnitQueryService<TResponse>` | Read-only service. Inject when writes are not needed. |
+| `IDXUnitCommandService<TRequest>` | Write-only service. Inject when reads are not needed. |
 
-Registration wires everything together: one call creates the mapper, wraps it in `IDXUnitDtoService<TDto>`, and registers both with the DI container.
+`IDXUnitDtoService<TRequest, TResponse>` extends both `IDXUnitQueryService<TResponse>` and `IDXUnitCommandService<TRequest>`.
+
+Registration wires everything together: one call creates the mapper, wraps it in the appropriate service interface, and registers both with the DI container.
 
 ---
 
 ## Registration
 
-Call one of the two `AddDXUnitMapper` overloads during service registration.
+### Convention mapper — symmetric, no code required
 
-### Convention mapper (no code required)
+Use when request and response shapes are identical and all properties match by name.
 
 ```csharp
-builder.Services
-    .AddDX(builder.Configuration)
-    .AddCustomData("MigrationScripts/MyApp.json")
-    ...
-
-// After .AddDX():
 builder.Services.AddDXUnitMapper<TBookDto, TBookUnit>();
 ```
 
-`AddDXUnitMapper<TDto, TUnit>()` creates a `DXConventionMapper` and validates the mapping at startup — if a property cannot be mapped the application fails to start with a clear error message.
+Registers `IDXUnitDtoService<TBookDto, TBookDto>`. Validates the mapping at startup — a property mismatch throws `InvalidOperationException` before the host starts.
 
-### Custom mapper
+### Full CRUD custom mapper
 
-Derive from `DXUnitMapper<TDto, TUnit>` and implement the two abstract methods:
+Use when request and response have different shapes, or when custom logic is needed in either direction.
+
+Derive from `DXUnitMapper<TRequest, TResponse, TUnit>`:
 
 ```csharp
-public class TBookMapper : DXUnitMapper<TBookDto, TBookUnit>
+public class BookMapper : DXUnitMapper<BookRequest, BookResponse, BookUnit>
 {
-    public override Task<TBookDto> ToDtoAsync(TBookUnit unit, CancellationToken ct = default)
+    private readonly IEnumService _enums;
+
+    public BookMapper(IEnumService enums) => _enums = enums;
+
+    public override async Task<BookResponse> ToDtoAsync(BookUnit unit, CancellationToken ct = default)
     {
-        return Task.FromResult(new TBookDto
+        return new BookResponse
         {
-            Id    = unit.Id,
-            Title = unit.TBookMainElement?.Name ?? string.Empty,
-            // any custom transform
-        });
+            Id        = unit.Id,
+            Title     = unit.TBookMainElement?.Name ?? string.Empty,
+            Genre     = await _enums.ResolveAsync(unit.Genre, ct),  // int → { key, value }
+            UpdatedAt = unit.TimeStamp
+        };
     }
 
-    public override Task<TBookUnit> ToUnitAsync(TBookDto dto, CancellationToken ct = default)
+    public override Task<BookUnit> ToUnitAsync(BookRequest dto, CancellationToken ct = default)
     {
-        return Task.FromResult(new TBookUnit
+        return Task.FromResult(new BookUnit
         {
-            Id = dto.Id,
-            TBookMainElement = new TBookMainElement
-            {
-                Id       = Guid.NewGuid(),
-                DXUnitId = dto.Id,
-                Name     = dto.Title
-            }
+            Id    = dto.Id,
+            Genre = dto.Genre,  // int key only
+            TBookMainElement = new TBookMainElement { Name = dto.Title }
         });
     }
 }
@@ -70,8 +75,54 @@ public class TBookMapper : DXUnitMapper<TBookDto, TBookUnit>
 Register it:
 
 ```csharp
-builder.Services.AddDXUnitMapper<TBookMapper>();
+builder.Services.AddDXUnitMapper<BookMapper>();
 ```
+
+Registers `IDXUnitDtoService<BookRequest, BookResponse>`.
+
+### Read-only custom mapper
+
+Use when an endpoint only reads — no writes, no `SaveAsync`/`DeleteAsync` needed.
+
+Derive from `DXUnitReadMapper<TResponse, TUnit>`:
+
+```csharp
+public class BookReadMapper : DXUnitReadMapper<BookResponse, BookUnit>
+{
+    public override Task<BookResponse> ToDtoAsync(BookUnit unit, CancellationToken ct = default)
+        => Task.FromResult(new BookResponse { Id = unit.Id, Title = unit.TBookMainElement?.Name });
+}
+```
+
+Register it:
+
+```csharp
+builder.Services.AddDXUnitReadMapper<BookReadMapper>();
+```
+
+Registers `IDXUnitQueryService<BookResponse>`.
+
+### Write-only custom mapper
+
+Use when an endpoint only writes — no reads, no `GetAsync`/`GetAllAsync` needed.
+
+Derive from `DXUnitWriteMapper<TRequest, TUnit>`:
+
+```csharp
+public class BookWriteMapper : DXUnitWriteMapper<BookRequest, BookUnit>
+{
+    public override Task<BookUnit> ToUnitAsync(BookRequest dto, CancellationToken ct = default)
+        => Task.FromResult(new BookUnit { Id = dto.Id, Genre = dto.Genre });
+}
+```
+
+Register it:
+
+```csharp
+builder.Services.AddDXUnitWriteMapper<BookWriteMapper>();
+```
+
+Registers `IDXUnitCommandService<BookRequest>`.
 
 ---
 
@@ -93,44 +144,34 @@ Any DTO property that has no name match in the unit, or whose type is incompatib
 
 ---
 
-## Using `IDXUnitDtoService<TDto>`
+## Service interfaces
 
-Inject the service anywhere — it is registered as Scoped.
+### `IDXUnitDtoService<TRequest, TResponse>` — full CRUD
 
 ```csharp
-public class BooksController(IDXUnitDtoService<TBookDto> books) : ControllerBase
+public interface IDXUnitDtoService<TRequest, TResponse>
+    : IDXUnitQueryService<TResponse>
+    , IDXUnitCommandService<TRequest>
+{ }
+```
+
+### `IDXUnitQueryService<TResponse>` — reads only
+
+```csharp
+public interface IDXUnitQueryService<TResponse>
 {
-    [HttpGet("{id}")]
-    public async Task<TBookDto?> Get(Guid id, CancellationToken ct)
-        => await books.GetAsync(id, ct);
-
-    [HttpGet]
-    public async Task<IEnumerable<TBookDto>> GetAll(CancellationToken ct)
-        => await books.GetAllAsync(ct);
-
-    [HttpGet("search")]
-    public async Task<IEnumerable<TBookDto>> Search([FromQuery] string filter, CancellationToken ct)
-        => await books.GetAsync(filter, ct);  // raw DXSQL filter string
-
-    [HttpPost]
-    public async Task Save(TBookDto dto, CancellationToken ct)
-        => await books.SaveAsync(dto, ct);
-
-    [HttpDelete("{id}")]
-    public async Task Delete(Guid id, CancellationToken ct)
-        => await books.DeleteAsync(id, ct);
+    Task<TResponse?> GetAsync(Guid id, CancellationToken ct = default);
+    Task<IEnumerable<TResponse>> GetAllAsync(CancellationToken ct = default);
+    Task<IEnumerable<TResponse>> GetAsync(string filter, CancellationToken ct = default);
 }
 ```
 
-### `IDXUnitDtoService<TDto>` contract
+### `IDXUnitCommandService<TRequest>` — writes only
 
 ```csharp
-public interface IDXUnitDtoService<TDto>
+public interface IDXUnitCommandService<TRequest>
 {
-    Task<TDto?> GetAsync(Guid id, CancellationToken ct = default);
-    Task<IEnumerable<TDto>> GetAllAsync(CancellationToken ct = default);
-    Task<IEnumerable<TDto>> GetAsync(string filter, CancellationToken ct = default);
-    Task<Guid> SaveAsync(TDto dto, CancellationToken ct = default);
+    Task<Guid> SaveAsync(TRequest dto, CancellationToken ct = default);
     Task DeleteAsync(Guid id, CancellationToken ct = default);
 }
 ```
@@ -143,48 +184,113 @@ public interface IDXUnitDtoService<TDto>
 
 ## Startup validation
 
-Both registration paths fail fast:
+All registration paths fail fast:
 
 - **Convention mapper** — `DXConventionMapper.Validate()` runs during `AddDXUnitMapper<TDto, TUnit>()`. A bad mapping throws `InvalidOperationException` before the host starts.
-- **Custom mapper** — type is checked to ensure it derives from `DXUnitMapper<TDto, TUnit>`. Passing a type that does not throws `InvalidOperationException` at registration.
+- **Custom mapper** — type is checked to ensure it derives from the expected base class (`DXUnitMapper<,,>`, `DXUnitReadMapper<,>`, or `DXUnitWriteMapper<,>`). Passing an incompatible type throws `InvalidOperationException` at registration.
 
 ---
 
-## Full example
+## Full example — asymmetric request/response
 
 ```csharp
 // Domain model
-[DXUnit("TBookUnit")]
-public class TBookUnit : DXUnit
+[DXUnit("BookUnit")]
+public class BookUnit : DXUnit
 {
+    public int Genre { get; set; }
+    public DXMultiElementsContainer<BookTagElement> Tags { get; set; } = new();
+}
+
+// Request DTO — client sends int key for enum fields, no timestamp
+public class BookRequest
+{
+    public Guid Id    { get; set; }
     public string Title { get; set; } = string.Empty;
-    public DXMultiElementsContainer<TBookTagElement> Tags { get; set; } = new();
+    public int Genre  { get; set; }
 }
 
-[DXElement("TBookTagElement")]
-public class TBookTagElement : DXElement
+// Response DTO — server returns resolved enum object and audit fields
+public class BookResponse
 {
-    public string Name { get; set; } = string.Empty;
+    public Guid Id        { get; set; }
+    public string Title   { get; set; } = string.Empty;
+    public GenreDto Genre { get; set; } = null!;  // { key, value }
+    public DateTime UpdatedAt { get; set; }
 }
 
-// DTO
+public record GenreDto(int Key, string Value);
+
+// Custom mapper
+public class BookMapper : DXUnitMapper<BookRequest, BookResponse, BookUnit>
+{
+    private readonly IEnumService _enums;
+    public BookMapper(IEnumService enums) => _enums = enums;
+
+    public override async Task<BookResponse> ToDtoAsync(BookUnit unit, CancellationToken ct = default)
+        => new BookResponse
+        {
+            Id        = unit.Id,
+            Title     = unit.TBookMainElement?.Name ?? string.Empty,
+            Genre     = await _enums.ResolveAsync(unit.Genre, ct),
+            UpdatedAt = unit.TimeStamp
+        };
+
+    public override Task<BookUnit> ToUnitAsync(BookRequest dto, CancellationToken ct = default)
+        => Task.FromResult(new BookUnit
+        {
+            Id    = dto.Id,
+            Genre = dto.Genre,
+            TBookMainElement = new TBookMainElement { Name = dto.Title }
+        });
+}
+
+// Registration
+builder.Services.AddDXUnitMapper<BookMapper>();
+
+// Controller
+public class BooksController(IDXUnitDtoService<BookRequest, BookResponse> books) : ControllerBase
+{
+    [HttpGet("{id}")]
+    public Task<BookResponse?> Get(Guid id, CancellationToken ct)
+        => books.GetAsync(id, ct);
+
+    [HttpGet]
+    public Task<IEnumerable<BookResponse>> GetAll(CancellationToken ct)
+        => books.GetAllAsync(ct);
+
+    [HttpPost]
+    public Task<Guid> Save(BookRequest dto, CancellationToken ct)
+        => books.SaveAsync(dto, ct);
+
+    [HttpDelete("{id}")]
+    public Task Delete(Guid id, CancellationToken ct)
+        => books.DeleteAsync(id, ct);
+}
+```
+
+## Full example — symmetric convention mapper
+
+When request and response shapes are identical, no mapper class is needed:
+
+```csharp
+// Single DTO used for both directions
 public class TBookDto
 {
-    public Guid Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public List<TBookTagElement> Tags { get; set; } = [];
+    public Guid Id        { get; set; }
+    public DateTime TimeStamp { get; set; }
 }
 
-// Registration — convention mapper handles both scalar and container properties
+// Registration
 builder.Services.AddDXUnitMapper<TBookDto, TBookUnit>();
 
-// Usage
-public class BooksController(IDXUnitDtoService<TBookDto> books) : ControllerBase
+// Controller
+public class BooksController(IDXUnitDtoService<TBookDto, TBookDto> books) : ControllerBase
 {
     [HttpGet("{id}")]
     public Task<TBookDto?> Get(Guid id, CancellationToken ct) => books.GetAsync(id, ct);
 
     [HttpPost]
-    public Task Save(TBookDto dto, CancellationToken ct) => books.SaveAsync(dto, ct);
+    public Task<Guid> Save(TBookDto dto, CancellationToken ct) => books.SaveAsync(dto, ct);
 }
 ```

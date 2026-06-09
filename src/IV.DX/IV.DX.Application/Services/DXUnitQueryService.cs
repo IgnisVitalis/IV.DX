@@ -3,13 +3,12 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Services
 {
-    internal sealed class DXUnitDtoService<TRequest, TResponse, TUnit, TMapper>(
+    internal sealed class DXUnitQueryService<TResponse, TUnit, TReadMapper>(
         IDXUnitDataReader reader,
-        IDXUnitDataService dataService,
-        TMapper mapper)
-        : IDXUnitDtoService<TRequest, TResponse>
+        TReadMapper mapper)
+        : IDXUnitQueryService<TResponse>
         where TUnit : DXUnit, new()
-        where TMapper : DXUnitMapper<TRequest, TResponse, TUnit>
+        where TReadMapper : DXUnitReadMapper<TResponse, TUnit>
     {
         public async Task<TResponse?> GetAsync(Guid id, CancellationToken ct = default)
         {
@@ -27,18 +26,6 @@ namespace IV.DX.Application.Services
         {
             var units = await reader.GetItemsAsync<TUnit>(filter, ct: ct);
             return await MapManyAsync(units, ct);
-        }
-
-        public async Task<Guid> SaveAsync(TRequest dto, CancellationToken ct = default)
-        {
-            var unit = await mapper.ToUnitAsync(dto, ct);
-            return await dataService.InsertOrUpdateAsync(unit, ct: ct);
-        }
-
-        public Task DeleteAsync(Guid id, CancellationToken ct = default)
-        {
-            var unit = new TUnit { Id = id };
-            return dataService.DeleteAsync(unit, ct: ct);
         }
 
         private async Task<IEnumerable<TResponse>> MapManyAsync(IEnumerable<TUnit> units, CancellationToken ct)

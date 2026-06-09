@@ -13,11 +13,11 @@ namespace IV.DX.Application.IntTests.Services
     [Collection("DX:dto-service")]
     public class DXUnitDtoServiceTests : IntTestController
     {
-        private readonly IDXUnitDtoService<TBookDto> _service;
+        private readonly IDXUnitDtoService<TBookDto, TBookDto> _service;
 
         public DXUnitDtoServiceTests(DXDtoServiceTestFixture fx, ITestOutputHelper output) : base(fx, output)
         {
-            _service = base.ServiceProvider.GetRequiredService<IDXUnitDtoService<TBookDto>>();
+            _service = base.ServiceProvider.GetRequiredService<IDXUnitDtoService<TBookDto, TBookDto>>();
         }
 
         [Fact]

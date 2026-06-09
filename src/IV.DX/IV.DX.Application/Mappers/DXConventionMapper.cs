@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace IV.DX.Application.Mappers
 {
-    internal sealed class DXConventionMapper<TDto, TUnit> : DXUnitMapper<TDto, TUnit>
+    internal sealed class DXConventionMapper<TDto, TUnit> : DXUnitMapper<TDto, TDto, TUnit>
         where TUnit : DXUnit, new()
     {
         // Built once per closed generic type; throws at startup if mapping is invalid
@@ -61,7 +61,7 @@ namespace IV.DX.Application.Mappers
                     errors.Add(
                         $"  Cannot map '{typeof(TDto).Name}.{dtoProp.Name}' ({dtoProp.PropertyType.Name}) " +
                         $"to '{typeof(TUnit).Name}.{unitProp.Name}' ({unitProp.PropertyType.Name}): " +
-                        $"types are incompatible. Use a custom DXUnitMapper<TDto, TUnit> instead.");
+                        $"types are incompatible. Use a custom DXUnitMapper<TDto, TDto, TUnit> instead.");
                     continue;
                 }
 

@@ -2,6 +2,26 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.106.0] - 2026-06-09
+
+### Changed
+
+- `DXUnitMapper<TDto, TUnit>` replaced by `DXUnitMapper<TRequest, TResponse, TUnit>` — request and response types are now distinct type parameters;
+- `IDXUnitDtoService<TDto>` replaced by `IDXUnitDtoService<TRequest, TResponse>`, which extends `IDXUnitQueryService<TResponse>` and `IDXUnitCommandService<TRequest>`;
+- `AddDXUnitMapper<TDto, TUnit>()` (convention mapper) now registers `IDXUnitDtoService<TDto, TDto>`;
+- `DXConventionMapper<TDto, TUnit>` now inherits `DXUnitMapper<TDto, TDto, TUnit>`;
+
+### Added
+
+- `DXUnitReadMapper<TResponse, TUnit>` — abstract base for read-only mappers (`ToDtoAsync` only);
+- `DXUnitWriteMapper<TRequest, TUnit>` — abstract base for write-only mappers (`ToUnitAsync` only);
+- `IDXUnitQueryService<TResponse>` — read-only service interface (`GetAsync`, `GetAllAsync`);
+- `IDXUnitCommandService<TRequest>` — write-only service interface (`SaveAsync`, `DeleteAsync`);
+- `DXUnitQueryService<TResponse, TUnit, TReadMapper>` — internal implementation of `IDXUnitQueryService<TResponse>`;
+- `DXUnitCommandService<TRequest, TUnit, TWriteMapper>` — internal implementation of `IDXUnitCommandService<TRequest>`;
+- `AddDXUnitReadMapper<TMapper>()` — registers a read-only mapper and `IDXUnitQueryService<TResponse>`;
+- `AddDXUnitWriteMapper<TMapper>()` — registers a write-only mapper and `IDXUnitCommandService<TRequest>`;
+
 ## [0.105.0] - 2026-05-22
 
 ### Changed

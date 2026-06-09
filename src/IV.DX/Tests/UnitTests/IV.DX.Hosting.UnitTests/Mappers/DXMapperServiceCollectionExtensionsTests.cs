@@ -24,11 +24,23 @@ namespace IV.DX.Hosting.UnitTests.Mappers
             public string Ghost { get; set; } = string.Empty;  // no property in SmUnit
         }
 
-        private sealed class SmMapper : DXUnitMapper<SmDto, SmUnit>
+        private sealed class SmMapper : DXUnitMapper<SmDto, SmDto, SmUnit>
         {
             public override Task<SmDto> ToDtoAsync(SmUnit unit, CancellationToken ct = default)
                 => Task.FromResult(new SmDto { Id = unit.Id });
 
+            public override Task<SmUnit> ToUnitAsync(SmDto dto, CancellationToken ct = default)
+                => Task.FromResult(new SmUnit { Id = dto.Id });
+        }
+
+        private sealed class SmReadMapper : DXUnitReadMapper<SmDto, SmUnit>
+        {
+            public override Task<SmDto> ToDtoAsync(SmUnit unit, CancellationToken ct = default)
+                => Task.FromResult(new SmDto { Id = unit.Id });
+        }
+
+        private sealed class SmWriteMapper : DXUnitWriteMapper<SmDto, SmUnit>
+        {
             public override Task<SmUnit> ToUnitAsync(SmDto dto, CancellationToken ct = default)
                 => Task.FromResult(new SmUnit { Id = dto.Id });
         }
@@ -44,7 +56,7 @@ namespace IV.DX.Hosting.UnitTests.Mappers
             services.AddDXUnitMapper<SmMapper>();
 
             Assert.Contains(services,
-                d => d.ServiceType == typeof(IDXUnitDtoService<SmDto>));
+                d => d.ServiceType == typeof(IDXUnitDtoService<SmDto, SmDto>));
         }
 
         [Fact]
@@ -75,7 +87,69 @@ namespace IV.DX.Hosting.UnitTests.Mappers
             services.AddDXUnitMapper<SmDto, SmUnit>();
 
             Assert.Contains(services,
-                d => d.ServiceType == typeof(IDXUnitDtoService<SmDto>));
+                d => d.ServiceType == typeof(IDXUnitDtoService<SmDto, SmDto>));
+        }
+
+        // ── AddDXUnitReadMapper<TMapper> ───────────────────────────────────────────
+
+        [Fact]
+        public void AddDXUnitReadMapper_RegistersIDXUnitQueryService()
+        {
+            var services = new ServiceCollection();
+            services.AddDXUnitReadMapper<SmReadMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(IDXUnitQueryService<SmDto>));
+        }
+
+        [Fact]
+        public void AddDXUnitReadMapper_RegistersMapper()
+        {
+            var services = new ServiceCollection();
+            services.AddDXUnitReadMapper<SmReadMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(SmReadMapper));
+        }
+
+        [Fact]
+        public void AddDXUnitReadMapper_TypeNotDerivedFromDXUnitReadMapper_ThrowsInvalidOperation()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<InvalidOperationException>(
+                () => services.AddDXUnitReadMapper<NotAMapper>());
+        }
+
+        // ── AddDXUnitWriteMapper<TMapper> ──────────────────────────────────────────
+
+        [Fact]
+        public void AddDXUnitWriteMapper_RegistersIDXUnitCommandService()
+        {
+            var services = new ServiceCollection();
+            services.AddDXUnitWriteMapper<SmWriteMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(IDXUnitCommandService<SmDto>));
+        }
+
+        [Fact]
+        public void AddDXUnitWriteMapper_RegistersMapper()
+        {
+            var services = new ServiceCollection();
+            services.AddDXUnitWriteMapper<SmWriteMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(SmWriteMapper));
+        }
+
+        [Fact]
+        public void AddDXUnitWriteMapper_TypeNotDerivedFromDXUnitWriteMapper_ThrowsInvalidOperation()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<InvalidOperationException>(
+                () => services.AddDXUnitWriteMapper<NotAMapper>());
         }
 
         [Fact]
