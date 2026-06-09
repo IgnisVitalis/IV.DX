@@ -23,7 +23,7 @@ namespace IV.DX.Shared.IntTests
 
         public DXTestFixtureBase()
         {
-            _pgContainer = new PostgreSqlBuilder()
+            _pgContainer = new PostgreSqlBuilder("postgres:17-alpine")
                 .WithDatabase(Database)
                 .WithUsername("postgres")
                 .WithPassword("postgres")
@@ -78,6 +78,8 @@ namespace IV.DX.Shared.IntTests
                 return new PGSQLTestSchemaHelper(secrets.DatabaseConnectionString);
             });
 
+            ConfigureAdditionalServices(services);
+
             Root = services.BuildServiceProvider();
 
             await Root.DropDXDatabaseAsync();
@@ -88,6 +90,8 @@ namespace IV.DX.Shared.IntTests
         {
             await _pgContainer.DisposeAsync();
         }
+
+        protected virtual void ConfigureAdditionalServices(IServiceCollection services) { }
 
         public void Dispose() => Root?.Dispose();
     }

@@ -5,7 +5,7 @@ namespace IV.DX.Application.Contracts.Abstractions
         Task<TDto?> GetAsync(Guid id, CancellationToken ct = default);
         Task<IEnumerable<TDto>> GetAllAsync(CancellationToken ct = default);
         Task<IEnumerable<TDto>> GetAsync(string filter, CancellationToken ct = default);
-        Task SaveAsync(TDto dto, CancellationToken ct = default);
+        Task<Guid> SaveAsync(TDto dto, CancellationToken ct = default);
         Task DeleteAsync(Guid id, CancellationToken ct = default);
     }
 }

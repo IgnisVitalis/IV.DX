@@ -29,10 +29,10 @@ namespace IV.DX.Application.Services
             return await MapManyAsync(units, ct);
         }
 
-        public async Task SaveAsync(TDto dto, CancellationToken ct = default)
+        public async Task<Guid> SaveAsync(TDto dto, CancellationToken ct = default)
         {
             var unit = await mapper.ToUnitAsync(dto, ct);
-            await dataService.InsertOrUpdateAsync(unit, ct: ct);
+            return await dataService.InsertOrUpdateAsync(unit, ct: ct);
         }
 
         public Task DeleteAsync(Guid id, CancellationToken ct = default)
