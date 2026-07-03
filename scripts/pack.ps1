@@ -11,7 +11,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $RepoRoot   = Resolve-Path "$PSScriptRoot/.."
-$OutputPath = Join-Path $env:USERPROFILE ".nuget\local-feed"
+$OutputPath = Join-Path $HOME ".nuget" "local-feed"
 if (-not (Test-Path $OutputPath)) { New-Item -ItemType Directory -Path $OutputPath | Out-Null }
 
 function Get-NearestSolution {
@@ -30,7 +30,7 @@ function Get-PackCandidates {
         ForEach-Object { (Resolve-Path (Join-Path $slnDir $_.Trim())).Path }
 
     foreach ($p in $projects) {
-        if ($p -match '\\Tests\\') { continue }
+        if ($p -match '[/\\]Tests[/\\]') { continue }
 
         $xml = Get-Content $p -Raw
         if ($xml -notmatch '<IsPackable>\s*true\s*</IsPackable>') { continue }
