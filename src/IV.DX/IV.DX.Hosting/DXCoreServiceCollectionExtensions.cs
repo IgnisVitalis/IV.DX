@@ -5,9 +5,7 @@ using IV.DX.Application.Handlers;
 using IV.DX.Application.Services;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Persistence;
-using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
-using IV.DX.Persistence.SQLQueryHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -52,8 +50,6 @@ namespace IV.DX.Hosting
                 {
                     if (!string.IsNullOrWhiteSpace(secrets.Value.DatabaseConnectionString))
                         o.ConnectionString = secrets.Value.DatabaseConnectionString;
-                    if (!string.IsNullOrWhiteSpace(secrets.Value.DatabaseType))
-                        o.Type = secrets.Value.DatabaseType;
                 });
 
             services.AddOptions<DXEncryptionOptions>()
@@ -78,14 +74,6 @@ namespace IV.DX.Hosting
             services.AddSingleton<IDXSecurityState, DXSecurityState>();
             services.AddScoped<IDXExecutionContextResolver, DXExecutionContextResolver>();
             services.AddScoped<IDXUnitTypeAccessChecker, DXContextualUnitTypeAccessChecker>();
-
-            services.AddSingleton<ISQLDialect>(sp => (ISQLDialect)GetHelper(sp));
-            services.AddSingleton<ISQLSchemaHelper>(sp => (ISQLSchemaHelper)GetHelper(sp));
-            services.AddSingleton<ISQLDbProvider>(sp => (ISQLDbProvider)GetHelper(sp));
-            services.AddSingleton<ISQLMigrationLockHelper>(sp => (ISQLMigrationLockHelper)GetHelper(sp));
-
-            services.AddSingleton<MySQLQueryDXHelper>();
-            services.AddSingleton<PGSQLQueryDXHelper>();
 
             services.AddSingleton<IDXStructureCache, DXStructureCache>();
 
@@ -133,25 +121,6 @@ namespace IV.DX.Hosting
         private static void RegisterCoreHandlers(this IServiceCollection services)
         {
             services.AddDXHandlers(typeof(DXElementDefinitionUnitHandler).Assembly);
-        }
-
-        private static object GetHelper(IServiceProvider sp)
-        {
-            var o = sp.GetRequiredService<IOptions<DXDatabaseOptions>>().Value;
-
-            if (string.IsNullOrWhiteSpace(o.Type))
-                throw new InvalidOperationException(
-                    "Secrets:DatabaseType is not configured. " +
-                    "Provide the database type via environment variable 'Secrets__DatabaseType' " +
-                    "(e.g. 'PostgreSQL', 'MySQL').");
-
-            return o.Type.Trim().ToLowerInvariant() switch
-            {
-                "mysql" => sp.GetRequiredService<MySQLQueryDXHelper>(),
-                "postgresql" => sp.GetRequiredService<PGSQLQueryDXHelper>(),
-                var t => throw new InvalidOperationException(
-                    $"Unsupported database type '{t}'. Supported values: 'PostgreSQL', 'MySQL'.")
-            };
         }
     }
 }

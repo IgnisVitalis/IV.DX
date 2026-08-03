@@ -29,10 +29,9 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.10" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="Npgsql" Version="9.0.4" />
         <PackageReference Include="Tenekon.MSBuild.Packaging.ProjectBuildInPackage" Version="2.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -42,7 +41,6 @@
     <ItemGroup>
         <ProjectReference Include="..\IV.DX.Application.Contracts\IV.DX.Application.Contracts.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\IV.DX.Application\IV.DX.Application.csproj" PrivateAssets="all" />
-        <ProjectReference Include="..\IV.DX.Domain\IV.DX.Domain.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\IV.DX.Kernel\IV.DX.Kernel.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\IV.DX.Persistence\IV.DX.Persistence.csproj" PrivateAssets="all" />

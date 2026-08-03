@@ -1,4 +1,3 @@
-using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Microsoft.Extensions.Options;
 using System.Data.Common;

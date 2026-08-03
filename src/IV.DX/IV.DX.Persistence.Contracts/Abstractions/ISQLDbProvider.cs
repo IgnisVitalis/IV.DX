@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace IV.DX.Persistence.Abstractions
+namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface ISQLDbProvider
     {

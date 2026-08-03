@@ -1,3 +1,4 @@
+using IV.DX.PostgreSQL;
 using IV.DX.Hosting;
 using IV.DX.Kernel.Models;
 using IV.DX.Shared.IntTests.Schema;
@@ -59,7 +60,6 @@ namespace IV.DX.Shared.IntTests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     { "Secrets:DatabaseConnectionString", _pgContainer.GetConnectionString() },
-                    { "Secrets:DatabaseType", "PostgreSQL" },
                     { "Secrets:JwtSigningKey", "int-tests-signing-key-change-me-32-bytes" },
                     { "Secrets:EncryptionKey", "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcy0hISE=" }
                 })
@@ -68,6 +68,7 @@ namespace IV.DX.Shared.IntTests
             var services = new ServiceCollection();
 
             services.AddDX(configuration)
+                    .UsePostgreSQL()
                     .AddSecurity()
                     .AddCustomData("MigrationScripts/Test.json")
                     .Build();

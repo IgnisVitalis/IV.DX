@@ -2,6 +2,7 @@
 
 [assembly: InternalsVisibleTo("IV.DX.Application")]
 [assembly: InternalsVisibleTo("IV.DX.Persistence")]
+[assembly: InternalsVisibleTo("IV.DX.PostgreSQL")]
 [assembly: InternalsVisibleTo("IV.DX.Hosting")]
 
 [assembly: InternalsVisibleTo("IV.DX.Persistence.IntTests")]

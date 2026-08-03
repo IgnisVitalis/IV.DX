@@ -179,6 +179,7 @@ Actions are registered through `DXBuilder`:
 ```csharp
 builder.Services
     .AddDX(builder.Configuration)
+    .UsePostgreSQL()
     .AddSecurity()
     .AddActions(typeof(Program).Assembly)   // scan app assembly for actions
     .AddHandlers(typeof(Program).Assembly)

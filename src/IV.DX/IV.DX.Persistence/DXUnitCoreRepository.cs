@@ -4,7 +4,6 @@ using IV.DX.Kernel.Converters.DXModelDefinitionConverters;
 using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Models;
-using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Newtonsoft.Json.Linq;
 using System.Data;

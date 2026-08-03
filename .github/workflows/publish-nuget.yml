@@ -25,7 +25,8 @@ jobs:
 
     env:
       SOLUTION_PATH: src/IV.DX/IV.DX.sln
-      PROJECT_PATH: src/IV.DX/IV.DX.Hosting/IV.DX.Hosting.csproj
+      CORE_PROJECT_PATH: src/IV.DX/IV.DX.Hosting/IV.DX.Hosting.csproj
+      POSTGRES_PROJECT_PATH: src/IV.DX/IV.DX.PostgreSQL/IV.DX.PostgreSQL.csproj
       TEST_SETTINGS: src/IV.DX/Tests/CodeCoverage.runsettings
       GPR_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       NUGET_SOURCE: https://api.nuget.org/v3/index.json
@@ -119,14 +120,19 @@ jobs:
           path: coveragereport
           if-no-files-found: ignore
 
-      - name: Pack (project)
+      - name: Pack (projects)
         run: |
           mkdir -p artifacts
-          if [ -n "${{ steps.v.outputs.version }}" ]; then
-            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts -p:Version=${{ steps.v.outputs.version }} -p:TreatWarningsAsErrors=true
-          else
-            dotnet pack "$PROJECT_PATH" -c Release -o ./artifacts -p:TreatWarningsAsErrors=true
-          fi
+          # IV.DX and IV.DX.PostgreSQL ship in lockstep on the same version:
+          # the provider SPI is internal, so the provider is only valid against
+          # the exact core version it was built with.
+          for proj in "$CORE_PROJECT_PATH" "$POSTGRES_PROJECT_PATH"; do
+            if [ -n "${{ steps.v.outputs.version }}" ]; then
+              dotnet pack "$proj" -c Release -o ./artifacts -p:Version=${{ steps.v.outputs.version }} -p:TreatWarningsAsErrors=true
+            else
+              dotnet pack "$proj" -c Release -o ./artifacts -p:TreatWarningsAsErrors=true
+            fi
+          done
 
       - name: Upload test results & coverage
         uses: actions/upload-artifact@v4

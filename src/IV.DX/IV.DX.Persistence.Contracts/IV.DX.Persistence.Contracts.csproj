@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IV.DX.Domain\IV.DX.Domain.csproj" />
         <ProjectReference Include="..\IV.DX.Kernel\IV.DX.Kernel.csproj" />
     </ItemGroup>
 

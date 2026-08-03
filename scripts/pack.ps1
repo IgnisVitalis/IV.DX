@@ -46,21 +46,27 @@ function Get-PackCandidates {
 }
 
 function Get-NextVersion {
-    param([string]$Folder, [string]$PackageId, [string]$Mode)
+    param([string]$Folder, [string[]]$PackageIds, [string]$Mode)
 
-    $rx = [regex]("^" + [regex]::Escape($PackageId) + "\.(\d+)\.(\d+)\.(\d+)\.nupkg$")
-    $items = Get-ChildItem $Folder -Filter "$PackageId.*.nupkg" -File -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -notlike "*.symbols.nupkg" } |
-        ForEach-Object {
-            $m = $rx.Match($_.Name)
-            if ($m.Success) {
-                [pscustomobject]@{
-                    Major = [int]$m.Groups[1].Value
-                    Minor = [int]$m.Groups[2].Value
-                    Patch = [int]$m.Groups[3].Value
+    # All IV.DX packages ship in lockstep: the provider SPI is internal, so a
+    # provider package is only valid against the exact core version it was built
+    # with. Version is therefore derived from the highest existing version across
+    # every package and applied uniformly.
+    $items = foreach ($PackageId in $PackageIds) {
+        $rx = [regex]("^" + [regex]::Escape($PackageId) + "\.(\d+)\.(\d+)\.(\d+)\.nupkg$")
+        Get-ChildItem $Folder -Filter "$PackageId.*.nupkg" -File -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -notlike "*.symbols.nupkg" } |
+            ForEach-Object {
+                $m = $rx.Match($_.Name)
+                if ($m.Success) {
+                    [pscustomobject]@{
+                        Major = [int]$m.Groups[1].Value
+                        Minor = [int]$m.Groups[2].Value
+                        Patch = [int]$m.Groups[3].Value
+                    }
                 }
             }
-        }
+    }
 
     if (-not $items) { return "0.1.0" }
 
@@ -71,37 +77,45 @@ function Get-NextVersion {
     return "$($v.Major).$($v.Minor + 1).0"
 }
 
+$sln = if ($Solution) { (Resolve-Path (Join-Path $RepoRoot $Solution)).Path } else { Get-NearestSolution $RepoRoot }
+
+# The whole package family is always discovered, even when packing a single
+# project, so the computed version accounts for every package.
+$family = @(Get-PackCandidates $sln)
+if ($family.Count -eq 0) { throw "No packable projects found" }
+
 if ($Project) {
     $projPath = (Resolve-Path (Join-Path $RepoRoot $Project)).Path
-    $xml = Get-Content $projPath -Raw
-    $m = [regex]::Match($xml, '<PackageId>\s*([^<]+?)\s*</PackageId>')
-    if (-not $m.Success) { throw "PackageId not found" }
-    $PackageId = $m.Groups[1].Value.Trim()
-    $ProjectPath = $projPath
+    $candidates = @($family | Where-Object { $_.ProjectPath -eq $projPath })
+    if ($candidates.Count -eq 0) { throw "Not a packable project in the solution: $Project" }
 } else {
-    $sln = if ($Solution) { (Resolve-Path (Join-Path $RepoRoot $Solution)).Path } else { Get-NearestSolution $RepoRoot }
-    $candidates = @(Get-PackCandidates $sln)
-    if ($candidates.Count -eq 0) { throw "No packable projects found" }
-    if ($candidates.Count -gt 1) { throw "Multiple packable projects found. Specify -Project." }
-    $ProjectPath = $candidates[0].ProjectPath
-    $PackageId   = $candidates[0].PackageId
+    $candidates = $family
 }
 
 if (-not $Version) {
     $mode = if ($BumpPatch) { "minor" } else { "patch" }
-    $Version = Get-NextVersion $OutputPath $PackageId $mode
+    $Version = Get-NextVersion $OutputPath ($family | ForEach-Object { $_.PackageId }) $mode
 }
 
-$pkg = Join-Path $OutputPath "$PackageId.$Version.nupkg"
-if (Test-Path $pkg) { throw "Package already exists" }
+foreach ($c in $candidates) {
+    $pkg = Join-Path $OutputPath "$($c.PackageId).$Version.nupkg"
+    if (Test-Path $pkg) { throw "Package already exists: $pkg" }
+}
 
-dotnet pack `
-    $ProjectPath `
-    -c $Configuration `
-    --no-restore `
-    -o $OutputPath `
-    -p:Version=$Version `
-    -p:TreatWarningsAsErrors=true
+foreach ($c in $candidates) {
+    # Restore is intentionally NOT skipped: with --no-restore a csproj change
+    # since the last restore is packed against a stale project.assets.json,
+    # silently producing a package built on the wrong dependency graph.
+    dotnet pack `
+        $c.ProjectPath `
+        -c $Configuration `
+        -o $OutputPath `
+        -p:Version=$Version `
+        -p:TreatWarningsAsErrors=true
 
+    if ($LASTEXITCODE -ne 0) { throw "pack failed for $($c.PackageId)" }
+}
 
-Write-Host $pkg
+foreach ($c in $candidates) {
+    Write-Host (Join-Path $OutputPath "$($c.PackageId).$Version.nupkg")
+}

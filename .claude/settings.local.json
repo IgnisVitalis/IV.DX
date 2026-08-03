@@ -2,7 +2,22 @@
   "permissions": {
     "allow": [
       "Bash(dotnet build:*)",
-      "Bash(dotnet test:*)"
+      "Bash(dotnet test:*)",
+      "Bash(bc)",
+      "Bash(git rm *)",
+      "Bash(xargs sed -i '/IV\\\\.DX\\\\.Domain\\\\\\\\IV\\\\.DX\\\\.Domain\\\\.csproj/d')",
+      "Bash(echo \"--- csproj refs remaining: $? ---\")",
+      "Bash(dotnet sln *)",
+      "Bash(git mv *)",
+      "Bash(grep -rnE '\\(Append|Join|\\\\breturn\\\\b|=\\)\\\\s*[\\\\$]?\"[^\"]*\\\\b\\(SELECT|FROM|WHERE|LEFT JOIN|INNER JOIN|AND|OR|ORDER BY|IN\\)\\\\b' --include=\"*.cs\" .)",
+      "Bash(chmod +x scripts/pack-iv.dx.ps1 scripts/pack-iv.dx.postgresql.ps1)",
+      "Read(//home/iv/Git/IgnisVitalis/DX/IV.DX.WebApi/**)",
+      "Read(//home/iv/Git/IgnisVitalis/DX/IV.DX.WebApi/scripts/**)",
+      "Bash(cd /home/iv/Git/IgnisVitalis/DX/IV.DX.WebApi && echo \"=== pack-core ===\" && cat scripts/pack-core.ps1 && echo \"=== pack-auth ===\" && cat scripts/pack-auth.ps1 && echo \"=== pack-management ===\" && cat scripts/pack-management.ps1)",
+      "Bash(pwsh -NoProfile -Command ' *)",
+      "Bash(pwsh -NoProfile -NoLogo -Command 'Write-Host \"pwsh ok\"')",
+      "Bash(pwsh -NoProfile -NoLogo -File /tmp/claude-1000/-home-iv-Git-IgnisVitalis-DX-IV-DX/4825b3bd-d07e-4620-961a-34a713f4133a/scratchpad/syntaxcheck.ps1)",
+      "Bash(pwsh -NoProfile -NoLogo -File /tmp/claude-1000/-home-iv-Git-IgnisVitalis-DX-IV-DX/4825b3bd-d07e-4620-961a-34a713f4133a/scratchpad/ordercheck.ps1)"
     ]
   }
 }

@@ -1,6 +1,5 @@
 ﻿using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
-using IV.DX.Persistence.Abstractions;
 using IV.DX.Persistence.Contracts.Abstractions;
 using Npgsql;
 using NpgsqlTypes;
@@ -9,7 +8,7 @@ using System.Data.Common;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace IV.DX.Persistence.SQLQueryHelpers
+namespace IV.DX.PostgreSQL
 {
     internal class PGSQLQueryDXHelper :
         ISQLDialect,
@@ -247,8 +246,8 @@ namespace IV.DX.Persistence.SQLQueryHelpers
             var columnsToDrop = this.GetColumnDescDXElementsToDrop(dataDXElementNew, dataDXElementExisting);
             var columnIDsToChange = this.GetColumnDescDXElementIDsToChange(dataDXElementNew, dataDXElementExisting);
 
-            var columnsToDropMySQLCommand = columnsToDrop.Select(x => $"DROP COLUMN \"{x.Name}\"");
-            var columnsToAddMySQLCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
+            var columnsToDropCommand = columnsToDrop.Select(x => $"DROP COLUMN \"{x.Name}\"");
+            var columnsToAddCommand = columnsToAdd.Select(x => $"ADD COLUMN {this.GetSQLColumnDefinitionToAddInTable(x)}");
             var columnsToAlterColumnSetTypeCommand = columnIDsToChange.Select(x =>
                 this.GetSQLColumnDefinitionToAlterColumnSetType(
                     dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
@@ -269,17 +268,17 @@ namespace IV.DX.Persistence.SQLQueryHelpers
                   dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
                   dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
-            if (columnsToDropMySQLCommand != null && columnsToDropMySQLCommand.Count() > 0)
+            if (columnsToDropCommand != null && columnsToDropCommand.Count() > 0)
             {
                 sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
-                sb.Append($"{string.Join(",", columnsToDropMySQLCommand)}");
+                sb.Append($"{string.Join(",", columnsToDropCommand)}");
                 sb.Append(";");
             }
 
-            if (columnsToAddMySQLCommand != null && columnsToAddMySQLCommand.Count() > 0)
+            if (columnsToAddCommand != null && columnsToAddCommand.Count() > 0)
             {
                 sb.Append($"ALTER TABLE \"{dataDXElementExisting.Name}\" ");
-                sb.Append($"{string.Join(",", columnsToAddMySQLCommand)}");
+                sb.Append($"{string.Join(",", columnsToAddCommand)}");
                 sb.Append(";");
             }
 
@@ -1024,7 +1023,6 @@ END $$;
                     pgbSqlDataType = "boolean";
                     break;
                 case DXColumnTypeEnum.DateTime:
-                    //mysqlDataType = "time";
                     pgbSqlDataType = "timestamp with time zone";
                     break;
                 case DXColumnTypeEnum.Decimal:

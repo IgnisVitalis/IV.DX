@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <PackageId>IV.DX.PostgreSQL</PackageId>
+        <Authors>Ignis Vitalis</Authors>
+        <Company>IgnisVitalis</Company>
+        <Description>PostgreSQL database provider for IV.DX.</Description>
+        <RepositoryUrl>https://github.com/IgnisVitalis/IV.DX</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>utilities;postgresql;</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Npgsql" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Becomes a package dependency on IV.DX. -->
+        <ProjectReference Include="..\IV.DX.Hosting\IV.DX.Hosting.csproj" />
+
+        <!-- Needed to compile against, but shipped inside the IV.DX package,
+             so they must not be emitted as dependencies or duplicated here. -->
+        <ProjectReference Include="..\IV.DX.Kernel\IV.DX.Kernel.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\IV.DX.Persistence.Contracts\IV.DX.Persistence.Contracts.csproj" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\..\README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-namespace IV.DX.Persistence.Abstractions
+namespace IV.DX.Persistence.Contracts.Abstractions
 {
     internal interface ISQLDialect
     {

@@ -6,19 +6,25 @@ IV.DX is a DB-driven framework for defining, persisting, and querying structured
 
 ## 1) Installation
 
-Add the NuGet package to your project:
+Add the core package and a database provider package to your project:
 
 ```xml
 <PackageReference Include="IV.DX" Version="x.x.x" />
+<PackageReference Include="IV.DX.PostgreSQL" Version="x.x.x" />
 ```
 
-The package bundles all layers: domain, persistence, application services, and hosting extensions.
+`IV.DX` bundles the storage-agnostic layers: domain, persistence, application services, and hosting
+extensions. It carries no database driver of its own.
+
+The provider package supplies the concrete database implementation and is selected explicitly in
+code — see [section 3](#3-service-registration-and-initialization). PostgreSQL is currently the only
+provider; additional providers can be added without changing `IV.DX`.
 
 ---
 
 ## 2) Configuration
 
-IV.DX requires a PostgreSQL database (MySQL is also supported) and reads its configuration from `IConfiguration`. Non-secret settings go in `appsettings.json`; secrets are always provided via environment variables.
+IV.DX requires a PostgreSQL database and reads its configuration from `IConfiguration`. Non-secret settings go in `appsettings.json`; secrets are always provided via environment variables.
 
 ### 2.1 appsettings.json — non-secret settings only
 
@@ -42,7 +48,6 @@ Never store secrets in `appsettings.json`. All secrets live under a single `Secr
 | Environment Variable                | Required                       | Description                                                         |
 |-------------------------------------|--------------------------------|---------------------------------------------------------------------|
 | `Secrets__DatabaseConnectionString` | Yes                            | Database connection string.                                         |
-| `Secrets__DatabaseType`             | Yes                            | Database type: `PostgreSQL`, `MySQL`.                               |
 | `Secrets__EncryptionKey`            | Yes                            | Base64-encoded 32-byte AES key. Generate: `openssl rand -base64 32` |
 | `Secrets__JwtSigningKey`            | Yes, if using `.AddSecurity()` | JWT signing key, min 32 chars.                                      |
 
@@ -106,6 +111,7 @@ services.AddSingleton<IDXEncryptionKeyProvider, MySharedKeyProvider>();
 // Then add DX as normal.
 builder.Services
     .AddDX(builder.Configuration)
+    .UsePostgreSQL()
     .RegisterHostedService();
 ```
 
@@ -151,7 +157,6 @@ The service finds all unit types that have at least one `EncryptedString` column
       "commandName": "Project",
       "environmentVariables": {
         "Secrets__DatabaseConnectionString": "Host=localhost;Database=myapp;Username=postgres;Password=secret",
-        "Secrets__DatabaseType": "PostgreSQL",
         "Secrets__EncryptionKey": "<base64-32-bytes>",
         "Secrets__JwtSigningKey": "dev-signing-key-at-least-32-characters"
       }
@@ -164,7 +169,6 @@ Alternatively use [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/c
 
 ```bash
 dotnet user-secrets set "Secrets:DatabaseConnectionString" "Host=localhost;Database=myapp;Username=postgres;Password=secret"
-dotnet user-secrets set "Secrets:DatabaseType" "PostgreSQL"
 dotnet user-secrets set "Secrets:EncryptionKey" "<base64-32-bytes>"
 dotnet user-secrets set "Secrets:JwtSigningKey" "dev-signing-key-at-least-32-characters"
 ```
@@ -174,7 +178,6 @@ dotnet user-secrets set "Secrets:JwtSigningKey" "dev-signing-key-at-least-32-cha
 ```ini
 # /etc/myapp/secrets  (chmod 600, chown myapp:myapp)
 Secrets__DatabaseConnectionString=Host=db.internal;Database=myapp;Username=app;Password=...
-Secrets__DatabaseType=PostgreSQL
 Secrets__EncryptionKey=...
 Secrets__JwtSigningKey=...
 ```
@@ -192,7 +195,6 @@ ExecStart=/usr/bin/dotnet /opt/myapp/MyApp.dll
 ```powershell
 # Run as Administrator — scoped to the service user account
 [System.Environment]::SetEnvironmentVariable("Secrets__DatabaseConnectionString", "Host=db;Database=myapp;Username=app;Password=...", "Machine")
-[System.Environment]::SetEnvironmentVariable("Secrets__DatabaseType", "PostgreSQL", "Machine")
 [System.Environment]::SetEnvironmentVariable("Secrets__EncryptionKey", "...", "Machine")
 [System.Environment]::SetEnvironmentVariable("Secrets__JwtSigningKey", "...", "Machine")
 ```
@@ -204,7 +206,6 @@ ExecStart=/usr/bin/dotnet /opt/myapp/MyApp.dll
 ```bash
 docker run \
   -e Secrets__DatabaseConnectionString="Host=db;Database=myapp;Username=app;Password=secret" \
-  -e Secrets__DatabaseType="PostgreSQL" \
   -e Secrets__EncryptionKey="..." \
   -e Secrets__JwtSigningKey="..." \
   myapp:latest
@@ -217,7 +218,6 @@ services:
     image: myapp:latest
     environment:
       Secrets__DatabaseConnectionString: "Host=db;Database=myapp;Username=app;Password=secret"
-      Secrets__DatabaseType: "PostgreSQL"
       Secrets__EncryptionKey: "..."
       Secrets__JwtSigningKey: "..."
 ```
@@ -228,17 +228,35 @@ For production use Docker secrets or an external secrets manager (AWS Secrets Ma
 
 ## 3) Service registration and initialization
 
-IV.DX uses a builder API to register services and declare which optional modules are active. All schema migrations and startup logic run automatically.
+IV.DX uses a builder API to register services, select the database provider, and declare which optional modules are active. All schema migrations and startup logic run automatically.
+
+### Selecting the database provider
+
+The provider is chosen **explicitly in code**, not through configuration — core has no knowledge of
+which databases exist. Call the provider's extension method on the builder returned by `AddDX`:
+
+```csharp
+using IV.DX.Hosting;
+using IV.DX.PostgreSQL;
+
+services.AddDX(configuration)
+        .UsePostgreSQL();
+```
+
+If no provider is registered by the time `Build()` or `RegisterHostedService()` runs, DX throws an
+`InvalidOperationException` naming the missing call.
 
 ### ASP.NET Core / Generic Host (recommended)
 
 ```csharp
 using IV.DX.Hosting;
+using IV.DX.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddDX(builder.Configuration)
+    .UsePostgreSQL()                          // database provider
     .AddHandlers(typeof(MyHandler).Assembly)  // your domain handlers
     .AddSecurity()                            // optional: RBAC and auth
     .AddCustomData("MigrationScripts/MyApp.json") // your schema
@@ -250,10 +268,14 @@ builder.Services
 ### Non-hosted apps (console, desktop, tests)
 
 ```csharp
+using IV.DX.Hosting;
+using IV.DX.PostgreSQL;
+
 var services = new ServiceCollection();
 
 services
     .AddDX(configuration)
+    .UsePostgreSQL()
     .AddHandlers(typeof(MyHandler).Assembly)
     .AddSecurity()                            // optional
     .AddCustomData("MigrationScripts/MyApp.json")
@@ -847,6 +869,7 @@ See [DXUnitDtoMapper.md](DXUnitDtoMapper.md) for the full reference including co
 // ASP.NET Core / Generic Host
 builder.Services
     .AddDX(builder.Configuration)
+    .UsePostgreSQL()                                 // database provider
     .AddHandlers(typeof(MyHandler).Assembly)
     .AddSecurity()                                   // optional
     .AddCustomData("MigrationScripts/MyApp.json")
@@ -859,6 +882,7 @@ var app = builder.Build();
 // Non-hosted (console, desktop, tests)
 services
     .AddDX(configuration)
+    .UsePostgreSQL()
     .AddHandlers(typeof(MyHandler).Assembly)
     .AddSecurity()                                   // optional
     .AddCustomData("MigrationScripts/MyApp.json")

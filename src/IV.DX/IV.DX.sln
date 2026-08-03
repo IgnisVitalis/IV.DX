@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Domain", "IV.DX.Domain\IV.DX.Domain.csproj", "{BAF9586D-74E6-4841-96CD-13C9F81CF455}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Application", "IV.DX.Application\IV.DX.Application.csproj", "{805AA468-1E9E-4F68-9C51-7715D8A3025E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Persistence", "IV.DX.Persistence\IV.DX.Persistence.csproj", "{57EE2373-C063-4441-BA28-FBCD86E6D529}"
@@ -40,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Kernel.UnitTests", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.Hosting.UnitTests", "Tests\UnitTests\IV.DX.Hosting.UnitTests\IV.DX.Hosting.UnitTests.csproj", "{F76E13A0-54F9-4B17-91C0-0F0B9F458C96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IV.DX.PostgreSQL", "IV.DX.PostgreSQL\IV.DX.PostgreSQL.csproj", "{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,18 +50,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|x64.Build.0 = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Debug|x86.Build.0 = Debug|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|x64.ActiveCfg = Release|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|x64.Build.0 = Release|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|x86.ActiveCfg = Release|Any CPU
-		{BAF9586D-74E6-4841-96CD-13C9F81CF455}.Release|x86.Build.0 = Release|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{805AA468-1E9E-4F68-9C51-7715D8A3025E}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -218,6 +206,18 @@ Global
 		{F76E13A0-54F9-4B17-91C0-0F0B9F458C96}.Release|x64.Build.0 = Release|Any CPU
 		{F76E13A0-54F9-4B17-91C0-0F0B9F458C96}.Release|x86.ActiveCfg = Release|Any CPU
 		{F76E13A0-54F9-4B17-91C0-0F0B9F458C96}.Release|x86.Build.0 = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|x64.Build.0 = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Debug|x86.Build.0 = Debug|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|x64.ActiveCfg = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|x64.Build.0 = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9810EDC0-AA09-451E-8299-C3DCB1C32C6B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,3 +1,4 @@
+using IV.DX.PostgreSQL;
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Hosting;
 using IV.DX.Kernel.Attributes;
@@ -72,7 +73,6 @@ namespace IV.DX.Application.IntTests.Services
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     { "Secrets:DatabaseConnectionString", connectionString },
-                    { "Secrets:DatabaseType", "PostgreSQL" },
                     { "Secrets:JwtSigningKey", "int-tests-signing-key-change-me-32-bytes" },
                     { "Secrets:EncryptionKey", "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcy0hISE=" },
                     { "Database:MigrationLockEnabled", "true" },
@@ -84,7 +84,7 @@ namespace IV.DX.Application.IntTests.Services
                 .Build();
 
             var services = new ServiceCollection();
-            services.AddDX(configuration).Build();
+            services.AddDX(configuration).UsePostgreSQL().Build();
 
             var root = services.BuildServiceProvider();
 
