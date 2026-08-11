@@ -46,7 +46,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Read_Allowed_WhenMembershipRoleGrantsRead()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
 
             try
@@ -70,7 +70,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Read_Denied_WhenMembershipRoleHasNoReadGrant()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: false, write: true, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: false, create: true, update: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var hiddenId = Guid.Empty;
 
@@ -99,10 +99,10 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
-        public async Task Write_Allowed_WhenMembershipRoleGrantsWrite()
+        public async Task Create_Allowed_WhenMembershipRoleGrantsCreate()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -126,10 +126,10 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
-        public async Task Write_Denied_WhenMembershipRoleHasNoWriteGrant()
+        public async Task Create_Denied_WhenMembershipRoleHasNoCreateGrant()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
 
             try
@@ -153,7 +153,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Delete_Allowed_WhenMembershipRoleGrantsDelete()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: true);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: true, delete: true);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -186,7 +186,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Delete_Denied_WhenRoleHasWriteButNotDelete()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -220,8 +220,8 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Read_Denied_WhenOneRoleDenies_EvenIfAnotherAllows()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var allowRoleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false, effect: DXGrantEffectEnum.Allow);
-            var denyRoleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false, effect: DXGrantEffectEnum.Deny);
+            var allowRoleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: false, delete: false, effect: DXGrantEffectEnum.Allow);
+            var denyRoleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: false, delete: false, effect: DXGrantEffectEnum.Deny);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, allowRoleId, denyRoleId);
             var hiddenId = Guid.Empty;
 
@@ -236,9 +236,9 @@ namespace IV.DX.Application.IntTests.Services
                 var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
                 using var _ = _contextAccessor.BeginScope(ctx);
 
-                // Deny effect overrides Allow → AllowedOwnedOnly → reader returns empty (not exception)
-                var items = await _reader.GetItemsAsync<TUserUnit>();
-                Assert.Empty(items);
+                // An explicit Deny is a hard denial: it outranks the ownership fallback.
+                await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                    () => _reader.GetItemsAsync<TUserUnit>());
             }
             finally
             {
@@ -258,8 +258,8 @@ namespace IV.DX.Application.IntTests.Services
             var tUserUnitDefId = GetUnitDefinitionId("TUserUnit");
             var tDocumentUnitDefId = GetUnitDefinitionId("TDocumentUnit");
 
-            var tenantRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, write: true, delete: false);
-            var membershipRoleId = await CreateRoleAsync(tDocumentUnitDefId, read: true, write: true, delete: false);
+            var tenantRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, create: true, update: true, delete: false);
+            var membershipRoleId = await CreateRoleAsync(tDocumentUnitDefId, read: true, create: true, update: true, delete: false);
             var tenantId = await CreateTenantWithRolesAsync(tenantRoleId);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, tenantId, membershipRoleId);
 
@@ -291,9 +291,9 @@ namespace IV.DX.Application.IntTests.Services
             var tUserUnitDefId = GetUnitDefinitionId("TUserUnit");
             var tDocumentUnitDefId = GetUnitDefinitionId("TDocumentUnit");
 
-            var memberRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, write: false, delete: false);
+            var memberRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, create: false, update: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, memberRoleId);
-            var groupRoleId = await CreateRoleAsync(tDocumentUnitDefId, read: true, write: false, delete: false);
+            var groupRoleId = await CreateRoleAsync(tDocumentUnitDefId, read: true, create: false, update: false, delete: false);
             var groupId = await CreateGroupAsync(_rbacFx.TenantId, groupRoleId);
             var groupMembershipId = await CreateGroupMembershipAsync(groupId, membershipId);
             var hiddenId = Guid.Empty;
@@ -330,9 +330,9 @@ namespace IV.DX.Application.IntTests.Services
         {
             var tUserUnitDefId = GetUnitDefinitionId("TUserUnit");
 
-            var memberRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, write: false, delete: false);
+            var memberRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, create: false, update: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, memberRoleId);
-            var groupRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, write: false, delete: false);
+            var groupRoleId = await CreateRoleAsync(tUserUnitDefId, read: true, create: false, update: false, delete: false);
             var groupId = await CreateGroupAsync(_rbacFx.TenantId, groupRoleId);
             var groupMembershipId = await CreateGroupMembershipAsync(groupId, membershipId);
 
@@ -363,7 +363,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Delete_Succeeds_WhenOwnedOnly_AndUserOwnsRecord()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -403,7 +403,7 @@ namespace IV.DX.Application.IntTests.Services
         public async Task Delete_Denied_WhenOwnedOnly_AndUserDoesNotOwnRecord()
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: true, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: true, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -440,7 +440,7 @@ namespace IV.DX.Application.IntTests.Services
         {
             var unitDefId = GetUnitDefinitionId("TUserUnit");
             // No write grant → AllowedOwnedOnly for writes
-            var roleId = await CreateRoleAsync(unitDefId, read: true, write: false, delete: false);
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: false, delete: false);
             var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
             var insertedId = Guid.Empty;
 
@@ -463,7 +463,11 @@ namespace IV.DX.Application.IntTests.Services
                         TimeStamp = DateTime.UtcNow,
                         Identity = _rbacFx.IdentityId,
                         DXUnitDefinition = unitDef.Id,
-                        OwnedDXUnitId = insertedId
+                        OwnedDXUnitId = insertedId,
+                        Read = true,
+                        Update = true,
+                        Delete = true,
+                        Effect = DXGrantEffectEnum.Allow
                     });
                 });
 
@@ -484,6 +488,340 @@ namespace IV.DX.Application.IntTests.Services
                     ("TUserUnit", insertedId),
                     ("DXMembershipUnit", membershipId),
                     ("DXRoleUnit", roleId));
+            }
+        }
+
+        // ===== F. Create and Update as separate grants =====
+
+        [Fact]
+        public async Task Create_Allowed_WhenRoleGrantsCreateWithoutUpdate()
+        {
+            var unitDefId = GetUnitDefinitionId("TUserUnit");
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: false, delete: false);
+            var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
+            var insertedId = Guid.Empty;
+
+            try
+            {
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "CreateOnly", DateTime.UtcNow.Date));
+
+                Assert.NotEqual(Guid.Empty, insertedId);
+            }
+            finally
+            {
+                await CleanupAsync(
+                    ("TUserUnit", insertedId),
+                    ("DXMembershipUnit", membershipId),
+                    ("DXRoleUnit", roleId));
+            }
+        }
+
+        [Fact]
+        public async Task Update_Denied_WhenRoleGrantsCreateWithoutUpdate_AndTypeHasNoOwnership()
+        {
+            // Append-only: the author may add records but may not revise them afterwards.
+            // TUserUnit.SupportsOwnership is false, so the creator gets no ownership row to fall back on.
+            var unitDefId = GetUnitDefinitionId("TUserUnit");
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: true, update: false, delete: false);
+            var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
+            var insertedId = Guid.Empty;
+
+            try
+            {
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+
+                using (var _ = _contextAccessor.BeginScope(ctx))
+                {
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "AppendOnly", DateTime.UtcNow.Date));
+                }
+
+                var existing = _genericRepo.GetDXUnit<TUserUnit>(insertedId)!;
+                existing.TUserMainElement.Name = "AppendOnlyEdited";
+
+                using (var _ = _contextAccessor.BeginScope(ctx))
+                {
+                    await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                        () => _dataService.UpdateAsync(existing));
+                }
+            }
+            finally
+            {
+                await CleanupAsync(
+                    ("TUserUnit", insertedId),
+                    ("DXMembershipUnit", membershipId),
+                    ("DXRoleUnit", roleId));
+            }
+        }
+
+        [Fact]
+        public async Task Create_Denied_WhenRoleGrantsUpdateWithoutCreate()
+        {
+            // Moderator shape: may revise any record, may not author new ones.
+            var unitDefId = GetUnitDefinitionId("TUserUnit");
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: true, delete: false);
+            var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
+
+            try
+            {
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                    () => _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "NoCreateGrant", DateTime.UtcNow.Date)));
+            }
+            finally
+            {
+                await CleanupAsync(
+                    ("DXMembershipUnit", membershipId),
+                    ("DXRoleUnit", roleId));
+            }
+        }
+
+        [Fact]
+        public async Task Update_Allowed_WhenRoleGrantsUpdateWithoutCreate_OnRecordUserDoesNotOwn()
+        {
+            var unitDefId = GetUnitDefinitionId("TUserUnit");
+            var roleId = await CreateRoleAsync(unitDefId, read: true, create: false, update: true, delete: false);
+            var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, roleId);
+            var insertedId = Guid.Empty;
+
+            await RunAsSystemAsync(async () =>
+            {
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "ForeignRecord", DateTime.UtcNow.Date));
+            });
+
+            try
+            {
+                var existing = _genericRepo.GetDXUnit<TUserUnit>(insertedId)!;
+                existing.TUserMainElement.Name = "ForeignEdited";
+
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                var updatedId = await _dataService.UpdateAsync(existing);
+
+                Assert.NotEqual(Guid.Empty, updatedId);
+            }
+            finally
+            {
+                await CleanupAsync(
+                    ("TUserUnit", insertedId),
+                    ("DXMembershipUnit", membershipId),
+                    ("DXRoleUnit", roleId));
+            }
+        }
+
+        // ===== G. AllowAuthenticatedCreate =====
+
+        [Fact]
+        public async Task Create_Allowed_WhenTypeAllowsAuthenticatedCreate_AndIdentityHasNoRoles()
+        {
+            await SetAllowAuthenticatedCreateAsync("TUserUnit", true);
+            var insertedId = Guid.Empty;
+
+            try
+            {
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                insertedId = await _dataService.InsertAsync(
+                    TUserUnitFactory.GetItem("RBAC", "SelfServiceCreate", DateTime.UtcNow.Date));
+
+                Assert.NotEqual(Guid.Empty, insertedId);
+            }
+            finally
+            {
+                await SetAllowAuthenticatedCreateAsync("TUserUnit", false);
+                await CleanupAsync(("TUserUnit", insertedId));
+            }
+        }
+
+        [Fact]
+        public async Task Create_Denied_WhenTypeAllowsAuthenticatedCreate_ButRoleDeniesCreate()
+        {
+            var unitDefId = GetUnitDefinitionId("TUserUnit");
+            var denyRoleId = await CreateRoleAsync(
+                unitDefId, read: true, create: true, update: false, delete: false, effect: DXGrantEffectEnum.Deny);
+            var membershipId = await CreateMembershipAsync(_rbacFx.IdentityId, _rbacFx.TenantId, denyRoleId);
+
+            await SetAllowAuthenticatedCreateAsync("TUserUnit", true);
+
+            try
+            {
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                    () => _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "DeniedSelfService", DateTime.UtcNow.Date)));
+            }
+            finally
+            {
+                await SetAllowAuthenticatedCreateAsync("TUserUnit", false);
+                await CleanupAsync(
+                    ("DXMembershipUnit", membershipId),
+                    ("DXRoleUnit", denyRoleId));
+            }
+        }
+
+        [Fact]
+        public async Task Create_Denied_WhenTypeAllowsAuthenticatedCreate_ButContextHasNoIdentity()
+        {
+            await SetAllowAuthenticatedCreateAsync("TUserUnit", true);
+
+            try
+            {
+                using var _ = _contextAccessor.BeginScope(new DXExecutionContext
+                {
+                    SubjectId = "anonymous-service",
+                    Access = DXAccessScope.None
+                });
+
+                await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                    () => _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "NoIdentityCreate", DateTime.UtcNow.Date)));
+            }
+            finally
+            {
+                await SetAllowAuthenticatedCreateAsync("TUserUnit", false);
+            }
+        }
+
+        // ===== H. Ownership rows as instance-level grants =====
+
+        [Fact]
+        public async Task CoOwner_CanUpdate_ButCannotDelete_WhenOwnershipGrantsUpdateOnly()
+        {
+            var insertedId = Guid.Empty;
+            var ownershipId = Guid.Empty;
+
+            await SetSupportsOwnershipAsync("TUserUnit", true);
+
+            try
+            {
+                await RunAsSystemAsync(async () =>
+                {
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "CoOwned", DateTime.UtcNow.Date));
+                });
+
+                ownershipId = await CreateIdentityOwnershipAsync(
+                    insertedId, read: true, update: true, delete: false);
+
+                var existing = _genericRepo.GetDXUnit<TUserUnit>(insertedId)!;
+                existing.TUserMainElement.Name = "CoOwnedEdited";
+
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+
+                using (var _ = _contextAccessor.BeginScope(ctx))
+                {
+                    var updatedId = await _dataService.UpdateAsync(existing);
+                    Assert.NotEqual(Guid.Empty, updatedId);
+                }
+
+                using (var _ = _contextAccessor.BeginScope(ctx))
+                {
+                    await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                        () => _dataService.DeleteAsync(
+                            new TUserUnit { Id = insertedId, TimeStamp = DateTime.UtcNow }));
+                }
+            }
+            finally
+            {
+                await SetSupportsOwnershipAsync("TUserUnit", false);
+                await CleanupAsync(
+                    ("DXIdentityOwnershipUnit", ownershipId),
+                    ("TUserUnit", insertedId));
+            }
+        }
+
+        [Fact]
+        public async Task Update_Denied_WhenOwnershipRowCarriesDenyEffect()
+        {
+            var insertedId = Guid.Empty;
+            var ownershipId = Guid.Empty;
+
+            await SetSupportsOwnershipAsync("TUserUnit", true);
+
+            try
+            {
+                await RunAsSystemAsync(async () =>
+                {
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "FrozenRecord", DateTime.UtcNow.Date));
+                });
+
+                ownershipId = await CreateIdentityOwnershipAsync(
+                    insertedId, read: true, update: true, delete: true, effect: DXGrantEffectEnum.Deny);
+
+                var existing = _genericRepo.GetDXUnit<TUserUnit>(insertedId)!;
+                existing.TUserMainElement.Name = "FrozenEdited";
+
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                await Assert.ThrowsAsync<UnauthorizedAccessException>(
+                    () => _dataService.UpdateAsync(existing));
+            }
+            finally
+            {
+                await SetSupportsOwnershipAsync("TUserUnit", false);
+                await CleanupAsync(
+                    ("DXIdentityOwnershipUnit", ownershipId),
+                    ("TUserUnit", insertedId));
+            }
+        }
+
+        [Fact]
+        public async Task Read_Denied_WhenOwnershipDenies_EvenIfRecordIsPubliclyExposed()
+        {
+            var insertedId = Guid.Empty;
+            var ownershipId = Guid.Empty;
+            var publicAccessId = Guid.Empty;
+
+            await SetSupportsOwnershipAsync("TUserUnit", true);
+
+            try
+            {
+                var unitDefId = GetUnitDefinitionId("TUserUnit");
+
+                await RunAsSystemAsync(async () =>
+                {
+                    insertedId = await _dataService.InsertAsync(
+                        TUserUnitFactory.GetItem("RBAC", "PubliclyExposed", DateTime.UtcNow.Date));
+
+                    publicAccessId = await _dataService.InsertAsync(new DXPublicAccessUnit
+                    {
+                        TimeStamp = DateTime.UtcNow,
+                        DXUnitDefinition = unitDefId,
+                        PublicDXUnitId = insertedId
+                    });
+                });
+
+                ownershipId = await CreateIdentityOwnershipAsync(
+                    insertedId, read: true, update: false, delete: false, effect: DXGrantEffectEnum.Deny);
+
+                var ctx = await _contextResolver.ResolveAsync(_rbacFx.LoginId, _rbacFx.SessionId, "test-user");
+                using var _ = _contextAccessor.BeginScope(ctx);
+
+                var item = await _reader.GetItemAsync<TUserUnit>(insertedId);
+
+                Assert.Null(item);
+            }
+            finally
+            {
+                await SetSupportsOwnershipAsync("TUserUnit", false);
+                await CleanupAsync(
+                    ("DXIdentityOwnershipUnit", ownershipId),
+                    ("DXPublicAccessUnit", publicAccessId),
+                    ("TUserUnit", insertedId));
             }
         }
 
@@ -582,7 +920,8 @@ namespace IV.DX.Application.IntTests.Services
         private async Task<Guid> CreateRoleAsync(
             Guid targetUnitDefId,
             bool read,
-            bool write,
+            bool create,
+            bool update,
             bool delete,
             DXGrantEffectEnum effect = DXGrantEffectEnum.Allow)
         {
@@ -600,7 +939,8 @@ namespace IV.DX.Application.IntTests.Services
                             {
                                 TimeStamp = DateTime.UtcNow,
                                 Read = read,
-                                Write = write,
+                                Create = create,
+                                Update = update,
                                 Delete = delete,
                                 Effect = effect,
                                 TargetDXUnitId = targetUnitDefId
@@ -628,6 +968,46 @@ namespace IV.DX.Application.IntTests.Services
                 return Task.CompletedTask;
             });
             await _structureCache.RefreshAsync();
+        }
+
+        private async Task SetAllowAuthenticatedCreateAsync(string typeName, bool value)
+        {
+            await RunAsSystemAsync(() =>
+            {
+                var unitDef = _genericRepo.GetDXUnits<DXUnitDefinitionUnit>($"Name = '{typeName}'").First();
+                unitDef.AllowAuthenticatedCreate = value;
+                _genericRepo.Update(unitDef);
+                return Task.CompletedTask;
+            });
+            await _structureCache.RefreshAsync();
+        }
+
+        private async Task<Guid> CreateIdentityOwnershipAsync(
+            Guid ownedUnitId,
+            bool read,
+            bool update,
+            bool delete,
+            DXGrantEffectEnum effect = DXGrantEffectEnum.Allow)
+        {
+            var id = Guid.CreateVersion7();
+            await RunAsSystemAsync(() =>
+            {
+                var unitDef = _structureCache.GetDXUnit("TUserUnit");
+                _genericRepo.Insert(new DXIdentityOwnershipUnit
+                {
+                    Id = id,
+                    TimeStamp = DateTime.UtcNow,
+                    Identity = _rbacFx.IdentityId,
+                    DXUnitDefinition = unitDef.Id,
+                    OwnedDXUnitId = ownedUnitId,
+                    Read = read,
+                    Update = update,
+                    Delete = delete,
+                    Effect = effect
+                });
+                return Task.CompletedTask;
+            });
+            return id;
         }
 
         private async Task CleanupAsync(params (string typeName, Guid id)[] items)

@@ -8,8 +8,6 @@ namespace IV.DX.Hosting
         IDXElementGenericRepository dxElementGenericRepository,
         IDXStructureCache dxStructureCache) : IDXExecutionContextResolver
     {
-        private const string DenyMarker = "__dx_deny__";
-
         public Task<DXExecutionContext> ResolveAsync(Guid identityLoginId, Guid sessionId, string? subjectId, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
@@ -62,34 +60,18 @@ namespace IV.DX.Hosting
                 }
             }
 
-            var tenantRead = ResolveAllowedUnitTypes(tenantRoleIds, static x => x.Read);
-            var tenantWrite = ResolveAllowedUnitTypes(tenantRoleIds, static x => x.Write);
-            var tenantDelete = ResolveAllowedUnitTypes(tenantRoleIds, static x => x.Delete);
+            var tenantScope = ResolveScope(tenantRoleIds);
+            var membershipScope = ResolveScope(membershipRoleIds);
+            var groupScope = ResolveScope(groupRoleIds);
 
-            var membershipRead = ResolveAllowedUnitTypes(membershipRoleIds, static x => x.Read);
-            var membershipWrite = ResolveAllowedUnitTypes(membershipRoleIds, static x => x.Write);
-            var membershipDelete = ResolveAllowedUnitTypes(membershipRoleIds, static x => x.Delete);
-
-            var groupRead = ResolveAllowedUnitTypes(groupRoleIds, static x => x.Read);
-            var groupWrite = ResolveAllowedUnitTypes(groupRoleIds, static x => x.Write);
-            var groupDelete = ResolveAllowedUnitTypes(groupRoleIds, static x => x.Delete);
-
-            var applyGroupRestrictions = groupRoleIds.Count > 0;
-
-            var finalRead = ComputeFinalAllowedTypes(
-                tenantRead,
-                membershipRead,
-                applyGroupRestrictions ? groupRead : null);
-
-            var finalWrite = ComputeFinalAllowedTypes(
-                tenantWrite,
-                membershipWrite,
-                applyGroupRestrictions ? groupWrite : null);
-
-            var finalDelete = ComputeFinalAllowedTypes(
-                tenantDelete,
-                membershipDelete,
-                applyGroupRestrictions ? groupDelete : null);
+            var access = DXAccessScope.FromOperations(
+                operation => NarrowLevels(
+                    tenantScope.For(operation),
+                    membershipScope.For(operation),
+                    groupScope.For(operation)),
+                operation => tenantScope.DeniedFor(operation)
+                    .Union(membershipScope.DeniedFor(operation))
+                    .Union(groupScope.DeniedFor(operation)));
 
             var resolvedSubject = string.IsNullOrWhiteSpace(subjectId)
                 ? identityLogin.Subject
@@ -101,20 +83,27 @@ namespace IV.DX.Hosting
                 IsSystem = false,
                 IdentityId = identityLogin.Identity,
                 ActiveGroupIDs = activeGroupIDs.Count > 0 ? activeGroupIDs : null,
-                AllowedReadUnitTypes = finalRead,
-                AllowedWriteUnitTypes = finalWrite,
-                AllowedDeleteUnitTypes = finalDelete,
-                TenantReadUnitTypes = tenantRead,
-                TenantWriteUnitTypes = tenantWrite,
-                TenantDeleteUnitTypes = tenantDelete,
-                MembershipReadUnitTypes = membershipRead,
-                MembershipWriteUnitTypes = membershipWrite,
-                MembershipDeleteUnitTypes = membershipDelete,
-                GroupReadUnitTypes = groupRead,
-                GroupWriteUnitTypes = groupWrite,
-                GroupDeleteUnitTypes = groupDelete,
-                ApplyGroupRestrictions = applyGroupRestrictions
+                Access = access
             });
+        }
+
+        /// <summary>
+        /// Narrows the levels against each other. A level that imposes no restriction is skipped;
+        /// when no level imposed one, nothing was granted anywhere and the result allows nothing.
+        /// </summary>
+        private static DXUnitTypeAllowSet NarrowLevels(params DXUnitTypeAllowSet[] levels)
+        {
+            DXUnitTypeAllowSet? result = null;
+
+            foreach (var level in levels)
+            {
+                if (level.IsUnrestricted)
+                    continue;
+
+                result = result == null ? level : result.Intersect(level);
+            }
+
+            return result ?? DXUnitTypeAllowSet.None;
         }
 
         private HashSet<Guid> GetRoleIdsForMember(Guid memberId)
@@ -133,100 +122,102 @@ namespace IV.DX.Hosting
                 .ToHashSet();
         }
 
-        private IReadOnlyCollection<string>? ResolveAllowedUnitTypes(
-            HashSet<Guid> roleIds,
-            Func<DXUnitGrantElement, bool> operationSelector)
+        /// <summary>
+        /// Resolves the access granted by a set of roles. An empty role set imposes no
+        /// restriction at this level, which is not the same as granting nothing.
+        /// </summary>
+        private DXAccessScope ResolveScope(HashSet<Guid> roleIds)
         {
             if (roleIds.Count == 0)
             {
-                return null;
+                return DXAccessScope.Unrestricted;
             }
 
-            var effectByUnit = new Dictionary<Guid, DXGrantEffectEnum>();
+            // Grants are read once per role and every operation is derived from them,
+            // rather than re-querying per operation.
+            var grants = new List<DXUnitGrantElement>();
 
             foreach (var roleId in roleIds)
             {
-                var grants = dxElementGenericRepository
-                    .GetItems<DXUnitGrantElement>("DXRoleUnit", $"Id = '{roleId}'");
+                grants.AddRange(dxElementGenericRepository
+                    .GetItems<DXUnitGrantElement>("DXRoleUnit", $"Id = '{roleId}'"));
+            }
 
-                foreach (var grant in grants)
+            var allowed = new Dictionary<DXUnitTypeAccessOperation, DXUnitTypeAllowSet>();
+            var denied = new Dictionary<DXUnitTypeAccessOperation, DXUnitTypeAllowSet>();
+
+            foreach (var operation in Enum.GetValues<DXUnitTypeAccessOperation>())
+            {
+                var effectByUnit = ResolveEffects(grants, operation);
+
+                allowed[operation] = ToAllowSet(effectByUnit, DXGrantEffectEnum.Allow);
+                denied[operation] = ToAllowSet(effectByUnit, DXGrantEffectEnum.Deny);
+            }
+
+            return DXAccessScope.FromOperations(op => allowed[op], op => denied[op]);
+        }
+
+        /// <summary>
+        /// Resolves the effect each targeted unit carries for the supplied operation.
+        /// Deny outranks Allow within a level regardless of the order grants are seen in.
+        /// </summary>
+        private static Dictionary<Guid, DXGrantEffectEnum> ResolveEffects(
+            IReadOnlyList<DXUnitGrantElement> grants,
+            DXUnitTypeAccessOperation operation)
+        {
+            var effectByUnit = new Dictionary<Guid, DXGrantEffectEnum>();
+
+            foreach (var grant in grants)
+            {
+                if (!GrantCovers(grant, operation) || grant.TargetDXUnitId == Guid.Empty)
                 {
-                    if (!operationSelector(grant) || grant.TargetDXUnitId == Guid.Empty)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    if (grant.Effect == DXGrantEffectEnum.Deny)
-                    {
-                        effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Deny;
-                        continue;
-                    }
+                if (grant.Effect == DXGrantEffectEnum.Deny)
+                {
+                    effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Deny;
+                    continue;
+                }
 
-                    if (!effectByUnit.TryGetValue(grant.TargetDXUnitId, out var currentEffect)
-                        || currentEffect != DXGrantEffectEnum.Deny)
-                    {
-                        effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Allow;
-                    }
+                if (!effectByUnit.TryGetValue(grant.TargetDXUnitId, out var currentEffect)
+                    || currentEffect != DXGrantEffectEnum.Deny)
+                {
+                    effectByUnit[grant.TargetDXUnitId] = DXGrantEffectEnum.Allow;
                 }
             }
 
-            var allowedUnitIds = effectByUnit
-                .Where(x => x.Value == DXGrantEffectEnum.Allow)
+            return effectByUnit;
+        }
+
+        private DXUnitTypeAllowSet ToAllowSet(
+            Dictionary<Guid, DXGrantEffectEnum> effectByUnit,
+            DXGrantEffectEnum effect)
+        {
+            var unitIds = effectByUnit
+                .Where(x => x.Value == effect)
                 .Select(x => x.Key)
                 .ToHashSet();
 
-            if (allowedUnitIds.Count == 0)
+            if (unitIds.Count == 0)
             {
-                return DenySet();
+                return DXUnitTypeAllowSet.None;
             }
 
             var names = dxStructureCache.DXUnits
-                .Where(x => allowedUnitIds.Contains(x.Id))
-                .Select(x => x.Name)
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                .Where(x => unitIds.Contains(x.Id))
+                .Select(x => x.Name);
 
-            return names.Count == 0 ? DenySet() : names;
+            return DXUnitTypeAllowSet.FromTypeNames(names);
         }
 
-        private static IReadOnlyCollection<string> ComputeFinalAllowedTypes(
-            IReadOnlyCollection<string>? tenantTypes,
-            IReadOnlyCollection<string>? membershipTypes,
-            IReadOnlyCollection<string>? groupTypes)
+        private static bool GrantCovers(DXUnitGrantElement grant, DXUnitTypeAccessOperation operation) => operation switch
         {
-            HashSet<string>? result = null;
-
-            Apply(ref result, tenantTypes);
-            Apply(ref result, membershipTypes);
-            Apply(ref result, groupTypes);
-
-            if (result == null || result.Count == 0)
-            {
-                return DenySet();
-            }
-
-            return result;
-        }
-
-        private static void Apply(ref HashSet<string>? result, IReadOnlyCollection<string>? set)
-        {
-            if (set == null)
-            {
-                return;
-            }
-
-            if (result == null)
-            {
-                result = new HashSet<string>(set, StringComparer.OrdinalIgnoreCase);
-                return;
-            }
-
-            result.IntersectWith(set);
-        }
-
-        private static HashSet<string> DenySet()
-        {
-            return new HashSet<string>(StringComparer.OrdinalIgnoreCase) { DenyMarker };
-        }
+            DXUnitTypeAccessOperation.Read => grant.Read,
+            DXUnitTypeAccessOperation.Create => grant.Create,
+            DXUnitTypeAccessOperation.Update => grant.Update,
+            DXUnitTypeAccessOperation.Delete => grant.Delete,
+            _ => false
+        };
     }
 }

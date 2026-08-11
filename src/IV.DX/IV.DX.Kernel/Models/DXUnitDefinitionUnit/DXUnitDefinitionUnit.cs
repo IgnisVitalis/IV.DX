@@ -13,6 +13,14 @@ namespace IV.DX.Kernel.Models
 
         [DXColumn("IsPublicRead")]
         public bool IsPublicRead { get; set; }
+
+        /// <summary>
+        /// When set, any caller with an identity may create instances of this type without
+        /// holding a Create grant. Intended for types whose records belong to whoever made them.
+        /// An explicit Deny grant still overrides it.
+        /// </summary>
+        [DXColumn("AllowAuthenticatedCreate")]
+        public bool AllowAuthenticatedCreate { get; set; }
  
         public DXMultiElementsContainer<DXElementInUnitDefinitionElement> DXElementInUnitDefinitionElement { get; set; }
 

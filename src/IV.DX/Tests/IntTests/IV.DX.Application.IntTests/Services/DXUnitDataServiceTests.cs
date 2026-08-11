@@ -197,10 +197,7 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "unit-service-test-user",
-                AllowedWriteUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXRoleUnit"
-                }
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Create, "DXRoleUnit")
             });
 
             var id = Guid.NewGuid();
@@ -221,10 +218,7 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "core-read-denied-user",
-                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXUnitDefinitionUnit"
-                }
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXUnitDefinitionUnit")
             });
 
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("DXUnitDefinitionUnit"));
@@ -236,10 +230,7 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "core-write-denied-user",
-                AllowedWriteUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXUnitDefinitionUnit"
-                }
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Create, "DXUnitDefinitionUnit")
             });
 
             var id = Guid.NewGuid();
@@ -294,15 +285,9 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "hierarchical-read-user",
-                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "TUserUnit"
-                },
-                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "TUserUnit"
-                },
-                ApplyGroupRestrictions = false
+                // Tenant ∩ membership, no group level.
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "TUserUnit")
+                    .Intersect(DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "TUserUnit"))
             });
 
             var items = await this._reader.GetItemsAsync("TUserUnit");
@@ -317,19 +302,10 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "hierarchical-read-user",
-                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "TUserUnit"
-                },
-                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXRoleUnit"
-                },
-                GroupReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "TUserUnit"
-                },
-                ApplyGroupRestrictions = true
+                // Membership grants a different type, so tenant ∩ membership ∩ group is empty.
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "TUserUnit")
+                    .Intersect(DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXRoleUnit"))
+                    .Intersect(DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "TUserUnit"))
             });
 
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() => this._reader.GetItemsAsync("TUserUnit"));

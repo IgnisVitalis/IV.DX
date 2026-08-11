@@ -263,10 +263,16 @@ namespace IV.DX.PostgreSQL
                 dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
                 dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
 
-            var columnsToChangeNamesCommand = columnIDsToChange.Select(x =>
-              this.GetSQLColumnDefinitionToChangeColumnNames(
-                  dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
-                  dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)));
+            // Only columns whose name actually changed: PostgreSQL rejects a rename to the
+            // column's own name, which would otherwise fail every ALTER that leaves a column untouched.
+            var columnsToChangeNamesCommand = columnIDsToChange
+                .Select(x => new
+                {
+                    New = dataDXElementNew.DXColumnDefinitionElement.Announced.Single(y => y.Id == x),
+                    Existing = dataDXElementExisting.DXColumnDefinitionElement.Announced.Single(y => y.Id == x)
+                })
+                .Where(x => !string.Equals(x.New.Name, x.Existing.Name, StringComparison.Ordinal))
+                .Select(x => this.GetSQLColumnDefinitionToChangeColumnNames(x.New, x.Existing));
 
             if (columnsToDropCommand != null && columnsToDropCommand.Count() > 0)
             {

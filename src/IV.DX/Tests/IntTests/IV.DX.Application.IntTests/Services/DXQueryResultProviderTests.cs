@@ -293,10 +293,7 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "query-provider-test-user",
-                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXRoleUnit"
-                }
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXRoleUnit")
             });
 
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _queryProvider.GetDXTitleExpressionsAsync("DXUnitDefinitionUnit"));
@@ -308,19 +305,10 @@ namespace IV.DX.Application.IntTests.Services
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "hierarchy-query-user",
-                TenantReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXRoleUnit"
-                },
-                MembershipReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXUnitDefinitionUnit"
-                },
-                GroupReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXUnitDefinitionUnit"
-                },
-                ApplyGroupRestrictions = true
+                // Tenant grants a different type, so the narrowed result excludes DXUnitDefinitionUnit.
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXRoleUnit")
+                    .Intersect(DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXUnitDefinitionUnit"))
+                    .Intersect(DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXUnitDefinitionUnit"))
             });
 
             await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _queryProvider.GetDXTitleExpressionsAsync("DXUnitDefinitionUnit"));
@@ -342,7 +330,7 @@ namespace IV.DX.Application.IntTests.Services
                 {
                     SubjectId = "qrp-owned-only-user",
                     IdentityId = identityId,
-                    AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "SomeOtherUnit" }
+                    Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "SomeOtherUnit")
                 });
 
                 var result = await _queryProvider.GetDXTitleExpressionsAsync("TUserUnit");

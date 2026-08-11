@@ -40,57 +40,16 @@ namespace IV.DX.Hosting
             if (context == null)
                 return DXAccessDecision.Denied;
 
-            var tenantAllowedTypes = operation switch
-            {
-                DXUnitTypeAccessOperation.Read => context.TenantReadUnitTypes,
-                DXUnitTypeAccessOperation.Write => context.TenantWriteUnitTypes,
-                DXUnitTypeAccessOperation.Delete => context.TenantDeleteUnitTypes,
-                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
-            };
+            // An explicit denial outranks grants, the create flag and the ownership fallback alike.
+            if (context.Access.IsExplicitlyDenied(operation, typeName))
+                return DXAccessDecision.Denied;
 
-            if (IsRestrictionProvided(tenantAllowedTypes) && !ContainsType(tenantAllowedTypes, typeName))
-            {
-                return FallbackToOwnership(context);
-            }
+            if (context.Access.Allows(operation, typeName))
+                return DXAccessDecision.Allowed;
 
-            var membershipAllowedTypes = operation switch
-            {
-                DXUnitTypeAccessOperation.Read => context.MembershipReadUnitTypes,
-                DXUnitTypeAccessOperation.Write => context.MembershipWriteUnitTypes,
-                DXUnitTypeAccessOperation.Delete => context.MembershipDeleteUnitTypes,
-                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
-            };
-
-            if (IsRestrictionProvided(membershipAllowedTypes) && !ContainsType(membershipAllowedTypes, typeName))
-            {
-                return FallbackToOwnership(context);
-            }
-
-            if (context.ApplyGroupRestrictions)
-            {
-                var groupAllowedTypes = operation switch
-                {
-                    DXUnitTypeAccessOperation.Read => context.GroupReadUnitTypes,
-                    DXUnitTypeAccessOperation.Write => context.GroupWriteUnitTypes,
-                    DXUnitTypeAccessOperation.Delete => context.GroupDeleteUnitTypes,
-                    _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
-                };
-
-                if (!ContainsTypeStrict(groupAllowedTypes, typeName))
-                {
-                    return FallbackToOwnership(context);
-                }
-            }
-
-            var globalAllowedTypes = operation switch
-            {
-                DXUnitTypeAccessOperation.Read => context.AllowedReadUnitTypes,
-                DXUnitTypeAccessOperation.Write => context.AllowedWriteUnitTypes,
-                DXUnitTypeAccessOperation.Delete => context.AllowedDeleteUnitTypes,
-                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
-            };
-
-            if (ContainsType(globalAllowedTypes, typeName))
+            if (operation == DXUnitTypeAccessOperation.Create
+                && context.IdentityId.HasValue
+                && AllowsAuthenticatedCreate(typeName))
                 return DXAccessDecision.Allowed;
 
             return FallbackToOwnership(context);
@@ -115,9 +74,10 @@ namespace IV.DX.Hosting
             return unit?.IsPublicRead == true;
         }
 
-        private static bool IsRestrictionProvided(IReadOnlyCollection<string>? allowedTypes)
+        private bool AllowsAuthenticatedCreate(string typeName)
         {
-            return allowedTypes != null;
+            var unit = structureCache.GetDXUnit(typeName);
+            return unit?.AllowAuthenticatedCreate == true;
         }
 
         private static void ThrowDenied(DXExecutionContext? context, string typeName, DXUnitTypeAccessOperation operation)
@@ -126,31 +86,6 @@ namespace IV.DX.Hosting
                 ? "anonymous"
                 : context.SubjectId;
             throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
-        }
-
-        private static bool ContainsType(IReadOnlyCollection<string>? allowedTypes, string typeName)
-        {
-            if (allowedTypes == null || allowedTypes.Count == 0)
-                return true;
-
-            foreach (var allowedType in allowedTypes)
-            {
-                if (string.Equals(allowedType, "*", StringComparison.Ordinal))
-                    return true;
-
-                if (string.Equals(allowedType, typeName, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private static bool ContainsTypeStrict(IReadOnlyCollection<string>? allowedTypes, string typeName)
-        {
-            if (allowedTypes == null || allowedTypes.Count == 0)
-                return false;
-
-            return ContainsType(allowedTypes, typeName);
         }
     }
 }

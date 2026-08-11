@@ -9,8 +9,11 @@ namespace IV.DX.Kernel.Models
         [DXColumn("Read")]
         public bool Read { get; set; }
 
-        [DXColumn("Write")]
-        public bool Write { get; set; }
+        [DXColumn("Create")]
+        public bool Create { get; set; }
+
+        [DXColumn("Update")]
+        public bool Update { get; set; }
 
         [DXColumn("Delete")]
         public bool Delete { get; set; }

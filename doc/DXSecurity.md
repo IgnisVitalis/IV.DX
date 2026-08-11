@@ -23,8 +23,8 @@ DXSecurity is split into two layers:
 
 2. Authorization layer
 - DB-driven RBAC via DX units/elements;
-- runtime access decisions per unit type (read/write);
-- ownership fallback when full type access is not granted.
+- runtime access decisions per unit type (read/create/update/delete);
+- instance-level ownership grants when full type access is not granted.
 
 Important: RBAC is not encoded as role claims in JWT. JWT is used to identify login/session, and RBAC is resolved from persisted data at runtime.
 
@@ -44,14 +44,23 @@ Main units/elements:
 - `DXGroupMembershipUnit`: membership-to-group bridge.
 - `DXRoleUnit`: role definition.
 - `DXRoleElement`: assigns a role to a security member.
-- `DXUnitGrantElement`: grant rule from role to target unit type, with effect.
-- `DXIdentityOwnershipUnit`: ownership mapping from identity to concrete record.
-- `DXGroupOwnershipUnit`: ownership mapping from group to concrete record.
+- `DXUnitGrantElement`: grant rule from role to target unit type. Carries one flag per operation (`Read`, `Create`, `Update`, `Delete`) and an effect.
+- `DXIdentityOwnershipUnit`: instance-level grant from identity to a concrete record, with `Read`/`Update`/`Delete` flags and an effect.
+- `DXGroupOwnershipUnit`: same, from a group to a concrete record.
+
+Ownership rows are grants, not mere mappings. Two identities can own one record with different
+rights — an author holding `Update + Delete` and a collaborator holding `Update` only.
 
 Enums:
 
 - `DXIdentityProviderTypeEnum`: `Local`, `Telegram`, `Microsoft`, `Facebook`.
 - `DXGrantEffectEnum`: `Allow`, `Deny`.
+
+Unit-definition flags that affect security:
+
+- `SupportsOwnership`: ownership rows are consulted for this type at all.
+- `IsPublicRead`: the type is readable without an execution context.
+- `AllowAuthenticatedCreate`: any caller with an identity may create instances without a `Create` grant.
 
 ## Security enablement model
 
@@ -127,20 +136,64 @@ Authorization is enforced by `IDXUnitTypeAccessChecker` (`DXContextualUnitTypeAc
 - `AllowedOwnedOnly`
 - `Denied`
 
+### Operations
+
+`DXUnitTypeAccessOperation` is `Read`, `Create`, `Update`, `Delete`.
+
+`Create` and `Update` are separate on purpose. One "write" permission cannot express an
+append-only type (create but never modify), a role that edits records it may not author, or
+records provisioned by a system and edited by users.
+
 ### Decision rules
 
-1. If security disabled -> `Allowed`.
-2. If no execution context -> `Denied`.
-3. If context is system -> `Allowed`.
-4. Core unit types are denied for non-system context.
-5. Evaluate hierarchical allow-lists:
-- tenant restrictions;
-- membership restrictions;
-- group restrictions (only when `ApplyGroupRestrictions = true`).
-6. If global allowed list contains type -> `Allowed`.
-7. Otherwise -> ownership fallback:
+Evaluated in order by `DXContextualUnitTypeAccessChecker`:
+
+1. Security disabled -> `Allowed`.
+2. Context is system -> `Allowed`.
+3. Core unit type -> `Denied` (non-system callers).
+4. `Read` on a type with `IsPublicRead` -> `Allowed`, with or without a context.
+5. No execution context -> `Denied`.
+6. Type explicitly denied for this operation -> `Denied`. An explicit `Deny` outranks every
+   other route to access, including ownership.
+7. Type granted for this operation -> `Allowed`.
+8. `Create` on a type with `AllowAuthenticatedCreate`, and the context has an identity -> `Allowed`.
+9. Otherwise -> ownership fallback:
 - with identity in context -> `AllowedOwnedOnly`;
 - without identity -> `Denied`.
+
+`AllowedOwnedOnly` is not access; it is the signal to consult ownership rows for the concrete
+record. The checker works at type level and cannot see instances.
+
+### Type-level access
+
+`DXExecutionContext.Access` is a `DXAccessScope`: for each operation it holds the granted unit
+types and the explicitly denied ones. Both are `DXUnitTypeAllowSet`, which distinguishes
+`Unrestricted` (no restriction imposed) from `None` (nothing allowed) — an empty restriction
+never widens access.
+
+"Denied" and "never granted" are different states. Only an explicit denial overrides access
+granted elsewhere.
+
+### Hierarchical RBAC resolution
+
+`DXExecutionContextResolver` resolves context from `identityLoginId + sessionId`:
+
+1. Validate session and login.
+2. Load memberships of identity.
+3. Collect role ids from membership, tenant and group memberships.
+4. Read each role's grants once, and derive every operation from them:
+- deny overrides allow per target unit within a level.
+5. Build a `DXAccessScope` per level (tenant, membership, group), each carrying granted and
+   denied types per operation.
+6. Combine the levels into `DXExecutionContext.Access`:
+- grants are intersected — a level that imposes no restriction is skipped;
+- denials are accumulated — a denial at any level stands.
+
+A level with no roles imposes no restriction, which is not the same as granting nothing. When
+no level restricted anything, nothing was granted anywhere and the result allows nothing.
+
+Level composition happens only here. The checker consumes the combined result, so there is no
+second, redundant walk over tenant/membership/group at access-check time.
 
 ## Public access model
 
@@ -157,7 +210,7 @@ Public access is **read-only** and is intentionally explicit. There is no implic
 `DXUnitDefinitionUnit.IsPublicRead` marks a unit type as publicly readable.
 
 - When `IsPublicRead = true`, `Read` for that type is `Allowed` even without execution context.
-- `Write` is not affected.
+- `Create`, `Update` and `Delete` are not affected.
 - Core unit types remain non-public for non-system callers.
 
 Typical use: catalog/reference-like units where all entries are safe to expose.
@@ -184,7 +237,7 @@ Typical use: mostly private dataset with curated public subset.
 
 1. System context bypass remains strongest rule.
 2. Type-level public (`IsPublicRead`) overrides the need for per-entry mapping.
-3. Entry-level public does not grant write/update/delete.
+3. Entry-level public does not grant create/update/delete.
 4. Authenticated callers keep normal RBAC path; public mapping is additive for read visibility.
 5. If no public mappings exist for private type, anonymous reads return empty/null (or denied for non-reader APIs), never full dataset.
 
@@ -200,48 +253,45 @@ Typical use: mostly private dataset with curated public subset.
 2. For mixed-sensitivity types, keep type private and expose only whitelisted records via `DXPublicAccessUnit`.
 3. Keep public exposure lifecycle explicit: add mapping on publish, remove mapping on unpublish/delete.
 
-### Hierarchical RBAC resolution
-
-`DXExecutionContextResolver` resolves context from `identityLoginId + sessionId`:
-
-1. Validate session and login.
-2. Load memberships of identity.
-3. Collect role ids from:
-- membership;
-- tenant;
-- group memberships.
-4. Resolve grants per role and operation (`Read`/`Write`/`Delete`):
-- deny overrides allow per target unit.
-5. Build per-level allow sets:
-- tenant read/write/delete;
-- membership read/write/delete;
-- group read/write/delete.
-6. Compute final sets by intersection:
-- `Tenant ∩ Membership ∩ Group` (group only if enabled for context).
-
-If a provided set resolves empty, internal deny marker is used to prevent accidental allow.
-
-## Ownership fallback behavior
+## Ownership behavior
 
 Ownership applies only for unit definitions with `SupportsOwnership = true`.
 
+An ownership row is an instance-level grant. It states which operations its owner may perform
+on one record, and carries an effect:
+
+- a row is consulted only when it covers the requested operation;
+- a `Deny` row covering the operation refuses access outright;
+- access requires an `Allow` row that covers the operation.
+
 ### Read path
 
-When decision is `AllowedOwnedOnly`:
+When the decision is `AllowedOwnedOnly`:
 
-- single record read: returned only if owned by identity or active group;
-- list/filter reads: query is restricted to owned ids.
+- single record read: returned only if a row with `Read` grants it to the identity or an active group;
+- list/filter reads: the query is restricted to ids granted that way.
 
-### Write/Delete path
+A `Deny` row removes its record from results even when `DXPublicAccessUnit` exposes it publicly.
 
-- insert requires full `Allowed` (owned-only is not enough to create).
-- update/delete with `AllowedOwnedOnly` require ownership of target record.
+### Create path
+
+Ownership never authorizes `Create`. It is a grant over a record that already exists, so creation
+always requires either a `Create` grant or `AllowAuthenticatedCreate` on the type. This is what
+keeps `AllowedOwnedOnly` — which every authenticated caller falls into for un-granted types —
+from becoming a way to create records.
+
+### Update/Delete path
+
+Full `Allowed` passes. `AllowedOwnedOnly` requires an ownership row granting that specific
+operation, so a collaborator can hold `Update` without `Delete`.
 
 ### Ownership creation and cleanup
 
-On successful insert (non-system context with identity), service auto-creates `DXIdentityOwnershipUnit`.
+On successful insert (non-system context with identity), the service auto-creates a
+`DXIdentityOwnershipUnit` granting the creator `Read`, `Update` and `Delete`. Types that only
+need "whoever made it owns it" therefore require no ownership rows to be managed by hand.
 
-On delete, identity/group ownership rows for that record are deleted.
+On delete, identity and group ownership rows for that record are deleted.
 
 ## Sensitive data handling
 
@@ -275,8 +325,14 @@ Without this integration, RBAC cannot be evaluated against current principal/ses
 
 ## Current limitations and risks
 
-1. Query/raw-reader APIs enforce full type access only.
-- They use `EnsureAccess` and do not apply owned-only filtering semantics like `IDXUnitDataReader` does.
+1. `DXExecutionContext` is resolved from the database on every request — session, memberships,
+   group memberships and role grants. There is no caching or invalidation.
+2. The system execution context created for service tokens carries no `SubjectId`, so writes
+   made through it are not attributable to an operator.
+3. A hand-built `DXExecutionContext` with no `Access` set is `Unrestricted` and allows
+   everything. Contexts produced by `IDXExecutionContextResolver` are unaffected.
+4. `AllowAuthenticatedCreate` has no quota or rate limit — throttling is the host application's
+   responsibility.
 
 ## Testing status summary
 
@@ -285,16 +341,24 @@ Covered:
 - security on/off initialization behavior;
 - migration system bypass mode;
 - auth/session flows (register/login/refresh/logout/logout-all);
-- hierarchical access checker scenarios (tenant/membership/group restrictions, deny precedence);
-- end-to-end resolver tests from real role/grant data to final execution context sets;
-- ownership fallback: insert/update/delete with and without ownership, AllowedOwnedOnly returning empty on reads;
-- delete-authorization behavior (full allow required; AllowedOwnedOnly with ownership also checked);
-- query provider ownership scoping (AllowedOwnedOnly returns empty when no owned records).
+- access checker scenarios over the combined access scope, including deny precedence;
+- end-to-end resolver tests from real role/grant data to the resolved execution context;
+- ownership: insert/update/delete with and without ownership, `AllowedOwnedOnly` returning empty on reads;
+- delete-authorization behavior;
+- query provider ownership scoping;
+- `Create` and `Update` as separate grants: create-without-update, update-without-create, and an
+  append-only type where the author cannot revise what they added;
+- `AllowAuthenticatedCreate`: granted with no roles, refused without an identity, and overridden
+  by an explicit `Deny` grant;
+- ownership rows granting a subset of operations — a co-owner holding `Update` but not `Delete`;
+- ownership `Effect = Deny`, including a denied record staying hidden despite `DXPublicAccessUnit`.
 
-Recommended additional tests:
+Not yet covered:
 
 - consumer-facing integration sample for JWT → execution context binding.
 
 ## Suggested evolution path
 
-1. Add consumer-facing integration sample for JWT -> execution context binding.
+1. Cache the resolved execution context per session, invalidated on role, grant or membership change.
+2. Give service tokens a real subject so system writes are attributable.
+3. Add a consumer-facing integration sample for JWT -> execution context binding.

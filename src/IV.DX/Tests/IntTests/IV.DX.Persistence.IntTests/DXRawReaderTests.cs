@@ -75,10 +75,7 @@ namespace IV.DX.Persistence.IntTests
             using var _ = _executionContextAccessor.BeginScope(new DXExecutionContext
             {
                 SubjectId = "raw-reader-test-user",
-                AllowedReadUnitTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "DXRoleUnit"
-                }
+                Access = DXAccessScope.ForOperation(DXUnitTypeAccessOperation.Read, "DXRoleUnit")
             });
 
             var columns = new Dictionary<string, string>

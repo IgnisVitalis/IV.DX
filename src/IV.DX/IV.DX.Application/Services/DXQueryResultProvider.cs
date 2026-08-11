@@ -182,6 +182,7 @@ namespace IV.DX.Application.Services
         private HashSet<Guid> CollectReadableIds(string typeName, DXExecutionContext? context)
         {
             var result = new HashSet<Guid>();
+            var denied = new HashSet<Guid>();
             var unitDef = dxStructureCache.GetDXUnit(typeName);
 
             if (unitDef == null)
@@ -192,8 +193,8 @@ namespace IV.DX.Application.Services
                 var identityOwned = genericRepo.GetDXUnits<DXIdentityOwnershipUnit>(
                     $"Identity = '{context.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}'");
 
-                foreach (var o in identityOwned)
-                    result.Add(o.OwnedDXUnitId);
+                foreach (var o in identityOwned.Where(x => x.Read))
+                    Classify(o.OwnedDXUnitId, o.Effect, result, denied);
             }
 
             if (unitDef.SupportsOwnership && context?.ActiveGroupIDs != null)
@@ -203,8 +204,8 @@ namespace IV.DX.Application.Services
                     var groupOwned = genericRepo.GetDXUnits<DXGroupOwnershipUnit>(
                         $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}'");
 
-                    foreach (var o in groupOwned)
-                        result.Add(o.OwnedDXUnitId);
+                    foreach (var o in groupOwned.Where(x => x.Read))
+                        Classify(o.OwnedDXUnitId, o.Effect, result, denied);
                 }
             }
 
@@ -217,7 +218,18 @@ namespace IV.DX.Application.Services
                     result.Add(access.PublicDXUnitId);
             }
 
+            // A denial on a record outranks every route to it, public exposure included.
+            result.ExceptWith(denied);
+
             return result;
+        }
+
+        private static void Classify(Guid ownedId, DXGrantEffectEnum effect, HashSet<Guid> allowed, HashSet<Guid> denied)
+        {
+            if (effect == DXGrantEffectEnum.Deny)
+                denied.Add(ownedId);
+            else if (effect == DXGrantEffectEnum.Allow)
+                allowed.Add(ownedId);
         }
 
         private static DXDataBlock<DXUnitRecord> BuildEmptyBlock(string typeName)

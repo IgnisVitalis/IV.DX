@@ -147,6 +147,18 @@
                     "AllowNull": false,
                     "DefaultValue": "false",
                     "ColumnType": 6
+                  },
+                  {
+                    "Id": "019f1a2c-4d5e-7f60-9b0c-1d2e3f4a5b6c",
+                    "TimeStamp": "2026-08-11T00:00:00Z",
+                    "DXUnitId": "018fa545-a3ce-7500-aabb-5bbf4767a6b1",
+                    "Name": "AllowAuthenticatedCreate",
+                    "Length": null,
+                    "Precision": null,
+                    "Scale": null,
+                    "AllowNull": false,
+                    "DefaultValue": "false",
+                    "ColumnType": 6
                   }
                 ]
               }

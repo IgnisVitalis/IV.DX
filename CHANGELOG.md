@@ -2,6 +2,32 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.107.0] - 2026-08-11
+
+### Changed
+
+- `DXUnitTypeAccessOperation` splits `Write` into `Create` and `Update` — the enum is now `Read`, `Create`, `Update`, `Delete`;
+- `DXUnitGrantElement.Write` replaced by `Create` and `Update`, so authoring a record and editing every record of a type are separate grants;
+- `DXExecutionContext` — the twelve per-level allow-list properties and `ApplyGroupRestrictions` replaced by a single `Access` property of type `DXAccessScope`; level intersection now happens only in `IDXExecutionContextResolver`;
+- `IDXUnitDataService.InsertOrUpdateAsync` (all overloads) resolves record existence before authorizing, so updating an owned record is no longer blocked by the create gate;
+- `DXIdentityOwnershipUnit` and `DXGroupOwnershipUnit` are instance-level grants carrying `Read`, `Update`, `Delete` and `Effect`; co-owners of one record can hold different rights;
+- Ownership never authorizes `Create` — it is a grant over a record that already exists;
+- Ownership rows created automatically on insert grant `Read`, `Update` and `Delete` to the creator;
+- An explicit `Deny` grant is a hard denial and no longer falls through to the ownership fallback;
+- A `Deny` ownership row hides its record from reads even when `DXPublicAccessUnit` exposes it;
+
+### Added
+
+- `DXAccessScope` — operation-keyed type access carrying both granted and explicitly denied unit types; adding an operation to `DXUnitTypeAccessOperation` no longer changes its shape;
+- `DXUnitTypeAllowSet` — allow set with explicit `Unrestricted` and `None` states, replacing the `__dx_deny__` marker convention;
+- `DXUnitDefinitionUnit.AllowAuthenticatedCreate` — any caller with an identity may create instances of the type without holding a `Create` grant, for types whose records belong to whoever made them; an explicit `Deny` grant still overrides it;
+
+### Fixed
+
+- PostgreSQL schema migration emitted `RENAME COLUMN "X" TO "X"` for every unchanged column, which PostgreSQL rejects — every `ALTER TABLE` touching a table with an unchanged column failed;
+- Type access checks no longer treat an empty allow list as "allow everything";
+- `DXExecutionContextResolver` read role grants once per role per operation; grants are now read once per role and every operation derived from them;
+
 ## [0.106.0] - 2026-06-09
 
 ### Changed
