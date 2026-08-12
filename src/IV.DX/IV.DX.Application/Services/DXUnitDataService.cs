@@ -81,6 +81,11 @@ namespace IV.DX.Application.Services
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
             EnsureInstanceAccess(typeName, dxUnit.Id, DXUnitTypeAccessOperation.Update);
 
+            // Access for this instance is already settled, so this check adds no exposure.
+            // Without it a missing record updates zero rows and reports success.
+            if (!coreRepo.IsItemExisting(typeName, dxUnit.Id))
+                return Guid.Empty;
+
             var result = await dxPipelineExecutor.UpdateAsync(dxUnit, context, ct);
 
             if (result.IsSuccess)

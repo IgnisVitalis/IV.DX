@@ -7,6 +7,10 @@ namespace IV.DX.Application.Contracts.Abstractions
     public interface IDXUnitDataService
     {
         Task<Guid> InsertAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
+        /// <summary>
+        /// Updates an existing record and returns its id, or <see cref="Guid.Empty"/> when no
+        /// record with that id exists. Access is checked before existence.
+        /// </summary>
         Task<Guid> UpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<Guid> InsertOrUpdateAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new();
         Task<bool> DeleteAsync<T>(T dxUnit, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new();

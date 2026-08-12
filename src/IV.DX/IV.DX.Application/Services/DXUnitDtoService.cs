@@ -3,49 +3,57 @@ using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Services
 {
-    internal sealed class DXUnitDtoService<TRequest, TResponse, TUnit, TMapper>(
-        IDXUnitDataReader reader,
-        IDXUnitDataService dataService,
-        TMapper mapper)
+    internal sealed class DXUnitDtoService<TRequest, TResponse, TUnit, TMapper>
         : IDXUnitDtoService<TRequest, TResponse>
         where TUnit : DXUnit, new()
         where TMapper : DXUnitMapper<TRequest, TResponse, TUnit>
     {
+        private readonly IDXUnitDataReader _reader;
+        private readonly TMapper _mapper;
+        private readonly DXUnitWriteOperations<TRequest, TUnit> _write;
+
+        public DXUnitDtoService(IDXUnitDataReader reader, IDXUnitDataService dataService, TMapper mapper)
+        {
+            _reader = reader;
+            _mapper = mapper;
+            _write = new DXUnitWriteOperations<TRequest, TUnit>(dataService, mapper.ToUnitAsync);
+        }
+
         public async Task<TResponse?> GetAsync(Guid id, CancellationToken ct = default)
         {
-            var unit = await reader.GetItemAsync<TUnit>(id, ct: ct);
-            return unit is null ? default : await mapper.ToDtoAsync(unit, ct);
+            var unit = await _reader.GetItemAsync<TUnit>(id, ct: ct);
+            return unit is null ? default : await _mapper.ToDtoAsync(unit, ct);
         }
 
         public async Task<IEnumerable<TResponse>> GetAllAsync(CancellationToken ct = default)
         {
-            var units = await reader.GetItemsAsync<TUnit>(ct: ct);
+            var units = await _reader.GetItemsAsync<TUnit>(ct: ct);
             return await MapManyAsync(units, ct);
         }
 
         public async Task<IEnumerable<TResponse>> GetAsync(string filter, CancellationToken ct = default)
         {
-            var units = await reader.GetItemsAsync<TUnit>(filter, ct: ct);
+            var units = await _reader.GetItemsAsync<TUnit>(filter, ct: ct);
             return await MapManyAsync(units, ct);
         }
 
-        public async Task<Guid> SaveAsync(TRequest dto, CancellationToken ct = default)
-        {
-            var unit = await mapper.ToUnitAsync(dto, ct);
-            return await dataService.InsertOrUpdateAsync(unit, ct: ct);
-        }
+        public Task<Guid> CreateAsync(TRequest dto, CancellationToken ct = default)
+            => _write.CreateAsync(dto, ct);
+
+        public Task<bool> UpdateAsync(TRequest dto, CancellationToken ct = default)
+            => _write.UpdateAsync(dto, ct);
+
+        public Task<Guid> SaveAsync(TRequest dto, CancellationToken ct = default)
+            => _write.SaveAsync(dto, ct);
 
         public Task DeleteAsync(Guid id, CancellationToken ct = default)
-        {
-            var unit = new TUnit { Id = id };
-            return dataService.DeleteAsync(unit, ct: ct);
-        }
+            => _write.DeleteAsync(id, ct);
 
         private async Task<IEnumerable<TResponse>> MapManyAsync(IEnumerable<TUnit> units, CancellationToken ct)
         {
             var result = new List<TResponse>();
             foreach (var unit in units)
-                result.Add(await mapper.ToDtoAsync(unit, ct));
+                result.Add(await _mapper.ToDtoAsync(unit, ct));
             return result;
         }
     }

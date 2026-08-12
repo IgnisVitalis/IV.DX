@@ -2,6 +2,20 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.108.0] - 2026-08-12
+
+### Changed
+
+- `IDXUnitCommandService<TRequest>` and `IDXUnitDtoService<TRequest, TResponse>` gain `CreateAsync` and `UpdateAsync` alongside `SaveAsync`, so a write call maps to exactly one access operation instead of resolving to `Create` or `Update` depending on whether the record happens to exist;
+- `CreateAsync` always inserts and returns the server-assigned id; `UpdateAsync` returns `false` when no record with that id exists, rather than failing;
+- `SaveAsync` keeps its upsert behaviour and is retained for import and synchronisation flows;
+
+- `IDXUnitDataService.UpdateAsync<T>` returns `Guid.Empty` when no record with that id exists, instead of updating zero rows and reporting success; access is still checked before existence;
+
+### Added
+
+- `IDXUnitRequest` — contract for request DTOs exposing `Guid Id`, so REST controllers can bind the id from the route; the DTO services themselves place no constraint on the request type;
+
 ## [0.107.0] - 2026-08-11
 
 ### Changed
