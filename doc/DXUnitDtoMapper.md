@@ -155,10 +155,10 @@ public class ChapterMapper : DXElementMapper<ChapterRequest, ChapterResponse, Bo
             Title  = element.Title
         });
 
+    // Payload only. Id and DXUnitId come from the service's arguments, not from here.
     public override Task<BookChapterElement> ToElementAsync(ChapterRequest dto, CancellationToken ct = default)
         => Task.FromResult(new BookChapterElement
         {
-            Id     = dto.Id,
             Number = dto.Number,
             Title  = dto.Title
         });
@@ -179,20 +179,34 @@ builder.Services.AddDXElementWriteMapper<ChapterWriteMapper>(); // IDXElementCom
 public interface IDXElementQueryService<TResponse>
 {
     Task<TResponse?> GetAsync(Guid id, CancellationToken ct = default);
+    Task<TResponse?> GetAsync(Guid dxUnitId, Guid id, CancellationToken ct = default);
     Task<IEnumerable<TResponse>> GetByUnitAsync(Guid dxUnitId, CancellationToken ct = default);
 }
 
 public interface IDXElementCommandService<TRequest>
 {
     Task<Guid> CreateAsync(Guid dxUnitId, TRequest dto, CancellationToken ct = default);
-    Task<bool> UpdateAsync(TRequest dto, CancellationToken ct = default);
+    Task<bool> UpdateAsync(Guid id, TRequest dto, CancellationToken ct = default);
+    Task<bool> UpdateAsync(Guid dxUnitId, Guid id, TRequest dto, CancellationToken ct = default);
     Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<bool> DeleteAsync(Guid dxUnitId, Guid id, CancellationToken ct = default);
 }
 ```
 
-`CreateAsync` takes the owner as an argument rather than reading it off the DTO, so the caller decides where it came from — a route segment for a nested resource (`/books/{bookId}/chapters`), the body for a flat one — without every request shape having to carry it. An id on the DTO is ignored on create; the server assigns one.
+**Ids are arguments, not DTO properties.** An element is addressed by two coordinates, and a nested route supplies both, so the request shape stays pure payload — no marker interface, no "route id and body id must match" check. Whatever a mapper writes into `Id` or `DXUnitId` is overwritten from the arguments, so `ToElementAsync` only has to map the payload.
 
-`ToElementAsync` must set `Id` for updates to work — that is how the service knows which element is meant. It does **not** need to set `DXUnitId`: on create the owner comes from the argument, and on update it is read from storage.
+### Scoped and unscoped overloads
+
+Each operation comes in two forms, and the difference is what an id that does not belong to the named unit means.
+
+| Form | Addresses | Element of another unit |
+|---|---|---|
+| `GetAsync(id)`, `UpdateAsync(id, dto)`, `DeleteAsync(id)` | the element on its own | not applicable — the owner is read from storage |
+| `GetAsync(dxUnitId, id)`, `UpdateAsync(dxUnitId, id, dto)`, `DeleteAsync(dxUnitId, id)` | the element **under** a unit | reported as absent: `default` / `false` |
+
+Use the scoped form under a nested route (`/books/{bookId}/chapters/{id}`). Without it the owner in the path is decorative: the service would find the chapter by its own id and answer with it whatever book was named, so swapping the book id in the URL would still return — or overwrite — a chapter of another book.
+
+Both forms refuse to move an element between units. The unscoped write resolves the owner from storage and rejects a request that disagrees; the scoped write reports the mismatch as an absence.
 
 ### Access
 

@@ -92,7 +92,7 @@ namespace IV.DX.Application.IntTests.Services
             var dto = (await _service.GetByUnitAsync(book.Id)).Single();
             dto.Text = "after";
 
-            Assert.True(await _service.UpdateAsync(dto));
+            Assert.True(await _service.UpdateAsync(dto.Id, dto));
 
             var reread = await _service.GetAsync(dto.Id);
 
@@ -104,9 +104,9 @@ namespace IV.DX.Application.IntTests.Services
         [Fact]
         public async Task UpdateAsync_UsingUnknownId_ReportsFalse()
         {
-            var dto = new ChapterDto { Id = Guid.CreateVersion7(), Number = 1, Text = "ghost" };
+            var dto = new ChapterDto { Number = 1, Text = "ghost" };
 
-            Assert.False(await _service.UpdateAsync(dto));
+            Assert.False(await _service.UpdateAsync(Guid.CreateVersion7(), dto));
         }
 
         [Fact]
@@ -127,6 +127,86 @@ namespace IV.DX.Application.IntTests.Services
         public async Task DeleteAsync_UsingUnknownId_ReportsFalse()
         {
             Assert.False(await _service.DeleteAsync(Guid.CreateVersion7()));
+        }
+
+        // ── Owner-scoped overloads: what a nested route resolves against ───────────
+
+        [Fact]
+        public async Task GetAsync_ScopedToTheOwningBook_ReturnsTheChapter()
+        {
+            var book = await CreateBookAsync("scoped-get", "one");
+
+            var chapter = (await _service.GetByUnitAsync(book.Id)).Single();
+            var dto = await _service.GetAsync(book.Id, chapter.Id);
+
+            Assert.NotNull(dto);
+            Assert.Equal(chapter.Id, dto.Id);
+        }
+
+        [Fact]
+        public async Task GetAsync_ScopedToTheWrongBook_ReturnsNull()
+        {
+            var mine = await CreateBookAsync("scoped-get-mine");
+            var other = await CreateBookAsync("scoped-get-other", "foreign");
+
+            var foreign = (await _service.GetByUnitAsync(other.Id)).Single();
+
+            // Reachable by its own id, but not under a book it does not belong to - otherwise the
+            // address would name one book and answer with the contents of another.
+            Assert.NotNull(await _service.GetAsync(foreign.Id));
+            Assert.Null(await _service.GetAsync(mine.Id, foreign.Id));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ScopedToTheWrongBook_ChangesNothing()
+        {
+            var mine = await CreateBookAsync("scoped-update-mine");
+            var other = await CreateBookAsync("scoped-update-other", "foreign");
+
+            var foreign = (await _service.GetByUnitAsync(other.Id)).Single();
+            foreign.Text = "rewritten";
+
+            Assert.False(await _service.UpdateAsync(mine.Id, foreign.Id, foreign));
+
+            var untouched = await _service.GetAsync(foreign.Id);
+
+            Assert.Equal("foreign", untouched!.Text);
+            Assert.Equal(other.Id, untouched.BookId);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ScopedToTheOwningBook_AppliesTheChange()
+        {
+            var book = await CreateBookAsync("scoped-update", "before");
+
+            var chapter = (await _service.GetByUnitAsync(book.Id)).Single();
+            chapter.Text = "after";
+
+            Assert.True(await _service.UpdateAsync(book.Id, chapter.Id, chapter));
+            Assert.Equal("after", (await _service.GetAsync(chapter.Id))!.Text);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ScopedToTheWrongBook_RemovesNothing()
+        {
+            var mine = await CreateBookAsync("scoped-delete-mine");
+            var other = await CreateBookAsync("scoped-delete-other", "foreign");
+
+            var foreign = (await _service.GetByUnitAsync(other.Id)).Single();
+
+            Assert.False(await _service.DeleteAsync(mine.Id, foreign.Id));
+            Assert.NotNull(await _service.GetAsync(foreign.Id));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ScopedToTheOwningBook_RemovesIt()
+        {
+            var book = await CreateBookAsync("scoped-delete", "drop");
+
+            var chapter = (await _service.GetByUnitAsync(book.Id)).Single();
+
+            Assert.True(await _service.DeleteAsync(book.Id, chapter.Id));
+            Assert.Null(await _service.GetAsync(chapter.Id));
         }
 
         private async Task<TBookUnit> CreateBookAsync(string name, params string[] chapters)

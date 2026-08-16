@@ -29,6 +29,12 @@ namespace IV.DX.Application.Services
             return element is null ? default : await _mapper.ToDtoAsync(element, ct);
         }
 
+        public async Task<TResponse?> GetAsync(Guid dxUnitId, Guid id, CancellationToken ct = default)
+        {
+            var element = await _dataService.GetItemAsync<TElement>(UnitTypeName, dxUnitId, id, ct);
+            return element is null ? default : await _mapper.ToDtoAsync(element, ct);
+        }
+
         public async Task<IEnumerable<TResponse>> GetByUnitAsync(Guid dxUnitId, CancellationToken ct = default)
         {
             var elements = await _dataService.GetItemsByUnitAsync<TElement>(UnitTypeName, dxUnitId, ct);
@@ -43,10 +49,16 @@ namespace IV.DX.Application.Services
         public Task<Guid> CreateAsync(Guid dxUnitId, TRequest dto, CancellationToken ct = default)
             => _write.CreateAsync(dxUnitId, dto, ct);
 
-        public Task<bool> UpdateAsync(TRequest dto, CancellationToken ct = default)
-            => _write.UpdateAsync(dto, ct);
+        public Task<bool> UpdateAsync(Guid id, TRequest dto, CancellationToken ct = default)
+            => _write.UpdateAsync(id, dto, ct);
+
+        public Task<bool> UpdateAsync(Guid dxUnitId, Guid id, TRequest dto, CancellationToken ct = default)
+            => _write.UpdateAsync(dxUnitId, id, dto, ct);
 
         public Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
             => _write.DeleteAsync(id, ct);
+
+        public Task<bool> DeleteAsync(Guid dxUnitId, Guid id, CancellationToken ct = default)
+            => _write.DeleteAsync(dxUnitId, id, ct);
     }
 }

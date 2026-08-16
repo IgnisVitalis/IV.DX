@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.112.0] - 2026-08-16
+
+> 0.109.0 through 0.111.0 shipped without changelog entries. What they carried is folded in below,
+> so a few items here reached a package before this release.
+
 ### Fixed
 
 - A write that changes nothing no longer touches the row. `TimeStamp` was stamped unconditionally while a row was being filled, which marked every row dirty by construction, so a no-op update still issued an UPDATE and moved the timestamp. It now moves only when a column value actually differs from what was read. This also means a unit's `TimeStamp` no longer moves when only one of its elements changed - the unit's own row is not rewritten;
@@ -19,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - `IDXElementDataService` covers the element lifecycle: `GetItemAsync`, `GetItemsByUnitAsync`, `GetItemsByUnitFilterAsync`, `InsertAsync<T>`, `UpdateAsync<T>` and `InsertOrUpdateAsync<T>` for a typed element, `InsertOrUpdateAsync` for a block, and `DeleteAsync`. Editing one element of a unit no longer means reading the whole unit, changing a part of it and writing it all back;
+- Owner-scoped overloads throughout the element path, for addresses that name the unit as well as the element: `IDXElementDataService.GetItemAsync<T>(unitType, dxUnitId, id)`, `UpdateAsync<T>(unitType, dxUnitId, element)` and `DeleteAsync<T>(unitType, dxUnitId, id)`, surfaced on the DTO services as `GetAsync(dxUnitId, id)`, `UpdateAsync(dxUnitId, id, dto)` and `DeleteAsync(dxUnitId, id)`. An element belonging to a different unit is reported as absent rather than served or written, so a nested route cannot be made to read or overwrite another unit's element by swapping the owner in the path;
 - A DTO mapper layer for elements, mirroring the unit one: `DXElementMapper<TRequest, TResponse, TElement, TUnit>`, `DXElementReadMapper<TResponse, TElement, TUnit>`, `DXElementWriteMapper<TRequest, TElement, TUnit>`, the services they register (`IDXElementDtoService<TRequest, TResponse>`, `IDXElementQueryService<TResponse>`, `IDXElementCommandService<TRequest>`), and `AddDXElementMapper` / `AddDXElementReadMapper` / `AddDXElementWriteMapper`. The owning unit is a type argument because `IsCommon` lets one element type belong to several units, and `IDXElementCommandService.CreateAsync` takes the owner id as an argument so a nested route can supply it without every request DTO carrying it. Documented in `doc/DXUnitDtoMapper.md`;
 - `DXObjectHelper.GetDeclaredDXUnitId` - the owning unit declared by an element record, read the same way by the access check and by the write that follows it;
 - `DXAuthSessionUnit.UserAgentMaxLength` and `DXAuthSessionUnit.DeviceIdMaxLength` - the session column widths, declared on the unit that owns them so callers no longer have to discover them by trial;
@@ -28,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - A block is written in one transaction. Both `IDXUnitDataService` and `IDXElementDataService` opened a transaction per record, so a failure partway through a block left the earlier records committed;
 - `IDXElementDataService.GetItemsAsync(dxUnitTypeName, dxFilter)` renamed to `GetItemsByUnitFilterAsync`. The filter is evaluated against the unit table, not the element table, and the old name said otherwise. The overloads taking ids take no filter string at all, which keeps them clear of the unparameterised filter path;
 - `IDXElementDataService.InsertOrUpdateAsync(block)` returns every id written rather than the last one;
+- `IDXElementCommandService.UpdateAsync` takes the element id as an argument (`UpdateAsync(id, dto)`) instead of reading it off the DTO. An element is addressed by two coordinates and a nested route supplies both, so request DTOs stay pure payload: no marker interface, and a mapper's `ToElementAsync` no longer has to remember to set `Id`. Whatever it writes into `Id` or `DXUnitId` is overwritten from the arguments;
 
 ## [0.108.0] - 2026-08-12
 

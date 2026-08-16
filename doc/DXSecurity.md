@@ -126,7 +126,10 @@ On refresh token mismatch:
 
 ## Authorization model
 
-Authorization is enforced by `IDXUnitTypeAccessChecker` (`DXContextualUnitTypeAccessChecker`) and consumed by data services/readers.
+Type-level decisions are made by `IDXUnitTypeAccessChecker` (`DXContextualUnitTypeAccessChecker`).
+Data services do not consume it directly: they go through `IDXUnitAccessGate`, which combines it
+with the instance-level ownership check and the narrowing a restricted read needs. See
+[Element access](#element-access) for why that gate is shared rather than per-service.
 
 ### Access decisions
 
@@ -292,6 +295,61 @@ On successful insert (non-system context with identity), the service auto-create
 need "whoever made it owns it" therefore require no ownership rows to be managed by hand.
 
 On delete, identity and group ownership rows for that record are deleted.
+
+## Element access
+
+A `DXElement` has no grants and no ownership rows of its own. Everything about it is decided
+against the **unit type that owns it**, named by `dxUnitTypeName` on the read calls and by
+`Meta.DXUnitContext` on a block write.
+
+| Operation on an element | Requires |
+|---|---|
+| read | `Read` on the owning unit type, narrowed to the units the caller may see |
+| create, update, delete | `Update` on the specific unit that owns it, or ownership granting `Update` |
+
+Writes map to `Update` rather than to `Create` and `Delete`. Adding or removing an element does
+not bring a unit into being or end it — it changes a unit's contents, which is exactly what a
+whole-unit write carrying a modified element container already does. Requiring `Delete` to drop
+one element would mean handing out the right to delete the whole unit; requiring `Create` to add
+one would let a caller holding a `Create` grant append to units they do not own, while locking out
+an owner who holds only `Update`. Either variant would make the element path grant something the
+unit path does not; as specified it grants nothing new.
+
+Reads apply the same narrowing as `IDXUnitDataReader`: under `AllowedOwnedOnly`, or for an
+anonymous caller falling back to `DXPublicAccessUnit`, the result is restricted to elements whose
+owning unit is visible. An element of a unit the caller cannot see reads as absent rather than
+denied, so its existence does not leak.
+
+### Resolving the owner
+
+For an element that already exists the owning unit is read from storage, never taken from the
+request. A request naming another unit's element alongside a unit of the caller's own would
+otherwise pass the check against their unit and then rewrite the other one — moving it across in
+the process.
+
+A declared owner that disagrees with the stored one is always refused; how depends on where it
+came from:
+
+- from a request body (`IDXElementDataService.UpdateAsync(unitType, element)`) it is a caller
+  error and throws;
+- from an address (`UpdateAsync(unitType, dxUnitId, element)`, and the DTO services'
+  `GetAsync(dxUnitId, id)` / `UpdateAsync(dxUnitId, id, dto)` / `DeleteAsync(dxUnitId, id)`) it is
+  reported as absent, so a nested route answers `404` rather than serving or overwriting an
+  element that lives under a different unit.
+
+Nothing on the element path reparents an element.
+
+### Where the rules live
+
+`IDXUnitAccessGate` holds the decisions — the type-level check, the owned-only and public-record
+narrowing, and the instance-level ownership check — and both the unit services and the element
+service go through it. One component on purpose: two copies of these rules would drift, and the
+newer path would quietly become a way around the older one.
+
+### Not covered
+
+The element path runs no handler pipeline. Before/after handlers registered for a unit do not see
+an element written through `IDXElementDataService`.
 
 ## Sensitive data handling
 

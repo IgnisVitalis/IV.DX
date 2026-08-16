@@ -20,6 +20,12 @@ namespace IV.DX.Application.Services
             return element is null ? default : await mapper.ToDtoAsync(element, ct);
         }
 
+        public async Task<TResponse?> GetAsync(Guid dxUnitId, Guid id, CancellationToken ct = default)
+        {
+            var element = await dataService.GetItemAsync<TElement>(UnitTypeName, dxUnitId, id, ct);
+            return element is null ? default : await mapper.ToDtoAsync(element, ct);
+        }
+
         public async Task<IEnumerable<TResponse>> GetByUnitAsync(Guid dxUnitId, CancellationToken ct = default)
         {
             var elements = await dataService.GetItemsByUnitAsync<TElement>(UnitTypeName, dxUnitId, ct);

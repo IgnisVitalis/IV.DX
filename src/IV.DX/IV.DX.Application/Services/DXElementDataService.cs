@@ -35,6 +35,16 @@ namespace IV.DX.Application.Services
             return Task.FromResult<T?>(element);
         }
 
+        public async Task<T?> GetItemAsync<T>(string dxUnitTypeName, Guid dxUnitId, Guid id, CancellationToken ct = default) where T : DXElement, new()
+        {
+            var element = await GetItemAsync<T>(dxUnitTypeName, id, ct);
+
+            // An element of a different unit is reported as absent, not returned. Under a nested
+            // route the owner is part of the address, so answering with something that lives
+            // somewhere else would make the address a lie.
+            return element is not null && element.DXUnitId == dxUnitId ? element : null;
+        }
+
         public Task<IEnumerable<T>> GetItemsByUnitAsync<T>(string dxUnitTypeName, Guid dxUnitId, CancellationToken ct = default) where T : DXElement, new()
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(dxUnitTypeName);
@@ -106,6 +116,42 @@ namespace IV.DX.Application.Services
             dxElement.DXUnitId = EnsureWritable(dxUnitTypeName, elementTypeName, dxElement.Id, dxElement.DXUnitId);
 
             return Task.FromResult(dxElementGenericRepo.Update(dxUnitTypeName, dxElement));
+        }
+
+        public Task<Guid> UpdateAsync<T>(string dxUnitTypeName, Guid dxUnitId, T dxElement, CancellationToken ct = default) where T : DXElement
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(dxUnitTypeName);
+            ArgumentNullException.ThrowIfNull(dxElement);
+
+            if (dxElement.Id == Guid.Empty)
+                throw new InvalidOperationException("Id is required to update a DXElement.");
+
+            var elementTypeName = AttributeReader.GetDXElementTypeName(dxElement.GetType());
+
+            // Belonging to another unit is reported the same way as not existing. The unscoped
+            // overload treats a disagreeing owner as a caller error and throws, which is right when
+            // the owner came from a request body; here it came from the address, and an address that
+            // does not resolve is a 404, not a fault.
+            if (!OwnedBy(dxUnitTypeName, elementTypeName, dxElement.Id, dxUnitId))
+                return Task.FromResult(Guid.Empty);
+
+            dxElement.DXUnitId = EnsureWritable(dxUnitTypeName, elementTypeName, dxElement.Id, dxUnitId);
+
+            return Task.FromResult(dxElementGenericRepo.Update(dxUnitTypeName, dxElement));
+        }
+
+        public Task<bool> DeleteAsync<T>(string dxUnitTypeName, Guid dxUnitId, Guid id, CancellationToken ct = default) where T : DXElement
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(dxUnitTypeName);
+
+            var elementTypeName = AttributeReader.GetDXElementTypeName(typeof(T));
+
+            if (id == Guid.Empty || !OwnedBy(dxUnitTypeName, elementTypeName, id, dxUnitId))
+                return Task.FromResult(false);
+
+            accessGate.EnsureInstanceAccess(dxUnitTypeName, dxUnitId, DXUnitTypeAccessOperation.Update);
+
+            return Task.FromResult(dxElementGenericRepo.Delete(elementTypeName, [id]));
         }
 
         public Task<Guid> InsertOrUpdateAsync<T>(string dxUnitTypeName, T dxElement, CancellationToken ct = default) where T : DXElement
@@ -183,6 +229,18 @@ namespace IV.DX.Application.Services
             }
 
             return Task.FromResult(present.Count != 0 && dxElementGenericRepo.Delete(elementTypeName, present));
+        }
+
+        /// <summary>
+        /// Whether a stored element belongs to the given unit. False when it does not exist at all,
+        /// so a caller cannot tell the two apart - which is the point under a nested address.
+        /// </summary>
+        private bool OwnedBy(string dxUnitTypeName, string elementTypeName, Guid elementId, Guid dxUnitId)
+        {
+            if (dxUnitId == Guid.Empty)
+                return false;
+
+            return dxElementGenericRepo.GetOwnerDXUnitId(dxUnitTypeName, elementTypeName, elementId) == dxUnitId;
         }
 
         /// <summary>

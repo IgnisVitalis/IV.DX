@@ -8,28 +8,40 @@ namespace IV.DX.Application.Contracts.Abstractions
     /// Not <c>Create</c> and not <c>Delete</c>: adding or removing an element does not bring a unit
     /// into being or end it, it changes a unit's contents - the same thing a whole-unit write with a
     /// modified element container does.
+    /// <para>
+    /// Ids are arguments rather than properties the DTO must carry. An element is addressed by two
+    /// coordinates, both of which a nested route already supplies, so the request shape stays pure
+    /// payload and no marker interface is needed on it. Anything a mapper puts in
+    /// <c>DXElement.Id</c> or <c>DXElement.DXUnitId</c> is overwritten from these arguments.
+    /// </para>
     /// </remarks>
     public interface IDXElementCommandService<TRequest>
     {
         /// <summary>
         /// Adds an element to a unit and returns its server-assigned id.
         /// </summary>
-        /// <remarks>
-        /// The owner is an argument rather than a property of the DTO so the caller decides where it
-        /// came from - a route segment for a nested resource, the body for a flat one - without every
-        /// request shape having to carry it.
-        /// </remarks>
         Task<Guid> CreateAsync(Guid dxUnitId, TRequest dto, CancellationToken ct = default);
 
         /// <summary>
-        /// Updates an existing element. Returns false when no element with that id exists. The owner
-        /// is resolved from storage, so the element cannot be moved to another unit through this.
+        /// Updates an element by its own id. Returns false when no element with that id exists. The
+        /// owning unit is resolved from storage, so this cannot move the element elsewhere.
         /// </summary>
-        Task<bool> UpdateAsync(TRequest dto, CancellationToken ct = default);
+        Task<bool> UpdateAsync(Guid id, TRequest dto, CancellationToken ct = default);
 
         /// <summary>
-        /// Removes an element. Removing one that is not there is not an error.
+        /// Updates an element of a named unit. Returns false when no such element exists under that
+        /// unit, including when it exists under a different one.
+        /// </summary>
+        Task<bool> UpdateAsync(Guid dxUnitId, Guid id, TRequest dto, CancellationToken ct = default);
+
+        /// <summary>
+        /// Removes an element by its own id. Removing one that is not there is not an error.
         /// </summary>
         Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+
+        /// <summary>
+        /// Removes an element of a named unit. Reports false when no such element exists under it.
+        /// </summary>
+        Task<bool> DeleteAsync(Guid dxUnitId, Guid id, CancellationToken ct = default);
     }
 }

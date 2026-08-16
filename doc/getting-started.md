@@ -859,7 +859,37 @@ public class BooksController(IDXUnitDtoService<TBookDto> books) : ControllerBase
 }
 ```
 
-See [DXUnitDtoMapper.md](DXUnitDtoMapper.md) for the full reference including convention mapping rules, container semantics, startup validation, and examples.
+### Editing one element of a unit
+
+Writing a whole unit to change one of its elements means reading it, mutating a part and writing it
+all back — which needs `Read` on top of `Update`, drags every untouched field along, and lets a
+stale copy overwrite an edit made elsewhere. The element services address the element's own row
+instead, leaving the unit untouched and its `TimeStamp` where it was:
+
+```csharp
+// ChapterMapper : DXElementMapper<ChapterDto, ChapterDto, BookChapterElement, BookUnit>
+builder.Services.AddDXElementMapper<ChapterMapper>();
+```
+
+```csharp
+public class ChaptersController(IDXElementDtoService<ChapterDto, ChapterDto> chapters) : ControllerBase
+{
+    [HttpGet]
+    public Task<IEnumerable<ChapterDto>> GetAll(Guid bookId, CancellationToken ct)
+        => chapters.GetByUnitAsync(bookId, ct);
+
+    [HttpPost]
+    public Task<Guid> Create(Guid bookId, ChapterDto dto, CancellationToken ct)
+        => chapters.CreateAsync(bookId, dto, ct);
+}
+```
+
+Both ids are arguments, so the DTO stays pure payload. Access is decided against the owning unit —
+`Read` to read it, `Update` on that specific unit to add, change or remove one — and every
+operation has an owner-scoped overload for nested routes. `IV.DX.WebApi` ships controller bases
+over these services.
+
+See [DXUnitDtoMapper.md](DXUnitDtoMapper.md) for the full reference including convention mapping rules, container semantics, startup validation, and examples, and [DXSecurity.md](DXSecurity.md#element-access) for the element access rules.
 
 ---
 

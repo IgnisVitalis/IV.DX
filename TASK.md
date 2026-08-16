@@ -30,23 +30,6 @@ Elements are the easier case: no containers, no nested elements, so only the
 scalar half of `DXConventionMapper` is needed. Worth factoring that half out of
 the existing mapper rather than writing a second copy of it.
 
-## No controller bases for elements
-
-`DXUnitQueryControllerBase` and `DXUnitCommandControllerBase` in `IV.DX.WebApi`
-are built on the DTO services, not on `IDXUnitDataService`. Element controller
-bases need `IDXElementQueryService` / `IDXElementCommandService` under them.
-Those now exist, so this is unblocked.
-
-One question is left, and it is the HTTP half of the one the service layer
-already answered by taking the owner as an argument: a nested base
-(`api/books/{bookUnitId}/chapters`) has to know the name of the owner-id route
-parameter, a flat one (`api/book-chapters`) has to take the owner from the body.
-Worth settling against a real controller rather than in the abstract.
-
-Do not copy `DXUnitQueryControllerBase.Search` when it happens: it passes a
-caller-supplied filter straight to the query builder, which concatenates it into
-the WHERE clause. That hole is already shipped for units.
-
 ## Handlers do not run on the element-scoped path
 
 `IDXElementDataService` now covers the full element lifecycle, but it does not

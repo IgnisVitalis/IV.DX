@@ -178,9 +178,10 @@ When a DXUnit type is declared as a **derived type** (its `DXUnitDefinitionUnit`
 
 ## 7) DXElementRecord specifics
 
-- `DXUnitId` is required.
+- `DXUnitId` is required. It may also be spelled inside `Fields`, as `DXUnitId` or as `<UnitType>Id`. `DXObjectHelper.GetDeclaredDXUnitId` resolves all three, and both the access check and the write that follows it use that one resolver, so they cannot read different owners out of the same record.
 - If the element is **standalone** (top-level block with `Kind = DXElement`), you must provide `Meta.DXUnitContext`.
 - `Delete` references may include extra fields (e.g., `DXUnitId`) in `DXDeleteRef.Fields`.
+- A standalone block goes through `IDXElementDataService`, which authorizes it against the unit type named in `Meta.DXUnitContext` and applies the whole block in one transaction. The rules are in [DXSecurity.md](DXSecurity.md#element-access); the typed API over the same path is in [DXUnitDtoMapper.md](DXUnitDtoMapper.md#element-mappers).
 
 ### Common DXElements (`DXElementDefinitionUnit.IsCommon`)
 

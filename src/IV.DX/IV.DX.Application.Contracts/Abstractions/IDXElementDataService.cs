@@ -37,6 +37,13 @@ namespace IV.DX.Application.Contracts.Abstractions
         Task<T?> GetItemAsync<T>(string dxUnitTypeName, Guid id, CancellationToken ct = default) where T : DXElement, new();
 
         /// <summary>
+        /// One element by its own id, provided it belongs to <paramref name="dxUnitId"/>. An element
+        /// of another unit reads as <c>null</c>, the same as one that does not exist - so a nested
+        /// address never resolves to something living elsewhere, and never reveals that it exists.
+        /// </summary>
+        Task<T?> GetItemAsync<T>(string dxUnitTypeName, Guid dxUnitId, Guid id, CancellationToken ct = default) where T : DXElement, new();
+
+        /// <summary>
         /// Every element of the given type belonging to one unit. Empty when the caller may not read
         /// that unit.
         /// </summary>
@@ -65,6 +72,24 @@ namespace IV.DX.Application.Contracts.Abstractions
         /// element with that id exists. Access is checked before existence.
         /// </summary>
         Task<Guid> UpdateAsync<T>(string dxUnitTypeName, T dxElement, CancellationToken ct = default) where T : DXElement;
+
+        /// <summary>
+        /// Updates an element that belongs to <paramref name="dxUnitId"/> and returns its id, or
+        /// <see cref="Guid.Empty"/> when no such element exists under that unit - including when it
+        /// exists under a different one.
+        /// </summary>
+        /// <remarks>
+        /// The unscoped overload throws when the owner disagrees, because there the owner arrived in
+        /// a request body and disagreeing with storage is a caller error. Here it arrived in the
+        /// address, and an address that does not resolve is an absence, not a fault.
+        /// </remarks>
+        Task<Guid> UpdateAsync<T>(string dxUnitTypeName, Guid dxUnitId, T dxElement, CancellationToken ct = default) where T : DXElement;
+
+        /// <summary>
+        /// Removes an element that belongs to <paramref name="dxUnitId"/>. Reports false when no such
+        /// element exists under that unit.
+        /// </summary>
+        Task<bool> DeleteAsync<T>(string dxUnitTypeName, Guid dxUnitId, Guid id, CancellationToken ct = default) where T : DXElement;
 
         /// <summary>
         /// Writes one element, inserting it when its id is unknown and updating it otherwise.
