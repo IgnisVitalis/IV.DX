@@ -144,6 +144,34 @@ namespace IV.DX.Application.IntTests.Services
             Assert.All(sessions, x => Assert.True(x.RevokedAt.HasValue));
         }
 
+        [Fact]
+        public async Task LoginLocalAsync_ClampsOversizedUserAgentAndDeviceId_Ok()
+        {
+            var subject = CreateSubject();
+            var password = "P@ssw0rd-Clamp-001";
+
+            await _securityService.RegisterLocalAsync(CreateRegisterRequest(subject, password));
+
+            // A browser User-Agent runs 110-130 characters. Passing one straight through
+            // used to fail the session insert, which surfaced as a 500 on a valid login.
+            var longUserAgent = new string('a', 250);
+            var longDeviceId = new string('d', 300);
+
+            var auth = await _securityService.LoginLocalAsync(new DXLoginLocalRequest
+            {
+                Subject = subject,
+                Password = password,
+                UserAgent = longUserAgent,
+                IpAddress = "127.0.0.1",
+                DeviceId = longDeviceId
+            });
+
+            var session = GetSessionBySessionId(auth.SessionId);
+
+            Assert.Equal(longUserAgent[..DXAuthSessionUnit.UserAgentMaxLength], session.UserAgent);
+            Assert.Equal(longDeviceId[..DXAuthSessionUnit.DeviceIdMaxLength], session.DeviceId);
+        }
+
         private static DXRegisterLocalRequest CreateRegisterRequest(string subject, string password)
         {
             return new DXRegisterLocalRequest

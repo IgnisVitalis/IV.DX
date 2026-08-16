@@ -6,6 +6,13 @@ namespace IV.DX.Kernel.Models
     [DXUnit("DXAuthSessionUnit")]
     public class DXAuthSessionUnit : DXUnit
     {
+        // Widths the table accepts. An oversized value fails the insert instead of being
+        // trimmed, so whoever fills a session clamps against these. They are declared
+        // here because the columns belong to this unit - callers cannot know them.
+        public const int UserAgentMaxLength = 100;
+
+        public const int DeviceIdMaxLength = 50;
+
         [DXColumn("SessionId")]
         public Guid SessionId { get; set; }
 

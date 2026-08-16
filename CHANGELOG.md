@@ -2,6 +2,16 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- `DXSecurityService` clamps `UserAgent` and `DeviceId` to the widths `DXAuthSessionUnit` accepts before inserting a session. An oversized value failed the insert instead of being trimmed, so register, login and refresh all threw for callers that passed real client data through - a browser `User-Agent` runs 110-130 characters against a 100 character column, which made every browser login fail;
+
+### Added
+
+- `DXAuthSessionUnit.UserAgentMaxLength` and `DXAuthSessionUnit.DeviceIdMaxLength` - the session column widths, declared on the unit that owns them so callers no longer have to discover them by trial;
+
 ## [0.108.0] - 2026-08-12
 
 ### Changed

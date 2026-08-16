@@ -267,9 +267,12 @@ namespace IV.DX.Application.Services
                 CreatedAt = now,
                 LastUsedAt = null,
                 RevokedAt = null,
-                UserAgent = Coalesce(userAgent, string.Empty),
+                // Callers pass these through from whatever they collected about the
+                // client, so they are clamped to what the columns hold. IpAddress needs
+                // no clamp: 45 characters covers any address it can carry.
+                UserAgent = Truncate(Coalesce(userAgent, string.Empty), DXAuthSessionUnit.UserAgentMaxLength),
                 IpAddress = Coalesce(ipAddress, string.Empty),
-                DeviceId = Coalesce(deviceId, string.Empty),
+                DeviceId = Truncate(Coalesce(deviceId, string.Empty), DXAuthSessionUnit.DeviceIdMaxLength),
                 IdentityLogin = identityLoginId,
                 ReplacedBySession = null
             };
@@ -354,6 +357,11 @@ namespace IV.DX.Application.Services
         private static string? Coalesce(string? value, string? fallback)
         {
             return string.IsNullOrWhiteSpace(value) ? fallback : value;
+        }
+
+        private static string? Truncate(string? value, int maxLength)
+        {
+            return value != null && value.Length > maxLength ? value[..maxLength] : value;
         }
 
         private static string GenerateToken(int bytesLength)
