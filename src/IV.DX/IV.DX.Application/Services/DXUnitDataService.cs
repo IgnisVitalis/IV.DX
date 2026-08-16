@@ -16,7 +16,7 @@ namespace IV.DX.Application.Services
     internal class DXUnitDataService(
         IDXUnitCoreRepository coreRepo,
         IDXPipelineExecutor dxPipelineExecutor,
-        IDXUnitTypeAccessChecker unitTypeAccessChecker,
+        IDXUnitAccessGate accessGate,
         IDXUnitGenericRepository genericRepo,
         IDXStructureCache structureCache,
         IDXExecutionContextAccessor executionContextAccessor,
@@ -30,7 +30,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Create);
+            accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Create);
 
             if (!DXMigrationContext.IsMigrating)
                 AssignNewIds(dxUnit);
@@ -79,7 +79,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureInstanceAccess(typeName, dxUnit.Id, DXUnitTypeAccessOperation.Update);
+            accessGate.EnsureInstanceAccess(typeName, dxUnit.Id, DXUnitTypeAccessOperation.Update);
 
             // Access for this instance is already settled, so this check adds no exposure.
             // Without it a missing record updates zero rows and reports success.
@@ -106,7 +106,7 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureReadAccess(typeName);
+            accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Read);
 
             var result = await dxPipelineExecutor.IsUnitExistingAsync(typeName, id, context, ct);
 
@@ -134,7 +134,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(dxUnit.GetType());
-            EnsureInstanceAccess(typeName, dxUnit.Id, DXUnitTypeAccessOperation.Delete);
+            accessGate.EnsureInstanceAccess(typeName, dxUnit.Id, DXUnitTypeAccessOperation.Delete);
 
             var result = await dxPipelineExecutor.DeleteAsync(dxUnit, context, ct);
 
@@ -158,7 +158,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = ExtractTypeName(jObject);
-            EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Create);
+            accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Create);
 
             var block = jObject.ToObject<DXDataBlock<DXUnitRecord>>()
                 ?? throw new Exception("Invalid DXDataBlock payload.");
@@ -190,9 +190,9 @@ namespace IV.DX.Application.Services
             var typeName = ExtractTypeName(jObject);
             var instanceId = ExtractInstanceId(jObject);
             if (instanceId.HasValue)
-                EnsureInstanceAccess(typeName, instanceId.Value, DXUnitTypeAccessOperation.Update);
+                accessGate.EnsureInstanceAccess(typeName, instanceId.Value, DXUnitTypeAccessOperation.Update);
             else
-                EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Update);
+                accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Update);
 
             var result = await dxPipelineExecutor.UpdateAsync(jObject, context, ct);
 
@@ -217,9 +217,9 @@ namespace IV.DX.Application.Services
             var typeName = ExtractTypeName(jObject);
             var instanceId = ExtractInstanceId(jObject);
             if (instanceId.HasValue)
-                EnsureInstanceAccess(typeName, instanceId.Value, DXUnitTypeAccessOperation.Delete);
+                accessGate.EnsureInstanceAccess(typeName, instanceId.Value, DXUnitTypeAccessOperation.Delete);
             else
-                EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Delete);
+                accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Delete);
 
             var result = await dxPipelineExecutor.DeleteAsync(jObject, context, ct);
 
@@ -257,7 +257,7 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            EnsureTypeAccess(block?.Meta?.Type, DXUnitTypeAccessOperation.Create);
+            accessGate.EnsureTypeAccess(block?.Meta?.Type, DXUnitTypeAccessOperation.Create);
 
             if (!DXMigrationContext.IsMigrating)
                 AssignNewIds(block);
@@ -289,12 +289,12 @@ namespace IV.DX.Application.Services
                 foreach (var record in block.Data.Items)
                 {
                     if (record != null)
-                        EnsureInstanceAccess(typeName, record.Id, DXUnitTypeAccessOperation.Update);
+                        accessGate.EnsureInstanceAccess(typeName, record.Id, DXUnitTypeAccessOperation.Update);
                 }
             }
             else
             {
-                EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Update);
+                accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Update);
             }
 
             var result = await dxPipelineExecutor.UpdateAsync(block!, context, ct);
@@ -324,12 +324,12 @@ namespace IV.DX.Application.Services
                 foreach (var deleteRef in deleteRefs)
                 {
                     if (deleteRef != null)
-                        EnsureInstanceAccess(typeName, deleteRef.Id, DXUnitTypeAccessOperation.Delete);
+                        accessGate.EnsureInstanceAccess(typeName, deleteRef.Id, DXUnitTypeAccessOperation.Delete);
                 }
             }
             else
             {
-                EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Delete);
+                accessGate.EnsureTypeAccess(typeName, DXUnitTypeAccessOperation.Delete);
             }
 
             var result = await dxPipelineExecutor.DeleteAsync(block!, context, ct);
@@ -422,155 +422,6 @@ namespace IV.DX.Application.Services
             if (idToken != null && Guid.TryParse(idToken.ToString(), out var id))
                 return id;
             return null;
-        }
-
-        private void EnsureReadAccess(string? typeName)
-        {
-            if (!string.IsNullOrWhiteSpace(typeName))
-            {
-                unitTypeAccessChecker.EnsureAccess(typeName, DXUnitTypeAccessOperation.Read);
-            }
-        }
-
-        /// <summary>
-        /// Requires full type-level access. Used where there is no concrete instance to fall back
-        /// to an ownership check against — creation, and whole-type operations.
-        /// </summary>
-        private void EnsureTypeAccess(string? typeName, DXUnitTypeAccessOperation operation)
-        {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return;
-
-            if (unitTypeAccessChecker.CheckAccess(typeName, operation) == DXAccessDecision.Allowed)
-                return;
-
-            var subject = GetCurrentSubject();
-            logger.LogWarning(
-                "{Operation} access denied for subject {Subject} to DX unit type {TypeName}.",
-                operation,
-                subject,
-                typeName);
-            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
-        }
-
-        /// <summary>
-        /// Requires full type-level access, or ownership of the concrete instance when the
-        /// decision is <see cref="DXAccessDecision.AllowedOwnedOnly"/>.
-        /// </summary>
-        private void EnsureInstanceAccess(string? typeName, Guid instanceId, DXUnitTypeAccessOperation operation)
-        {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return;
-
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, operation);
-
-            if (decision == DXAccessDecision.Allowed)
-                return;
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly)
-            {
-                EnsureOwnership(typeName, instanceId, operation);
-                return;
-            }
-
-            var subject = GetCurrentSubject();
-            logger.LogWarning(
-                "{Operation} access denied for subject {Subject} to DX unit type {TypeName} and instance {InstanceId}.",
-                operation,
-                subject,
-                typeName,
-                instanceId);
-            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
-        }
-
-        /// <summary>
-        /// Ownership rows are instance-level grants: each one states which operations its owner
-        /// may perform. A Deny row outranks every Allow row on the same record.
-        /// </summary>
-        private void EnsureOwnership(string typeName, Guid instanceId, DXUnitTypeAccessOperation operation)
-        {
-            var unitDef = structureCache.GetDXUnit(typeName);
-            if (unitDef == null || !unitDef.SupportsOwnership)
-            {
-                var subject = GetCurrentSubject();
-                logger.LogWarning(
-                    "Ownership check denied for subject {Subject} because DX unit type {TypeName} does not support ownership.",
-                    subject,
-                    typeName);
-                throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' instance '{instanceId}'.");
-            }
-
-            var context = executionContextAccessor.Current;
-            var granted = false;
-
-            if (context?.IdentityId.HasValue == true)
-            {
-                var identityOwnerships = genericRepo
-                    .GetDXUnits<DXIdentityOwnershipUnit>(
-                        $"Identity = '{context.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'");
-
-                foreach (var ownership in identityOwnerships)
-                {
-                    if (!OwnershipCovers(ownership.Read, ownership.Update, ownership.Delete, operation))
-                        continue;
-
-                    if (ownership.Effect == DXGrantEffectEnum.Deny)
-                    {
-                        ThrowOwnershipDenied(typeName, instanceId, operation);
-                    }
-
-                    granted |= ownership.Effect == DXGrantEffectEnum.Allow;
-                }
-            }
-
-            if (context?.ActiveGroupIDs != null)
-            {
-                foreach (var groupId in context.ActiveGroupIDs)
-                {
-                    var groupOwnerships = genericRepo
-                        .GetDXUnits<DXGroupOwnershipUnit>(
-                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'");
-
-                    foreach (var ownership in groupOwnerships)
-                    {
-                        if (!OwnershipCovers(ownership.Read, ownership.Update, ownership.Delete, operation))
-                            continue;
-
-                        if (ownership.Effect == DXGrantEffectEnum.Deny)
-                        {
-                            ThrowOwnershipDenied(typeName, instanceId, operation);
-                        }
-
-                        granted |= ownership.Effect == DXGrantEffectEnum.Allow;
-                    }
-                }
-            }
-
-            if (granted)
-                return;
-
-            ThrowOwnershipDenied(typeName, instanceId, operation);
-        }
-
-        private static bool OwnershipCovers(bool read, bool update, bool delete, DXUnitTypeAccessOperation operation) => operation switch
-        {
-            DXUnitTypeAccessOperation.Read => read,
-            DXUnitTypeAccessOperation.Update => update,
-            DXUnitTypeAccessOperation.Delete => delete,
-            // Ownership is a grant over a record that already exists; it never authorises creation.
-            _ => false
-        };
-
-        private void ThrowOwnershipDenied(string typeName, Guid instanceId, DXUnitTypeAccessOperation operation)
-        {
-            var subject = GetCurrentSubject();
-            logger.LogWarning(
-                "Ownership check denied for subject {Subject} to {Operation} DX unit type {TypeName} and instance {InstanceId}.",
-                subject,
-                operation,
-                typeName,
-                instanceId);
-            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' instance '{instanceId}' ({operation}).");
         }
 
         private void TryCreateIdentityOwnership(string? typeName, Guid unitId)
@@ -692,12 +543,6 @@ namespace IV.DX.Application.Services
 
             foreach (var owner in groupOwners)
                 genericRepo.Delete(owner);
-        }
-
-        private string GetCurrentSubject()
-        {
-            var ctx = executionContextAccessor.Current;
-            return ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
         }
 
         private void LogWriteFailure(string operation, string? typeName, string? error, Guid? id = null)

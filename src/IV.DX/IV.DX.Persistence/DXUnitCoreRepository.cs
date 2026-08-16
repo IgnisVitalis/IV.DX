@@ -523,27 +523,28 @@ namespace IV.DX.Persistence
             if (block.Data?.Items == null || block.Data.Items.Count == 0)
                 return Guid.Empty;
 
-            Guid lastId = Guid.Empty;
+            var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
+            if (mainDXUnitInfo == null)
+                throw new Exception($"Unit type '{typeName}' is not registered.");
 
-            foreach (var record in block.Data.Items)
+            // One transaction for the whole block. A block is a single write as far as its caller is
+            // concerned, so a failure on its fourth record must not leave the first three committed.
+            return this.RunRequestInTransaction(conn =>
             {
-                if (record == null) continue;
+                Guid lastId = Guid.Empty;
 
-                if (DXMigrationContext.IsMigrating && record.Id == Guid.Empty)
-                    throw new InvalidOperationException("Migration scripts must provide an explicit non-empty Id.");
+                foreach (var record in block.Data.Items)
+                {
+                    if (record == null) continue;
 
-                var mainDXUnitInfo = this.GetDXUnitDefinition(typeName);
-                if (mainDXUnitInfo == null)
-                    throw new Exception($"Unit type '{typeName}' is not registered.");
+                    if (DXMigrationContext.IsMigrating && record.Id == Guid.Empty)
+                        throw new InvalidOperationException("Migration scripts must provide an explicit non-empty Id.");
 
-                var processingType = this.IsItemExisting(typeName, record.Id)
-                    ? ProcessingType.Update
-                    : ProcessingType.Insert;
+                    lastId = this.InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, conn);
+                }
 
-                lastId = this.InsertOrUpdateDXUnitFromRecord(mainDXUnitInfo, typeName, record, processingType);
-            }
-
-            return lastId;
+                return lastId;
+            });
         }
 
         public bool IsItemExisting(string type, Guid objectId)
@@ -560,58 +561,53 @@ namespace IV.DX.Persistence
             DXUnitDefinitionUnit mainDXUnitInfo,
             string typeName,
             DXUnitRecord record,
-            ProcessingType processingType)
+            DbConnection conn)
         {
-            this.RunRequestInTransaction(conn =>
+            var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnitInfo!);
+            var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeName, dxUnitHierarchy);
+
+            foreach (var dxUnitHierarchyItem in dxUnitHierarchy.ItemsReverted)
             {
-                var dxUnitHierarchy = this._dxStructureCache.GetDXUnitInheritance(mainDXUnitInfo!);
-                var dxUnitDefinition = DXDataSetDefinitionConverter.ToDXModelDefinition(typeName, dxUnitHierarchy);
+                var dxUnitInfo = dxUnitHierarchyItem.DXUnit;
+                var dxUnitName = dxUnitInfo.Name;
 
-                foreach (var dxUnitHierarchyItem in dxUnitHierarchy.ItemsReverted)
-                {
-                    var dxUnitInfo = dxUnitHierarchyItem.DXUnit;
-                    var dxUnitName = dxUnitInfo.Name;
+                var dxUnitColumns = SQLQueryBuilder.AllColumns;
+                var dataSet = new DataSet(dxUnitName);
 
-                    var dxUnitColumns = SQLQueryBuilder.AllColumns;
-                    var dataSet = new DataSet(dxUnitName);
+                var relatedMM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
+                var relatedMO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
 
-                    var relatedMM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiMandatory);
-                    var relatedMO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.MultiOptional);
+                var unitTable = dxUnitInfo.Name;
+                var objectId = record.Id;
 
-                    var unitTable = dxUnitInfo.Name;
-                    var objectId = record.Id;
+                // 1) OWN
+                var adapter = PopulateTableToDataSet(
+                    conn,
+                    dataSet,
+                    unitTable,
+                    dxUnitColumns,
+                    dxFilter: this.GetWhereExpressionForId(objectId));
 
-                    // 1) OWN
-                    var adapter = PopulateTableToDataSet(
-                        conn,
-                        dataSet,
-                        unitTable,
-                        dxUnitColumns,
-                        dxFilter: this.GetWhereExpressionForId(objectId));
+                UpsertOwnRowFromRecord(record, dataSet.Tables[unitTable]!, unitTable);
+                SetDerivedDXUnitTypeIfPresent(dataSet.Tables[unitTable], record.Id, mainDXUnitInfo.Id);
+                SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable]!, false);
 
-                    UpsertOwnRowFromRecord(record, dataSet.Tables[unitTable]!, unitTable);
-                    SetDerivedDXUnitTypeIfPresent(dataSet.Tables[unitTable], record.Id, mainDXUnitInfo.Id);
-                    SaveTable(adapter, conn, dataSet, dataSet.Tables[unitTable]!, false);
+                // 2) SINGLE
+                var relatedSM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
+                var relatedSO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
+                if (relatedSM != null) foreach (var el in relatedSM)
+                    UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
+                if (relatedSO != null) foreach (var el in relatedSO)
+                    UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
 
-                    // 2) SINGLE
-                    var relatedSM = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleMandatory);
-                    var relatedSO = this._dxStructureCache.GetRelatedDXElementDefinitions(dxUnitInfo, DXElementInUnitTypeEnum.SingleOptional);
-                    if (relatedSM != null) foreach (var el in relatedSM)
-                        UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
-                    if (relatedSO != null) foreach (var el in relatedSO)
-                        UpsertSingleFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
+                // 3) MULTI
+                if (relatedMM != null) foreach (var el in relatedMM)
+                    UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
+                if (relatedMO != null) foreach (var el in relatedMO)
+                    UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
 
-                    // 3) MULTI
-                    if (relatedMM != null) foreach (var el in relatedMM)
-                        UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
-                    if (relatedMO != null) foreach (var el in relatedMO)
-                        UpsertMultiFromRecord(record, dxUnitDefinition, unitTable, el.Name, dataSet, conn);
-
-                    dataSet.AcceptChanges();
-                }
-
-                return true;
-            });
+                dataSet.AcceptChanges();
+            }
 
             return record.Id;
         }
@@ -619,6 +615,8 @@ namespace IV.DX.Persistence
         private void SaveTable(DbDataAdapter adapter, DbConnection conn, DataSet dataSet, DataTable table, bool isMultiTable, int bulkThreshold = 500)
         {
             if (table == null || table.Rows.Count == 0) return;
+
+            StampChangedRows(table);
 
             // bulk for multi-таблиц
             if (isMultiTable && _dbProvider is IDXBulkInsertCapable bulk && table.Rows.Count >= bulkThreshold)
@@ -629,6 +627,82 @@ namespace IV.DX.Persistence
 
             _dbProvider.GetDbCommandBuilder(adapter);
             adapter.Update(table);
+        }
+
+        /// <summary>
+        /// Re-stamps <see cref="Constants.TimeStamp"/> on the existing rows this save really changes,
+        /// and drops the ones it does not so the adapter never issues their UPDATE.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="DataRowState"/> cannot answer "did this row change": assigning a column marks
+        /// the row <see cref="DataRowState.Modified"/> whether or not the value differs, and every
+        /// row passing through <see cref="MapRowItemToRow"/> gets assigned. So the original and
+        /// current versions are compared value by value instead.
+        /// <para>
+        /// Before this, the timestamp was written up front and unconditionally, which made every row
+        /// dirty by construction. A write with nothing to say still became an UPDATE, and a unit's
+        /// timestamp moved whenever one of its elements changed or a caller re-sent values it had not
+        /// edited - which is exactly the signal a client uses to decide its cached copy went stale.
+        /// </para>
+        /// <para>
+        /// Rows being inserted are stamped earlier, in <see cref="MapRowItemToRow"/>: they must carry
+        /// a value before they join the table, since the column does not allow nulls.
+        /// </para>
+        /// <para>
+        /// This is the single choke point for upserts: every other <c>Update</c> on an adapter in
+        /// this repository saves deleted rows only.
+        /// </para>
+        /// </remarks>
+        private static void StampChangedRows(DataTable table)
+        {
+            var timeStampColumn = FindColumn(table, Constants.TimeStamp);
+            if (timeStampColumn == null || timeStampColumn.ReadOnly)
+                return;
+
+            // One reading for the whole table, so rows written together carry the same instant.
+            var now = DateTime.UtcNow;
+
+            // Snapshot: RejectChanges below leaves Modified rows in place, but iterating a collection
+            // being written to is not worth the risk.
+            foreach (var row in table.Rows.Cast<DataRow>().ToList())
+            {
+                if (row.RowState != DataRowState.Modified)
+                    continue;
+
+                if (HasRealChange(row, timeStampColumn))
+                    row[timeStampColumn] = now;
+                else
+                    row.RejectChanges();
+            }
+        }
+
+        /// <summary>
+        /// Whether any column other than the timestamp differs from what was read.
+        /// </summary>
+        private static bool HasRealChange(DataRow row, DataColumn timeStampColumn)
+        {
+            foreach (DataColumn column in row.Table.Columns)
+            {
+                if (column == timeStampColumn)
+                    continue;
+
+                if (!SameStoredValue(row[column, DataRowVersion.Original], row[column, DataRowVersion.Current]))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Compares two stored cell values. Blobs are compared by content: they arrive as fresh
+        /// arrays on every read, so reference equality would report every re-sent blob as a change.
+        /// </summary>
+        private static bool SameStoredValue(object? original, object? current)
+        {
+            if (original is byte[] originalBytes && current is byte[] currentBytes)
+                return originalBytes.AsSpan().SequenceEqual(currentBytes);
+
+            return Equals(original, current);
         }
 
         private void UpsertOwnRowFromRecord(DXUnitRecord record, DataTable table, string dxUnitType)
@@ -953,10 +1027,14 @@ namespace IV.DX.Persistence
                 }
             }
 
-            var timeStampColumn = FindColumn(row.Table, Constants.TimeStamp);
-            if (timeStampColumn != null)
+            // A row being created needs a value now: TimeStamp does not allow nulls, and the row is
+            // validated the moment it joins the table. An existing row is left alone here and gets
+            // its new stamp from StampChangedRows, but only if this write actually changed it.
+            if (row.RowState == DataRowState.Detached)
             {
-                row[timeStampColumn] = DateTime.UtcNow;
+                var newRowTimeStampColumn = FindColumn(row.Table, Constants.TimeStamp);
+                if (newRowTimeStampColumn != null && !newRowTimeStampColumn.ReadOnly)
+                    row[newRowTimeStampColumn] = DateTime.UtcNow;
             }
 
             if (item.Content == null)
@@ -1923,13 +2001,6 @@ namespace IV.DX.Persistence
         public void CreateDataBase()
         {
             this._schemaHelper.CreateDataBase(this._connectionStr);
-        }
-
-        private enum ProcessingType
-        {
-            Insert = 1,
-            Update = 2,
-            Delete = 3
         }
 
         private bool TryGetCommonDXElementUnitTypeId(

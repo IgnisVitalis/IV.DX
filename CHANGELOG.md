@@ -6,11 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- A write that changes nothing no longer touches the row. `TimeStamp` was stamped unconditionally while a row was being filled, which marked every row dirty by construction, so a no-op update still issued an UPDATE and moved the timestamp. It now moves only when a column value actually differs from what was read. This also means a unit's `TimeStamp` no longer moves when only one of its elements changed - the unit's own row is not rewritten;
+- `IDXElementDataService.InsertOrUpdateAsync` assigned a generated id to the first record of a block only, so every further record without an id was written with `Guid.Empty`;
 - `DXSecurityService` clamps `UserAgent` and `DeviceId` to the widths `DXAuthSessionUnit` accepts before inserting a session. An oversized value failed the insert instead of being trimmed, so register, login and refresh all threw for callers that passed real client data through - a browser `User-Agent` runs 110-130 characters against a 100 character column, which made every browser login fail;
+
+### Security
+
+- Element writes are authorized. `IDXElementDataService` performed no access check at all, so anything reachable through it bypassed RBAC entirely. Access is now decided against the owning unit type: reading an element needs `Read` on the unit, and creating, changing or removing one needs `Update` on the specific unit that owns it. `Update` rather than `Delete` for removal, because removing an element is a change to a unit's contents, not the end of the unit - the same thing a whole-unit write with a modified element container already does, so the element path grants nothing new;
+- Element reads narrow to what the caller may see, applying the same owned-only and public-record filtering as `IDXUnitDataReader`. Without it the element path returned rows belonging to units the unit path would have hidden;
+- An element write resolves its owning unit from storage instead of from the request. Naming another unit's element alongside a unit of one's own previously passed the check against the caller's unit and then rewrote the other one, reparenting it in the process; a request whose declared owner disagrees with the stored one is now rejected;
 
 ### Added
 
+- `IDXElementDataService` covers the element lifecycle: `GetItemAsync`, `GetItemsByUnitAsync`, `GetItemsByUnitFilterAsync`, `InsertAsync<T>`, `UpdateAsync<T>` and `InsertOrUpdateAsync<T>` for a typed element, `InsertOrUpdateAsync` for a block, and `DeleteAsync`. Editing one element of a unit no longer means reading the whole unit, changing a part of it and writing it all back;
+- A DTO mapper layer for elements, mirroring the unit one: `DXElementMapper<TRequest, TResponse, TElement, TUnit>`, `DXElementReadMapper<TResponse, TElement, TUnit>`, `DXElementWriteMapper<TRequest, TElement, TUnit>`, the services they register (`IDXElementDtoService<TRequest, TResponse>`, `IDXElementQueryService<TResponse>`, `IDXElementCommandService<TRequest>`), and `AddDXElementMapper` / `AddDXElementReadMapper` / `AddDXElementWriteMapper`. The owning unit is a type argument because `IsCommon` lets one element type belong to several units, and `IDXElementCommandService.CreateAsync` takes the owner id as an argument so a nested route can supply it without every request DTO carrying it. Documented in `doc/DXUnitDtoMapper.md`;
+- `DXObjectHelper.GetDeclaredDXUnitId` - the owning unit declared by an element record, read the same way by the access check and by the write that follows it;
 - `DXAuthSessionUnit.UserAgentMaxLength` and `DXAuthSessionUnit.DeviceIdMaxLength` - the session column widths, declared on the unit that owns them so callers no longer have to discover them by trial;
+
+### Changed
+
+- A block is written in one transaction. Both `IDXUnitDataService` and `IDXElementDataService` opened a transaction per record, so a failure partway through a block left the earlier records committed;
+- `IDXElementDataService.GetItemsAsync(dxUnitTypeName, dxFilter)` renamed to `GetItemsByUnitFilterAsync`. The filter is evaluated against the unit table, not the element table, and the old name said otherwise. The overloads taking ids take no filter string at all, which keeps them clear of the unparameterised filter path;
+- `IDXElementDataService.InsertOrUpdateAsync(block)` returns every id written rather than the last one;
 
 ## [0.108.0] - 2026-08-12
 

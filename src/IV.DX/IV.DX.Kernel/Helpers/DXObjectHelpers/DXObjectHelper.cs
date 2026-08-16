@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using IV.DX.Kernel.Helpers;
+using IV.DX.Kernel.Models;
 
 namespace IV.DX.Kernel.Helpers.DXObjectHelpers
 {
@@ -60,6 +61,63 @@ namespace IV.DX.Kernel.Helpers.DXObjectHelpers
 
             return jObject.GetValue(Constants.DXTitle, StringComparison.OrdinalIgnoreCase)
                           ?.Value<string>();
+        }
+
+        /// <summary>
+        /// The owning unit declared by an element record. Reads the <see cref="DXElementRecord.DXUnitId"/>
+        /// property first, then falls back to the dynamic fields, where a writer may have spelled the
+        /// owner as <c>DXUnitId</c> or as <c>&lt;UnitType&gt;Id</c>.
+        /// </summary>
+        /// <remarks>
+        /// Shared so that the access check and the write that follows it resolve the same owner.
+        /// Reading it two different ways would let a record pass a check against one unit and then
+        /// land under another.
+        /// </remarks>
+        public static Guid GetDeclaredDXUnitId(DXElementRecord record, string? dxUnitTypeName)
+        {
+            ArgumentNullException.ThrowIfNull(record);
+
+            if (record.DXUnitId != Guid.Empty)
+                return record.DXUnitId;
+
+            if (record.Fields == null)
+                return Guid.Empty;
+
+            if (TryReadGuidField(record.Fields, Constants.DXUnitId, out var value))
+                return value;
+
+            return !string.IsNullOrWhiteSpace(dxUnitTypeName)
+                && TryReadGuidField(record.Fields, $"{dxUnitTypeName}Id", out value)
+                    ? value
+                    : Guid.Empty;
+        }
+
+        private static bool TryReadGuidField(IDictionary<string, JToken> fields, string key, out Guid value)
+        {
+            value = Guid.Empty;
+
+            if (!fields.TryGetValue(key, out var token))
+            {
+                foreach (var kvp in fields)
+                {
+                    if (string.Equals(kvp.Key, key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        token = kvp.Value;
+                        break;
+                    }
+                }
+            }
+
+            if (token == null || token.Type == JTokenType.Null)
+                return false;
+
+            if (token.Type == JTokenType.Guid)
+            {
+                value = token.ToObject<Guid>();
+                return value != Guid.Empty;
+            }
+
+            return Guid.TryParse(token.ToString(), out value) && value != Guid.Empty;
         }
     }
 }

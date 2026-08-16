@@ -1,8 +1,10 @@
-# DXUnit DTO Mapper
+# DX DTO Mapper
 
-The DTO mapper feature provides a thin application-layer bridge between the DX domain model (`DXUnit`/`DXElement`) and the DTOs your API or UI exposes. It handles the mechanical work of copying scalar properties and synchronizing element containers, leaving your code free of boilerplate reflection.
+The DTO mapper feature provides a thin application-layer bridge between the DX domain model and the DTOs your API or UI exposes. It handles the mechanical work of copying scalar properties and synchronizing element containers, leaving your code free of boilerplate reflection.
 
 Request and response shapes are first-class: the mapper hierarchy supports symmetric (same DTO in/out), read-only, write-only, and fully asymmetric (different request/response) configurations.
+
+There are two parallel families. **Unit mappers** address a whole `DXUnit` and are what most endpoints use. **Element mappers** address a single `DXElement` without loading the unit that owns it — see [Element mappers](#element-mappers).
 
 ---
 
@@ -123,6 +125,93 @@ builder.Services.AddDXUnitWriteMapper<BookWriteMapper>();
 ```
 
 Registers `IDXUnitCommandService<BookRequest>`.
+
+---
+
+## Element mappers
+
+Use these when an endpoint addresses one element of a unit — a chapter of a book, a line of an order — rather than the unit as a whole. The element's own row is read and written directly, so the unit is never loaded, never rewritten, and its `TimeStamp` does not move.
+
+| Type | Role |
+|---|---|
+| `DXElementMapper<TRequest, TResponse, TElement, TUnit>` | Abstract base for full CRUD element mappers. |
+| `DXElementReadMapper<TResponse, TElement, TUnit>` | Read-only. Implement `ToDtoAsync` only. |
+| `DXElementWriteMapper<TRequest, TElement, TUnit>` | Write-only. Implement `ToElementAsync` only. |
+| `IDXElementDtoService<TRequest, TResponse>` | Full CRUD service. |
+| `IDXElementQueryService<TResponse>` | Read-only service. |
+| `IDXElementCommandService<TRequest>` | Write-only service. |
+
+`TUnit` is a type argument, not something inferred from `TElement`: an element declared `IsCommon` can belong to several unit types, and both the access rules and the storage layout depend on which one is meant.
+
+```csharp
+public class ChapterMapper : DXElementMapper<ChapterRequest, ChapterResponse, BookChapterElement, BookUnit>
+{
+    public override Task<ChapterResponse> ToDtoAsync(BookChapterElement element, CancellationToken ct = default)
+        => Task.FromResult(new ChapterResponse
+        {
+            Id     = element.Id,
+            BookId = element.DXUnitId,
+            Number = element.Number,
+            Title  = element.Title
+        });
+
+    public override Task<BookChapterElement> ToElementAsync(ChapterRequest dto, CancellationToken ct = default)
+        => Task.FromResult(new BookChapterElement
+        {
+            Id     = dto.Id,
+            Number = dto.Number,
+            Title  = dto.Title
+        });
+}
+```
+
+Register it:
+
+```csharp
+builder.Services.AddDXElementMapper<ChapterMapper>();       // IDXElementDtoService<ChapterRequest, ChapterResponse>
+builder.Services.AddDXElementReadMapper<ChapterReadMapper>();   // IDXElementQueryService<ChapterResponse>
+builder.Services.AddDXElementWriteMapper<ChapterWriteMapper>(); // IDXElementCommandService<ChapterRequest>
+```
+
+### Service interfaces
+
+```csharp
+public interface IDXElementQueryService<TResponse>
+{
+    Task<TResponse?> GetAsync(Guid id, CancellationToken ct = default);
+    Task<IEnumerable<TResponse>> GetByUnitAsync(Guid dxUnitId, CancellationToken ct = default);
+}
+
+public interface IDXElementCommandService<TRequest>
+{
+    Task<Guid> CreateAsync(Guid dxUnitId, TRequest dto, CancellationToken ct = default);
+    Task<bool> UpdateAsync(TRequest dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+}
+```
+
+`CreateAsync` takes the owner as an argument rather than reading it off the DTO, so the caller decides where it came from — a route segment for a nested resource (`/books/{bookId}/chapters`), the body for a flat one — without every request shape having to carry it. An id on the DTO is ignored on create; the server assigns one.
+
+`ToElementAsync` must set `Id` for updates to work — that is how the service knows which element is meant. It does **not** need to set `DXUnitId`: on create the owner comes from the argument, and on update it is read from storage.
+
+### Access
+
+Element access is decided against the **owning unit type**, since an element has no grants of its own:
+
+| Operation | Requires |
+|---|---|
+| `GetAsync`, `GetByUnitAsync` | `Read` on the unit type, narrowed to units the caller may see |
+| `CreateAsync`, `UpdateAsync`, `DeleteAsync` | `Update` on the specific unit that owns the element, or ownership of it |
+
+Writes need `Update` rather than `Create` or `Delete` because none of them brings a unit into being or ends it — they change a unit's contents, which is what a whole-unit write with a modified element container already does.
+
+An update resolves the owning unit from storage, so an element cannot be moved to another unit through this path: a request naming an element of one unit alongside a different owner is rejected.
+
+### Limitations
+
+- **No handler pipeline.** Unlike the unit services, no before/after handlers run. A handler registered for a unit does not see an element written this way.
+- **No convention mapper yet.** There is no element equivalent of `DXConventionMapper`; write the mapper by hand.
+- **No controller bases.** `IV.DX.WebApi` has `DXUnitQueryControllerBase` and `DXUnitCommandControllerBase` but no element counterparts.
 
 ---
 

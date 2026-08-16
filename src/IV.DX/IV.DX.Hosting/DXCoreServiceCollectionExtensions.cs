@@ -101,6 +101,10 @@ namespace IV.DX.Hosting
             services.AddScoped<IDXElementGenericRepository, DXElementGenericRepository>();
             services.AddScoped<ISQLQueryBuilder, SQLQueryBuilder>();
 
+            // Every data service decides access through this one component, so the unit path and the
+            // element path can never answer to different rules.
+            services.AddScoped<IDXUnitAccessGate, DXUnitAccessGate>();
+
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXUnitDataReader, DXUnitDataReader>();
             services.AddScoped<IDXEncryptionMigrationService, DXEncryptionMigrationService>();

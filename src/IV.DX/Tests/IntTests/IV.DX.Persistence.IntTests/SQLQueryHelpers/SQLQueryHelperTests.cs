@@ -29,12 +29,16 @@ namespace IV.DX.Persistence.IntTests.SQLQueryHelpers
         const int dxUnitStartIndex = 23;
         const int dxElementStartIndex = 42;
 
+        // These indices are the position of each definition in the structure snapshot, which is read
+        // without an ORDER BY - so they follow the physical row order of DXUnitDefinitionUnit rather
+        // than anything declared. See TASK.md: the numbering is not stable, and pinning generated SQL
+        // to it makes these assertions move whenever the write pattern of a migration changes.
         string tableRelation_TUserUnit_TBookUnit_0 = "Relation_TUserUnit_TBookUnit_0";
         string tableAlias_TPassportUnit_0 = $"T_{dxUnitStartIndex}_0";//TPassportUnit
-        string tableAlias_TPositionUnit_0 = $"T_{dxUnitStartIndex + 1}_0";//TPositionUnit        
+        string tableAlias_TPositionUnit_0 = $"T_{dxUnitStartIndex + 1}_0";//TPositionUnit
         string tableAlias_TDocumentUnit_0 = $"T_{dxUnitStartIndex + 2}_0";//TDocumentUnit
-        string tableAlias_TComputerUnit_0 = $"T_{dxUnitStartIndex + 3}_0";//TComputerUnit         
-        string tableAlias_TDeviceUnit_0 = $"T_{dxUnitStartIndex + 4}_0";//TDeviceUnit        
+        string tableAlias_TDeviceUnit_0 = $"T_{dxUnitStartIndex + 3}_0";//TDeviceUnit
+        string tableAlias_TComputerUnit_0 = $"T_{dxUnitStartIndex + 4}_0";//TComputerUnit
         string tableAlias_TBookUnit_0 = $"T_{dxUnitStartIndex + 5}_0";//TBookUnit   
         string tableAlias_TUserUnit_0 = $"T_{dxUnitStartIndex + 6}_0";//TUserUnit
         string tableAlias_TPassportMainElement_0 = $"T_{dxElementStartIndex}_0";//TPassportMainElement

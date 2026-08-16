@@ -13,9 +13,7 @@ namespace IV.DX.Application.Services
     internal sealed class DXUnitDataReader(
         IDXPipelineExecutor dxPipelineExecutor,
         IDXStructureCache structureCache,
-        IDXUnitTypeAccessChecker unitTypeAccessChecker,
-        IDXUnitGenericRepository genericRepo,
-        IDXExecutionContextAccessor executionContextAccessor,
+        IDXUnitAccessGate accessGate,
         ILogger<DXUnitDataReader> logger) : IDXUnitDataReader
     {
         public async Task<T?> GetItemAsync<T>(Guid id, DXLoadingType typeOfLoading = DXLoadingType.Full, DXHandlerBaseContext? context = default, CancellationToken ct = default) where T : DXUnit, new()
@@ -26,13 +24,7 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if ((decision == DXAccessDecision.AllowedOwnedOnly || publicFallback) && !IsReadOwned(typeName, id))
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly && !accessGate.IsReadVisible(typeName, id))
                 return null;
 
             var result = await dxPipelineExecutor.GetAsync<T>(id, context, ct);
@@ -61,16 +53,9 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 if (ownedIds.Count == 0)
                     return Enumerable.Empty<T>();
 
@@ -115,16 +100,9 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 var filteredIds = ids.Where(id => ownedIds.Contains(id)).ToList();
 
                 if (filteredIds.Count == 0)
@@ -170,16 +148,9 @@ namespace IV.DX.Application.Services
             }
 
             var typeName = AttributeReader.GetDXUnitTypeName(typeof(T));
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 if (ownedIds.Count == 0)
                     return Enumerable.Empty<T>();
 
@@ -223,13 +194,7 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if ((decision == DXAccessDecision.AllowedOwnedOnly || publicFallback) && !IsReadOwned(typeName, id))
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly && !accessGate.IsReadVisible(typeName, id))
                 return null;
 
             var result = await dxPipelineExecutor.GetAsync(typeName, id, context, ct);
@@ -257,16 +222,9 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 if (ownedIds.Count == 0)
                     return EmptyDXFormat(typeName);
 
@@ -306,16 +264,9 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 var filteredIds = ids.Where(id => ownedIds.Contains(id)).ToList();
 
                 if (filteredIds.Count == 0)
@@ -356,16 +307,9 @@ namespace IV.DX.Application.Services
                 context = new DXHandlerContext();
             }
 
-            var decision = unitTypeAccessChecker.CheckAccess(typeName, DXUnitTypeAccessOperation.Read);
-            var publicFallback = ShouldApplyAnonymousPublicFallback(decision);
-
-            if (decision == DXAccessDecision.Denied && !publicFallback)
-                ThrowDenied(typeName, DXUnitTypeAccessOperation.Read);
-
-            if (decision == DXAccessDecision.AllowedOwnedOnly || publicFallback)
+            if (accessGate.EnsureReadAccess(typeName) == DXReadScope.VisibleOnly)
             {
-                var ctx = executionContextAccessor.Current;
-                var ownedIds = CollectOwnedIds(typeName, ctx);
+                var ownedIds = accessGate.CollectVisibleIds(typeName);
                 if (ownedIds.Count == 0)
                     return EmptyDXFormat(typeName);
 
@@ -417,113 +361,6 @@ namespace IV.DX.Application.Services
             return unit.Name;
         }
 
-        private bool IsReadOwned(string typeName, Guid instanceId)
-        {
-            var ctx = executionContextAccessor.Current;
-
-            var unitDef = structureCache.GetDXUnit(typeName);
-            if (unitDef == null)
-                return false;
-
-            var granted = false;
-
-            if (unitDef.SupportsOwnership && ctx?.IdentityId.HasValue == true)
-            {
-                var identityOwnerships = genericRepo
-                    .GetDXUnits<DXIdentityOwnershipUnit>(
-                        $"Identity = '{ctx.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'");
-
-                foreach (var ownership in identityOwnerships.Where(x => x.Read))
-                {
-                    if (ownership.Effect == DXGrantEffectEnum.Deny)
-                        return false;
-
-                    granted |= ownership.Effect == DXGrantEffectEnum.Allow;
-                }
-            }
-
-            if (unitDef.SupportsOwnership && ctx?.ActiveGroupIDs != null)
-            {
-                foreach (var groupId in ctx.ActiveGroupIDs)
-                {
-                    var groupOwnerships = genericRepo
-                        .GetDXUnits<DXGroupOwnershipUnit>(
-                            $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}' AND OwnedDXUnitId = '{instanceId}'");
-
-                    foreach (var ownership in groupOwnerships.Where(x => x.Read))
-                    {
-                        if (ownership.Effect == DXGrantEffectEnum.Deny)
-                            return false;
-
-                        granted |= ownership.Effect == DXGrantEffectEnum.Allow;
-                    }
-                }
-            }
-
-            if (granted)
-                return true;
-
-            var publicAccess = genericRepo
-                .GetDXUnits<DXPublicAccessUnit>(
-                    $"DXUnitDefinition = '{unitDef.Id}' AND PublicDXUnitId = '{instanceId}'")
-                .FirstOrDefault();
-
-            return publicAccess != null;
-        }
-
-        private HashSet<Guid> CollectOwnedIds(string typeName, DXExecutionContext? ctx)
-        {
-            var result = new HashSet<Guid>();
-            var denied = new HashSet<Guid>();
-
-            var unitDef = structureCache.GetDXUnit(typeName);
-            if (unitDef == null)
-                return result;
-
-            if (unitDef.SupportsOwnership && ctx?.IdentityId.HasValue == true)
-            {
-                var identityOwned = genericRepo.GetDXUnits<DXIdentityOwnershipUnit>(
-                    $"Identity = '{ctx.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}'");
-
-                foreach (var o in identityOwned.Where(x => x.Read))
-                    Classify(o.OwnedDXUnitId, o.Effect, result, denied);
-            }
-
-            if (unitDef.SupportsOwnership && ctx?.ActiveGroupIDs != null)
-            {
-                foreach (var groupId in ctx.ActiveGroupIDs)
-                {
-                    var groupOwned = genericRepo.GetDXUnits<DXGroupOwnershipUnit>(
-                        $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}'");
-
-                    foreach (var o in groupOwned.Where(x => x.Read))
-                        Classify(o.OwnedDXUnitId, o.Effect, result, denied);
-                }
-            }
-
-            var publicAccess = genericRepo.GetDXUnits<DXPublicAccessUnit>(
-                $"DXUnitDefinition = '{unitDef.Id}'");
-
-            foreach (var access in publicAccess)
-            {
-                if (access.PublicDXUnitId != Guid.Empty)
-                    result.Add(access.PublicDXUnitId);
-            }
-
-            // A denial on a record outranks every route to it, public exposure included.
-            result.ExceptWith(denied);
-
-            return result;
-        }
-
-        private static void Classify(Guid ownedId, DXGrantEffectEnum effect, HashSet<Guid> allowed, HashSet<Guid> denied)
-        {
-            if (effect == DXGrantEffectEnum.Deny)
-                denied.Add(ownedId);
-            else if (effect == DXGrantEffectEnum.Allow)
-                allowed.Add(ownedId);
-        }
-
         private static JObject EmptyDXFormat(string? typeName) =>
             JObject.FromObject(new DXDataBlock<DXUnitRecord>
             {
@@ -538,22 +375,6 @@ namespace IV.DX.Application.Services
             return string.IsNullOrWhiteSpace(originalFilter)
                 ? idIn
                 : $"({idIn}) AND ({originalFilter})";
-        }
-
-        private bool ShouldApplyAnonymousPublicFallback(DXAccessDecision decision)
-        {
-            return decision == DXAccessDecision.Denied && executionContextAccessor.Current == null;
-        }
-
-        private void ThrowDenied(string typeName, DXUnitTypeAccessOperation operation)
-        {
-            var subject = GetCurrentSubject();
-            logger.LogWarning(
-                "Read access denied for subject {Subject} to DX unit type {TypeName} and operation {Operation}.",
-                subject,
-                typeName,
-                operation);
-            throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
         }
 
         private JObject? MaskSensitive(JObject? jObject, string? typeName)
@@ -681,10 +502,5 @@ namespace IV.DX.Application.Services
                 error);
         }
 
-        private string GetCurrentSubject()
-        {
-            var ctx = executionContextAccessor.Current;
-            return ctx == null || string.IsNullOrWhiteSpace(ctx.SubjectId) ? "anonymous" : ctx.SubjectId;
-        }
     }
 }

@@ -50,7 +50,19 @@ namespace IV.DX.Persistence
             ArgumentNullException.ThrowIfNull(dxElement);
 
             var elementTypeName = AttributeReader.GetDXElementTypeName(dxElement.GetType());
-            return dxElementCoreRepo.Delete(elementTypeName, dxElement.Id);
+            return dxElementCoreRepo.Delete(elementTypeName, [dxElement.Id]);
+        }
+
+        public bool Delete(string dxElementTypeName, IEnumerable<Guid> ids)
+        {
+            ArgumentNullException.ThrowIfNullOrEmpty(dxElementTypeName);
+
+            return dxElementCoreRepo.Delete(dxElementTypeName, ids);
+        }
+
+        public Guid GetOwnerDXUnitId(string dxUnitTypeName, string dxElementTypeName, Guid id)
+        {
+            return dxElementCoreRepo.GetOwnerDXUnitId(dxUnitTypeName, dxElementTypeName, id);
         }
 
         public T GetItem<T>(string dxUnitTypeName, Guid id) where T : DXElement, new()
@@ -64,6 +76,18 @@ namespace IV.DX.Persistence
             if (result == null) return default!;
 
             return DXRecordConverter.ToDXElement<T>(result);
+        }
+
+        public IEnumerable<T> GetItemsByUnits<T>(string dxUnitTypeName, IEnumerable<Guid> dxUnitIds) where T : DXElement, new()
+        {
+            var dxElementName = AttributeReader.GetDXElementTypeName(typeof(T));
+
+            // TODO : need to rework using info about relation type
+            var dxElement = DXTableDefinitionConverter.ToDXTableDefinition(dxElementName, dxUnitTypeName, typeof(T), false);
+
+            var result = dxElementCoreRepo.GetItemsRecordByUnits(dxElement, dxUnitIds);
+
+            return result.Select(DXRecordConverter.ToDXElement<T>).ToList();
         }
 
         public IEnumerable<T> GetItems<T>(string dxUnitTypeName, string dxFilter) where T : DXElement, new()

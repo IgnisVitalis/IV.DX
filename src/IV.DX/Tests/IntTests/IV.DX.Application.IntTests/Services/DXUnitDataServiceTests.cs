@@ -1003,6 +1003,62 @@ namespace IV.DX.Application.IntTests.Services
         }
 
         [Fact]
+        public async Task UpdateDXUnit_UsingUnchangedValues_KeepsTimeStamp()
+        {
+            // Init
+            var item = TBookUnitFactory.GetItem(Guid.Empty, "TimeStampBook");
+
+            base._finalizationAction = () =>
+            {
+                this._genericRepo.Delete(item);
+            };
+
+            await this._service.InsertAsync(item);
+
+            var stored = await this._reader.GetItemAsync<TBookUnit>(item.Id);
+            Assert.NotNull(stored);
+
+            // Action: write the record back exactly as it was read.
+            await this._service.UpdateAsync(stored);
+
+            // Assert: a write with nothing to say leaves the row, and its timestamp, alone. The
+            // timestamp is the only version marker a caller has, so moving it on a no-op edit
+            // invalidates every cache downstream for no reason.
+            var reread = await this._reader.GetItemAsync<TBookUnit>(item.Id);
+
+            Assert.NotNull(reread);
+            Assert.Equal(stored.TimeStamp, reread.TimeStamp);
+        }
+
+        [Fact]
+        public async Task UpdateDXUnit_UsingChangedValues_MovesTimeStamp()
+        {
+            // Init
+            var item = TBookUnitFactory.GetItem(Guid.Empty, "TimeStampChangedBook");
+
+            base._finalizationAction = () =>
+            {
+                this._genericRepo.Delete(item);
+            };
+
+            await this._service.InsertAsync(item);
+
+            var stored = await this._reader.GetItemAsync<TBookUnit>(item.Id);
+            Assert.NotNull(stored);
+
+            // Action
+            stored.TBookMainElement.Name = "TimeStampChangedBook - edited";
+            await this._service.UpdateAsync(stored);
+
+            // Assert
+            var reread = await this._reader.GetItemAsync<TBookUnit>(item.Id);
+
+            Assert.NotNull(reread);
+            Assert.Equal("TimeStampChangedBook - edited", reread.TBookMainElement.Name);
+            Assert.True(reread.TBookMainElement.TimeStamp > stored.TBookMainElement.TimeStamp);
+        }
+
+        [Fact]
         public async Task InsertDXUnit_UsingLargeAmountOfMultiItems_Ok()
         {
             // Init

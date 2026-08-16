@@ -47,6 +47,46 @@ namespace IV.DX.Hosting.UnitTests.Mappers
 
         private sealed class NotAMapper { }
 
+        [DXElement("SmElement")]
+        private sealed class SmElement : DXElement { }
+
+        private sealed class SmElementDto
+        {
+            public Guid Id { get; set; }
+        }
+
+        private sealed class SmElementSummaryDto
+        {
+            public Guid Id { get; set; }
+        }
+
+        private sealed class SmElementMapper : DXElementMapper<SmElementDto, SmElementDto, SmElement, SmUnit>
+        {
+            public override Task<SmElementDto> ToDtoAsync(SmElement element, CancellationToken ct = default)
+                => Task.FromResult(new SmElementDto { Id = element.Id });
+
+            public override Task<SmElement> ToElementAsync(SmElementDto dto, CancellationToken ct = default)
+                => Task.FromResult(new SmElement { Id = dto.Id });
+        }
+
+        private sealed class SmElementReadMapper : DXElementReadMapper<SmElementDto, SmElement, SmUnit>
+        {
+            public override Task<SmElementDto> ToDtoAsync(SmElement element, CancellationToken ct = default)
+                => Task.FromResult(new SmElementDto { Id = element.Id });
+        }
+
+        private sealed class SmElementSummaryReadMapper : DXElementReadMapper<SmElementSummaryDto, SmElement, SmUnit>
+        {
+            public override Task<SmElementSummaryDto> ToDtoAsync(SmElement element, CancellationToken ct = default)
+                => Task.FromResult(new SmElementSummaryDto { Id = element.Id });
+        }
+
+        private sealed class SmElementWriteMapper : DXElementWriteMapper<SmElementDto, SmElement, SmUnit>
+        {
+            public override Task<SmElement> ToElementAsync(SmElementDto dto, CancellationToken ct = default)
+                => Task.FromResult(new SmElement { Id = dto.Id });
+        }
+
         // ── AddDXUnitMapper<TMapper> ───────────────────────────────────────────────
 
         [Fact]
@@ -159,6 +199,89 @@ namespace IV.DX.Hosting.UnitTests.Mappers
 
             Assert.Throws<InvalidOperationException>(
                 () => services.AddDXUnitMapper<SmDtoBad, SmUnit>());
+        }
+
+        // ── Element mappers ────────────────────────────────────────────────────────
+
+        [Fact]
+        public void AddDXElementMapper_CustomMapper_RegistersIDXElementDtoService()
+        {
+            var services = new ServiceCollection();
+            services.AddDXElementMapper<SmElementMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(IDXElementDtoService<SmElementDto, SmElementDto>));
+        }
+
+        [Fact]
+        public void AddDXElementMapper_CustomMapper_RegistersMapper()
+        {
+            var services = new ServiceCollection();
+            services.AddDXElementMapper<SmElementMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(SmElementMapper));
+        }
+
+        [Fact]
+        public void AddDXElementMapper_TypeNotDerivedFromDXElementMapper_ThrowsInvalidOperation()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<InvalidOperationException>(
+                () => services.AddDXElementMapper<NotAMapper>());
+        }
+
+        [Fact]
+        public void AddDXElementReadMapper_CustomMapper_RegistersIDXElementQueryService()
+        {
+            var services = new ServiceCollection();
+            services.AddDXElementReadMapper<SmElementReadMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(IDXElementQueryService<SmElementDto>));
+        }
+
+        [Fact]
+        public void AddDXElementReadMapper_TypeNotDerivedFromDXElementReadMapper_ThrowsInvalidOperation()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<InvalidOperationException>(
+                () => services.AddDXElementReadMapper<NotAMapper>());
+        }
+
+        [Fact]
+        public void AddDXElementWriteMapper_CustomMapper_RegistersIDXElementCommandService()
+        {
+            var services = new ServiceCollection();
+            services.AddDXElementWriteMapper<SmElementWriteMapper>();
+
+            Assert.Contains(services,
+                d => d.ServiceType == typeof(IDXElementCommandService<SmElementDto>));
+        }
+
+        [Fact]
+        public void AddDXElementWriteMapper_TypeNotDerivedFromDXElementWriteMapper_ThrowsInvalidOperation()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<InvalidOperationException>(
+                () => services.AddDXElementWriteMapper<NotAMapper>());
+        }
+
+        [Fact]
+        public void AddDXElementReadMapper_TwoMappersOverOneElement_BothServicesRegistered()
+        {
+            var services = new ServiceCollection();
+
+            services.AddDXElementReadMapper<SmElementReadMapper>();
+            services.AddDXElementReadMapper<SmElementSummaryReadMapper>();
+
+            // Services are keyed by response DTO, not by element, so several contracts over one
+            // element type coexist - the same property the unit mappers have.
+            Assert.Contains(services, d => d.ServiceType == typeof(IDXElementQueryService<SmElementDto>));
+            Assert.Contains(services, d => d.ServiceType == typeof(IDXElementQueryService<SmElementSummaryDto>));
         }
     }
 }
