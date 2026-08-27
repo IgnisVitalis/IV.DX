@@ -1,3 +1,4 @@
+using IV.DX.Kernel.Enums;
 using IV.DX.Application.Contracts.Abstractions;
 using IV.DX.Kernel.Helpers;
 using IV.DX.Kernel.Helpers.DXObjectHelpers;

@@ -4,6 +4,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.113.0] - 2026-08-27
+
+### Added
+
+- `IDXOwnershipReader` — which records of a type the current principal owns, as identifiers. Ownership was reachable only from inside the access gate, so an application could not ask "which of these are mine" at all: the ownership units are `Core`, which the type-level checker denies to every non-system caller, and `IDXUnitGenericRepository` is internal. Needed because a type declared `IsPublicRead`, or covered by a type-level `Read` grant, never reaches the gate's ownership narrowing — the decision comes back `Allowed` and every record is returned, so ownership has to be asked for explicitly;
+- `IDXUnitQueryService<TResponse>.GetOwnedAsync`, inherited by `IDXUnitDtoService<TRequest, TResponse>` — the owned records mapped through the same read mapper as every other method on the service. This is what an "edit what I authored" screen reads;
+- Both take a `DXUnitTypeAccessOperation`, defaulting to `Read`. Ownership rows are per-operation grants, so "records I see as their owner" and "records I may edit" are different answers once a record has co-owners holding narrower rows. No row ever covers `Create`;
+
+### Changed
+
+- `DXUnitTypeAccessOperation` moves from `IV.DX.Persistence.Contracts.Abstractions` to `IV.DX.Kernel.Enums`. A public application contract has to be able to name the operation, and `IV.DX.Application.Contracts` deliberately references `IV.DX.Kernel` only. The enum carries no persistence semantics, and `DXGrantEffectEnum` — its sibling in every ownership row — already lived in the kernel. Callers naming the type need their `using` updated;
+
 ## [0.112.0] - 2026-08-16
 
 > 0.109.0 through 0.111.0 shipped without changelog entries. What they carried is folded in below,

@@ -1,4 +1,4 @@
-namespace IV.DX.Persistence.Contracts.Abstractions
+namespace IV.DX.Kernel.Enums
 {
     public enum DXUnitTypeAccessOperation
     {

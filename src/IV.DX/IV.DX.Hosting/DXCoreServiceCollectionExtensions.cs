@@ -105,6 +105,10 @@ namespace IV.DX.Hosting
             // element path can never answer to different rules.
             services.AddScoped<IDXUnitAccessGate, DXUnitAccessGate>();
 
+            // Reports ownership; the gate enforces it. Both read the same rows through
+            // DXOwnershipRules, so "what may I touch" and "what is mine" cannot drift apart.
+            services.AddScoped<IDXOwnershipReader, DXOwnershipReader>();
+
             services.AddScoped<IDXUnitDataService, DXUnitDataService>();
             services.AddScoped<IDXUnitDataReader, DXUnitDataReader>();
             services.AddScoped<IDXEncryptionMigrationService, DXEncryptionMigrationService>();

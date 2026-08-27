@@ -103,7 +103,7 @@ namespace IV.DX.Application.Services
                     $"Identity = '{ctx.IdentityId.Value}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                 foreach (var o in identityOwned.Where(x => x.Read))
-                    Classify(o.OwnedDXUnitId, o.Effect, result, denied);
+                    DXOwnershipRules.Classify(o.OwnedDXUnitId, o.Effect, result, denied);
             }
 
             if (unitDef.SupportsOwnership && ctx?.ActiveGroupIDs != null)
@@ -114,7 +114,7 @@ namespace IV.DX.Application.Services
                         $"Group = '{groupId}' AND DXUnitDefinition = '{unitDef.Id}'");
 
                     foreach (var o in groupOwned.Where(x => x.Read))
-                        Classify(o.OwnedDXUnitId, o.Effect, result, denied);
+                        DXOwnershipRules.Classify(o.OwnedDXUnitId, o.Effect, result, denied);
                 }
             }
 
@@ -210,7 +210,7 @@ namespace IV.DX.Application.Services
 
                 foreach (var ownership in identityOwnerships)
                 {
-                    if (!OwnershipCovers(ownership.Read, ownership.Update, ownership.Delete, operation))
+                    if (!DXOwnershipRules.Covers(ownership.Read, ownership.Update, ownership.Delete, operation))
                         continue;
 
                     if (ownership.Effect == DXGrantEffectEnum.Deny)
@@ -232,7 +232,7 @@ namespace IV.DX.Application.Services
 
                     foreach (var ownership in groupOwnerships)
                     {
-                        if (!OwnershipCovers(ownership.Read, ownership.Update, ownership.Delete, operation))
+                        if (!DXOwnershipRules.Covers(ownership.Read, ownership.Update, ownership.Delete, operation))
                             continue;
 
                         if (ownership.Effect == DXGrantEffectEnum.Deny)
@@ -250,15 +250,6 @@ namespace IV.DX.Application.Services
 
             ThrowOwnershipDenied(typeName, instanceId, operation);
         }
-
-        private static bool OwnershipCovers(bool read, bool update, bool delete, DXUnitTypeAccessOperation operation) => operation switch
-        {
-            DXUnitTypeAccessOperation.Read => read,
-            DXUnitTypeAccessOperation.Update => update,
-            DXUnitTypeAccessOperation.Delete => delete,
-            // Ownership is a grant over a record that already exists; it never authorises creation.
-            _ => false
-        };
 
         private void ThrowOwnershipDenied(string typeName, Guid instanceId, DXUnitTypeAccessOperation operation)
         {
@@ -281,14 +272,6 @@ namespace IV.DX.Application.Services
                 typeName,
                 operation);
             throw new UnauthorizedAccessException($"Access denied for '{subject}' to '{typeName}' ({operation}).");
-        }
-
-        private static void Classify(Guid ownedId, DXGrantEffectEnum effect, HashSet<Guid> allowed, HashSet<Guid> denied)
-        {
-            if (effect == DXGrantEffectEnum.Deny)
-                denied.Add(ownedId);
-            else if (effect == DXGrantEffectEnum.Allow)
-                allowed.Add(ownedId);
         }
     }
 }

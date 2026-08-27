@@ -1,4 +1,5 @@
 using IV.DX.Application.Contracts.Abstractions;
+using IV.DX.Kernel.Enums;
 using IV.DX.Kernel.Models;
 
 namespace IV.DX.Application.Services
@@ -9,12 +10,18 @@ namespace IV.DX.Application.Services
         where TMapper : DXUnitMapper<TRequest, TResponse, TUnit>
     {
         private readonly IDXUnitDataReader _reader;
+        private readonly IDXOwnershipReader _ownershipReader;
         private readonly TMapper _mapper;
         private readonly DXUnitWriteOperations<TRequest, TUnit> _write;
 
-        public DXUnitDtoService(IDXUnitDataReader reader, IDXUnitDataService dataService, TMapper mapper)
+        public DXUnitDtoService(
+            IDXUnitDataReader reader,
+            IDXOwnershipReader ownershipReader,
+            IDXUnitDataService dataService,
+            TMapper mapper)
         {
             _reader = reader;
+            _ownershipReader = ownershipReader;
             _mapper = mapper;
             _write = new DXUnitWriteOperations<TRequest, TUnit>(dataService, mapper.ToUnitAsync);
         }
@@ -34,6 +41,19 @@ namespace IV.DX.Application.Services
         public async Task<IEnumerable<TResponse>> GetAsync(string filter, CancellationToken ct = default)
         {
             var units = await _reader.GetItemsAsync<TUnit>(filter, ct: ct);
+            return await MapManyAsync(units, ct);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<TResponse>> GetOwnedAsync(
+            DXUnitTypeAccessOperation operation = DXUnitTypeAccessOperation.Read,
+            CancellationToken ct = default)
+        {
+            var ownedIds = await _ownershipReader.GetOwnedIdsAsync<TUnit>(operation, ct);
+            if (ownedIds.Count == 0)
+                return [];
+
+            var units = await _reader.GetItemsAsync<TUnit>(ownedIds, ct: ct);
             return await MapManyAsync(units, ct);
         }
 

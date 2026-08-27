@@ -1,3 +1,4 @@
+using IV.DX.Kernel.Enums;
 using IV.DX.Persistence.Contracts.Abstractions;
 using IV.DX.Shared.IntTests;
 using Microsoft.Extensions.DependencyInjection;

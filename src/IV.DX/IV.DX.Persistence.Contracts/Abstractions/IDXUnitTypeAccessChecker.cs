@@ -1,3 +1,5 @@
+using IV.DX.Kernel.Enums;
+
 namespace IV.DX.Persistence.Contracts.Abstractions
 {
     public interface IDXUnitTypeAccessChecker
